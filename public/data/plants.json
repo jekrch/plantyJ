@@ -1,6 +1,11 @@
 {
   "plants": [
     {
+      "shortCode": "a tri",
+      "fullName": "Allium tricoccum",
+      "commonName": "wild leek"
+    },
+    {
       "shortCode": "h acu",
       "fullName": "Hepatica acutiloba",
       "commonName": "sharp lobed hepatica"
