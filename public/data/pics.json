@@ -12,7 +12,27 @@
       "description": null,
       "image": "images/u dio/1777160703.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-25T23:45:04.916Z"
+      "addedAt": "2026-04-25T23:45:04.916Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "d1eee1b4e4711cd0",
+      "dominantColors": [
+        [
+          71.0,
+          -22.4,
+          17.9
+        ],
+        [
+          39.3,
+          -6.5,
+          10.3
+        ],
+        [
+          58.6,
+          -29.4,
+          36.6
+        ]
+      ]
     },
     {
       "seq": 6,
