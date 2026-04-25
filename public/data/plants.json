@@ -3,27 +3,27 @@
     {
       "shortCode": "a tri",
       "fullName": "Allium tricoccum",
-      "commonName": "wild leek"
+      "commonName": "Wild Leek"
     },
     {
       "shortCode": "h acu",
       "fullName": "Hepatica acutiloba",
-      "commonName": "sharp lobed hepatica"
+      "commonName": "Sharp Lobed Hepatica"
     },
     {
       "shortCode": "v sor",
       "fullName": "Viola sororia",
-      "commonName": "violet"
+      "commonName": "Common Blue Violet"
     },
     {
       "shortCode": "p jac",
       "fullName": "Prunus jacquemontii x japonica",
-      "commonName": "joel bush cherry"
+      "commonName": "Joel Bush Cherry"
     },
     {
-      "shortCode": "m. vir",
-      "fullName": "mertensia virginica",
-      "commonName": "Virginia bluebells"
+      "shortCode": "m vir",
+      "fullName": "Mertensia virginica",
+      "commonName": "Virginia Bluebells"
     }
   ]
 }
