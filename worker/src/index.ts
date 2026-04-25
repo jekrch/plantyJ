@@ -46,6 +46,7 @@ function buildHelpText(plants: PlantEntry[]): string {
     }
   }
 
+  
   const sections: string[] = [HELP_HEADER];
 
   if (plantMap.size > 0) {
