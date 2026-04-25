@@ -1,6 +1,21 @@
 {
   "plants": [
     {
+      "seq": 2,
+      "id": "p jac-1777155888",
+      "shortCode": "p jac",
+      "fullName": "Prunus jacquemontii x japonica",
+      "commonName": "joel bush cherry",
+      "zoneCode": "bb",
+      "tags": [
+        "edible + bloom"
+      ],
+      "description": "first ripe fruit",
+      "image": "images/p jac/1777155888.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-25T22:24:49.172Z"
+    },
+    {
       "seq": 1,
       "id": "m. vir-1777154087",
       "shortCode": "m. vir",
@@ -21,7 +36,7 @@
         [
           34.7,
           6.2,
-          6.0
+          6
         ],
         [
           60.2,
@@ -48,6 +63,10 @@
     {
       "code": "maple",
       "name": null
+    },
+    {
+      "code": "bb",
+      "name": "berry border"
     }
   ]
 }
