@@ -1,6 +1,22 @@
 {
   "plants": [
     {
+      "seq": 3,
+      "id": "v sor-1777156147",
+      "shortCode": "v sor",
+      "fullName": "Viola sororia",
+      "commonName": "violet",
+      "zoneCode": "mpg",
+      "tags": [
+        "edible",
+        "bloom"
+      ],
+      "description": null,
+      "image": "images/v sor/1777156147.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-25T22:29:08.309Z"
+    },
+    {
       "seq": 2,
       "id": "p jac-1777155888",
       "shortCode": "p jac",
@@ -20,7 +36,7 @@
       "dominantColors": [
         [
           62.9,
-          -24.0,
+          -24,
           51.5
         ],
         [
@@ -31,7 +47,7 @@
         [
           11.7,
           -2.5,
-          6.0
+          6
         ]
       ]
     },
@@ -87,6 +103,10 @@
     {
       "code": "bb",
       "name": "berry border"
+    },
+    {
+      "code": "mpg",
+      "name": "maple"
     }
   ]
 }
