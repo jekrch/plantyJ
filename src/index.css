@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "DM Sans", sans-serif;
+  --font-mono: "Space Mono", monospace;
+  --font-display: "Space Mono", monospace;
+
+  --color-surface: #0b140d;
+  --color-surface-raised: #112014;
+  --color-surface-hover: #16291b;
+  --color-ink: #d8e6d2;
+  --color-ink-muted: #8aa085;
+  --color-ink-faint: #56685a;
+  --color-accent: #7fb069;
+  --color-accent-dim: #5a8c4a;
+}
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: var(--color-ink-muted);
+  }
+
+  html {
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+button, 
+[type="button"], 
+[type="submit"], 
+[type="reset"] {
+  cursor: pointer;
+}
+
+.panel-item {
+  break-inside: avoid;
+}
+
+/* Overlay transition */
+.panel-overlay {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.panel-item:hover .panel-overlay,
+.panel-item:focus-within .panel-overlay {
+  opacity: 1;
+}
+
+/* Subtle image scale on hover */
+.panel-item img {
+  transition: transform 0.3s ease-in-out;
+  will-change: transform;
+}
+
+.panel-item:hover img {
+  transform: scale(1.02);
+}
+
+/* Placeholder shimmer for loading */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #112014 25%, #16291b 50%, #112014 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.viewer-btn {
+  @apply flex items-center justify-center h-8 min-w-8 px-2 rounded-md bg-white/10 backdrop-blur-sm text-white/70 hover:text-white hover:bg-white/20 transition-all duration-150 ease-out active:scale-95;
+}
+
+.viewer-pill {
+  @apply flex items-center gap-1.5 h-7 px-3 rounded-full border border-white/15 bg-white/5 backdrop-blur-md text-[11px] tracking-wide text-white/60 hover:text-white/90 hover:bg-white/12 hover:border-white/25 transition-all duration-150 ease-out active:scale-95 cursor-pointer;
+}
+
+.content-container {
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@keyframes hatchFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.32;
+  }
+}
+
+@keyframes hatchFadeOut {
+  from {
+    opacity: 0.32;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes hatchDrift {
+
+  0%,
+  100% {
+    transform: rotate(-5deg) scale(1.15) translate(-4%, 3%);
+  }
+
+  50% {
+    transform: rotate(-3.5deg) scale(1.18) translate(-3%, 2%);
+  }
+}
+
+@keyframes scrimIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scrimOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes modalExit {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.info-modal-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.info-modal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.info-modal-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+}
+
+.info-modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.info-modal-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+}

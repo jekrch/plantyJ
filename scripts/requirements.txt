@@ -1,0 +1,10 @@
+Pillow
+imagehash
+scikit-learn
+scikit-image
+numpy
+requests
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+torchvision
+open_clip_torch
