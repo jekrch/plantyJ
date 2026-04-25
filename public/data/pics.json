@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 6,
+      "id": "e ame-1777160369",
+      "shortCode": "e ame",
+      "zoneCode": "mpg",
+      "tags": [
+        "native"
+      ],
+      "description": "seed pod",
+      "image": "images/e ame/1777160369.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-25T23:39:30.968Z"
+    },
+    {
       "seq": 5,
       "id": "a tri-1777158209",
       "shortCode": "a tri",
@@ -18,13 +31,13 @@
       "dominantColors": [
         [
           61.5,
-          -27.0,
+          -27,
           29.4
         ],
         [
           34.1,
           -0.3,
-          9.0
+          9
         ],
         [
           70.7,
