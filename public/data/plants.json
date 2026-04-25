@@ -13,7 +13,27 @@
       "description": "first ripe fruit",
       "image": "images/p jac/1777155888.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-25T22:24:49.172Z"
+      "addedAt": "2026-04-25T22:24:49.172Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "d1a956435fdc5a06",
+      "dominantColors": [
+        [
+          62.9,
+          -24.0,
+          51.5
+        ],
+        [
+          51.8,
+          -5.3,
+          23.5
+        ],
+        [
+          11.7,
+          -2.5,
+          6.0
+        ]
+      ]
     },
     {
       "seq": 1,
