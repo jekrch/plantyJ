@@ -11,7 +11,27 @@
       "description": "transplanted 2025",
       "image": "images/a tri/1777158209.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-25T23:03:30.486Z"
+      "addedAt": "2026-04-25T23:03:30.486Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "b1e49975e45b2269",
+      "dominantColors": [
+        [
+          61.5,
+          -27.0,
+          29.4
+        ],
+        [
+          34.1,
+          -0.3,
+          9.0
+        ],
+        [
+          70.7,
+          -1.6,
+          6.6
+        ]
+      ]
     },
     {
       "seq": 4,
