@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
-import type { PicRecord, Plant, PlantRecord, Zone } from "./types";
+import type { PicRecord, Plant, PlantRecord, Species, Zone } from "./types";
 import { Sprout } from "lucide-react";
 import { sortPlantsAsync } from "./utils/sorting.ts";
 import type { SortMode } from "./utils/sorting.ts";
@@ -11,9 +11,19 @@ import { SpinnerState, ErrorState, EmptyState } from "./components/StatusStates"
 import { useFilterParams } from "./hooks/useFilterParams";
 import PlantViewer from "./components/PlantViewer";
 
+function slugifyName(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 export default function App() {
   const [plants, setPlants] = useState<Plant[]>([]);
   const [zones, setZones] = useState<Zone[]>([]);
+  const [speciesByShortCode, setSpeciesByShortCode] = useState<
+    Map<string, Species>
+  >(new Map());
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const { initialFilters, initialSort, syncToURL } = useFilterParams();
@@ -73,6 +83,27 @@ export default function App() {
         setPlants(merged);
         setZones(zonesData.zones ?? []);
         setStatus("ready");
+
+        // Load species data in parallel — non-blocking; fills in once available.
+        const records = plantsData.plants ?? [];
+        Promise.all(
+          records.map(async (p) => {
+            if (!p.fullName) return null;
+            const slug = slugifyName(p.fullName);
+            try {
+              const res = await fetch(`${base}data/species/${slug}.json`);
+              if (!res.ok) return null;
+              const sp = (await res.json()) as Species;
+              return [p.shortCode, sp] as const;
+            } catch {
+              return null;
+            }
+          })
+        ).then((entries) => {
+          const m = new Map<string, Species>();
+          for (const e of entries) if (e) m.set(e[0], e[1]);
+          setSpeciesByShortCode(m);
+        });
       })
       .catch(() => setStatus("error"));
   }, []);
@@ -113,6 +144,17 @@ export default function App() {
       setOpenPlantId(plant.id);
     },
     [sortedPlants]
+  );
+
+  const handleApplyShortCodes = useCallback(
+    (shortCodes: string[]) => {
+      const next: Filters = { ...filters, shortCodes: new Set(shortCodes) };
+      setFilters(next);
+      syncToURL(next, sortMode);
+      setOpenPlantId(null);
+      setViewerScope("filtered");
+    },
+    [filters, sortMode, syncToURL]
   );
 
   const viewerPlants = viewerScope === "all" ? plants : sortedPlants;
@@ -197,10 +239,12 @@ export default function App() {
           plants={viewerPlants}
           allPlants={plants}
           zones={zones}
+          speciesByShortCode={speciesByShortCode}
           currentIndex={openIndex}
           onClose={handleCloseViewer}
           onNavigate={handleNavigateViewer}
           onSelectPlant={handleSelectPlant}
+          onApplyShortCodes={handleApplyShortCodes}
         />
       )}
     </div>

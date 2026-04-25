@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ExternalLink } from "lucide-react";
+import { ChevronDown, ExternalLink } from "lucide-react";
 import type { Plant, Species, SpeciesTaxonomy, Zone } from "../types";
 
 interface Props {
@@ -7,7 +7,9 @@ interface Props {
   plant: Plant;
   allPlants: Plant[];
   zones: Zone[];
+  speciesByShortCode: Map<string, Species>;
   onSelectPlant: (plant: Plant) => void;
+  onApplyShortCodes: (shortCodes: string[]) => void;
   topOffset?: number;
   bottomOffset?: number;
   closing?: boolean;
@@ -26,13 +28,6 @@ const TAXONOMY_RANKS: Array<keyof SpeciesTaxonomy> = [
 
 const DESCRIPTION_PREVIEW_CHARS = 260;
 
-function slugifyFullName(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
 function firstSentenceOrTrim(text: string, max: number): string {
   if (text.length <= max) return text;
   const slice = text.slice(0, max);
@@ -46,45 +41,36 @@ function firstSentenceOrTrim(text: string, max: number): string {
   return `${slice.slice(0, lastSpace > 0 ? lastSpace : max).trimEnd()}…`;
 }
 
-const speciesCache = new Map<string, Species | null>();
+interface TaxonomyRow {
+  rank: keyof SpeciesTaxonomy;
+  value: string;
+  matchingShortCodes: string[];
+}
 
 export default function PlantInfoDrawer({
   open,
   plant,
   allPlants,
   zones,
+  speciesByShortCode,
   onSelectPlant,
+  onApplyShortCodes,
   topOffset = 0,
   bottomOffset = 0,
   closing = false,
   slideDir = null,
 }: Props) {
-  const [species, setSpecies] = useState<Species | null>(null);
   const [descExpanded, setDescExpanded] = useState(false);
+  const [expandedRank, setExpandedRank] = useState<keyof SpeciesTaxonomy | null>(
+    null
+  );
 
   useEffect(() => {
     setDescExpanded(false);
-    if (!plant.fullName) {
-      setSpecies(null);
-      return;
-    }
-    const slug = slugifyFullName(plant.fullName);
-    if (speciesCache.has(slug)) {
-      setSpecies(speciesCache.get(slug) ?? null);
-      return;
-    }
-    let cancelled = false;
-    fetch(`${import.meta.env.BASE_URL}data/species/${slug}.json`)
-      .then((r) => (r.ok ? (r.json() as Promise<Species>) : null))
-      .catch(() => null)
-      .then((data) => {
-        speciesCache.set(slug, data);
-        if (!cancelled) setSpecies(data);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [plant.fullName]);
+    setExpandedRank(null);
+  }, [plant.id]);
+
+  const species = speciesByShortCode.get(plant.shortCode) ?? null;
 
   const samePlantTimeline = allPlants
     .filter((p) => p.shortCode === plant.shortCode && p.id !== plant.id)
@@ -125,14 +111,24 @@ export default function PlantInfoDrawer({
     });
   }, [species, plant.commonName]);
 
-  const taxonomyRows = useMemo(() => {
-    if (!species?.taxonomy) return [] as Array<{ rank: string; name: string }>;
+  const plantByShortCode = useMemo(() => {
+    const m = new Map<string, Plant>();
+    for (const p of allPlants) if (!m.has(p.shortCode)) m.set(p.shortCode, p);
+    return m;
+  }, [allPlants]);
+
+  const taxonomyRows: TaxonomyRow[] = useMemo(() => {
+    if (!species?.taxonomy) return [];
     return TAXONOMY_RANKS.flatMap((rank) => {
       const value = species.taxonomy?.[rank];
       if (!value) return [];
-      return [{ rank, name: value as string }];
+      const matching: string[] = [];
+      for (const [code, sp] of speciesByShortCode) {
+        if (sp.taxonomy?.[rank] === value) matching.push(code);
+      }
+      return [{ rank, value: value as string, matchingShortCodes: matching }];
     });
-  }, [species]);
+  }, [species, speciesByShortCode]);
 
   const description = species?.description?.trim() || null;
   const needsTruncation =
@@ -231,30 +227,99 @@ export default function PlantInfoDrawer({
         {/* Taxonomic lineage */}
         {taxonomyRows.length > 0 && (
           <div>
-            <p className="text-[10px] uppercase tracking-widest text-white/30 mb-2">
-              Classification
-            </p>
+            <div className="flex items-baseline justify-between mb-2">
+              <p className="text-[10px] uppercase tracking-widest text-white/30">
+                Classification
+              </p>
+              <p className="text-[9px] uppercase tracking-widest text-white/20">
+                tap to filter
+              </p>
+            </div>
             <ol className="space-y-1">
               {taxonomyRows.map((row, idx) => {
                 const isLast = idx === taxonomyRows.length - 1;
+                const siblingCodes = row.matchingShortCodes.filter(
+                  (c) => c !== plant.shortCode
+                );
+                const total = row.matchingShortCodes.length;
+                const isExpandable = siblingCodes.length > 0;
+                const isExpanded = expandedRank === row.rank;
                 return (
-                  <li
-                    key={row.rank}
-                    className="flex items-baseline gap-3 text-xs"
-                    style={{ paddingLeft: `${idx * 10}px` }}
-                  >
-                    <span className="text-[9px] uppercase tracking-widest text-white/25 w-14 shrink-0 font-mono">
-                      {row.rank}
-                    </span>
-                    <span
-                      className={
-                        isLast
-                          ? "text-accent italic"
-                          : "text-white/65"
-                      }
-                    >
-                      {row.name}
-                    </span>
+                  <li key={row.rank} style={{ paddingLeft: `${idx * 10}px` }}>
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="text-[9px] uppercase tracking-widest text-white/25 w-14 shrink-0 font-mono">
+                        {row.rank}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          onApplyShortCodes(row.matchingShortCodes)
+                        }
+                        className={`text-left hover:text-accent transition-colors cursor-pointer ${
+                          isLast ? "text-accent italic" : "text-white/65"
+                        }`}
+                        title={`Filter to ${total} plant${total === 1 ? "" : "s"}`}
+                      >
+                        {row.value}
+                      </button>
+                      {isExpandable && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setExpandedRank(isExpanded ? null : row.rank)
+                          }
+                          className="ml-auto inline-flex items-center gap-0.5 text-[10px] text-white/35 hover:text-white/70 transition-colors cursor-pointer px-1.5 py-0.5 rounded-sm hover:bg-white/5"
+                          title={
+                            isExpanded
+                              ? "Hide siblings"
+                              : `Show ${siblingCodes.length} other${siblingCodes.length === 1 ? "" : "s"}`
+                          }
+                          aria-expanded={isExpanded}
+                        >
+                          <span className="tabular-nums">
+                            +{siblingCodes.length}
+                          </span>
+                          <ChevronDown
+                            size={11}
+                            strokeWidth={1.5}
+                            style={{
+                              transform: isExpanded
+                                ? "rotate(180deg)"
+                                : "rotate(0deg)",
+                              transition: "transform 0.2s ease-out",
+                            }}
+                          />
+                        </button>
+                      )}
+                    </div>
+                    {isExpandable && isExpanded && (
+                      <div
+                        className="flex flex-wrap gap-1.5 mt-1.5 mb-1"
+                        style={{ paddingLeft: "calc(3.5rem + 0.5rem)" }}
+                      >
+                        {siblingCodes.map((code) => {
+                          const sibPlant = plantByShortCode.get(code);
+                          const sibSpecies = speciesByShortCode.get(code);
+                          const label =
+                            sibPlant?.commonName ??
+                            sibPlant?.fullName ??
+                            sibSpecies?.commonName ??
+                            sibSpecies?.fullName ??
+                            code;
+                          return (
+                            <button
+                              key={code}
+                              type="button"
+                              onClick={() => onApplyShortCodes([code])}
+                              className="text-[11px] leading-none px-2 py-1 rounded-sm bg-white/5 text-white/60 hover:bg-accent/15 hover:text-accent transition-colors cursor-pointer"
+                              title={sibSpecies?.fullName ?? sibPlant?.fullName ?? code}
+                            >
+                              {label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
                   </li>
                 );
               })}

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { X, ZoomIn, ZoomOut, Info } from "lucide-react";
-import type { Plant, Zone } from "../types";
+import type { Plant, Species, Zone } from "../types";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import { MAX_SCALE, MIN_SCALE, useZoomPan } from "../hooks/useZoomPan";
 import { useBarMeasure } from "../hooks/useBarMeasure";
@@ -14,10 +14,12 @@ interface Props {
   plants: Plant[];
   allPlants: Plant[];
   zones: Zone[];
+  speciesByShortCode: Map<string, Species>;
   currentIndex: number;
   onClose: () => void;
   onNavigate: (index: number) => void;
   onSelectPlant: (plant: Plant) => void;
+  onApplyShortCodes: (shortCodes: string[]) => void;
 }
 
 export default function PlantViewer({
@@ -25,10 +27,12 @@ export default function PlantViewer({
   plants,
   allPlants,
   zones,
+  speciesByShortCode,
   currentIndex,
   onClose,
   onNavigate,
   onSelectPlant,
+  onApplyShortCodes,
 }: Props) {
   const [visible, setVisible] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -475,7 +479,9 @@ export default function PlantViewer({
         plant={plant}
         allPlants={allPlants}
         zones={zones}
+        speciesByShortCode={speciesByShortCode}
         onSelectPlant={onSelectPlant}
+        onApplyShortCodes={onApplyShortCodes}
         topOffset={topBarH}
         bottomOffset={bottomBarH}
         slideDir={drawerSlideDir}
