@@ -1,4 +1,9 @@
 {
   "plants": [],
-  "zones": []
+  "zones": [
+    {
+      "code": "{WBV}",
+      "name": "{West Boulevard}"
+    }
+  ]
 }
