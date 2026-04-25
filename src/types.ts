@@ -4,7 +4,7 @@ export interface Plant {
   shortCode: string;
   fullName: string | null;
   commonName: string | null;
-  zoneCodes: string[];
+  zoneCode: string;
   tags: string[];
   description: string | null;
   image: string;

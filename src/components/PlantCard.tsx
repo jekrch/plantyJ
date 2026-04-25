@@ -62,9 +62,7 @@ export default function PlantCard({ plant, zoneNameByCode, onOpen }: Props) {
   );
 
   const titleLine = plant.commonName ?? plant.fullName ?? plant.shortCode;
-  const subtitle = plant.zoneCodes
-    .map((code) => zoneNameByCode.get(code) ?? code)
-    .join(", ");
+  const subtitle = zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode;
 
   return (
     <div

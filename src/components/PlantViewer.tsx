@@ -169,9 +169,7 @@ export default function PlantViewer({
     for (const z of zones) if (z.name) m.set(z.code, z.name);
     return m;
   }, [zones]);
-  const subtitle = plant.zoneCodes
-    .map((code) => zoneNameByCode.get(code) ?? code)
-    .join(", ");
+  const subtitle = zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode;
 
   return (
     <div

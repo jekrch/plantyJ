@@ -34,22 +34,18 @@ export default function PlantInfoDrawer({
     return m;
   }, [zones]);
 
-  const zoneSet = useMemo(() => new Set(plant.zoneCodes), [plant.zoneCodes]);
   const sharingZone = allPlants
     .filter(
       (p) =>
         p.shortCode !== plant.shortCode &&
-        p.zoneCodes.some((z) => zoneSet.has(z))
+        p.zoneCode === plant.zoneCode
     )
     .reduce<Plant[]>((acc, p) => {
       if (!acc.some((existing) => existing.shortCode === p.shortCode)) acc.push(p);
       return acc;
     }, []);
 
-  const sharingHeader =
-    plant.zoneCodes.length === 1
-      ? `Others in ${zoneNameByCode.get(plant.zoneCodes[0]) ?? plant.zoneCodes[0]}`
-      : "Others sharing a zone";
+  const sharingHeader = `Others in ${zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode}`;
 
   const show = open && !closing;
 
@@ -96,19 +92,13 @@ export default function PlantInfoDrawer({
           )}
         </div>
 
-        {/* Zones */}
+        {/* Zone */}
         <div className="rounded px-4 py-3" style={{ backgroundColor: "rgba(255,255,255,0.04)" }}>
-          <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">
-            {plant.zoneCodes.length > 1 ? "Zones" : "Zone"}
+          <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">Zone</p>
+          <p className="font-display text-sm text-white/90 leading-snug">
+            {zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode}{" "}
+            <span className="text-accent">{plant.zoneCode}</span>
           </p>
-          <div className="flex flex-wrap gap-x-3 gap-y-1">
-            {plant.zoneCodes.map((code) => (
-              <p key={code} className="font-display text-sm text-white/90 leading-snug">
-                {zoneNameByCode.get(code) ?? code}{" "}
-                <span className="text-accent">{code}</span>
-              </p>
-            ))}
-          </div>
         </div>
 
         {/* Description */}

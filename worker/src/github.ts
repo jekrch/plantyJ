@@ -208,7 +208,7 @@ const UPDATABLE_FIELDS = [
   "shortCode",
   "fullName",
   "commonName",
-  "zoneCodes",
+  "zoneCode",
   "tags",
   "description",
 ] as const;
@@ -251,17 +251,18 @@ export async function updatePlant(
     case "commonName":
       plant.commonName = value || null;
       break;
-    case "zoneCodes": {
-      const codes = parseList(value);
-      if (codes.length === 0) {
-        throw new Error("zoneCodes must contain at least one code.");
+    case "zoneCode": {
+      const code = value.trim();
+      if (!code) {
+        throw new Error("zoneCode must be a non-empty zone code.");
       }
-      for (const code of codes) {
-        if (!gallery.zones.some((z) => z.code === code)) {
-          gallery.zones.push({ code, name: null });
-        }
+      if (code.includes(",") || code.includes("+")) {
+        throw new Error("zoneCode is a single value — a picture belongs to one zone.");
       }
-      plant.zoneCodes = codes;
+      if (!gallery.zones.some((z) => z.code === code)) {
+        gallery.zones.push({ code, name: null });
+      }
+      plant.zoneCode = code;
       break;
     }
     case "tags":
@@ -315,7 +316,7 @@ export async function deleteZone(env: Env, code: string): Promise<DeleteZoneResu
   if (idx === -1) return { zone: null, inUseBy: [] };
 
   const inUseBy = gallery.plants
-    .filter((p) => p.zoneCodes.includes(code))
+    .filter((p) => p.zoneCode === code)
     .map((p) => p.shortCode);
   if (inUseBy.length > 0) {
     return { zone: gallery.zones[idx], inUseBy };

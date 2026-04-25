@@ -17,22 +17,24 @@ import {
 const HELP_HEADER = `PlantyJ Bot — Commands:
 
 Add a plant photo:
-  Post a photo with a caption in this format (only shortCode is required):
-  shortCode // fullName // commonName // zones // tags // description
+  Each photo is one plant in one zone. If a plant lives in multiple zones,
+  post a separate photo per zone.
 
-  Multiple zones are separated by '+'. Each zone is either a code (fb1) or
-  'Display Name (code)' to declare/rename it.
+  Caption format (only shortCode is required):
+  shortCode // fullName // commonName // zone // tags // description
+
+  Zone is either a bare code (fb1) or 'Display Name (code)' to declare/rename.
 
   First time registering a plant + zone:
   tmt-c // Solanum lycopersicum 'Cherokee Purple' // Cherokee Purple Tomato // Front Bed 1 (fb1) // edible,heirloom // first ripe fruit
 
-  A plant in two zones:
-  mint-1 // Mentha spicata // Spearmint // Front Bed 1 (fb1) + Side Bed (sb) // edible
+  Same plant photographed in a different zone (just supply the new zone):
+  mint-1 // // // sb // // spreading into the side bed
 
-  Once shortCode and zones are known, just:
+  Once shortCode and zone are known, just:
   tmt-c // // // fb1 // // sizing up nicely
 
-  If the plant hasn't moved zones, just the code is enough:
+  If posting from the same zone as the last photo of this plant, just the code:
   tmt-c
 
 Plant commands:
@@ -40,8 +42,8 @@ Plant commands:
   /update {seq} {field} {value} — Update a field on a plant
   /help — Show this message
 
-Updatable fields: shortCode, fullName, commonName, zoneCodes, tags, description
-  (zoneCodes accepts a comma-separated list, e.g. /update 12 zoneCodes fb1,sb)
+Updatable fields: shortCode, fullName, commonName, zoneCode, tags, description
+  (zoneCode is a single zone, e.g. /update 12 zoneCode sb)
 
 Zone commands:
   /addzone {code} {name} — Create or rename a zone (name optional)
@@ -206,7 +208,7 @@ export default {
               env.TELEGRAM_BOT_TOKEN,
               message.chat.id,
               message.message_id,
-              `Invalid field "${field}". Updatable: shortCode, fullName, commonName, zoneCodes, tags, description`
+              `Invalid field "${field}". Updatable: shortCode, fullName, commonName, zoneCode, tags, description`
             );
             return new Response("OK");
           }
@@ -286,7 +288,7 @@ export default {
         shortCode: resolved.shortCode,
         fullName: resolved.fullName,
         commonName: resolved.commonName,
-        zoneCodes: resolved.zoneCodes,
+        zoneCode: resolved.zoneCode,
         tags: resolved.tags,
         description: resolved.description,
         image: browserImagePath,
@@ -301,18 +303,16 @@ export default {
         if (idx === -1) mergedZones.push(u);
         else mergedZones[idx] = { ...mergedZones[idx], name: u.name ?? mergedZones[idx].name };
       }
-      const zoneLabel = resolved.zoneCodes
-        .map((code) => {
-          const z = mergedZones.find((zone) => zone.code === code);
-          return z?.name ? `${z.name} (${code})` : code;
-        })
-        .join(" + ");
+      const resolvedZone = mergedZones.find((z) => z.code === resolved.zoneCode);
+      const zoneLabel = resolvedZone?.name
+        ? `${resolvedZone.name} (${resolved.zoneCode})`
+        : resolved.zoneCode;
 
       const lines = [
         `Added plant #${seq}: ${resolved.shortCode}`,
         resolved.commonName ? `  Common: ${resolved.commonName}` : null,
         resolved.fullName ? `  Full: ${resolved.fullName}` : null,
-        `  Zones: ${zoneLabel}`,
+        `  Zone: ${zoneLabel}`,
         resolved.tags.length > 0 ? `  Tags: ${resolved.tags.join(", ")}` : null,
         resolved.description ? `  Note: ${resolved.description}` : null,
         `  → ${browserImagePath}`,

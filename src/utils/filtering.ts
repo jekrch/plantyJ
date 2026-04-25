@@ -34,7 +34,7 @@ export function activeFilterCount(filters: Filters): number {
 
 function plantMatchesZones(plant: Plant, zoneFilter: Set<string>): boolean {
   if (zoneFilter.size === 0) return true;
-  return plant.zoneCodes.some((z) => zoneFilter.has(z));
+  return zoneFilter.has(plant.zoneCode);
 }
 
 export function applyFilters(plants: Plant[], filters: Filters): Plant[] {
@@ -84,9 +84,7 @@ export function computeFacets(plants: Plant[], filters: Filters, zones: Zone[]) 
       filters.tags.size === 0 || (p.tags ?? []).some((t) => filters.tags.has(t));
 
     if (passShort && passPostedBy && passTags) {
-      for (const code of p.zoneCodes) {
-        zoneCounts.set(code, (zoneCounts.get(code) ?? 0) + 1);
-      }
+      zoneCounts.set(p.zoneCode, (zoneCounts.get(p.zoneCode) ?? 0) + 1);
     }
     if (passZone && passPostedBy && passTags) {
       shortCodeCounts.set(p.shortCode, (shortCodeCounts.get(p.shortCode) ?? 0) + 1);

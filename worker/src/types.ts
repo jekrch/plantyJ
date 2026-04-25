@@ -59,7 +59,7 @@ export interface ParsedCaption {
   shortCode: string;
   fullName: string | null;
   commonName: string | null;
-  zones: ParsedZoneRef[] | null;
+  zone: ParsedZoneRef | null;
   tags: string[] | null;
   description: string | null;
 }
@@ -70,7 +70,7 @@ export interface PlantEntry {
   shortCode: string;
   fullName: string | null;
   commonName: string | null;
-  zoneCodes: string[];
+  zoneCode: string;
   tags: string[];
   description: string | null;
   image: string;
