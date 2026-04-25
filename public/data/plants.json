@@ -1,5 +1,21 @@
 {
-  "plants": [],
+  "plants": [
+    {
+      "seq": 1,
+      "id": "m. vir-1777154087",
+      "shortCode": "m. vir",
+      "fullName": "mertensia virginica",
+      "commonName": "Virginia bluebells",
+      "zoneCode": "maple",
+      "tags": [
+        "bloom"
+      ],
+      "description": "one year",
+      "image": "images/m. vir/1777154087.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-25T21:54:48.503Z"
+    }
+  ],
   "zones": [
     {
       "code": "wbv",
@@ -8,6 +24,10 @@
     {
       "code": "nbv",
       "name": "North Boulevard"
+    },
+    {
+      "code": "maple",
+      "name": null
     }
   ]
 }
