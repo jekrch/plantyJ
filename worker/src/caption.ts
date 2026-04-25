@@ -1,20 +1,15 @@
-import type { ParsedCaption, ParsedZoneRef, PlantEntry, Zone } from "./types";
+import type { ParsedCaption, ParsedZoneRef, PicEntry, PlantRecord, Zone } from "./types";
 
 /**
- * Parse a Telegram caption into structured plant metadata.
+ * Parse a Telegram caption into structured plant + pic metadata.
  *
  * Format (// delimited):
  *   shortCode // fullName // commonName // zone // tags // description
  *
- * The zone segment is a single zone — either a bare code (`fb1`) or
- * `Display Name (zoneCode)` to declare the name. A picture is always taken
- * in exactly one zone; if a plant lives in multiple zones, post a separate
- * picture per zone.
- *
- * Examples:
- *   tmt-c // Solanum lycopersicum // Cherokee Purple // Front Bed 1 (fb1) // edible // first ripe
- *   tmt-c // // // fb1 // // sizing up nicely
- *   tmt-c
+ * Plant-level fields (fullName, commonName) live on the plant record,
+ * keyed by shortCode. Pic-level fields (zone, tags, description) live on
+ * the pic. The zone segment is a single zone — either a bare code (`fb1`)
+ * or `Display Name (zoneCode)` to declare the name.
  */
 export function parseCaption(caption: string): ParsedCaption {
   const parts = caption.split("//").map((s) => s.trim());
@@ -64,35 +59,47 @@ export function slugify(text: string): string {
     .replace(/^-|-$/g, "");
 }
 
-export interface ResolvedPlant {
+export interface ResolvedPlantUpsert {
   shortCode: string;
   fullName: string | null;
   commonName: string | null;
+}
+
+export interface ResolvedPic {
+  shortCode: string;
   zoneCode: string;
   tags: string[];
   description: string | null;
 }
 
 export interface ResolveResult {
-  plant: ResolvedPlant;
+  pic: ResolvedPic;
+  /** Plant record to create or fill in (only when new or has new info to backfill). */
+  plantUpsert: ResolvedPlantUpsert | null;
   /** Zone records that should be created or renamed in the registry. */
   zoneUpserts: Zone[];
 }
 
 /**
- * Inherit missing fields from prior entries with a matching shortCode. The
- * zone is inherited from the most recent prior picture of the same plant
- * (PlantEntry list is newest-first). Auto-register a new zoneCode referenced
- * by the caption, and apply any new zone name provided.
+ * Resolve the caption into a pic + (optional) plant upsert.
  *
- * Throws if shortCode is brand new and `fullName` or zone is missing.
+ * Plant fields (fullName, commonName) come from the existing plant record
+ * if present. If the plant is new, fullName is required and the plant is
+ * registered. If a known plant has missing fields and the caption supplies
+ * them, those gaps are filled (caption never overwrites existing plant data
+ * — use /update for that).
+ *
+ * Pic fields (zone, tags) inherit from the most recent prior pic of the same
+ * plant when not supplied in the caption.
  */
 export function resolveFields(
   parsed: ParsedCaption,
-  existing: PlantEntry[],
+  existingPics: PicEntry[],
+  plants: PlantRecord[],
   zones: Zone[]
 ): ResolveResult {
-  const priorPlant = existing.find((p) => p.shortCode === parsed.shortCode);
+  const priorPic = existingPics.find((p) => p.shortCode === parsed.shortCode);
+  const existingPlant = plants.find((p) => p.shortCode === parsed.shortCode);
 
   let zoneCode: string;
   const zoneUpserts: Zone[] = [];
@@ -105,8 +112,8 @@ export function resolveFields(
     } else if (parsed.zone.name && parsed.zone.name !== existingZone.name) {
       zoneUpserts.push({ code: parsed.zone.code, name: parsed.zone.name });
     }
-  } else if (priorPlant) {
-    zoneCode = priorPlant.zoneCode;
+  } else if (priorPic) {
+    zoneCode = priorPic.zoneCode;
   } else {
     throw new Error(
       `New plant "${parsed.shortCode}" needs a zone. Use: shortCode // fullName // commonName // Zone Name (zoneCode)`
@@ -117,25 +124,42 @@ export function resolveFields(
     throw new Error(`Plant "${parsed.shortCode}" must belong to a zone.`);
   }
 
-  const fullName = parsed.fullName ?? priorPlant?.fullName ?? null;
-  const commonName = parsed.commonName ?? priorPlant?.commonName ?? null;
-  const tags = parsed.tags ?? priorPlant?.tags ?? [];
+  const tags = parsed.tags ?? priorPic?.tags ?? [];
 
-  if (!priorPlant && !fullName) {
+  if (!existingPlant && !parsed.fullName) {
     throw new Error(
       `New shortCode "${parsed.shortCode}" needs a fullName. Use: shortCode // Genus species 'Variety' // Common Name // Zone (code)`
     );
   }
 
-  return {
-    plant: {
+  let plantUpsert: ResolvedPlantUpsert | null = null;
+  if (!existingPlant) {
+    plantUpsert = {
       shortCode: parsed.shortCode,
-      fullName,
-      commonName,
+      fullName: parsed.fullName,
+      commonName: parsed.commonName,
+    };
+  } else {
+    // Backfill missing fields only — don't overwrite existing plant data.
+    const fullName = existingPlant.fullName ?? parsed.fullName ?? null;
+    const commonName = existingPlant.commonName ?? parsed.commonName ?? null;
+    if (fullName !== existingPlant.fullName || commonName !== existingPlant.commonName) {
+      plantUpsert = {
+        shortCode: parsed.shortCode,
+        fullName,
+        commonName,
+      };
+    }
+  }
+
+  return {
+    pic: {
+      shortCode: parsed.shortCode,
       zoneCode,
       tags,
       description: parsed.description,
     },
+    plantUpsert,
     zoneUpserts,
   };
 }

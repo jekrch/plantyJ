@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Compute BioCLIP image embeddings for plants.json.
+Compute BioCLIP image embeddings for pics.json.
 
 Uses `imageomics/bioclip` via OpenCLIP — a CLIP variant fine-tuned on the
 Tree of Life dataset. It groups species, families, and visual plant
@@ -34,7 +34,7 @@ SPEC = ModelSpec(
     version="bioclip-v1",
 )
 
-PLANTS_PATH = Path("public/data/plants.json")
+PICS_PATH = Path("public/data/pics.json")
 IMAGE_ROOT = Path("public")
 
 
@@ -85,44 +85,44 @@ def embed_image(image_path: Path, model, preprocess) -> list[float]:
 
 
 def main():
-    if not PLANTS_PATH.exists():
-        print(f"plants.json not found at {PLANTS_PATH}", file=sys.stderr)
+    if not PICS_PATH.exists():
+        print(f"pics.json not found at {PICS_PATH}", file=sys.stderr)
         sys.exit(1)
 
-    plants = json.loads(PLANTS_PATH.read_text()).get("plants", [])
+    pics = json.loads(PICS_PATH.read_text()).get("pics", [])
     existing = load_existing(SPEC)
 
-    current_ids = {p["id"] for p in plants}
+    current_ids = {p["id"] for p in pics}
     pruned = {k: v for k, v in existing.items() if k in current_ids}
     pruned_count = len(existing) - len(pruned)
     if pruned_count:
         print(f"Pruned {pruned_count} stale embedding(s).")
 
-    to_compute = [p for p in plants if p["id"] not in pruned]
+    to_compute = [p for p in pics if p["id"] not in pruned]
     if not to_compute:
         if pruned_count:
             save_embeddings(SPEC, pruned)
             print("Wrote pruned embeddings file.")
         else:
-            print("All plants already have embeddings.")
+            print("All pics already have embeddings.")
         return
 
-    print(f"Computing BioCLIP embeddings for {len(to_compute)} plant(s)...")
+    print(f"Computing BioCLIP embeddings for {len(to_compute)} pic(s)...")
     model, preprocess = load_model(SPEC)
 
     updated = dict(pruned)
     errors = 0
-    for i, plant in enumerate(to_compute, start=1):
-        image_path = IMAGE_ROOT / plant["image"]
+    for i, pic in enumerate(to_compute, start=1):
+        image_path = IMAGE_ROOT / pic["image"]
         if not image_path.exists():
-            print(f"  SKIP (file not found): {plant['image']}", file=sys.stderr)
+            print(f"  SKIP (file not found): {pic['image']}", file=sys.stderr)
             errors += 1
             continue
         try:
-            updated[plant["id"]] = embed_image(image_path, model, preprocess)
-            print(f"  [{i}/{len(to_compute)}] OK: {plant['image']}")
+            updated[pic["id"]] = embed_image(image_path, model, preprocess)
+            print(f"  [{i}/{len(to_compute)}] OK: {pic['image']}")
         except Exception as e:
-            print(f"  ERROR: {plant['image']} → {e}", file=sys.stderr)
+            print(f"  ERROR: {pic['image']} → {e}", file=sys.stderr)
             errors += 1
 
     save_embeddings(SPEC, updated)

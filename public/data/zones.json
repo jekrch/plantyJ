@@ -1,0 +1,24 @@
+{
+  "zones": [
+    {
+      "code": "wbv",
+      "name": "West Boulevard"
+    },
+    {
+      "code": "nbv",
+      "name": "North Boulevard"
+    },
+    {
+      "code": "maple",
+      "name": null
+    },
+    {
+      "code": "bb",
+      "name": "berry border"
+    },
+    {
+      "code": "mpg",
+      "name": "maple"
+    }
+  ]
+}

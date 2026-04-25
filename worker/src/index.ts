@@ -1,16 +1,16 @@
-import type { Env, Gallery, PlantEntry, TelegramUpdate, Zone } from "./types";
+import type { Env, Gallery, PicEntry, PlantRecord, TelegramUpdate, Zone } from "./types";
 import { parseCaption, resolveFields } from "./caption";
 import { downloadFile, sendReply } from "./telegram";
 import {
-  appendPlant,
+  appendPic,
   arrayBufferToBase64,
   commitFile,
-  deletePlant,
+  deletePic,
   deleteZone,
   isUpdatableField,
   nextSeq,
-  readPlantsJson,
-  updatePlant,
+  readGallery,
+  updateBySeq,
   upsertZone,
 } from "./github";
 
@@ -37,34 +37,28 @@ Add a plant photo:
   If posting from the same zone as the last photo of this plant, just the code:
   tmt-c
 
-Plant commands:
-  /delete {seq} — Remove a plant entry by its sequential ID
-  /update {seq} {field} {value} — Update a field on a plant
+Pic commands:
+  /delete {seq} — Remove a pic by its sequential ID
+  /update {seq} {field} {value} — Update a field on a pic or its plant
   /help — Show this message
 
-Updatable fields: shortCode, fullName, commonName, zoneCode, tags, description
-  (zoneCode is a single zone, e.g. /update 12 zoneCode sb)
+Updatable fields:
+  Plant-level (apply to all pics of the plant): shortCode, fullName, commonName
+  Pic-level (apply only to this pic): zoneCode, tags, description
 
 Zone commands:
   /addzone {code} {name} — Create or rename a zone (name optional)
   /renamezone {code} {name} — Set/replace a zone's display name
-  /deletezone {code} — Remove a zone (only if no plants reference it)
+  /deletezone {code} — Remove a zone (only if no pics reference it)
   /zones — List all known zones`;
 
 function buildHelpText(gallery: Gallery): string {
-  const plantMap = new Map<string, string>();
-  for (const p of gallery.plants) {
-    if (!plantMap.has(p.shortCode)) {
-      plantMap.set(p.shortCode, p.commonName ?? p.fullName ?? p.shortCode);
-    }
-  }
-
   const sections: string[] = [HELP_HEADER];
 
-  if (plantMap.size > 0) {
-    const lines = Array.from(plantMap.entries())
-      .sort((a, b) => a[0].localeCompare(b[0]))
-      .map(([code, name]) => `  ${code} — ${name}`);
+  if (gallery.plants.length > 0) {
+    const lines = [...gallery.plants]
+      .sort((a, b) => a.shortCode.localeCompare(b.shortCode))
+      .map((p) => `  ${p.shortCode} — ${p.commonName ?? p.fullName ?? p.shortCode}`);
     sections.push(`Known plants:\n${lines.join("\n")}`);
   }
 
@@ -111,7 +105,7 @@ export default {
 
       try {
         if (text === "/help" || text === "/start") {
-          const { gallery } = await readPlantsJson(env);
+          const { gallery } = await readGallery(env);
           await sendReply(
             env.TELEGRAM_BOT_TOKEN,
             message.chat.id,
@@ -122,7 +116,7 @@ export default {
         }
 
         if (text === "/zones") {
-          const { gallery } = await readPlantsJson(env);
+          const { gallery } = await readGallery(env);
           await sendReply(
             env.TELEGRAM_BOT_TOKEN,
             message.chat.id,
@@ -185,14 +179,14 @@ export default {
         const deleteMatch = text.match(/^\/delete\s+(\d+)$/);
         if (deleteMatch) {
           const seq = parseInt(deleteMatch[1], 10);
-          const removed = await deletePlant(env, seq);
+          const removed = await deletePic(env, seq);
           await sendReply(
             env.TELEGRAM_BOT_TOKEN,
             message.chat.id,
             message.message_id,
             removed
-              ? `Deleted plant #${seq}: ${removed.shortCode}`
-              : `No plant found with ID ${seq}.`
+              ? `Deleted pic #${seq}: ${removed.shortCode}`
+              : `No pic found with ID ${seq}.`
           );
           return new Response("OK");
         }
@@ -213,14 +207,14 @@ export default {
             return new Response("OK");
           }
 
-          const updated = await updatePlant(env, seq, field, value);
+          const updated = await updateBySeq(env, seq, field, value);
           await sendReply(
             env.TELEGRAM_BOT_TOKEN,
             message.chat.id,
             message.message_id,
             updated
-              ? `Updated plant #${seq}: ${field} → "${value}"\n→ ${updated.shortCode}`
-              : `No plant found with ID ${seq}.`
+              ? `Updated pic #${seq}: ${field} → "${value}"\n→ ${updated.pic.shortCode}`
+              : `No pic found with ID ${seq}.`
           );
           return new Response("OK");
         }
@@ -253,9 +247,10 @@ export default {
     try {
       const parsed = parseCaption(message.caption);
 
-      const { gallery } = await readPlantsJson(env);
-      const { plant: resolved, zoneUpserts } = resolveFields(
+      const { gallery } = await readGallery(env);
+      const { pic: resolvedPic, plantUpsert, zoneUpserts } = resolveFields(
         parsed,
+        gallery.pics,
         gallery.plants,
         gallery.zones
       );
@@ -268,34 +263,41 @@ export default {
 
       const timestamp = Math.floor(Date.now() / 1000);
       const filename = `${timestamp}.jpg`;
-      const repoImagePath = `public/images/${resolved.shortCode}/${filename}`;
-      const browserImagePath = `images/${resolved.shortCode}/${filename}`;
-      const id = `${resolved.shortCode}-${timestamp}`;
+      const repoImagePath = `public/images/${resolvedPic.shortCode}/${filename}`;
+      const browserImagePath = `images/${resolvedPic.shortCode}/${filename}`;
+      const id = `${resolvedPic.shortCode}-${timestamp}`;
 
       const base64Image = arrayBufferToBase64(imageBytes);
       await commitFile(
         env,
         repoImagePath,
         base64Image,
-        `Add photo: ${resolved.shortCode}`
+        `Add photo: ${resolvedPic.shortCode}`
       );
 
       const seq = nextSeq(gallery);
 
-      const entry: PlantEntry = {
+      const entry: PicEntry = {
         seq,
         id,
-        shortCode: resolved.shortCode,
-        fullName: resolved.fullName,
-        commonName: resolved.commonName,
-        zoneCode: resolved.zoneCode,
-        tags: resolved.tags,
-        description: resolved.description,
+        shortCode: resolvedPic.shortCode,
+        zoneCode: resolvedPic.zoneCode,
+        tags: resolvedPic.tags,
+        description: resolvedPic.description,
         image: browserImagePath,
         postedBy,
         addedAt: new Date().toISOString(),
       };
-      await appendPlant(env, entry, zoneUpserts);
+
+      const plantUpsertRecord: PlantRecord | null = plantUpsert
+        ? {
+            shortCode: plantUpsert.shortCode,
+            fullName: plantUpsert.fullName,
+            commonName: plantUpsert.commonName,
+          }
+        : null;
+
+      await appendPic(env, entry, plantUpsertRecord, zoneUpserts);
 
       const mergedZones = [...gallery.zones];
       for (const u of zoneUpserts) {
@@ -303,18 +305,23 @@ export default {
         if (idx === -1) mergedZones.push(u);
         else mergedZones[idx] = { ...mergedZones[idx], name: u.name ?? mergedZones[idx].name };
       }
-      const resolvedZone = mergedZones.find((z) => z.code === resolved.zoneCode);
+      const resolvedZone = mergedZones.find((z) => z.code === resolvedPic.zoneCode);
       const zoneLabel = resolvedZone?.name
-        ? `${resolvedZone.name} (${resolved.zoneCode})`
-        : resolved.zoneCode;
+        ? `${resolvedZone.name} (${resolvedPic.zoneCode})`
+        : resolvedPic.zoneCode;
+
+      const plantForReply =
+        plantUpsertRecord ??
+        gallery.plants.find((p) => p.shortCode === resolvedPic.shortCode) ??
+        null;
 
       const lines = [
-        `Added plant #${seq}: ${resolved.shortCode}`,
-        resolved.commonName ? `  Common: ${resolved.commonName}` : null,
-        resolved.fullName ? `  Full: ${resolved.fullName}` : null,
+        `Added pic #${seq}: ${resolvedPic.shortCode}`,
+        plantForReply?.commonName ? `  Common: ${plantForReply.commonName}` : null,
+        plantForReply?.fullName ? `  Full: ${plantForReply.fullName}` : null,
         `  Zone: ${zoneLabel}`,
-        resolved.tags.length > 0 ? `  Tags: ${resolved.tags.join(", ")}` : null,
-        resolved.description ? `  Note: ${resolved.description}` : null,
+        resolvedPic.tags.length > 0 ? `  Tags: ${resolvedPic.tags.join(", ")}` : null,
+        resolvedPic.description ? `  Note: ${resolvedPic.description}` : null,
         `  → ${browserImagePath}`,
       ].filter(Boolean);
 

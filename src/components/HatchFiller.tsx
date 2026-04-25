@@ -1,16 +1,16 @@
 import { useId, useRef, useState, useEffect } from "react";
-import { Leaf, Sprout, Flower2 } from "lucide-react";
+import { Leaf, Sprout, LeafyGreen} from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { createRoot } from "react-dom/client";
 import type { NeighborMap } from "../adjacency";
 import FillerLabels from "./FillerLabels";
 
-export const WORDS = ["GROW"];
+export const WORDS = ["PLANTYJ"];
 
 export const LUCIDE_ICONS: LucideIcon[] = [
+  LeafyGreen,
   Leaf,
   Sprout,
-  Flower2,
 ];
 
 const ROTATIONS = [45, 135];

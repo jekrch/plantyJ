@@ -64,12 +64,10 @@ export interface ParsedCaption {
   description: string | null;
 }
 
-export interface PlantEntry {
+export interface PicEntry {
   seq: number;
   id: string;
   shortCode: string;
-  fullName: string | null;
-  commonName: string | null;
   zoneCode: string;
   tags: string[];
   description: string | null;
@@ -78,12 +76,19 @@ export interface PlantEntry {
   addedAt: string;
 }
 
+export interface PlantRecord {
+  shortCode: string;
+  fullName: string | null;
+  commonName: string | null;
+}
+
 export interface Zone {
   code: string;
   name: string | null;
 }
 
 export interface Gallery {
-  plants: PlantEntry[];
+  pics: PicEntry[];
+  plants: PlantRecord[];
   zones: Zone[];
 }

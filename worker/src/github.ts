@@ -1,8 +1,17 @@
-import type { Env, Gallery, GitHubContentsResponse, PlantEntry, Zone } from "./types";
+import type {
+  Env,
+  Gallery,
+  GitHubContentsResponse,
+  PicEntry,
+  PlantRecord,
+  Zone,
+} from "./types";
 
 const GITHUB_API = "https://api.github.com";
 const USER_AGENT = "plantyj-bot";
+const PICS_PATH = "public/data/pics.json";
 const PLANTS_PATH = "public/data/plants.json";
+const ZONES_PATH = "public/data/zones.json";
 
 function githubHeaders(token: string): Record<string, string> {
   return {
@@ -47,46 +56,40 @@ export async function commitFile(
   }
 }
 
-export async function readPlantsJson(
-  env: Env
-): Promise<{ gallery: Gallery; sha: string | null }> {
+async function readJsonFile<T>(
+  env: Env,
+  path: string,
+  fallback: T
+): Promise<{ data: T; sha: string | null }> {
   const [owner, repo] = env.GITHUB_REPO.split("/");
-  const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${PLANTS_PATH}`;
+  const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${path}`;
 
-  const getResp = await fetch(url, {
-    headers: githubHeaders(env.GITHUB_TOKEN),
-  });
+  const resp = await fetch(url, { headers: githubHeaders(env.GITHUB_TOKEN) });
 
-  let gallery: Gallery = { plants: [], zones: [] };
-  let sha: string | null = null;
-
-  if (getResp.ok) {
-    const data: GitHubContentsResponse = await getResp.json();
-    sha = data.sha;
-    const content = atob(data.content.replace(/\n/g, ""));
-    const parsed = JSON.parse(content) as Partial<Gallery>;
-    gallery = {
-      plants: parsed.plants ?? [],
-      zones: parsed.zones ?? [],
-    };
-  } else if (getResp.status !== 404) {
-    const err = await getResp.text();
-    throw new Error(`Failed to read plants.json (${getResp.status}): ${err}`);
+  if (resp.status === 404) {
+    return { data: fallback, sha: null };
+  }
+  if (!resp.ok) {
+    const err = await resp.text();
+    throw new Error(`Failed to read ${path} (${resp.status}): ${err}`);
   }
 
-  return { gallery, sha };
+  const meta: GitHubContentsResponse = await resp.json();
+  const content = atob(meta.content.replace(/\n/g, ""));
+  return { data: JSON.parse(content) as T, sha: meta.sha };
 }
 
-async function writePlantsJson(
+async function writeJsonFile(
   env: Env,
-  gallery: Gallery,
+  path: string,
+  body: unknown,
   sha: string | null,
   commitMessage: string
 ): Promise<void> {
   const [owner, repo] = env.GITHUB_REPO.split("/");
-  const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${PLANTS_PATH}`;
+  const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${path}`;
 
-  const updatedContent = btoa(JSON.stringify(gallery, null, 2));
+  const updatedContent = btoa(JSON.stringify(body, null, 2));
 
   const putBody: Record<string, string> = {
     message: commitMessage,
@@ -95,21 +98,47 @@ async function writePlantsJson(
   };
   if (sha) putBody.sha = sha;
 
-  const putResp = await fetch(url, {
+  const resp = await fetch(url, {
     method: "PUT",
     headers: githubHeaders(env.GITHUB_TOKEN),
     body: JSON.stringify(putBody),
   });
 
-  if (!putResp.ok) {
-    const err = await putResp.text();
-    throw new Error(`plants.json update failed (${putResp.status}): ${err}`);
+  if (!resp.ok) {
+    const err = await resp.text();
+    throw new Error(`${path} update failed (${resp.status}): ${err}`);
   }
+}
+
+interface ReadResult {
+  gallery: Gallery;
+  picsSha: string | null;
+  plantsSha: string | null;
+  zonesSha: string | null;
+}
+
+export async function readGallery(env: Env): Promise<ReadResult> {
+  const [picsRes, plantsRes, zonesRes] = await Promise.all([
+    readJsonFile<{ pics?: PicEntry[] }>(env, PICS_PATH, { pics: [] }),
+    readJsonFile<{ plants?: PlantRecord[] }>(env, PLANTS_PATH, { plants: [] }),
+    readJsonFile<{ zones?: Zone[] }>(env, ZONES_PATH, { zones: [] }),
+  ]);
+
+  return {
+    gallery: {
+      pics: picsRes.data.pics ?? [],
+      plants: plantsRes.data.plants ?? [],
+      zones: zonesRes.data.zones ?? [],
+    },
+    picsSha: picsRes.sha,
+    plantsSha: plantsRes.sha,
+    zonesSha: zonesRes.sha,
+  };
 }
 
 export function nextSeq(gallery: Gallery): number {
   let max = 0;
-  for (const p of gallery.plants) {
+  for (const p of gallery.pics) {
     if (p.seq && p.seq > max) max = p.seq;
   }
   return max + 1;
@@ -125,21 +154,51 @@ function applyZoneUpserts(zones: Zone[], upserts: Zone[]): Zone[] {
   return next;
 }
 
-export async function appendPlant(
+function upsertPlantRecord(plants: PlantRecord[], upsert: PlantRecord): PlantRecord[] {
+  const next = [...plants];
+  const idx = next.findIndex((p) => p.shortCode === upsert.shortCode);
+  if (idx === -1) next.unshift(upsert);
+  else next[idx] = upsert;
+  return next;
+}
+
+export async function appendPic(
   env: Env,
-  newEntry: PlantEntry,
+  newPic: PicEntry,
+  plantUpsert: PlantRecord | null,
   zoneUpserts: Zone[] = []
 ): Promise<void> {
-  const { gallery, sha } = await readPlantsJson(env);
-  gallery.plants.unshift(newEntry);
+  const { gallery, picsSha, plantsSha, zonesSha } = await readGallery(env);
+
   if (zoneUpserts.length > 0) {
-    gallery.zones = applyZoneUpserts(gallery.zones, zoneUpserts);
+    const nextZones = applyZoneUpserts(gallery.zones, zoneUpserts);
+    await writeJsonFile(
+      env,
+      ZONES_PATH,
+      { zones: nextZones },
+      zonesSha,
+      `Add zone(s): ${zoneUpserts.map((z) => z.code).join(", ")}`
+    );
   }
-  await writePlantsJson(
+
+  if (plantUpsert) {
+    const nextPlants = upsertPlantRecord(gallery.plants, plantUpsert);
+    await writeJsonFile(
+      env,
+      PLANTS_PATH,
+      { plants: nextPlants },
+      plantsSha,
+      `Add/update plant: ${plantUpsert.shortCode}`
+    );
+  }
+
+  const nextPics = [newPic, ...gallery.pics];
+  await writeJsonFile(
     env,
-    gallery,
-    sha,
-    `Add plant: ${newEntry.shortCode}`
+    PICS_PATH,
+    { pics: nextPics },
+    picsSha,
+    `Add pic: ${newPic.shortCode}`
   );
 }
 
@@ -168,21 +227,19 @@ async function deleteFile(
   }
 }
 
-export async function deletePlant(
-  env: Env,
-  seq: number
-): Promise<PlantEntry | null> {
-  const { gallery, sha } = await readPlantsJson(env);
-  const idx = gallery.plants.findIndex((p) => p.seq === seq);
+export async function deletePic(env: Env, seq: number): Promise<PicEntry | null> {
+  const { gallery, picsSha } = await readGallery(env);
+  const idx = gallery.pics.findIndex((p) => p.seq === seq);
   if (idx === -1) return null;
 
-  const [removed] = gallery.plants.splice(idx, 1);
+  const [removed] = gallery.pics.splice(idx, 1);
 
-  await writePlantsJson(
+  await writeJsonFile(
     env,
-    gallery,
-    sha,
-    `Remove plant: ${removed.shortCode} (#${removed.seq})`
+    PICS_PATH,
+    { pics: gallery.pics },
+    picsSha,
+    `Remove pic: ${removed.shortCode} (#${removed.seq})`
   );
 
   const imagePath = `public/${removed.image}`;
@@ -204,18 +261,21 @@ export async function deletePlant(
   return removed;
 }
 
-const UPDATABLE_FIELDS = [
-  "shortCode",
-  "fullName",
-  "commonName",
-  "zoneCode",
-  "tags",
-  "description",
-] as const;
+const PIC_FIELDS = ["zoneCode", "tags", "description"] as const;
+const PLANT_FIELDS = ["shortCode", "fullName", "commonName"] as const;
+const UPDATABLE_FIELDS = [...PLANT_FIELDS, ...PIC_FIELDS] as const;
+
+type PicField = (typeof PIC_FIELDS)[number];
 type UpdatableField = (typeof UPDATABLE_FIELDS)[number];
+
+export const UPDATABLE_FIELD_LIST = UPDATABLE_FIELDS;
 
 export function isUpdatableField(field: string): field is UpdatableField {
   return (UPDATABLE_FIELDS as readonly string[]).includes(field);
+}
+
+function isPicField(field: UpdatableField): field is PicField {
+  return (PIC_FIELDS as readonly string[]).includes(field);
 }
 
 function parseList(value: string): string[] {
@@ -225,62 +285,130 @@ function parseList(value: string): string[] {
     .filter((t) => t.length > 0);
 }
 
-export async function updatePlant(
+export interface UpdateResult {
+  pic: PicEntry;
+  plant: PlantRecord | null;
+}
+
+/**
+ * Update a field on the pic with the given seq, or on its associated plant
+ * record. shortCode rename cascades to all pics referencing the old code.
+ */
+export async function updateBySeq(
   env: Env,
   seq: number,
   field: string,
   value: string
-): Promise<PlantEntry | null> {
+): Promise<UpdateResult | null> {
   if (!isUpdatableField(field)) {
     throw new Error(
       `Cannot update "${field}". Updatable fields: ${UPDATABLE_FIELDS.join(", ")}`
     );
   }
 
-  const { gallery, sha } = await readPlantsJson(env);
-  const plant = gallery.plants.find((p) => p.seq === seq);
-  if (!plant) return null;
+  const { gallery, picsSha, plantsSha, zonesSha } = await readGallery(env);
+  const pic = gallery.pics.find((p) => p.seq === seq);
+  if (!pic) return null;
+
+  if (isPicField(field)) {
+    switch (field) {
+      case "zoneCode": {
+        const code = value.trim();
+        if (!code) throw new Error("zoneCode must be a non-empty zone code.");
+        if (code.includes(",") || code.includes("+")) {
+          throw new Error("zoneCode is a single value — a picture belongs to one zone.");
+        }
+        if (!gallery.zones.some((z) => z.code === code)) {
+          const nextZones = [...gallery.zones, { code, name: null }];
+          await writeJsonFile(
+            env,
+            ZONES_PATH,
+            { zones: nextZones },
+            zonesSha,
+            `Add zone: ${code}`
+          );
+        }
+        pic.zoneCode = code;
+        break;
+      }
+      case "tags":
+        pic.tags = parseList(value);
+        break;
+      case "description":
+        pic.description = value || null;
+        break;
+    }
+
+    await writeJsonFile(
+      env,
+      PICS_PATH,
+      { pics: gallery.pics },
+      picsSha,
+      `Update pic ${pic.shortCode} (#${pic.seq}): ${field}`
+    );
+
+    const plant = gallery.plants.find((p) => p.shortCode === pic.shortCode) ?? null;
+    return { pic, plant };
+  }
+
+  // Plant-level field — operate on the plant record keyed by pic.shortCode.
+  const plantIdx = gallery.plants.findIndex((p) => p.shortCode === pic.shortCode);
+  if (plantIdx === -1) {
+    throw new Error(
+      `Plant "${pic.shortCode}" not found in plants.json — cannot update ${field}.`
+    );
+  }
+  const plant = gallery.plants[plantIdx];
 
   switch (field) {
-    case "shortCode":
-      plant.shortCode = value;
-      break;
+    case "shortCode": {
+      const newCode = value.trim();
+      if (!newCode) throw new Error("shortCode must be non-empty.");
+      if (newCode === plant.shortCode) {
+        return { pic, plant };
+      }
+      if (gallery.plants.some((p) => p.shortCode === newCode)) {
+        throw new Error(`shortCode "${newCode}" already exists.`);
+      }
+      const oldCode = plant.shortCode;
+      plant.shortCode = newCode;
+      // Cascade: re-point every pic that referenced the old code.
+      for (const p of gallery.pics) {
+        if (p.shortCode === oldCode) p.shortCode = newCode;
+      }
+      await writeJsonFile(
+        env,
+        PLANTS_PATH,
+        { plants: gallery.plants },
+        plantsSha,
+        `Rename plant: ${oldCode} → ${newCode}`
+      );
+      await writeJsonFile(
+        env,
+        PICS_PATH,
+        { pics: gallery.pics },
+        picsSha,
+        `Re-point pics: ${oldCode} → ${newCode}`
+      );
+      return { pic, plant };
+    }
     case "fullName":
       plant.fullName = value || null;
       break;
     case "commonName":
       plant.commonName = value || null;
       break;
-    case "zoneCode": {
-      const code = value.trim();
-      if (!code) {
-        throw new Error("zoneCode must be a non-empty zone code.");
-      }
-      if (code.includes(",") || code.includes("+")) {
-        throw new Error("zoneCode is a single value — a picture belongs to one zone.");
-      }
-      if (!gallery.zones.some((z) => z.code === code)) {
-        gallery.zones.push({ code, name: null });
-      }
-      plant.zoneCode = code;
-      break;
-    }
-    case "tags":
-      plant.tags = parseList(value);
-      break;
-    case "description":
-      plant.description = value || null;
-      break;
   }
 
-  await writePlantsJson(
+  await writeJsonFile(
     env,
-    gallery,
-    sha,
-    `Update plant ${plant.shortCode} (#${plant.seq}): ${field}`
+    PLANTS_PATH,
+    { plants: gallery.plants },
+    plantsSha,
+    `Update plant ${plant.shortCode}: ${field}`
   );
 
-  return plant;
+  return { pic, plant };
 }
 
 export async function upsertZone(
@@ -288,7 +416,7 @@ export async function upsertZone(
   code: string,
   name: string | null
 ): Promise<Zone> {
-  const { gallery, sha } = await readPlantsJson(env);
+  const { gallery, zonesSha } = await readGallery(env);
   const idx = gallery.zones.findIndex((z) => z.code === code);
   let zone: Zone;
   let action: string;
@@ -301,7 +429,13 @@ export async function upsertZone(
     gallery.zones[idx] = zone;
     action = "Rename";
   }
-  await writePlantsJson(env, gallery, sha, `${action} zone: ${code}`);
+  await writeJsonFile(
+    env,
+    ZONES_PATH,
+    { zones: gallery.zones },
+    zonesSha,
+    `${action} zone: ${code}`
+  );
   return zone;
 }
 
@@ -311,11 +445,11 @@ export interface DeleteZoneResult {
 }
 
 export async function deleteZone(env: Env, code: string): Promise<DeleteZoneResult> {
-  const { gallery, sha } = await readPlantsJson(env);
+  const { gallery, zonesSha } = await readGallery(env);
   const idx = gallery.zones.findIndex((z) => z.code === code);
   if (idx === -1) return { zone: null, inUseBy: [] };
 
-  const inUseBy = gallery.plants
+  const inUseBy = gallery.pics
     .filter((p) => p.zoneCode === code)
     .map((p) => p.shortCode);
   if (inUseBy.length > 0) {
@@ -323,6 +457,12 @@ export async function deleteZone(env: Env, code: string): Promise<DeleteZoneResu
   }
 
   const [removed] = gallery.zones.splice(idx, 1);
-  await writePlantsJson(env, gallery, sha, `Remove zone: ${code}`);
+  await writeJsonFile(
+    env,
+    ZONES_PATH,
+    { zones: gallery.zones },
+    zonesSha,
+    `Remove zone: ${code}`
+  );
   return { zone: removed, inUseBy: [] };
 }

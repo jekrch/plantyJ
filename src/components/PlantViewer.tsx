@@ -383,23 +383,26 @@ export default function PlantViewer({
       >
         {!isZoomed && (hasPrev || hasNext) && (
           <div
-            className="relative flex items-center justify-center"
+            className="relative flex items-center justify-center w-full px-4 sm:px-6"
             style={{ pointerEvents: "auto" }}
           >
-            <div className="flex items-center justify-center gap-3">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setDrawerOpen((d) => !d);
-                }}
-                className={`viewer-btn mr-2 ${
-                  drawerOpen ? "bg-accent/20! text-white!" : ""
-                }`}
-                title="Show details"
-              >
-                <Info size={16} strokeWidth={1.5} />
-              </button>
+            {/* Info Button - Pulled out of the centered div and positioned left */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setDrawerOpen((d) => !d);
+              }}
+              // Removed mr-2 and added absolute positioning
+              className={`viewer-btn absolute left-4 sm:left-6 ${
+                drawerOpen ? "bg-accent/20! text-white!" : ""
+              }`}
+              title="Show details"
+            >
+              <Info size={16} strokeWidth={1.5} />
+            </button>
 
+            {/* Navigation Group - Now perfectly centered in isolation */}
+            <div className="flex items-center justify-center gap-3">
               <NavButton
                 direction="prev"
                 enabled={hasPrev}
@@ -436,10 +439,11 @@ export default function PlantViewer({
         )}
 
         {!isZoomed && !hasPrev && !hasNext && (
-          <div
-            className="flex items-center justify-center gap-5"
+          <div           
+            className="flex flex-col items-center justify-center gap-2 w-full px-4 sm:px-6"
             style={{ pointerEvents: "auto" }}
           >
+            {/* Info Button - Now perfectly centered */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -452,6 +456,8 @@ export default function PlantViewer({
             >
               <Info size={16} strokeWidth={1.5} />
             </button>
+
+            {/* Helper Text - Stacked below the button */}
             <div className="text-center mx-auto w-fit">
               <span className="text-[11px] text-white/30 tracking-wide">
                 {isTouchDevice

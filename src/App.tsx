@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
-import type { Gallery, Plant, Zone } from "./types";
+import type { PicRecord, Plant, PlantRecord, Zone } from "./types";
 import { Sprout } from "lucide-react";
 import { sortPlantsAsync } from "./utils/sorting.ts";
 import type { SortMode } from "./utils/sorting.ts";
@@ -45,14 +45,33 @@ export default function App() {
   );
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data/plants.json`)
-      .then((res) => {
-        if (!res.ok) throw new Error(`${res.status}`);
-        return res.json() as Promise<Gallery>;
-      })
-      .then((data) => {
-        setPlants(data.plants ?? []);
-        setZones(data.zones ?? []);
+    const base = import.meta.env.BASE_URL;
+    const fetchJson = <T,>(path: string) =>
+      fetch(`${base}${path}`).then((res) => {
+        if (!res.ok) throw new Error(`${path}: ${res.status}`);
+        return res.json() as Promise<T>;
+      });
+
+    Promise.all([
+      fetchJson<{ pics?: PicRecord[] }>("data/pics.json"),
+      fetchJson<{ plants?: PlantRecord[] }>("data/plants.json"),
+      fetchJson<{ zones?: Zone[] }>("data/zones.json"),
+    ])
+      .then(([picsData, plantsData, zonesData]) => {
+        const plantsByCode = new Map<string, PlantRecord>();
+        for (const p of plantsData.plants ?? []) plantsByCode.set(p.shortCode, p);
+
+        const merged: Plant[] = (picsData.pics ?? []).map((pic) => {
+          const plant = plantsByCode.get(pic.shortCode);
+          return {
+            ...pic,
+            fullName: plant?.fullName ?? null,
+            commonName: plant?.commonName ?? null,
+          };
+        });
+
+        setPlants(merged);
+        setZones(zonesData.zones ?? []);
         setStatus("ready");
       })
       .catch(() => setStatus("error"));

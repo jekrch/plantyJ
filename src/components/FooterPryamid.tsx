@@ -24,10 +24,11 @@ export default function FooterPyramid() {
   return (
     <div className="flex flex-col items-center gap-0 pt-8 pb-16">
       <p
-        className="text-white/80 font-black tracking-widest uppercase text-md mb-4"
+        className="text-white/80 font-black tracking-widest uppercase text-md mb-4 mx-10"
         style={{ fontFamily: "'Space Mono', monospace" }}
       >
-        to be continued...
+        "More respect is due the little things that run the world" 
+        <p className="text-center">E.O. WILSON</p>
       </p>
       <div className="flex flex-col items-center" style={{ gap: `${CELL_GAP}px` }}>
         {rows.map((cellCount, rowIdx) => (

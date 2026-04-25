@@ -1,7 +1,7 @@
 """
 Build/refresh per-species enrichment files keyed on `fullName`.
 
-For each unique `fullName` in `plants.json`, ensure a file at
+For each plant in `plants.json`, ensure a file at
 `public/data/species/{slug}.json` exists. New files are seeded with the
 identifying name and an empty references/sources list, leaving the
 description/taxonomy fields blank for the GBIF/POWO/Wikipedia passes to fill in.
@@ -30,7 +30,7 @@ def save_species(entry: dict) -> None:
 
 
 def seed_species(plants: list) -> None:
-    """Ensure a species file exists for each distinct fullName in the gallery."""
+    """Ensure a species file exists for each distinct fullName in plants.json."""
     SPECIES_DIR.mkdir(parents=True, exist_ok=True)
 
     seen = set()

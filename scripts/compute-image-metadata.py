@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Compute per-image metadata for plants.json and refresh per-species
+Compute per-image metadata for pics.json and refresh per-species
 enrichment files in public/data/species/.
 
 For images: dimensions, perceptual hash, and dominant CIELAB colors.
@@ -14,7 +14,7 @@ import json
 import sys
 
 from metadata.image_metadata import compute_metadata, needs_update
-from metadata.paths import IMAGE_ROOT, PLANTS_PATH, SPECIES_DIR
+from metadata.paths import IMAGE_ROOT, PICS_PATH, PLANTS_PATH, SPECIES_DIR
 from metadata.seed import seed_species
 from metadata.sources.gbif import backfill_gbif
 from metadata.sources.powo import backfill_powo
@@ -34,12 +34,18 @@ def load_species_entries() -> list[dict]:
 
 
 def main():
+    if not PICS_PATH.exists():
+        print(f"pics.json not found at {PICS_PATH}", file=sys.stderr)
+        sys.exit(1)
     if not PLANTS_PATH.exists():
         print(f"plants.json not found at {PLANTS_PATH}", file=sys.stderr)
         sys.exit(1)
 
-    gallery = json.loads(PLANTS_PATH.read_text())
-    plants = gallery.get("plants", [])
+    pics_doc = json.loads(PICS_PATH.read_text())
+    pics = pics_doc.get("pics", [])
+
+    plants_doc = json.loads(PLANTS_PATH.read_text())
+    plants = plants_doc.get("plants", [])
 
     seed_species(plants)
     species_entries = load_species_entries()
@@ -60,33 +66,33 @@ def main():
     updated = 0
     errors = 0
 
-    for plant in plants:
-        if not needs_update(plant):
+    for pic in pics:
+        if not needs_update(pic):
             continue
 
-        image_path = IMAGE_ROOT / plant["image"]
+        image_path = IMAGE_ROOT / pic["image"]
         if not image_path.exists():
-            print(f"  SKIP (file not found): {plant['image']}", file=sys.stderr)
+            print(f"  SKIP (file not found): {pic['image']}", file=sys.stderr)
             errors += 1
             continue
 
         try:
             meta = compute_metadata(image_path)
-            plant.update(meta)
+            pic.update(meta)
             updated += 1
             print(
-                f"  OK: {plant['image']} → {meta['width']}x{meta['height']} "
+                f"  OK: {pic['image']} → {meta['width']}x{meta['height']} "
                 f"phash={meta['phash']}"
             )
         except Exception as e:
-            print(f"  ERROR: {plant['image']} → {e}", file=sys.stderr)
+            print(f"  ERROR: {pic['image']} → {e}", file=sys.stderr)
             errors += 1
 
     if updated:
-        PLANTS_PATH.write_text(json.dumps(gallery, indent=2) + "\n")
-        print(f"\nUpdated {updated} plant(s). Errors: {errors}.")
+        PICS_PATH.write_text(json.dumps(pics_doc, indent=2) + "\n")
+        print(f"\nUpdated {updated} pic(s). Errors: {errors}.")
     else:
-        print("\nNo plant images needed updating.")
+        print("\nNo pic images needed updating.")
 
 
 if __name__ == "__main__":
