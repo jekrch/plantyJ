@@ -1,6 +1,11 @@
 {
   "plants": [
     {
+      "shortCode": "e ame",
+      "fullName": "Erythronium americanum",
+      "commonName": "Yellow Trout Lily"
+    },
+    {
       "shortCode": "a tri",
       "fullName": "Allium tricoccum",
       "commonName": "Wild Leek"
