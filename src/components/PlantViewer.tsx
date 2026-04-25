@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { X, ZoomIn, ZoomOut, Info } from "lucide-react";
-import type { Plant } from "../types";
+import type { Plant, Zone } from "../types";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import { MAX_SCALE, MIN_SCALE, useZoomPan } from "../hooks/useZoomPan";
 import { useBarMeasure } from "../hooks/useBarMeasure";
@@ -13,6 +13,7 @@ interface Props {
   plant: Plant;
   plants: Plant[];
   allPlants: Plant[];
+  zones: Zone[];
   currentIndex: number;
   onClose: () => void;
   onNavigate: (index: number) => void;
@@ -23,6 +24,7 @@ export default function PlantViewer({
   plant,
   plants,
   allPlants,
+  zones,
   currentIndex,
   onClose,
   onNavigate,
@@ -162,7 +164,14 @@ export default function PlantViewer({
   const slideTrackTransform = drawerOpen ? "translateY(-100vh)" : "translateY(0)";
 
   const titleLine = plant.commonName ?? plant.fullName ?? plant.shortCode;
-  const subtitle = plant.zoneName ?? plant.zoneCode;
+  const zoneNameByCode = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const z of zones) if (z.name) m.set(z.code, z.name);
+    return m;
+  }, [zones]);
+  const subtitle = plant.zoneCodes
+    .map((code) => zoneNameByCode.get(code) ?? code)
+    .join(", ");
 
   return (
     <div
@@ -461,6 +470,7 @@ export default function PlantViewer({
         closing={closing}
         plant={plant}
         allPlants={allPlants}
+        zones={zones}
         onSelectPlant={onSelectPlant}
         topOffset={topBarH}
         bottomOffset={bottomBarH}

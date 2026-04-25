@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
-import type { Gallery, Plant } from "./types";
+import type { Gallery, Plant, Zone } from "./types";
 import { Sprout } from "lucide-react";
 import { sortPlantsAsync } from "./utils/sorting.ts";
 import type { SortMode } from "./utils/sorting.ts";
@@ -13,6 +13,7 @@ import PlantViewer from "./components/PlantViewer";
 
 export default function App() {
   const [plants, setPlants] = useState<Plant[]>([]);
+  const [zones, setZones] = useState<Zone[]>([]);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const { initialFilters, initialSort, syncToURL } = useFilterParams();
@@ -51,6 +52,7 @@ export default function App() {
       })
       .then((data) => {
         setPlants(data.plants ?? []);
+        setZones(data.zones ?? []);
         setStatus("ready");
       })
       .catch(() => setStatus("error"));
@@ -144,6 +146,7 @@ export default function App() {
             <MasonryGrid
               plants={sortedPlants}
               allPlants={plants}
+              zones={zones}
               sortMode={sortMode}
               onSort={handleSortChange}
               filters={filters}
@@ -174,6 +177,7 @@ export default function App() {
           plant={viewerPlants[openIndex]}
           plants={viewerPlants}
           allPlants={plants}
+          zones={zones}
           currentIndex={openIndex}
           onClose={handleCloseViewer}
           onNavigate={handleNavigateViewer}

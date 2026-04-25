@@ -1,6 +1,6 @@
 # PlantyJ :seedling:
 
-A private garden journal for two. Snap a plant, send it to a Telegram group with a caption, and it shows up on the site.
+A private garden journal for my partner and me. Snap a plant, send it to a Telegram group with a caption, and it shows up on the site.
 
 ## How it works
 ```

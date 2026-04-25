@@ -1,9 +1,11 @@
-import type { Plant } from "../types";
+import { useMemo } from "react";
+import type { Plant, Zone } from "../types";
 
 interface Props {
   open: boolean;
   plant: Plant;
   allPlants: Plant[];
+  zones: Zone[];
   onSelectPlant: (plant: Plant) => void;
   topOffset?: number;
   bottomOffset?: number;
@@ -15,6 +17,7 @@ export default function PlantInfoDrawer({
   open,
   plant,
   allPlants,
+  zones,
   onSelectPlant,
   topOffset = 0,
   bottomOffset = 0,
@@ -25,12 +28,28 @@ export default function PlantInfoDrawer({
     .filter((p) => p.shortCode === plant.shortCode && p.id !== plant.id)
     .sort((a, b) => new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime());
 
-  const sameZone = allPlants
-    .filter((p) => p.zoneCode === plant.zoneCode && p.shortCode !== plant.shortCode)
+  const zoneNameByCode = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const z of zones) if (z.name) m.set(z.code, z.name);
+    return m;
+  }, [zones]);
+
+  const zoneSet = useMemo(() => new Set(plant.zoneCodes), [plant.zoneCodes]);
+  const sharingZone = allPlants
+    .filter(
+      (p) =>
+        p.shortCode !== plant.shortCode &&
+        p.zoneCodes.some((z) => zoneSet.has(z))
+    )
     .reduce<Plant[]>((acc, p) => {
       if (!acc.some((existing) => existing.shortCode === p.shortCode)) acc.push(p);
       return acc;
     }, []);
+
+  const sharingHeader =
+    plant.zoneCodes.length === 1
+      ? `Others in ${zoneNameByCode.get(plant.zoneCodes[0]) ?? plant.zoneCodes[0]}`
+      : "Others sharing a zone";
 
   const show = open && !closing;
 
@@ -77,13 +96,19 @@ export default function PlantInfoDrawer({
           )}
         </div>
 
-        {/* Zone */}
+        {/* Zones */}
         <div className="rounded px-4 py-3" style={{ backgroundColor: "rgba(255,255,255,0.04)" }}>
-          <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">Zone</p>
-          <p className="font-display text-sm text-white/90 leading-snug">
-            {plant.zoneName ?? plant.zoneCode}{" "}
-            <span className="text-accent">{plant.zoneCode}</span>
+          <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">
+            {plant.zoneCodes.length > 1 ? "Zones" : "Zone"}
           </p>
+          <div className="flex flex-wrap gap-x-3 gap-y-1">
+            {plant.zoneCodes.map((code) => (
+              <p key={code} className="font-display text-sm text-white/90 leading-snug">
+                {zoneNameByCode.get(code) ?? code}{" "}
+                <span className="text-accent">{code}</span>
+              </p>
+            ))}
+          </div>
         </div>
 
         {/* Description */}
@@ -159,17 +184,17 @@ export default function PlantInfoDrawer({
           </>
         )}
 
-        {/* Other plants in this zone */}
-        {sameZone.length > 0 && (
+        {/* Other plants sharing a zone */}
+        {sharingZone.length > 0 && (
           <>
             <div className="border-t border-white/8" />
             <div>
               <div className="flex items-center gap-1.5 mb-2 text-[10px] uppercase tracking-widest text-white/30">
-                <span>Others in {plant.zoneName ?? plant.zoneCode}</span>
-                <span className="text-white/20 normal-case tracking-normal">· {sameZone.length}</span>
+                <span>{sharingHeader}</span>
+                <span className="text-white/20 normal-case tracking-normal">· {sharingZone.length}</span>
               </div>
               <div className="flex gap-2 overflow-x-auto pb-1 info-related-scroll">
-                {sameZone.map((p) => (
+                {sharingZone.map((p) => (
                   <button
                     key={p.id}
                     type="button"

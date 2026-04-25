@@ -4,8 +4,7 @@ export interface Plant {
   shortCode: string;
   fullName: string | null;
   commonName: string | null;
-  zoneCode: string;
-  zoneName: string | null;
+  zoneCodes: string[];
   tags: string[];
   description: string | null;
   image: string;
@@ -17,6 +16,12 @@ export interface Plant {
   phash: string;
 }
 
+export interface Zone {
+  code: string;
+  name: string | null;
+}
+
 export interface Gallery {
   plants: Plant[];
+  zones: Zone[];
 }

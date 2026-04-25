@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import type { Plant } from "../types";
+import type { Plant, Zone } from "../types";
 import type { Filters } from "../utils/filtering";
 import {
   hasActiveFilters,
@@ -12,12 +12,14 @@ import { ChevronDown, XCircle } from "lucide-react";
 
 interface FilterControlProps {
   plants: Plant[];
+  zones: Zone[];
   filters: Filters;
   onFiltersChange: (filters: Filters) => void;
 }
 
 export default function FilterControl({
   plants,
+  zones,
   filters,
   onFiltersChange,
 }: FilterControlProps) {
@@ -26,8 +28,8 @@ export default function FilterControl({
   const count = activeFilterCount(filters);
 
   const { tagItems, zoneItems, postedByItems, shortCodeItems } = useMemo(
-    () => computeFacets(plants, filters),
-    [plants, filters]
+    () => computeFacets(plants, filters, zones),
+    [plants, filters, zones]
   );
 
   const toggleInSet = useCallback(

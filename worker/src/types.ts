@@ -50,12 +50,16 @@ export interface GitHubContentsResponse {
   sha: string;
 }
 
+export interface ParsedZoneRef {
+  code: string;
+  name: string | null;
+}
+
 export interface ParsedCaption {
   shortCode: string;
   fullName: string | null;
   commonName: string | null;
-  zoneCode: string | null;
-  zoneName: string | null;
+  zones: ParsedZoneRef[] | null;
   tags: string[] | null;
   description: string | null;
 }
@@ -66,8 +70,7 @@ export interface PlantEntry {
   shortCode: string;
   fullName: string | null;
   commonName: string | null;
-  zoneCode: string;
-  zoneName: string | null;
+  zoneCodes: string[];
   tags: string[];
   description: string | null;
   image: string;
@@ -75,6 +78,12 @@ export interface PlantEntry {
   addedAt: string;
 }
 
+export interface Zone {
+  code: string;
+  name: string | null;
+}
+
 export interface Gallery {
   plants: PlantEntry[];
+  zones: Zone[];
 }

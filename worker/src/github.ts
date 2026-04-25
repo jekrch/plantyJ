@@ -1,4 +1,4 @@
-import type { Env, Gallery, GitHubContentsResponse, PlantEntry } from "./types";
+import type { Env, Gallery, GitHubContentsResponse, PlantEntry, Zone } from "./types";
 
 const GITHUB_API = "https://api.github.com";
 const USER_AGENT = "plantyj-bot";
@@ -57,14 +57,18 @@ export async function readPlantsJson(
     headers: githubHeaders(env.GITHUB_TOKEN),
   });
 
-  let gallery: Gallery = { plants: [] };
+  let gallery: Gallery = { plants: [], zones: [] };
   let sha: string | null = null;
 
   if (getResp.ok) {
     const data: GitHubContentsResponse = await getResp.json();
     sha = data.sha;
     const content = atob(data.content.replace(/\n/g, ""));
-    gallery = JSON.parse(content);
+    const parsed = JSON.parse(content) as Partial<Gallery>;
+    gallery = {
+      plants: parsed.plants ?? [],
+      zones: parsed.zones ?? [],
+    };
   } else if (getResp.status !== 404) {
     const err = await getResp.text();
     throw new Error(`Failed to read plants.json (${getResp.status}): ${err}`);
@@ -111,12 +115,26 @@ export function nextSeq(gallery: Gallery): number {
   return max + 1;
 }
 
+function applyZoneUpserts(zones: Zone[], upserts: Zone[]): Zone[] {
+  const next = [...zones];
+  for (const u of upserts) {
+    const idx = next.findIndex((z) => z.code === u.code);
+    if (idx === -1) next.push(u);
+    else next[idx] = { ...next[idx], name: u.name ?? next[idx].name };
+  }
+  return next;
+}
+
 export async function appendPlant(
   env: Env,
-  newEntry: PlantEntry
+  newEntry: PlantEntry,
+  zoneUpserts: Zone[] = []
 ): Promise<void> {
   const { gallery, sha } = await readPlantsJson(env);
   gallery.plants.unshift(newEntry);
+  if (zoneUpserts.length > 0) {
+    gallery.zones = applyZoneUpserts(gallery.zones, zoneUpserts);
+  }
   await writePlantsJson(
     env,
     gallery,
@@ -190,8 +208,7 @@ const UPDATABLE_FIELDS = [
   "shortCode",
   "fullName",
   "commonName",
-  "zoneCode",
-  "zoneName",
+  "zoneCodes",
   "tags",
   "description",
 ] as const;
@@ -199,6 +216,13 @@ type UpdatableField = (typeof UPDATABLE_FIELDS)[number];
 
 export function isUpdatableField(field: string): field is UpdatableField {
   return (UPDATABLE_FIELDS as readonly string[]).includes(field);
+}
+
+function parseList(value: string): string[] {
+  return value
+    .split(",")
+    .map((t) => t.trim())
+    .filter((t) => t.length > 0);
 }
 
 export async function updatePlant(
@@ -227,17 +251,21 @@ export async function updatePlant(
     case "commonName":
       plant.commonName = value || null;
       break;
-    case "zoneCode":
-      plant.zoneCode = value;
+    case "zoneCodes": {
+      const codes = parseList(value);
+      if (codes.length === 0) {
+        throw new Error("zoneCodes must contain at least one code.");
+      }
+      for (const code of codes) {
+        if (!gallery.zones.some((z) => z.code === code)) {
+          gallery.zones.push({ code, name: null });
+        }
+      }
+      plant.zoneCodes = codes;
       break;
-    case "zoneName":
-      plant.zoneName = value || null;
-      break;
+    }
     case "tags":
-      plant.tags = value
-        .split(",")
-        .map((t) => t.trim())
-        .filter((t) => t.length > 0);
+      plant.tags = parseList(value);
       break;
     case "description":
       plant.description = value || null;
@@ -252,4 +280,48 @@ export async function updatePlant(
   );
 
   return plant;
+}
+
+export async function upsertZone(
+  env: Env,
+  code: string,
+  name: string | null
+): Promise<Zone> {
+  const { gallery, sha } = await readPlantsJson(env);
+  const idx = gallery.zones.findIndex((z) => z.code === code);
+  let zone: Zone;
+  let action: string;
+  if (idx === -1) {
+    zone = { code, name };
+    gallery.zones.push(zone);
+    action = "Add";
+  } else {
+    zone = { ...gallery.zones[idx], name };
+    gallery.zones[idx] = zone;
+    action = "Rename";
+  }
+  await writePlantsJson(env, gallery, sha, `${action} zone: ${code}`);
+  return zone;
+}
+
+export interface DeleteZoneResult {
+  zone: Zone | null;
+  inUseBy: string[];
+}
+
+export async function deleteZone(env: Env, code: string): Promise<DeleteZoneResult> {
+  const { gallery, sha } = await readPlantsJson(env);
+  const idx = gallery.zones.findIndex((z) => z.code === code);
+  if (idx === -1) return { zone: null, inUseBy: [] };
+
+  const inUseBy = gallery.plants
+    .filter((p) => p.zoneCodes.includes(code))
+    .map((p) => p.shortCode);
+  if (inUseBy.length > 0) {
+    return { zone: gallery.zones[idx], inUseBy };
+  }
+
+  const [removed] = gallery.zones.splice(idx, 1);
+  await writePlantsJson(env, gallery, sha, `Remove zone: ${code}`);
+  return { zone: removed, inUseBy: [] };
 }

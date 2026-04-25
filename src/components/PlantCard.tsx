@@ -8,10 +8,11 @@ const TOUCH_TOLERANCE = 30;
 
 interface Props {
   plant: Plant;
+  zoneNameByCode: Map<string, string>;
   onOpen: (plant: Plant) => void;
 }
 
-export default function PlantCard({ plant, onOpen }: Props) {
+export default function PlantCard({ plant, zoneNameByCode, onOpen }: Props) {
   const lastTap = useRef<{ time: number; x: number; y: number } | null>(null);
   const lastClick = useRef<{ time: number; x: number; y: number } | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -61,7 +62,9 @@ export default function PlantCard({ plant, onOpen }: Props) {
   );
 
   const titleLine = plant.commonName ?? plant.fullName ?? plant.shortCode;
-  const subtitle = plant.zoneName ?? plant.zoneCode;
+  const subtitle = plant.zoneCodes
+    .map((code) => zoneNameByCode.get(code) ?? code)
+    .join(", ");
 
   return (
     <div

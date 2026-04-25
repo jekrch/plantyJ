@@ -1,4 +1,4 @@
-import type { Env, PlantEntry, TelegramUpdate } from "./types";
+import type { Env, Gallery, PlantEntry, TelegramUpdate, Zone } from "./types";
 import { parseCaption, resolveFields } from "./caption";
 import { downloadFile, sendReply } from "./telegram";
 import {
@@ -6,47 +6,57 @@ import {
   arrayBufferToBase64,
   commitFile,
   deletePlant,
+  deleteZone,
   isUpdatableField,
   nextSeq,
   readPlantsJson,
   updatePlant,
+  upsertZone,
 } from "./github";
 
 const HELP_HEADER = `PlantyJ Bot — Commands:
 
 Add a plant photo:
   Post a photo with a caption in this format (only shortCode is required):
-  shortCode // fullName // commonName // Zone Name (zoneCode) // tags // description
+  shortCode // fullName // commonName // zones // tags // description
+
+  Multiple zones are separated by '+'. Each zone is either a code (fb1) or
+  'Display Name (code)' to declare/rename it.
 
   First time registering a plant + zone:
   tmt-c // Solanum lycopersicum 'Cherokee Purple' // Cherokee Purple Tomato // Front Bed 1 (fb1) // edible,heirloom // first ripe fruit
 
-  Once shortCode and zone are known, just:
+  A plant in two zones:
+  mint-1 // Mentha spicata // Spearmint // Front Bed 1 (fb1) + Side Bed (sb) // edible
+
+  Once shortCode and zones are known, just:
   tmt-c // // // fb1 // // sizing up nicely
 
   If the plant hasn't moved zones, just the code is enough:
   tmt-c
 
-Commands:
+Plant commands:
   /delete {seq} — Remove a plant entry by its sequential ID
   /update {seq} {field} {value} — Update a field on a plant
   /help — Show this message
 
-Updatable fields: shortCode, fullName, commonName, zoneCode, zoneName, tags, description`;
+Updatable fields: shortCode, fullName, commonName, zoneCodes, tags, description
+  (zoneCodes accepts a comma-separated list, e.g. /update 12 zoneCodes fb1,sb)
 
-function buildHelpText(plants: PlantEntry[]): string {
+Zone commands:
+  /addzone {code} {name} — Create or rename a zone (name optional)
+  /renamezone {code} {name} — Set/replace a zone's display name
+  /deletezone {code} — Remove a zone (only if no plants reference it)
+  /zones — List all known zones`;
+
+function buildHelpText(gallery: Gallery): string {
   const plantMap = new Map<string, string>();
-  const zoneMap = new Map<string, string>();
-  for (const p of plants) {
+  for (const p of gallery.plants) {
     if (!plantMap.has(p.shortCode)) {
       plantMap.set(p.shortCode, p.commonName ?? p.fullName ?? p.shortCode);
     }
-    if (!zoneMap.has(p.zoneCode)) {
-      zoneMap.set(p.zoneCode, p.zoneName ?? p.zoneCode);
-    }
   }
 
-  
   const sections: string[] = [HELP_HEADER];
 
   if (plantMap.size > 0) {
@@ -56,14 +66,22 @@ function buildHelpText(plants: PlantEntry[]): string {
     sections.push(`Known plants:\n${lines.join("\n")}`);
   }
 
-  if (zoneMap.size > 0) {
-    const lines = Array.from(zoneMap.entries())
-      .sort((a, b) => a[0].localeCompare(b[0]))
-      .map(([code, name]) => `  ${code} — ${name}`);
+  if (gallery.zones.length > 0) {
+    const lines = [...gallery.zones]
+      .sort((a, b) => a.code.localeCompare(b.code))
+      .map((z) => `  ${z.code} — ${z.name ?? "(unnamed)"}`);
     sections.push(`Known zones:\n${lines.join("\n")}`);
   }
 
   return sections.join("\n\n");
+}
+
+function buildZonesText(zones: Zone[]): string {
+  if (zones.length === 0) return "No zones yet. Add one with /addzone {code} {name}.";
+  const lines = [...zones]
+    .sort((a, b) => a.code.localeCompare(b.code))
+    .map((z) => `  ${z.code} — ${z.name ?? "(unnamed)"}`);
+  return `Zones:\n${lines.join("\n")}`;
 }
 
 export default {
@@ -96,7 +114,68 @@ export default {
             env.TELEGRAM_BOT_TOKEN,
             message.chat.id,
             message.message_id,
-            buildHelpText(gallery.plants)
+            buildHelpText(gallery)
+          );
+          return new Response("OK");
+        }
+
+        if (text === "/zones") {
+          const { gallery } = await readPlantsJson(env);
+          await sendReply(
+            env.TELEGRAM_BOT_TOKEN,
+            message.chat.id,
+            message.message_id,
+            buildZonesText(gallery.zones)
+          );
+          return new Response("OK");
+        }
+
+        const addZoneMatch = text.match(/^\/addzone\s+(\S+)(?:\s+([\s\S]+))?$/);
+        if (addZoneMatch) {
+          const code = addZoneMatch[1];
+          const name = addZoneMatch[2]?.trim() || null;
+          const zone = await upsertZone(env, code, name);
+          await sendReply(
+            env.TELEGRAM_BOT_TOKEN,
+            message.chat.id,
+            message.message_id,
+            `Saved zone: ${zone.code}${zone.name ? ` — ${zone.name}` : ""}`
+          );
+          return new Response("OK");
+        }
+
+        const renameZoneMatch = text.match(/^\/renamezone\s+(\S+)\s+([\s\S]+)$/);
+        if (renameZoneMatch) {
+          const code = renameZoneMatch[1];
+          const name = renameZoneMatch[2].trim();
+          const zone = await upsertZone(env, code, name || null);
+          await sendReply(
+            env.TELEGRAM_BOT_TOKEN,
+            message.chat.id,
+            message.message_id,
+            `Zone ${zone.code} renamed to "${zone.name}"`
+          );
+          return new Response("OK");
+        }
+
+        const deleteZoneMatch = text.match(/^\/deletezone\s+(\S+)$/);
+        if (deleteZoneMatch) {
+          const code = deleteZoneMatch[1];
+          const result = await deleteZone(env, code);
+          let reply: string;
+          if (!result.zone) {
+            reply = `No zone found with code "${code}".`;
+          } else if (result.inUseBy.length > 0) {
+            const refs = Array.from(new Set(result.inUseBy)).join(", ");
+            reply = `Cannot delete zone "${code}" — still used by: ${refs}`;
+          } else {
+            reply = `Deleted zone: ${code}`;
+          }
+          await sendReply(
+            env.TELEGRAM_BOT_TOKEN,
+            message.chat.id,
+            message.message_id,
+            reply
           );
           return new Response("OK");
         }
@@ -127,7 +206,7 @@ export default {
               env.TELEGRAM_BOT_TOKEN,
               message.chat.id,
               message.message_id,
-              `Invalid field "${field}". Updatable: shortCode, fullName, commonName, zoneCode, zoneName, tags, description`
+              `Invalid field "${field}". Updatable: shortCode, fullName, commonName, zoneCodes, tags, description`
             );
             return new Response("OK");
           }
@@ -162,7 +241,7 @@ export default {
         env.TELEGRAM_BOT_TOKEN,
         message.chat.id,
         message.message_id,
-        "Photo received but no caption.\n\nFormat:\nshortCode // fullName // commonName // Zone (code) // tags // description"
+        "Photo received but no caption.\n\nFormat:\nshortCode // fullName // commonName // zones // tags // description"
       );
       return new Response("OK");
     }
@@ -173,7 +252,11 @@ export default {
       const parsed = parseCaption(message.caption);
 
       const { gallery } = await readPlantsJson(env);
-      const resolved = resolveFields(parsed, gallery.plants);
+      const { plant: resolved, zoneUpserts } = resolveFields(
+        parsed,
+        gallery.plants,
+        gallery.zones
+      );
 
       const postedBy =
         message.from?.first_name || message.from?.username || "unknown";
@@ -203,21 +286,33 @@ export default {
         shortCode: resolved.shortCode,
         fullName: resolved.fullName,
         commonName: resolved.commonName,
-        zoneCode: resolved.zoneCode,
-        zoneName: resolved.zoneName,
+        zoneCodes: resolved.zoneCodes,
         tags: resolved.tags,
         description: resolved.description,
         image: browserImagePath,
         postedBy,
         addedAt: new Date().toISOString(),
       };
-      await appendPlant(env, entry);
+      await appendPlant(env, entry, zoneUpserts);
+
+      const mergedZones = [...gallery.zones];
+      for (const u of zoneUpserts) {
+        const idx = mergedZones.findIndex((z) => z.code === u.code);
+        if (idx === -1) mergedZones.push(u);
+        else mergedZones[idx] = { ...mergedZones[idx], name: u.name ?? mergedZones[idx].name };
+      }
+      const zoneLabel = resolved.zoneCodes
+        .map((code) => {
+          const z = mergedZones.find((zone) => zone.code === code);
+          return z?.name ? `${z.name} (${code})` : code;
+        })
+        .join(" + ");
 
       const lines = [
         `Added plant #${seq}: ${resolved.shortCode}`,
         resolved.commonName ? `  Common: ${resolved.commonName}` : null,
         resolved.fullName ? `  Full: ${resolved.fullName}` : null,
-        `  Zone: ${resolved.zoneName ?? resolved.zoneCode} (${resolved.zoneCode})`,
+        `  Zones: ${zoneLabel}`,
         resolved.tags.length > 0 ? `  Tags: ${resolved.tags.join(", ")}` : null,
         resolved.description ? `  Note: ${resolved.description}` : null,
         `  → ${browserImagePath}`,

@@ -1,5 +1,5 @@
-import { useRef, useState, useCallback, useEffect } from "react";
-import type { Plant } from "../types";
+import { useRef, useState, useCallback, useEffect, useMemo } from "react";
+import type { Plant, Zone } from "../types";
 import type { SortMode } from "../utils/sorting";
 import type { Filters } from "../utils/filtering";
 import PlantCard from "./PlantCard";
@@ -235,6 +235,7 @@ function computeLayout(
 interface MasonryGridProps {
   plants: Plant[];
   allPlants: Plant[];
+  zones: Zone[];
   sortMode: SortMode;
   onSort: (mode: SortMode) => void;
   filters: Filters;
@@ -247,6 +248,7 @@ interface MasonryGridProps {
 export default function MasonryGrid({
   plants,
   allPlants,
+  zones,
   sortMode,
   onSort,
   filters,
@@ -266,6 +268,12 @@ export default function MasonryGrid({
   const stampCacheRef = useRef<
     Map<string, { stamp: StampDef; fillerIndex: number }>
   >(new Map());
+
+  const zoneNameByCode = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const z of zones) if (z.name) m.set(z.code, z.name);
+    return m;
+  }, [zones]);
 
   const layout = useCallback(() => {
     if (!containerRef.current) return;
@@ -416,6 +424,7 @@ export default function MasonryGrid({
         >
           <FilterControl
             plants={allPlants}
+            zones={zones}
             filters={filters}
             onFiltersChange={onFiltersChange}
           />
@@ -465,7 +474,11 @@ export default function MasonryGrid({
                 width: `${item.w}px`,
               }}
             >
-              <PlantCard plant={item.plant} onOpen={onOpenPlant} />
+              <PlantCard
+                plant={item.plant}
+                zoneNameByCode={zoneNameByCode}
+                onOpen={onOpenPlant}
+              />
             </div>
           );
         })}
