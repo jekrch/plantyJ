@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 5,
+      "id": "a tri-1777158209",
+      "shortCode": "a tri",
+      "zoneCode": "mpg",
+      "tags": [
+        "edible"
+      ],
+      "description": "transplanted 2025",
+      "image": "images/a tri/1777158209.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-25T23:03:30.486Z"
+    },
+    {
       "seq": 4,
       "id": "h acu-1777156328",
       "shortCode": "h acu",
@@ -18,18 +31,18 @@
       "dominantColors": [
         [
           34.9,
-          3.0,
+          3,
           11.8
         ],
         [
-          64.0,
+          64,
           2.7,
           12.6
         ],
         [
           51.7,
           -19.2,
-          37.0
+          37
         ]
       ]
     },
