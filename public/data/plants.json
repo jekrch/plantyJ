@@ -2,12 +2,12 @@
   "plants": [],
   "zones": [
     {
-      "code": "{WBV}",
-      "name": "{West Boulevard}"
+      "code": "WBV",
+      "name": "West Boulevard"
     },
     {
-      "code": "{NBV}",
-      "name": "{North Boulevard}"
+      "code": "NBV",
+      "name": "North Boulevard"
     }
   ]
 }
