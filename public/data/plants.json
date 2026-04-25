@@ -13,7 +13,27 @@
       "description": null,
       "image": "images/h acu/1777156328.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-25T22:32:09.998Z"
+      "addedAt": "2026-04-25T22:32:09.998Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "dc9a72e6581916d6",
+      "dominantColors": [
+        [
+          34.9,
+          3.0,
+          11.8
+        ],
+        [
+          64.0,
+          2.7,
+          12.6
+        ],
+        [
+          51.7,
+          -19.2,
+          37.0
+        ]
+      ]
     },
     {
       "seq": 3,
