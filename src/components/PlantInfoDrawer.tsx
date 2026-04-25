@@ -1,5 +1,6 @@
-import { useMemo } from "react";
-import type { Plant, Zone } from "../types";
+import { useEffect, useMemo, useState } from "react";
+import { ExternalLink } from "lucide-react";
+import type { Plant, Species, SpeciesTaxonomy, Zone } from "../types";
 
 interface Props {
   open: boolean;
@@ -13,6 +14,40 @@ interface Props {
   slideDir?: "left" | "right" | null;
 }
 
+const TAXONOMY_RANKS: Array<keyof SpeciesTaxonomy> = [
+  "kingdom",
+  "phylum",
+  "class",
+  "order",
+  "family",
+  "genus",
+  "species",
+];
+
+const DESCRIPTION_PREVIEW_CHARS = 260;
+
+function slugifyFullName(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function firstSentenceOrTrim(text: string, max: number): string {
+  if (text.length <= max) return text;
+  const slice = text.slice(0, max);
+  const lastBoundary = Math.max(
+    slice.lastIndexOf(". "),
+    slice.lastIndexOf("! "),
+    slice.lastIndexOf("? ")
+  );
+  if (lastBoundary > max * 0.5) return slice.slice(0, lastBoundary + 1);
+  const lastSpace = slice.lastIndexOf(" ");
+  return `${slice.slice(0, lastSpace > 0 ? lastSpace : max).trimEnd()}…`;
+}
+
+const speciesCache = new Map<string, Species | null>();
+
 export default function PlantInfoDrawer({
   open,
   plant,
@@ -24,6 +59,33 @@ export default function PlantInfoDrawer({
   closing = false,
   slideDir = null,
 }: Props) {
+  const [species, setSpecies] = useState<Species | null>(null);
+  const [descExpanded, setDescExpanded] = useState(false);
+
+  useEffect(() => {
+    setDescExpanded(false);
+    if (!plant.fullName) {
+      setSpecies(null);
+      return;
+    }
+    const slug = slugifyFullName(plant.fullName);
+    if (speciesCache.has(slug)) {
+      setSpecies(speciesCache.get(slug) ?? null);
+      return;
+    }
+    let cancelled = false;
+    fetch(`${import.meta.env.BASE_URL}data/species/${slug}.json`)
+      .then((r) => (r.ok ? (r.json() as Promise<Species>) : null))
+      .catch(() => null)
+      .then((data) => {
+        speciesCache.set(slug, data);
+        if (!cancelled) setSpecies(data);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [plant.fullName]);
+
   const samePlantTimeline = allPlants
     .filter((p) => p.shortCode === plant.shortCode && p.id !== plant.id)
     .sort((a, b) => new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime());
@@ -46,6 +108,40 @@ export default function PlantInfoDrawer({
     }, []);
 
   const sharingHeader = `Others in ${zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode}`;
+
+  const otherVernaculars = useMemo(() => {
+    if (!species?.vernacularNames?.length) return [] as string[];
+    const known = new Set(
+      [plant.commonName, species.commonName]
+        .filter((s): s is string => !!s)
+        .map((s) => s.toLowerCase())
+    );
+    const seen = new Set<string>();
+    return species.vernacularNames.filter((n) => {
+      const key = n.toLowerCase();
+      if (known.has(key) || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, [species, plant.commonName]);
+
+  const taxonomyRows = useMemo(() => {
+    if (!species?.taxonomy) return [] as Array<{ rank: string; name: string }>;
+    return TAXONOMY_RANKS.flatMap((rank) => {
+      const value = species.taxonomy?.[rank];
+      if (!value) return [];
+      return [{ rank, name: value as string }];
+    });
+  }, [species]);
+
+  const description = species?.description?.trim() || null;
+  const needsTruncation =
+    !!description && description.length > DESCRIPTION_PREVIEW_CHARS;
+  const visibleDescription = description
+    ? descExpanded || !needsTruncation
+      ? description
+      : firstSentenceOrTrim(description, DESCRIPTION_PREVIEW_CHARS)
+    : null;
 
   const show = open && !closing;
 
@@ -91,6 +187,92 @@ export default function PlantInfoDrawer({
             <p className="text-[11px] text-white/50 italic mt-0.5">{plant.fullName}</p>
           )}
         </div>
+
+        {/* Species overview */}
+        {description && (
+          <div>
+            <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">
+              About this species
+            </p>
+            <p className="text-xs text-white/55 leading-relaxed whitespace-pre-line">
+              {visibleDescription}
+            </p>
+            {needsTruncation && (
+              <button
+                type="button"
+                onClick={() => setDescExpanded((v) => !v)}
+                className="mt-1.5 text-[10px] uppercase tracking-widest text-accent/80 hover:text-accent transition-colors cursor-pointer"
+              >
+                {descExpanded ? "Show less" : "Read more"}
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Vernacular names */}
+        {otherVernaculars.length > 0 && (
+          <div>
+            <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">
+              Also known as
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {otherVernaculars.map((name) => (
+                <span
+                  key={name}
+                  className="text-[11px] leading-none px-2 py-1 rounded-sm bg-white/5 text-white/55 italic"
+                >
+                  {name}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Taxonomic lineage */}
+        {taxonomyRows.length > 0 && (
+          <div>
+            <p className="text-[10px] uppercase tracking-widest text-white/30 mb-2">
+              Classification
+            </p>
+            <ol className="space-y-1">
+              {taxonomyRows.map((row, idx) => {
+                const isLast = idx === taxonomyRows.length - 1;
+                return (
+                  <li
+                    key={row.rank}
+                    className="flex items-baseline gap-3 text-xs"
+                    style={{ paddingLeft: `${idx * 10}px` }}
+                  >
+                    <span className="text-[9px] uppercase tracking-widest text-white/25 w-14 shrink-0 font-mono">
+                      {row.rank}
+                    </span>
+                    <span
+                      className={
+                        isLast
+                          ? "text-accent italic"
+                          : "text-white/65"
+                      }
+                    >
+                      {row.name}
+                    </span>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+        )}
+
+        {/* Native range */}
+        {species?.nativeRange && (
+          <div>
+            <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">
+              Native range
+            </p>
+            <p className="text-xs text-white/55 leading-relaxed">
+              {species.nativeRange}
+            </p>
+          </div>
+        )}
 
         {/* Zone */}
         <div className="rounded px-4 py-3" style={{ backgroundColor: "rgba(255,255,255,0.04)" }}>
@@ -203,6 +385,32 @@ export default function PlantInfoDrawer({
                       {p.commonName ?? p.shortCode}
                     </span>
                   </button>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Sources */}
+        {species?.references && species.references.length > 0 && (
+          <>
+            <div className="border-t border-white/8" />
+            <div>
+              <p className="text-[10px] uppercase tracking-widest text-white/30 mb-2">
+                Sources
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {species.references.map((ref) => (
+                  <a
+                    key={ref.url}
+                    href={ref.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-white/55 hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
+                  >
+                    {ref.name}
+                    <ExternalLink size={10} strokeWidth={1.5} />
+                  </a>
                 ))}
               </div>
             </div>
