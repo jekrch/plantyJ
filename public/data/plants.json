@@ -4,6 +4,10 @@
     {
       "code": "{WBV}",
       "name": "{West Boulevard}"
+    },
+    {
+      "code": "{NBV}",
+      "name": "{North Boulevard}"
     }
   ]
 }
