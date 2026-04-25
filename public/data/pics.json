@@ -7,7 +7,8 @@
       "zoneCode": "mpg",
       "tags": [
         "edible",
-        "potted"
+        "potted",
+        "native"
       ],
       "description": null,
       "image": "images/u dio/1777160703.jpg",
@@ -73,7 +74,8 @@
       "shortCode": "a tri",
       "zoneCode": "mpg",
       "tags": [
-        "edible"
+        "edible",
+        "native"
       ],
       "description": "transplanted 2025",
       "image": "images/a tri/1777158209.jpg",
@@ -106,7 +108,8 @@
       "shortCode": "h acu",
       "zoneCode": "mpg",
       "tags": [
-        "bloom"
+        "bloom",
+        "native"
       ],
       "description": null,
       "image": "images/h acu/1777156328.jpg",
@@ -140,7 +143,8 @@
       "zoneCode": "mpg",
       "tags": [
         "edible",
-        "bloom"
+        "bloom",
+        "native"
       ],
       "description": null,
       "image": "images/v sor/1777156147.jpg",
@@ -207,7 +211,8 @@
       "shortCode": "m vir",
       "zoneCode": "mpg",
       "tags": [
-        "bloom"
+        "bloom",
+        "native"
       ],
       "description": "one year",
       "image": "images/m. vir/1777154087.jpg",
