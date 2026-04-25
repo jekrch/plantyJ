@@ -7,7 +7,7 @@ export const SORT_OPTIONS: { value: SortMode; label: string }[] = [
   { value: "oldest", label: "OLDEST" },
   { value: "color", label: "COLOR" },
   { value: "similarity", label: "SIMILARITY" },
-  { value: "duplicates", label: "DUPLICATES" },
+  // { value: "duplicates", label: "DUPLICATES" },
 ];
 
 export const SORT_DESCRIPTIONS: Record<SortMode, string> = {
