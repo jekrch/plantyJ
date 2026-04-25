@@ -1,6 +1,11 @@
 {
   "plants": [
     {
+      "shortCode": "u dio",
+      "fullName": "Urtica dioica",
+      "commonName": "Stinging Nettle"
+    },
+    {
       "shortCode": "e ame",
       "fullName": "Erythronium americanum",
       "commonName": "Yellow Trout Lily"
