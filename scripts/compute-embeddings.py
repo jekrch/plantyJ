@@ -41,7 +41,14 @@ IMAGE_ROOT = Path("public")
 def load_existing(spec: ModelSpec) -> dict[str, list[float]]:
     if not spec.output_path.exists():
         return {}
-    data = json.loads(spec.output_path.read_text())
+        
+    try:
+        # Catch errors if the file is empty or contains malformed JSON
+        data = json.loads(spec.output_path.read_text())
+    except json.JSONDecodeError:
+        print(f"Warning: {spec.output_path} is empty or contains invalid JSON. Recomputing.")
+        return {}
+        
     if data.get("model_version") != spec.version:
         print(
             f"Version mismatch (stored={data.get('model_version')!r}, "
@@ -49,7 +56,6 @@ def load_existing(spec: ModelSpec) -> dict[str, list[float]]:
         )
         return {}
     return data.get("embeddings", {})
-
 
 def save_embeddings(spec: ModelSpec, embeddings: dict[str, list[float]]) -> None:
     spec.output_path.parent.mkdir(parents=True, exist_ok=True)
