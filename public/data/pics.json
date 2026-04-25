@@ -1,6 +1,20 @@
 {
   "pics": [
     {
+      "seq": 7,
+      "id": "u dio-1777160703",
+      "shortCode": "u dio",
+      "zoneCode": "mpg",
+      "tags": [
+        "edible",
+        "potted"
+      ],
+      "description": null,
+      "image": "images/u dio/1777160703.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-25T23:45:04.916Z"
+    },
+    {
       "seq": 6,
       "id": "e ame-1777160369",
       "shortCode": "e ame",
@@ -17,7 +31,7 @@
       "phash": "e6b10f714b0760eb",
       "dominantColors": [
         [
-          62.0,
+          62,
           1.1,
           9.8
         ],
