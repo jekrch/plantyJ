@@ -130,6 +130,23 @@ export default function PlantInfoDrawer({
     });
   }, [species, speciesByShortCode]);
 
+  const bioclipSpeciesId = plant.bioclipSpeciesId?.trim() || null;
+  const bioclipCommonName = plant.bioclipCommonName?.trim() || null;
+  const bioclipScore =
+    typeof plant.bioclipScore === "number" ? plant.bioclipScore : null;
+  const recordedSpecies =
+    species?.fullName?.trim() || plant.fullName?.trim() || null;
+  const bioclipMatch: "match" | "genus" | "mismatch" | null = (() => {
+    if (!bioclipSpeciesId || !recordedSpecies) return null;
+    const a = bioclipSpeciesId.toLowerCase();
+    const b = recordedSpecies.toLowerCase();
+    if (a === b) return "match";
+    const genusA = a.split(/\s+/)[0];
+    const genusB = b.split(/\s+/)[0];
+    if (genusA && genusA === genusB) return "genus";
+    return "mismatch";
+  })();
+
   const description = species?.description?.trim() || null;
   const needsTruncation =
     !!description && description.length > DESCRIPTION_PREVIEW_CHARS;
@@ -174,7 +191,7 @@ export default function PlantInfoDrawer({
       >
         {/* Plant identity */}
         <div className="rounded px-4 py-3" style={{ backgroundColor: "rgba(255,255,255,0.04)" }}>
-          <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">Plant</p>
+          <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Plant</p>
           <p className="font-display text-sm text-white/90 leading-snug">
             {plant.commonName ?? plant.fullName ?? plant.shortCode}{" "}
             <span className="text-accent">{plant.shortCode}</span>
@@ -189,7 +206,7 @@ export default function PlantInfoDrawer({
           <>
             <div className="border-t border-white/8" />
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">Notes</p>
+              <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Notes</p>
               <p className="text-xs text-white/55 leading-relaxed whitespace-pre-line">
                 {plant.description}
               </p>
@@ -202,7 +219,7 @@ export default function PlantInfoDrawer({
           <>
             <div className="border-t border-white/8" />
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">Tags</p>
+              <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Tags</p>
               <div className="flex flex-wrap gap-1.5">
                 {plant.tags.map((tag) => (
                   <span
@@ -222,7 +239,7 @@ export default function PlantInfoDrawer({
           <>
             <div className="border-t border-white/8" />
             <div>
-              <div className="flex items-center gap-1.5 mb-2 text-[10px] uppercase tracking-widest text-white/30">
+              <div className="flex items-center gap-1.5 mb-2 text-[10px] uppercase tracking-widest text-white/50">
                 <span>More photos of this plant</span>
                 <span className="text-white/20 normal-case tracking-normal">
                   · {samePlantTimeline.length}
@@ -259,7 +276,7 @@ export default function PlantInfoDrawer({
 
       {/* Zone */}
         <div className="rounded px-4 py-3" style={{ backgroundColor: "rgba(255,255,255,0.04)" }}>
-          <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">Zone</p>
+          <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Zone</p>
           <p className="font-display text-sm text-white/90 leading-snug">
             {zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode}{" "}
             <span className="text-accent">{plant.zoneCode}</span>
@@ -271,7 +288,7 @@ export default function PlantInfoDrawer({
           <>
             <div className="border-t border-white/8" />
             <div>
-              <div className="flex items-center gap-1.5 mb-2 text-[10px] uppercase tracking-widest text-white/30">
+              <div className="flex items-center gap-1.5 mb-2 text-[10px] uppercase tracking-widest text-white/50">
                 <span>{sharingHeader}</span>
                 <span className="text-white/20 normal-case tracking-normal">· {sharingZone.length}</span>
               </div>
@@ -304,7 +321,7 @@ export default function PlantInfoDrawer({
         {/* Species overview */}
         {description && (
           <div>
-            <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">
+            <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">
               About this species
             </p>
             <p className="text-xs text-white/55 leading-relaxed whitespace-pre-line">
@@ -325,7 +342,7 @@ export default function PlantInfoDrawer({
         {/* Vernacular names */}
         {otherVernaculars.length > 0 && (
           <div>
-            <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">
+            <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">
               Also known as
             </p>
             <div className="flex flex-wrap gap-1.5">
@@ -345,7 +362,7 @@ export default function PlantInfoDrawer({
         {taxonomyRows.length > 0 && (
           <div>
             <div className="flex items-baseline justify-between mb-2">
-              <p className="text-[10px] uppercase tracking-widest text-white/30">
+              <p className="text-[10px] uppercase tracking-widest text-white/50">
                 Classification
               </p>
               <p className="text-[9px] uppercase tracking-widest text-white/20">
@@ -364,7 +381,7 @@ export default function PlantInfoDrawer({
                 return (
                   <li key={row.rank} style={{ paddingLeft: `${idx * 10}px` }}>
                     <div className="flex items-center gap-2 text-xs">
-                      <span className="text-[9px] uppercase tracking-widest text-white/25 w-14 shrink-0 font-mono">
+                      <span className="text-[9px] uppercase tracking-widest text-white/35 w-14 shrink-0 font-mono">
                         {row.rank}
                       </span>
                       <button
@@ -447,7 +464,7 @@ export default function PlantInfoDrawer({
         {/* Native range */}
         {species?.nativeRange && (
           <div>
-            <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">
+            <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">
               Native range
             </p>
             <p className="text-xs text-white/55 leading-relaxed">
@@ -456,12 +473,73 @@ export default function PlantInfoDrawer({
           </div>
         )}   
         
+        {/* BioCLIP prediction */}
+        {bioclipSpeciesId && (
+          <>
+            <div className="border-t border-white/8" />
+            <div>
+              <div className="flex items-baseline justify-between mb-2">
+                <p className="text-[10px] uppercase tracking-widest text-white/50">
+                  BioCLIP prediction
+                </p>
+                {bioclipScore !== null && (
+                  <p className="text-[9px] uppercase tracking-widest text-white/35 tabular-nums">
+                    {(bioclipScore * 100).toFixed(1)}% confidence
+                  </p>
+                )}
+              </div>
+              <div
+                className="rounded px-4 py-3 space-y-2"
+                style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
+              >
+                <div>
+                  <p className="font-display text-sm text-white/70 italic leading-snug">
+                    {bioclipSpeciesId}
+                  </p>
+                  {bioclipCommonName && (
+                    <p className="text-[11px] text-white/50 mt-0.5">
+                      {bioclipCommonName}
+                    </p>
+                  )}
+                </div>
+                {bioclipMatch && recordedSpecies && (
+                  <p
+                    className={`text-[11px] leading-snug ${
+                      bioclipMatch === "match"
+                        ? "text-accent/90"
+                        : bioclipMatch === "genus"
+                          ? "text-amber-300/80"
+                          : "text-rose-300/80"
+                    }`}
+                  >
+                    {bioclipMatch === "match" &&
+                      `Agrees with the recorded species (${recordedSpecies}).`}
+                    {bioclipMatch === "genus" &&
+                      `Same genus as the recorded species (${recordedSpecies}), but a different species.`}
+                    {bioclipMatch === "mismatch" &&
+                      `Disagrees with the recorded species (${recordedSpecies}).`}
+                  </p>
+                )}
+              </div>
+              <a
+                href="https://imageomics.github.io/bioclip/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-[11px] text-white/55 hover:text-accent transition-colors mt-2 px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
+              >
+                About BioCLIP
+                <ExternalLink size={10} strokeWidth={1.5} />
+              </a>
+            </div>
+          </>
+        )}
+
         {/* Sources */}
         {species?.references && species.references.length > 0 && (
           <>
             <div className="border-t border-white/8" />
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/30 mb-2">
+              <p className="text-[10px] uppercase tracking-widest text-white/50 mb-2">
                 Sources
               </p>
               <div className="flex flex-wrap gap-2">

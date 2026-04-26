@@ -12,6 +12,9 @@ export interface PicRecord {
   height: number;
   dominantColors: number[][];
   phash: string;
+  bioclipSpeciesId?: string | null;
+  bioclipCommonName?: string | null;
+  bioclipScore?: number | null;
 }
 
 export interface PlantRecord {
