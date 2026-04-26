@@ -1,6 +1,11 @@
 {
   "plants": [
     {
+      "shortCode": "s can wyl",
+      "fullName": "Sambucus canadensis Wyldewood",
+      "commonName": "Elderberry"
+    },
+    {
       "shortCode": "c vir",
       "fullName": "Clematis virginiana",
       "commonName": "Virgin's Bower"
