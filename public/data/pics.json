@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 11,
+      "id": "r pix-1777241419",
+      "shortCode": "r pix",
+      "zoneCode": "mpg",
+      "tags": [
+        "edible"
+      ],
+      "description": "Potted",
+      "image": "images/r pix/1777241419.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-26T22:10:19.963Z"
+    },
+    {
       "seq": 10,
       "id": "r rub-1777239539",
       "shortCode": "r rub",
@@ -19,7 +32,7 @@
         [
           56.7,
           -26.2,
-          34.0
+          34
         ],
         [
           65.8,
@@ -28,7 +41,7 @@
         ],
         [
           19.2,
-          -5.0,
+          -5,
           6.7
         ]
       ],
@@ -54,18 +67,18 @@
       "dominantColors": [
         [
           28.6,
-          -2.0,
+          -2,
           7.4
         ],
         [
           61.5,
-          -24.0,
+          -24,
           34.4
         ],
         [
           63.1,
           -1.4,
-          10.0
+          10
         ]
       ],
       "bioclipSpeciesId": "Rubus caesius",

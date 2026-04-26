@@ -1,6 +1,11 @@
 {
   "plants": [
     {
+      "shortCode": "r pix",
+      "fullName": "Ribes Pixwell",
+      "commonName": "Gooseberry"
+    },
+    {
       "shortCode": "r rub",
       "fullName": "Ribes rubrum Jonkheer Van Tets",
       "commonName": "Red Currant"
