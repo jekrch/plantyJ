@@ -1,6 +1,20 @@
 {
   "pics": [
     {
+      "seq": 16,
+      "id": "s fle-1777242745",
+      "shortCode": "s fle",
+      "zoneCode": "mpg",
+      "tags": [
+        "native",
+        "basal"
+      ],
+      "description": null,
+      "image": "images/s fle/1777242745.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-26T22:32:26.484Z"
+    },
+    {
       "seq": 15,
       "id": "s can bob-1777242363",
       "shortCode": "s can bob",
@@ -18,7 +32,7 @@
       "dominantColors": [
         [
           61.5,
-          0.0,
+          0,
           8.6
         ],
         [
@@ -55,7 +69,7 @@
         [
           55.2,
           -0.5,
-          9.0
+          9
         ],
         [
           33.4,
@@ -65,7 +79,7 @@
         [
           50.8,
           -21.8,
-          34.0
+          34
         ]
       ],
       "bioclipSpeciesId": "Sambucus canadensis",
