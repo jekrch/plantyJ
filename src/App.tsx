@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import type { PicRecord, Plant, PlantRecord, Species, Zone, ZonePic } from "./types";
-import { Sprout } from "lucide-react";
+import { Sprout, House } from "lucide-react";
 import { sortPlantsAsync } from "./utils/sorting.ts";
 import type { SortMode } from "./utils/sorting.ts";
 import type { Filters } from "./utils/filtering.ts";
@@ -10,6 +10,7 @@ import BackgroundEchoes from "./components/BackgroundEchoes";
 import { SpinnerState, ErrorState, EmptyState } from "./components/StatusStates";
 import { useFilterParams } from "./hooks/useFilterParams";
 import PlantViewer from "./components/PlantViewer";
+import InfoModal from "./components/InfoModal";
 
 function slugifyName(name: string): string {
   return name
@@ -38,6 +39,7 @@ export default function App() {
     () => new URLSearchParams(window.location.search).get("plant")
   );
   const [viewerScope, setViewerScope] = useState<"filtered" | "all">("filtered");
+  const [infoOpen, setInfoOpen] = useState(false);
 
   const handleFiltersChange = useCallback(
     (next: Filters) => {
@@ -195,6 +197,14 @@ export default function App() {
               PlantyJ
             </h1>
           </div>
+          <button
+            onClick={() => setInfoOpen(true)}
+            className="flex items-center justify-center h-8 w-8 mr-2 rounded-md text-ink-muted hover:text-ink hover:bg-white/5 transition-colors"
+            title="About this site"
+            aria-label="About this site"
+          >
+            <House color={"#b08968"} size={20} strokeWidth={1.5} />
+          </button>
         </div>
       </header>
 
@@ -237,6 +247,14 @@ export default function App() {
           </div>
         )}
       </main>
+
+      <InfoModal
+        open={infoOpen}
+        onClose={() => setInfoOpen(false)}
+        plants={plants}
+        zones={zones}
+        zonePics={zonePics}
+      />
 
       {openIndex >= 0 && (
         <PlantViewer
