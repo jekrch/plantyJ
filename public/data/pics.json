@@ -1,6 +1,17 @@
 {
   "pics": [
     {
+      "seq": 8,
+      "id": "c ros-1777238847",
+      "shortCode": "c ros",
+      "zoneCode": "mpg",
+      "tags": [],
+      "description": "transplated 2025",
+      "image": "images/c ros/1777238847.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-26T21:27:28.575Z"
+    },
+    {
       "seq": 7,
       "id": "u dio-1777160703",
       "shortCode": "u dio",
@@ -19,7 +30,7 @@
       "phash": "d1eee1b4e4711cd0",
       "dominantColors": [
         [
-          71.0,
+          71,
           -22.4,
           17.9
         ],
