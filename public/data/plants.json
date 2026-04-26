@@ -1,6 +1,11 @@
 {
   "plants": [
     {
+      "shortCode": "c vir",
+      "fullName": "Clematis virginiana",
+      "commonName": "Virgin's Bower"
+    },
+    {
       "shortCode": "r pix",
       "fullName": "Ribes Pixwell",
       "commonName": "Gooseberry"
