@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { X, ExternalLink, Sprout, Github } from "lucide-react";
-import type { Plant, Zone, ZonePic } from "../types";
-import { plantTitle } from "../utils/display";
+import type { Plant, PlantRecord, Zone, ZonePic } from "../types";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 
 type Tab = "about" | "plants" | "zones";
@@ -10,8 +9,25 @@ interface Props {
   open: boolean;
   onClose: () => void;
   plants: Plant[];
+  plantRecords: PlantRecord[];
   zones: Zone[];
   zonePics: ZonePic[];
+  onFilterShortCode: (shortCode: string) => void;
+  onFilterZone: (zoneCode: string) => void;
+}
+
+interface PlantEntry {
+  shortCode: string;
+  label: string;
+  fullName: string | null;
+  image: string | null;
+  count: number;
+}
+
+interface ZoneEntry {
+  zone: Zone;
+  image: string | null;
+  count: number;
 }
 
 const TABS: { id: Tab; label: string }[] = [
@@ -43,9 +59,12 @@ export default function InfoModal(props: Props) {
 function InfoModalContent({
   onClose,
   plants,
+  plantRecords,
   zones,
   zonePics,
   visible,
+  onFilterShortCode,
+  onFilterZone,
 }: Props & { visible: boolean }) {
   const [tab, setTab] = useState<Tab>("about");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -64,33 +83,53 @@ function InfoModalContent({
     return () => window.removeEventListener("keydown", handler);
   }, [handleClose]);
 
-  const uniquePlants = useMemo(() => {
-    const seen = new Map<string, Plant>();
+  const plantEntries: PlantEntry[] = useMemo(() => {
+    const countByCode = new Map<string, number>();
+    const imageByCode = new Map<string, string>();
     for (const p of plants) {
-      if (!seen.has(p.shortCode)) seen.set(p.shortCode, p);
+      countByCode.set(p.shortCode, (countByCode.get(p.shortCode) ?? 0) + 1);
+      if (!imageByCode.has(p.shortCode)) imageByCode.set(p.shortCode, p.image);
     }
-    return Array.from(seen.values()).sort((a, b) => {
-      const an = plantTitle(a).toLowerCase();
-      const bn = plantTitle(b).toLowerCase();
-      return an.localeCompare(bn);
+    const recordByCode = new Map<string, PlantRecord>();
+    for (const r of plantRecords) recordByCode.set(r.shortCode, r);
+    const codes = new Set<string>([
+      ...plantRecords.map((r) => r.shortCode),
+      ...plants.map((p) => p.shortCode),
+    ]);
+    const entries: PlantEntry[] = Array.from(codes).map((code) => {
+      const rec = recordByCode.get(code);
+      const label = rec?.commonName ?? rec?.fullName ?? code;
+      return {
+        shortCode: code,
+        label,
+        fullName: rec?.fullName ?? null,
+        image: imageByCode.get(code) ?? null,
+        count: countByCode.get(code) ?? 0,
+      };
     });
-  }, [plants]);
+    return entries.sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
+  }, [plants, plantRecords]);
 
-  const zoneEntries = useMemo(() => {
+  const zoneEntries: ZoneEntry[] = useMemo(() => {
     const picByZone = new Map<string, string>();
     for (const zp of zonePics) {
       if (!picByZone.has(zp.zoneCode)) picByZone.set(zp.zoneCode, zp.image);
     }
     const fallback = new Map<string, string>();
+    const countByZone = new Map<string, number>();
     for (const p of plants) {
       if (!fallback.has(p.zoneCode)) fallback.set(p.zoneCode, p.image);
+      countByZone.set(p.zoneCode, (countByZone.get(p.zoneCode) ?? 0) + 1);
     }
     return zones
       .map((z) => ({
         zone: z,
         image: picByZone.get(z.code) ?? fallback.get(z.code) ?? null,
+        count: countByZone.get(z.code) ?? 0,
       }))
-      .sort((a, b) => (a.zone.name ?? a.zone.code).localeCompare(b.zone.name ?? b.zone.code));
+      .sort((a, b) =>
+        (a.zone.name ?? a.zone.code).localeCompare(b.zone.name ?? b.zone.code)
+      );
   }, [zones, zonePics, plants]);
 
   return (
@@ -164,8 +203,12 @@ function InfoModalContent({
 
         <div className="flex-1 overflow-y-auto info-modal-scroll">
           {tab === "about" && <AboutPanel />}
-          {tab === "plants" && <PlantsPanel plants={uniquePlants} />}
-          {tab === "zones" && <ZonesPanel entries={zoneEntries} />}
+          {tab === "plants" && (
+            <PlantsPanel entries={plantEntries} onFilter={onFilterShortCode} />
+          )}
+          {tab === "zones" && (
+            <ZonesPanel entries={zoneEntries} onFilter={onFilterZone} />
+          )}
         </div>
       </div>
     </div>
@@ -182,9 +225,9 @@ function AboutPanel() {
         photos, and zone neighbors.
       </p>
 
-      <div className="border-t border-ink-faint/20" />
+      {/* <div className="border-t border-ink-faint/20" /> */}
 
-      <div>
+      {/* <div>
         <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-2">
           Tabs
         </p>
@@ -198,7 +241,7 @@ function AboutPanel() {
             representative photo of each.
           </li>
         </ul>
-      </div>
+      </div> */}
 
       <div className="border-t border-ink-faint/20" />
 
@@ -231,36 +274,29 @@ function AboutPanel() {
   );
 }
 
-function PlantsPanel({ plants }: { plants: Plant[] }) {
-  const base = import.meta.env.BASE_URL;
+function PlantsPanel({
+  entries,
+  onFilter,
+}: {
+  entries: PlantEntry[];
+  onFilter: (shortCode: string) => void;
+}) {
   return (
     <div className="px-4 py-4 sm:px-5 sm:py-5">
       <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-3 px-1">
-        Plants · {plants.length}
+        Plants · {entries.length}
       </p>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-        {plants.map((p) => (
-          <div
-            key={p.shortCode}
-            className="group flex flex-col rounded-md overflow-hidden bg-white/3 ring-1 ring-inset ring-white/5"
-          >
-            <div className="relative aspect-square overflow-hidden bg-surface">
-              <img
-                src={`${base}${p.image}`}
-                alt={plantTitle(p)}
-                loading="lazy"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-            </div>
-            <div className="px-2.5 py-2 min-w-0">
-              <p className="text-[11px] text-ink leading-tight truncate font-display">
-                {plantTitle(p)}
-              </p>
-              <p className="text-[10px] text-accent mt-0.5 font-mono tracking-wide">
-                {p.shortCode}
-              </p>
-            </div>
-          </div>
+        {entries.map((entry) => (
+          <EntryCard
+            key={entry.shortCode}
+            image={entry.image}
+            label={entry.label}
+            altLabel={entry.fullName ?? entry.label}
+            code={entry.shortCode}
+            count={entry.count}
+            onClick={entry.count > 0 ? () => onFilter(entry.shortCode) : null}
+          />
         ))}
       </div>
     </div>
@@ -269,46 +305,104 @@ function PlantsPanel({ plants }: { plants: Plant[] }) {
 
 function ZonesPanel({
   entries,
+  onFilter,
 }: {
-  entries: { zone: Zone; image: string | null }[];
+  entries: ZoneEntry[];
+  onFilter: (zoneCode: string) => void;
 }) {
-  const base = import.meta.env.BASE_URL;
   return (
     <div className="px-4 py-4 sm:px-5 sm:py-5">
       <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-3 px-1">
         Zones · {entries.length}
       </p>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-        {entries.map(({ zone, image }) => (
-          <div
+        {entries.map(({ zone, image, count }) => (
+          <EntryCard
             key={zone.code}
-            className="group flex flex-col rounded-md overflow-hidden bg-white/3 ring-1 ring-inset ring-white/5"
-          >
-            <div className="relative aspect-square overflow-hidden bg-surface">
-              {image ? (
-                <img
-                  src={`${base}${image}`}
-                  alt={zone.name ?? zone.code}
-                  loading="lazy"
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center text-ink-faint text-[10px] font-mono">
-                  no image
-                </div>
-              )}
-            </div>
-            <div className="px-2.5 py-2 min-w-0">
-              <p className="text-[11px] text-ink leading-tight truncate font-display capitalize">
-                {zone.name ?? zone.code}
-              </p>
-              <p className="text-[10px] text-accent mt-0.5 font-mono tracking-wide">
-                {zone.code}
-              </p>
-            </div>
-          </div>
+            image={image}
+            label={zone.name ?? zone.code}
+            altLabel={zone.name ?? zone.code}
+            code={zone.code}
+            count={count}
+            capitalizeLabel
+            onClick={count > 0 ? () => onFilter(zone.code) : null}
+          />
         ))}
       </div>
     </div>
+  );
+}
+
+interface EntryCardProps {
+  image: string | null;
+  label: string;
+  altLabel: string;
+  code: string;
+  count: number;
+  capitalizeLabel?: boolean;
+  onClick: (() => void) | null;
+}
+
+function EntryCard({
+  image,
+  label,
+  altLabel,
+  code,
+  count,
+  capitalizeLabel,
+  onClick,
+}: EntryCardProps) {
+  const base = import.meta.env.BASE_URL;
+  const interactive = onClick !== null;
+  const Tag = interactive ? "button" : "div";
+  const tagProps = interactive
+    ? {
+        type: "button" as const,
+        onClick,
+        title: `Show ${count} photo${count === 1 ? "" : "s"}`,
+      }
+    : { "aria-disabled": true };
+
+  return (
+    <Tag
+      {...tagProps}
+      className={`group flex flex-col rounded-md overflow-hidden bg-white/3 ring-1 ring-inset ring-white/5 text-left ${
+        interactive
+          ? "hover:ring-accent/40 hover:bg-white/5 transition-colors cursor-pointer"
+          : "opacity-60"
+      }`}
+    >
+      <div className="relative aspect-square overflow-hidden bg-surface">
+        {image ? (
+          <img
+            src={`${base}${image}`}
+            alt={altLabel}
+            loading="lazy"
+            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-300 ${
+              interactive ? "group-hover:scale-105" : ""
+            }`}
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center text-ink-faint text-[10px] font-mono">
+            no image
+          </div>
+        )}
+        <span className="absolute top-1.5 right-1.5 text-[9px] font-mono tabular-nums px-1.5 py-0.5 rounded bg-black/55 text-white/75 backdrop-blur-sm">
+          {count}
+        </span>
+      </div>
+      <div className="px-2.5 py-2 min-w-0">
+        <p
+          className={`text-[11px] text-ink leading-tight truncate font-display ${
+            capitalizeLabel ? "capitalize" : ""
+          }`}
+        >
+          {label}
+        </p>
+        <p className="text-[10px] text-accent mt-0.5 font-mono tracking-wide">
+          {code}
+        </p>
+      </div>
+    </Tag>
   );
 }

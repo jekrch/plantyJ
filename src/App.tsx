@@ -21,6 +21,7 @@ function slugifyName(name: string): string {
 
 export default function App() {
   const [plants, setPlants] = useState<Plant[]>([]);
+  const [plantRecords, setPlantRecords] = useState<PlantRecord[]>([]);
   const [zones, setZones] = useState<Zone[]>([]);
   const [zonePics, setZonePics] = useState<ZonePic[]>([]);
   const [speciesByShortCode, setSpeciesByShortCode] = useState<
@@ -87,6 +88,7 @@ export default function App() {
         });
 
         setPlants(merged);
+        setPlantRecords(plantsData.plants ?? []);
         setZones(zonesData.zones ?? []);
         setZonePics(zonePicsData.zonePics ?? []);
         setStatus("ready");
@@ -162,6 +164,28 @@ export default function App() {
       setViewerScope("filtered");
     },
     [filters, sortMode, syncToURL]
+  );
+
+  const handleFilterShortCode = useCallback(
+    (shortCode: string) => {
+      const next: Filters = { ...EMPTY_FILTERS, shortCodes: new Set([shortCode]) };
+      setFilters(next);
+      syncToURL(next, sortMode);
+      setInfoOpen(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    [sortMode, syncToURL]
+  );
+
+  const handleFilterZone = useCallback(
+    (zoneCode: string) => {
+      const next: Filters = { ...EMPTY_FILTERS, zoneCodes: new Set([zoneCode]) };
+      setFilters(next);
+      syncToURL(next, sortMode);
+      setInfoOpen(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    [sortMode, syncToURL]
   );
 
   const viewerPlants = viewerScope === "all" ? plants : sortedPlants;
@@ -252,8 +276,11 @@ export default function App() {
         open={infoOpen}
         onClose={() => setInfoOpen(false)}
         plants={plants}
+        plantRecords={plantRecords}
         zones={zones}
         zonePics={zonePics}
+        onFilterShortCode={handleFilterShortCode}
+        onFilterZone={handleFilterZone}
       />
 
       {openIndex >= 0 && (
