@@ -109,8 +109,8 @@ function generateStableStyle(stamp: StampDef | null, empty: boolean, fillerIndex
       stamp.type === "icon"
         ? generateDeterministicPlacement(fillerIndex)
         : { scale: 1, offsetX: 0, offsetY: 0 },
-    iconInnerX: deterministicBetween(fillerIndex, 5, -10, 10),
-    iconInnerY: deterministicBetween(fillerIndex, 5, -10, 40),
+    iconInnerX: deterministicBetween(fillerIndex, 5, -10, 50),
+    iconInnerY: deterministicBetween(fillerIndex, 5, -10, 30),
   };
 }
 
@@ -303,7 +303,7 @@ export default function HatchFiller({
 
   const baseIconSize = Math.min(size.width, size.height) * 0.7;
   const effectiveScale = isSmall
-    ? Math.min(placement.scale, 1.3)   // cap scale on mobile
+    ? Math.min(placement.scale, 1)   // cap scale on mobile
     : placement.scale;
   const iconSize = Math.min(
     baseIconSize * effectiveScale,
@@ -327,7 +327,7 @@ export default function HatchFiller({
 
   if (!empty && stamp?.type === "word") {
     // 1. Define character aspect ratio for Space Mono (width is ~60% of height)
-    const charWidthRatio = 0.6; 
+    const charWidthRatio = 0.7; 
     
     // 2. Define how much of the container the text is allowed to take up (e.g., 85% to leave padding)
     const maxAllowedWidth = size.width * 0.85;
