@@ -318,15 +318,15 @@ export default function PlantInfoDrawer({
 
       {/* Zone */}
         <div
-          className="relative overflow-hidden rounded px-4 py-3"
+          className="relative overflow-hidden rounded px-4 py-14"
           style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
         >
           {matchingZonePic && (
             <div
-              className="absolute inset-y-0 right-0 w-2/3 sm:w-1/2 pointer-events-none z-0"
+              className="absolute inset-y-0 right-0 w-4/5 sm:w-1/2 pointer-events-none z-0"
               style={{
-                WebkitMaskImage: "linear-gradient(to right, transparent, black 80%)",
-                maskImage: "linear-gradient(to right, transparent, black 80%)",
+                WebkitMaskImage: "linear-gradient(to right, transparent, black 20%)",
+                maskImage: "linear-gradient(to right, transparent, black 20%)",
               }}
             >
               <img
