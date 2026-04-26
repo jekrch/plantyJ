@@ -1,6 +1,11 @@
 {
   "plants": [
     {
+      "shortCode": "r ida",
+      "fullName": "Rubus idaeus Joan J",
+      "commonName": "Joan J Raspberry"
+    },
+    {
       "shortCode": "c ros",
       "fullName": "Carex rosea",
       "commonName": "Rosy Sedge"

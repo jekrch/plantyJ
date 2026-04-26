@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 9,
+      "id": "r ida-1777239358",
+      "shortCode": "r ida",
+      "zoneCode": "bb",
+      "tags": [
+        "foliage"
+      ],
+      "description": "transplanted 2024",
+      "image": "images/r ida/1777239358.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-26T21:35:59.975Z"
+    },
+    {
       "seq": 8,
       "id": "c ros-1777238847",
       "shortCode": "c ros",
