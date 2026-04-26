@@ -9,7 +9,30 @@
       "description": "transplated 2025",
       "image": "images/c ros/1777238847.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-26T21:27:28.575Z"
+      "addedAt": "2026-04-26T21:27:28.575Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "facc974d1d4a0af0",
+      "dominantColors": [
+        [
+          63.9,
+          1.9,
+          8.7
+        ],
+        [
+          28.3,
+          1.6,
+          8.4
+        ],
+        [
+          51.2,
+          -21.6,
+          35.5
+        ]
+      ],
+      "bioclipSpeciesId": "Carex leptopoda",
+      "bioclipCommonName": "Short-scale sedge",
+      "bioclipScore": 0.154
     },
     {
       "seq": 7,

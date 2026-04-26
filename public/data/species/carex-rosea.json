@@ -1,0 +1,41 @@
+{
+  "id": "carex-rosea",
+  "fullName": "Carex rosea",
+  "commonName": "Rosy Sedge",
+  "description": "Carex rosea, the rosy sedge, is a flowering plant and part of the family Cyperaceae. Synonyms for Carex rosea include Carex concoluta, and Carex flaccidula. It is native to central and eastern North America and it exists in wet to dry soils. Carex rosea can be found in shores of streams and bottomlands, as well as ponds. It is known to have good adaptations to dry-shade locations. It is an evergreen plant which is easy to grow.",
+  "vernacularNames": [
+    "Rosy Sedge",
+    "Curly-styled Wood Sedge",
+    "Stellate Sedge"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Liliopsida",
+    "order": "Poales",
+    "family": "Cyperaceae",
+    "genus": "Carex",
+    "species": "Carex rosea",
+    "canonicalName": "Carex rosea"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/2727476"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:20008065-1"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Carex_rosea"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia"
+  ]
+}
