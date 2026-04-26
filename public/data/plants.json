@@ -1,6 +1,16 @@
 {
   "plants": [
     {
+      "shortCode": "s fle",
+      "fullName": "Solidago flexicaulis",
+      "commonName": "Zig Zag Goldenrod"
+    },
+    {
+      "shortCode": "s can bob",
+      "fullName": "Sambucus canadensis Bob Gordon",
+      "commonName": "Elderberry"
+    },
+    {
       "shortCode": "s can wyl",
       "fullName": "Sambucus canadensis Wyldewood",
       "commonName": "Elderberry"

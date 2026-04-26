@@ -1,6 +1,56 @@
 {
   "pics": [
     {
+      "seq": 16,
+      "id": "s fle-1777242745",
+      "shortCode": "s fle",
+      "zoneCode": "mpg",
+      "tags": [
+        "native",
+        "basal"
+      ],
+      "description": null,
+      "image": "images/s fle/1777242745.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-26T22:32:26.484Z"
+    },
+    {
+      "seq": 15,
+      "id": "s can bob-1777242363",
+      "shortCode": "s can bob",
+      "zoneCode": "mpg",
+      "tags": [
+        "edible"
+      ],
+      "description": null,
+      "image": "images/s can bob/1777242363.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-26T22:26:04.664Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "80f45d8cf2d429d7",
+      "dominantColors": [
+        [
+          61.5,
+          0,
+          8.6
+        ],
+        [
+          36.6,
+          0.1,
+          7.7
+        ],
+        [
+          60.1,
+          -30.9,
+          39.8
+        ]
+      ],
+      "bioclipSpeciesId": "Sambucus williamsii",
+      "bioclipCommonName": "William's elder",
+      "bioclipScore": 0.5715
+    },
+    {
       "seq": 14,
       "id": "s can wyl-1777242278",
       "shortCode": "s can wyl",
@@ -11,7 +61,30 @@
       "description": null,
       "image": "images/s can wyl/1777242278.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-26T22:24:39.826Z"
+      "addedAt": "2026-04-26T22:24:39.826Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "838957e8ece2e0f2",
+      "dominantColors": [
+        [
+          55.2,
+          -0.5,
+          9
+        ],
+        [
+          33.4,
+          0.4,
+          6.6
+        ],
+        [
+          50.8,
+          -21.8,
+          34
+        ]
+      ],
+      "bioclipSpeciesId": "Sambucus canadensis",
+      "bioclipCommonName": "Elderberry",
+      "bioclipScore": 0.8438
     },
     {
       "seq": 13,
