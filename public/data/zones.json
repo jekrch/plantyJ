@@ -21,15 +21,15 @@
       "name": "hydrangea border"
     },
     {
-      "code": "(fy)",
+      "code": "fy",
       "name": "front yard"
     },
     {
-      "code": "(by)",
+      "code": "by",
       "name": "back yard"
     },
     {
-      "code": "(sy)",
+      "code": "sy",
       "name": "side yard"
     }
   ]
