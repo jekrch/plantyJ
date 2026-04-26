@@ -1,12 +1,14 @@
-import type { Env, Gallery, PicEntry, PlantRecord, TelegramUpdate, Zone } from "./types";
+import type { Env, Gallery, PicEntry, PlantRecord, TelegramUpdate, Zone, ZonePicEntry } from "./types";
 import { parseCaption, resolveFields } from "./caption";
 import { downloadFile, sendReply } from "./telegram";
 import {
   appendPic,
+  appendZonePic,
   arrayBufferToBase64,
   commitFile,
   deletePic,
   deleteZone,
+  deleteZonePic,
   isUpdatableField,
   nextSeq,
   readGallery,
@@ -50,7 +52,13 @@ Zone commands:
   /addzone {code} {name} — Create or rename a zone (name optional)
   /renamezone {code} {name} — Set/replace a zone's display name
   /deletezone {code} — Remove a zone (only if no pics reference it)
-  /zones — List all known zones`;
+  /zones — List all known zones
+
+Zone photo (represents the zone, not a plant):
+  Send a photo with the caption:
+  /zonepic {zoneCode} [// description]
+  Zone pics live independently of plant pics and aren't grouped by shortCode.
+  /deletezonepic {id} — Remove a zone pic by its id`;
 
 function buildHelpText(gallery: Gallery): string {
   const sections: string[] = [HELP_HEADER];
@@ -154,6 +162,21 @@ export default {
           return new Response("OK");
         }
 
+        const deleteZonePicMatch = text.match(/^\/deletezonepic\s+(\S+)$/);
+        if (deleteZonePicMatch) {
+          const id = deleteZonePicMatch[1];
+          const removed = await deleteZonePic(env, id);
+          await sendReply(
+            env.TELEGRAM_BOT_TOKEN,
+            message.chat.id,
+            message.message_id,
+            removed
+              ? `Deleted zone pic: ${removed.zoneCode} (${removed.id})`
+              : `No zone pic found with id ${id}.`
+          );
+          return new Response("OK");
+        }
+
         const deleteZoneMatch = text.match(/^\/deletezone\s+(\S+)$/);
         if (deleteZoneMatch) {
           const code = deleteZoneMatch[1];
@@ -237,12 +260,81 @@ export default {
         env.TELEGRAM_BOT_TOKEN,
         message.chat.id,
         message.message_id,
-        "Photo received but no caption.\n\nFormat:\nshortCode // fullName // commonName // zones // tags // description"
+        "Photo received but no caption.\n\nFormat:\nshortCode // fullName // commonName // zones // tags // description\n\nOr for a zone photo:\n/zonepic {zoneCode} [// description]"
       );
       return new Response("OK");
     }
 
     if (!message.photo || !message.caption) return new Response("OK");
+
+    const zonePicMatch = message.caption.trim().match(/^\/zonepic\s+(\S+)(?:\s*\/\/\s*([\s\S]+))?$/);
+    if (zonePicMatch) {
+      try {
+        const zoneCode = zonePicMatch[1];
+        const description = zonePicMatch[2]?.trim() || null;
+
+        const { gallery } = await readGallery(env);
+        const existingZone = gallery.zones.find((z) => z.code === zoneCode);
+        const zoneUpsert: Zone | null = existingZone ? null : { code: zoneCode, name: null };
+
+        const postedBy =
+          message.from?.first_name || message.from?.username || "unknown";
+
+        const photo = message.photo[message.photo.length - 1];
+        const imageBytes = await downloadFile(photo.file_id, env.TELEGRAM_BOT_TOKEN);
+
+        const timestamp = Math.floor(Date.now() / 1000);
+        const filename = `${timestamp}.jpg`;
+        const repoImagePath = `public/images/zones/${zoneCode}/${filename}`;
+        const browserImagePath = `images/zones/${zoneCode}/${filename}`;
+        const id = `${zoneCode}-${timestamp}`;
+
+        const base64Image = arrayBufferToBase64(imageBytes);
+        await commitFile(
+          env,
+          repoImagePath,
+          base64Image,
+          `Add zone photo: ${zoneCode}`
+        );
+
+        const entry: ZonePicEntry = {
+          id,
+          zoneCode,
+          image: browserImagePath,
+          addedAt: new Date().toISOString(),
+          postedBy,
+          description,
+        };
+
+        await appendZonePic(env, entry, zoneUpsert);
+
+        const zoneLabel = existingZone?.name
+          ? `${existingZone.name} (${zoneCode})`
+          : zoneCode;
+        const lines = [
+          `Added zone pic for ${zoneLabel}`,
+          `  id: ${id}`,
+          description ? `  Note: ${description}` : null,
+          `  → ${browserImagePath}`,
+        ].filter(Boolean);
+
+        await sendReply(
+          env.TELEGRAM_BOT_TOKEN,
+          message.chat.id,
+          message.message_id,
+          lines.join("\n")
+        );
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : "Unknown error";
+        await sendReply(
+          env.TELEGRAM_BOT_TOKEN,
+          message.chat.id,
+          message.message_id,
+          `Error: ${errorMessage}`
+        );
+      }
+      return new Response("OK");
+    }
 
     try {
       const parsed = parseCaption(message.caption);

@@ -5,6 +5,7 @@ import type {
   PicEntry,
   PlantRecord,
   Zone,
+  ZonePicEntry,
 } from "./types";
 
 const GITHUB_API = "https://api.github.com";
@@ -12,6 +13,7 @@ const USER_AGENT = "plantyj-bot";
 const PICS_PATH = "public/data/pics.json";
 const PLANTS_PATH = "public/data/plants.json";
 const ZONES_PATH = "public/data/zones.json";
+const ZONE_PICS_PATH = "public/data/zone_pics.json";
 
 function githubHeaders(token: string): Record<string, string> {
   return {
@@ -115,13 +117,15 @@ interface ReadResult {
   picsSha: string | null;
   plantsSha: string | null;
   zonesSha: string | null;
+  zonePicsSha: string | null;
 }
 
 export async function readGallery(env: Env): Promise<ReadResult> {
-  const [picsRes, plantsRes, zonesRes] = await Promise.all([
+  const [picsRes, plantsRes, zonesRes, zonePicsRes] = await Promise.all([
     readJsonFile<{ pics?: PicEntry[] }>(env, PICS_PATH, { pics: [] }),
     readJsonFile<{ plants?: PlantRecord[] }>(env, PLANTS_PATH, { plants: [] }),
     readJsonFile<{ zones?: Zone[] }>(env, ZONES_PATH, { zones: [] }),
+    readJsonFile<{ zonePics?: ZonePicEntry[] }>(env, ZONE_PICS_PATH, { zonePics: [] }),
   ]);
 
   return {
@@ -129,10 +133,12 @@ export async function readGallery(env: Env): Promise<ReadResult> {
       pics: picsRes.data.pics ?? [],
       plants: plantsRes.data.plants ?? [],
       zones: zonesRes.data.zones ?? [],
+      zonePics: zonePicsRes.data.zonePics ?? [],
     },
     picsSha: picsRes.sha,
     plantsSha: plantsRes.sha,
     zonesSha: zonesRes.sha,
+    zonePicsSha: zonePicsRes.sha,
   };
 }
 
@@ -439,6 +445,71 @@ export async function upsertZone(
   return zone;
 }
 
+export async function appendZonePic(
+  env: Env,
+  newZonePic: ZonePicEntry,
+  zoneUpsert: Zone | null
+): Promise<void> {
+  const { gallery, zonesSha, zonePicsSha } = await readGallery(env);
+
+  if (zoneUpsert) {
+    const nextZones = applyZoneUpserts(gallery.zones, [zoneUpsert]);
+    await writeJsonFile(
+      env,
+      ZONES_PATH,
+      { zones: nextZones },
+      zonesSha,
+      `Add zone: ${zoneUpsert.code}`
+    );
+  }
+
+  const nextZonePics = [newZonePic, ...gallery.zonePics];
+  await writeJsonFile(
+    env,
+    ZONE_PICS_PATH,
+    { zonePics: nextZonePics },
+    zonePicsSha,
+    `Add zone pic: ${newZonePic.zoneCode}`
+  );
+}
+
+export async function deleteZonePic(
+  env: Env,
+  id: string
+): Promise<ZonePicEntry | null> {
+  const { gallery, zonePicsSha } = await readGallery(env);
+  const idx = gallery.zonePics.findIndex((p) => p.id === id);
+  if (idx === -1) return null;
+
+  const [removed] = gallery.zonePics.splice(idx, 1);
+
+  await writeJsonFile(
+    env,
+    ZONE_PICS_PATH,
+    { zonePics: gallery.zonePics },
+    zonePicsSha,
+    `Remove zone pic: ${removed.zoneCode} (${removed.id})`
+  );
+
+  const imagePath = `public/${removed.image}`;
+  const [owner, repo] = env.GITHUB_REPO.split("/");
+  const fileUrl = `${GITHUB_API}/repos/${owner}/${repo}/contents/${imagePath}`;
+  const fileResp = await fetch(fileUrl, {
+    headers: githubHeaders(env.GITHUB_TOKEN),
+  });
+  if (fileResp.ok) {
+    const fileData: GitHubContentsResponse = await fileResp.json();
+    await deleteFile(
+      env,
+      imagePath,
+      fileData.sha,
+      `Delete zone image: ${removed.zoneCode} (${removed.id})`
+    );
+  }
+
+  return removed;
+}
+
 export interface DeleteZoneResult {
   zone: Zone | null;
   inUseBy: string[];
@@ -452,6 +523,10 @@ export async function deleteZone(env: Env, code: string): Promise<DeleteZoneResu
   const inUseBy = gallery.pics
     .filter((p) => p.zoneCode === code)
     .map((p) => p.shortCode);
+  const zonePicsInUse = gallery.zonePics.filter((p) => p.zoneCode === code);
+  if (zonePicsInUse.length > 0) {
+    inUseBy.push(`${zonePicsInUse.length} zone pic(s)`);
+  }
   if (inUseBy.length > 0) {
     return { zone: gallery.zones[idx], inUseBy };
   }

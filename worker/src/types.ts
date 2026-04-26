@@ -87,8 +87,18 @@ export interface Zone {
   name: string | null;
 }
 
+export interface ZonePicEntry {
+  id: string;
+  zoneCode: string;
+  image: string;
+  addedAt: string;
+  postedBy: string;
+  description: string | null;
+}
+
 export interface Gallery {
   pics: PicEntry[];
   plants: PlantRecord[];
   zones: Zone[];
+  zonePics: ZonePicEntry[];
 }

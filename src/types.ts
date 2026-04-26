@@ -28,6 +28,15 @@ export interface Zone {
   name: string | null;
 }
 
+export interface ZonePic {
+  id: string;
+  zoneCode: string;
+  image: string;
+  addedAt: string;
+  postedBy: string;
+  description: string | null;
+}
+
 // Runtime view: a pic joined with its plant record (lookup by shortCode).
 // Components consume this merged shape.
 export interface Plant extends PicRecord {

@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, ExternalLink } from "lucide-react";
-import type { Plant, Species, SpeciesTaxonomy, Zone } from "../types";
+import type { Plant, Species, SpeciesTaxonomy, Zone, ZonePic } from "../types";
 
 interface Props {
   open: boolean;
   plant: Plant;
   allPlants: Plant[];
   zones: Zone[];
+  zonePics: ZonePic[];
   speciesByShortCode: Map<string, Species>;
   onSelectPlant: (plant: Plant) => void;
   onApplyShortCodes: (shortCodes: string[]) => void;
@@ -52,6 +53,7 @@ export default function PlantInfoDrawer({
   plant,
   allPlants,
   zones,
+  zonePics,
   speciesByShortCode,
   onSelectPlant,
   onApplyShortCodes,
@@ -81,6 +83,22 @@ export default function PlantInfoDrawer({
     for (const z of zones) if (z.name) m.set(z.code, z.name);
     return m;
   }, [zones]);
+
+  const matchingZonePic = useMemo(() => {
+    const candidates = zonePics.filter((z) => z.zoneCode === plant.zoneCode);
+    if (candidates.length === 0) return null;
+    const target = new Date(plant.addedAt).getTime();
+    let best = candidates[0];
+    let bestDelta = Math.abs(new Date(best.addedAt).getTime() - target);
+    for (let i = 1; i < candidates.length; i++) {
+      const delta = Math.abs(new Date(candidates[i].addedAt).getTime() - target);
+      if (delta < bestDelta) {
+        best = candidates[i];
+        bestDelta = delta;
+      }
+    }
+    return best;
+  }, [zonePics, plant.zoneCode, plant.addedAt]);
 
   const sharingZone = allPlants
     .filter(
@@ -299,12 +317,33 @@ export default function PlantInfoDrawer({
         )}
 
       {/* Zone */}
-        <div className="rounded px-4 py-3" style={{ backgroundColor: "rgba(255,255,255,0.04)" }}>
-          <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Zone</p>
-          <p className="font-display text-sm text-white/90 leading-snug">
-            {zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode}{" "}
-            <span className="text-accent text-xs">{plant.zoneCode}</span>
-          </p>
+        <div
+          className="relative overflow-hidden rounded px-4 py-3"
+          style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
+        >
+          {matchingZonePic && (
+            <div
+              className="absolute inset-y-0 right-0 w-2/3 sm:w-1/2 pointer-events-none z-0"
+              style={{
+                WebkitMaskImage: "linear-gradient(to right, transparent, black 80%)",
+                maskImage: "linear-gradient(to right, transparent, black 80%)",
+              }}
+            >
+              <img
+                src={`${import.meta.env.BASE_URL}${matchingZonePic.image}`}
+                alt=""
+                className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
+              />
+            </div>
+          )}
+
+          <div className="relative z-10 pointer-events-none">
+            <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Zone</p>
+            <p className="font-display text-sm text-white/90 leading-snug">
+              {zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode}{" "}
+              <span className="text-accent text-xs">{plant.zoneCode}</span>
+            </p>
+          </div>
         </div>
 
         {/* Other plants sharing a zone */}

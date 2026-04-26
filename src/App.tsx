@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
-import type { PicRecord, Plant, PlantRecord, Species, Zone } from "./types";
+import type { PicRecord, Plant, PlantRecord, Species, Zone, ZonePic } from "./types";
 import { Sprout } from "lucide-react";
 import { sortPlantsAsync } from "./utils/sorting.ts";
 import type { SortMode } from "./utils/sorting.ts";
@@ -21,6 +21,7 @@ function slugifyName(name: string): string {
 export default function App() {
   const [plants, setPlants] = useState<Plant[]>([]);
   const [zones, setZones] = useState<Zone[]>([]);
+  const [zonePics, setZonePics] = useState<ZonePic[]>([]);
   const [speciesByShortCode, setSpeciesByShortCode] = useState<
     Map<string, Species>
   >(new Map());
@@ -66,8 +67,11 @@ export default function App() {
       fetchJson<{ pics?: PicRecord[] }>("data/pics.json"),
       fetchJson<{ plants?: PlantRecord[] }>("data/plants.json"),
       fetchJson<{ zones?: Zone[] }>("data/zones.json"),
+      fetchJson<{ zonePics?: ZonePic[] }>("data/zone_pics.json").catch(
+        () => ({ zonePics: [] as ZonePic[] })
+      ),
     ])
-      .then(([picsData, plantsData, zonesData]) => {
+      .then(([picsData, plantsData, zonesData, zonePicsData]) => {
         const plantsByCode = new Map<string, PlantRecord>();
         for (const p of plantsData.plants ?? []) plantsByCode.set(p.shortCode, p);
 
@@ -82,6 +86,7 @@ export default function App() {
 
         setPlants(merged);
         setZones(zonesData.zones ?? []);
+        setZonePics(zonePicsData.zonePics ?? []);
         setStatus("ready");
 
         // Load species data in parallel — non-blocking; fills in once available.
@@ -239,6 +244,7 @@ export default function App() {
           plants={viewerPlants}
           allPlants={plants}
           zones={zones}
+          zonePics={zonePics}
           speciesByShortCode={speciesByShortCode}
           currentIndex={openIndex}
           onClose={handleCloseViewer}
