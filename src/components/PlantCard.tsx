@@ -118,16 +118,16 @@ export default function PlantCard({ plant, zoneNameByCode, onOpen }: Props) {
           <Expand size={16} />
         </button>
 
-        <p className="font-display text-sm text-ink leading-tight">
+        <p className="font-display text-sm text-white leading-tight">
           {titleLine}{" "}
-          <span className="text-accent">{plant.shortCode}</span>
+          <span className="text-accent text-[10px]">{plant.shortCode}</span>
         </p>
         <p className="text-xs text-ink-muted mt-0.5">{subtitle}</p>
-        {plant.description && (
+        {/* {plant.description && (
           <p className="text-xs text-ink-muted/70 mt-1 italic leading-snug line-clamp-2">
             {plant.description}
           </p>
-        )}
+        )} */}
         {plant.tags?.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-1.5">
             {plant.tags.map((tag) => (
