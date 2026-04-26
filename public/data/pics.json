@@ -1,6 +1,43 @@
 {
   "pics": [
     {
+      "seq": 17,
+      "id": "s lat-1777242955",
+      "shortCode": "s lat",
+      "zoneCode": "mpg",
+      "tags": [
+        "native",
+        "basal"
+      ],
+      "description": null,
+      "image": "images/s lat/1777242955.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-26T22:35:55.939Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "a386d9f32c85e26c",
+      "dominantColors": [
+        [
+          62.2,
+          -32.1,
+          28.6
+        ],
+        [
+          27.9,
+          -5.4,
+          10.5
+        ],
+        [
+          62.2,
+          0.4,
+          10.4
+        ]
+      ],
+      "bioclipSpeciesId": "Solidago ulmifolia",
+      "bioclipCommonName": "Elm-leaf goldenrod",
+      "bioclipScore": 0.1404
+    },
+    {
       "seq": 16,
       "id": "s fle-1777242745",
       "shortCode": "s fle",
@@ -12,7 +49,30 @@
       "description": null,
       "image": "images/s fle/1777242745.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-26T22:32:26.484Z"
+      "addedAt": "2026-04-26T22:32:26.484Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "b0d7ce78b280479d",
+      "dominantColors": [
+        [
+          65.2,
+          -16.5,
+          15.5
+        ],
+        [
+          57,
+          -28,
+          35.1
+        ],
+        [
+          33.6,
+          -9,
+          14.5
+        ]
+      ],
+      "bioclipSpeciesId": "Solidago flexicaulis",
+      "bioclipCommonName": "Zig-zag goldenrod",
+      "bioclipScore": 0.715
     },
     {
       "seq": 15,

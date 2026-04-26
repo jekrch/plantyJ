@@ -1,6 +1,11 @@
 {
   "plants": [
     {
+      "shortCode": "s lat",
+      "fullName": "Symphyotrichum lateriflorum",
+      "commonName": "Calico Aster"
+    },
+    {
       "shortCode": "s fle",
       "fullName": "Solidago flexicaulis",
       "commonName": "Zig Zag Goldenrod"
