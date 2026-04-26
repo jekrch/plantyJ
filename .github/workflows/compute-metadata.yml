@@ -46,7 +46,8 @@ jobs:
             ~/.cache/huggingface
             ~/.cache/torch
             ~/.cache/clip
-          key: ${{ runner.os }}-models-bioclip-v1
+            ~/.local/share/bioclip
+          key: ${{ runner.os }}-models-bioclip-v2
           restore-keys: |
             ${{ runner.os }}-models-
 

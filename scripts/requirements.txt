@@ -8,3 +8,4 @@ requests
 torch
 torchvision
 open_clip_torch
+pybioclip
