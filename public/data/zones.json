@@ -17,8 +17,12 @@
       "name": "maple"
     },
     {
-    "code": "hbd",
-    "name": "hydrangea border"
+      "code": "hbd",
+      "name": "hydrangea border"
+    },
+    {
+      "code": "(fy)",
+      "name": "front yard"
     }
   ]
 }
