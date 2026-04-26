@@ -1,0 +1,36 @@
+{
+  "id": "ribes-rubrum-pink-champagne",
+  "fullName": "Ribes rubrum Pink Champagne",
+  "commonName": "Pink Currant",
+  "description": "",
+  "vernacularNames": [
+    "Currant",
+    "Currant, Gooseberry",
+    "Currants",
+    "gooseberry",
+    "\uae4c\uce58\ubc25\ub098\ubb34\uc18d",
+    "Currants And Gooseberries"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Saxifragales",
+    "family": "Grossulariaceae",
+    "genus": "Ribes",
+    "species": null,
+    "canonicalName": "Ribes"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/2986095"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia"
+  ]
+}
