@@ -1,6 +1,14 @@
 {
   "zonePics": [
     {
+      "id": "by-1777240313",
+      "zoneCode": "by",
+      "image": "images/zones/by/1777240313.jpg",
+      "addedAt": "2026-04-26T21:51:54.732Z",
+      "postedBy": "Jenny",
+      "description": null
+    },
+    {
       "id": "bb-1777240280",
       "zoneCode": "bb",
       "image": "images/zones/bb/1777240280.jpg",
