@@ -89,7 +89,7 @@ When viewing a specific photo in the gallery, opening the info drawer surfaces a
 
 - **Newest / Oldest**: chronological by date added
 - **Color**: hue-angle walk through the dominant CIELAB color of each photo
-- **Similarity**: nearest-neighbor chain by cosine distance on BioCLIP embeddings; clusters by species and visual form
+- **Similarity (BioCLIP)**: nearest-neighbor chain by cosine distance on BioCLIP embeddings; clusters by species and visual form
 
 ## Filters
 

@@ -6,7 +6,7 @@ export const SORT_OPTIONS: { value: SortMode; label: string }[] = [
   { value: "newest", label: "NEWEST" },
   { value: "oldest", label: "OLDEST" },
   { value: "color", label: "COLOR" },
-  { value: "similarity", label: "SIMILARITY" },
+  { value: "similarity", label: "Similarity (BioCLIP)" },
   // { value: "duplicates", label: "DUPLICATES" },
 ];
 
