@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 14,
+      "id": "s can wyl-1777242278",
+      "shortCode": "s can wyl",
+      "zoneCode": "mpg",
+      "tags": [
+        "edible"
+      ],
+      "description": null,
+      "image": "images/s can wyl/1777242278.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-26T22:24:39.826Z"
+    },
+    {
       "seq": 13,
       "id": "c vir-1777241697",
       "shortCode": "c vir",
@@ -56,13 +69,13 @@
           12.1
         ],
         [
-          30.0,
+          30,
           1.8,
           8.7
         ],
         [
           73.3,
-          -39.0,
+          -39,
           56.7
         ]
       ],
@@ -93,7 +106,7 @@
         ],
         [
           50.2,
-          -22.0,
+          -22,
           28.1
         ],
         [
