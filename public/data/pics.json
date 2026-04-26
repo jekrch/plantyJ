@@ -12,7 +12,30 @@
       "description": null,
       "image": "images/s fle/1777242745.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-26T22:32:26.484Z"
+      "addedAt": "2026-04-26T22:32:26.484Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "b0d7ce78b280479d",
+      "dominantColors": [
+        [
+          65.2,
+          -16.5,
+          15.5
+        ],
+        [
+          57.0,
+          -28.0,
+          35.1
+        ],
+        [
+          33.6,
+          -9.0,
+          14.5
+        ]
+      ],
+      "bioclipSpeciesId": "Solidago flexicaulis",
+      "bioclipCommonName": "Zig-zag goldenrod",
+      "bioclipScore": 0.715
     },
     {
       "seq": 15,
