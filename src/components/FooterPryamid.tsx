@@ -24,7 +24,7 @@ export default function FooterPyramid() {
   return (
     <div className="flex flex-col items-center gap-0 pt-8 pb-16">
       <p
-        className="text-white/80 font-black tracking-widest uppercase text-sm mb-4 mx-10"
+        className="text-white/80 font-black tracking-widest uppercase text-xs mb-4 mx-10"
         style={{ fontFamily: "'Space Mono', monospace" }}
       >
         "More respect is due the little things that run the world" 
