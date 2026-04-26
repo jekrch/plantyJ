@@ -1,6 +1,11 @@
 {
   "plants": [
     {
+      "shortCode": "c ros",
+      "fullName": "Carex rosea",
+      "commonName": "Rosy Sedge"
+    },
+    {
       "shortCode": "u dio",
       "fullName": "Urtica dioica",
       "commonName": "Stinging Nettle"
