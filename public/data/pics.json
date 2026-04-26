@@ -33,7 +33,10 @@
           -29.4,
           36.6
         ]
-      ]
+      ],
+      "bioclipSpeciesId": "Urtica platyphylla",
+      "bioclipCommonName": "",
+      "bioclipScore": 0.7505
     },
     {
       "seq": 6,
@@ -66,7 +69,10 @@
           -22.1,
           27.7
         ]
-      ]
+      ],
+      "bioclipSpeciesId": "Erythronium americanum",
+      "bioclipCommonName": "Adder's Tongue",
+      "bioclipScore": 0.532
     },
     {
       "seq": 5,
@@ -100,7 +106,10 @@
           -1.6,
           6.6
         ]
-      ]
+      ],
+      "bioclipSpeciesId": "Allium tricoccum",
+      "bioclipCommonName": "Wild Leek",
+      "bioclipScore": 0.976
     },
     {
       "seq": 4,
@@ -134,7 +143,10 @@
           -19.2,
           37
         ]
-      ]
+      ],
+      "bioclipSpeciesId": "Hepatica acutiloba",
+      "bioclipCommonName": "Sharp-lobed hepatica",
+      "bioclipScore": 0.9266
     },
     {
       "seq": 3,
@@ -169,7 +181,10 @@
           -9.1,
           15.9
         ]
-      ]
+      ],
+      "bioclipSpeciesId": "Viola sororia",
+      "bioclipCommonName": "Common violet",
+      "bioclipScore": 0.2618
     },
     {
       "seq": 2,
@@ -203,7 +218,10 @@
           -2.5,
           6
         ]
-      ]
+      ],
+      "bioclipSpeciesId": "Ribes rubrum",
+      "bioclipCommonName": "Red currant",
+      "bioclipScore": 0.8219
     },
     {
       "seq": 1,
@@ -237,7 +255,10 @@
           -25.9,
           38.5
         ]
-      ]
+      ],
+      "bioclipSpeciesId": "Mertensia virginica",
+      "bioclipCommonName": "Virginia bluebells",
+      "bioclipScore": 0.9807
     }
   ]
 }
