@@ -1,6 +1,7 @@
 import { useRef, useCallback } from "react";
 import type { Plant } from "../types";
 import { Expand } from "lucide-react";
+import { plantTitle } from "../utils/display";
 
 const DOUBLE_CLICK_DELAY = 400;
 const MOUSE_TOLERANCE = 20;
@@ -61,7 +62,7 @@ export default function PlantCard({ plant, zoneNameByCode, onOpen }: Props) {
     [openViewer]
   );
 
-  const titleLine = plant.commonName ?? plant.fullName ?? plant.shortCode;
+  const titleLine = plantTitle(plant);
   const subtitle = zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode;
 
   return (

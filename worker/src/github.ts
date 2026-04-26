@@ -417,6 +417,108 @@ export async function updateBySeq(
   return { pic, plant };
 }
 
+export interface AcceptResult {
+  pic: PicEntry;
+  plant: PlantRecord;
+  renamedFrom: string | null;
+}
+
+/**
+ * Accept the BioCLIP prediction on a pic: ensure a plant record exists with
+ * the predicted fullName/commonName, optionally renaming the pic's shortCode
+ * (e.g. `unid-7` → `r-rub`). When merging into an existing plant record,
+ * existing fields are preserved — never overwritten.
+ */
+export async function acceptBioclip(
+  env: Env,
+  seq: number,
+  targetShortCode: string | null
+): Promise<AcceptResult | "no-pic" | "no-prediction"> {
+  const { gallery, picsSha, plantsSha } = await readGallery(env);
+  const pic = gallery.pics.find((p) => p.seq === seq);
+  if (!pic) return "no-pic";
+
+  const speciesId = pic.bioclipSpeciesId?.trim() || null;
+  const commonName = pic.bioclipCommonName?.trim() || null;
+  if (!speciesId && !commonName) return "no-prediction";
+
+  const newCode = targetShortCode?.trim() || null;
+  const oldCode = pic.shortCode;
+  const finalCode = newCode ?? oldCode;
+
+  let plantsChanged = false;
+  let picsChanged = false;
+  let renamedFrom: string | null = null;
+
+  if (newCode && newCode !== oldCode) {
+    renamedFrom = oldCode;
+    for (const p of gallery.pics) {
+      if (p.shortCode === oldCode) {
+        p.shortCode = newCode;
+        picsChanged = true;
+      }
+    }
+    // If a plant record existed at the old (unidentified) code, drop it —
+    // the meaningful record now lives at finalCode.
+    const oldPlantIdx = gallery.plants.findIndex((p) => p.shortCode === oldCode);
+    if (oldPlantIdx !== -1) {
+      gallery.plants.splice(oldPlantIdx, 1);
+      plantsChanged = true;
+    }
+  }
+
+  const existingIdx = gallery.plants.findIndex((p) => p.shortCode === finalCode);
+  let plant: PlantRecord;
+  if (existingIdx === -1) {
+    plant = {
+      shortCode: finalCode,
+      fullName: speciesId,
+      commonName: commonName,
+    };
+    gallery.plants.unshift(plant);
+    plantsChanged = true;
+  } else {
+    const existing = gallery.plants[existingIdx];
+    const merged: PlantRecord = {
+      shortCode: finalCode,
+      fullName: existing.fullName ?? speciesId,
+      commonName: existing.commonName ?? commonName,
+    };
+    if (
+      merged.fullName !== existing.fullName ||
+      merged.commonName !== existing.commonName
+    ) {
+      gallery.plants[existingIdx] = merged;
+      plantsChanged = true;
+    }
+    plant = merged;
+  }
+
+  if (plantsChanged) {
+    await writeJsonFile(
+      env,
+      PLANTS_PATH,
+      { plants: gallery.plants },
+      plantsSha,
+      renamedFrom
+        ? `Accept BioCLIP: ${renamedFrom} → ${finalCode}`
+        : `Accept BioCLIP: ${finalCode}`
+    );
+  }
+
+  if (picsChanged) {
+    await writeJsonFile(
+      env,
+      PICS_PATH,
+      { pics: gallery.pics },
+      picsSha,
+      `Re-point pics: ${renamedFrom} → ${finalCode}`
+    );
+  }
+
+  return { pic, plant, renamedFrom };
+}
+
 export async function upsertZone(
   env: Env,
   code: string,

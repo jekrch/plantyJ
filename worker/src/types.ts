@@ -74,6 +74,9 @@ export interface PicEntry {
   image: string;
   postedBy: string;
   addedAt: string;
+  bioclipSpeciesId?: string | null;
+  bioclipCommonName?: string | null;
+  bioclipScore?: number | null;
 }
 
 export interface PlantRecord {

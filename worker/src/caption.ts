@@ -1,5 +1,8 @@
 import type { ParsedCaption, ParsedZoneRef, PicEntry, PlantRecord, Zone } from "./types";
 
+export const UNIDENTIFIED_CODE = "id";
+export const UNIDENTIFIED_PREFIX = "unid-";
+
 /**
  * Parse a Telegram caption into structured plant + pic metadata.
  *
@@ -10,12 +13,32 @@ import type { ParsedCaption, ParsedZoneRef, PicEntry, PlantRecord, Zone } from "
  * keyed by shortCode. Pic-level fields (zone, tags, description) live on
  * the pic. The zone segment is a single zone — either a bare code (`fb1`)
  * or `Display Name (zoneCode)` to declare the name.
+ *
+ * Special shortCode `id` marks the pic as unidentified — the user doesn't
+ * know what the plant is yet. Format collapses to `id // zone [// description]`
+ * and skips fullName/commonName/tags slots. The worker assigns a unique
+ * `unid-{seq}` shortCode and leaves plant fields null until accepted via
+ * `/accept` (BioCLIP prediction) or filled in via `/update`.
  */
 export function parseCaption(caption: string): ParsedCaption {
   const parts = caption.split("//").map((s) => s.trim());
   const shortCode = parts[0];
   if (!shortCode) {
     throw new Error("Caption must start with a shortCode.");
+  }
+
+  if (shortCode.toLowerCase() === UNIDENTIFIED_CODE) {
+    const zoneRaw = parts[1] || null;
+    const zone = zoneRaw ? parseZoneRef(zoneRaw) : null;
+    const description = parts[2] ? parts[2] : null;
+    return {
+      shortCode: UNIDENTIFIED_CODE,
+      fullName: null,
+      commonName: null,
+      zone,
+      tags: null,
+      description,
+    };
   }
 
   const fullName = parts[1] ? parts[1] : null;
@@ -28,6 +51,10 @@ export function parseCaption(caption: string): ParsedCaption {
   const description = parts[5] ? parts[5] : null;
 
   return { shortCode, fullName, commonName, zone, tags, description };
+}
+
+export function isUnidentifiedShortCode(shortCode: string): boolean {
+  return shortCode.startsWith(UNIDENTIFIED_PREFIX);
 }
 
 function parseZoneRef(segment: string): ParsedZoneRef {
@@ -98,8 +125,13 @@ export function resolveFields(
   plants: PlantRecord[],
   zones: Zone[]
 ): ResolveResult {
-  const priorPic = existingPics.find((p) => p.shortCode === parsed.shortCode);
-  const existingPlant = plants.find((p) => p.shortCode === parsed.shortCode);
+  const isUnidentified = parsed.shortCode === UNIDENTIFIED_CODE;
+  const priorPic = isUnidentified
+    ? null
+    : existingPics.find((p) => p.shortCode === parsed.shortCode);
+  const existingPlant = isUnidentified
+    ? undefined
+    : plants.find((p) => p.shortCode === parsed.shortCode);
 
   let zoneCode: string;
   const zoneUpserts: Zone[] = [];
@@ -114,6 +146,10 @@ export function resolveFields(
     }
   } else if (priorPic) {
     zoneCode = priorPic.zoneCode;
+  } else if (isUnidentified) {
+    throw new Error(
+      `Unidentified pics need a zone. Use: id // zoneCode [// description]`
+    );
   } else {
     throw new Error(
       `New plant "${parsed.shortCode}" needs a zone. Use: shortCode // fullName // commonName // Zone Name (zoneCode)`
@@ -125,6 +161,19 @@ export function resolveFields(
   }
 
   const tags = parsed.tags ?? priorPic?.tags ?? [];
+
+  if (isUnidentified) {
+    return {
+      pic: {
+        shortCode: UNIDENTIFIED_CODE,
+        zoneCode,
+        tags: [],
+        description: parsed.description,
+      },
+      plantUpsert: null,
+      zoneUpserts,
+    };
+  }
 
   if (!existingPlant && !parsed.fullName) {
     throw new Error(

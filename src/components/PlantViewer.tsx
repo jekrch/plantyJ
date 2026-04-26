@@ -8,6 +8,7 @@ import { useGestureHandler } from "../hooks/useGestureHandler";
 import { useSlideNavigation } from "../hooks/useSlideNavigation";
 import NavButton from "./NavButton";
 import PlantInfoDrawer from "./PlantInfoDrawer";
+import { plantTitle } from "../utils/display";
 
 interface Props {
   plant: Plant;
@@ -169,7 +170,7 @@ export default function PlantViewer({
 
   const slideTrackTransform = drawerOpen ? "translateY(-100vh)" : "translateY(0)";
 
-  const titleLine = plant.commonName ?? plant.fullName ?? plant.shortCode;
+  const titleLine = plantTitle(plant);
   const zoneNameByCode = useMemo(() => {
     const m = new Map<string, string>();
     for (const z of zones) if (z.name) m.set(z.code, z.name);

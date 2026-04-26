@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, ExternalLink } from "lucide-react";
 import type { Plant, Species, SpeciesTaxonomy, Zone, ZonePic } from "../types";
+import { plantTitle } from "../utils/display";
 
 interface Props {
   open: boolean;
@@ -234,7 +235,7 @@ export default function PlantInfoDrawer({
           <div className="relative z-10 pointer-events-none">
             <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Plant</p>
             <p className="font-display text-sm text-white/90 leading-snug">
-              {plant.commonName ?? plant.fullName ?? plant.shortCode}{" "}
+              {plantTitle(plant)}{" "}
               <span className="text-accent text-xs">{plant.shortCode}</span>
             </p>
             {plant.fullName && plant.commonName && (

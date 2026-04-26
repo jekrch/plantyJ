@@ -1,7 +1,8 @@
 import type { Env, Gallery, PicEntry, PlantRecord, TelegramUpdate, Zone, ZonePicEntry } from "./types";
-import { parseCaption, resolveFields } from "./caption";
+import { parseCaption, resolveFields, UNIDENTIFIED_CODE, UNIDENTIFIED_PREFIX } from "./caption";
 import { downloadFile, sendReply } from "./telegram";
 import {
+  acceptBioclip,
   appendPic,
   appendZonePic,
   arrayBufferToBase64,
@@ -39,9 +40,20 @@ Add a plant photo:
   If posting from the same zone as the last photo of this plant, just the code:
   tmt-c
 
+Unidentified plants:
+  Don't know what it is? Use shortCode 'id':
+  id // fb1                    — minimum: just a zone
+  id // fb1 // mystery vine    — with a description
+  The pic is saved as 'unid-{seq}' until you identify it. Once the BioCLIP
+  action runs, accept its prediction with /accept, or fill it in manually
+  with /update.
+
 Pic commands:
   /delete {seq} — Remove a pic by its sequential ID
   /update {seq} {field} {value} — Update a field on a pic or its plant
+  /accept {seq} [shortCode] — Apply BioCLIP prediction to an unidentified
+    pic. With a shortCode, also rename (e.g. /accept 12 r-rub merges into
+    an existing 'r-rub' plant or creates one).
   /help — Show this message
 
 Updatable fields:
@@ -214,6 +226,37 @@ export default {
           return new Response("OK");
         }
 
+        const acceptMatch = text.match(/^\/accept\s+(\d+)(?:\s+(\S+))?$/);
+        if (acceptMatch) {
+          const seq = parseInt(acceptMatch[1], 10);
+          const targetShortCode = acceptMatch[2] || null;
+          const result = await acceptBioclip(env, seq, targetShortCode);
+
+          let reply: string;
+          if (result === "no-pic") {
+            reply = `No pic found with ID ${seq}.`;
+          } else if (result === "no-prediction") {
+            reply = `Pic #${seq} has no BioCLIP prediction yet. The metadata action runs after each commit — try again in a few minutes.`;
+          } else {
+            const lines = [
+              result.renamedFrom
+                ? `Accepted #${seq}: ${result.renamedFrom} → ${result.plant.shortCode}`
+                : `Accepted #${seq}: ${result.plant.shortCode}`,
+              result.plant.fullName ? `  Full: ${result.plant.fullName}` : null,
+              result.plant.commonName ? `  Common: ${result.plant.commonName}` : null,
+            ].filter(Boolean);
+            reply = lines.join("\n");
+          }
+
+          await sendReply(
+            env.TELEGRAM_BOT_TOKEN,
+            message.chat.id,
+            message.message_id,
+            reply
+          );
+          return new Response("OK");
+        }
+
         const updateMatch = text.match(/^\/update\s+(\d+)\s+(\S+)\s+([\s\S]+)$/);
         if (updateMatch) {
           const seq = parseInt(updateMatch[1], 10);
@@ -350,29 +393,33 @@ export default {
       const postedBy =
         message.from?.first_name || message.from?.username || "unknown";
 
+      const seq = nextSeq(gallery);
+      const isUnidentified = resolvedPic.shortCode === UNIDENTIFIED_CODE;
+      const finalShortCode = isUnidentified
+        ? `${UNIDENTIFIED_PREFIX}${seq}`
+        : resolvedPic.shortCode;
+
       const photo = message.photo[message.photo.length - 1];
       const imageBytes = await downloadFile(photo.file_id, env.TELEGRAM_BOT_TOKEN);
 
       const timestamp = Math.floor(Date.now() / 1000);
       const filename = `${timestamp}.jpg`;
-      const repoImagePath = `public/images/${resolvedPic.shortCode}/${filename}`;
-      const browserImagePath = `images/${resolvedPic.shortCode}/${filename}`;
-      const id = `${resolvedPic.shortCode}-${timestamp}`;
+      const repoImagePath = `public/images/${finalShortCode}/${filename}`;
+      const browserImagePath = `images/${finalShortCode}/${filename}`;
+      const id = `${finalShortCode}-${timestamp}`;
 
       const base64Image = arrayBufferToBase64(imageBytes);
       await commitFile(
         env,
         repoImagePath,
         base64Image,
-        `Add photo: ${resolvedPic.shortCode}`
+        `Add photo: ${finalShortCode}`
       );
-
-      const seq = nextSeq(gallery);
 
       const entry: PicEntry = {
         seq,
         id,
-        shortCode: resolvedPic.shortCode,
+        shortCode: finalShortCode,
         zoneCode: resolvedPic.zoneCode,
         tags: resolvedPic.tags,
         description: resolvedPic.description,
@@ -404,11 +451,14 @@ export default {
 
       const plantForReply =
         plantUpsertRecord ??
-        gallery.plants.find((p) => p.shortCode === resolvedPic.shortCode) ??
+        gallery.plants.find((p) => p.shortCode === finalShortCode) ??
         null;
 
       const lines = [
-        `Added pic #${seq}: ${resolvedPic.shortCode}`,
+        `Added pic #${seq}: ${finalShortCode}`,
+        isUnidentified
+          ? `  Unidentified — /accept ${seq} once BioCLIP runs, or /update to set fields manually`
+          : null,
         plantForReply?.commonName ? `  Common: ${plantForReply.commonName}` : null,
         plantForReply?.fullName ? `  Full: ${plantForReply.fullName}` : null,
         `  Zone: ${zoneLabel}`,
