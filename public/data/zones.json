@@ -27,6 +27,10 @@
     {
       "code": "(by)",
       "name": "back yard"
+    },
+    {
+      "code": "(sy)",
+      "name": "side yard"
     }
   ]
 }
