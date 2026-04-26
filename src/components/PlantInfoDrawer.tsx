@@ -303,7 +303,7 @@ export default function PlantInfoDrawer({
           <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Zone</p>
           <p className="font-display text-sm text-white/90 leading-snug">
             {zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode}{" "}
-            <span className="text-accent">{plant.zoneCode}</span>
+            <span className="text-accent text-xs">{plant.zoneCode}</span>
           </p>
         </div>
 

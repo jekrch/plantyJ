@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from 'react';
+
 const VIEW_W = 600;
 const VIEW_H = 300;
 const TX = 300;
@@ -16,6 +18,11 @@ interface Seg {
   bx: number; by: number;
   wa: number; wb: number;
   color: string;
+}
+
+interface Quote {
+  text: string;
+  author: string;
 }
 
 function taperedPath(s: Seg): string {
@@ -158,15 +165,57 @@ function buildSegments(): Seg[] {
 const SEGMENTS = buildSegments();
 
 export default function FooterRoots() {
+  const [quotes, setQuotes] = useState<Quote[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    fetch('/data/quotes.json')
+      .then((res) => res.json())
+      .then((data) => {
+        setQuotes(data);
+        setIsVisible(true);
+      })
+      .catch((err) => console.error("Failed to fetch quotes:", err));
+  }, []);
+
+  useEffect(() => {
+    if (quotes.length <= 1) return;
+
+    const interval = setInterval(() => {
+      // Fade out
+      setIsVisible(false);
+      
+      // Wait for fade-out to finish before changing text and fading back in
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % quotes.length);
+        setIsVisible(true);
+      }, 600); // matches CSS duration slightly plus a buffer
+      
+    }, 9000); // 9 seconds per quote cycle
+
+    return () => clearInterval(interval);
+  }, [quotes.length]);
+
+  // Fallback state while loading
+  const currentQuote = quotes[currentIndex] || { text: "...", author: "..." };
+
   return (
     <div className="flex flex-col items-center pt-8 pb-8 w-full overflow-hidden">
-      <p
-        className="text-white/80 font-black tracking-widest uppercase text-xs mb-6 mx-10 text-center"
-        style={{ fontFamily: "'Space Mono', monospace" }}
-      >
-        "More respect is due the little things that run the world"
-        <span className="block mt-1">— E.O. WILSON</span>
-      </p>
+      
+      {/* Container with a fixed min-height to prevent UI jumping during quote changes */}
+      <div className="min-h-[100px] flex items-center justify-center mb-6 max-w-2xl mx-auto px-6">
+        <p
+          className={`font-black tracking-widest uppercase text-xs text-center transition-all duration-500 ease-in-out ${
+            isVisible ? 'opacity-100 translate-y-0 text-white/80' : 'opacity-0 translate-y-2 text-white/0'
+          }`}
+          style={{ fontFamily: "'Space Mono', monospace" }}
+        >
+          "{currentQuote.text}"
+          <span className="block mt-2 text-white/40">— {currentQuote.author}</span>
+        </p>
+      </div>
+
       <div className="w-full" style={{ maxWidth: 640 }}>
         <svg
           viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
