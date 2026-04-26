@@ -215,7 +215,7 @@ export default function PlantViewer({
           <div style={{ pointerEvents: "auto", width: "fit-content" }}>
             <p className="font-display text-sm text-white/90 leading-snug">
               {titleLine}{" "}
-              <span className="text-accent">{plant.shortCode}</span>
+              <span className="text-accent text-xs">{plant.shortCode}</span>
             </p>
             <p className="text-xs text-white/60 mt-0.5 leading-snug">{subtitle}</p>
           </div>

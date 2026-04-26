@@ -190,16 +190,40 @@ export default function PlantInfoDrawer({
         }}
       >
         {/* Plant identity */}
-        <div className="rounded px-4 py-3" style={{ backgroundColor: "rgba(255,255,255,0.04)" }}>
-          <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Plant</p>
-          <p className="font-display text-sm text-white/90 leading-snug">
-            {plant.commonName ?? plant.fullName ?? plant.shortCode}{" "}
-            <span className="text-accent">{plant.shortCode}</span>
-          </p>
-          {plant.fullName && plant.commonName && (
-            <p className="text-[11px] text-white/50 italic mt-0.5">{plant.fullName}</p>
+        <div 
+          className="relative overflow-hidden rounded px-4 py-3" 
+          style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
+        >
+          {/* Fading Background Image */}
+          {plant.image && (
+            <div
+              className="absolute inset-y-0 right-0 w-2/3 sm:w-1/2 pointer-events-none z-0"
+              style={{
+                // Mask fades from transparent on the left to solid on the right
+                WebkitMaskImage: "linear-gradient(to right, transparent, black 80%)",
+                maskImage: "linear-gradient(to right, transparent, black 80%)",
+              }}
+            >
+              <img
+                src={`${import.meta.env.BASE_URL}${plant.image}`}
+                alt=""
+                className="w-full h-full object-cover opacity-40 mix-blend-luminosity" 
+              />
+            </div>
           )}
-        </div> 
+
+          {/* Text Content */}
+          <div className="relative z-10 pointer-events-none">
+            <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Plant</p>
+            <p className="font-display text-sm text-white/90 leading-snug">
+              {plant.commonName ?? plant.fullName ?? plant.shortCode}{" "}
+              <span className="text-accent text-xs">{plant.shortCode}</span>
+            </p>
+            {plant.fullName && plant.commonName && (
+              <p className="text-[11px] text-white/50 italic mt-0.5">{plant.fullName}</p>
+            )}
+          </div>
+        </div>
 
         {/* Description */}
         {plant.description && (
