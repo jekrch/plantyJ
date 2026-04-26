@@ -11,7 +11,30 @@
       "description": "transplanted 2024",
       "image": "images/r rub/1777239539.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-26T21:39:00.293Z"
+      "addedAt": "2026-04-26T21:39:00.293Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "e08f4f30ac62e673",
+      "dominantColors": [
+        [
+          56.7,
+          -26.2,
+          34.0
+        ],
+        [
+          65.8,
+          -6.4,
+          10.8
+        ],
+        [
+          19.2,
+          -5.0,
+          6.7
+        ]
+      ],
+      "bioclipSpeciesId": "Ribes rubrum",
+      "bioclipCommonName": "Red currant",
+      "bioclipScore": 0.4738
     },
     {
       "seq": 9,
@@ -24,7 +47,30 @@
       "description": "transplanted 2024",
       "image": "images/r ida/1777239358.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-26T21:35:59.975Z"
+      "addedAt": "2026-04-26T21:35:59.975Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "87414e7a3fa1f0b1",
+      "dominantColors": [
+        [
+          28.6,
+          -2.0,
+          7.4
+        ],
+        [
+          61.5,
+          -24.0,
+          34.4
+        ],
+        [
+          63.1,
+          -1.4,
+          10.0
+        ]
+      ],
+      "bioclipSpeciesId": "Rubus caesius",
+      "bioclipCommonName": "Dewberry",
+      "bioclipScore": 0.2519
     },
     {
       "seq": 8,
