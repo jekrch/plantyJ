@@ -175,6 +175,13 @@ export default function PlantInfoDrawer({
       : firstSentenceOrTrim(description, DESCRIPTION_PREVIEW_CHARS)
     : null;
 
+  const note = plant.description?.trim() ?? "";
+  const tags = plant.tags ?? [];
+  const hasNote = note.length > 0;
+  const hasTags = tags.length > 0;
+  const compactNoteAndTags =
+    hasNote && hasTags && note.length <= 80 && tags.join(" ").length <= 40;
+
   const show = open && !closing;
 
   let transform = show ? "translateY(0)" : "translateY(100vh)";
@@ -244,36 +251,63 @@ export default function PlantInfoDrawer({
           </div>
         </div>
 
-        {/* Description */}
-        {plant.description && (
+        {/* Notes + Tags */}
+        {compactNoteAndTags ? (
           <>
             <div className="border-t border-white/8" />
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Notes</p>
-              <p className="text-xs text-white/55 leading-relaxed whitespace-pre-line">
-                {plant.description}
-              </p>
-            </div>
-          </>
-        )}
-
-        {/* Tags */}
-        {plant.tags?.length > 0 && (
-          <>
-            <div className="border-t border-white/8" />
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Tags</p>
-              <div className="flex flex-wrap gap-1.5">
-                {plant.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-[10px] leading-none px-1.5 py-[3.9px] rounded-sm bg-white/8 text-white/35"
-                  >
-                    {tag}
-                  </span>
-                ))}
+            <div className="flex flex-wrap gap-x-6 gap-y-4 items-start">
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Notes</p>
+                <p className="text-xs text-white/55 leading-relaxed whitespace-pre-line">
+                  {note}
+                </p>
+              </div>
+              <div className="shrink-0">
+                <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Tags</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-[10px] leading-none px-1.5 py-[3.9px] rounded-sm bg-white/8 text-white/35"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
+          </>
+        ) : (
+          <>
+            {hasNote && (
+              <>
+                <div className="border-t border-white/8" />
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Notes</p>
+                  <p className="text-xs text-white/55 leading-relaxed whitespace-pre-line">
+                    {note}
+                  </p>
+                </div>
+              </>
+            )}
+            {hasTags && (
+              <>
+                <div className="border-t border-white/8" />
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Tags</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[10px] leading-none px-1.5 py-[3.9px] rounded-sm bg-white/8 text-white/35"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
           </>
         )}
 
