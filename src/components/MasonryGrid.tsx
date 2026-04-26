@@ -8,7 +8,7 @@ import SortControl from "./SortControl";
 import HatchFiller from "./HatchFiller";
 import { buildStampPool } from "./HatchFiller";
 import type { StampDef } from "./HatchFiller";
-import FooterPyramid from "./FooterPryamid";
+import FooterRoots from "./FooterRoots";
 import { resolveNeighbors } from "../adjacency";
 import type { NeighborMap } from "../adjacency";
 
@@ -483,7 +483,7 @@ export default function MasonryGrid({
           );
         })}
       </div>
-      <FooterPyramid />
+      <FooterRoots />
     </>
   );
 }

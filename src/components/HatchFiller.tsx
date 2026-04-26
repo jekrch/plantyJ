@@ -8,15 +8,22 @@ import FillerLabels from "./FillerLabels";
 export const WORDS = ["PLANTYJ"];
 
 export const LUCIDE_ICONS: LucideIcon[] = [
-  LeafyGreen,
   Leaf,
+  LeafyGreen,
   Sprout,
 ];
 
 const ROTATIONS = [45, 135];
 const COLORS = ["#7fb069", "#5a8c4a"];
 
+const TEXT_FILL_COLOR = "var(--color-ink-muted)";
+const ICON_FILL_COLOR = "var(--color-ink-faint)";
+
+
 const STYLIZE_PLACEMENT = true;
+
+// Higher = denser vines. 
+const VINE_DENSITY = 1.75;
 
 export type StampDef =
   | { type: "word"; value: string }
@@ -191,8 +198,6 @@ interface HatchFillerProps {
   fillerIndex?: number;
   /** Adjacent plant info for rendering edge labels. */
   neighbors?: NeighborMap | null;
-  /** Override the hatch color (bypasses the deterministic COLORS cycle). */
-  colorOverride?: string | null;
 }
 
 export default function HatchFiller({
@@ -200,10 +205,8 @@ export default function HatchFiller({
   assignedStamp = null,
   fillerIndex = 0,
   neighbors = null,
-  colorOverride = null,
 }: HatchFillerProps) {
   const patternId = useId();
-  const maskId = useId();
   const containerRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 900, height: 600 });
 
@@ -243,9 +246,6 @@ export default function HatchFiller({
   }
   const { rotation, color, twist, placement, iconInnerX, iconInnerY } = styleRef.current;
 
-  // Allow external color override (e.g. FooterPyramid random colors)
-  const resolvedColor = colorOverride ?? color;
-
   const iconSvgContent = useLucideExtract(
     stamp?.type === "icon" ? stamp.value : null
   );
@@ -253,20 +253,48 @@ export default function HatchFiller({
   const patternContent = (
     <pattern
       id={patternId}
-      width="8"
-      height="8"
+      width="16"
+      height="32"
       patternUnits="userSpaceOnUse"
-      patternTransform={`rotate(${rotation})`}
+      patternTransform={`rotate(${rotation}) scale(${1 / VINE_DENSITY})`}
     >
-      <line
-        x1="0"
-        y1="0"
-        x2="0"
-        y2="8"
-        stroke={resolvedColor}
-        strokeWidth="8"
-        strokeOpacity="0.68"
+      {/* sinuous vine stem (S-curve, tiles vertically) */}
+      <path
+        d="M 8 0 Q 15 8 8 16 T 8 32"
+        stroke={color}
+        strokeWidth="2.0"
+        strokeOpacity="0.78"
+        fill="none"
+        strokeLinecap="round"
       />
+      {/* leaf branching from the right-curve apex */}
+      <path
+        d="M 12 6 Q 14.5 3 15.5 6 Q 14 8 12 6 Z"
+        fill={color}
+        fillOpacity="0.7"
+      />
+      <path
+        d="M 12 6 L 14 5"
+        stroke={color}
+        strokeWidth="0.6"
+        strokeOpacity="0.7"
+        fill="none"
+      />
+      {/* leaf branching from the left-curve apex */}
+      <path
+        d="M 4 22 Q 1.5 19 0.5 22 Q 2 24 4 22 Z"
+        fill={color}
+        fillOpacity="0.7"
+      />
+      <path
+        d="M 4 22 L 2 21"
+        stroke={color}
+        strokeWidth="0.6"
+        strokeOpacity="0.7"
+        fill="none"
+      />
+      {/* tendril buds */}
+      <circle cx="8" cy="16" r="1" fill={color} fillOpacity="0.55" />
     </pattern>
   );
 
@@ -295,12 +323,23 @@ export default function HatchFiller({
   const cx = Math.max(margin, Math.min(size.width - margin, rawCx));
   const cy = Math.max(margin, Math.min(size.height - margin, rawCy));
 
-  const fontSize = 80;
-
-  let maskContent: React.ReactNode = null;
+  let stampContent: React.ReactNode = null;
 
   if (!empty && stamp?.type === "word") {
-    maskContent = (
+    // 1. Define character aspect ratio for Space Mono (width is ~60% of height)
+    const charWidthRatio = 0.6; 
+    
+    // 2. Define how much of the container the text is allowed to take up (e.g., 85% to leave padding)
+    const maxAllowedWidth = size.width * 0.85;
+    const maxAllowedHeight = size.height * 0.85;
+    
+    // 3. Calculate the maximum font size based on width
+    const maxFontSizeByWidth = maxAllowedWidth / (stamp.value.length * charWidthRatio);
+    
+    // 4. Calculate the final font size (cap it at your original 80px so it doesn't get massive on large screens)
+    const dynamicFontSize = Math.min(80, maxFontSizeByWidth, maxAllowedHeight);
+
+    stampContent = (
       <text
         className="hatch-text"
         x="50%"
@@ -309,9 +348,9 @@ export default function HatchFiller({
         textAnchor="middle"
         fontFamily="'Space Mono', monospace"
         fontWeight="900"
-        fontSize={fontSize}
+        fontSize={dynamicFontSize}
         letterSpacing="0em"
-        fill="black"
+        fill={TEXT_FILL_COLOR}
       >
         {stamp.value}
       </text>
@@ -322,7 +361,7 @@ export default function HatchFiller({
       'stroke="black"'
     );
 
-    maskContent = (
+    stampContent = (
       <g
         className="hatch-text"
         transform={`translate(${cx - half}, ${cy - half})`}
@@ -335,7 +374,7 @@ export default function HatchFiller({
           viewBox="0 0 24 24"
           overflow="visible"
           fill="none"
-          stroke="black"
+          stroke={ICON_FILL_COLOR}
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -377,10 +416,6 @@ export default function HatchFiller({
       >
         <defs>
           {patternContent}
-          <mask id={maskId}>
-            <rect width="100%" height="100%" fill="white" />
-            {maskContent}
-          </mask>
         </defs>
         <rect
           width="100%"
@@ -391,8 +426,8 @@ export default function HatchFiller({
           width="100%"
           height="100%"
           fill={`url(#${patternId})`}
-          mask={`url(#${maskId})`}
         />
+        {stampContent}
       </svg>
 
       {neighbors && (

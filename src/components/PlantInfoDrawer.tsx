@@ -182,7 +182,124 @@ export default function PlantInfoDrawer({
           {plant.fullName && plant.commonName && (
             <p className="text-[11px] text-white/50 italic mt-0.5">{plant.fullName}</p>
           )}
+        </div> 
+
+        {/* Description */}
+        {plant.description && (
+          <>
+            <div className="border-t border-white/8" />
+            <div>
+              <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">Notes</p>
+              <p className="text-xs text-white/55 leading-relaxed whitespace-pre-line">
+                {plant.description}
+              </p>
+            </div>
+          </>
+        )}
+
+        {/* Tags */}
+        {plant.tags?.length > 0 && (
+          <>
+            <div className="border-t border-white/8" />
+            <div>
+              <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">Tags</p>
+              <div className="flex flex-wrap gap-1.5">
+                {plant.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-[10px] leading-none px-1.5 py-[3.9px] rounded-sm bg-white/8 text-white/35"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Same plant timeline */}
+        {samePlantTimeline.length > 0 && (
+          <>
+            <div className="border-t border-white/8" />
+            <div>
+              <div className="flex items-center gap-1.5 mb-2 text-[10px] uppercase tracking-widest text-white/30">
+                <span>More photos of this plant</span>
+                <span className="text-white/20 normal-case tracking-normal">
+                  · {samePlantTimeline.length}
+                </span>
+              </div>
+              <div className="flex gap-2 overflow-x-auto pb-1 info-related-scroll">
+                {samePlantTimeline.map((p) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => onSelectPlant(p)}
+                    className="relative shrink-0 h-24 rounded-sm overflow-hidden bg-white/5 ring-1 ring-inset ring-white/5 hover:ring-white/25 transition-colors"
+                    style={{ aspectRatio: `${p.width} / ${p.height}` }}
+                    title={new Date(p.addedAt).toLocaleDateString()}
+                  >
+                    <img
+                      src={`${import.meta.env.BASE_URL}${p.image}`}
+                      alt=""
+                      loading="lazy"
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[9px] text-white/80 bg-gradient-to-t from-black/80 to-transparent leading-tight">
+                      {new Date(p.addedAt).toLocaleDateString(undefined, {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+
+      {/* Zone */}
+        <div className="rounded px-4 py-3" style={{ backgroundColor: "rgba(255,255,255,0.04)" }}>
+          <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">Zone</p>
+          <p className="font-display text-sm text-white/90 leading-snug">
+            {zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode}{" "}
+            <span className="text-accent">{plant.zoneCode}</span>
+          </p>
         </div>
+
+        {/* Other plants sharing a zone */}
+        {sharingZone.length > 0 && (
+          <>
+            <div className="border-t border-white/8" />
+            <div>
+              <div className="flex items-center gap-1.5 mb-2 text-[10px] uppercase tracking-widest text-white/30">
+                <span>{sharingHeader}</span>
+                <span className="text-white/20 normal-case tracking-normal">· {sharingZone.length}</span>
+              </div>
+              <div className="flex gap-2 overflow-x-auto pb-1 info-related-scroll">
+                {sharingZone.map((p) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => onSelectPlant(p)}
+                    className="relative shrink-0 h-24 rounded-sm overflow-hidden bg-white/5 ring-1 ring-inset ring-white/5 hover:ring-white/25 transition-colors"
+                    style={{ aspectRatio: `${p.width} / ${p.height}` }}
+                    title={p.commonName ?? p.shortCode}
+                  >
+                    <img
+                      src={`${import.meta.env.BASE_URL}${p.image}`}
+                      alt=""
+                      loading="lazy"
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[9px] text-white/80 bg-gradient-to-t from-black/80 to-transparent leading-tight">
+                      {p.commonName ?? p.shortCode}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
 
         {/* Species overview */}
         {description && (
@@ -337,125 +454,8 @@ export default function PlantInfoDrawer({
               {species.nativeRange}
             </p>
           </div>
-        )}
-
-        {/* Zone */}
-        <div className="rounded px-4 py-3" style={{ backgroundColor: "rgba(255,255,255,0.04)" }}>
-          <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">Zone</p>
-          <p className="font-display text-sm text-white/90 leading-snug">
-            {zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode}{" "}
-            <span className="text-accent">{plant.zoneCode}</span>
-          </p>
-        </div>
-
-        {/* Description */}
-        {plant.description && (
-          <>
-            <div className="border-t border-white/8" />
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">Notes</p>
-              <p className="text-xs text-white/55 leading-relaxed whitespace-pre-line">
-                {plant.description}
-              </p>
-            </div>
-          </>
-        )}
-
-        {/* Tags */}
-        {plant.tags?.length > 0 && (
-          <>
-            <div className="border-t border-white/8" />
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/30 mb-1.5">Tags</p>
-              <div className="flex flex-wrap gap-1.5">
-                {plant.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-[10px] leading-none px-1.5 py-[3.9px] rounded-sm bg-white/8 text-white/35"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* Same plant timeline */}
-        {samePlantTimeline.length > 0 && (
-          <>
-            <div className="border-t border-white/8" />
-            <div>
-              <div className="flex items-center gap-1.5 mb-2 text-[10px] uppercase tracking-widest text-white/30">
-                <span>More photos of this plant</span>
-                <span className="text-white/20 normal-case tracking-normal">
-                  · {samePlantTimeline.length}
-                </span>
-              </div>
-              <div className="flex gap-2 overflow-x-auto pb-1 info-related-scroll">
-                {samePlantTimeline.map((p) => (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => onSelectPlant(p)}
-                    className="relative shrink-0 h-24 rounded-sm overflow-hidden bg-white/5 ring-1 ring-inset ring-white/5 hover:ring-white/25 transition-colors"
-                    style={{ aspectRatio: `${p.width} / ${p.height}` }}
-                    title={new Date(p.addedAt).toLocaleDateString()}
-                  >
-                    <img
-                      src={`${import.meta.env.BASE_URL}${p.image}`}
-                      alt=""
-                      loading="lazy"
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                    <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[9px] text-white/80 bg-gradient-to-t from-black/80 to-transparent leading-tight">
-                      {new Date(p.addedAt).toLocaleDateString(undefined, {
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* Other plants sharing a zone */}
-        {sharingZone.length > 0 && (
-          <>
-            <div className="border-t border-white/8" />
-            <div>
-              <div className="flex items-center gap-1.5 mb-2 text-[10px] uppercase tracking-widest text-white/30">
-                <span>{sharingHeader}</span>
-                <span className="text-white/20 normal-case tracking-normal">· {sharingZone.length}</span>
-              </div>
-              <div className="flex gap-2 overflow-x-auto pb-1 info-related-scroll">
-                {sharingZone.map((p) => (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => onSelectPlant(p)}
-                    className="relative shrink-0 h-24 rounded-sm overflow-hidden bg-white/5 ring-1 ring-inset ring-white/5 hover:ring-white/25 transition-colors"
-                    style={{ aspectRatio: `${p.width} / ${p.height}` }}
-                    title={p.commonName ?? p.shortCode}
-                  >
-                    <img
-                      src={`${import.meta.env.BASE_URL}${p.image}`}
-                      alt=""
-                      loading="lazy"
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                    <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[9px] text-white/80 bg-gradient-to-t from-black/80 to-transparent leading-tight">
-                      {p.commonName ?? p.shortCode}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
-
+        )}   
+        
         {/* Sources */}
         {species?.references && species.references.length > 0 && (
           <>
