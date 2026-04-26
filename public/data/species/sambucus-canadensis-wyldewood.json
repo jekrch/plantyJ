@@ -1,0 +1,34 @@
+{
+  "id": "sambucus-canadensis-wyldewood",
+  "fullName": "Sambucus canadensis Wyldewood",
+  "commonName": "Elderberry",
+  "description": "",
+  "vernacularNames": [
+    "Elder",
+    "Elderberry",
+    "Elders",
+    "\ub531\ucd1d\ub098\ubb34\uc18d"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Dipsacales",
+    "family": "Viburnaceae",
+    "genus": "Sambucus",
+    "species": null,
+    "canonicalName": "Sambucus"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/2888721"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia"
+  ]
+}
