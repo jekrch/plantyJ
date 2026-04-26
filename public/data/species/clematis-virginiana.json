@@ -1,0 +1,46 @@
+{
+  "id": "clematis-virginiana",
+  "fullName": "Clematis virginiana",
+  "commonName": "Virgin's Bower",
+  "description": "Clematis virginiana (also known as devil's darning needles, devil's hair, love vine, traveller's joy, virgin's bower, Virginia virgin's bower, wild hops, and woodbine; syn. Clematis virginiana L. var. missouriensis (Rydb.) Palmer & Steyermark ) is a vine of the Ranunculaceae (buttercup family) native to North America from Newfoundland to southern Manitoba down to the Gulf of Mexico. The rationale for some of the common names is unclear, as they include examples normally applied to unrelated plants, including twining parasites (e.g. \"devil's hair\" for Cuscuta). The name \"Love Vine\" also is applied to alleged aphrodisiacs, such as Caribbean species of Cassytha, which are unrelated to Clematis, not being in the family Ranunculaceae.",
+  "vernacularNames": [
+    "Devil's Darning Needles",
+    "Virgin's Bower",
+    "Virginia Bower",
+    "Virginia clematis",
+    "Virginia virgin's-bower",
+    "devil's darning needle",
+    "devil's-darning-needles",
+    "virgin's-bower"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Ranunculales",
+    "family": "Ranunculaceae",
+    "genus": "Clematis",
+    "species": "Clematis virginiana",
+    "canonicalName": "Clematis virginiana"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/3033541"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:710188-1"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Clematis_virginiana"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia"
+  ]
+}
