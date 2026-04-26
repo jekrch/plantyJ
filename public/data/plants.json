@@ -1,6 +1,11 @@
 {
   "plants": [
     {
+      "shortCode": "r rub",
+      "fullName": "Ribes rubrum Jonkheer Van Tets",
+      "commonName": "Red Currant"
+    },
+    {
       "shortCode": "r ida",
       "fullName": "Rubus idaeus Joan J",
       "commonName": "Joan J Raspberry"
