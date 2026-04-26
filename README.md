@@ -78,7 +78,7 @@ When viewing a specific photo in the gallery, opening the info drawer surfaces a
 - **Identity & Notes:** The primary names (`commonName`, `fullName`, `shortCode`), user-provided descriptions, and attached tags.
 - **Photo Timeline:** A scrollable chronological history of all other photos of that specific plant.
 - **Zone Context:** The physical location (`zoneName`) and a visual list of other distinct plants currently sharing that zone.
-- **Species Overview:** An encyclopedic description pulled from Wikipedia. 
+- **Species Overview:** A description pulled from Wikipedia. 
 - **Vernacular Names:** Alternative common names pulled from the GBIF API.
 - **Taxonomic Lineage:** The full hierarchical classification (Kingdom down to Species). Each rank is interactive, allowing you to filter the gallery by that rank or expand it to see sibling plants in your garden that share the same classification.
 - **Native Range:** Geographic origin data pulled from POWO.
@@ -109,7 +109,7 @@ The worker has its own setup — see [worker/README.md](worker/README.md).
 
 ## Stack
 
-- **Frontend:** React 19, TypeScript, Tailwind CSS v4, Vite, Bun
+- **Frontend:** React, TypeScript, Tailwind, Vite, Bun
 - **Backend:** Cloudflare Worker
 - **Scripting:** Python (PyTorch, OpenCLIP, scikit-image, pybioclip)
 - **Hosting:** GitHub Pages
