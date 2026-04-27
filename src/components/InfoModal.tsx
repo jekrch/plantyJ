@@ -220,8 +220,8 @@ function AboutPanel() {
     <div className="px-6 py-6 space-y-5">
       <p className="text-sm text-ink leading-relaxed">
         PlantyJ is a visual catalog of the plants growing around our
-        house. It includes pictures, identifications, and the zones where they live. Each
-        photo is tagged with a short code. Tap any image for taxonomy, species information, related
+        house. It includes pictures, identifications, and the zones where they live. 
+        Tap any image for taxonomy, species information, related
         photos, and other plants from the same zone.
       </p>
 
