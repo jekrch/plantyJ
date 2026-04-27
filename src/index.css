@@ -89,6 +89,14 @@ button,
   @apply flex items-center justify-center h-8 min-w-8 px-2 rounded-md bg-white/10 backdrop-blur-sm text-white/70 hover:text-white hover:bg-white/20 transition-all duration-150 ease-out active:scale-95;
 }
 
+.viewer-btn-accent {
+  @apply h-9 px-3 bg-accent/20 text-white border border-accent/40 shadow-[0_0_12px_rgba(127,176,105,0.25)] hover:bg-accent/30 hover:border-accent/60 hover:text-white;
+}
+
+.viewer-btn-accent.is-active {
+  @apply bg-accent/35 border-accent/70 text-white;
+}
+
 .viewer-pill {
   @apply flex items-center gap-1.5 h-7 px-3 rounded-full border border-white/15 bg-white/5 backdrop-blur-md text-[11px] tracking-wide text-white/60 hover:text-white/90 hover:bg-white/12 hover:border-white/25 transition-all duration-150 ease-out active:scale-95 cursor-pointer;
 }

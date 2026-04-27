@@ -390,44 +390,48 @@ export default function PlantViewer({
       >
         {!isZoomed && (hasPrev || hasNext) && (
           <div
-            className="relative flex items-center justify-center w-full px-4 sm:px-6"
+            className="w-full px-4 sm:px-6"
             style={{ pointerEvents: "auto" }}
           >
-            {/* Info Button - Pulled out of the centered div and positioned left */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setDrawerOpen((d) => !d);
-              }}
-              // Removed mr-2 and added absolute positioning
-              className={`viewer-btn absolute left-4 sm:left-6 ${
-                drawerOpen ? "bg-accent/20! text-white!" : ""
-              }`}
-              title="Show details"
-            >
-              <Info size={16} strokeWidth={1.5} />
-            </button>
-
-            {/* Navigation Group - Now perfectly centered in isolation */}
-            <div className="flex items-center justify-center gap-3">
-              <NavButton
-                direction="prev"
-                enabled={hasPrev}
-                onClick={() => handleNavigate("prev")}
-              />
-
-              <span
-                className="text-[11px] text-white/50 tabular-nums tracking-wide select-none text-center inline-block font-mono"
-                style={{ minWidth: counterMinWidth }}
+            <div className="relative flex items-center justify-center max-w-2xl mx-auto">
+              {/* Info Button - Positioned left within the centered max-width row */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setDrawerOpen((d) => !d);
+                }}
+                className={`viewer-btn viewer-btn-accent absolute left-0 gap-1.5 ${
+                  drawerOpen ? "is-active" : ""
+                }`}
+                title="Show details"
               >
-                {currentIndex + 1} / {plants.length}
-              </span>
+                <Info size={18} strokeWidth={2} />
+                <span className="text-[11px] font-medium tracking-wide hidden sm:inline">
+                  Details
+                </span>
+              </button>
 
-              <NavButton
-                direction="next"
-                enabled={hasNext}
-                onClick={() => handleNavigate("next")}
-              />
+              {/* Navigation Group - Now perfectly centered in isolation */}
+              <div className="flex items-center justify-center gap-3">
+                <NavButton
+                  direction="prev"
+                  enabled={hasPrev}
+                  onClick={() => handleNavigate("prev")}
+                />
+
+                <span
+                  className="text-[11px] text-white/50 tabular-nums tracking-wide select-none text-center inline-block font-mono"
+                  style={{ minWidth: counterMinWidth }}
+                >
+                  {currentIndex + 1} / {plants.length}
+                </span>
+
+                <NavButton
+                  direction="next"
+                  enabled={hasNext}
+                  onClick={() => handleNavigate("next")}
+                />
+              </div>
             </div>
           </div>
         )}
@@ -456,12 +460,15 @@ export default function PlantViewer({
                 e.stopPropagation();
                 setDrawerOpen((d) => !d);
               }}
-              className={`viewer-btn ${
-                drawerOpen ? "bg-accent/20! text-white!" : ""
+              className={`viewer-btn viewer-btn-accent gap-1.5 ${
+                drawerOpen ? "is-active" : ""
               }`}
               title="Show details"
             >
-              <Info size={16} strokeWidth={1.5} />
+              <Info size={18} strokeWidth={2} />
+              <span className="text-[11px] font-medium tracking-wide">
+                Details
+              </span>
             </button>
 
             {/* Helper Text - Stacked below the button */}

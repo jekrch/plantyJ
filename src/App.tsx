@@ -11,6 +11,9 @@ import { SpinnerState, ErrorState, EmptyState } from "./components/StatusStates"
 import { useFilterParams } from "./hooks/useFilterParams";
 import PlantViewer from "./components/PlantViewer";
 import InfoModal from "./components/InfoModal";
+import SpotlightView from "./components/SpotlightView";
+import ViewModeControl from "./components/ViewModeControl";
+import type { ViewMode } from "./components/ViewModeControl";
 
 function slugifyName(name: string): string {
   return name
@@ -39,8 +42,10 @@ export default function App() {
   const [openPlantId, setOpenPlantId] = useState<string | null>(
     () => new URLSearchParams(window.location.search).get("plant")
   );
-  const [viewerScope, setViewerScope] = useState<"filtered" | "all">("filtered");
+  const [viewerScope, setViewerScope] = useState<"filtered" | "all" | "spotlight">("filtered");
   const [infoOpen, setInfoOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>("gallery");
+  const [spotlightCode, setSpotlightCode] = useState<string | null>(null);
 
   const handleFiltersChange = useCallback(
     (next: Filters) => {
@@ -141,10 +146,23 @@ export default function App() {
     setOpenPlantId(plant.id);
   }, []);
 
+  const handleOpenFromSpotlight = useCallback((plant: Plant) => {
+    setViewerScope("spotlight");
+    setOpenPlantId(plant.id);
+  }, []);
+
   const handleCloseViewer = useCallback(() => {
     setOpenPlantId(null);
     setViewerScope("filtered");
   }, []);
+
+  const handleViewModeChange = useCallback(
+    (next: ViewMode, code: string | null) => {
+      setViewMode(next);
+      setSpotlightCode(code);
+    },
+    []
+  );
 
   const handleSelectPlant = useCallback(
     (plant: Plant) => {
@@ -188,7 +206,24 @@ export default function App() {
     [sortMode, syncToURL]
   );
 
-  const viewerPlants = viewerScope === "all" ? plants : sortedPlants;
+  const spotlightPlants = useMemo(() => {
+    if (viewMode === "gallery" || !spotlightCode) return [];
+    const list =
+      viewMode === "plant"
+        ? plants.filter((p) => p.shortCode === spotlightCode)
+        : plants.filter((p) => p.zoneCode === spotlightCode);
+    return [...list].sort(
+      (a, b) =>
+        new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime()
+    );
+  }, [plants, viewMode, spotlightCode]);
+
+  const viewerPlants =
+    viewerScope === "spotlight" && spotlightPlants.length > 0
+      ? spotlightPlants
+      : viewerScope === "all"
+      ? plants
+      : sortedPlants;
 
   const handleNavigateViewer = useCallback(
     (idx: number) => {
@@ -243,30 +278,56 @@ export default function App() {
             className="transition-opacity duration-700 ease-out"
             style={{ opacity: imagesLoaded ? 1 : 0 }}
           >
-            <MasonryGrid
-              plants={sortedPlants}
-              allPlants={plants}
-              zones={zones}
-              sortMode={sortMode}
-              onSort={handleSortChange}
-              filters={filters}
-              onFiltersChange={handleFiltersChange}
-              onLayoutReady={handleLayoutReady}
-              onPlantPositions={setPlantPositions}
-              onOpenPlant={handleOpenPlant}
-            />
-            {hasActiveFilters(filters) && sortedPlants.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-20 text-center">
-                <p className="text-ink-muted text-sm font-display tracking-wide">
-                  NO MATCHES
-                </p>
-                <button
-                  onClick={() => setFilters(EMPTY_FILTERS)}
-                  className="mt-3 text-xs text-accent hover:text-accent-dim transition-colors font-display tracking-wider uppercase cursor-pointer"
-                >
-                  CLEAR FILTERS
-                </button>
-              </div>
+            <div className="pt-2 pb-3">
+              <ViewModeControl
+                mode={viewMode}
+                subjectCode={spotlightCode}
+                plants={plants}
+                plantRecords={plantRecords}
+                zones={zones}
+                onChange={handleViewModeChange}
+              />
+            </div>
+
+            {viewMode === "gallery" && (
+              <>
+                <MasonryGrid
+                  plants={sortedPlants}
+                  allPlants={plants}
+                  zones={zones}
+                  sortMode={sortMode}
+                  onSort={handleSortChange}
+                  filters={filters}
+                  onFiltersChange={handleFiltersChange}
+                  onLayoutReady={handleLayoutReady}
+                  onPlantPositions={setPlantPositions}
+                  onOpenPlant={handleOpenPlant}
+                />
+                {hasActiveFilters(filters) && sortedPlants.length === 0 && (
+                  <div className="flex flex-col items-center justify-center py-20 text-center">
+                    <p className="text-ink-muted text-sm font-display tracking-wide">
+                      NO MATCHES
+                    </p>
+                    <button
+                      onClick={() => setFilters(EMPTY_FILTERS)}
+                      className="mt-3 text-xs text-accent hover:text-accent-dim transition-colors font-display tracking-wider uppercase cursor-pointer"
+                    >
+                      CLEAR FILTERS
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+
+            {viewMode !== "gallery" && spotlightCode && (
+              <SpotlightView
+                kind={viewMode}
+                subjectCode={spotlightCode}
+                allPlants={plants}
+                zonePics={zonePics}
+                zones={zones}
+                onOpenViewer={handleOpenFromSpotlight}
+              />
             )}
           </div>
         )}
