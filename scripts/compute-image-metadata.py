@@ -24,7 +24,7 @@ from metadata.sources.wikipedia import backfill_wikipedia
 # New API Integrations
 from metadata.sources.inaturalist import backfill_inaturalist
 from metadata.sources.wikidata import backfill_wikidata
-from scripts.metadata.sources.natureserve import backfill_natureserve
+from metadata.sources.natureserve import backfill_natureserve
 
 
 def load_species_entries() -> list[dict]:
