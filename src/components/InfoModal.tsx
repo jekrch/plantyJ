@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { X, ExternalLink, Sprout, Github } from "lucide-react";
+import { X, ExternalLink, Sprout, Github, BugIcon, Building, Flower } from "lucide-react";
 import type { Plant, PlantRecord, Zone, ZonePic } from "../types";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 
@@ -186,15 +186,13 @@ function InfoModalContent({
                 role="tab"
                 aria-selected={active}
                 onClick={() => setTab(t.id)}
-                className={`relative px-3 py-2 text-xs font-display tracking-wide transition-colors ${
-                  active ? "text-ink" : "text-ink-muted hover:text-ink"
-                }`}
+                className={`relative px-3 py-2 text-xs font-display tracking-wide transition-colors ${active ? "text-ink" : "text-ink-muted hover:text-ink"
+                  }`}
               >
                 {t.label}
                 <span
-                  className={`absolute left-2 right-2 -bottom-px h-px transition-all duration-200 ease-out ${
-                    active ? "bg-accent opacity-100" : "bg-transparent opacity-0"
-                  }`}
+                  className={`absolute left-2 right-2 -bottom-px h-px transition-all duration-200 ease-out ${active ? "bg-accent opacity-100" : "bg-transparent opacity-0"
+                    }`}
                 />
               </button>
             );
@@ -220,7 +218,7 @@ function AboutPanel() {
     <div className="px-6 py-6 space-y-5">
       <p className="text-sm text-ink leading-relaxed">
         PlantyJ is a visual catalog of the plants growing around our
-        house. It includes pictures, identifications, and the zones where they live. 
+        house. It includes pictures, identifications, and the zones where they live.
         Tap any image for taxonomy, species information, related
         photos, and other plants from the same zone.
       </p>
@@ -267,6 +265,38 @@ function AboutPanel() {
           >
             <Github size={12} strokeWidth={1.5} />
             github.com/jekrch/plantyJ
+          </a>
+        </div>
+        <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-2 mt-4">
+          Resources
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <a
+            href="https://homegrownnationalpark.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-ink-muted hover:text-accent transition-colors px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/8 border border-ink-faint/20"
+          >
+            <BugIcon size={12} strokeWidth={1.5} />
+            homegrownnationalpark.org
+          </a>
+          <a
+            href="https://extension.umn.edu/find-plants/native-plants"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-ink-muted hover:text-accent transition-colors px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/8 border border-ink-faint/20"
+          >
+            <Building size={12} strokeWidth={1.5} />
+            UM Extension
+          </a>
+          <a
+            href="https://https://www.prairiemoon.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-ink-muted hover:text-accent transition-colors px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/8 border border-ink-faint/20"
+          >
+            <Flower size={12} strokeWidth={1.5} />
+            Prarie Moon Nursery
           </a>
         </div>
       </div>
@@ -357,20 +387,19 @@ function EntryCard({
   const Tag = interactive ? "button" : "div";
   const tagProps = interactive
     ? {
-        type: "button" as const,
-        onClick,
-        title: `Show ${count} photo${count === 1 ? "" : "s"}`,
-      }
+      type: "button" as const,
+      onClick,
+      title: `Show ${count} photo${count === 1 ? "" : "s"}`,
+    }
     : { "aria-disabled": true };
 
   return (
     <Tag
       {...tagProps}
-      className={`group flex flex-col rounded-md overflow-hidden bg-white/3 ring-1 ring-inset ring-white/5 text-left ${
-        interactive
+      className={`group flex flex-col rounded-md overflow-hidden bg-white/3 ring-1 ring-inset ring-white/5 text-left ${interactive
           ? "hover:ring-accent/40 hover:bg-white/5 transition-colors cursor-pointer"
           : "opacity-60"
-      }`}
+        }`}
     >
       <div className="relative aspect-square overflow-hidden bg-surface">
         {image ? (
@@ -378,9 +407,8 @@ function EntryCard({
             src={`${base}${image}`}
             alt={altLabel}
             loading="lazy"
-            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-in-out will-change-transform ${
-              interactive ? "group-hover:scale-[1.02]" : ""
-            }`}
+            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-in-out will-change-transform ${interactive ? "group-hover:scale-[1.02]" : ""
+              }`}
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-ink-faint text-[10px] font-mono">
@@ -393,9 +421,8 @@ function EntryCard({
       </div>
       <div className="px-2.5 py-2 min-w-0">
         <p
-          className={`text-[11px] text-ink leading-tight truncate font-display ${
-            capitalizeLabel ? "capitalize" : ""
-          }`}
+          className={`text-[11px] text-ink leading-tight truncate font-display ${capitalizeLabel ? "capitalize" : ""
+            }`}
         >
           {label}
         </p>
