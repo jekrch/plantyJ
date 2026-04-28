@@ -6,7 +6,8 @@
   "vernacularNames": [
     "Rosy Sedge",
     "Curly-styled Wood Sedge",
-    "Stellate Sedge"
+    "Stellate Sedge",
+    "Carex Rosea Clade"
   ],
   "taxonomy": {
     "kingdom": "Plantae",
@@ -31,11 +32,27 @@
     {
       "name": "Wikipedia",
       "url": "https://en.wikipedia.org/wiki/Carex_rosea"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/1459717"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q15582169"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.140103"
     }
   ],
   "sources": [
     "gbif",
     "powo",
-    "wikipedia"
-  ]
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 9488
 }

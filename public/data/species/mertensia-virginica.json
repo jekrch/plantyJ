@@ -36,11 +36,23 @@
     {
       "name": "Wikipedia",
       "url": "https://en.wikipedia.org/wiki/mertensia_virginica"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/59771"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.138078"
     }
   ],
   "sources": [
     "gbif",
     "powo",
-    "wikipedia"
-  ]
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 51172
 }

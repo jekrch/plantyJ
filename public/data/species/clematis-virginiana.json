@@ -36,11 +36,27 @@
     {
       "name": "Wikipedia",
       "url": "https://en.wikipedia.org/wiki/Clematis_virginiana"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/62778"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q4266308"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.137741"
     }
   ],
   "sources": [
     "gbif",
     "powo",
-    "wikipedia"
-  ]
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 28502
 }

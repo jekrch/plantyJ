@@ -30,11 +30,27 @@
     {
       "name": "Wikipedia",
       "url": "https://en.wikipedia.org/wiki/Hepatica_acutiloba"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/179786"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q50346840"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.138420"
     }
   ],
   "sources": [
     "gbif",
     "powo",
-    "wikipedia"
-  ]
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 34053
 }

@@ -32,11 +32,27 @@
     {
       "name": "Wikipedia",
       "url": "https://en.wikipedia.org/wiki/Solidago_flexicaulis"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/119154"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q3489405"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.135850"
     }
   ],
   "sources": [
     "gbif",
     "powo",
-    "wikipedia"
-  ]
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 21990
 }

@@ -15,7 +15,8 @@
     "amerika-fuki-sumire",
     "amerika-sumire-saishin",
     "blue prairie violet",
-    "hooded blue violet"
+    "hooded blue violet",
+    "common blue violet"
   ],
   "taxonomy": {
     "kingdom": "Plantae",
@@ -40,11 +41,27 @@
     {
       "name": "Wikipedia",
       "url": "https://en.wikipedia.org/wiki/Viola_sororia"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/82816"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q1077055"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.158850"
     }
   ],
   "sources": [
     "gbif",
     "powo",
-    "wikipedia"
-  ]
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 108208
 }

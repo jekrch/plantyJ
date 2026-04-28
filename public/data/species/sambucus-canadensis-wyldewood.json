@@ -29,6 +29,9 @@
   "sources": [
     "gbif",
     "powo",
-    "wikipedia"
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
   ]
 }
