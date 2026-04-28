@@ -9,7 +9,30 @@
       "description": null,
       "image": "images/c daf/1777409093.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-28T20:44:54.380Z"
+      "addedAt": "2026-04-28T20:44:54.380Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "ec842939fd848977",
+      "dominantColors": [
+        [
+          31.4,
+          -2.6,
+          12.8
+        ],
+        [
+          61.4,
+          0.7,
+          10.8
+        ],
+        [
+          66.9,
+          -22.4,
+          51.0
+        ]
+      ],
+      "bioclipSpeciesId": "Narcissus pseudonarcissus",
+      "bioclipCommonName": "Daffodil",
+      "bioclipScore": 0.2754
     },
     {
       "seq": 17,
