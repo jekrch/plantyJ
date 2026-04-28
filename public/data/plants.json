@@ -1,6 +1,11 @@
 {
   "plants": [
     {
+      "shortCode": "c daf",
+      "fullName": "Cyclamineus Daffodil Tete a Tete",
+      "commonName": "Dwarf Daffodil"
+    },
+    {
       "shortCode": "s lat",
       "fullName": "Symphyotrichum lateriflorum",
       "commonName": "Calico Aster"
