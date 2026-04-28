@@ -2,7 +2,9 @@
 SOURCE_WIKIPEDIA = "wikipedia"
 SOURCE_GBIF = "gbif"
 SOURCE_POWO = "powo"
-
+SOURCE_INATURALIST = "inaturalist"
+SOURCE_WIKIDATA = "wikidata"
+SOURCE_NATURESERVE = "natureserve"
 
 def has_source(entry: dict, source_id: str) -> bool:
     return source_id in entry.get("sources", [])

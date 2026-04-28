@@ -5,7 +5,8 @@ enrichment files in public/data/species/.
 
 For images: dimensions, perceptual hash, and dominant CIELAB colors.
 For species: GBIF taxonomy + vernacular names, POWO native range,
-Wikipedia description (lead section).
+Wikipedia description, iNaturalist observation counts, Wikidata 
+traits (edibility/toxicity), and IUCN Red List conservation status.
 
 Each enrichment source is best-effort — failures and rate limits are
 caught so a third-party hiccup doesn't fail the build.
@@ -19,6 +20,11 @@ from metadata.seed import seed_species
 from metadata.sources.gbif import backfill_gbif
 from metadata.sources.powo import backfill_powo
 from metadata.sources.wikipedia import backfill_wikipedia
+
+# New API Integrations
+from metadata.sources.inaturalist import backfill_inaturalist
+from metadata.sources.wikidata import backfill_wikidata
+from scripts.metadata.sources.natureserve import backfill_natureserve
 
 
 def load_species_entries() -> list[dict]:
@@ -62,6 +68,18 @@ def main():
         print("Backfilling Wikipedia descriptions...")
         wiki_count = backfill_wikipedia(species_entries)
         print(f"  Wikipedia processed {wiki_count} entries.")
+
+        print("Backfilling iNaturalist data...")
+        inat_count = backfill_inaturalist(species_entries)
+        print(f"  iNaturalist processed {inat_count} entries.")
+
+        print("Backfilling Wikidata traits...")
+        wikidata_count = backfill_wikidata(species_entries)
+        print(f"  Wikidata processed {wikidata_count} entries.")
+
+        print("Backfilling NatureServe status...")
+        natureserve_count = backfill_natureserve(species_entries)
+        print(f"  NatureServe processed {natureserve_count} entries.")
 
     updated = 0
     errors = 0
