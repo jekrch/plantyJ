@@ -12,8 +12,8 @@ interface Props {
   plantRecords: PlantRecord[];
   zones: Zone[];
   zonePics: ZonePic[];
-  onFilterShortCode: (shortCode: string) => void;
-  onFilterZone: (zoneCode: string) => void;
+  onSpotlightPlant: (shortCode: string) => void;
+  onSpotlightZone: (zoneCode: string) => void;
 }
 
 interface PlantEntry {
@@ -63,8 +63,8 @@ function InfoModalContent({
   zones,
   zonePics,
   visible,
-  onFilterShortCode,
-  onFilterZone,
+  onSpotlightPlant,
+  onSpotlightZone,
 }: Props & { visible: boolean }) {
   const [tab, setTab] = useState<Tab>("about");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -204,10 +204,10 @@ function InfoModalContent({
         <div className="flex-1 overflow-y-auto info-modal-scroll">
           {tab === "about" && <AboutPanel />}
           {tab === "plants" && (
-            <PlantsPanel entries={plantEntries} onFilter={onFilterShortCode} />
+            <PlantsPanel entries={plantEntries} onFilter={onSpotlightPlant} />
           )}
           {tab === "zones" && (
-            <ZonesPanel entries={zoneEntries} onFilter={onFilterZone} />
+            <ZonesPanel entries={zoneEntries} onFilter={onSpotlightZone} />
           )}
         </div>
       </div>
@@ -378,8 +378,8 @@ function EntryCard({
             src={`${base}${image}`}
             alt={altLabel}
             loading="lazy"
-            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-300 ${
-              interactive ? "group-hover:scale-105" : ""
+            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-in-out will-change-transform ${
+              interactive ? "group-hover:scale-[1.02]" : ""
             }`}
           />
         ) : (

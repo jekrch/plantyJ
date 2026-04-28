@@ -32,7 +32,13 @@ export default function App() {
   >(new Map());
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [imagesLoaded, setImagesLoaded] = useState(false);
-  const { initialFilters, initialSort, syncToURL } = useFilterParams();
+  const {
+    initialFilters,
+    initialSort,
+    initialView,
+    initialSubject,
+    syncToURL,
+  } = useFilterParams();
   const [sortMode, setSortMode] = useState<SortMode>(initialSort);
   const [filters, setFilters] = useState<Filters>(initialFilters);
   const [sortedPlants, setSortedPlants] = useState<Plant[]>([]);
@@ -44,23 +50,23 @@ export default function App() {
   );
   const [viewerScope, setViewerScope] = useState<"filtered" | "all" | "spotlight">("filtered");
   const [infoOpen, setInfoOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>("gallery");
-  const [spotlightCode, setSpotlightCode] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>(initialView);
+  const [spotlightCode, setSpotlightCode] = useState<string | null>(initialSubject);
 
   const handleFiltersChange = useCallback(
     (next: Filters) => {
       setFilters(next);
-      syncToURL(next, sortMode);
+      syncToURL(next, sortMode, viewMode, spotlightCode);
     },
-    [sortMode, syncToURL]
+    [sortMode, viewMode, spotlightCode, syncToURL]
   );
 
   const handleSortChange = useCallback(
     (next: SortMode) => {
       setSortMode(next);
-      syncToURL(filters, next);
+      syncToURL(filters, next, viewMode, spotlightCode);
     },
-    [filters, syncToURL]
+    [filters, viewMode, spotlightCode, syncToURL]
   );
 
   useEffect(() => {
@@ -160,8 +166,9 @@ export default function App() {
     (next: ViewMode, code: string | null) => {
       setViewMode(next);
       setSpotlightCode(code);
+      syncToURL(filters, sortMode, next, code);
     },
-    []
+    [filters, sortMode, syncToURL]
   );
 
   const handleSelectPlant = useCallback(
@@ -177,33 +184,33 @@ export default function App() {
     (shortCodes: string[]) => {
       const next: Filters = { ...filters, shortCodes: new Set(shortCodes) };
       setFilters(next);
-      syncToURL(next, sortMode);
+      syncToURL(next, sortMode, viewMode, spotlightCode);
       setOpenPlantId(null);
       setViewerScope("filtered");
+    },
+    [filters, sortMode, viewMode, spotlightCode, syncToURL]
+  );
+
+  const handleSpotlightPlant = useCallback(
+    (shortCode: string) => {
+      setViewMode("plant");
+      setSpotlightCode(shortCode);
+      syncToURL(filters, sortMode, "plant", shortCode);
+      setInfoOpen(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     },
     [filters, sortMode, syncToURL]
   );
 
-  const handleFilterShortCode = useCallback(
-    (shortCode: string) => {
-      const next: Filters = { ...EMPTY_FILTERS, shortCodes: new Set([shortCode]) };
-      setFilters(next);
-      syncToURL(next, sortMode);
-      setInfoOpen(false);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    },
-    [sortMode, syncToURL]
-  );
-
-  const handleFilterZone = useCallback(
+  const handleSpotlightZone = useCallback(
     (zoneCode: string) => {
-      const next: Filters = { ...EMPTY_FILTERS, zoneCodes: new Set([zoneCode]) };
-      setFilters(next);
-      syncToURL(next, sortMode);
+      setViewMode("zone");
+      setSpotlightCode(zoneCode);
+      syncToURL(filters, sortMode, "zone", zoneCode);
       setInfoOpen(false);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [sortMode, syncToURL]
+    [filters, sortMode, syncToURL]
   );
 
   const spotlightPlants = useMemo(() => {
@@ -268,15 +275,17 @@ export default function App() {
       </header>
 
       <main className="content-container px-1 pt-0 pb-12 sm:px-1 sm:pt-0">
-        {(status === "loading" || (status === "ready" && plants.length > 0 && !imagesLoaded)) && (
-          <SpinnerState />
-        )}
+        {(status === "loading" ||
+          (status === "ready" &&
+            plants.length > 0 &&
+            viewMode === "gallery" &&
+            !imagesLoaded)) && <SpinnerState />}
         {status === "error" && <ErrorState />}
         {status === "ready" && plants.length === 0 && <EmptyState />}
         {status === "ready" && plants.length > 0 && (
           <div
             className="transition-opacity duration-700 ease-out"
-            style={{ opacity: imagesLoaded ? 1 : 0 }}
+            style={{ opacity: viewMode !== "gallery" || imagesLoaded ? 1 : 0 }}
           >
             <div className="pt-2 pb-3">
               <ViewModeControl
@@ -340,8 +349,8 @@ export default function App() {
         plantRecords={plantRecords}
         zones={zones}
         zonePics={zonePics}
-        onFilterShortCode={handleFilterShortCode}
-        onFilterZone={handleFilterZone}
+        onSpotlightPlant={handleSpotlightPlant}
+        onSpotlightZone={handleSpotlightZone}
       />
 
       {openIndex >= 0 && (

@@ -151,9 +151,10 @@ export default function SpotlightView({
       <div className="flex flex-col items-center">
         <div className="w-full max-w-[420px] mx-auto">
           <div
-            className={`relative rounded-sm overflow-hidden bg-surface-raised flex items-center justify-center ${
+            className={`relative rounded-sm overflow-hidden bg-surface-raised flex items-center justify-center w-full ${
               heroOpensViewer ? "cursor-zoom-in" : "cursor-default"
             }`}
+            style={{ height: "min(45vh, 360px)" }}
             onClick={() => {
               if (hero.kind === "plant") onOpenViewer(hero.plant);
             }}
@@ -162,11 +163,7 @@ export default function SpotlightView({
             <img
               src={heroSrc}
               alt={heroTitle}
-              className="block w-auto h-auto object-contain"
-              style={{
-                maxWidth: "100%",
-                maxHeight: "min(45vh, 360px)",
-              }}
+              className="block w-full h-full object-contain"
               draggable={false}
             />
           </div>

@@ -1,11 +1,20 @@
 import { useCallback, useMemo } from "react";
 import type { Filters } from "../utils/filtering";
 import type { SortMode } from "../utils/sorting";
+import type { ViewMode } from "../components/ViewModeControl";
 
 const FILTER_KEYS: (keyof Filters)[] = ["tags", "zoneCodes", "postedBy", "shortCodes"];
 const DEFAULT_SORT: SortMode = "newest";
+const DEFAULT_VIEW: ViewMode = "gallery";
 
-function parseFiltersFromURL(): { filters: Filters; sort: SortMode } {
+interface InitialState {
+  filters: Filters;
+  sort: SortMode;
+  view: ViewMode;
+  subject: string | null;
+}
+
+function parseFiltersFromURL(): InitialState {
   const params = new URLSearchParams(window.location.search);
 
   const filters: Filters = {
@@ -17,7 +26,12 @@ function parseFiltersFromURL(): { filters: Filters; sort: SortMode } {
 
   const sort = (params.get("sort") as SortMode) ?? DEFAULT_SORT;
 
-  return { filters, sort };
+  const rawView = params.get("view");
+  const view: ViewMode =
+    rawView === "plant" || rawView === "zone" ? rawView : DEFAULT_VIEW;
+  const subject = view === "gallery" ? null : params.get("subject");
+
+  return { filters, sort, view, subject };
 }
 
 const KEY_TO_PARAM: Record<keyof Filters, string> = {
@@ -27,13 +41,22 @@ const KEY_TO_PARAM: Record<keyof Filters, string> = {
   shortCodes: "plants",
 };
 
-function buildParams(filters: Filters, sort: SortMode): string {
+function buildParams(
+  filters: Filters,
+  sort: SortMode,
+  view: ViewMode,
+  subject: string | null
+): string {
   const params = new URLSearchParams();
   for (const key of FILTER_KEYS) {
     const values = Array.from(filters[key]);
     if (values.length > 0) params.set(KEY_TO_PARAM[key], values.join(","));
   }
   if (sort !== DEFAULT_SORT) params.set("sort", sort);
+  if (view !== DEFAULT_VIEW) {
+    params.set("view", view);
+    if (subject) params.set("subject", subject);
+  }
   return params.toString();
 }
 
@@ -45,13 +68,18 @@ function pushURL(qs: string) {
 export function useFilterParams() {
   const initial = useMemo(() => parseFiltersFromURL(), []);
 
-  const syncToURL = useCallback((filters: Filters, sort: SortMode) => {
-    pushURL(buildParams(filters, sort));
-  }, []);
+  const syncToURL = useCallback(
+    (filters: Filters, sort: SortMode, view: ViewMode, subject: string | null) => {
+      pushURL(buildParams(filters, sort, view, subject));
+    },
+    []
+  );
 
   return {
     initialFilters: initial.filters,
     initialSort: initial.sort,
+    initialView: initial.view,
+    initialSubject: initial.subject,
     syncToURL,
   };
 }
