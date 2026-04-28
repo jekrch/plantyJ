@@ -270,11 +270,11 @@ function SubjectDropdown({
   }, [open]);
 
   return (
-    <div ref={ref} className="relative inline-block">
+    <div ref={ref} className="relative inline-block mx-auto">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-surface-raised ring-1 ring-inset ring-white/5 hover:ring-accent/30 transition-colors text-[11px] font-display tracking-wide text-ink min-w-[10rem] sm:min-w-[12rem] justify-between"
+        className="flex items-center gap-1.5 px-2.5 py-1.5 h-8 w-50 rounded-md bg-surface-raised ring-1 ring-inset ring-white/5 hover:ring-accent/30 transition-colors text-[11px] font-display tracking-wide text-ink min-w-[10rem] sm:min-w-[12rem] justify-between"
       >
         <span className={`truncate ${capitalize ? "capitalize" : ""}`}>
           {activeLabel}
