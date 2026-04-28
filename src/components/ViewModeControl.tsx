@@ -95,7 +95,7 @@ export default function ViewModeControl({
       : null;
 
   return (
-    <div className="view-mode-control flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 px-1">
+    <div className="view-mode-control flex flex-col px-1">
       <div className="inline-flex items-center rounded-md bg-surface-raised ring-1 ring-inset ring-white/5 p-0.5 self-start">
         <SegBtn
           active={mode === "gallery"}
@@ -121,25 +121,30 @@ export default function ViewModeControl({
       </div>
 
       {mode !== "gallery" && (
-        <SubjectPicker
-          options={activeOptions}
-          value={subjectCode}
-          activeLabel={activeOption?.label ?? subjectCode ?? "Select"}
-          capitalize={mode === "zone"}
-          onChange={(code) => onChange(mode, code)}
-        />
+        <div className="mt-4 self-center -mb-3">
+          <SubjectPicker
+            mode={mode}
+            options={activeOptions}
+            value={subjectCode}
+            activeLabel={activeOption?.label ?? subjectCode ?? "Select"}
+            capitalize={mode === "zone"}
+            onChange={(code) => onChange(mode, code)}
+          />
+        </div>
       )}
     </div>
   );
 }
 
 function SubjectPicker({
+  mode,
   options,
   value,
   activeLabel,
   capitalize,
   onChange,
 }: {
+  mode: Exclude<ViewMode, "gallery">;
   options: Option[];
   value: string | null;
   activeLabel: string;
@@ -159,13 +164,14 @@ function SubjectPicker({
   };
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1.5">
       <ArrowBtn
         direction="prev"
         enabled={canStep}
         onClick={() => step(-1)}
       />
       <SubjectDropdown
+        mode={mode}
         options={options}
         value={value}
         activeLabel={activeLabel}
@@ -197,13 +203,13 @@ function ArrowBtn({
       onClick={onClick}
       disabled={!enabled}
       aria-label={direction === "prev" ? "Previous" : "Next"}
-      className={`flex items-center justify-center h-8 w-8 rounded-md bg-surface-raised ring-1 ring-inset ring-white/5 transition-colors ${
+      className={`flex items-center justify-center h-9 w-9 rounded-md bg-surface-raised ring-1 ring-inset ring-white/5 transition-all ${
         enabled
-          ? "text-ink-muted hover:text-ink hover:ring-accent/30"
-          : "text-ink-faint/40 cursor-not-allowed"
+          ? "text-ink-muted hover:text-accent hover:ring-accent/40 active:scale-95"
+          : "text-ink-faint/30 cursor-not-allowed"
       }`}
     >
-      <Icon size={14} strokeWidth={1.5} />
+      <Icon size={16} strokeWidth={1.5} />
     </button>
   );
 }
@@ -236,12 +242,14 @@ function SegBtn({
 }
 
 function SubjectDropdown({
+  mode,
   options,
   value,
   activeLabel,
   capitalize,
   onChange,
 }: {
+  mode: Exclude<ViewMode, "gallery">;
   options: Option[];
   value: string | null;
   activeLabel: string;
@@ -250,6 +258,7 @@ function SubjectDropdown({
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const ModeIcon = mode === "plant" ? Sprout : MapIcon;
 
   useEffect(() => {
     if (!open) return;
@@ -270,17 +279,24 @@ function SubjectDropdown({
   }, [open]);
 
   return (
-    <div ref={ref} className="relative inline-block mx-auto">
+    <div ref={ref} className="relative">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 h-8 w-50 rounded-md bg-surface-raised ring-1 ring-inset ring-white/5 hover:ring-accent/30 transition-colors text-[11px] font-display tracking-wide text-ink min-w-[10rem] sm:min-w-[12rem] justify-between"
+        className="flex items-center justify-between gap-2 px-3 h-9 rounded-md bg-surface-raised ring-1 ring-inset ring-white/5 hover:ring-accent/40 transition-all text-xs font-display tracking-wide text-ink min-w-56 sm:min-w-64"
       >
-        <span className={`truncate ${capitalize ? "capitalize" : ""}`}>
-          {activeLabel}
+        <span className="flex items-center gap-2 min-w-0">
+          <ModeIcon
+            size={13}
+            strokeWidth={1.5}
+            className="text-accent shrink-0"
+          />
+          <span className={`truncate ${capitalize ? "capitalize" : ""}`}>
+            {activeLabel}
+          </span>
         </span>
         <ChevronDown
-          size={13}
+          size={14}
           className={`text-ink-faint transition-transform shrink-0 ${
             open ? "rotate-180" : ""
           }`}
@@ -288,7 +304,7 @@ function SubjectDropdown({
       </button>
 
       {open && (
-        <div className="absolute z-30 mt-1 left-0 right-0 sm:right-auto sm:min-w-[18rem] max-h-[60vh] overflow-y-auto rounded-md bg-surface-raised ring-1 ring-inset ring-white/10 shadow-lg shadow-black/40 py-1">
+        <div className="absolute z-30 mt-1.5 left-0 right-0 sm:right-auto sm:min-w-full max-h-[60vh] overflow-y-auto thin-scroll rounded-md bg-surface-raised ring-1 ring-inset ring-white/10 shadow-lg shadow-black/40 py-1">
           {options.length === 0 && (
             <div className="px-3 py-2 text-[11px] text-ink-faint">
               No options

@@ -192,7 +192,7 @@ export default function PlantInfoDrawer({
 
   return (
     <div
-      className="absolute inset-x-0 z-15 overflow-y-auto info-modal-scroll"
+      className="absolute inset-x-0 z-15 overflow-y-auto info-modal-scroll thin-scroll"
       style={{
         top: topOffset,
         bottom: bottomOffset,

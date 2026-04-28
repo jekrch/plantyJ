@@ -201,7 +201,7 @@ function InfoModalContent({
           })}
         </div>
 
-        <div className="flex-1 overflow-y-auto info-modal-scroll">
+        <div className="flex-1 overflow-y-auto info-modal-scroll thin-scroll">
           {tab === "about" && <AboutPanel />}
           {tab === "plants" && (
             <PlantsPanel entries={plantEntries} onFilter={onSpotlightPlant} />
