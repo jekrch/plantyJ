@@ -1,0 +1,58 @@
+{
+  "id": "oenothera-macrocarpa",
+  "fullName": "Oenothera macrocarpa",
+  "commonName": "Missouri Evening Primrose",
+  "description": "Oenothera macrocarpa (syn. Oenothera missouriensis), the bigfruit evening primrose, Ozark sundrops, Missouri evening primrose, or Missouri primrose, is a species of flowering plant in the evening primrose family Onagraceae, native to northeast Mexico and the south-central United States, where it is found in calcareous prairies and limestone outcrops.",
+  "vernacularNames": [
+    "Ozark sundrop",
+    "bigfruit evening primrose",
+    "bigfruit evening-primrose",
+    "bigfruit eveningprimrose"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Myrtales",
+    "family": "Onagraceae",
+    "genus": "Oenothera",
+    "species": "Oenothera macrocarpa",
+    "canonicalName": "Oenothera macrocarpa"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/3188904"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:173157-2"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Oenothera_macrocarpa"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/119117"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q9373395"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.129287"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 5267
+}

@@ -12,7 +12,30 @@
       "description": null,
       "image": "images/E pur/1777431369.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-29T02:56:10.682Z"
+      "addedAt": "2026-04-29T02:56:10.682Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "aec4d306c1acd9a7",
+      "dominantColors": [
+        [
+          32.6,
+          -10.9,
+          10.6
+        ],
+        [
+          61.5,
+          -10.0,
+          8.3
+        ],
+        [
+          63.5,
+          27.1,
+          -10.5
+        ]
+      ],
+      "bioclipSpeciesId": "Echinacea purpurea",
+      "bioclipCommonName": "Purple coneflower",
+      "bioclipScore": 0.7918
     },
     {
       "seq": 20,
@@ -25,7 +48,30 @@
       "description": null,
       "image": "images/O mac/1777431320.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-29T02:55:21.794Z"
+      "addedAt": "2026-04-29T02:55:21.794Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "c8bab9ca42e6d698",
+      "dominantColors": [
+        [
+          59.7,
+          -26.5,
+          39.4
+        ],
+        [
+          40.0,
+          -15.2,
+          21.3
+        ],
+        [
+          73.0,
+          -4.3,
+          5.2
+        ]
+      ],
+      "bioclipSpeciesId": "Oenothera biennis",
+      "bioclipCommonName": "Common Evening-primrose",
+      "bioclipScore": 0.3294
     },
     {
       "seq": 19,
@@ -38,7 +84,30 @@
       "description": null,
       "image": "images/T can/1777431206.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-29T02:53:27.054Z"
+      "addedAt": "2026-04-29T02:53:27.054Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "e6a1f45e4b5c5605",
+      "dominantColors": [
+        [
+          47.5,
+          8.6,
+          0.4
+        ],
+        [
+          40.8,
+          -18.8,
+          19.5
+        ],
+        [
+          71.7,
+          -9.1,
+          18.7
+        ]
+      ],
+      "bioclipSpeciesId": "Bombus impatiens",
+      "bioclipCommonName": "Common Eastern Bumblebee",
+      "bioclipScore": 0.9208
     },
     {
       "seq": 18,
