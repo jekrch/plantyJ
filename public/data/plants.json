@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "E pur",
+      "fullName": "Echinacea purpurea",
+      "commonName": "Purple Coneflower",
+      "variety": null
+    },
+    {
       "shortCode": "O mac",
       "fullName": "Oenothera macrocarpa",
       "commonName": "Missouri Evening Primrose",
