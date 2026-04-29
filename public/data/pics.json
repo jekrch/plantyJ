@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 19,
+      "id": "T can-1777431206",
+      "shortCode": "T can",
+      "zoneCode": "mpg",
+      "tags": [
+        "native"
+      ],
+      "description": null,
+      "image": "images/T can/1777431206.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-29T02:53:27.054Z"
+    },
+    {
       "seq": 18,
       "id": "c daf-1777409093",
       "shortCode": "c daf",
@@ -27,7 +40,7 @@
         [
           66.9,
           -22.4,
-          51.0
+          51
         ]
       ],
       "bioclipSpeciesId": "Narcissus pseudonarcissus",
