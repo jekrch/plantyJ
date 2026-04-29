@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "T cor",
+      "fullName": "Tiarella cordifolia",
+      "commonName": "Foamflower",
+      "variety": null
+    },
+    {
       "shortCode": "S ter",
       "fullName": "Sedum ternatum",
       "commonName": "Wild Stonecrop",
