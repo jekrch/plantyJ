@@ -1,0 +1,53 @@
+{
+  "id": "narcissus-cyclamineus",
+  "fullName": "Narcissus cyclamineus",
+  "commonName": "Dwarf Daffodil",
+  "description": "Narcissus cyclamineus, the cyclamen-flowered daffodil, is a species of flowering plant in the family Amaryllidaceae, native to North West Portugal and North West Spain.",
+  "vernacularNames": [
+    "Cyclamen-Flowered Daffodil",
+    "cyclamen-flower daffodil",
+    "Head-to-head Daffodil"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Liliopsida",
+    "order": "Asparagales",
+    "family": "Amaryllidaceae",
+    "genus": "Narcissus",
+    "species": "Narcissus cyclamineus",
+    "canonicalName": "Narcissus cyclamineus"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/2858654"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:65999-1"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Narcissus_cyclamineus"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/1062301"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q1727024"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 648
+}

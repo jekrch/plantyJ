@@ -1,0 +1,66 @@
+{
+  "id": "ribes-hirtellum",
+  "fullName": "Ribes hirtellum",
+  "commonName": "Gooseberry",
+  "description": "Ribes hirtellum is a species of gooseberry commonly known as wild gooseberry or swamp gooseberry. It is native to Canada and the northern United States. Cultivated gooseberries are derived from this species and from Ribes uva-crispa.\nRibes hirtellum is known by several other names, including American gooseberry, hairy-stem gooseberry, hairy gooseberry, low wild gooseberry northern gooseberry, smooth gooseberry, and wedge-leaf gooseberry.",
+  "vernacularNames": [
+    "American Gooseberry",
+    "Hairy Gooseberry",
+    "Hairy-stem Gooseberry",
+    "Hairystem Gooseberry",
+    "Wedge-leaf Gooseberry",
+    "low wild gooseberry",
+    "northern gooseberry",
+    "smooth gooseberry",
+    "swamp gooseberry",
+    "wedge-leaved gooseberry",
+    "wild gooseberry",
+    "Smooth Gooseberry"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Saxifragales",
+    "family": "Grossulariaceae",
+    "genus": "Ribes",
+    "species": "Ribes hirtellum",
+    "canonicalName": "Ribes hirtellum"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/2986164"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:220946-2"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Ribes_hirtellum"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/136605"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q15441429"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.140983"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 1849
+}
