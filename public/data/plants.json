@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "S ter",
+      "fullName": "Sedum ternatum",
+      "commonName": "Wild Stonecrop",
+      "variety": null
+    },
+    {
       "shortCode": "S pul",
       "fullName": "Sedum pulchellum",
       "commonName": "Widow's Cross",
