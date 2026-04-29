@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "S pul",
+      "fullName": "Sedum pulchellum",
+      "commonName": "Widow's Cross",
+      "variety": null
+    },
+    {
       "shortCode": "L car",
       "fullName": "Leonurus cardiaca",
       "commonName": "Motherwort",
