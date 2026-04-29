@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "H tel 'Aut'",
+      "fullName": "Hylotelephium telephium",
+      "commonName": "Sedum",
+      "variety": "Autumn Joy"
+    },
+    {
       "shortCode": "E pur",
       "fullName": "Echinacea purpurea",
       "commonName": "Purple Coneflower",
