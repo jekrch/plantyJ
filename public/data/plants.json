@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A tub",
+      "fullName": "Asclepias tuberosa",
+      "commonName": "Butterfly Weed",
+      "variety": null
+    },
+    {
       "shortCode": "E mac",
       "fullName": "Eurybia macrophylla",
       "commonName": "Big-leaved Aster",
