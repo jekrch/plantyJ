@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "O mac",
+      "fullName": "Oenothera macrocarpa",
+      "commonName": "Missouri Evening Primrose",
+      "variety": null
+    },
+    {
       "shortCode": "T can",
       "fullName": "Teucrium canadense",
       "commonName": "Germander",
