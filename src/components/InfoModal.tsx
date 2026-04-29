@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { X, ExternalLink, Sprout, Github, BugIcon, Building, Flower } from "lucide-react";
+import { X, ExternalLink, Sprout, Github, BugIcon, Building, Flower, Cpu, Globe, BookOpen, Database, Leaf } from "lucide-react";
 import type { Plant, PlantRecord, Zone, ZonePic } from "../types";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 
@@ -229,24 +229,6 @@ function AboutPanel() {
         photos, and other plants from the same zone.
       </p>
 
-      {/* <div className="border-t border-ink-faint/20" /> */}
-
-      {/* <div>
-        <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-2">
-          Tabs
-        </p>
-        <ul className="space-y-1.5 text-xs text-ink-muted leading-relaxed">
-          <li>
-            <span className="text-ink">Plants</span> — every plant with its short
-            code and a reference photo.
-          </li>
-          <li>
-            <span className="text-ink">Zones</span> — areas of the yard with a
-            representative photo of each.
-          </li>
-        </ul>
-      </div> */}
-
       <div className="border-t border-ink-faint/20" />
 
       <div>
@@ -273,6 +255,7 @@ function AboutPanel() {
             github.com/jekrch/plantyJ
           </a>
         </div>
+        
         <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-2 mt-4">
           Resources
         </p>
@@ -296,13 +279,96 @@ function AboutPanel() {
             UM Extension
           </a>
           <a
-            href="https://https://www.prairiemoon.com/"
+            href="https://www.prairiemoon.com/"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-xs text-ink-muted hover:text-accent transition-colors px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/8 border border-ink-faint/20"
           >
             <Flower size={12} strokeWidth={1.5} />
-            Prarie Moon Nursery
+            Prairie Moon Nursery
+          </a>
+        </div>
+      </div>
+
+      <div className="border-t border-ink-faint/20" />
+
+      <div>
+        <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-2">
+          Data Sources
+        </p>
+        <p className="text-sm text-ink leading-relaxed mb-4">
+          Where do I get all of my data? I use automation to pull it from these excellent, free, public data sources whenever a new image is added:
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <a
+            href="https://www.gbif.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-ink-muted hover:text-accent transition-colors px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/8 border border-ink-faint/20"
+            title="Global Biodiversity Information Facility"
+          >
+            <Database size={12} strokeWidth={1.5} />
+            GBIF
+          </a>
+          <a
+            href="https://powo.science.kew.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-ink-muted hover:text-accent transition-colors px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/8 border border-ink-faint/20"
+            title="Plants of the World Online"
+          >
+            <Globe size={12} strokeWidth={1.5} />
+            POWO
+          </a>
+          <a
+            href="https://www.inaturalist.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-ink-muted hover:text-accent transition-colors px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/8 border border-ink-faint/20"
+            title="iNaturalist API"
+          >
+            <Leaf size={12} strokeWidth={1.5} />
+            iNaturalist
+          </a>
+          <a
+            href="https://www.wikidata.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-ink-muted hover:text-accent transition-colors px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/8 border border-ink-faint/20"
+            title="Wikidata Semantic Traits"
+          >
+            <Database size={12} strokeWidth={1.5} />
+            Wikidata
+          </a>
+          <a
+            href="https://en.wikipedia.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-ink-muted hover:text-accent transition-colors px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/8 border border-ink-faint/20"
+            title="Wikipedia Descriptions"
+          >
+            <BookOpen size={12} strokeWidth={1.5} />
+            Wikipedia
+          </a>
+          <a
+            href="https://explorer.natureserve.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-ink-muted hover:text-accent transition-colors px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/8 border border-ink-faint/20"
+            title="NatureServe Conservation Status"
+          >
+            <Globe size={12} strokeWidth={1.5} />
+            NatureServe
+          </a>
+          <a
+            href="https://imageomics.github.io/bioclip/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-ink-muted hover:text-accent transition-colors px-3 py-1.5 rounded-md bg-white/5 hover:bg-white/8 border border-ink-faint/20"
+            title="BioCLIP Machine Learning ID"
+          >
+            <Cpu size={12} strokeWidth={1.5} />
+            BioCLIP
           </a>
         </div>
       </div>
