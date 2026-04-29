@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 25,
+      "id": "S ter-1777431973",
+      "shortCode": "S ter",
+      "zoneCode": "mpg",
+      "tags": [
+        "native"
+      ],
+      "description": null,
+      "image": "images/S ter/1777431973.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-29T03:06:14.083Z"
+    },
+    {
       "seq": 24,
       "id": "S pul-1777431892",
       "shortCode": "S pul",
