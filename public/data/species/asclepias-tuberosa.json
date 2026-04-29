@@ -1,0 +1,62 @@
+{
+  "id": "asclepias-tuberosa",
+  "fullName": "Asclepias tuberosa",
+  "commonName": "Butterfly Weed",
+  "description": "Asclepias tuberosa, commonly known as butterfly weed, is a species of milkweed native to eastern and southwestern North America. It is commonly known as butterfly weed because of the butterflies that are attracted to the plant by its color and its copious production of nectar.",
+  "vernacularNames": [
+    "Butterfly Milkweed",
+    "Butterfly-weed",
+    "Chieger-flower",
+    "Pleurisy-root",
+    "butterflyweed",
+    "orange milkweed",
+    "pleurisy root",
+    "butterfly milkweed"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Gentianales",
+    "family": "Apocynaceae",
+    "genus": "Asclepias",
+    "species": "Asclepias tuberosa",
+    "canonicalName": "Asclepias tuberosa"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/3170305"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:94704-1"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Asclepias_tuberosa"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/47912"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q311131"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.129775"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 66298
+}

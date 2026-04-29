@@ -11,7 +11,30 @@
       "description": null,
       "image": "images/A tub/1777432564.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2025-08-01T03:16:05.410Z"
+      "addedAt": "2025-08-01T03:16:05.410Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "fe41ad16c28dd8b2",
+      "dominantColors": [
+        [
+          51.2,
+          -25.1,
+          39.1
+        ],
+        [
+          44.5,
+          -12.0,
+          17.0
+        ],
+        [
+          58.1,
+          38.8,
+          60.5
+        ]
+      ],
+      "bioclipSpeciesId": "Asclepias tuberosa",
+      "bioclipCommonName": "Butterfly-weed",
+      "bioclipScore": 0.9817
     },
     {
       "seq": 27,
