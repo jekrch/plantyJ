@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "T can",
+      "fullName": "Teucrium canadense",
+      "commonName": "Germander",
+      "variety": null
+    },
+    {
       "shortCode": "c daf",
       "fullName": "Narcissus cyclamineus",
       "commonName": "Dwarf Daffodil",
