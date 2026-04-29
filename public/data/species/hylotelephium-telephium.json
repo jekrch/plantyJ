@@ -1,0 +1,65 @@
+{
+  "id": "hylotelephium-telephium",
+  "fullName": "Hylotelephium telephium",
+  "commonName": "Sedum",
+  "description": "Hylotelephium telephium (synonym Sedum telephium), known as orpine, livelong, frog's-stomach, harping Johnny, life-everlasting, live-forever, midsummer-men, Orphan John, witch's moneybags, and garden stonecrop is a succulent perennial plant of the family Crassulaceae native to Eurasia. The flowers are held in dense heads and can be reddish or yellowish-white. A number of cultivars, often with purplish leaves, are grown in gardens as well as hybrids between this species and the related Hylotelephium spectabile (iceplant), especially the popular 'Herbstfreude' ('Autumn Joy'). Occasionally garden plants may escape and naturalise as has happened in parts of North America.",
+  "vernacularNames": [
+    "Live-forever",
+    "Orpine",
+    "Purple-flower Stonecrop",
+    "Purpur-waldfetthenne",
+    "Vit-toujours",
+    "Witch's Moneybags",
+    "garden orpine",
+    "garden stonecrop",
+    "live-forever stonecrop",
+    "purple stonecrop",
+    "witches' moneybags"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Saxifragales",
+    "family": "Crassulaceae",
+    "genus": "Hylotelephium",
+    "species": "Hylotelephium telephium",
+    "canonicalName": "Hylotelephium telephium"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/2985865"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:274226-1"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Hylotelephium_telephium"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/1420906"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q1327535"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.153618"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 32525
+}

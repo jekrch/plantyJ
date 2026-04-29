@@ -11,7 +11,30 @@
       "description": null,
       "image": "images/L car/1777431685.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-29T03:01:26.843Z"
+      "addedAt": "2026-04-29T03:01:26.843Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "fa68b7d29930915a",
+      "dominantColors": [
+        [
+          62.4,
+          -31.7,
+          40.5
+        ],
+        [
+          62.5,
+          10.9,
+          18.7
+        ],
+        [
+          29.4,
+          -3.9,
+          19.6
+        ]
+      ],
+      "bioclipSpeciesId": "Leonurus cardiaca",
+      "bioclipCommonName": "Motherwort",
+      "bioclipScore": 0.9406
     },
     {
       "seq": 22,
@@ -22,7 +45,30 @@
       "description": null,
       "image": "images/H tel 'Aut'/1777431609.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-29T03:00:10.974Z"
+      "addedAt": "2026-04-29T03:00:10.974Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "b4da3ef64bc03158",
+      "dominantColors": [
+        [
+          55.8,
+          -29.9,
+          25.7
+        ],
+        [
+          59.6,
+          0.5,
+          10.0
+        ],
+        [
+          30.5,
+          -2.1,
+          10.5
+        ]
+      ],
+      "bioclipSpeciesId": "Hylotelephium spectabile",
+      "bioclipCommonName": "Showy stonecrop",
+      "bioclipScore": 0.2525
     },
     {
       "seq": 21,

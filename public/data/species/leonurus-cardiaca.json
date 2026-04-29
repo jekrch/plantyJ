@@ -1,0 +1,57 @@
+{
+  "id": "leonurus-cardiaca",
+  "fullName": "Leonurus cardiaca",
+  "commonName": "Motherwort",
+  "description": "Leonurus cardiaca, known as motherwort, is an herbaceous perennial plant in the mint family, Lamiaceae. Other common names include throw-wort, lion's ear, and lion's tail. Lion's tail is also a common name for Leonotis leonurus, and lion's ear, a common name for Leonotis nepetifolia. Originally from Central Asia and southeastern Europe, it is now found worldwide, spread largely due to its use as a herbal remedy.",
+  "vernacularNames": [
+    "Common Motherwort",
+    "Motherwort",
+    "common motherwort"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Lamiales",
+    "family": "Lamiaceae",
+    "genus": "Leonurus",
+    "species": "Leonurus cardiaca",
+    "canonicalName": "Leonurus cardiaca"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/5341389"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:449168-1"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Leonurus_cardiaca"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/56171"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q161130"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.128520"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 36678
+}
