@@ -11,7 +11,30 @@
       "description": null,
       "image": "images/E mac/1777432166.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-29T03:09:27.601Z"
+      "addedAt": "2026-04-29T03:09:27.601Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "c362f90e32c99f68",
+      "dominantColors": [
+        [
+          32.2,
+          1.8,
+          7.1
+        ],
+        [
+          64.0,
+          0.9,
+          8.5
+        ],
+        [
+          65.8,
+          -32.1,
+          33.9
+        ]
+      ],
+      "bioclipSpeciesId": "Arnica cordifolia",
+      "bioclipCommonName": "Heart-Leaved Arnica",
+      "bioclipScore": 0.1859
     },
     {
       "seq": 26,
@@ -24,7 +47,30 @@
       "description": null,
       "image": "images/T cor/1777432042.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-29T03:07:24.066Z"
+      "addedAt": "2026-04-29T03:07:24.066Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "c3bc256719f32c45",
+      "dominantColors": [
+        [
+          33.3,
+          0.0,
+          3.8
+        ],
+        [
+          62.8,
+          3.2,
+          6.8
+        ],
+        [
+          66.4,
+          -22.1,
+          19.5
+        ]
+      ],
+      "bioclipSpeciesId": "Tiarella wherryi",
+      "bioclipCommonName": "Tufted foamflower",
+      "bioclipScore": 0.3186
     },
     {
       "seq": 25,
@@ -37,7 +83,30 @@
       "description": null,
       "image": "images/S ter/1777431973.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-29T03:06:14.083Z"
+      "addedAt": "2026-04-29T03:06:14.083Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "8bb5a91095767f42",
+      "dominantColors": [
+        [
+          26.9,
+          -0.0,
+          3.4
+        ],
+        [
+          65.6,
+          1.2,
+          6.2
+        ],
+        [
+          71.3,
+          -36.3,
+          32.2
+        ]
+      ],
+      "bioclipSpeciesId": "Sedum ternatum",
+      "bioclipCommonName": "Wild stonecrop",
+      "bioclipScore": 0.739
     },
     {
       "seq": 24,
@@ -50,7 +119,30 @@
       "description": null,
       "image": "images/S pul/1777431892.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-29T03:04:53.846Z"
+      "addedAt": "2026-04-29T03:04:53.846Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "f0be1f13011f1f29",
+      "dominantColors": [
+        [
+          59.1,
+          -33.1,
+          49.7
+        ],
+        [
+          28.0,
+          -3.7,
+          13.7
+        ],
+        [
+          65.1,
+          0.1,
+          14.0
+        ]
+      ],
+      "bioclipSpeciesId": "Sedum sarmentosum",
+      "bioclipCommonName": "Orpine",
+      "bioclipScore": 0.5247
     },
     {
       "seq": 23,

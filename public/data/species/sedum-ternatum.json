@@ -1,0 +1,58 @@
+{
+  "id": "sedum-ternatum",
+  "fullName": "Sedum ternatum",
+  "commonName": "Wild Stonecrop",
+  "description": "Sedum ternatum is the most widespread native Sedum species in eastern North America, commonly known as woodland stonecrop. It has white flowers, blooming April to May. This shade-tolerant species is often found in the forest understory, although it can also grow in sunnier locations when sufficient moisture is present. Its common name of \"stonecrop\" evokes its ability to thrive atop boulders, where its succulent leaves help it to retain moisture in shallow soil. It adapts well to garden use.\nSedum ternatum is native to much of the eastern United States, as far west as Arkansas and Iowa, south down the Appalachian Mountains, and north to near the Canada\u2013United States border.\nSedum ternatum can be distinguished from other sedums, native and cultivated, which are commonly found in the United States by the white flowers with four (not five) petals, and by the leaves in whorls of three, whence the species name. The plant flowers for about a month in late spring to early summer.",
+  "vernacularNames": [
+    "Wild Stonecrop",
+    "Woodland Stonecrop",
+    "whorled stonecrop",
+    "woodland stonecrop"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Saxifragales",
+    "family": "Crassulaceae",
+    "genus": "Sedum",
+    "species": "Sedum ternatum",
+    "canonicalName": "Sedum ternatum"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/5362037"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:284835-2"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Sedum_ternatum"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/127597"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q7445445"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.146949"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 16240
+}

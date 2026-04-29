@@ -1,0 +1,56 @@
+{
+  "id": "sedum-pulchellum",
+  "fullName": "Sedum pulchellum",
+  "commonName": "Widow's Cross",
+  "description": "Sedum pulchellum is a species of flowering plant in the family Crassulaceae known by the common names widowscross and widow's cross. It is native to calcareous areas of the South-Central and Southeastern United States, where it is found on flat rock outcrops, particularly cedar glades. Most populations are in the Interior Low Plateau, and Ozark and Ouachita Mountains.\nIt produces pink-white flowers in late spring. It is a winter annual, germinating in the fall and dying in the summer.",
+  "vernacularNames": [
+    "widowscross",
+    "Widow's-cross"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Saxifragales",
+    "family": "Crassulaceae",
+    "genus": "Sedum",
+    "species": "Sedum pulchellum",
+    "canonicalName": "Sedum pulchellum"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/5361999"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:275864-1"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Sedum_pulchellum"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/168746"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q15486335"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.131789"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 3175
+}
