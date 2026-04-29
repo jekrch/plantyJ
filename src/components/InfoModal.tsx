@@ -19,6 +19,8 @@ interface Props {
 interface PlantEntry {
   shortCode: string;
   label: string;
+  baseLabel: string;
+  variety: string | null;
   fullName: string | null;
   image: string | null;
   count: number;
@@ -98,10 +100,14 @@ function InfoModalContent({
     ]);
     const entries: PlantEntry[] = Array.from(codes).map((code) => {
       const rec = recordByCode.get(code);
-      const label = rec?.commonName ?? rec?.fullName ?? code;
+      const base = rec?.commonName ?? rec?.fullName ?? code;
+      const variety = rec?.variety ?? null;
+      const label = variety ? `${base} '${variety}'` : base;
       return {
         shortCode: code,
         label,
+        baseLabel: base,
+        variety,
         fullName: rec?.fullName ?? null,
         image: imageByCode.get(code) ?? null,
         count: countByCode.get(code) ?? 0,
@@ -321,8 +327,9 @@ function PlantsPanel({
           <EntryCard
             key={entry.shortCode}
             image={entry.image}
-            label={entry.label}
-            altLabel={entry.fullName ?? entry.label}
+            label={entry.baseLabel}
+            variety={entry.variety}
+            altLabel={entry.fullName ?? entry.baseLabel}
             code={entry.shortCode}
             count={entry.count}
             onClick={entry.count > 0 ? () => onFilter(entry.shortCode) : null}
@@ -366,6 +373,7 @@ function ZonesPanel({
 interface EntryCardProps {
   image: string | null;
   label: string;
+  variety?: string | null;
   altLabel: string;
   code: string;
   count: number;
@@ -376,6 +384,7 @@ interface EntryCardProps {
 function EntryCard({
   image,
   label,
+  variety,
   altLabel,
   code,
   count,
@@ -421,11 +430,15 @@ function EntryCard({
       </div>
       <div className="px-2.5 py-2 min-w-0">
         <p
-          className={`text-[11px] text-ink leading-tight truncate font-display ${capitalizeLabel ? "capitalize" : ""
-            }`}
+          className={`text-[11px] text-ink leading-tight truncate font-display ${capitalizeLabel ? "capitalize" : ""}`}
         >
           {label}
         </p>
+        {variety && (
+          <p className="text-[10px] text-white/40 italic leading-tight truncate mt-0.5">
+            '{variety}'
+          </p>
+        )}
         <p className="text-[10px] text-accent mt-0.5 font-mono tracking-wide">
           {code}
         </p>

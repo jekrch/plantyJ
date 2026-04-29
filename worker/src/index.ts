@@ -433,6 +433,7 @@ export default {
             shortCode: plantUpsert.shortCode,
             fullName: plantUpsert.fullName,
             commonName: plantUpsert.commonName,
+            variety: plantUpsert.variety,
           }
         : null;
 
@@ -460,6 +461,7 @@ export default {
           ? `  Unidentified — /accept ${seq} once BioCLIP runs, or /update to set fields manually`
           : null,
         plantForReply?.commonName ? `  Common: ${plantForReply.commonName}` : null,
+        plantForReply?.variety ? `  Variety: '${plantForReply.variety}'` : null,
         plantForReply?.fullName ? `  Full: ${plantForReply.fullName}` : null,
         `  Zone: ${zoneLabel}`,
         resolvedPic.tags.length > 0 ? `  Tags: ${resolvedPic.tags.join(", ")}` : null,

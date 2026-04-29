@@ -21,6 +21,7 @@ export interface PlantRecord {
   shortCode: string;
   fullName: string | null;
   commonName: string | null;
+  variety?: string | null;
 }
 
 export interface Zone {
@@ -42,6 +43,7 @@ export interface ZonePic {
 export interface Plant extends PicRecord {
   fullName: string | null;
   commonName: string | null;
+  variety?: string | null;
 }
 
 export interface Gallery {

@@ -7,7 +7,7 @@ export const UNIDENTIFIED_PREFIX = "unid-";
  * Parse a Telegram caption into structured plant + pic metadata.
  *
  * Format (// delimited):
- *   shortCode // fullName // commonName // zone // tags // description
+ *   shortCode // fullName ['Variety'] // commonName // zone // tags // description
  *
  * Plant-level fields (fullName, commonName) live on the plant record,
  * keyed by shortCode. Pic-level fields (zone, tags, description) live on
@@ -35,13 +35,15 @@ export function parseCaption(caption: string): ParsedCaption {
       shortCode: UNIDENTIFIED_CODE,
       fullName: null,
       commonName: null,
+      variety: null,
       zone,
       tags: null,
       description,
     };
   }
 
-  const fullName = parts[1] ? parts[1] : null;
+  const rawFullName = parts[1] ? parts[1] : null;
+  const { fullName, variety } = extractVariety(rawFullName);
   const commonName = parts[2] ? parts[2] : null;
 
   const zoneRaw = parts[3] ? parts[3] : null;
@@ -50,11 +52,18 @@ export function parseCaption(caption: string): ParsedCaption {
   const tags = parts[4] ? parseTags(parts[4]) : null;
   const description = parts[5] ? parts[5] : null;
 
-  return { shortCode, fullName, commonName, zone, tags, description };
+  return { shortCode, fullName, commonName, variety, zone, tags, description };
 }
 
 export function isUnidentifiedShortCode(shortCode: string): boolean {
   return shortCode.startsWith(UNIDENTIFIED_PREFIX);
+}
+
+function extractVariety(raw: string | null): { fullName: string | null; variety: string | null } {
+  if (!raw) return { fullName: null, variety: null };
+  const m = raw.match(/^(.*?)\s*'([^']+)'\s*$/);
+  if (m) return { fullName: m[1].trim() || null, variety: m[2].trim() };
+  return { fullName: raw, variety: null };
 }
 
 function parseZoneRef(segment: string): ParsedZoneRef {
@@ -90,6 +99,7 @@ export interface ResolvedPlantUpsert {
   shortCode: string;
   fullName: string | null;
   commonName: string | null;
+  variety: string | null;
 }
 
 export interface ResolvedPic {
@@ -187,16 +197,23 @@ export function resolveFields(
       shortCode: parsed.shortCode,
       fullName: parsed.fullName,
       commonName: parsed.commonName,
+      variety: parsed.variety,
     };
   } else {
     // Backfill missing fields only — don't overwrite existing plant data.
     const fullName = existingPlant.fullName ?? parsed.fullName ?? null;
     const commonName = existingPlant.commonName ?? parsed.commonName ?? null;
-    if (fullName !== existingPlant.fullName || commonName !== existingPlant.commonName) {
+    const variety = existingPlant.variety ?? parsed.variety ?? null;
+    if (
+      fullName !== existingPlant.fullName ||
+      commonName !== existingPlant.commonName ||
+      variety !== (existingPlant.variety ?? null)
+    ) {
       plantUpsert = {
         shortCode: parsed.shortCode,
         fullName,
         commonName,
+        variety,
       };
     }
   }

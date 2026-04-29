@@ -1,4 +1,5 @@
 import type { Plant, Zone } from "../types";
+import { plantTitle } from "./display";
 
 export interface Filters {
   tags: Set<string>;
@@ -60,10 +61,8 @@ export interface FacetItem {
 }
 
 function pickShortCodeLabel(plants: Plant[], value: string): string {
-  for (const p of plants) {
-    if (p.shortCode === value) return p.commonName ?? p.fullName ?? value;
-  }
-  return value;
+  const p = plants.find((p) => p.shortCode === value);
+  return p ? plantTitle(p) : value;
 }
 
 function pickZoneLabel(zones: Zone[], code: string): string {

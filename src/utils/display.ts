@@ -11,8 +11,11 @@ export function isUnidentified(plant: { shortCode: string; fullName: string | nu
 }
 
 export function plantTitle(plant: Plant): string {
-  if (plant.commonName) return plant.commonName;
-  if (plant.fullName) return plant.fullName;
-  if (isUnidentified(plant)) return "Unidentified";
-  return plant.shortCode;
+  let base: string;
+  if (plant.commonName) base = plant.commonName;
+  else if (plant.fullName) base = plant.fullName;
+  else if (isUnidentified(plant)) return "Unidentified";
+  else return plant.shortCode;
+  if (plant.variety) return `${base} '${plant.variety}'`;
+  return base;
 }

@@ -268,7 +268,7 @@ export async function deletePic(env: Env, seq: number): Promise<PicEntry | null>
 }
 
 const PIC_FIELDS = ["zoneCode", "tags", "description"] as const;
-const PLANT_FIELDS = ["shortCode", "fullName", "commonName"] as const;
+const PLANT_FIELDS = ["shortCode", "fullName", "commonName", "variety"] as const;
 const UPDATABLE_FIELDS = [...PLANT_FIELDS, ...PIC_FIELDS] as const;
 
 type PicField = (typeof PIC_FIELDS)[number];
@@ -403,6 +403,9 @@ export async function updateBySeq(
       break;
     case "commonName":
       plant.commonName = value || null;
+      break;
+    case "variety":
+      plant.variety = value || null;
       break;
   }
 

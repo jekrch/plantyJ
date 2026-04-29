@@ -246,7 +246,10 @@ export default function PlantInfoDrawer({
               <span className="text-accent text-xs">{plant.shortCode}</span>
             </p>
             {plant.fullName && plant.commonName && (
-              <p className="text-[11px] text-white/50 italic mt-0.5">{plant.fullName}</p>
+              <p className="text-[11px] text-white/50 italic mt-0.5">{plant.fullName}{plant.variety && ` '${plant.variety}'`}</p>
+            )}
+            {!plant.commonName && plant.variety && (
+              <p className="text-[11px] text-white/40 mt-0.5">'{plant.variety}'</p>
             )}
           </div>
         </div>

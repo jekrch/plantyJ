@@ -95,6 +95,7 @@ export default function App() {
             ...pic,
             fullName: plant?.fullName ?? null,
             commonName: plant?.commonName ?? null,
+            variety: plant?.variety ?? null,
           };
         });
 

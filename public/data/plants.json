@@ -2,8 +2,9 @@
   "plants": [
     {
       "shortCode": "c daf",
-      "fullName": "Cyclamineus Daffodil Tete a Tete",
-      "commonName": "Dwarf Daffodil"
+      "fullName": "Narcissus cyclamineus",
+      "commonName": "Dwarf Daffodil",
+      "variety": "Tete a Tete"
     },
     {
       "shortCode": "s lat",
@@ -17,13 +18,15 @@
     },
     {
       "shortCode": "s can bob",
-      "fullName": "Sambucus canadensis Bob Gordon",
-      "commonName": "Elderberry"
+      "fullName": "Sambucus canadensis",
+      "commonName": "Elderberry",
+      "variety": "Bob Gordon"
     },
     {
       "shortCode": "s can wyl",
-      "fullName": "Sambucus canadensis Wyldewood",
-      "commonName": "Elderberry"
+      "fullName": "Sambucus canadensis",
+      "commonName": "Elderberry",
+      "variety": "Wyldewood"
     },
     {
       "shortCode": "c vir",
@@ -32,18 +35,21 @@
     },
     {
       "shortCode": "r pix",
-      "fullName": "Ribes Pixwell",
-      "commonName": "Gooseberry"
+      "fullName": "Ribes hirtellum",
+      "commonName": "Gooseberry",
+      "variety": "Pixwell"
     },
     {
       "shortCode": "r rub",
-      "fullName": "Ribes rubrum Jonkheer Van Tets",
-      "commonName": "Red Currant"
+      "fullName": "Ribes rubrum",
+      "commonName": "Red Currant",
+      "variety": "Jonkheer Van Tets"
     },
     {
       "shortCode": "r ida",
-      "fullName": "Rubus idaeus Joan J",
-      "commonName": "Joan J Raspberry"
+      "fullName": "Rubus idaeus",
+      "commonName": "Raspberry",
+      "variety": "Joan J"
     },
     {
       "shortCode": "c ros",
@@ -77,8 +83,9 @@
     },
     {
       "shortCode": "r rub pc",
-      "fullName": "Ribes rubrum Pink Champagne",
-      "commonName": "Pink Currant"
+      "fullName": "Ribes rubrum",
+      "commonName": "Pink Currant",
+      "variety": "Pink Champagne"
     },
     {
       "shortCode": "m vir",
