@@ -101,6 +101,13 @@ export interface ZonePicEntry {
   description: string | null;
 }
 
+export interface AnnotationEntry {
+  shortCode: string;
+  zoneCode: string | null;
+  tags: string[];
+  description: string | null;
+}
+
 export interface Gallery {
   pics: PicEntry[];
   plants: PlantRecord[];

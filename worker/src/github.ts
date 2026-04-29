@@ -1,4 +1,5 @@
 import type {
+  AnnotationEntry,
   Env,
   Gallery,
   GitHubContentsResponse,
@@ -14,6 +15,7 @@ const PICS_PATH = "public/data/pics.json";
 const PLANTS_PATH = "public/data/plants.json";
 const ZONES_PATH = "public/data/zones.json";
 const ZONE_PICS_PATH = "public/data/zone_pics.json";
+const ANNOTATIONS_PATH = "public/data/annotations.json";
 
 function githubHeaders(token: string): Record<string, string> {
   return {
@@ -645,4 +647,83 @@ export async function deleteZone(env: Env, code: string): Promise<DeleteZoneResu
     `Remove zone: ${code}`
   );
   return { zone: removed, inUseBy: [] };
+}
+
+export async function upsertAnnotation(
+  env: Env,
+  shortCode: string,
+  zoneCode: string | null,
+  field: "tags" | "description",
+  value: string
+): Promise<AnnotationEntry> {
+  const { data, sha } = await readJsonFile<{ annotations?: AnnotationEntry[] }>(
+    env,
+    ANNOTATIONS_PATH,
+    { annotations: [] }
+  );
+  const annotations = data.annotations ?? [];
+
+  const idx = annotations.findIndex(
+    (a) => a.shortCode === shortCode && a.zoneCode === zoneCode
+  );
+
+  let entry: AnnotationEntry;
+  if (idx === -1) {
+    entry = { shortCode, zoneCode, tags: [], description: null };
+    annotations.push(entry);
+  } else {
+    entry = annotations[idx];
+  }
+
+  if (field === "tags") {
+    entry.tags = parseList(value);
+  } else {
+    entry.description = value.trim() || null;
+  }
+
+  if (idx !== -1) annotations[idx] = entry;
+
+  // Drop entries that carry no information.
+  const cleaned = annotations.filter(
+    (a) => a.tags.length > 0 || a.description !== null
+  );
+
+  const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
+  await writeJsonFile(
+    env,
+    ANNOTATIONS_PATH,
+    { annotations: cleaned },
+    sha,
+    `Annotate ${scope}: ${field}`
+  );
+
+  return entry;
+}
+
+export async function deleteAnnotation(
+  env: Env,
+  shortCode: string,
+  zoneCode: string | null
+): Promise<boolean> {
+  const { data, sha } = await readJsonFile<{ annotations?: AnnotationEntry[] }>(
+    env,
+    ANNOTATIONS_PATH,
+    { annotations: [] }
+  );
+  const annotations = data.annotations ?? [];
+  const idx = annotations.findIndex(
+    (a) => a.shortCode === shortCode && a.zoneCode === zoneCode
+  );
+  if (idx === -1) return false;
+
+  annotations.splice(idx, 1);
+  const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
+  await writeJsonFile(
+    env,
+    ANNOTATIONS_PATH,
+    { annotations },
+    sha,
+    `Delete annotation: ${scope}`
+  );
+  return true;
 }

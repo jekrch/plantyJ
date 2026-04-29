@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, ExternalLink } from "lucide-react";
-import type { Plant, Species, SpeciesTaxonomy, Zone, ZonePic } from "../types";
+import type { Annotation, Plant, Species, SpeciesTaxonomy, Zone, ZonePic } from "../types";
 import { plantTitle } from "../utils/display";
 
 interface Props {
@@ -9,6 +9,7 @@ interface Props {
   allPlants: Plant[];
   zones: Zone[];
   zonePics: ZonePic[];
+  annotations: Annotation[];
   speciesByShortCode: Map<string, Species>;
   onSelectPlant: (plant: Plant) => void;
   onApplyShortCodes: (shortCodes: string[]) => void;
@@ -55,6 +56,7 @@ export default function PlantInfoDrawer({
   allPlants,
   zones,
   zonePics,
+  annotations,
   speciesByShortCode,
   onSelectPlant,
   onApplyShortCodes,
@@ -175,12 +177,16 @@ export default function PlantInfoDrawer({
       : firstSentenceOrTrim(description, DESCRIPTION_PREVIEW_CHARS)
     : null;
 
-  const note = plant.description?.trim() ?? "";
+  const note = plant.description?.trim() || null;
   const tags = plant.tags ?? [];
-  const hasNote = note.length > 0;
-  const hasTags = tags.length > 0;
-  const compactNoteAndTags =
-    hasNote && hasTags && note.length <= 80 && tags.join(" ").length <= 40;
+
+  const plantAnnotation =
+    annotations.find((a) => a.shortCode === plant.shortCode && a.zoneCode === null) ?? null;
+  const zoneAnnotation =
+    annotations.find(
+      (a) => a.shortCode === plant.shortCode && a.zoneCode === plant.zoneCode
+    ) ?? null;
+  const zoneName = zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode;
 
   const show = open && !closing;
 
@@ -254,63 +260,36 @@ export default function PlantInfoDrawer({
           </div>
         </div>
 
-        {/* Notes + Tags */}
-        {compactNoteAndTags ? (
+        {/* Plant, zone, and photo annotations — all side by side if they fit */}
+        {(plantAnnotation || zoneAnnotation || note || tags.length > 0) && (
           <>
             <div className="border-t border-white/8" />
-            <div className="flex flex-wrap gap-x-6 gap-y-4 items-start">
-              <div className="flex-1 min-w-0">
-                <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Notes</p>
-                <p className="text-xs text-white/55 leading-relaxed whitespace-pre-line">
-                  {note}
-                </p>
-              </div>
-              <div className="shrink-0">
-                <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Tags</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="text-[10px] leading-none px-1.5 py-[3.9px] rounded-sm bg-white/8 text-white/35"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
+            <div className="flex flex-wrap gap-x-6 gap-y-3 items-start">
+              {plantAnnotation && (plantAnnotation.description || plantAnnotation.tags.length > 0) && (
+                <AnnotationGroup
+                  noteLabel="Plant notes"
+                  tagsLabel="Plant tags"
+                  description={plantAnnotation.description}
+                  tags={plantAnnotation.tags}
+                />
+              )}
+              {zoneAnnotation && (zoneAnnotation.description || zoneAnnotation.tags.length > 0) && (
+                <AnnotationGroup
+                  noteLabel={`${zoneName} notes`}
+                  tagsLabel={`${zoneName} tags`}
+                  description={zoneAnnotation.description}
+                  tags={zoneAnnotation.tags}
+                />
+              )}
+              {(note || tags.length > 0) && (
+                <AnnotationGroup
+                  noteLabel="Photo notes"
+                  tagsLabel="Photo tags"
+                  description={note}
+                  tags={tags}
+                />
+              )}
             </div>
-          </>
-        ) : (
-          <>
-            {hasNote && (
-              <>
-                <div className="border-t border-white/8" />
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Notes</p>
-                  <p className="text-xs text-white/55 leading-relaxed whitespace-pre-line">
-                    {note}
-                  </p>
-                </div>
-              </>
-            )}
-            {hasTags && (
-              <>
-                <div className="border-t border-white/8" />
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Tags</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[10px] leading-none px-1.5 py-[3.9px] rounded-sm bg-white/8 text-white/35"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
           </>
         )}
 
@@ -661,6 +640,43 @@ export default function PlantInfoDrawer({
           </>
         )}
       </div>
+    </div>
+  );
+}
+
+const TAG_CHIP = "text-[10px] leading-none px-1.5 py-[3.9px] rounded-sm bg-white/8 text-white/35";
+const LABEL_CLS = "text-[10px] uppercase tracking-widest text-white/50";
+
+function AnnotationGroup({
+  noteLabel,
+  tagsLabel,
+  description,
+  tags,
+}: {
+  noteLabel: string;
+  tagsLabel: string;
+  description: string | null;
+  tags: string[];
+}) {
+  const hasNote = !!description;
+  const hasTags = tags.length > 0;
+
+  return (
+    <div className="space-y-2">
+      {hasNote && (
+        <div>
+          <p className={`${LABEL_CLS} mb-1.5`}>{noteLabel}</p>
+          <p className="text-xs text-white/55 leading-relaxed whitespace-pre-line">{description}</p>
+        </div>
+      )}
+      {hasTags && (
+        <div>
+          <p className={`${LABEL_CLS} mb-1.5`}>{tagsLabel}</p>
+          <div className="flex flex-wrap gap-1.5">
+            {tags.map((t) => <span key={t} className={TAG_CHIP}>{t}</span>)}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { X, ZoomIn, ZoomOut, Info } from "lucide-react";
-import type { Plant, Species, Zone, ZonePic } from "../types";
+import type { Annotation, Plant, Species, Zone, ZonePic } from "../types";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import { MAX_SCALE, MIN_SCALE, useZoomPan } from "../hooks/useZoomPan";
 import { useBarMeasure } from "../hooks/useBarMeasure";
@@ -16,6 +16,7 @@ interface Props {
   allPlants: Plant[];
   zones: Zone[];
   zonePics: ZonePic[];
+  annotations: Annotation[];
   speciesByShortCode: Map<string, Species>;
   currentIndex: number;
   onClose: () => void;
@@ -30,6 +31,7 @@ export default function PlantViewer({
   allPlants,
   zones,
   zonePics,
+  annotations,
   speciesByShortCode,
   currentIndex,
   onClose,
@@ -490,6 +492,7 @@ export default function PlantViewer({
         allPlants={allPlants}
         zones={zones}
         zonePics={zonePics}
+        annotations={annotations}
         speciesByShortCode={speciesByShortCode}
         onSelectPlant={onSelectPlant}
         onApplyShortCodes={onApplyShortCodes}

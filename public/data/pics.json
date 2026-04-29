@@ -39,10 +39,7 @@
       "id": "s lat-1777242955",
       "shortCode": "s lat",
       "zoneCode": "mpg",
-      "tags": [
-        "native",
-        "basal"
-      ],
+      "tags": [],
       "description": null,
       "image": "images/s lat/1777242955.jpg",
       "postedBy": "Jenny",
@@ -76,10 +73,7 @@
       "id": "s fle-1777242745",
       "shortCode": "s fle",
       "zoneCode": "mpg",
-      "tags": [
-        "native",
-        "basal"
-      ],
+      "tags": [],
       "description": null,
       "image": "images/s fle/1777242745.jpg",
       "postedBy": "Jenny",
@@ -113,9 +107,7 @@
       "id": "s can bob-1777242363",
       "shortCode": "s can bob",
       "zoneCode": "mpg",
-      "tags": [
-        "edible"
-      ],
+      "tags": [],
       "description": null,
       "image": "images/s can bob/1777242363.jpg",
       "postedBy": "Jenny",
@@ -149,9 +141,7 @@
       "id": "s can wyl-1777242278",
       "shortCode": "s can wyl",
       "zoneCode": "mpg",
-      "tags": [
-        "edible"
-      ],
+      "tags": [],
       "description": null,
       "image": "images/s can wyl/1777242278.jpg",
       "postedBy": "Jenny",
@@ -185,9 +175,7 @@
       "id": "c vir-1777241697",
       "shortCode": "c vir",
       "zoneCode": "mpg",
-      "tags": [
-        "vine"
-      ],
+      "tags": [],
       "description": null,
       "image": "images/c vir/1777241697.jpg",
       "postedBy": "Jenny",
@@ -255,9 +243,7 @@
       "id": "r pix-1777241419",
       "shortCode": "r pix",
       "zoneCode": "mpg",
-      "tags": [
-        "edible"
-      ],
+      "tags": [],
       "description": "Potted",
       "image": "images/r pix/1777241419.jpg",
       "postedBy": "Jenny",
@@ -291,9 +277,7 @@
       "id": "r rub-1777239539",
       "shortCode": "r rub",
       "zoneCode": "bb",
-      "tags": [
-        "edible"
-      ],
+      "tags": [],
       "description": "transplanted 2024",
       "image": "images/r rub/1777239539.jpg",
       "postedBy": "Jenny",
@@ -397,11 +381,7 @@
       "id": "u dio-1777160703",
       "shortCode": "u dio",
       "zoneCode": "mpg",
-      "tags": [
-        "edible",
-        "potted",
-        "native"
-      ],
+      "tags": [],
       "description": null,
       "image": "images/u dio/1777160703.jpg",
       "postedBy": "Jenny",
@@ -435,9 +415,7 @@
       "id": "e ame-1777160369",
       "shortCode": "e ame",
       "zoneCode": "mpg",
-      "tags": [
-        "native"
-      ],
+      "tags": [],
       "description": "seed pod",
       "image": "images/e ame/1777160369.jpg",
       "postedBy": "Jenny",
@@ -471,10 +449,7 @@
       "id": "a tri-1777158209",
       "shortCode": "a tri",
       "zoneCode": "mpg",
-      "tags": [
-        "edible",
-        "native"
-      ],
+      "tags": [],
       "description": "transplanted 2025",
       "image": "images/a tri/1777158209.jpg",
       "postedBy": "Jenny",
@@ -509,8 +484,7 @@
       "shortCode": "h acu",
       "zoneCode": "mpg",
       "tags": [
-        "bloom",
-        "native"
+        "bloom"
       ],
       "description": null,
       "image": "images/h acu/1777156328.jpg",
@@ -546,9 +520,7 @@
       "shortCode": "v sor",
       "zoneCode": "mpg",
       "tags": [
-        "edible",
-        "bloom",
-        "native"
+        "bloom"
       ],
       "description": null,
       "image": "images/v sor/1777156147.jpg",
@@ -584,7 +556,6 @@
       "shortCode": "r rub pc",
       "zoneCode": "bb",
       "tags": [
-        "edible",
         "bloom"
       ],
       "description": null,
@@ -621,8 +592,7 @@
       "shortCode": "m vir",
       "zoneCode": "mpg",
       "tags": [
-        "bloom",
-        "native"
+        "bloom"
       ],
       "description": "one year",
       "image": "images/m. vir/1777154087.jpg",

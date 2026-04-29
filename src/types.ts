@@ -52,6 +52,13 @@ export interface Gallery {
   zones: Zone[];
 }
 
+export interface Annotation {
+  shortCode: string;
+  zoneCode: string | null;  // null = plant-level; string = plant+zone level
+  tags: string[];
+  description: string | null;
+}
+
 export interface SpeciesTaxonomy {
   kingdom: string | null;
   phylum: string | null;

@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback, useEffect, useMemo } from "react";
-import type { Plant, Zone } from "../types";
+import type { Annotation, Plant, Zone } from "../types";
 import type { SortMode } from "../utils/sorting";
 import type { Filters } from "../utils/filtering";
 import PlantCard from "./PlantCard";
@@ -236,6 +236,7 @@ interface MasonryGridProps {
   plants: Plant[];
   allPlants: Plant[];
   zones: Zone[];
+  annotations: Annotation[];
   sortMode: SortMode;
   onSort: (mode: SortMode) => void;
   filters: Filters;
@@ -249,6 +250,7 @@ export default function MasonryGrid({
   plants,
   allPlants,
   zones,
+  annotations,
   sortMode,
   onSort,
   filters,
@@ -425,6 +427,7 @@ export default function MasonryGrid({
           <FilterControl
             plants={allPlants}
             zones={zones}
+            annotations={annotations}
             filters={filters}
             onFiltersChange={onFiltersChange}
           />

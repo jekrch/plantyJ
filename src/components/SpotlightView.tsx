@@ -162,8 +162,15 @@ export default function SpotlightView({
           >
             <img
               src={heroSrc}
+              alt=""
+              aria-hidden
+              className="absolute inset-0 w-full h-full object-cover scale-110 blur-xl brightness-50"
+              draggable={false}
+            />
+            <img
+              src={heroSrc}
               alt={heroTitle}
-              className="block w-full h-full object-contain"
+              className="relative z-10 block w-full h-full object-contain"
               draggable={false}
             />
           </div>
@@ -199,18 +206,28 @@ export default function SpotlightView({
             {items.length} photo{items.length === 1 ? "" : "s"}
           </p>
           <div className="columns-3 sm:columns-4 md:columns-5 lg:columns-6 gap-1.5">
-            {items.map((it) => (
-              <Thumb
-                key={it.id}
-                item={it}
-                active={it.id === hero.id}
-                onSingleClick={() => setSelectedId(it.id)}
-                onDoubleClick={() => {
-                  if (it.kind === "plant") onOpenViewer(it.plant);
-                  else setSelectedId(it.id);
-                }}
-              />
-            ))}
+            {items.map((it) => {
+              let thumbLabel: string | undefined;
+              if (kind === "plant" && it.kind === "plant") {
+                const z = zones.find((z) => z.code === it.plant.zoneCode);
+                thumbLabel = z?.name ?? it.plant.zoneCode;
+              } else if (kind === "zone" && it.kind === "plant") {
+                thumbLabel = plantTitle(it.plant);
+              }
+              return (
+                <Thumb
+                  key={it.id}
+                  item={it}
+                  active={it.id === hero.id}
+                  label={thumbLabel}
+                  onSingleClick={() => setSelectedId(it.id)}
+                  onDoubleClick={() => {
+                    if (it.kind === "plant") onOpenViewer(it.plant);
+                    else setSelectedId(it.id);
+                  }}
+                />
+              );
+            })}
           </div>
         </div>
       )}
@@ -221,11 +238,12 @@ export default function SpotlightView({
 interface ThumbProps {
   item: SpotlightItem;
   active: boolean;
+  label?: string;
   onSingleClick: () => void;
   onDoubleClick: () => void;
 }
 
-function Thumb({ item, active, onSingleClick, onDoubleClick }: ThumbProps) {
+function Thumb({ item, active, label, onSingleClick, onDoubleClick }: ThumbProps) {
   const lastTap = useRef<{ time: number; x: number; y: number } | null>(null);
   const lastClick = useRef<{ time: number; x: number; y: number } | null>(null);
 
@@ -292,6 +310,11 @@ function Thumb({ item, active, onSingleClick, onDoubleClick }: ThumbProps) {
         className="block w-full h-full object-cover"
         draggable={false}
       />
+      {label && (
+        <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[12px] text-white/80 bg-linear-to-t from-black/80 to-black/20 leading-tight truncate pointer-events-none">
+          {label}
+        </span>
+      )}
       {active && (
         <span className="absolute inset-0 ring-2 ring-inset ring-accent/80 rounded-sm pointer-events-none" />
       )}

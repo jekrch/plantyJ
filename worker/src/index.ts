@@ -7,6 +7,7 @@ import {
   appendZonePic,
   arrayBufferToBase64,
   commitFile,
+  deleteAnnotation,
   deletePic,
   deleteZone,
   deleteZonePic,
@@ -14,6 +15,7 @@ import {
   nextSeq,
   readGallery,
   updateBySeq,
+  upsertAnnotation,
   upsertZone,
 } from "./github";
 
@@ -59,6 +61,15 @@ Pic commands:
 Updatable fields:
   Plant-level (apply to all pics of the plant): shortCode, fullName, commonName
   Pic-level (apply only to this pic): zoneCode, tags, description
+
+Annotation commands (persistent across all pics):
+  /annotate {shortCode} // tags // {tags} — set plant-level tags (comma-separated)
+  /annotate {shortCode} // description // {desc} — set plant-level description
+  /annotate {shortCode} // {zoneCode} // tags // {tags} — set plant+zone tags
+  /annotate {shortCode} // {zoneCode} // description // {desc} — set plant+zone description
+  /deleteannotation {shortCode} — remove plant-level annotation
+  /deleteannotation {shortCode} // {zoneCode} — remove plant+zone annotation
+  Set tags to "-" or leave value empty to clear.
 
 Zone commands:
   /addzone {code} {name} — Create or rename a zone (name optional)
@@ -281,6 +292,64 @@ export default {
             updated
               ? `Updated pic #${seq}: ${field} → "${value}"\n→ ${updated.pic.shortCode}`
               : `No pic found with ID ${seq}.`
+          );
+          return new Response("OK");
+        }
+
+        if (text.startsWith("/annotate ")) {
+          const parts = text.slice("/annotate ".length).split("//").map((s) => s.trim());
+          const isField = (s: string): s is "tags" | "description" =>
+            s === "tags" || s === "description";
+
+          let shortCode: string, zoneCode: string | null, field: "tags" | "description", value: string;
+
+          if (parts.length >= 3 && isField(parts[1])) {
+            shortCode = parts[0];
+            zoneCode = null;
+            field = parts[1];
+            value = parts.slice(2).join("//");
+          } else if (parts.length >= 4 && isField(parts[2])) {
+            shortCode = parts[0];
+            zoneCode = parts[1];
+            field = parts[2];
+            value = parts.slice(3).join("//");
+          } else {
+            await sendReply(
+              env.TELEGRAM_BOT_TOKEN,
+              message.chat.id,
+              message.message_id,
+              `Invalid format. Use:\n  /annotate shortCode // tags // value\n  /annotate shortCode // zoneCode // tags // value`
+            );
+            return new Response("OK");
+          }
+
+          const entry = await upsertAnnotation(env, shortCode, zoneCode, field, value.trim() === "-" ? "" : value);
+          const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
+          const lines = [
+            `Annotated ${scope}:`,
+            entry.tags.length > 0 ? `  Tags: ${entry.tags.join(", ")}` : null,
+            entry.description ? `  Note: ${entry.description}` : null,
+          ].filter(Boolean);
+          await sendReply(
+            env.TELEGRAM_BOT_TOKEN,
+            message.chat.id,
+            message.message_id,
+            lines.join("\n") || `Cleared annotation for ${scope}.`
+          );
+          return new Response("OK");
+        }
+
+        if (text.startsWith("/deleteannotation ")) {
+          const parts = text.slice("/deleteannotation ".length).split("//").map((s) => s.trim());
+          const shortCode = parts[0];
+          const zoneCode = parts[1] || null;
+          const removed = await deleteAnnotation(env, shortCode, zoneCode);
+          const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
+          await sendReply(
+            env.TELEGRAM_BOT_TOKEN,
+            message.chat.id,
+            message.message_id,
+            removed ? `Deleted annotation for ${scope}.` : `No annotation found for ${scope}.`
           );
           return new Response("OK");
         }

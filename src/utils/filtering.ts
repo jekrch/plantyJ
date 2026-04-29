@@ -1,4 +1,4 @@
-import type { Plant, Zone } from "../types";
+import type { Annotation, Plant, Zone } from "../types";
 import { plantTitle } from "./display";
 
 export interface Filters {
@@ -38,15 +38,30 @@ function plantMatchesZones(plant: Plant, zoneFilter: Set<string>): boolean {
   return zoneFilter.has(plant.zoneCode);
 }
 
-export function applyFilters(plants: Plant[], filters: Filters): Plant[] {
+export function getEffectiveTags(plant: Plant, annotations: Annotation[]): string[] {
+  const plantAnnotation = annotations.find(
+    (a) => a.shortCode === plant.shortCode && a.zoneCode === null
+  );
+  const zoneAnnotation = annotations.find(
+    (a) => a.shortCode === plant.shortCode && a.zoneCode === plant.zoneCode
+  );
+  const all = new Set([
+    ...(plant.tags ?? []),
+    ...(plantAnnotation?.tags ?? []),
+    ...(zoneAnnotation?.tags ?? []),
+  ]);
+  return Array.from(all);
+}
+
+export function applyFilters(plants: Plant[], filters: Filters, annotations: Annotation[] = []): Plant[] {
   if (!hasActiveFilters(filters)) return plants;
   return plants.filter((p) => {
     if (!plantMatchesZones(p, filters.zoneCodes)) return false;
     if (filters.shortCodes.size > 0 && !filters.shortCodes.has(p.shortCode)) return false;
     if (filters.postedBy.size > 0 && !filters.postedBy.has(p.postedBy)) return false;
     if (filters.tags.size > 0) {
-      const tags = p.tags ?? [];
-      if (!tags.some((t) => filters.tags.has(t))) return false;
+      const effective = getEffectiveTags(p, annotations);
+      if (!effective.some((t) => filters.tags.has(t))) return false;
     }
     return true;
   });
@@ -69,18 +84,19 @@ function pickZoneLabel(zones: Zone[], code: string): string {
   return zones.find((z) => z.code === code)?.name ?? code;
 }
 
-export function computeFacets(plants: Plant[], filters: Filters, zones: Zone[]) {
+export function computeFacets(plants: Plant[], filters: Filters, zones: Zone[], annotations: Annotation[] = []) {
   const tagCounts = new Map<string, number>();
   const zoneCounts = new Map<string, number>();
   const postedByCounts = new Map<string, number>();
   const shortCodeCounts = new Map<string, number>();
 
   for (const p of plants) {
+    const effectiveTags = getEffectiveTags(p, annotations);
     const passZone = plantMatchesZones(p, filters.zoneCodes);
     const passShort = filters.shortCodes.size === 0 || filters.shortCodes.has(p.shortCode);
     const passPostedBy = filters.postedBy.size === 0 || filters.postedBy.has(p.postedBy);
     const passTags =
-      filters.tags.size === 0 || (p.tags ?? []).some((t) => filters.tags.has(t));
+      filters.tags.size === 0 || effectiveTags.some((t) => filters.tags.has(t));
 
     if (passShort && passPostedBy && passTags) {
       zoneCounts.set(p.zoneCode, (zoneCounts.get(p.zoneCode) ?? 0) + 1);
@@ -92,7 +108,7 @@ export function computeFacets(plants: Plant[], filters: Filters, zones: Zone[]) 
       postedByCounts.set(p.postedBy, (postedByCounts.get(p.postedBy) ?? 0) + 1);
     }
     if (passZone && passShort && passPostedBy) {
-      for (const t of p.tags ?? []) {
+      for (const t of effectiveTags) {
         tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
       }
     }

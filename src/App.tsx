@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
-import type { PicRecord, Plant, PlantRecord, Species, Zone, ZonePic } from "./types";
+import type { Annotation, PicRecord, Plant, PlantRecord, Species, Zone, ZonePic } from "./types";
 import { Sprout, House } from "lucide-react";
 import { sortPlantsAsync } from "./utils/sorting.ts";
 import type { SortMode } from "./utils/sorting.ts";
@@ -27,6 +27,7 @@ export default function App() {
   const [plantRecords, setPlantRecords] = useState<PlantRecord[]>([]);
   const [zones, setZones] = useState<Zone[]>([]);
   const [zonePics, setZonePics] = useState<ZonePic[]>([]);
+  const [annotations, setAnnotations] = useState<Annotation[]>([]);
   const [speciesByShortCode, setSpeciesByShortCode] = useState<
     Map<string, Species>
   >(new Map());
@@ -84,8 +85,11 @@ export default function App() {
       fetchJson<{ zonePics?: ZonePic[] }>("data/zone_pics.json").catch(
         () => ({ zonePics: [] as ZonePic[] })
       ),
+      fetchJson<{ annotations?: Annotation[] }>("data/annotations.json").catch(
+        () => ({ annotations: [] as Annotation[] })
+      ),
     ])
-      .then(([picsData, plantsData, zonesData, zonePicsData]) => {
+      .then(([picsData, plantsData, zonesData, zonePicsData, annotationsData]) => {
         const plantsByCode = new Map<string, PlantRecord>();
         for (const p of plantsData.plants ?? []) plantsByCode.set(p.shortCode, p);
 
@@ -103,6 +107,7 @@ export default function App() {
         setPlantRecords(plantsData.plants ?? []);
         setZones(zonesData.zones ?? []);
         setZonePics(zonePicsData.zonePics ?? []);
+        setAnnotations(annotationsData.annotations ?? []);
         setStatus("ready");
 
         // Load species data in parallel — non-blocking; fills in once available.
@@ -130,8 +135,8 @@ export default function App() {
   }, []);
 
   const filteredPlants = useMemo(
-    () => applyFilters(plants, filters),
-    [plants, filters]
+    () => applyFilters(plants, filters, annotations),
+    [plants, filters, annotations]
   );
 
   useEffect(() => {
@@ -305,6 +310,7 @@ export default function App() {
                   plants={sortedPlants}
                   allPlants={plants}
                   zones={zones}
+                  annotations={annotations}
                   sortMode={sortMode}
                   onSort={handleSortChange}
                   filters={filters}
@@ -361,6 +367,7 @@ export default function App() {
           allPlants={plants}
           zones={zones}
           zonePics={zonePics}
+          annotations={annotations}
           speciesByShortCode={speciesByShortCode}
           currentIndex={openIndex}
           onClose={handleCloseViewer}

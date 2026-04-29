@@ -1,0 +1,129 @@
+{
+  "annotations": [
+    {
+      "shortCode": "a tri",
+      "zoneCode": null,
+      "tags": [
+        "edible",
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "c vir",
+      "zoneCode": null,
+      "tags": [
+        "vine"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "e ame",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "h acu",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "m vir",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "r pix",
+      "zoneCode": null,
+      "tags": [
+        "edible"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "r rub",
+      "zoneCode": null,
+      "tags": [
+        "edible"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "r rub pc",
+      "zoneCode": null,
+      "tags": [
+        "edible"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "s can bob",
+      "zoneCode": null,
+      "tags": [
+        "edible"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "s can wyl",
+      "zoneCode": null,
+      "tags": [
+        "edible"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "s fle",
+      "zoneCode": null,
+      "tags": [
+        "basal",
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "s lat",
+      "zoneCode": null,
+      "tags": [
+        "basal",
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "u dio",
+      "zoneCode": null,
+      "tags": [
+        "edible",
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "v sor",
+      "zoneCode": null,
+      "tags": [
+        "edible",
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "u dio",
+      "zoneCode": "mpg",
+      "tags": [
+        "potted"
+      ],
+      "description": null
+    }
+  ]
+}
