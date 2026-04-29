@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "E mac",
+      "fullName": "Eurybia macrophylla",
+      "commonName": "Big-leaved Aster",
+      "variety": null
+    },
+    {
       "shortCode": "T cor",
       "fullName": "Tiarella cordifolia",
       "commonName": "Foamflower",
