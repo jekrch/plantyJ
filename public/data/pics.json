@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 30,
+      "id": "P arm-1777514589",
+      "shortCode": "P arm",
+      "zoneCode": "sy",
+      "tags": [
+        "edible"
+      ],
+      "description": "semi-dwarf on Marianna 2624 rootstock",
+      "image": "images/P arm/1777514589.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-30T02:03:10.371Z"
+    },
+    {
       "seq": 29,
       "id": "P cor-1777514149",
       "shortCode": "P cor",
@@ -22,7 +35,7 @@
         [
           66.4,
           -22.2,
-          59.0
+          59
         ],
         [
           76.4,
