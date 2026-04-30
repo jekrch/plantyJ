@@ -11,7 +11,30 @@
       "description": "semi-dwarf on Marianna 2624 rootstock",
       "image": "images/P arm/1777514589.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-30T02:03:10.371Z"
+      "addedAt": "2026-04-30T02:03:10.371Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "b2c34c6d23332bae",
+      "dominantColors": [
+        [
+          38.5,
+          3.4,
+          9.8
+        ],
+        [
+          55.0,
+          -2.4,
+          18.3
+        ],
+        [
+          78.9,
+          -0.6,
+          4.2
+        ]
+      ],
+      "bioclipSpeciesId": "Pyrus calleryana",
+      "bioclipCommonName": "Callery pear",
+      "bioclipScore": 0.2474
     },
     {
       "seq": 29,
