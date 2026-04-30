@@ -708,9 +708,9 @@ export default function TreeView({
         </div>
 
         {/* Hint */}
-        <p className="absolute bottom-3 left-3 text-[10px] font-mono text-ink-faint/70 pointer-events-none">
+        {/* <p className="absolute bottom-3 left-3 text-[10px] font-mono text-ink-faint/70 pointer-events-none">
           drag to pan · scroll/pinch to zoom · click a leaf to open · click a node to expand
-        </p>
+        </p> */}
       </div>
 
       {/* Pinned detail panel */}
