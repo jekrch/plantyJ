@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 33,
+      "id": "V vir-1777515350",
+      "shortCode": "V vir",
+      "zoneCode": "fy",
+      "tags": [
+        "native"
+      ],
+      "description": null,
+      "image": "images/V vir/1777515350.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-30T02:15:51.713Z"
+    },
+    {
       "seq": 32,
       "id": "P pyr 'shi'-1777515119",
       "shortCode": "P pyr 'shi'",
@@ -29,7 +42,7 @@
         [
           53.9,
           -16.9,
-          34.0
+          34
         ]
       ],
       "bioclipSpeciesId": "Pyrus calleryana",
