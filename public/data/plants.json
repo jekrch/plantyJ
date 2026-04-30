@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P arm",
+      "fullName": "Prunus armeniaca",
+      "commonName": "Apricot",
+      "variety": null
+    },
+    {
       "shortCode": "P cor",
       "fullName": "Philadelphus coronarius",
       "commonName": "Mock Orange",
