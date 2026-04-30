@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 31,
+      "id": "M dom 'red'-1777514915",
+      "shortCode": "M dom 'red'",
+      "zoneCode": "sy",
+      "tags": [
+        "edible"
+      ],
+      "description": "dwarf rootstock",
+      "image": "images/M dom 'red'/1777514915.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-30T02:08:36.563Z"
+    },
+    {
       "seq": 30,
       "id": "P arm-1777514589",
       "shortCode": "P arm",
@@ -22,7 +35,7 @@
           9.8
         ],
         [
-          55.0,
+          55,
           -2.4,
           18.3
         ],
