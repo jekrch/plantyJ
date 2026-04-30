@@ -199,6 +199,19 @@ export default function TreeView({
   const [pinned, setPinned] = useState<HierarchyPointNode<RawNode> | null>(
     null
   );
+  const [renderedPinned, setRenderedPinned] = useState<HierarchyPointNode<RawNode> | null>(null);
+  const [isClosing, setIsClosing] = useState(false);
+
+  // Sync `pinned` to `renderedPinned`
+  useEffect(() => {
+    if (pinned) {
+      setRenderedPinned(pinned);
+      setIsClosing(false);
+    } else if (renderedPinned) {
+      setIsClosing(true);
+    }
+  }, [pinned, renderedPinned]);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const pointersRef = useRef<Map<number, { cx: number; cy: number }>>(
     new Map()
@@ -701,10 +714,14 @@ export default function TreeView({
       </div>
 
       {/* Pinned detail panel */}
-      {pinned && (
+      {renderedPinned && (
         <NodeDetail
-          node={pinned}
+          node={renderedPinned}
           plants={plants}
+          isClosing={isClosing}
+          onAnimationEnd={() => {
+            if (isClosing) setRenderedPinned(null);
+          }}
           onClose={() => setPinned(null)}
           onOpenPlantInList={onOpenPlantInList}
           onSpotlightPlant={onSpotlightPlant}
@@ -738,12 +755,16 @@ function CtrlBtn({
 function NodeDetail({
   node,
   plants,
+  isClosing,
+  onAnimationEnd,
   onClose,
   onOpenPlantInList,
   onSpotlightPlant,
 }: {
   node: HierarchyPointNode<RawNode>;
   plants: Plant[];
+  isClosing?: boolean;
+  onAnimationEnd?: () => void;
   onClose: () => void;
   onOpenPlantInList: (plant: Plant, list: Plant[]) => void;
   onSpotlightPlant: (shortCode: string) => void;
@@ -795,7 +816,10 @@ function NodeDetail({
     : RANK_LABEL[node.data.rank];
 
   return (
-    <div className="bg-surface-raised border-t border-ink-faint/30 p-3 max-h-[45vh] overflow-y-auto shrink-0 thin-scroll">
+    <div 
+      className={`${isClosing ? "slide-down-out" : "slide-up-in"} bg-surface-raised border-t border-ink-faint/30 p-3 max-h-[45vh] overflow-y-auto shrink-0 thin-scroll`}
+      onAnimationEnd={onAnimationEnd}
+    >
       <div className="flex items-baseline justify-between gap-3 mb-2">
         <div className="min-w-0">
           <div className="flex items-baseline gap-2 flex-wrap">
@@ -826,7 +850,7 @@ function NodeDetail({
       {items.length === 0 ? (
         <p className="text-[11px] text-ink-faint">No images yet.</p>
       ) : (
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-1.5">
+        <div className="columns-3 sm:columns-4 md:columns-5 lg:columns-6 gap-1.5">
           {items.map((p) => {
             const aspect =
               p.width && p.height ? `${p.width} / ${p.height}` : "3 / 4";
@@ -837,7 +861,7 @@ function NodeDetail({
                 onClick={() =>
                   onOpenPlantInList(p, speciesPicsFor(plants, p.shortCode))
                 }
-                className="relative overflow-hidden rounded-sm bg-surface ring-1 ring-inset ring-white/5 hover:ring-accent/40 transition-all"
+                className="panel-item relative overflow-hidden rounded-sm bg-surface ring-1 ring-inset ring-white/5 hover:ring-accent/40 transition-all break-inside-avoid mb-1.5 block w-full"
                 style={{ aspectRatio: aspect }}
               >
                 <img

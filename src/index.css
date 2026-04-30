@@ -183,6 +183,35 @@ button,
   }
 }
 
+@keyframes slideUpIn {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up-in {
+  animation: slideUpIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes slideDownOut {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+.slide-down-out {
+  animation: slideDownOut 0.2s ease-in forwards;
+}
+
 .thin-scroll::-webkit-scrollbar {
   width: 4px;
 }
