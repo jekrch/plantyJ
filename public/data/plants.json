@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "V vir",
+      "fullName": "Veronicastrum virginicum",
+      "commonName": "Culver's Root",
+      "variety": null
+    },
+    {
       "shortCode": "P pyr 'shi'",
       "fullName": "Pyrus pyrifolia 'Shinseiki\"",
       "commonName": "Asian Pear",
