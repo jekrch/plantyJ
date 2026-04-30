@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "E yuc",
+      "fullName": "Eryngium yuccifolium",
+      "commonName": "Rattlesnake Master",
+      "variety": null
+    },
+    {
       "shortCode": "A scr",
       "fullName": "Agastache scrophulariifolia",
       "commonName": "Purple Giant Hyssop",
