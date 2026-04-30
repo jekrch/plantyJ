@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P cor",
+      "fullName": "Philadelphus coronarius",
+      "commonName": "Mock Orange",
+      "variety": null
+    },
+    {
       "shortCode": "A tub",
       "fullName": "Asclepias tuberosa",
       "commonName": "Butterfly Weed",
