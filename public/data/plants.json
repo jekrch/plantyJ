@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "S lan",
+      "fullName": "Scrophularia lanceolata",
+      "commonName": "Early Figwort",
+      "variety": null
+    },
+    {
       "shortCode": "E yuc",
       "fullName": "Eryngium yuccifolium",
       "commonName": "Rattlesnake Master",
