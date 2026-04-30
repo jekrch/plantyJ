@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "M dom 'red'",
+      "fullName": "Malus domestica",
+      "commonName": "Apple",
+      "variety": "Red Rome"
+    },
+    {
       "shortCode": "P arm",
       "fullName": "Prunus armeniaca",
       "commonName": "Apricot",
