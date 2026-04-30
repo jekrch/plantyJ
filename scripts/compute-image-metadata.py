@@ -20,11 +20,10 @@ from metadata.seed import seed_species
 from metadata.sources.gbif import backfill_gbif
 from metadata.sources.powo import backfill_powo
 from metadata.sources.wikipedia import backfill_wikipedia
-
-# New API Integrations
 from metadata.sources.inaturalist import backfill_inaturalist
 from metadata.sources.wikidata import backfill_wikidata
 from metadata.sources.natureserve import backfill_natureserve
+from metadata.sources.taxonomy_wiki import build_taxa_registry
 
 
 def load_species_entries() -> list[dict]:
@@ -68,7 +67,11 @@ def main():
         print("Backfilling Wikipedia descriptions...")
         wiki_count = backfill_wikipedia(species_entries)
         print(f"  Wikipedia processed {wiki_count} entries.")
-
+        
+        print("Building normalized Taxa registry...")
+        taxa_added = build_taxa_registry(species_entries)
+        print(f"  Added {taxa_added} new taxa to taxa.json.")
+        
         print("Backfilling iNaturalist data...")
         inat_count = backfill_inaturalist(species_entries)
         print(f"  iNaturalist processed {inat_count} entries.")
