@@ -200,14 +200,35 @@ export default function TreeView({
     null
   );
   const containerRef = useRef<HTMLDivElement>(null);
+  const pointersRef = useRef<Map<number, { cx: number; cy: number }>>(
+    new Map()
+  );
   const panRef = useRef<{
     pointerId: number;
-    startX: number;
-    startY: number;
+    startCX: number;
+    startCY: number;
     origX: number;
     origY: number;
     moved: boolean;
   } | null>(null);
+  const pinchRef = useRef<{
+    startDist: number;
+    startMidCX: number;
+    startMidCY: number;
+    startK: number;
+    startTx: number;
+    startTy: number;
+  } | null>(null);
+
+  const clientToContainer = useCallback(
+    (clientX: number, clientY: number) => {
+      const el = containerRef.current;
+      if (!el) return { cx: clientX, cy: clientY };
+      const rect = el.getBoundingClientRect();
+      return { cx: clientX - rect.left, cy: clientY - rect.top };
+    },
+    []
+  );
 
   const fitToView = useCallback(() => {
     const el = containerRef.current;
@@ -259,28 +280,79 @@ export default function TreeView({
     []
   );
 
-  const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.button !== 0) return;
-    panRef.current = {
-      pointerId: e.pointerId,
-      startX: e.clientX,
-      startY: e.clientY,
-      origX: transform.x,
-      origY: transform.y,
-      moved: false,
-    };
-  }, [transform.x, transform.y]);
+  const onPointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      const { cx, cy } = clientToContainer(e.clientX, e.clientY);
+      pointersRef.current.set(e.pointerId, { cx, cy });
+
+      if (pointersRef.current.size === 1) {
+        // Single pointer → defer capture until movement so child clicks survive.
+        pinchRef.current = null;
+        panRef.current = {
+          pointerId: e.pointerId,
+          startCX: cx,
+          startCY: cy,
+          origX: transform.x,
+          origY: transform.y,
+          moved: false,
+        };
+      } else if (pointersRef.current.size === 2) {
+        // Promote to pinch — capture both pointers immediately.
+        panRef.current = null;
+        const target = e.currentTarget as HTMLElement;
+        for (const id of pointersRef.current.keys()) {
+          try {
+            target.setPointerCapture(id);
+          } catch {}
+        }
+        const pts = Array.from(pointersRef.current.values());
+        const dx = pts[1].cx - pts[0].cx;
+        const dy = pts[1].cy - pts[0].cy;
+        pinchRef.current = {
+          startDist: Math.max(1, Math.hypot(dx, dy)),
+          startMidCX: (pts[0].cx + pts[1].cx) / 2,
+          startMidCY: (pts[0].cy + pts[1].cy) / 2,
+          startK: transform.k,
+          startTx: transform.x,
+          startTy: transform.y,
+        };
+      }
+    },
+    [transform.x, transform.y, transform.k, clientToContainer]
+  );
 
   const onPointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!pointersRef.current.has(e.pointerId)) return;
+      const { cx, cy } = clientToContainer(e.clientX, e.clientY);
+      pointersRef.current.set(e.pointerId, { cx, cy });
+
+      const pinch = pinchRef.current;
+      if (pinch && pointersRef.current.size >= 2) {
+        const pts = Array.from(pointersRef.current.values()).slice(0, 2);
+        const dx = pts[1].cx - pts[0].cx;
+        const dy = pts[1].cy - pts[0].cy;
+        const dist = Math.max(1, Math.hypot(dx, dy));
+        const midCX = (pts[0].cx + pts[1].cx) / 2;
+        const midCY = (pts[0].cy + pts[1].cy) / 2;
+        const rawK = pinch.startK * (dist / pinch.startDist);
+        const k = Math.min(4, Math.max(0.2, rawK));
+        const ratio = k / pinch.startK;
+        // Scale around the original midpoint, then translate by midpoint drift
+        // so two-finger drag also pans.
+        const x = midCX - (pinch.startMidCX - pinch.startTx) * ratio;
+        const y = midCY - (pinch.startMidCY - pinch.startTy) * ratio;
+        setTransform({ x, y, k });
+        return;
+      }
+
       const p = panRef.current;
       if (!p || p.pointerId !== e.pointerId) return;
-      const dx = e.clientX - p.startX;
-      const dy = e.clientY - p.startY;
+      const dx = cx - p.startCX;
+      const dy = cy - p.startCY;
       if (!p.moved && Math.hypot(dx, dy) > 4) {
         p.moved = true;
-        // Capture only once a real drag begins so simple clicks still target
-        // the inner leaf/node element instead of being redirected to this div.
         try {
           (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
         } catch {}
@@ -288,19 +360,41 @@ export default function TreeView({
       if (!p.moved) return;
       setTransform((t) => ({ ...t, x: p.origX + dx, y: p.origY + dy }));
     },
-    []
+    [clientToContainer]
   );
 
   const onPointerUp = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
-      const p = panRef.current;
-      if (!p || p.pointerId !== e.pointerId) return;
-      panRef.current = null;
+      pointersRef.current.delete(e.pointerId);
       try {
         (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
       } catch {}
+
+      if (pointersRef.current.size < 2) {
+        pinchRef.current = null;
+      }
+      if (panRef.current && panRef.current.pointerId === e.pointerId) {
+        panRef.current = null;
+      }
+      if (pointersRef.current.size === 1) {
+        // Pinch ended with a finger still down — resume panning from here.
+        let remId = -1;
+        let remPos = { cx: 0, cy: 0 };
+        for (const [id, pos] of pointersRef.current) {
+          remId = id;
+          remPos = pos;
+        }
+        panRef.current = {
+          pointerId: remId,
+          startCX: remPos.cx,
+          startCY: remPos.cy,
+          origX: transform.x,
+          origY: transform.y,
+          moved: true,
+        };
+      }
     },
-    []
+    [transform.x, transform.y]
   );
 
   const zoomBy = useCallback((factor: number) => {
@@ -602,7 +696,7 @@ export default function TreeView({
 
         {/* Hint */}
         <p className="absolute bottom-3 left-3 text-[10px] font-mono text-ink-faint/70 pointer-events-none">
-          drag to pan · scroll to zoom · click a leaf to open · click a node to expand
+          drag to pan · scroll/pinch to zoom · click a leaf to open · click a node to expand
         </p>
       </div>
 
@@ -701,7 +795,7 @@ function NodeDetail({
     : RANK_LABEL[node.data.rank];
 
   return (
-    <div className="bg-surface-raised border-t border-ink-faint/30 p-3 max-h-[45vh] overflow-y-auto shrink-0">
+    <div className="bg-surface-raised border-t border-ink-faint/30 p-3 max-h-[45vh] overflow-y-auto shrink-0 thin-scroll">
       <div className="flex items-baseline justify-between gap-3 mb-2">
         <div className="min-w-0">
           <div className="flex items-baseline gap-2 flex-wrap">
