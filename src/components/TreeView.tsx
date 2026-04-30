@@ -57,6 +57,11 @@ const LABEL_COL = 220;
 const PAD_X = 60;
 const PAD_Y = 56;
 
+// Multiplier applied to the fit-to-view zoom on first load. >1 zooms in past
+// the "everything visible" baseline; the initial viewport is then anchored so
+// the species column (right edge of tree) and rank headers (top) stay in view.
+const INITIAL_ZOOM_FACTOR = 2.5;
+
 const RANK_LABEL: Record<Rank, string> = {
   root: "Life",
   kingdom: "Kingdom",
@@ -258,11 +263,29 @@ export default function TreeView({
     return true;
   }, [layout.width, layout.height]);
 
+  const initialView = useCallback(() => {
+    const el = containerRef.current;
+    if (!el) return false;
+    const cw = el.clientWidth;
+    const ch = el.clientHeight;
+    if (!cw || !ch) return false;
+    const fitK = Math.min(cw / layout.width, ch / layout.height, 1);
+    const k = Math.min(4, Math.max(0.2, fitK * INITIAL_ZOOM_FACTOR));
+    const scaledW = layout.width * k;
+    // If the full tree fits horizontally at this zoom, center it; otherwise
+    // right-align so species labels sit at the right edge of the viewport.
+    // Top-align so rank headers stay visible at the top either way.
+    const x = scaledW <= cw ? (cw - scaledW) / 2 : cw - scaledW;
+    const y = 0;
+    setTransform({ x, y, k });
+    return true;
+  }, [layout.width, layout.height]);
+
   // Run the initial fit synchronously before paint so the user never sees
   // the un-fitted (zoomed-in, top-left) frame.
   useLayoutEffect(() => {
-    if (fitToView()) setReady(true);
-  }, [fitToView]);
+    if (initialView()) setReady(true);
+  }, [initialView]);
 
   useEffect(() => {
     const onResize = () => fitToView();
