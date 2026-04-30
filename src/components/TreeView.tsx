@@ -287,12 +287,6 @@ export default function TreeView({
     if (initialView()) setReady(true);
   }, [initialView]);
 
-  useEffect(() => {
-    const onResize = () => fitToView();
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [fitToView]);
-
   const onWheel = useCallback(
     (e: React.WheelEvent<HTMLDivElement>) => {
       if (!e.ctrlKey && !e.metaKey && Math.abs(e.deltaY) < 30) {
@@ -728,26 +722,27 @@ export default function TreeView({
           </CtrlBtn>
         </div>
 
-        {/* Pinned detail panel — absolute overlay so the tree canvas never resizes */}
-        {renderedPinned && (
-          <div className="absolute bottom-0 left-0 right-0 z-20 flex justify-center pointer-events-none">
-            <div className="w-full max-w-3xl pointer-events-auto" onWheel={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()}>
-              <NodeDetail
-                node={renderedPinned}
-                plants={plants}
-                taxa={taxa}
-                isClosing={isClosing}
-                onAnimationEnd={() => {
-                  if (isClosing) setRenderedPinned(null);
-                }}
-                onClose={() => setPinned(null)}
-                onOpenPlantInList={onOpenPlantInList}
-                onSpotlightPlant={onSpotlightPlant}
-              />
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* Pinned detail panel — outside the touch-action:none canvas so mobile scroll works */}
+      {renderedPinned && (
+        <div className="absolute bottom-0 left-0 right-0 z-20 flex justify-center pointer-events-none">
+          <div className="w-full max-w-3xl pointer-events-auto" onWheel={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()}>
+            <NodeDetail
+              node={renderedPinned}
+              plants={plants}
+              taxa={taxa}
+              isClosing={isClosing}
+              onAnimationEnd={() => {
+                if (isClosing) setRenderedPinned(null);
+              }}
+              onClose={() => setPinned(null)}
+              onOpenPlantInList={onOpenPlantInList}
+              onSpotlightPlant={onSpotlightPlant}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
