@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P pyr 'shi'",
+      "fullName": "Pyrus pyrifolia 'Shinseiki\"",
+      "commonName": "Asian Pear",
+      "variety": null
+    },
+    {
       "shortCode": "M dom 'red'",
       "fullName": "Malus domestica",
       "commonName": "Apple",
