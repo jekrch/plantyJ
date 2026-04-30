@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "R lac",
+      "fullName": "Rudbeckia laciniata",
+      "commonName": "Sochan",
+      "variety": null
+    },
+    {
       "shortCode": "S lan",
       "fullName": "Scrophularia lanceolata",
       "commonName": "Early Figwort",
