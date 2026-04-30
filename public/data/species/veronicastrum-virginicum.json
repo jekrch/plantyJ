@@ -1,0 +1,60 @@
+{
+  "id": "veronicastrum-virginicum",
+  "fullName": "Veronicastrum virginicum",
+  "commonName": "Culver's Root",
+  "description": "Veronicastrum virginicum, or Culver's root, is a species of flowering plant in the plantain family, Plantaginaceae. It is native to the eastern United States and south-eastern Canada. Growing to 200 cm (79 in) tall by 45 cm (18 in) broad, it is an erect herbaceous perennial with slender racemes of white or occasionally pink or purple flowers in summer.",
+  "vernacularNames": [
+    "Blackroot",
+    "Bowman's-root",
+    "Culver's Root",
+    "Culver's-root",
+    "Tall-speedwell",
+    "Virginia Culver's root"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Lamiales",
+    "family": "Plantaginaceae",
+    "genus": "Veronicastrum",
+    "species": "Veronicastrum virginicum",
+    "canonicalName": "Veronicastrum virginicum"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/3172206"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:264772-2"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Veronicastrum_virginicum"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/141767"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q4108065"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.138942"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 13391
+}

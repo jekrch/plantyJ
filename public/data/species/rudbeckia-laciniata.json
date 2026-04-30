@@ -1,0 +1,58 @@
+{
+  "id": "rudbeckia-laciniata",
+  "fullName": "Rudbeckia laciniata",
+  "commonName": "Sochan",
+  "description": "Rudbeckia laciniata, the cutleaf coneflower, is a species of flowering plant in the family Asteraceae. Other common names include cutleaf, goldenglow, green-headed coneflower, tall coneflower, sochan and thimbleweed. It is native to North American floodplains, stream banks, and moist forests. Although toxic to animals, the leaves have culinary uses.",
+  "vernacularNames": [
+    "Coneflower",
+    "Cut-leaf Coneflower",
+    "Cutleaf Coneflower",
+    "cutleaf coneflower"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Asterales",
+    "family": "Asteraceae",
+    "genus": "Rudbeckia",
+    "species": "Rudbeckia laciniata",
+    "canonicalName": "Rudbeckia laciniata"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/3114229"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:241716-1"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rudbeckia_laciniata"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/116735"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q1194614"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.128829"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 36686
+}

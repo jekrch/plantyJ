@@ -1,0 +1,60 @@
+{
+  "id": "scrophularia-lanceolata",
+  "fullName": "Scrophularia lanceolata",
+  "commonName": "Early Figwort",
+  "description": "Scrophularia lanceolata is a species of flowering plant in the figwort family known by the common names lanceleaf figwort and American figwort. It is native to North America, where it is known from western and eastern Canada and much of the United States except for the southeastern quadrant. Past common names include Western figwort when the western US plants were grouped under the name Scrophularia occidentalis and the eastern US plants were called Scrophularia leporella with the common name hare figwort.",
+  "vernacularNames": [
+    "American Figwort",
+    "Lanceleaf Figwort",
+    "hare figwort",
+    "lance-leaved figwort",
+    "Lanceolate Figwort",
+    "lanceleaf figwort"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Lamiales",
+    "family": "Scrophulariaceae",
+    "genus": "Scrophularia",
+    "species": "Scrophularia lanceolata",
+    "canonicalName": "Scrophularia lanceolata"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/3170878"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:809288-1"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Scrophularia_lanceolata"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/79012"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q7439304"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.161263"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 3818
+}
