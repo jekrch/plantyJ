@@ -7,7 +7,7 @@ import {
   useCallback,
 } from "react";
 import { hierarchy, cluster, type HierarchyPointNode } from "d3-hierarchy";
-import { Sprout, ZoomIn, ZoomOut, Maximize2, LoaderCircle, ExternalLink } from "lucide-react";
+import { Sprout, ZoomIn, ZoomOut, Maximize2, LoaderCircle, ExternalLink, X } from "lucide-react";
 import type { Plant, Species, TaxaInfo } from "../types";
 import { plantTitle } from "../utils/display";
 
@@ -876,11 +876,12 @@ function NodeDetail({
             )}
           </div>
           <button
-            type="button"
             onClick={onClose}
-            className="text-[10px] font-mono uppercase tracking-wider text-ink-muted hover:text-accent transition-colors shrink-0"
+            className="flex items-center justify-center h-7 w-7 rounded-md text-ink-muted hover:text-ink hover:bg-white/5 transition-colors"
+            title="Close (Esc)"
+            aria-label="Close"
           >
-            close
+            <X size={16} strokeWidth={1.5} />
           </button>
         </div>
 
@@ -909,7 +910,7 @@ function NodeDetail({
             className={`space-y-3 ${tab === "info" ? "" : "invisible pointer-events-none"}`}
           >
             {taxaInfo?.description ? (
-              <p className="text-[12px] leading-relaxed text-ink/90">
+              <p className="text-[12px] leading-relaxed text-ink/90 max-w-[60em]">
                 {taxaInfo.description}
               </p>
             ) : (
