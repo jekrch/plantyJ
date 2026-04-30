@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 32,
+      "id": "P pyr 'shi'-1777515119",
+      "shortCode": "P pyr 'shi'",
+      "zoneCode": "sy",
+      "tags": [
+        "edible"
+      ],
+      "description": "dwarf rootstock",
+      "image": "images/P pyr 'shi'/1777515119.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-04-30T02:12:00.777Z"
+    },
+    {
       "seq": 31,
       "id": "M dom 'red'-1777514915",
       "shortCode": "M dom 'red'",
