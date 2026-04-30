@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A scr",
+      "fullName": "Agastache scrophulariifolia",
+      "commonName": "Purple Giant Hyssop",
+      "variety": null
+    },
+    {
       "shortCode": "V vir",
       "fullName": "Veronicastrum virginicum",
       "commonName": "Culver's Root",
