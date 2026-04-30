@@ -11,7 +11,30 @@
       "description": "dwarf rootstock",
       "image": "images/P pyr 'shi'/1777515119.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-30T02:12:00.777Z"
+      "addedAt": "2026-04-30T02:12:00.777Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "95d2da6f9fb02094",
+      "dominantColors": [
+        [
+          43.9,
+          -2.7,
+          12.4
+        ],
+        [
+          77.8,
+          -1.2,
+          4.3
+        ],
+        [
+          53.9,
+          -16.9,
+          34.0
+        ]
+      ],
+      "bioclipSpeciesId": "Pyrus calleryana",
+      "bioclipCommonName": "Callery pear",
+      "bioclipScore": 0.3527
     },
     {
       "seq": 31,
@@ -24,7 +47,30 @@
       "description": "dwarf rootstock",
       "image": "images/M dom 'red'/1777514915.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-30T02:08:36.563Z"
+      "addedAt": "2026-04-30T02:08:36.563Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "d9c0c81f1f0391fe",
+      "dominantColors": [
+        [
+          44.3,
+          -3.8,
+          13.5
+        ],
+        [
+          75.1,
+          -1.2,
+          7.6
+        ],
+        [
+          56.3,
+          -23.2,
+          36.5
+        ]
+      ],
+      "bioclipSpeciesId": "Malus domestica",
+      "bioclipCommonName": "Apple",
+      "bioclipScore": 0.1248
     },
     {
       "seq": 30,
