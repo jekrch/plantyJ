@@ -1,0 +1,60 @@
+{
+  "id": "philadelphus-coronarius",
+  "fullName": "Philadelphus coronarius",
+  "commonName": "Mock Orange",
+  "description": "Philadelphus coronarius (sweet mock orange, English dogwood) is a species of flowering plant in the family Hydrangeaceae, native to the Caucasus and northeastern Turkey.",
+  "vernacularNames": [
+    "European mock-orange",
+    "Mock Orange",
+    "Mock-orange",
+    "Philadelphia mock-orange",
+    "Sweet Mock Orange",
+    "garden syringa"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Cornales",
+    "family": "Hydrangeaceae",
+    "genus": "Philadelphus",
+    "species": "Philadelphus coronarius",
+    "canonicalName": "Philadelphus coronarius"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/2986045"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:792194-1"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Philadelphus_coronarius"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/52468"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q163791"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.154656"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 19131
+}
