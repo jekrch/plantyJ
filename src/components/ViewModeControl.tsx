@@ -7,9 +7,10 @@ import {
   LayoutGrid,
   Sprout,
   Map as MapIcon,
+  TreeDeciduous,
 } from "lucide-react";
 
-export type ViewMode = "gallery" | "plant" | "zone";
+export type ViewMode = "gallery" | "plant" | "zone" | "tree";
 
 interface Props {
   mode: ViewMode;
@@ -75,8 +76,8 @@ export default function ViewModeControl({
   }, [zones, plants]);
 
   const setMode = (next: ViewMode) => {
-    if (next === "gallery") {
-      onChange("gallery", null);
+    if (next === "gallery" || next === "tree") {
+      onChange(next, null);
       return;
     }
     const options = next === "plant" ? plantOptions : zoneOptions;
@@ -87,10 +88,11 @@ export default function ViewModeControl({
     onChange(next, keep);
   };
 
+  const hasSubject = mode === "plant" || mode === "zone";
   const activeOptions =
     mode === "plant" ? plantOptions : mode === "zone" ? zoneOptions : [];
   const activeOption =
-    mode !== "gallery" && subjectCode
+    hasSubject && subjectCode
       ? activeOptions.find((o) => o.code === subjectCode)
       : null;
 
@@ -118,12 +120,19 @@ export default function ViewModeControl({
         >
           <MapIcon size={13} strokeWidth={1.5} />
         </SegBtn>
+        <SegBtn
+          active={mode === "tree"}
+          onClick={() => setMode("tree")}
+          label="Tree"
+        >
+          <TreeDeciduous size={13} strokeWidth={1.5} />
+        </SegBtn>
       </div>
 
-      {mode !== "gallery" && (
+      {hasSubject && (
         <div className="mt-4 self-center -mb-3">
           <SubjectPicker
-            mode={mode}
+            mode={mode as "plant" | "zone"}
             options={activeOptions}
             value={subjectCode}
             activeLabel={activeOption?.label ?? subjectCode ?? "Select"}

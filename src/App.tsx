@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import type { Annotation, PicRecord, Plant, PlantRecord, Species, Zone, ZonePic } from "./types";
 import { Sprout, House } from "lucide-react";
 import { sortPlantsAsync } from "./utils/sorting.ts";
@@ -12,6 +12,7 @@ import { useFilterParams } from "./hooks/useFilterParams";
 import PlantViewer from "./components/PlantViewer";
 import InfoModal from "./components/InfoModal";
 import SpotlightView from "./components/SpotlightView";
+import TreeView from "./components/TreeView";
 import ViewModeControl from "./components/ViewModeControl";
 import type { ViewMode } from "./components/ViewModeControl";
 
@@ -49,10 +50,27 @@ export default function App() {
   const [openPlantId, setOpenPlantId] = useState<string | null>(
     () => new URLSearchParams(window.location.search).get("plant")
   );
-  const [viewerScope, setViewerScope] = useState<"filtered" | "all" | "spotlight">("filtered");
+  const [viewerScope, setViewerScope] = useState<
+    "filtered" | "all" | "spotlight" | "custom"
+  >("filtered");
+  const [customViewerPlants, setCustomViewerPlants] = useState<Plant[] | null>(
+    null
+  );
   const [infoOpen, setInfoOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>(initialView);
   const [spotlightCode, setSpotlightCode] = useState<string | null>(initialSubject);
+  const headerRef = useRef<HTMLElement>(null);
+  const [headerHeight, setHeaderHeight] = useState(0);
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const update = () => setHeaderHeight(el.offsetHeight);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const handleFiltersChange = useCallback(
     (next: Filters) => {
@@ -163,9 +181,16 @@ export default function App() {
     setOpenPlantId(plant.id);
   }, []);
 
+  const handleOpenInList = useCallback((plant: Plant, list: Plant[]) => {
+    setCustomViewerPlants(list);
+    setViewerScope("custom");
+    setOpenPlantId(plant.id);
+  }, []);
+
   const handleCloseViewer = useCallback(() => {
     setOpenPlantId(null);
     setViewerScope("filtered");
+    setCustomViewerPlants(null);
   }, []);
 
   const handleViewModeChange = useCallback(
@@ -232,7 +257,9 @@ export default function App() {
   }, [plants, viewMode, spotlightCode]);
 
   const viewerPlants =
-    viewerScope === "spotlight" && spotlightPlants.length > 0
+    viewerScope === "custom" && customViewerPlants
+      ? customViewerPlants
+      : viewerScope === "spotlight" && spotlightPlants.length > 0
       ? spotlightPlants
       : viewerScope === "all"
       ? plants
@@ -253,8 +280,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-surface relative">
-      <BackgroundEchoes plantPositions={plantPositions} />
-      <header className="sticky top-0 z-40 bg-surface/90 backdrop-blur-sm border-b border-ink-faint/30 pl-1!">
+      {viewMode === "gallery" && (
+        <BackgroundEchoes plantPositions={plantPositions} />
+      )}
+      <header ref={headerRef} className="sticky top-0 z-40 bg-surface/90 backdrop-blur-sm border-b border-ink-faint/30 pl-1!">
         <div className="content-container px-1 py-0 flex items-center justify-between">
           <div className="flex items-center gap-2 px-2 py-2">
             <Sprout
@@ -278,6 +307,18 @@ export default function App() {
             <House color={"#b08968"} size={20} strokeWidth={1.5} />
           </button>
         </div>
+        {status === "ready" && plants.length > 0 && viewMode === "tree" && (
+          <div className="content-container px-1 pt-2 pb-3 border-t border-ink-faint/20">
+            <ViewModeControl
+              mode={viewMode}
+              subjectCode={spotlightCode}
+              plants={plants}
+              plantRecords={plantRecords}
+              zones={zones}
+              onChange={handleViewModeChange}
+            />
+          </div>
+        )}
       </header>
 
       <main className="content-container px-1 pt-0 pb-12 sm:px-1 sm:pt-0">
@@ -293,16 +334,18 @@ export default function App() {
             className="transition-opacity duration-700 ease-out"
             style={{ opacity: viewMode !== "gallery" || imagesLoaded ? 1 : 0 }}
           >
-            <div className="pt-2 pb-3">
-              <ViewModeControl
-                mode={viewMode}
-                subjectCode={spotlightCode}
-                plants={plants}
-                plantRecords={plantRecords}
-                zones={zones}
-                onChange={handleViewModeChange}
-              />
-            </div>
+            {viewMode !== "tree" && (
+              <div className="pt-2 pb-3">
+                <ViewModeControl
+                  mode={viewMode}
+                  subjectCode={spotlightCode}
+                  plants={plants}
+                  plantRecords={plantRecords}
+                  zones={zones}
+                  onChange={handleViewModeChange}
+                />
+              </div>
+            )}
 
             {viewMode === "gallery" && (
               <>
@@ -335,7 +378,7 @@ export default function App() {
               </>
             )}
 
-            {viewMode !== "gallery" && spotlightCode && (
+            {(viewMode === "plant" || viewMode === "zone") && spotlightCode && (
               <SpotlightView
                 kind={viewMode}
                 subjectCode={spotlightCode}
@@ -345,9 +388,20 @@ export default function App() {
                 onOpenViewer={handleOpenFromSpotlight}
               />
             )}
+
           </div>
         )}
       </main>
+
+      {status === "ready" && plants.length > 0 && viewMode === "tree" && (
+        <TreeView
+          plants={plants}
+          speciesByShortCode={speciesByShortCode}
+          headerHeight={headerHeight}
+          onOpenPlantInList={handleOpenInList}
+          onSpotlightPlant={handleSpotlightPlant}
+        />
+      )}
 
       <InfoModal
         open={infoOpen}

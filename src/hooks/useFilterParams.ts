@@ -28,8 +28,11 @@ function parseFiltersFromURL(): InitialState {
 
   const rawView = params.get("view");
   const view: ViewMode =
-    rawView === "plant" || rawView === "zone" ? rawView : DEFAULT_VIEW;
-  const subject = view === "gallery" ? null : params.get("subject");
+    rawView === "plant" || rawView === "zone" || rawView === "tree"
+      ? rawView
+      : DEFAULT_VIEW;
+  const subject =
+    view === "plant" || view === "zone" ? params.get("subject") : null;
 
   return { filters, sort, view, subject };
 }
@@ -55,7 +58,9 @@ function buildParams(
   if (sort !== DEFAULT_SORT) params.set("sort", sort);
   if (view !== DEFAULT_VIEW) {
     params.set("view", view);
-    if (subject) params.set("subject", subject);
+    if (subject && (view === "plant" || view === "zone")) {
+      params.set("subject", subject);
+    }
   }
   return params.toString();
 }
