@@ -473,10 +473,7 @@ export default function TreeView({
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
-        onClick={(e) => {
-          // Click on background (not a node) clears pin.
-          if (e.target === e.currentTarget) setPinned(null);
-        }}
+        onClick={() => setPinned(null)}
       >
         <svg
           width={layout.width}
@@ -719,7 +716,7 @@ export default function TreeView({
         )}
 
         {/* Floating control bar */}
-        <div className="absolute top-3 right-3 flex items-center gap-1 rounded-md bg-surface/85 backdrop-blur-sm ring-1 ring-inset ring-white/5 p-1">
+        <div className="absolute top-3 right-3 z-30 flex items-center gap-1 rounded-md bg-surface/85 backdrop-blur-sm ring-1 ring-inset ring-white/5 p-1" onClick={(e) => e.stopPropagation()}>
           <CtrlBtn label="Zoom out" onClick={() => zoomBy(0.8)}>
             <ZoomOut size={13} strokeWidth={1.5} />
           </CtrlBtn>
@@ -731,27 +728,26 @@ export default function TreeView({
           </CtrlBtn>
         </div>
 
-        {/* Hint */}
-        {/* <p className="absolute bottom-3 left-3 text-[10px] font-mono text-ink-faint/70 pointer-events-none">
-          drag to pan · scroll/pinch to zoom · click a leaf to open · click a node to expand
-        </p> */}
+        {/* Pinned detail panel — absolute overlay so the tree canvas never resizes */}
+        {renderedPinned && (
+          <div className="absolute bottom-0 left-0 right-0 z-20 flex justify-center pointer-events-none">
+            <div className="w-full max-w-3xl pointer-events-auto" onWheel={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()}>
+              <NodeDetail
+                node={renderedPinned}
+                plants={plants}
+                taxa={taxa}
+                isClosing={isClosing}
+                onAnimationEnd={() => {
+                  if (isClosing) setRenderedPinned(null);
+                }}
+                onClose={() => setPinned(null)}
+                onOpenPlantInList={onOpenPlantInList}
+                onSpotlightPlant={onSpotlightPlant}
+              />
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Pinned detail panel */}
-      {renderedPinned && (
-        <NodeDetail
-          node={renderedPinned}
-          plants={plants}
-          taxa={taxa}
-          isClosing={isClosing}
-          onAnimationEnd={() => {
-            if (isClosing) setRenderedPinned(null);
-          }}
-          onClose={() => setPinned(null)}
-          onOpenPlantInList={onOpenPlantInList}
-          onSpotlightPlant={onSpotlightPlant}
-        />
-      )}
     </div>
   );
 }
@@ -875,7 +871,7 @@ function NodeDetail({
 
   return (
     <div
-      className={`${isClosing ? "slide-down-out" : "slide-up-in"} bg-surface-raised border-t border-ink-faint/30 max-h-[45vh] shrink-0 flex flex-col`}
+      className={`${isClosing ? "slide-down-out" : "slide-up-in"} bg-surface-raised border border-ink-faint/20 rounded-t-xl h-[45vh] flex flex-col shadow-2xl`}
       onAnimationEnd={onAnimationEnd}
     >
       {/* Static header — title, ancestry, close, and tabs stay pinned to the top */}
@@ -923,91 +919,85 @@ function NodeDetail({
         </div>
       </div>
 
-      {/* Scrollable body. Both tab panels share grid cell 1/1 so the body
-          sizes to whichever is taller — switching tabs never shifts height. */}
-      <div className="flex-1 min-h-0 overflow-y-auto px-3 pt-3 pb-3 thin-scroll">
-        <div className="grid">
-          <div
-            style={{ gridArea: "1 / 1" }}
-            aria-hidden={tab !== "info"}
-            className={`space-y-3 ${tab === "info" ? "" : "invisible pointer-events-none"}`}
-          >
-            {taxaInfo?.description ? (
-              <p className="text-[12px] leading-relaxed text-ink/90 max-w-[60em]">
-                {taxaInfo.description}
-              </p>
-            ) : (
-              <p className="text-[11px] text-ink-faint italic">
-                No description available for {title}.
-              </p>
-            )}
-            {taxaInfo?.url && (
-              <a
-                href={taxaInfo.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-[11px] text-ink-muted hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
+      <div className="flex-1 min-h-0 relative">
+        <div
+          aria-hidden={tab !== "info"}
+          className={`h-full overflow-y-auto px-3 pt-3 pb-3 thin-scroll space-y-3 ${tab !== "info" ? "hidden" : ""}`}
+        >
+          {taxaInfo?.description ? (
+            <p className="text-[12px] leading-relaxed text-ink/90 max-w-[60em]">
+              {taxaInfo.description}
+            </p>
+          ) : (
+            <p className="text-[11px] text-ink-faint italic">
+              No description available for {title}.
+            </p>
+          )}
+          {taxaInfo?.url && (
+            <a
+              href={taxaInfo.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-[11px] text-ink-muted hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
+            >
+              View on Wikipedia
+              <ExternalLink size={10} strokeWidth={1.5} />
+            </a>
+          )}
+        </div>
+
+        <div
+          aria-hidden={tab !== "images"}
+          className={`h-full overflow-y-auto px-3 pt-3 pb-3 thin-scroll ${tab !== "images" ? "hidden" : ""}`}
+        >
+          {items.length === 0 ? (
+            <p className="text-[11px] text-ink-faint">No images yet.</p>
+          ) : (
+            <div className="columns-3 sm:columns-4 md:columns-5 lg:columns-6 gap-1.5">
+              {items.map((p) => {
+                const aspect =
+                  p.width && p.height ? `${p.width} / ${p.height}` : "3 / 4";
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() =>
+                      onOpenPlantInList(p, speciesPicsFor(plants, p.shortCode))
+                    }
+                    className="panel-item relative overflow-hidden rounded-sm bg-surface ring-1 ring-inset ring-white/5 hover:ring-accent/40 transition-all break-inside-avoid mb-1.5 block w-full"
+                    style={{ aspectRatio: aspect }}
+                  >
+                    <img
+                      src={`${baseURL}${p.image}`}
+                      alt={plantTitle(p)}
+                      loading="lazy"
+                      decoding="async"
+                      className="block w-full h-full object-cover"
+                      draggable={false}
+                    />
+                    {!isLeaf && (
+                      <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[10px] text-white/85 bg-linear-to-t from-black/80 to-black/20 leading-tight truncate pointer-events-none">
+                        {plantTitle(p)}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {isLeaf && node.data.shortCode && (
+            <div className="mt-3 flex justify-end">
+              <button
+                type="button"
+                onClick={() => onSpotlightPlant(node.data.shortCode!)}
+                className="flex items-center gap-1.5 text-[11px] font-display tracking-wider uppercase text-accent hover:text-accent-dim transition-colors"
               >
-                View on Wikipedia
-                <ExternalLink size={10} strokeWidth={1.5} />
-              </a>
-            )}
-          </div>
-
-          <div
-            style={{ gridArea: "1 / 1" }}
-            aria-hidden={tab !== "images"}
-            className={tab === "images" ? "" : "invisible pointer-events-none"}
-          >
-            {items.length === 0 ? (
-              <p className="text-[11px] text-ink-faint">No images yet.</p>
-            ) : (
-              <div className="columns-3 sm:columns-4 md:columns-5 lg:columns-6 gap-1.5">
-                {items.map((p) => {
-                  const aspect =
-                    p.width && p.height ? `${p.width} / ${p.height}` : "3 / 4";
-                  return (
-                    <button
-                      key={p.id}
-                      type="button"
-                      onClick={() =>
-                        onOpenPlantInList(p, speciesPicsFor(plants, p.shortCode))
-                      }
-                      className="panel-item relative overflow-hidden rounded-sm bg-surface ring-1 ring-inset ring-white/5 hover:ring-accent/40 transition-all break-inside-avoid mb-1.5 block w-full"
-                      style={{ aspectRatio: aspect }}
-                    >
-                      <img
-                        src={`${baseURL}${p.image}`}
-                        alt={plantTitle(p)}
-                        loading="lazy"
-                        decoding="async"
-                        className="block w-full h-full object-cover"
-                        draggable={false}
-                      />
-                      {!isLeaf && (
-                        <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[10px] text-white/85 bg-linear-to-t from-black/80 to-black/20 leading-tight truncate pointer-events-none">
-                          {plantTitle(p)}
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-
-            {isLeaf && node.data.shortCode && (
-              <div className="mt-3 flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => onSpotlightPlant(node.data.shortCode!)}
-                  className="flex items-center gap-1.5 text-[11px] font-display tracking-wider uppercase text-accent hover:text-accent-dim transition-colors"
-                >
-                  <Sprout size={12} strokeWidth={1.5} />
-                  Spotlight this plant
-                </button>
-              </div>
-            )}
-          </div>
+                <Sprout size={12} strokeWidth={1.5} />
+                Spotlight this plant
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
