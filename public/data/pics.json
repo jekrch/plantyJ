@@ -9,7 +9,30 @@
       "description": null,
       "image": "images/P cor/1777514149.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-04-30T01:55:50.277Z"
+      "addedAt": "2026-04-30T01:55:50.277Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "f9e10c7783397314",
+      "dominantColors": [
+        [
+          41.1,
+          -0.7,
+          21.6
+        ],
+        [
+          66.4,
+          -22.2,
+          59.0
+        ],
+        [
+          76.4,
+          -2.3,
+          8.2
+        ]
+      ],
+      "bioclipSpeciesId": "Philadelphus tenuifolius",
+      "bioclipCommonName": "",
+      "bioclipScore": 0.1992
     },
     {
       "seq": 28,
