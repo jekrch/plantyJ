@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback, useRef } from "react";
-import type { Annotation, PicRecord, Plant, PlantRecord, Species, Zone, ZonePic } from "./types";
+import type { Annotation, PicRecord, Plant, PlantRecord, Species, TaxaInfo, Zone, ZonePic } from "./types";
 import { Sprout, House } from "lucide-react";
 import { sortPlantsAsync } from "./utils/sorting.ts";
 import type { SortMode } from "./utils/sorting.ts";
@@ -32,6 +32,7 @@ export default function App() {
   const [speciesByShortCode, setSpeciesByShortCode] = useState<
     Map<string, Species>
   >(new Map());
+  const [taxa, setTaxa] = useState<Record<string, TaxaInfo>>({});
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const {
@@ -106,8 +107,11 @@ export default function App() {
       fetchJson<{ annotations?: Annotation[] }>("data/annotations.json").catch(
         () => ({ annotations: [] as Annotation[] })
       ),
+      fetchJson<Record<string, TaxaInfo>>("data/taxa.json").catch(
+        () => ({} as Record<string, TaxaInfo>)
+      ),
     ])
-      .then(([picsData, plantsData, zonesData, zonePicsData, annotationsData]) => {
+      .then(([picsData, plantsData, zonesData, zonePicsData, annotationsData, taxaData]) => {
         const plantsByCode = new Map<string, PlantRecord>();
         for (const p of plantsData.plants ?? []) plantsByCode.set(p.shortCode, p);
 
@@ -126,6 +130,7 @@ export default function App() {
         setZones(zonesData.zones ?? []);
         setZonePics(zonePicsData.zonePics ?? []);
         setAnnotations(annotationsData.annotations ?? []);
+        setTaxa(taxaData ?? {});
         setStatus("ready");
 
         // Load species data in parallel — non-blocking; fills in once available.
@@ -397,6 +402,7 @@ export default function App() {
         <TreeView
           plants={plants}
           speciesByShortCode={speciesByShortCode}
+          taxa={taxa}
           headerHeight={headerHeight}
           onOpenPlantInList={handleOpenInList}
           onSpotlightPlant={handleSpotlightPlant}

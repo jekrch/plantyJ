@@ -7,8 +7,8 @@ import {
   useCallback,
 } from "react";
 import { hierarchy, cluster, type HierarchyPointNode } from "d3-hierarchy";
-import { Sprout, ZoomIn, ZoomOut, Maximize2, LoaderCircle } from "lucide-react";
-import type { Plant, Species } from "../types";
+import { Sprout, ZoomIn, ZoomOut, Maximize2, LoaderCircle, ExternalLink } from "lucide-react";
+import type { Plant, Species, TaxaInfo } from "../types";
 import { plantTitle } from "../utils/display";
 
 const RANKS = [
@@ -34,6 +34,7 @@ interface RawNode {
 interface Props {
   plants: Plant[];
   speciesByShortCode: Map<string, Species>;
+  taxa: Record<string, TaxaInfo>;
   headerHeight: number;
   onOpenPlantInList: (plant: Plant, list: Plant[]) => void;
   onSpotlightPlant: (shortCode: string) => void;
@@ -144,6 +145,7 @@ function linkPath(
 export default function TreeView({
   plants,
   speciesByShortCode,
+  taxa,
   headerHeight,
   onOpenPlantInList,
   onSpotlightPlant,
@@ -659,13 +661,12 @@ export default function TreeView({
                   <g
                     key={`int-${n.data.rank}-${n.data.name}-${n.depth}`}
                     transform={`translate(${cx},${cy})`}
-                    style={{ cursor: branching ? "pointer" : "default" }}
+                    style={{ cursor: "pointer" }}
                     onPointerEnter={() => setHovered(n)}
                     onPointerLeave={() =>
                       setHovered((h) => (h === n ? null : h))
                     }
                     onClick={(e) => {
-                      if (!branching && !isRoot) return;
                       e.stopPropagation();
                       if (panRef.current?.moved) return;
                       setPinned((cur) => (cur === n ? null : n));
@@ -718,6 +719,7 @@ export default function TreeView({
         <NodeDetail
           node={renderedPinned}
           plants={plants}
+          taxa={taxa}
           isClosing={isClosing}
           onAnimationEnd={() => {
             if (isClosing) setRenderedPinned(null);
@@ -752,9 +754,34 @@ function CtrlBtn({
   );
 }
 
+function TabBtn({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`relative -mb-px py-1.5 text-[11px] font-display tracking-wider uppercase transition-colors ${
+        active
+          ? "text-accent border-b border-accent"
+          : "text-ink-muted hover:text-ink border-b border-transparent"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
 function NodeDetail({
   node,
   plants,
+  taxa,
   isClosing,
   onAnimationEnd,
   onClose,
@@ -763,6 +790,7 @@ function NodeDetail({
 }: {
   node: HierarchyPointNode<RawNode>;
   plants: Plant[];
+  taxa: Record<string, TaxaInfo>;
   isClosing?: boolean;
   onAnimationEnd?: () => void;
   onClose: () => void;
@@ -771,6 +799,13 @@ function NodeDetail({
 }) {
   const isLeaf = !!node.data.plant;
   const baseURL = import.meta.env.BASE_URL;
+  const taxaInfo = taxa[node.data.name];
+  const [tab, setTab] = useState<"info" | "images">("info");
+
+  // Reset to info tab whenever the displayed node changes.
+  useEffect(() => {
+    setTab("info");
+  }, [node]);
 
   // Collect all leaf shortCodes under this node.
   const shortCodes = useMemo(() => {
@@ -816,85 +851,141 @@ function NodeDetail({
     : RANK_LABEL[node.data.rank];
 
   return (
-    <div 
-      className={`${isClosing ? "slide-down-out" : "slide-up-in"} bg-surface-raised border-t border-ink-faint/30 p-3 max-h-[45vh] overflow-y-auto shrink-0 thin-scroll`}
+    <div
+      className={`${isClosing ? "slide-down-out" : "slide-up-in"} bg-surface-raised border-t border-ink-faint/30 max-h-[45vh] shrink-0 flex flex-col`}
       onAnimationEnd={onAnimationEnd}
     >
-      <div className="flex items-baseline justify-between gap-3 mb-2">
-        <div className="min-w-0">
-          <div className="flex items-baseline gap-2 flex-wrap">
-            <h3 className="text-sm font-display text-ink leading-tight">
-              {title}
-            </h3>
-            {subtitle && (
-              <span className="text-[10px] font-mono uppercase tracking-wider text-ink-faint">
-                {subtitle}
-              </span>
+      {/* Static header — title, ancestry, close, and tabs stay pinned to the top */}
+      <div className="shrink-0 px-3 pt-3">
+        <div className="flex items-baseline justify-between gap-3 mb-2">
+          <div className="min-w-0">
+            <div className="flex items-baseline gap-2 flex-wrap">
+              <h3 className="text-sm font-display text-ink leading-tight">
+                {title}
+              </h3>
+              {subtitle && (
+                <span className="text-[10px] font-mono uppercase tracking-wider text-ink-faint">
+                  {subtitle}
+                </span>
+              )}
+            </div>
+            {ancestry.length > 0 && (
+              <p className="text-[10px] font-mono text-ink-faint mt-1 truncate">
+                {ancestry.map((a) => a.data.name).join(" › ")}
+              </p>
             )}
           </div>
-          {ancestry.length > 0 && (
-            <p className="text-[10px] font-mono text-ink-faint mt-1 truncate">
-              {ancestry.map((a) => a.data.name).join(" › ")}
-            </p>
-          )}
-        </div>
-        <button
-          type="button"
-          onClick={onClose}
-          className="text-[10px] font-mono uppercase tracking-wider text-ink-muted hover:text-accent transition-colors shrink-0"
-        >
-          close
-        </button>
-      </div>
-
-      {items.length === 0 ? (
-        <p className="text-[11px] text-ink-faint">No images yet.</p>
-      ) : (
-        <div className="columns-3 sm:columns-4 md:columns-5 lg:columns-6 gap-1.5">
-          {items.map((p) => {
-            const aspect =
-              p.width && p.height ? `${p.width} / ${p.height}` : "3 / 4";
-            return (
-              <button
-                key={p.id}
-                type="button"
-                onClick={() =>
-                  onOpenPlantInList(p, speciesPicsFor(plants, p.shortCode))
-                }
-                className="panel-item relative overflow-hidden rounded-sm bg-surface ring-1 ring-inset ring-white/5 hover:ring-accent/40 transition-all break-inside-avoid mb-1.5 block w-full"
-                style={{ aspectRatio: aspect }}
-              >
-                <img
-                  src={`${baseURL}${p.image}`}
-                  alt={plantTitle(p)}
-                  loading="lazy"
-                  decoding="async"
-                  className="block w-full h-full object-cover"
-                  draggable={false}
-                />
-                {!isLeaf && (
-                  <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[10px] text-white/85 bg-linear-to-t from-black/80 to-black/20 leading-tight truncate pointer-events-none">
-                    {plantTitle(p)}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      )}
-
-      {isLeaf && node.data.shortCode && (
-        <div className="mt-3 flex justify-end">
           <button
             type="button"
-            onClick={() => onSpotlightPlant(node.data.shortCode!)}
-            className="flex items-center gap-1.5 text-[11px] font-display tracking-wider uppercase text-accent hover:text-accent-dim transition-colors"
+            onClick={onClose}
+            className="text-[10px] font-mono uppercase tracking-wider text-ink-muted hover:text-accent transition-colors shrink-0"
           >
-            <Sprout size={12} strokeWidth={1.5} />
-            Spotlight this plant
+            close
           </button>
         </div>
-      )}
+
+        <div className="flex items-center gap-4 border-b border-ink-faint/20">
+          <TabBtn active={tab === "info"} onClick={() => setTab("info")}>
+            Info
+          </TabBtn>
+          <TabBtn active={tab === "images"} onClick={() => setTab("images")}>
+            Images
+            {items.length > 0 && (
+              <span className="ml-1 text-ink-faint normal-case tracking-normal">
+                ({items.length})
+              </span>
+            )}
+          </TabBtn>
+        </div>
+      </div>
+
+      {/* Scrollable body. Both tab panels share grid cell 1/1 so the body
+          sizes to whichever is taller — switching tabs never shifts height. */}
+      <div className="flex-1 min-h-0 overflow-y-auto px-3 pt-3 pb-3 thin-scroll">
+        <div className="grid">
+          <div
+            style={{ gridArea: "1 / 1" }}
+            aria-hidden={tab !== "info"}
+            className={`space-y-3 ${tab === "info" ? "" : "invisible pointer-events-none"}`}
+          >
+            {taxaInfo?.description ? (
+              <p className="text-[12px] leading-relaxed text-ink/90">
+                {taxaInfo.description}
+              </p>
+            ) : (
+              <p className="text-[11px] text-ink-faint italic">
+                No description available for {title}.
+              </p>
+            )}
+            {taxaInfo?.url && (
+              <a
+                href={taxaInfo.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-[11px] text-ink-muted hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
+              >
+                View on Wikipedia
+                <ExternalLink size={10} strokeWidth={1.5} />
+              </a>
+            )}
+          </div>
+
+          <div
+            style={{ gridArea: "1 / 1" }}
+            aria-hidden={tab !== "images"}
+            className={tab === "images" ? "" : "invisible pointer-events-none"}
+          >
+            {items.length === 0 ? (
+              <p className="text-[11px] text-ink-faint">No images yet.</p>
+            ) : (
+              <div className="columns-3 sm:columns-4 md:columns-5 lg:columns-6 gap-1.5">
+                {items.map((p) => {
+                  const aspect =
+                    p.width && p.height ? `${p.width} / ${p.height}` : "3 / 4";
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() =>
+                        onOpenPlantInList(p, speciesPicsFor(plants, p.shortCode))
+                      }
+                      className="panel-item relative overflow-hidden rounded-sm bg-surface ring-1 ring-inset ring-white/5 hover:ring-accent/40 transition-all break-inside-avoid mb-1.5 block w-full"
+                      style={{ aspectRatio: aspect }}
+                    >
+                      <img
+                        src={`${baseURL}${p.image}`}
+                        alt={plantTitle(p)}
+                        loading="lazy"
+                        decoding="async"
+                        className="block w-full h-full object-cover"
+                        draggable={false}
+                      />
+                      {!isLeaf && (
+                        <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[10px] text-white/85 bg-linear-to-t from-black/80 to-black/20 leading-tight truncate pointer-events-none">
+                          {plantTitle(p)}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {isLeaf && node.data.shortCode && (
+              <div className="mt-3 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => onSpotlightPlant(node.data.shortCode!)}
+                  className="flex items-center gap-1.5 text-[11px] font-display tracking-wider uppercase text-accent hover:text-accent-dim transition-colors"
+                >
+                  <Sprout size={12} strokeWidth={1.5} />
+                  Spotlight this plant
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

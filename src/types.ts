@@ -86,3 +86,8 @@ export interface Species {
   references: SpeciesReference[];
   sources: string[];
 }
+
+export interface TaxaInfo {
+  description: string;
+  url: string;
+}
