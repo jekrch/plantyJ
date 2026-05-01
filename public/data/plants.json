@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "C ser",
+      "fullName": "Cornus sericea",
+      "commonName": "Red Osier Dogwood",
+      "variety": null
+    },
+    {
       "shortCode": "S alb",
       "fullName": "Spiraea alba",
       "commonName": "Meadowsweet",
