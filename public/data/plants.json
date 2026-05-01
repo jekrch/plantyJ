@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "F cat",
+      "fullName": "Felis catus",
+      "commonName": "Cat",
+      "variety": null
+    },
+    {
       "shortCode": "R lac",
       "fullName": "Rudbeckia laciniata",
       "commonName": "Sochan",
