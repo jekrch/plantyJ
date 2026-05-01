@@ -12,7 +12,30 @@
       "description": null,
       "image": "images/R bla/1777602168.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-05-01T02:22:49.905Z"
+      "addedAt": "2026-05-01T02:22:49.905Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "d6440db6db5d309a",
+      "dominantColors": [
+        [
+          27.4,
+          -0.0,
+          12.8
+        ],
+        [
+          61.6,
+          5.5,
+          20.9
+        ],
+        [
+          53.3,
+          -14.4,
+          36.8
+        ]
+      ],
+      "bioclipSpeciesId": "Rosa arkansana",
+      "bioclipCommonName": "Prairie rose",
+      "bioclipScore": 0.4239
     },
     {
       "seq": 46,
@@ -26,7 +49,30 @@
       "description": null,
       "image": "images/H vir/1777602105.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-05-01T02:21:46.134Z"
+      "addedAt": "2026-05-01T02:21:46.134Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "a1cbbd4285a5daa5",
+      "dominantColors": [
+        [
+          47.5,
+          2.8,
+          9.9
+        ],
+        [
+          26.6,
+          2.7,
+          6.8
+        ],
+        [
+          69.0,
+          2.4,
+          19.7
+        ]
+      ],
+      "bioclipSpeciesId": "Acer platanoides",
+      "bioclipCommonName": "Norway maple",
+      "bioclipScore": 0.1182
     },
     {
       "seq": 45,
@@ -39,7 +85,30 @@
       "description": null,
       "image": "images/R hir/1777601996.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-05-01T02:19:57.855Z"
+      "addedAt": "2026-05-01T02:19:57.855Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "e9ee22c9ad924ce4",
+      "dominantColors": [
+        [
+          27.5,
+          -2.9,
+          10.2
+        ],
+        [
+          53.2,
+          -0.1,
+          10.3
+        ],
+        [
+          53.3,
+          -16.5,
+          23.8
+        ]
+      ],
+      "bioclipSpeciesId": "Cynoglossum australe",
+      "bioclipCommonName": "Australian Hound's-tongue",
+      "bioclipScore": 0.2276
     },
     {
       "seq": 44,
