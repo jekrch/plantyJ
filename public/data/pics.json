@@ -22,7 +22,30 @@
       "description": null,
       "image": "images/S vul/1777602511.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-05-01T02:28:32.231Z"
+      "addedAt": "2026-05-01T02:28:32.231Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "eece68700135f3e2",
+      "dominantColors": [
+        [
+          46.1,
+          -21.6,
+          35.8
+        ],
+        [
+          46.2,
+          -2.7,
+          16.5
+        ],
+        [
+          74.3,
+          -3.1,
+          13.3
+        ]
+      ],
+      "bioclipSpeciesId": "Syringa vulgaris",
+      "bioclipCommonName": "Common lilac",
+      "bioclipScore": 0.8649
     },
     {
       "seq": 47,
