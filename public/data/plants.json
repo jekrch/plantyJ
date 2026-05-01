@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "H lup Wil",
+      "fullName": "Humulus lupulus",
+      "commonName": "Hops",
+      "variety": "Willamette"
+    },
+    {
       "shortCode": "P pyr Peg",
       "fullName": "Pyrus pyrifolia",
       "commonName": "Asian Pear",
