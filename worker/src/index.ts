@@ -28,6 +28,9 @@ Add a plant photo:
   Caption format (only shortCode is required):
   shortCode // fullName // commonName // zone // tags // description
 
+  To add an animal photo (squirrel, butterfly, etc.), prefix with "animal //":
+  animal // shortCode // fullName // commonName // zone // tags // description
+
   Zone is either a bare code (fb1) or 'Display Name (code)' to declare/rename.
 
   First time registering a plant + zone:
@@ -495,6 +498,7 @@ export default {
         image: browserImagePath,
         postedBy,
         addedAt: new Date().toISOString(),
+        ...(resolvedPic.kind === "animal" && { kind: "animal" }),
       };
 
       const plantUpsertRecord: PlantRecord | null = plantUpsert

@@ -37,8 +37,13 @@ export default function ViewModeControl({
 }: Props) {
   const plantOptions = useMemo<Option[]>(() => {
     const countByCode = new Map<string, number>();
+    const animalCodes = new Set<string>();
     for (const p of plants) {
-      countByCode.set(p.shortCode, (countByCode.get(p.shortCode) ?? 0) + 1);
+      if (p.kind === "animal") {
+        animalCodes.add(p.shortCode);
+      } else {
+        countByCode.set(p.shortCode, (countByCode.get(p.shortCode) ?? 0) + 1);
+      }
     }
     const recordByCode = new Map<string, PlantRecord>();
     for (const r of plantRecords) recordByCode.set(r.shortCode, r);
@@ -47,6 +52,7 @@ export default function ViewModeControl({
       ...plants.map((p) => p.shortCode),
     ]);
     return Array.from(codes)
+      .filter((code) => !animalCodes.has(code))
       .map((code) => {
         const rec = recordByCode.get(code);
         const label = rec?.commonName ?? rec?.fullName ?? code;

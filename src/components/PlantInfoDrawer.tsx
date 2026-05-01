@@ -246,7 +246,7 @@ export default function PlantInfoDrawer({
 
           {/* Text Content */}
           <div className="relative z-10 pointer-events-none">
-            <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Plant</p>
+            <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">{plant.kind === "animal" ? "Animal" : "Plant"}</p>
             <p className="font-display text-sm text-white/90 leading-snug">
               {plantTitle(plant)}{" "}
               <span className="text-accent text-xs">{plant.shortCode}</span>
@@ -299,7 +299,7 @@ export default function PlantInfoDrawer({
             <div className="border-t border-white/8" />
             <div>
               <div className="flex items-center gap-1.5 mb-2 text-[10px] uppercase tracking-widest text-white/50">
-                <span>More photos of this plant</span>
+                <span>More photos of this {plant.kind === "animal" ? "animal" : "plant"}</span>
                 <span className="text-white/20 normal-case tracking-normal">
                   · {samePlantTimeline.length}
                 </span>
@@ -615,7 +615,7 @@ export default function PlantInfoDrawer({
         )}
 
         {/* Sources */}
-        {species?.references && species.references.length > 0 && (
+        {((species?.references && species.references.length > 0) || (plant.kind === "animal" && plant.fullName)) && (
           <>
             <div className="border-t border-white/8" />
             <div>
@@ -623,7 +623,7 @@ export default function PlantInfoDrawer({
                 Sources
               </p>
               <div className="flex flex-wrap gap-2">
-                {species.references.map((ref) => (
+                {species?.references?.map((ref) => (
                   <a
                     key={ref.url}
                     href={ref.url}
@@ -635,6 +635,17 @@ export default function PlantInfoDrawer({
                     <ExternalLink size={10} strokeWidth={1.5} />
                   </a>
                 ))}
+                {plant.kind === "animal" && plant.fullName && (
+                  <a
+                    href={`https://www.inaturalist.org/taxa/search?q=${encodeURIComponent(plant.fullName)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-white/55 hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
+                  >
+                    iNaturalist
+                    <ExternalLink size={10} strokeWidth={1.5} />
+                  </a>
+                )}
               </div>
             </div>
           </>

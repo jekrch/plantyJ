@@ -582,6 +582,10 @@ export default function TreeView({
                   const r = LEAF_RADIUS;
                   const title = plantTitle(p);
                   const binomial = p.fullName;
+                  const isAnimal = p.kind === "animal";
+                  const nodeColor = isAnimal
+                    ? "var(--color-amber, #f59e0b)"
+                    : "var(--color-accent)";
                   return (
                     <g
                       key={`leaf-${p.id}`}
@@ -605,8 +609,10 @@ export default function TreeView({
                         fill="var(--color-surface)"
                         stroke={
                           isActive
-                            ? "var(--color-accent)"
-                            : "var(--color-ink-muted)"
+                            ? nodeColor
+                            : isAnimal
+                              ? "rgba(245,158,11,0.6)"
+                              : "var(--color-ink-muted)"
                         }
                         strokeOpacity={isActive ? 0.95 : 0.7}
                         strokeWidth={isActive ? 1.8 : 1.2}

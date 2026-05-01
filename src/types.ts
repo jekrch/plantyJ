@@ -15,6 +15,7 @@ export interface PicRecord {
   bioclipSpeciesId?: string | null;
   bioclipCommonName?: string | null;
   bioclipScore?: number | null;
+  kind?: "plant" | "animal";
 }
 
 export interface PlantRecord {

@@ -63,6 +63,7 @@ export interface ParsedCaption {
   zone: ParsedZoneRef | null;
   tags: string[] | null;
   description: string | null;
+  kind: "plant" | "animal";
 }
 
 export interface PicEntry {
@@ -78,6 +79,7 @@ export interface PicEntry {
   bioclipSpeciesId?: string | null;
   bioclipCommonName?: string | null;
   bioclipScore?: number | null;
+  kind?: "plant" | "animal";
 }
 
 export interface PlantRecord {
