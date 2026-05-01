@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 51,
+      "id": "C ser-1777603191",
+      "shortCode": "C ser",
+      "zoneCode": "fy",
+      "tags": [
+        "native"
+      ],
+      "description": null,
+      "image": "images/C ser/1777603191.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-05-01T02:39:52.562Z"
+    },
+    {
       "seq": 50,
       "id": "S alb-1777602773",
       "shortCode": "S alb",
@@ -19,7 +32,7 @@
         [
           62.4,
           0.8,
-          15.0
+          15
         ],
         [
           41.2,
@@ -54,12 +67,12 @@
       "dominantColors": [
         [
           62.2,
-          2.0,
+          2,
           9.5
         ],
         [
           34.9,
-          3.0,
+          3,
           8.4
         ],
         [
