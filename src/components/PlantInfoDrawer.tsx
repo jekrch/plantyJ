@@ -168,7 +168,7 @@ export default function PlantInfoDrawer({
     return "mismatch";
   })();
 
-  const description = species?.description?.trim() || null;
+  const description = species?.description?.trim().replace(/(?<!\n)\n(?!\n)/g, '\n\n') || null;
   const needsTruncation =
     !!description && description.length > DESCRIPTION_PREVIEW_CHARS;
   const visibleDescription = description

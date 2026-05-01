@@ -926,8 +926,8 @@ function NodeDetail({
           className={`h-full overflow-y-auto px-3 pt-3 pb-3 thin-scroll space-y-3 ${tab !== "info" ? "hidden" : ""}`}
         >
           {taxaInfo?.description ? (
-            <p className="text-[12px] leading-relaxed text-ink/90 max-w-[60em]">
-              {taxaInfo.description}
+            <p className="text-[12px] leading-relaxed text-ink/90 max-w-[60em] whitespace-pre-line">
+              {taxaInfo.description.replace(/(?<!\n)\n(?!\n)/g, '\n\n')}
             </p>
           ) : (
             <p className="text-[11px] text-ink-faint italic">
