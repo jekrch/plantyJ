@@ -84,7 +84,7 @@
     "url": "https://en.wikipedia.org/wiki/Erythronium"
   },
   "Eurybia": {
-    "description": "Eurybia is a genus of plants in the family Asteraceae that were previously included in the genus Aster. Most species are native to North America, although one is also present in northern Eurasia. There are 23 species in the genus, including 1 natural hybrid. The name was first applied by Alexandre de Cassini in 1820. The name is derived from Ancient Greek εὐρύς (eurús), meaning \"wide\", and βαιός (baiós), meaning \"few\", perhaps in reference to the small number of relatively wide ray florets.",
+    "description": "Eurybia is a genus of plants in the family Asteraceae that were previously included in the genus Aster. Most species are native to North America, although one is also present in northern Eurasia. There are 23 species in the genus, including 1 natural hybrid. The name was first applied by Alexandre de Cassini in 1820. The name is derived from Ancient Greek \u03b5\u1f50\u03c1\u03cd\u03c2 (eur\u00fas), meaning \"wide\", and \u03b2\u03b1\u03b9\u03cc\u03c2 (bai\u00f3s), meaning \"few\", perhaps in reference to the small number of relatively wide ray florets.",
     "url": "https://en.wikipedia.org/wiki/Eurybia_(plant)"
   },
   "Gentianales": {
@@ -282,5 +282,33 @@
   "Violaceae": {
     "description": "Violaceae is a family of flowering plants established in 1802, consisting of about 1000 species in about 25 genera. It takes its name from the genus Viola, the violets and pansies.",
     "url": "https://en.wikipedia.org/wiki/Violaceae"
+  },
+  "Achillea": {
+    "description": "Achillea is a genus of flowering plants in the family Asteraceae. The plants typically have frilly leaves and are known colloquially as yarrows, although this common name usually refers to A.\u00a0millefolium. The genus was named after the Greek mythological character Achilles, whose soldiers were said to have used yarrow to treat their wounds; this is reflected by common names such as allheal and bloodwort. The genus is native primarily to Eurasia and North America.",
+    "url": "https://en.wikipedia.org/wiki/Achillea"
+  },
+  "Animalia": {
+    "description": "Animals are multicellular, eukaryotic organisms belonging to the biological kingdom Animalia. With few exceptions, animals consume organic material, breathe oxygen, have myocytes and are able to move, can reproduce sexually, and grow from a hollow sphere of cells, the blastula, during embryonic development. Animals form a clade, meaning that they arose from a single common ancestor. Over 1.5 million living animal species have been described, of which around 1.05 million are insects, over 85,000 are molluscs, and around 65,000 are vertebrates. It has been estimated there are as many as 7.77\u00a0million animal species on Earth. Animal body lengths range from 8.5\u00a0\u03bcm (0.00033\u00a0in) to 33.6\u00a0m (110\u00a0ft). They have complex ecologies and interactions with each other and their environments, forming intricate food webs. The scientific study of animals is known as zoology, and the study of animal behaviour is known as ethology.",
+    "url": "https://en.wikipedia.org/wiki/Animal"
+  },
+  "Carnivora": {
+    "description": "Carnivora is an order of placental mammals specialised primarily in eating flesh, whose members are formally referred to as carnivorans. The order Carnivora is the sixth largest order of mammals, comprising at least 279 species. Carnivorans are found on every major landmass and in a variety of habitats, ranging from the cold polar regions of Earth to the hyper-arid region of the Sahara Desert and the open seas. Carnivorans exhibit a wide array of body plans, varying greatly in size and shape.",
+    "url": "https://en.wikipedia.org/wiki/Carnivora"
+  },
+  "Chordata": {
+    "description": "A chordate is a bilaterian animal belonging to the phylum Chordata. All chordates possess, at some point during their larval or adult stages, five distinctive physical characteristics (synapomorphies) that distinguish them from other taxa: a notochord, a hollow dorsal nerve cord, an endostyle or thyroid, pharyngeal slits, and a post-anal tail.",
+    "url": "https://en.wikipedia.org/wiki/Chordate"
+  },
+  "Felidae": {
+    "description": "Felidae is the family of mammals in the order Carnivora colloquially referred to as cats. A member of this family is also called a felid.",
+    "url": "https://en.wikipedia.org/wiki/Felidae"
+  },
+  "Felis": {
+    "description": "Felis is a genus of small and medium-sized cat species native to most of Africa and south of 60\u00b0 latitude in Europe and Asia to Indochina. The genus includes the domestic cat. The smallest of the seven Felis species is the black-footed cat with a head and body length from 38 to 42\u00a0cm. The largest is the jungle cat with a head and body length from 62 to 76\u00a0cm.",
+    "url": "https://en.wikipedia.org/wiki/Felis"
+  },
+  "Mammalia": {
+    "description": "A mammal is a vertebrate animal of the class Mammalia. Mammals are characterized by the presence of milk-producing mammary glands for feeding their young, a broad neocortex region of the brain, fur or hair, and three middle ear bones. These characteristics distinguish them from reptiles and birds, from which their ancestors diverged in the Carboniferous period over 300\u00a0million years ago. Around 6,640 extant species of mammals have been described and divided into 27 orders. The study of mammals is called mammalogy.",
+    "url": "https://en.wikipedia.org/wiki/Mammal"
   }
 }

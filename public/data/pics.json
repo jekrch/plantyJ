@@ -12,7 +12,30 @@
       "description": null,
       "image": "images/A mil/1777600657.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-05-01T01:57:38.548Z"
+      "addedAt": "2026-05-01T01:57:38.548Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "97c88f7ea48241fa",
+      "dominantColors": [
+        [
+          66.3,
+          1.0,
+          8.9
+        ],
+        [
+          35.6,
+          1.1,
+          9.1
+        ],
+        [
+          49.8,
+          -17.0,
+          26.8
+        ]
+      ],
+      "bioclipSpeciesId": "Achillea millefolium",
+      "bioclipCommonName": "common yarrow",
+      "bioclipScore": 0.821
     },
     {
       "seq": 38,
@@ -24,7 +47,30 @@
       "image": "images/F cat/1777600429.jpg",
       "postedBy": "Jenny",
       "addedAt": "2026-05-01T01:53:50.778Z",
-      "kind": "animal"
+      "kind": "animal",
+      "width": 1280,
+      "height": 960,
+      "phash": "fde383c20c9d1a3a",
+      "dominantColors": [
+        [
+          57.0,
+          -25.3,
+          29.9
+        ],
+        [
+          42.5,
+          -19.1,
+          22.5
+        ],
+        [
+          81.8,
+          -3.7,
+          3.0
+        ]
+      ],
+      "bioclipSpeciesId": "Felis catus",
+      "bioclipCommonName": "Cat",
+      "bioclipScore": 0.3327
     },
     {
       "seq": 37,
