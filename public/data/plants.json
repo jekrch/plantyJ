@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "R bla",
+      "fullName": "Rosa blanda",
+      "commonName": "Smooth Rose",
+      "variety": null
+    },
+    {
       "shortCode": "H vir",
       "fullName": "Hamamelis virginiana",
       "commonName": "Witch Hazel",
