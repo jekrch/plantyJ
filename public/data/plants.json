@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "S vul",
+      "fullName": "Syringa vulgaris",
+      "commonName": "Lilac",
+      "variety": null
+    },
+    {
       "shortCode": "R bla",
       "fullName": "Rosa blanda",
       "commonName": "Smooth Rose",
