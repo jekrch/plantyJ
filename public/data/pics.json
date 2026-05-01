@@ -25,7 +25,30 @@
       "description": null,
       "image": "images/H lup Wil/1777601590.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-05-01T02:13:11.608Z"
+      "addedAt": "2026-05-01T02:13:11.608Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "d31d42f62f232cca",
+      "dominantColors": [
+        [
+          40.4,
+          20.3,
+          18.6
+        ],
+        [
+          61.7,
+          -26.7,
+          40.4
+        ],
+        [
+          72.5,
+          2.7,
+          6.6
+        ]
+      ],
+      "bioclipSpeciesId": "Humulus lupulus",
+      "bioclipCommonName": "hops",
+      "bioclipScore": 0.2963
     },
     {
       "seq": 43,

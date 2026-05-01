@@ -330,5 +330,13 @@
   "Zizia": {
     "description": "Zizia is a genus of flowering plants in the parsley family, Apiaceae. It was named after Johann Baptist Ziz (1779\u20131829), a German botanist from the Rhineland. It is native to North America.",
     "url": "https://en.wikipedia.org/wiki/Zizia"
+  },
+  "Cannabaceae": {
+    "description": "Cannabaceae is a small family of flowering plants, known as the hemp family. As now circumscribed, the family includes about 170 species grouped in about 11 genera, including Cannabis (hemp), Humulus (hops) and Celtis (hackberries). Celtis is by far the largest genus, containing about 100 species.",
+    "url": "https://en.wikipedia.org/wiki/Cannabaceae"
+  },
+  "Humulus": {
+    "description": "Humulus, or hop, is a small genus of flowering plants in the hemp family, Cannabaceae. Its members are native to temperate regions of the Northern Hemisphere. Hops are the female flowers of the hop species H. lupulus; as a main flavor and aroma ingredient in many beer styles, H. lupulus is widely cultivated for use by the brewing industry.",
+    "url": "https://en.wikipedia.org/wiki/Humulus"
   }
 }
