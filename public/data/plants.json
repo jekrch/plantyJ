@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P sub",
+      "fullName": "Phlox subulata",
+      "commonName": "Phlox",
+      "variety": null
+    },
+    {
       "shortCode": "A mil",
       "fullName": "Achillea millefolium",
       "commonName": "Yarrow",
