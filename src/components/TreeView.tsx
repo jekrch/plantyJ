@@ -287,6 +287,21 @@ export default function TreeView({
     if (initialView()) setReady(true);
   }, [initialView]);
 
+  // Keep the right edge anchored when the container resizes.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    let prevWidth = el.clientWidth;
+    const ro = new ResizeObserver(() => {
+      const newWidth = el.clientWidth;
+      const delta = newWidth - prevWidth;
+      prevWidth = newWidth;
+      if (delta !== 0) setTransform((t) => ({ ...t, x: t.x + delta }));
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   const onWheel = useCallback(
     (e: React.WheelEvent<HTMLDivElement>) => {
       if (!e.ctrlKey && !e.metaKey && Math.abs(e.deltaY) < 30) {
