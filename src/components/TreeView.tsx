@@ -7,7 +7,7 @@ import {
   useCallback,
 } from "react";
 import { hierarchy, cluster, type HierarchyPointNode } from "d3-hierarchy";
-import { Sprout, ZoomIn, ZoomOut, Maximize2, LoaderCircle, ExternalLink, X } from "lucide-react";
+import { Sprout, ZoomIn, ZoomOut, Maximize2, LoaderCircle, ExternalLink, X, Search } from "lucide-react";
 import type { Plant, Species, TaxaInfo } from "../types";
 import { plantTitle } from "../utils/display";
 
@@ -208,6 +208,10 @@ export default function TreeView({
   );
   const [renderedPinned, setRenderedPinned] = useState<HierarchyPointNode<RawNode> | null>(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchHi, setSearchHi] = useState(0);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Sync `pinned` to `renderedPinned`
   useEffect(() => {
@@ -444,6 +448,127 @@ export default function TreeView({
     [transform.x, transform.y]
   );
 
+  type SearchItem = {
+    node: HierarchyPointNode<RawNode>;
+    label: string;
+    sublabel: string;
+    haystack: string;
+  };
+
+  const searchIndex = useMemo<SearchItem[]>(() => {
+    const items: SearchItem[] = [];
+    for (const n of layout.nodes) {
+      if (n.depth === 0) continue;
+      if (n.data.plant) {
+        const p = n.data.plant;
+        const label = plantTitle(p);
+        const sublabel = p.fullName ?? RANK_LABEL[n.data.rank];
+        const fields = [
+          p.commonName,
+          p.fullName,
+          p.variety,
+          p.shortCode,
+          n.data.name,
+        ].filter(Boolean) as string[];
+        items.push({
+          node: n,
+          label,
+          sublabel,
+          haystack: fields.join(" \n ").toLowerCase(),
+        });
+      } else {
+        items.push({
+          node: n,
+          label: n.data.name,
+          sublabel: RANK_LABEL[n.data.rank],
+          haystack: n.data.name.toLowerCase(),
+        });
+      }
+    }
+    return items;
+  }, [layout.nodes]);
+
+  const matches = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return [] as SearchItem[];
+    const hits: { item: SearchItem; score: number }[] = [];
+    for (const item of searchIndex) {
+      const idx = item.haystack.indexOf(q);
+      if (idx === -1) continue;
+      const labelStart = item.label.toLowerCase().startsWith(q);
+      hits.push({ item, score: (labelStart ? 0 : 1000) + idx });
+    }
+    hits.sort((a, b) => a.score - b.score || a.item.label.localeCompare(b.item.label));
+    return hits.slice(0, 12).map((h) => h.item);
+  }, [searchQuery, searchIndex]);
+
+  useEffect(() => {
+    setSearchHi(0);
+  }, [matches]);
+
+  useEffect(() => {
+    if (searchOpen) {
+      const id = window.setTimeout(() => searchInputRef.current?.focus(), 0);
+      return () => window.clearTimeout(id);
+    }
+  }, [searchOpen]);
+
+  const closeSearch = useCallback(() => {
+    setSearchOpen(false);
+    setSearchQuery("");
+    setSearchHi(0);
+  }, []);
+
+  const focusNode = useCallback((n: HierarchyPointNode<RawNode>) => {
+    const el = containerRef.current;
+    if (!el) return;
+    const cw = el.clientWidth;
+    const ch = el.clientHeight;
+    setTransform((t) => {
+      const nodeX = PAD_X + n.y;
+      const nodeY = PAD_Y + n.x;
+      const targetSX = cw * (2 / 3);
+      const targetSY = ch * (1 / 3);
+      // Clamp y so the tree's top edge never drops below the canvas top
+      // (no empty band above the rank headers).
+      const y = Math.min(0, targetSY - nodeY * t.k);
+      return {
+        k: t.k,
+        x: targetSX - nodeX * t.k,
+        y,
+      };
+    });
+    setPinned(n);
+  }, []);
+
+  const selectSearchItem = useCallback(
+    (item: SearchItem) => {
+      closeSearch();
+      focusNode(item.node);
+    },
+    [closeSearch, focusNode]
+  );
+
+  const onSearchKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeSearch();
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSearchHi((i) => Math.min(matches.length - 1, i + 1));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSearchHi((i) => Math.max(0, i - 1));
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        const pick = matches[searchHi] ?? matches[0];
+        if (pick) selectSearchItem(pick);
+      }
+    },
+    [matches, searchHi, closeSearch, selectSearchItem]
+  );
+
   const zoomBy = useCallback((factor: number) => {
     const el = containerRef.current;
     if (!el) return;
@@ -482,7 +607,10 @@ export default function TreeView({
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
-        onClick={() => setPinned(null)}
+        onClick={() => {
+          setPinned(null);
+          if (searchOpen) closeSearch();
+        }}
       >
         <svg
           width={layout.width}
@@ -500,8 +628,8 @@ export default function TreeView({
               <circle r={LEAF_RADIUS} />
             </clipPath>
             <radialGradient id="leaf-glow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="var(--color-accent)" stopOpacity="0.55" />
-              <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0" />
+              <stop offset="0%" stopColor="var(--color-ink)" stopOpacity="0.45" />
+              <stop offset="100%" stopColor="var(--color-ink)" stopOpacity="0" />
             </radialGradient>
           </defs>
 
@@ -540,9 +668,9 @@ export default function TreeView({
                     key={i}
                     d={linkPath(l.source, l.target)}
                     stroke={
-                      isActive ? "var(--color-accent)" : "var(--color-ink-muted)"
+                      isActive ? "var(--color-ink)" : "var(--color-ink-muted)"
                     }
-                    strokeOpacity={isActive ? 0.95 : 0.55}
+                    strokeOpacity={isActive ? 0.9 : 0.55}
                     strokeWidth={isActive ? 1.8 : 1.1}
                   />
                 );
@@ -565,11 +693,7 @@ export default function TreeView({
                       textAnchor="middle"
                       fontFamily="'Space Mono', monospace"
                       fontSize={11}
-                      fill={
-                        isActive
-                          ? "var(--color-accent)"
-                          : "var(--color-ink)"
-                      }
+                      fill="var(--color-ink)"
                       fillOpacity={isActive ? 1 : 0.85}
                       stroke="var(--color-surface)"
                       strokeWidth={3}
@@ -600,7 +724,7 @@ export default function TreeView({
                   const isAnimal = p.kind === "animal";
                   const nodeColor = isAnimal
                     ? "var(--color-amber, #f59e0b)"
-                    : "var(--color-accent)";
+                    : "var(--color-ink)";
                   return (
                     <g
                       key={`leaf-${p.id}`}
@@ -712,7 +836,7 @@ export default function TreeView({
                       r={r}
                       fill={
                         isActive || isAncestorOfActive
-                          ? "var(--color-accent)"
+                          ? "var(--color-ink)"
                           : "var(--color-ink-muted)"
                       }
                       fillOpacity={isActive || isAncestorOfActive ? 1 : 0.75}
@@ -731,16 +855,87 @@ export default function TreeView({
         )}
 
         {/* Floating control bar */}
-        <div className="absolute top-3 right-3 z-30 flex items-center gap-1 rounded-md bg-surface/85 backdrop-blur-sm ring-1 ring-inset ring-white/5 p-1" onClick={(e) => e.stopPropagation()}>
-          <CtrlBtn label="Zoom out" onClick={() => zoomBy(0.8)}>
-            <ZoomOut size={13} strokeWidth={1.5} />
-          </CtrlBtn>
-          <CtrlBtn label="Zoom in" onClick={() => zoomBy(1.25)}>
-            <ZoomIn size={13} strokeWidth={1.5} />
-          </CtrlBtn>
-          <CtrlBtn label="Fit to view" onClick={fitToView}>
-            <Maximize2 size={13} strokeWidth={1.5} />
-          </CtrlBtn>
+        <div
+          className="absolute bottom-3 left-3 flex flex-col-reverse items-start gap-2"
+          onClick={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.stopPropagation()}
+          onWheel={(e) => e.stopPropagation()}
+        >
+          <div className="flex items-center gap-1 rounded-md bg-surface/85 backdrop-blur-sm ring-1 ring-inset ring-white/5 p-1">
+            <CtrlBtn
+              label="Search"
+              active={searchOpen}
+              onClick={() => {
+                if (searchOpen) closeSearch();
+                else setSearchOpen(true);
+              }}
+            >
+              <Search size={13} strokeWidth={1.5} />
+            </CtrlBtn>
+            <CtrlBtn label="Zoom out" onClick={() => zoomBy(0.8)}>
+              <ZoomOut size={13} strokeWidth={1.5} />
+            </CtrlBtn>
+            <CtrlBtn label="Zoom in" onClick={() => zoomBy(1.25)}>
+              <ZoomIn size={13} strokeWidth={1.5} />
+            </CtrlBtn>
+            <CtrlBtn label="Fit to view" onClick={fitToView}>
+              <Maximize2 size={13} strokeWidth={1.5} />
+            </CtrlBtn>
+          </div>
+
+          {searchOpen && (
+            <div className="w-72 max-w-[80vw] rounded-md bg-surface-raised/95 backdrop-blur-sm ring-1 ring-inset ring-white/10 shadow-xl overflow-hidden">
+              <div className="flex items-center gap-2 px-2 py-1.5 border-b border-ink-faint/15">
+                <Search size={12} strokeWidth={1.5} className="text-ink-muted shrink-0" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="Species, common, or taxa…"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={onSearchKeyDown}
+                  className="flex-1 min-w-0 bg-transparent text-[12px] text-ink placeholder:text-ink-faint outline-none"
+                  autoComplete="off"
+                  spellCheck={false}
+                />
+                <button
+                  type="button"
+                  aria-label="Close search"
+                  onClick={closeSearch}
+                  className="flex items-center justify-center h-5 w-5 rounded text-ink-muted hover:text-ink hover:bg-white/5 transition-colors shrink-0"
+                >
+                  <X size={12} strokeWidth={1.5} />
+                </button>
+              </div>
+              {searchQuery.trim() && (
+                <ul className="max-h-72 overflow-y-auto thin-scroll py-1">
+                  {matches.length === 0 ? (
+                    <li className="px-3 py-2 text-[11px] text-ink-faint italic">No matches</li>
+                  ) : (
+                    matches.map((m, i) => (
+                      <li key={`sr-${m.node.depth}-${m.node.data.rank}-${m.node.data.name}-${i}`}>
+                        <button
+                          type="button"
+                          onMouseEnter={() => setSearchHi(i)}
+                          onClick={() => selectSearchItem(m)}
+                          className={`w-full text-left px-3 py-1.5 flex items-baseline gap-2 transition-colors ${
+                            i === searchHi ? "bg-white/8" : "hover:bg-white/5"
+                          }`}
+                        >
+                          <span className="text-[12px] text-ink truncate min-w-0">
+                            {m.label}
+                          </span>
+                          <span className="ml-auto text-[9px] font-mono uppercase tracking-wider text-ink-faint shrink-0">
+                            {m.sublabel}
+                          </span>
+                        </button>
+                      </li>
+                    ))
+                  )}
+                </ul>
+              )}
+            </div>
+          )}
         </div>
 
       </div>
@@ -753,6 +948,7 @@ export default function TreeView({
               node={renderedPinned}
               plants={plants}
               taxa={taxa}
+              speciesByShortCode={speciesByShortCode}
               isClosing={isClosing}
               onAnimationEnd={() => {
                 if (isClosing) setRenderedPinned(null);
@@ -772,17 +968,24 @@ function CtrlBtn({
   label,
   onClick,
   children,
+  active,
 }: {
   label: string;
   onClick: () => void;
   children: React.ReactNode;
+  active?: boolean;
 }) {
   return (
     <button
       type="button"
       aria-label={label}
+      aria-pressed={active}
       onClick={onClick}
-      className="flex items-center justify-center h-7 w-7 rounded text-ink-muted hover:text-accent hover:bg-white/5 transition-colors"
+      className={`flex items-center justify-center h-7 w-7 rounded transition-colors ${
+        active
+          ? "text-accent bg-white/5"
+          : "text-ink-muted hover:text-accent hover:bg-white/5"
+      }`}
     >
       {children}
     </button>
@@ -817,6 +1020,7 @@ function NodeDetail({
   node,
   plants,
   taxa,
+  speciesByShortCode,
   isClosing,
   onAnimationEnd,
   onClose,
@@ -826,6 +1030,7 @@ function NodeDetail({
   node: HierarchyPointNode<RawNode>;
   plants: Plant[];
   taxa: Record<string, TaxaInfo>;
+  speciesByShortCode: Map<string, Species>;
   isClosing?: boolean;
   onAnimationEnd?: () => void;
   onClose: () => void;
@@ -834,7 +1039,17 @@ function NodeDetail({
 }) {
   const isLeaf = !!node.data.plant;
   const baseURL = import.meta.env.BASE_URL;
+  const species =
+    isLeaf && node.data.shortCode
+      ? speciesByShortCode.get(node.data.shortCode) ?? null
+      : null;
   const taxaInfo = taxa[node.data.name];
+  const description = isLeaf ? species?.description ?? null : taxaInfo?.description ?? null;
+  const references: { name: string; url: string }[] = isLeaf
+    ? species?.references ?? []
+    : taxaInfo?.url
+      ? [{ name: "Wikipedia", url: taxaInfo.url }]
+      : [];
   const [tab, setTab] = useState<"info" | "images">("info");
 
   // Reset to info tab whenever the displayed node changes.
@@ -938,27 +1153,39 @@ function NodeDetail({
       <div className="flex-1 min-h-0 relative">
         <div
           aria-hidden={tab !== "info"}
-          className={`h-full overflow-y-auto px-3 pt-3 pb-3 thin-scroll space-y-3 ${tab !== "info" ? "hidden" : ""}`}
+          className={`h-full overflow-y-auto px-3 pt-3 pb-3 thin-scroll flex flex-col gap-3 ${tab !== "info" ? "hidden" : ""}`}
         >
-          {taxaInfo?.description ? (
-            <p className="text-[12px] leading-relaxed text-ink/90 max-w-[60em] whitespace-pre-line">
-              {taxaInfo.description.replace(/(?<!\n)\n(?!\n)/g, '\n\n')}
-            </p>
-          ) : (
-            <p className="text-[11px] text-ink-faint italic">
-              No description available for {title}.
-            </p>
-          )}
-          {taxaInfo?.url && (
-            <a
-              href={taxaInfo.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-[11px] text-ink-muted hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
-            >
-              View on Wikipedia
-              <ExternalLink size={10} strokeWidth={1.5} />
-            </a>
+          <div className="flex-1">
+            {description ? (
+              <p className="text-[12px] leading-relaxed text-ink/90 max-w-[60em] whitespace-pre-line">
+                {description.replace(/(?<!\n)\n(?!\n)/g, '\n\n')}
+              </p>
+            ) : (
+              <p className="text-[11px] text-ink-faint italic">
+                No description available for {title}.
+              </p>
+            )}
+          </div>
+          {references.length > 0 && (
+            <div className="pt-2 border-t border-ink-faint/15">
+              <div className="text-[9px] font-mono uppercase tracking-wider text-ink-faint mb-1.5">
+                Sources
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {references.map((r) => (
+                  <a
+                    key={r.url}
+                    href={r.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-ink-muted hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
+                  >
+                    {r.name}
+                    <ExternalLink size={10} strokeWidth={1.5} />
+                  </a>
+                ))}
+              </div>
+            </div>
           )}
         </div>
 
