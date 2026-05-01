@@ -1,6 +1,91 @@
 {
   "pics": [
     {
+      "seq": 42,
+      "id": "S mar-1777601302",
+      "shortCode": "S mar",
+      "zoneCode": "fy",
+      "tags": [
+        "native"
+      ],
+      "description": null,
+      "image": "images/S mar/1777601302.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-05-01T02:08:23.899Z"
+    },
+    {
+      "seq": 41,
+      "id": "Z aur-1777601176",
+      "shortCode": "Z aur",
+      "zoneCode": "nbv",
+      "tags": [
+        "native"
+      ],
+      "description": null,
+      "image": "images/Z aur/1777601176.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-05-01T02:06:17.686Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "d04228bfa3377633",
+      "dominantColors": [
+        [
+          59.5,
+          4.8,
+          18.7
+        ],
+        [
+          22.0,
+          2.8,
+          9.1
+        ],
+        [
+          53.9,
+          -19.4,
+          36.8
+        ]
+      ],
+      "bioclipSpeciesId": "Zizia aurea",
+      "bioclipCommonName": "Golden Zizia",
+      "bioclipScore": 0.7177
+    },
+    {
+      "seq": 40,
+      "id": "P sub-1777601099",
+      "shortCode": "P sub",
+      "zoneCode": "fy",
+      "tags": [
+        "native"
+      ],
+      "description": null,
+      "image": "images/P sub/1777601099.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-05-01T02:05:00.652Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "ebf9c7bcc8911a01",
+      "dominantColors": [
+        [
+          53.0,
+          -20.1,
+          36.4
+        ],
+        [
+          38.1,
+          -1.7,
+          12.5
+        ],
+        [
+          66.8,
+          -4.9,
+          13.7
+        ]
+      ],
+      "bioclipSpeciesId": "Phlox pilosa",
+      "bioclipCommonName": "Prairie phlox",
+      "bioclipScore": 0.2427
+    },
+    {
       "seq": 39,
       "id": "A mil-1777600657",
       "shortCode": "A mil",
@@ -19,7 +104,7 @@
       "dominantColors": [
         [
           66.3,
-          1.0,
+          1,
           8.9
         ],
         [
@@ -29,7 +114,7 @@
         ],
         [
           49.8,
-          -17.0,
+          -17,
           26.8
         ]
       ],
@@ -53,7 +138,7 @@
       "phash": "fde383c20c9d1a3a",
       "dominantColors": [
         [
-          57.0,
+          57,
           -25.3,
           29.9
         ],
@@ -65,7 +150,7 @@
         [
           81.8,
           -3.7,
-          3.0
+          3
         ]
       ],
       "bioclipSpeciesId": "Felis catus",

@@ -1,6 +1,24 @@
 {
   "plants": [
     {
+      "shortCode": "S mar",
+      "fullName": "Scrophularia marilandica",
+      "commonName": "Late Figwort",
+      "variety": null
+    },
+    {
+      "shortCode": "Z aur",
+      "fullName": "Zizia aurea",
+      "commonName": "Golden Alexanders",
+      "variety": null
+    },
+    {
+      "shortCode": "P sub",
+      "fullName": "Phlox subulata",
+      "commonName": "Phlox",
+      "variety": null
+    },
+    {
       "shortCode": "A mil",
       "fullName": "Achillea millefolium",
       "commonName": "Yarrow",

@@ -1,0 +1,59 @@
+{
+  "id": "zizia-aurea",
+  "fullName": "Zizia aurea",
+  "commonName": "Golden Alexanders",
+  "description": "Zizia aurea (golden alexanders, golden zizia) is a flowering herbaceous perennial plant of the carrot family Apiaceae. It is native to eastern Canada and the United States, from the eastern Great Plains to the Atlantic Coast. The genus is named for Johann Baptist Ziz, a German botanist. The common name is based on the similarity to alexanders (Smyrnium olusatrum), another member of the carrot family from coastal areas in Europe and Northern Africa.",
+  "vernacularNames": [
+    "Golden Alexanders",
+    "Golden Zizia",
+    "Golden Alexander",
+    "Common Alexanders",
+    "Golden Meadowparsnip"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Apiales",
+    "family": "Apiaceae",
+    "genus": "Zizia",
+    "species": "Zizia aurea",
+    "canonicalName": "Zizia aurea"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/3034521"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:850044-1"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Zizia_aurea"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/83154"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q926091"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.144433"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 32829
+}

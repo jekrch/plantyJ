@@ -314,5 +314,21 @@
   "Mammalia": {
     "description": "A mammal is a vertebrate animal of the class Mammalia. Mammals are characterized by the presence of milk-producing mammary glands for feeding their young, a broad neocortex region of the brain, fur or hair, and three middle ear bones. These characteristics distinguish them from reptiles and birds, from which their ancestors diverged in the Carboniferous period over 300\u00a0million years ago. Around 6,640 extant species of mammals have been described and divided into 27 orders. The study of mammals is called mammalogy.",
     "url": "https://en.wikipedia.org/wiki/Mammal"
+  },
+  "Ericales": {
+    "description": "The Ericales are a large and diverse order of flowering plants in the asterid group of the eudicots. Well-known and economically important members of this order include tea and ornamental camellias, persimmon, ebony, blueberry, cranberry, lingonberry, huckleberry, kiwifruit, Brazil nut, argan, sapote, azaleas and rhododendrons, heather, heath, impatiens, phlox, Jacob's ladder, primroses, cyclamens, shea, sapodilla, pouterias, and trumpet pitchers.",
+    "url": "https://en.wikipedia.org/wiki/Ericales"
+  },
+  "Phlox": {
+    "description": "Phlox is a genus of 68 species of perennial and annual plants in the family Polemoniaceae. They are found mostly in North America in diverse habitats from alpine tundra to open woodland and prairie. Some flower in spring, others in summer and fall. Flowers may be pale blue, violet, pink, bright red, or white. Many are fragrant.",
+    "url": "https://en.wikipedia.org/wiki/Phlox"
+  },
+  "Polemoniaceae": {
+    "description": "The Polemoniaceae are a family of flowering plants consisting of about 27 genera with 270\u2013400 species of annuals and perennials native to the Northern Hemisphere and South America, with the center of diversity in western North America.",
+    "url": "https://en.wikipedia.org/wiki/Polemoniaceae"
+  },
+  "Zizia": {
+    "description": "Zizia is a genus of flowering plants in the parsley family, Apiaceae. It was named after Johann Baptist Ziz (1779\u20131829), a German botanist from the Rhineland. It is native to North America.",
+    "url": "https://en.wikipedia.org/wiki/Zizia"
   }
 }
