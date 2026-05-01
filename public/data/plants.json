@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "H arb",
+      "fullName": "Hydrangea arborescens",
+      "commonName": "Smooth Hydrangea",
+      "variety": null
+    },
+    {
       "shortCode": "S vul",
       "fullName": "Syringa vulgaris",
       "commonName": "Lilac",
