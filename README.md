@@ -2,7 +2,7 @@
 
 A private garden journal for my partner and me. Snap a plant, send it to a Telegram group with a caption, and it shows up on the site.
 
-[plantyj.com](plantyj.com)
+[plantyj.com](https://plantyj.com)
 
 ## How it works
 ```
