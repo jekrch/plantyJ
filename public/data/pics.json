@@ -25,7 +25,30 @@
       "description": "dwarf rootstock",
       "image": "images/P pyr Peg/1777601505.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-05-01T02:11:46.299Z"
+      "addedAt": "2026-05-01T02:11:46.299Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "d0af26f7a5805ba4",
+      "dominantColors": [
+        [
+          27.7,
+          -1.7,
+          6.7
+        ],
+        [
+          55.6,
+          0.6,
+          10.7
+        ],
+        [
+          51.3,
+          -14.3,
+          29.1
+        ]
+      ],
+      "bioclipSpeciesId": "Viburnum lentago",
+      "bioclipCommonName": "viburnum",
+      "bioclipScore": 0.3475
     },
     {
       "seq": 42,
@@ -38,7 +61,30 @@
       "description": null,
       "image": "images/S mar/1777601302.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-05-01T02:08:23.899Z"
+      "addedAt": "2026-05-01T02:08:23.899Z",
+      "width": 960,
+      "height": 1280,
+      "phash": "d5c56d8339130f9a",
+      "dominantColors": [
+        [
+          39.7,
+          0.5,
+          7.9
+        ],
+        [
+          66.9,
+          0.5,
+          7.6
+        ],
+        [
+          54.1,
+          -23.2,
+          29.8
+        ]
+      ],
+      "bioclipSpeciesId": "Scrophularia nodosa",
+      "bioclipCommonName": "Foxglove",
+      "bioclipScore": 0.7847
     },
     {
       "seq": 41,
