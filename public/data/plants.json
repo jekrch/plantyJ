@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "R hir",
+      "fullName": "Rudbeckia hirta",
+      "commonName": "Black-eyed Susan",
+      "variety": null
+    },
+    {
       "shortCode": "H lup Wil",
       "fullName": "Humulus lupulus",
       "commonName": "Hops",
