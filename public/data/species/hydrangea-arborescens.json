@@ -1,0 +1,62 @@
+{
+  "id": "hydrangea-arborescens",
+  "fullName": "Hydrangea arborescens",
+  "commonName": "Smooth Hydrangea",
+  "description": "Hydrangea arborescens, commonly known as smooth hydrangea or sevenbark, is a species of flowering plant in the family Hydrangeaceae. It is a small- to medium-sized, multi-stemmed, deciduous shrub up to 2 m (7 ft) tall that is native to the eastern United States.",
+  "vernacularNames": [
+    "Sevenbark",
+    "Smooth Hydrangea",
+    "Smooth Hydrangea, Wild Hydrangea, Sevenbark, Sheep Flower",
+    "Tree Hydrangea",
+    "Wild Hydrangea",
+    "migugsugug",
+    "\ubbf8\uad6d\uc218\uad6d",
+    "wild hydrangea"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Cornales",
+    "family": "Hydrangeaceae",
+    "genus": "Hydrangea",
+    "species": "Hydrangea arborescens",
+    "canonicalName": "Hydrangea arborescens"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/2985986"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:30010549-2"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Hydrangea_arborescens"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/130554"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q278173"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.134902"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 22092
+}

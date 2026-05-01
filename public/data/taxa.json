@@ -358,5 +358,13 @@
   "Syringa": {
     "description": "Syringa is a genus of 12 currently recognized species of flowering woody plants in the olive family called lilacs. They are native to woodland and scrub from southeastern Europe to eastern Asia, and widely and commonly cultivated in temperate areas elsewhere.",
     "url": "https://en.wikipedia.org/wiki/Syringa"
+  },
+  "Hydrangea": {
+    "description": "Hydrangea is a genus of more than 70 species of flowering plants native to Asia and the Americas. Hydrangea is also used as the common name for the genus; some are also often called hortensia. The genus was first described from Virginia in North America, but by far the greatest species diversity is in eastern Asia, notably China, Korea, and Japan. Most are shrubs 1\u20133\u00a0m tall, but some are small trees, and others lianas reaching up to 30\u00a0m (100\u00a0ft) by climbing up trees. They can be either deciduous or evergreen, though the widely cultivated temperate species are all deciduous.",
+    "url": "https://en.wikipedia.org/wiki/Hydrangea"
+  },
+  "Spiraea": {
+    "description": "Spiraea, sometimes spelled spirea in common names, and commonly known as meadowsweets or steeplebushes, is a genus of about 80 to 100 species of shrubs in the family Rosaceae. They are native to the temperate Northern Hemisphere, with the greatest diversity in eastern Asia.",
+    "url": "https://en.wikipedia.org/wiki/Spiraea"
   }
 }
