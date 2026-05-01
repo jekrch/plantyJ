@@ -196,7 +196,7 @@ export async function appendPic(
       PLANTS_PATH,
       { plants: nextPlants },
       plantsSha,
-      `Add/update plant: ${plantUpsert.shortCode}`
+      `Add/update plant: ${plantUpsert.shortCode} [skip-deploy]`
     );
   }
 
@@ -206,7 +206,7 @@ export async function appendPic(
     PICS_PATH,
     { pics: nextPics },
     picsSha,
-    `Add pic: ${newPic.shortCode}`
+    `Add pic: ${newPic.shortCode} [skip-deploy]`
   );
 }
 

@@ -485,7 +485,7 @@ export default {
         env,
         repoImagePath,
         base64Image,
-        `Add photo: ${finalShortCode}`
+        `Add photo: ${finalShortCode} [skip-deploy]`
       );
 
       const entry: PicEntry = {
