@@ -60,7 +60,7 @@ const PAD_Y = 56;
 // Multiplier applied to the fit-to-view zoom on first load. >1 zooms in past
 // the "everything visible" baseline; the initial viewport is then anchored so
 // the species column (right edge of tree) and rank headers (top) stay in view.
-const INITIAL_ZOOM_FACTOR = 2.5;
+const INITIAL_ZOOM_FACTOR = 2.8;
 
 const RANK_LABEL: Record<Rank, string> = {
   root: "Life",
@@ -275,7 +275,7 @@ export default function TreeView({
     // If the full tree fits horizontally at this zoom, center it; otherwise
     // right-align so species labels sit at the right edge of the viewport.
     // Top-align so rank headers stay visible at the top either way.
-    const x = scaledW <= cw ? (cw - scaledW) / 2 : cw - scaledW;
+    const x = scaledW <= cw ? (cw - scaledW) / 2 : cw - scaledW + 60;
     const y = 0;
     setTransform({ x, y, k });
     return true;
