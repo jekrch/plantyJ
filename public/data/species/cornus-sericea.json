@@ -1,0 +1,60 @@
+{
+  "id": "cornus-sericea",
+  "fullName": "Cornus sericea",
+  "commonName": "Red Osier Dogwood",
+  "description": "Cornus sericea, the red osier or red-osier dogwood, is a species of flowering plant in the family Cornaceae, native to much of North America. It has sometimes been considered a synonym of the Asian species Cornus alba. Other names include red brush, red willow, redstem dogwood, redtwig dogwood, red-rood, American dogwood, creek dogwood, and western dogwood.",
+  "vernacularNames": [
+    "Red-osier Dogwood",
+    "Red-osier Dogwood (EN)",
+    "Red-osier Dogwood, Red Willow",
+    "Redosier",
+    "Redosier Dogwood",
+    "Seidiger Hartriegel (DE)"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Cornales",
+    "family": "Cornaceae",
+    "genus": "Cornus",
+    "species": "Cornus sericea",
+    "canonicalName": "Cornus sericea"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/3082244"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:66169-2"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Cornus_sericea"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/53387"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q164130"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.140261"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 81666
+}

@@ -11,7 +11,30 @@
       "description": null,
       "image": "images/C ser/1777603191.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-05-01T02:39:52.562Z"
+      "addedAt": "2026-05-01T02:39:52.562Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "ccab13ad765a43b0",
+      "dominantColors": [
+        [
+          39.6,
+          2.8,
+          8.5
+        ],
+        [
+          60.9,
+          1.9,
+          10.6
+        ],
+        [
+          61.7,
+          -28.4,
+          41.5
+        ]
+      ],
+      "bioclipSpeciesId": "Malus baccata",
+      "bioclipCommonName": "SIberian crab apple",
+      "bioclipScore": 0.6235
     },
     {
       "seq": 50,

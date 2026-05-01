@@ -366,5 +366,13 @@
   "Spiraea": {
     "description": "Spiraea, sometimes spelled spirea in common names, and commonly known as meadowsweets or steeplebushes, is a genus of about 80 to 100 species of shrubs in the family Rosaceae. They are native to the temperate Northern Hemisphere, with the greatest diversity in eastern Asia.",
     "url": "https://en.wikipedia.org/wiki/Spiraea"
+  },
+  "Cornaceae": {
+    "description": "The Cornaceae, the dogwood family, are a cosmopolitan family of flowering plants in the order Cornales. The family contains approximately 85 species in two genera, Alangium and Cornus. They are mostly trees and shrubs, which may be deciduous or evergreen, although a few species are perennial herbs. Members of the family usually have opposite or alternate simple leaves, four- or five-parted flowers clustered in inflorescences or pseudanthia, and drupaceous fruits. The family is primarily distributed in northern temperate regions and tropical Asia. In northern temperate areas, Cornaceae are well known from the dogwoods Cornus.",
+    "url": "https://en.wikipedia.org/wiki/Cornaceae"
+  },
+  "Cornus": {
+    "description": "Cornus is a genus of about 30\u201360 species of woody plants in the family Cornaceae, commonly known as dogwoods or cornels, which can generally be distinguished by their blossoms, berries, and distinctive bark. Most are deciduous trees or shrubs, but a few species are nearly herbaceous perennial subshrubs, and some species are evergreen. Several species have small heads of inconspicuous flowers surrounded by an involucre of large, typically white petal-like bracts, while others have more open clusters of petal-bearing flowers. The various species of dogwood are native throughout much of temperate and boreal Eurasia and North America, with China, Japan, and the southeastern United States being particularly rich in native species. The genus is also known from South America with members such as Cornus peruviana.",
+    "url": "https://en.wikipedia.org/wiki/Cornus"
   }
 }
