@@ -12,7 +12,7 @@
     "url": "https://en.wikipedia.org/wiki/Amaryllidaceae"
   },
   "Apiaceae": {
-    "description": "Apiaceae, also called Umbelliferae, is a family of mostly aromatic flowering plants named after the type genus Apium, and commonly known as the celery, carrot, or parsley family, or simply as umbellifers. It is the 16th-largest family of flowering plants, with more than 3,800 species in about 446 genera, including such well-known, and economically important plants as ajwain, angelica, anise, asafoetida, caraway, carrot, celery, chervil, coriander, cumin, dill, fennel, lovage, cow parsley, parsley, parsnip and sea holly, as well as silphium, a plant whose exact identity is unclear and which may be extinct.",
+    "description": "Apiaceae, also called Umbelliferae, is a family of mostly aromatic flowering plants named after the type genus Apium, and commonly known as the celery, carrot, or parsley family, or simply as umbellifers. \nIt is the 16th-largest family of flowering plants, with more than 3,800 species in about 446 genera, including such well-known, and economically important plants as ajwain, angelica, anise, asafoetida, caraway, carrot, celery, chervil, coriander, cumin, dill, fennel, lovage, cow parsley, parsley, parsnip and sea holly, as well as silphium, a plant whose exact identity is unclear and which may be extinct.",
     "url": "https://en.wikipedia.org/wiki/Apiaceae"
   },
   "Apiales": {
@@ -32,7 +32,7 @@
     "url": "https://en.wikipedia.org/wiki/Asparagales"
   },
   "Asteraceae": {
-    "description": "Asteraceae is a large family of flowering plants that consists of over 32,000 known species in over 1,900 genera within the order Asterales. The number of species in Asteraceae is rivaled only by the Orchidaceae, and which is the larger family is unclear as the number of extant species in each family is unknown. The Asteraceae were first described in the year 1740 and given the original name Compositae. The family is commonly known as the aster, daisy, composite, or sunflower family.",
+    "description": "Asteraceae is a large family of flowering plants that consists of over 32,000 known species in over 1,900 genera within the order Asterales. The number of species in Asteraceae is rivaled only by the Orchidaceae, and which is the larger family is unclear as the number of extant species in each family is unknown. \nThe Asteraceae were first described in the year 1740 and given the original name Compositae. The family is commonly known as the aster, daisy, composite, or sunflower family.",
     "url": "https://en.wikipedia.org/wiki/Asteraceae"
   },
   "Asterales": {
@@ -152,7 +152,7 @@
     "url": "https://en.wikipedia.org/wiki/Myrtales"
   },
   "Narcissus": {
-    "description": "Narcissus is a genus of predominantly spring flowering perennial plants of the amaryllis family, Amaryllidaceae. Various common names including daffodil,[Note 1] narcissus (plural narcissi), and jonquil, are used to describe some or all members of the genus. Narcissus has conspicuous flowers with six petal-like tepals surmounted by a cup- or trumpet-shaped corona. The flowers are generally white and yellow (also orange or pink in garden varieties), with either uniform or contrasting coloured tepals and corona.",
+    "description": "Narcissus is a genus of predominantly spring flowering perennial plants of the amaryllis family, Amaryllidaceae. Various common names including daffodil,[Note 1] narcissus (plural narcissi), and jonquil, are used to describe some or all members of the genus. \nNarcissus has conspicuous flowers with six petal-like tepals surmounted by a cup- or trumpet-shaped corona. The flowers are generally white and yellow (also orange or pink in garden varieties), with either uniform or contrasting coloured tepals and corona.",
     "url": "https://en.wikipedia.org/wiki/Narcissus_(plant)"
   },
   "Oenothera": {
