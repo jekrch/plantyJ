@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "S alb",
+      "fullName": "Spiraea alba",
+      "commonName": "Meadowsweet",
+      "variety": null
+    },
+    {
       "shortCode": "H arb",
       "fullName": "Hydrangea arborescens",
       "commonName": "Smooth Hydrangea",
