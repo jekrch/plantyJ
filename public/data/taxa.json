@@ -338,5 +338,17 @@
   "Humulus": {
     "description": "Humulus, or hop, is a small genus of flowering plants in the hemp family, Cannabaceae. Its members are native to temperate regions of the Northern Hemisphere. Hops are the female flowers of the hop species H. lupulus; as a main flavor and aroma ingredient in many beer styles, H. lupulus is widely cultivated for use by the brewing industry.",
     "url": "https://en.wikipedia.org/wiki/Humulus"
+  },
+  "Hamamelidaceae": {
+    "description": "Hamamelidaceae, commonly referred to as the witch-hazel family, is a family of flowering plants in the order Saxifragales. The clade consists of shrubs and small trees positioned within the woody clade of the core Saxifragales. An earlier system, the Cronquist system, recognized Hamamelidaceae in the Hamamelidales order.",
+    "url": "https://en.wikipedia.org/wiki/Hamamelidaceae"
+  },
+  "Hamamelis": {
+    "description": "Witch-hazels or witch hazels (Hamamelis) are a genus of flowering plants in the family Hamamelidaceae, with three species in North America, and one each in Japan (H.\u00a0japonica) and China (H.\u00a0mollis). The North American species are occasionally called winterbloom.",
+    "url": "https://en.wikipedia.org/wiki/Witch-hazel"
+  },
+  "Rosa": {
+    "description": "Rosa or De Rosa may refer to:",
+    "url": "https://en.wikipedia.org/wiki/Rosa"
   }
 }

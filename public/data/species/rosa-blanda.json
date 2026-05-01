@@ -1,0 +1,58 @@
+{
+  "id": "rosa-blanda",
+  "fullName": "Rosa blanda",
+  "commonName": "Smooth Rose",
+  "description": "Rosa blanda, commonly known as the smooth rose, meadow/wild rose, or prairie rose, is a species of rose native to North America. Among roses, it is closest to a \"thornless\" rose, with just a few thorns at the base. The meadow rose occurs as a colony-forming shrub growing to 1 m (3.3 ft) high, naturally in prairies and meadows. The roses are quite variable, the characteristics such as leaf tip number of prickles and glandular hairs usually do not always remain constant, thus it is often confused with Rosa arkansana or Rosa carolina, the two other prairie rose species.",
+  "vernacularNames": [
+    "Smooth Rose",
+    "Smooth rose (EN); Labrador-Rose (DE)",
+    "meadow rose",
+    "smooth wild rose"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Rosales",
+    "family": "Rosaceae",
+    "genus": "Rosa",
+    "species": "Rosa blanda",
+    "canonicalName": "Rosa blanda"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/3002372"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:222243-2"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Rosa_blanda"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/83062"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q952147"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.145493"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 6613
+}
