@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 40,
+      "id": "P sub-1777601099",
+      "shortCode": "P sub",
+      "zoneCode": "fy",
+      "tags": [
+        "native"
+      ],
+      "description": null,
+      "image": "images/P sub/1777601099.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-05-01T02:05:00.652Z"
+    },
+    {
       "seq": 39,
       "id": "A mil-1777600657",
       "shortCode": "A mil",
@@ -19,7 +32,7 @@
       "dominantColors": [
         [
           66.3,
-          1.0,
+          1,
           8.9
         ],
         [
@@ -29,7 +42,7 @@
         ],
         [
           49.8,
-          -17.0,
+          -17,
           26.8
         ]
       ],
@@ -53,7 +66,7 @@
       "phash": "fde383c20c9d1a3a",
       "dominantColors": [
         [
-          57.0,
+          57,
           -25.3,
           29.9
         ],
@@ -65,7 +78,7 @@
         [
           81.8,
           -3.7,
-          3.0
+          3
         ]
       ],
       "bioclipSpeciesId": "Felis catus",
