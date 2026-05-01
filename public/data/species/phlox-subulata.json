@@ -1,0 +1,63 @@
+{
+  "id": "phlox-subulata",
+  "fullName": "Phlox subulata",
+  "commonName": "Phlox",
+  "description": "Phlox subulata the creeping phlox, moss phlox, moss pink or mountain phlox, is a species of flowering plant in the family Polemoniaceae, native to the eastern and central United States, and widely cultivated.\nThe odor given off by the plants may be mistaken for that of marijuana.",
+  "vernacularNames": [
+    "Moss Phlox",
+    "Moss-pink",
+    "Mountain Phlox",
+    "ground pink",
+    "hana-tsumekusa",
+    "moss pink",
+    "\uc9c0\uba74\ud328\ub7ad\uc774\uaf43",
+    "Rock Pink",
+    "moss phlox"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Ericales",
+    "family": "Polemoniaceae",
+    "genus": "Phlox",
+    "species": "Phlox subulata",
+    "canonicalName": "Phlox subulata"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/2927727"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:193691-2"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Phlox_subulata"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/68884"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q1045366"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.152830"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 20643
+}
