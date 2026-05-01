@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "H vir",
+      "fullName": "Hamamelis virginiana",
+      "commonName": "Witch Hazel",
+      "variety": null
+    },
+    {
       "shortCode": "R hir",
       "fullName": "Rudbeckia hirta",
       "commonName": "Black-eyed Susan",
