@@ -455,6 +455,20 @@ export default function TreeView({
     haystack: string;
   };
 
+  // Intercept Ctrl+F / Cmd+F to open the custom search
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // Check for Ctrl or Meta (Command on Mac) + 'f'
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "f") {
+        e.preventDefault(); // Stop the browser's native search from popping up
+        setSearchOpen(true);
+      }
+    };
+
+    window.addEventListener("keydown", handleGlobalKeyDown);
+    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+  }, []);
+  
   const searchIndex = useMemo<SearchItem[]>(() => {
     const items: SearchItem[] = [];
     for (const n of layout.nodes) {
