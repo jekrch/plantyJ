@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "S mar",
+      "fullName": "Scrophularia marilandica",
+      "commonName": "Late Figwort",
+      "variety": null
+    },
+    {
       "shortCode": "Z aur",
       "fullName": "Zizia aurea",
       "commonName": "Golden Alexanders",
