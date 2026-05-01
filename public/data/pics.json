@@ -1,6 +1,17 @@
 {
   "pics": [
     {
+      "seq": 48,
+      "id": "S vul-1777602511",
+      "shortCode": "S vul",
+      "zoneCode": "mpg",
+      "tags": [],
+      "description": null,
+      "image": "images/S vul/1777602511.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-05-01T02:28:32.231Z"
+    },
+    {
       "seq": 47,
       "id": "R bla-1777602168",
       "shortCode": "R bla",
@@ -19,7 +30,7 @@
       "dominantColors": [
         [
           27.4,
-          -0.0,
+          0,
           12.8
         ],
         [
@@ -65,7 +76,7 @@
           6.8
         ],
         [
-          69.0,
+          69,
           2.4,
           19.7
         ]
