@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 43,
+      "id": "P pyr Peg-1777601505",
+      "shortCode": "P pyr Peg",
+      "zoneCode": "sy",
+      "tags": [
+        "edible"
+      ],
+      "description": "dwarf rootstock",
+      "image": "images/P pyr Peg/1777601505.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-05-01T02:11:46.299Z"
+    },
+    {
       "seq": 42,
       "id": "S mar-1777601302",
       "shortCode": "S mar",
@@ -35,7 +48,7 @@
           18.7
         ],
         [
-          22.0,
+          22,
           2.8,
           9.1
         ],
@@ -66,7 +79,7 @@
       "phash": "ebf9c7bcc8911a01",
       "dominantColors": [
         [
-          53.0,
+          53,
           -20.1,
           36.4
         ],
