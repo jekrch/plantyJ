@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "Z aur",
+      "fullName": "Zizia aurea",
+      "commonName": "Golden Alexanders",
+      "variety": null
+    },
+    {
       "shortCode": "P sub",
       "fullName": "Phlox subulata",
       "commonName": "Phlox",
