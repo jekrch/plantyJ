@@ -69,5 +69,6 @@ jobs:
             echo "No metadata changes to commit."
           else
             git commit -m "chore: refresh plant metadata + embeddings"
+            git pull --rebase origin main
             git push
           fi
