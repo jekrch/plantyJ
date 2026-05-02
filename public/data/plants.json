@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A sac",
+      "fullName": "Acer saccharinum",
+      "commonName": "Silver Maple",
+      "variety": null
+    },
+    {
       "shortCode": "A fla",
       "fullName": "Aesculus flava",
       "commonName": "Yellow Buckeye",
