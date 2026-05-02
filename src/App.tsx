@@ -227,9 +227,24 @@ export default function App() {
       setOpenPlantId(null);
       setViewerScope("filtered");
       setCustomViewerPlants(null);
+      setInfoOpen(false);
     },
     [filters, sortMode, syncToURL]
   );
+
+  const handleShowBioclipConflicts = useCallback(() => {
+    const next: Filters = {
+      ...EMPTY_FILTERS,
+      misc: new Set(["bioclip-conflict"]),
+    };
+    setFilters(next);
+    setViewMode("gallery");
+    setSpotlightCode(null);
+    setTreeFocusNode(null);
+    syncToURL(next, sortMode, "gallery", null);
+    setInfoOpen(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [sortMode, syncToURL]);
 
   const handleTreeNodeSelect = useCallback(
     (name: string | null) => {
@@ -429,8 +444,11 @@ export default function App() {
         plantRecords={plantRecords}
         zones={zones}
         zonePics={zonePics}
+        speciesByShortCode={speciesByShortCode}
         onSpotlightPlant={handleSpotlightPlant}
         onSpotlightZone={handleSpotlightZone}
+        onSelectTaxon={handleSelectTaxon}
+        onShowBioclipConflicts={handleShowBioclipConflicts}
       />
 
       {openIndex >= 0 && (

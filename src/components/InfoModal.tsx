@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { X, ExternalLink, Sprout, Github, BugIcon, Building, Flower, Cpu, Globe, BookOpen, Database, Leaf } from "lucide-react";
-import type { Plant, PlantRecord, Zone, ZonePic } from "../types";
+import type { Plant, PlantRecord, Species, Zone, ZonePic } from "../types";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
+import StatsPanel from "./StatsPanel";
 
-type Tab = "about" | "plants" | "zones";
+type Tab = "about" | "stats" | "plants" | "zones";
 
 interface Props {
   open: boolean;
@@ -12,8 +13,11 @@ interface Props {
   plantRecords: PlantRecord[];
   zones: Zone[];
   zonePics: ZonePic[];
+  speciesByShortCode: Map<string, Species>;
   onSpotlightPlant: (shortCode: string) => void;
   onSpotlightZone: (zoneCode: string) => void;
+  onSelectTaxon: (name: string) => void;
+  onShowBioclipConflicts: () => void;
 }
 
 interface PlantEntry {
@@ -34,6 +38,7 @@ interface ZoneEntry {
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "about", label: "About" },
+  { id: "stats", label: "Stats" },
   { id: "plants", label: "Plants" },
   { id: "zones", label: "Zones" },
 ];
@@ -64,9 +69,12 @@ function InfoModalContent({
   plantRecords,
   zones,
   zonePics,
+  speciesByShortCode,
   visible,
   onSpotlightPlant,
   onSpotlightZone,
+  onSelectTaxon,
+  onShowBioclipConflicts,
 }: Props & { visible: boolean }) {
   const [tab, setTab] = useState<Tab>("about");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -223,6 +231,16 @@ function InfoModalContent({
 
         <div className="flex-1 overflow-y-auto info-modal-scroll thin-scroll">
           {tab === "about" && <AboutPanel />}
+          {tab === "stats" && (
+            <StatsPanel
+              plants={plants}
+              zones={zones}
+              speciesByShortCode={speciesByShortCode}
+              onSelectTaxon={onSelectTaxon}
+              onSpotlightZone={onSpotlightZone}
+              onShowBioclipConflicts={onShowBioclipConflicts}
+            />
+          )}
           {tab === "plants" && (
             <PlantsPanel entries={plantEntries} onFilter={onSpotlightPlant} />
           )}

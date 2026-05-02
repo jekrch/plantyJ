@@ -82,7 +82,7 @@ An interactive phylogenetic tree of all plants in the collection, built from the
 
 ## Plant & Zone Views
 
-Clicking a plant short code or zone name opens a **Spotlight** view — a focused, single-subject layout outside the main gallery grid.
+The overhead switcher exposes four primary sections: **Gallery**, **Plant**, **Zone**, and **Tree**. Plant and Zone are spotlight sections — each focuses on a single subject selected from a dropdown (with prev/next stepping). Clicking a plant short code or zone name anywhere in the app also jumps directly to the relevant spotlight.
 
 - **Plant view:** Hero image of the plant with a thumbnail strip of every other photo of that species. Clicking opens the full info drawer.
 - **Zone view:** Hero image for the zone followed by every plant and zone photo recorded there, sorted newest-first. Thumbnails are labeled with the plant name or zone name.
@@ -100,6 +100,17 @@ When viewing a specific photo in the gallery, opening the info drawer surfaces a
 - **Native Range:** Geographic origin data pulled from POWO.
 - **BioCLIP Prediction:** The AI-generated species identification and confidence score, including a logic check that flags whether the visual prediction matches, shares a genus with, or contradicts the manually recorded species.
 - **External Sources:** Direct links to source records — GBIF, POWO, Wikipedia, iNaturalist, Wikidata, and NatureServe (conservation status).
+
+## Info Modal Stats
+
+The info modal (accessible via the site header) has four tabs: **About**, **Stats**, **Plants**, and **Zones**. The Stats tab surfaces a collection-wide snapshot:
+
+- **Hero banner:** Total days the journal has been running, counted from the first entry.
+- **Tile row:** Total photos, unique plant species, unique animal species, and zones with photos.
+- **Biodiversity:** A donut chart of photos grouped by taxonomic rank (Kingdom → Genus). The rank is selectable; clicking any slice filters the gallery by that taxon.
+- **Activity:** A bar chart of photos over time, with granularity (day / week / month) adapting automatically to the span of the collection.
+- **Zones:** Highlight cards for the most-photographed and most species-diverse zones. Clicking either opens the zone spotlight.
+- **Machine ID:** BioCLIP summary — average confidence across all scored photos, number of species disagreements (clickable to filter the gallery to those entries), and count of unidentified photos.
 
 ## Sort modes
 
