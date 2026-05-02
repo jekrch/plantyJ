@@ -149,6 +149,14 @@
         "nonresident"
       ],
       "description": null
+    },
+    {
+      "shortCode": "V ata",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
     }
   ]
 }
