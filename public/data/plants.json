@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "V ata",
+      "fullName": "Vanessa atalanta",
+      "commonName": "Red Admiral",
+      "variety": null
+    },
+    {
       "shortCode": "m gal",
       "fullName": "Meleagris gallopavo",
       "commonName": "Wild Turkey",
