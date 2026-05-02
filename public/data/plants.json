@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "a pla",
+      "fullName": "Acer platanoides",
+      "commonName": "Norway Maple",
+      "variety": null
+    },
+    {
       "shortCode": "C ser",
       "fullName": "Cornus sericea",
       "commonName": "Red Osier Dogwood",
