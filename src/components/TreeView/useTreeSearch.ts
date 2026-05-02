@@ -13,7 +13,8 @@ export interface SearchItem {
 
 export function useTreeSearch(
   nodes: HierarchyPointNode<RawNode>[],
-  onSelect: (node: HierarchyPointNode<RawNode>) => void
+  onSelect: (node: HierarchyPointNode<RawNode>) => void,
+  onCloseDetail?: () => void
 ) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,6 +26,7 @@ export function useTreeSearch(
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "f") {
         e.preventDefault();
+        onCloseDetail?.();
         setSearchOpen(true);
       }
     };

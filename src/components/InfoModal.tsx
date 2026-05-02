@@ -113,7 +113,9 @@ function InfoModalContent({
         count: countByCode.get(code) ?? 0,
       };
     });
-    return entries.sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
+    return entries
+      .filter((e) => e.image !== null)
+      .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
   }, [plants, plantRecords]);
 
   const zoneEntries: ZoneEntry[] = useMemo(() => {

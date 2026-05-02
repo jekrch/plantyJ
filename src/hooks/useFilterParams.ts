@@ -12,6 +12,7 @@ interface InitialState {
   sort: SortMode;
   view: ViewMode;
   subject: string | null;
+  treeNode: string | null;
 }
 
 function parseFiltersFromURL(): InitialState {
@@ -33,8 +34,9 @@ function parseFiltersFromURL(): InitialState {
       : DEFAULT_VIEW;
   const subject =
     view === "plant" || view === "zone" ? params.get("subject") : null;
+  const treeNode = view === "tree" ? params.get("treeNode") : null;
 
-  return { filters, sort, view, subject };
+  return { filters, sort, view, subject, treeNode };
 }
 
 const KEY_TO_PARAM: Record<keyof Filters, string> = {
@@ -48,7 +50,8 @@ function buildParams(
   filters: Filters,
   sort: SortMode,
   view: ViewMode,
-  subject: string | null
+  subject: string | null,
+  treeNode: string | null = null
 ): string {
   const params = new URLSearchParams();
   for (const key of FILTER_KEYS) {
@@ -60,6 +63,9 @@ function buildParams(
     params.set("view", view);
     if (subject && (view === "plant" || view === "zone")) {
       params.set("subject", subject);
+    }
+    if (treeNode && view === "tree") {
+      params.set("treeNode", treeNode);
     }
   }
   return params.toString();
@@ -74,8 +80,8 @@ export function useFilterParams() {
   const initial = useMemo(() => parseFiltersFromURL(), []);
 
   const syncToURL = useCallback(
-    (filters: Filters, sort: SortMode, view: ViewMode, subject: string | null) => {
-      pushURL(buildParams(filters, sort, view, subject));
+    (filters: Filters, sort: SortMode, view: ViewMode, subject: string | null, treeNode: string | null = null) => {
+      pushURL(buildParams(filters, sort, view, subject, treeNode));
     },
     []
   );
@@ -85,6 +91,7 @@ export function useFilterParams() {
     initialSort: initial.sort,
     initialView: initial.view,
     initialSubject: initial.subject,
+    initialTreeNode: initial.treeNode,
     syncToURL,
   };
 }

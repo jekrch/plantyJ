@@ -40,6 +40,7 @@ export default function App() {
     initialSort,
     initialView,
     initialSubject,
+    initialTreeNode,
     syncToURL,
   } = useFilterParams();
   const [sortMode, setSortMode] = useState<SortMode>(initialSort);
@@ -227,6 +228,13 @@ export default function App() {
     [filters, sortMode, viewMode, spotlightCode, syncToURL]
   );
 
+  const handleTreeNodeSelect = useCallback(
+    (name: string | null) => {
+      syncToURL(filters, sortMode, "tree", null, name);
+    },
+    [filters, sortMode, syncToURL]
+  );
+
   const handleSpotlightPlant = useCallback(
     (shortCode: string) => {
       setViewMode("plant");
@@ -406,6 +414,8 @@ export default function App() {
           headerHeight={headerHeight}
           onOpenPlantInList={handleOpenInList}
           onSpotlightPlant={handleSpotlightPlant}
+          initialTreeNode={initialTreeNode}
+          onNodeSelect={handleTreeNodeSelect}
         />
       )}
 

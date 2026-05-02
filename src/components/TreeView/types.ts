@@ -27,6 +27,8 @@ export interface Props {
   headerHeight: number;
   onOpenPlantInList: (plant: Plant, list: Plant[]) => void;
   onSpotlightPlant: (shortCode: string) => void;
+  initialTreeNode?: string | null;
+  onNodeSelect?: (name: string | null) => void;
 }
 
 export const LEAF_RADIUS = 22;
@@ -40,7 +42,7 @@ export const PAD_Y = 56;
 // Multiplier applied to the fit-to-view zoom on first load. >1 zooms in past
 // the "everything visible" baseline; the initial viewport is then anchored so
 // the species column (right edge of tree) and rank headers (top) stay in view.
-export const INITIAL_ZOOM_FACTOR = 2.8;
+export const INITIAL_ZOOM_FACTOR = 3.5;
 
 export const RANK_LABEL: Record<Rank, string> = {
   root: "Life",

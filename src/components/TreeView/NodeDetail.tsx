@@ -79,11 +79,29 @@ export function NodeDetail({
   const title = isLeaf ? plantTitle(node.data.plant!) : node.data.name;
   const subtitle = isLeaf ? node.data.plant?.fullName : RANK_LABEL[node.data.rank];
 
+  const firstImage = items[0]?.image ?? null;
+
   return (
     <div
-      className={`${isClosing ? "slide-down-out" : "slide-up-in"} bg-surface-raised border border-ink-faint/20 rounded-t-xl h-[45vh] flex flex-col shadow-2xl`}
+      className={`${isClosing ? "slide-down-out" : "slide-up-in"} relative overflow-hidden bg-surface-raised border border-ink-faint/20 rounded-t-xl h-[45vh] flex flex-col shadow-2xl`}
       onAnimationEnd={onAnimationEnd}
     >
+      {firstImage && (
+        <div
+          className="absolute inset-y-0 right-0 w-3/4 pointer-events-none z-[-1]"
+          style={{
+            WebkitMaskImage: "linear-gradient(to right, transparent, black 45%)",
+            maskImage: "linear-gradient(to right, transparent, black 45%)",
+          }}
+        >
+          <img
+            src={`${baseURL}${firstImage}`}
+            alt=""
+            className="w-full h-full object-cover opacity-[0.05] mix-blend-luminosity"
+            draggable={false}
+          />
+        </div>
+      )}
       <div className="shrink-0 px-3 pt-3">
         <div className="flex items-baseline justify-between gap-3 mb-2">
           <div className="min-w-0">

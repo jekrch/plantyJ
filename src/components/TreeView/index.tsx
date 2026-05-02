@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { hierarchy, cluster, type HierarchyPointNode } from "d3-hierarchy";
 import { LoaderCircle, Maximize2, Search, X, ZoomIn, ZoomOut } from "lucide-react";
 import { plantTitle } from "../../utils/display";
@@ -27,6 +27,8 @@ export default function TreeView({
   headerHeight,
   onOpenPlantInList,
   onSpotlightPlant,
+  initialTreeNode,
+  onNodeSelect,
 }: Props) {
   const baseURL = import.meta.env.BASE_URL;
 
@@ -102,6 +104,35 @@ export default function TreeView({
     [focusOnPoint]
   );
 
+  const prevPinned = useRef<typeof pinned>(pinned);
+  useEffect(() => {
+    const prev = prevPinned.current;
+    prevPinned.current = pinned;
+    // Only sync when the selection actually changed (skip mount no-op null→null)
+    if (prev === pinned) return;
+    if (prev === null && pinned === null) return;
+    onNodeSelect?.(pinned?.data.name ?? null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pinned]);
+
+  const didInitialFocus = useRef(false);
+  useEffect(() => {
+    if (!ready || didInitialFocus.current || !initialTreeNode) return;
+    const node = layout.nodes.find((n) => n.data.name === initialTreeNode);
+    if (!node) return;
+    didInitialFocus.current = true;
+    focusNode(node);
+  }, [ready, layout.nodes, initialTreeNode, focusNode]);
+
+  // When layout is recomputed (e.g. species data reloads in Strict Mode), the node
+  // objects are new references. Re-sync pinned to the matching node so highlights stay.
+  useEffect(() => {
+    if (!pinned) return;
+    const fresh = layout.nodes.find((n) => n.data.name === pinned.data.name);
+    if (fresh && fresh !== pinned) setPinned(fresh);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [layout.nodes]);
+
   const {
     searchOpen,
     setSearchOpen,
@@ -114,7 +145,7 @@ export default function TreeView({
     closeSearch,
     selectSearchItem,
     onSearchKeyDown,
-  } = useTreeSearch(layout.nodes, focusNode);
+  } = useTreeSearch(layout.nodes, focusNode, () => setPinned(null));
 
   const activeNode = pinned ?? hovered;
 
