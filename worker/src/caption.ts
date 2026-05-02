@@ -1,4 +1,4 @@
-import type { ParsedCaption, ParsedZoneRef, PicEntry, PlantRecord, Zone } from "./types";
+import type { ParsedCaption, ParsedTags, ParsedZoneRef, PicEntry, PlantRecord, Zone } from "./types";
 
 export const UNIDENTIFIED_CODE = "id";
 export const UNIDENTIFIED_PREFIX = "unid-";
@@ -90,11 +90,20 @@ function parseZoneRef(segment: string): ParsedZoneRef {
   return { code: trimmed, name: null };
 }
 
-function parseTags(raw: string): string[] {
-  return raw
-    .split(",")
-    .map((t) => t.trim())
-    .filter((t) => t.length > 0);
+function parseTags(raw: string): ParsedTags {
+  const picTags: string[] = [];
+  const zoneTags: string[] = [];
+  const plantTags: string[] = [];
+  for (const t of raw.split(",").map((s) => s.trim()).filter((s) => s.length > 0)) {
+    if (t.startsWith("++")) {
+      plantTags.push(t.slice(2).trim());
+    } else if (t.startsWith("+")) {
+      zoneTags.push(t.slice(1).trim());
+    } else {
+      picTags.push(t);
+    }
+  }
+  return { picTags, zoneTags, plantTags };
 }
 
 export function slugify(text: string): string {
@@ -119,12 +128,19 @@ export interface ResolvedPic {
   kind: "plant" | "animal";
 }
 
+export interface AnnotationTags {
+  plantTags: string[];
+  zoneTags: string[];
+}
+
 export interface ResolveResult {
   pic: ResolvedPic;
   /** Plant record to create or fill in (only when new or has new info to backfill). */
   plantUpsert: ResolvedPlantUpsert | null;
   /** Zone records that should be created or renamed in the registry. */
   zoneUpserts: Zone[];
+  /** Tags prefixed with ++ (plant-level) or + (plant+zone-level) to upsert as annotations. */
+  annotationTags: AnnotationTags;
 }
 
 /**
@@ -180,7 +196,11 @@ export function resolveFields(
     throw new Error(`Plant "${parsed.shortCode}" must belong to a zone.`);
   }
 
-  const tags = parsed.tags ?? priorPic?.tags ?? [];
+  const tags = parsed.tags?.picTags ?? priorPic?.tags ?? [];
+  const annotationTags: AnnotationTags = {
+    plantTags: parsed.tags?.plantTags ?? [],
+    zoneTags: parsed.tags?.zoneTags ?? [],
+  };
 
   if (isUnidentified) {
     return {
@@ -193,6 +213,7 @@ export function resolveFields(
       },
       plantUpsert: null,
       zoneUpserts,
+      annotationTags: { plantTags: [], zoneTags: [] },
     };
   }
 
@@ -239,5 +260,6 @@ export function resolveFields(
     },
     plantUpsert,
     zoneUpserts,
+    annotationTags,
   };
 }

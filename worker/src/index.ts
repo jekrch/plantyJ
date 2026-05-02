@@ -1,8 +1,10 @@
-import type { Env, Gallery, PicEntry, PlantRecord, TelegramUpdate, Zone, ZonePicEntry } from "./types";
+import type { AnnotationEntry, Env, PicEntry, PlantRecord, TelegramUpdate, Zone, ZonePicEntry } from "./types";
 import { parseCaption, resolveFields, UNIDENTIFIED_CODE, UNIDENTIFIED_PREFIX } from "./caption";
 import { downloadFile, sendReply } from "./telegram";
 import {
   acceptBioclip,
+  addAnnotationTag,
+  addPicTag,
   appendPic,
   appendZonePic,
   arrayBufferToBase64,
@@ -13,6 +15,7 @@ import {
   deleteZonePic,
   isUpdatableField,
   nextSeq,
+  readAnnotations,
   readGallery,
   updateBySeq,
   upsertAnnotation,
@@ -32,6 +35,9 @@ Add a plant photo:
   animal // shortCode // fullName // commonName // zone // tags // description
 
   Zone is either a bare code (fb1) or 'Display Name (code)' to declare/rename.
+
+  Tags can be pic-level (no prefix), plant+zone-level (+tag), or plant-level (++tag):
+  tmt-c // // // fb1 // edible,+native,++medicinal
 
   First time registering a plant + zone:
   tmt-c // Solanum lycopersicum 'Cherokee Purple' // Cherokee Purple Tomato // Front Bed 1 (fb1) // edible,heirloom // first ripe fruit
@@ -74,11 +80,17 @@ Annotation commands (persistent across all pics):
   /deleteannotation {shortCode} // {zoneCode} — remove plant+zone annotation
   Set tags to "-" or leave value empty to clear.
 
+  /addtag {seq} {tag} — add a tag to a pic (deduped)
+  /addtag {shortCode} // {tag} — add a tag to a plant annotation
+  /addtag {shortCode} // {zoneCode} // {tag} — add a tag to a plant+zone annotation
+
 Zone commands:
   /addzone {code} {name} — Create or rename a zone (name optional)
   /renamezone {code} {name} — Set/replace a zone's display name
   /deletezone {code} — Remove a zone (only if no pics reference it)
   /zones — List all known zones
+  /plants — List all known plants
+  /tags — List all known tags
 
 Zone photo (represents the zone, not a plant):
   Send a photo with the caption:
@@ -86,24 +98,24 @@ Zone photo (represents the zone, not a plant):
   Zone pics live independently of plant pics and aren't grouped by shortCode.
   /deletezonepic {id} — Remove a zone pic by its id`;
 
-function buildHelpText(gallery: Gallery): string {
-  const sections: string[] = [HELP_HEADER];
+function buildHelpText(): string {
+  return HELP_HEADER;
+}
 
-  if (gallery.plants.length > 0) {
-    const lines = [...gallery.plants]
-      .sort((a, b) => a.shortCode.localeCompare(b.shortCode))
-      .map((p) => `  ${p.shortCode} — ${p.commonName ?? p.fullName ?? p.shortCode}`);
-    sections.push(`Known plants:\n${lines.join("\n")}`);
-  }
+function buildPlantsText(plants: PlantRecord[]): string {
+  if (plants.length === 0) return "No plants yet.";
+  const lines = [...plants]
+    .sort((a, b) => a.shortCode.localeCompare(b.shortCode))
+    .map((p) => `  ${p.shortCode} — ${p.commonName ?? p.fullName ?? p.shortCode}`);
+  return `Plants:\n${lines.join("\n")}`;
+}
 
-  if (gallery.zones.length > 0) {
-    const lines = [...gallery.zones]
-      .sort((a, b) => a.code.localeCompare(b.code))
-      .map((z) => `  ${z.code} — ${z.name ?? "(unnamed)"}`);
-    sections.push(`Known zones:\n${lines.join("\n")}`);
-  }
-
-  return sections.join("\n\n");
+function buildTagsText(pics: PicEntry[], annotations: AnnotationEntry[]): string {
+  const tags = new Set<string>();
+  for (const p of pics) for (const t of p.tags) tags.add(t);
+  for (const a of annotations) for (const t of a.tags) tags.add(t);
+  if (tags.size === 0) return "No tags yet.";
+  return `Tags:\n${[...tags].sort().map((t) => `  ${t}`).join("\n")}`;
 }
 
 function buildZonesText(zones: Zone[]): string {
@@ -139,12 +151,36 @@ export default {
 
       try {
         if (text === "/help" || text === "/start") {
+          await sendReply(
+            env.TELEGRAM_BOT_TOKEN,
+            message.chat.id,
+            message.message_id,
+            buildHelpText()
+          );
+          return new Response("OK");
+        }
+
+        if (text === "/plants") {
           const { gallery } = await readGallery(env);
           await sendReply(
             env.TELEGRAM_BOT_TOKEN,
             message.chat.id,
             message.message_id,
-            buildHelpText(gallery)
+            buildPlantsText(gallery.plants)
+          );
+          return new Response("OK");
+        }
+
+        if (text === "/tags") {
+          const [{ gallery }, annotations] = await Promise.all([
+            readGallery(env),
+            readAnnotations(env),
+          ]);
+          await sendReply(
+            env.TELEGRAM_BOT_TOKEN,
+            message.chat.id,
+            message.message_id,
+            buildTagsText(gallery.pics, annotations)
           );
           return new Response("OK");
         }
@@ -342,6 +378,55 @@ export default {
           return new Response("OK");
         }
 
+        if (text.startsWith("/addtag ")) {
+          const parts = text.slice("/addtag ".length).split("//").map((s) => s.trim());
+
+          if (parts.length === 1) {
+            // /addtag {seq} {tag}  or  /addtag {shortCode} {tag} (plant-level)
+            const spaceIdx = parts[0].indexOf(" ");
+            if (spaceIdx === -1) {
+              await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+                `Invalid format. Use:\n  /addtag {seq} {tag}\n  /addtag {shortCode} // {tag}\n  /addtag {shortCode} // {zoneCode} // {tag}`);
+              return new Response("OK");
+            }
+            const first = parts[0].slice(0, spaceIdx).trim();
+            const tag = parts[0].slice(spaceIdx + 1).trim();
+            const seq = parseInt(first, 10);
+            if (!isNaN(seq) && String(seq) === first) {
+              const pic = await addPicTag(env, seq, tag);
+              await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+                pic
+                  ? `Added tag "${tag}" to pic #${seq} (${pic.shortCode}). Tags: ${pic.tags.join(", ")}`
+                  : `No pic found with ID ${seq}.`);
+            } else {
+              const { entry, added } = await addAnnotationTag(env, first, null, tag);
+              await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+                added
+                  ? `Added tag "${tag}" to ${first}. Tags: ${entry.tags.join(", ")}`
+                  : `Tag "${tag}" already present on ${first}.`);
+            }
+          } else if (parts.length === 2) {
+            // /addtag {shortCode} // {tag}
+            const { entry, added } = await addAnnotationTag(env, parts[0], null, parts[1]);
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+              added
+                ? `Added tag "${parts[1]}" to ${parts[0]}. Tags: ${entry.tags.join(", ")}`
+                : `Tag "${parts[1]}" already present on ${parts[0]}.`);
+          } else if (parts.length === 3) {
+            // /addtag {shortCode} // {zoneCode} // {tag}
+            const { entry, added } = await addAnnotationTag(env, parts[0], parts[1], parts[2]);
+            const scope = `${parts[0]} / ${parts[1]}`;
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+              added
+                ? `Added tag "${parts[2]}" to ${scope}. Tags: ${entry.tags.join(", ")}`
+                : `Tag "${parts[2]}" already present on ${scope}.`);
+          } else {
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+              `Invalid format. Use:\n  /addtag {seq} {tag}\n  /addtag {shortCode} // {tag}\n  /addtag {shortCode} // {zoneCode} // {tag}`);
+          }
+          return new Response("OK");
+        }
+
         if (text.startsWith("/deleteannotation ")) {
           const parts = text.slice("/deleteannotation ".length).split("//").map((s) => s.trim());
           const shortCode = parts[0];
@@ -455,7 +540,7 @@ export default {
       const parsed = parseCaption(message.caption);
 
       const { gallery } = await readGallery(env);
-      const { pic: resolvedPic, plantUpsert, zoneUpserts } = resolveFields(
+      const { pic: resolvedPic, plantUpsert, zoneUpserts, annotationTags } = resolveFields(
         parsed,
         gallery.pics,
         gallery.plants,
@@ -512,6 +597,13 @@ export default {
 
       await appendPic(env, entry, plantUpsertRecord, zoneUpserts);
 
+      if (annotationTags.plantTags.length > 0) {
+        await upsertAnnotation(env, finalShortCode, null, "tags", annotationTags.plantTags.join(","));
+      }
+      if (annotationTags.zoneTags.length > 0) {
+        await upsertAnnotation(env, finalShortCode, resolvedPic.zoneCode, "tags", annotationTags.zoneTags.join(","));
+      }
+
       const mergedZones = [...gallery.zones];
       for (const u of zoneUpserts) {
         const idx = mergedZones.findIndex((z) => z.code === u.code);
@@ -538,6 +630,8 @@ export default {
         plantForReply?.fullName ? `  Full: ${plantForReply.fullName}` : null,
         `  Zone: ${zoneLabel}`,
         resolvedPic.tags.length > 0 ? `  Tags: ${resolvedPic.tags.join(", ")}` : null,
+        annotationTags.zoneTags.length > 0 ? `  Zone tags: ${annotationTags.zoneTags.join(", ")}` : null,
+        annotationTags.plantTags.length > 0 ? `  Plant tags: ${annotationTags.plantTags.join(", ")}` : null,
         resolvedPic.description ? `  Note: ${resolvedPic.description}` : null,
         `  → ${browserImagePath}`,
       ].filter(Boolean);

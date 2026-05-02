@@ -55,13 +55,19 @@ export interface ParsedZoneRef {
   name: string | null;
 }
 
+export interface ParsedTags {
+  picTags: string[];
+  zoneTags: string[];
+  plantTags: string[];
+}
+
 export interface ParsedCaption {
   shortCode: string;
   fullName: string | null;
   commonName: string | null;
   variety: string | null;
   zone: ParsedZoneRef | null;
-  tags: string[] | null;
+  tags: ParsedTags | null;
   description: string | null;
   kind: "plant" | "animal";
 }

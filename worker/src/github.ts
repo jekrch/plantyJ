@@ -700,6 +700,53 @@ export async function upsertAnnotation(
   return entry;
 }
 
+export async function addPicTag(
+  env: Env,
+  seq: number,
+  tag: string
+): Promise<PicEntry | null> {
+  const { gallery, picsSha } = await readGallery(env);
+  const pic = gallery.pics.find((p) => p.seq === seq);
+  if (!pic) return null;
+  if (pic.tags.includes(tag)) return pic;
+  pic.tags = [...pic.tags, tag];
+  await writeJsonFile(env, PICS_PATH, { pics: gallery.pics }, picsSha, `Add tag to pic #${seq}: ${tag}`);
+  return pic;
+}
+
+export async function addAnnotationTag(
+  env: Env,
+  shortCode: string,
+  zoneCode: string | null,
+  tag: string
+): Promise<{ entry: AnnotationEntry; added: boolean }> {
+  const { data, sha } = await readJsonFile<{ annotations?: AnnotationEntry[] }>(
+    env,
+    ANNOTATIONS_PATH,
+    { annotations: [] }
+  );
+  const annotations = data.annotations ?? [];
+
+  const idx = annotations.findIndex(
+    (a) => a.shortCode === shortCode && a.zoneCode === zoneCode
+  );
+
+  let entry: AnnotationEntry;
+  if (idx === -1) {
+    entry = { shortCode, zoneCode, tags: [tag], description: null };
+    annotations.push(entry);
+  } else {
+    entry = annotations[idx];
+    if (entry.tags.includes(tag)) return { entry, added: false };
+    entry = { ...entry, tags: [...entry.tags, tag] };
+    annotations[idx] = entry;
+  }
+
+  const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
+  await writeJsonFile(env, ANNOTATIONS_PATH, { annotations }, sha, `Add tag to ${scope}: ${tag}`);
+  return { entry, added: true };
+}
+
 export async function deleteAnnotation(
   env: Env,
   shortCode: string,
@@ -726,4 +773,13 @@ export async function deleteAnnotation(
     `Delete annotation: ${scope}`
   );
   return true;
+}
+
+export async function readAnnotations(env: Env): Promise<AnnotationEntry[]> {
+  const { data } = await readJsonFile<{ annotations?: AnnotationEntry[] }>(
+    env,
+    ANNOTATIONS_PATH,
+    { annotations: [] }
+  );
+  return data.annotations ?? [];
 }
