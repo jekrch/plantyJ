@@ -386,5 +386,9 @@
   "Sapindales": {
     "description": "Sapindales is an order of flowering plants. Well-known members of Sapindales include citrus; maples, sumac, horse-chestnuts, lychees and rambutans; mangos and cashews; frankincense and myrrh; mahogany and neem.",
     "url": "https://en.wikipedia.org/wiki/Sapindales"
+  },
+  "Aesculus": {
+    "description": "The genus Aesculus is a genus of flowering plants in the family Sapindaceae. They are trees and shrubs, mostly native to the temperate Northern Hemisphere, but one species (A.\u00a0assamica) into subtropical areas of southeast Asia. The Plants of the World Online (POWO) database currently accepts 12 species, with seven species native to North America, four native to Asia, and one native to Europe; some other authors have accepted more species. Hardin (1957\u20131960) accepted 13 species, the Trees and Shrubs Online website cites \"13\u201315\" species with descriptions given for 14 species, and Harris et al. (2009) accepted 16 species. Six natural hybrids occur, and several others have been raised in cultivation. The European and Asian species are known as horse-chestnut or horse chestnut, and the North American species as buckeye. Aesculus exhibits a classical Arcto-Tertiary distribution.",
+    "url": "https://en.wikipedia.org/wiki/Aesculus"
   }
 }
