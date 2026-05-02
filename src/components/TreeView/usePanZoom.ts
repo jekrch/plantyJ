@@ -116,11 +116,18 @@ export function usePanZoom({ layoutWidth, layoutHeight }: PanZoomOptions) {
       setTransform((t) => {
         const svgX = PAD_X + nodeY;
         const svgY = PAD_Y + nodeX;
-        const y = Math.min(0, ch * (1 / 3) - svgY * t.k);
-        return { k: t.k, x: cw * (2 / 3) - svgX * t.k, y };
+        // Don't pull content further left than the initial right-aligned view.
+        // For species (rightmost column) the desired x would otherwise sit well
+        // left of the initial loading position; floor at the right-aligned tx.
+        const scaledW = layoutWidth * t.k;
+        const rightAlignedX = scaledW <= cw ? (cw - scaledW) / 2 : cw - scaledW + 60;
+        const desiredX = cw * (1 / 6) - svgX * t.k;
+        const x = Math.max(desiredX, rightAlignedX);
+        const y = Math.min(0, ch * (1 / 4) - svgY * t.k);
+        return { k: t.k, x, y };
       });
     },
-    []
+    [layoutWidth]
   );
 
   const onWheel = useCallback((e: React.WheelEvent<HTMLDivElement>) => {
