@@ -33,7 +33,30 @@
       "description": null,
       "image": "images/m gal/1777738885.jpg",
       "postedBy": "Jacob",
-      "addedAt": "2026-05-02T16:21:26.274Z"
+      "addedAt": "2026-05-02T16:21:26.274Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "eee414ce62198be6",
+      "dominantColors": [
+        [
+          77.1,
+          -0.1,
+          4.9
+        ],
+        [
+          37.0,
+          -15.9,
+          20.6
+        ],
+        [
+          52.1,
+          -22.9,
+          33.6
+        ]
+      ],
+      "bioclipSpeciesId": "Meleagris gallopavo",
+      "bioclipCommonName": "Wild turkey",
+      "bioclipScore": 0.9907
     },
     {
       "seq": 55,
