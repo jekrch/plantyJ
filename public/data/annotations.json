@@ -157,6 +157,15 @@
         "native"
       ],
       "description": null
+    },
+    {
+      "shortCode": "c card",
+      "zoneCode": null,
+      "tags": [
+        "native",
+        "bird"
+      ],
+      "description": null
     }
   ]
 }
