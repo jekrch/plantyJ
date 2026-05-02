@@ -67,7 +67,8 @@
       "height": 960,
       "bioclipSpeciesId": "Acer platanoides",
       "bioclipCommonName": "Norway maple",
-      "bioclipScore": 0.3794
+      "bioclipScore": 0.3794,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Acer_platanoides"
     },
     {
       "seq": 54,
@@ -99,7 +100,8 @@
       "height": 960,
       "bioclipSpeciesId": "Ceiba pentandra",
       "bioclipCommonName": "Kapok",
-      "bioclipScore": 0.3295
+      "bioclipScore": 0.3295,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Ceiba_pentandra"
     },
     {
       "seq": 52,
@@ -115,7 +117,8 @@
       "height": 960,
       "bioclipSpeciesId": "Acer saccharum",
       "bioclipCommonName": "Sugar Maple",
-      "bioclipScore": 0.1958
+      "bioclipScore": 0.1958,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Acer_saccharum"
     },
     {
       "seq": 51,
@@ -133,7 +136,8 @@
       "height": 960,
       "bioclipSpeciesId": "Malus baccata",
       "bioclipCommonName": "SIberian crab apple",
-      "bioclipScore": 0.6235
+      "bioclipScore": 0.6235,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Malus_baccata"
     },
     {
       "seq": 50,
@@ -151,7 +155,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Salix integra",
       "bioclipCommonName": "Dappled willow",
-      "bioclipScore": 0.1517
+      "bioclipScore": 0.1517,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Salix_integra"
     },
     {
       "seq": 49,
@@ -169,7 +174,8 @@
       "height": 960,
       "bioclipSpeciesId": "Catalpa catalpa",
       "bioclipCommonName": "",
-      "bioclipScore": 0.1222
+      "bioclipScore": 0.1222,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 48,
@@ -204,7 +210,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Rosa arkansana",
       "bioclipCommonName": "Prairie rose",
-      "bioclipScore": 0.4239
+      "bioclipScore": 0.4239,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Rosa_arkansana"
     },
     {
       "seq": 46,
@@ -223,7 +230,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Acer platanoides",
       "bioclipCommonName": "Norway maple",
-      "bioclipScore": 0.1182
+      "bioclipScore": 0.1182,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Acer_platanoides"
     },
     {
       "seq": 45,
@@ -241,7 +249,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Cynoglossum australe",
       "bioclipCommonName": "Australian Hound's-tongue",
-      "bioclipScore": 0.2276
+      "bioclipScore": 0.2276,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Cynoglossum_australe"
     },
     {
       "seq": 44,
@@ -278,7 +287,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Viburnum lentago",
       "bioclipCommonName": "viburnum",
-      "bioclipScore": 0.3475
+      "bioclipScore": 0.3475,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Viburnum_lentago"
     },
     {
       "seq": 42,
@@ -296,7 +306,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Scrophularia nodosa",
       "bioclipCommonName": "Foxglove",
-      "bioclipScore": 0.7847
+      "bioclipScore": 0.7847,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 41,
@@ -332,7 +343,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Phlox pilosa",
       "bioclipCommonName": "Prairie phlox",
-      "bioclipScore": 0.2427
+      "bioclipScore": 0.2427,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 39,
@@ -405,7 +417,8 @@
       "height": 960,
       "bioclipSpeciesId": "Solidago rugosa",
       "bioclipCommonName": "Mountain goldenrod",
-      "bioclipScore": 0.2765
+      "bioclipScore": 0.2765,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 35,
@@ -423,7 +436,8 @@
       "height": 960,
       "bioclipSpeciesId": "Allium tricoccum",
       "bioclipCommonName": "Wild Leek",
-      "bioclipScore": 0.4181
+      "bioclipScore": 0.4181,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 34,
@@ -441,7 +455,8 @@
       "height": 960,
       "bioclipSpeciesId": "Scrophularia scorodonia",
       "bioclipCommonName": "Balm-leaved figwort",
-      "bioclipScore": 0.1447
+      "bioclipScore": 0.1447,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 33,
@@ -459,7 +474,8 @@
       "height": 960,
       "bioclipSpeciesId": "Pojarkovia pojarkovae",
       "bioclipCommonName": "",
-      "bioclipScore": 0.3018
+      "bioclipScore": 0.3018,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 31,
@@ -495,7 +511,8 @@
       "height": 960,
       "bioclipSpeciesId": "Pyrus calleryana",
       "bioclipCommonName": "Callery pear",
-      "bioclipScore": 0.2474
+      "bioclipScore": 0.2474,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 29,
@@ -511,7 +528,8 @@
       "height": 960,
       "bioclipSpeciesId": "Philadelphus tenuifolius",
       "bioclipCommonName": "",
-      "bioclipScore": 0.1992
+      "bioclipScore": 0.1992,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 28,
@@ -547,7 +565,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Arnica cordifolia",
       "bioclipCommonName": "Heart-Leaved Arnica",
-      "bioclipScore": 0.1859
+      "bioclipScore": 0.1859,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 26,
@@ -565,7 +584,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Tiarella wherryi",
       "bioclipCommonName": "Tufted foamflower",
-      "bioclipScore": 0.3186
+      "bioclipScore": 0.3186,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 25,
@@ -601,7 +621,8 @@
       "height": 960,
       "bioclipSpeciesId": "Sedum sarmentosum",
       "bioclipCommonName": "Orpine",
-      "bioclipScore": 0.5247
+      "bioclipScore": 0.5247,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 23,
@@ -635,7 +656,8 @@
       "height": 960,
       "bioclipSpeciesId": "Hylotelephium spectabile",
       "bioclipCommonName": "Showy stonecrop",
-      "bioclipScore": 0.2525
+      "bioclipScore": 0.2525,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 21,
@@ -672,7 +694,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Oenothera biennis",
       "bioclipCommonName": "Common Evening-primrose",
-      "bioclipScore": 0.3294
+      "bioclipScore": 0.3294,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 19,
@@ -690,7 +713,8 @@
       "height": 960,
       "bioclipSpeciesId": "Bombus impatiens",
       "bioclipCommonName": "Common Eastern Bumblebee",
-      "bioclipScore": 0.9208
+      "bioclipScore": 0.9208,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 18,
@@ -706,7 +730,8 @@
       "height": 960,
       "bioclipSpeciesId": "Narcissus pseudonarcissus",
       "bioclipCommonName": "Daffodil",
-      "bioclipScore": 0.2754
+      "bioclipScore": 0.2754,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 17,
@@ -722,7 +747,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Solidago ulmifolia",
       "bioclipCommonName": "Elm-leaf goldenrod",
-      "bioclipScore": 0.1404
+      "bioclipScore": 0.1404,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 16,
@@ -754,7 +780,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Sambucus williamsii",
       "bioclipCommonName": "William's elder",
-      "bioclipScore": 0.5715
+      "bioclipScore": 0.5715,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 14,
@@ -786,7 +813,8 @@
       "height": 960,
       "bioclipSpeciesId": "Clematis microphylla",
       "bioclipCommonName": "Headachevine",
-      "bioclipScore": 0.2543
+      "bioclipScore": 0.2543,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 12,
@@ -802,7 +830,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Campanula rapunculoides",
       "bioclipCommonName": "European Bellflower",
-      "bioclipScore": 0.1526
+      "bioclipScore": 0.1526,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 11,
@@ -818,7 +847,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Ribes missouriense",
       "bioclipCommonName": "",
-      "bioclipScore": 0.6793
+      "bioclipScore": 0.6793,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 10,
@@ -852,7 +882,8 @@
       "height": 960,
       "bioclipSpeciesId": "Rubus caesius",
       "bioclipCommonName": "Dewberry",
-      "bioclipScore": 0.2519
+      "bioclipScore": 0.2519,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 8,
@@ -868,7 +899,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Carex leptopoda",
       "bioclipCommonName": "Short-scale sedge",
-      "bioclipScore": 0.154
+      "bioclipScore": 0.154,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 7,
@@ -884,7 +916,8 @@
       "height": 960,
       "bioclipSpeciesId": "Urtica platyphylla",
       "bioclipCommonName": "",
-      "bioclipScore": 0.7505
+      "bioclipScore": 0.7505,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 6,
