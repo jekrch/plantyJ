@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A fla",
+      "fullName": "Aesculus flava",
+      "commonName": "Yellow Buckeye",
+      "variety": null
+    },
+    {
       "shortCode": "a pla",
       "fullName": "Acer platanoides",
       "commonName": "Norway Maple",
