@@ -115,12 +115,13 @@ export default function TreeView({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pinned]);
 
-  const didInitialFocus = useRef(false);
+  const lastFocusedName = useRef<string | null>(null);
   useEffect(() => {
-    if (!ready || didInitialFocus.current || !initialTreeNode) return;
+    if (!ready || !initialTreeNode) return;
+    if (lastFocusedName.current === initialTreeNode) return;
     const node = layout.nodes.find((n) => n.data.name === initialTreeNode);
     if (!node) return;
-    didInitialFocus.current = true;
+    lastFocusedName.current = initialTreeNode;
     focusNode(node);
   }, [ready, layout.nodes, initialTreeNode, focusNode]);
 

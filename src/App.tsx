@@ -61,6 +61,7 @@ export default function App() {
   const [infoOpen, setInfoOpen] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>(initialView);
   const [spotlightCode, setSpotlightCode] = useState<string | null>(initialSubject);
+  const [treeFocusNode, setTreeFocusNode] = useState<string | null>(initialTreeNode);
   const headerRef = useRef<HTMLElement>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
 
@@ -217,15 +218,17 @@ export default function App() {
     [sortedPlants]
   );
 
-  const handleApplyShortCodes = useCallback(
-    (shortCodes: string[]) => {
-      const next: Filters = { ...filters, shortCodes: new Set(shortCodes) };
-      setFilters(next);
-      syncToURL(next, sortMode, viewMode, spotlightCode);
+  const handleSelectTaxon = useCallback(
+    (name: string) => {
+      setTreeFocusNode(name);
+      setViewMode("tree");
+      setSpotlightCode(null);
+      syncToURL(filters, sortMode, "tree", null, name);
       setOpenPlantId(null);
       setViewerScope("filtered");
+      setCustomViewerPlants(null);
     },
-    [filters, sortMode, viewMode, spotlightCode, syncToURL]
+    [filters, sortMode, syncToURL]
   );
 
   const handleTreeNodeSelect = useCallback(
@@ -414,7 +417,7 @@ export default function App() {
           headerHeight={headerHeight}
           onOpenPlantInList={handleOpenInList}
           onSpotlightPlant={handleSpotlightPlant}
-          initialTreeNode={initialTreeNode}
+          initialTreeNode={treeFocusNode}
           onNodeSelect={handleTreeNodeSelect}
         />
       )}
@@ -443,7 +446,7 @@ export default function App() {
           onClose={handleCloseViewer}
           onNavigate={handleNavigateViewer}
           onSelectPlant={handleSelectPlant}
-          onApplyShortCodes={handleApplyShortCodes}
+          onSelectTaxon={handleSelectTaxon}
         />
       )}
     </div>

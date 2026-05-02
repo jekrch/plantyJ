@@ -12,7 +12,7 @@ interface Props {
   annotations: Annotation[];
   speciesByShortCode: Map<string, Species>;
   onSelectPlant: (plant: Plant) => void;
-  onApplyShortCodes: (shortCodes: string[]) => void;
+  onSelectTaxon: (name: string) => void;
   topOffset?: number;
   bottomOffset?: number;
   closing?: boolean;
@@ -59,7 +59,7 @@ export default function PlantInfoDrawer({
   annotations,
   speciesByShortCode,
   onSelectPlant,
-  onApplyShortCodes,
+  onSelectTaxon,
   topOffset = 0,
   bottomOffset = 0,
   closing = false,
@@ -446,7 +446,7 @@ export default function PlantInfoDrawer({
                 Classification
               </p>
               <p className="text-[9px] uppercase tracking-widest text-white/20">
-                tap to filter
+                tap to view in tree
               </p>
             </div>
             <ol className="space-y-1">
@@ -466,13 +466,11 @@ export default function PlantInfoDrawer({
                       </span>
                       <button
                         type="button"
-                        onClick={() =>
-                          onApplyShortCodes(row.matchingShortCodes)
-                        }
+                        onClick={() => onSelectTaxon(row.value)}
                         className={`text-left hover:text-accent transition-colors cursor-pointer ${
                           isLast ? "text-accent italic" : "text-white/65"
                         }`}
-                        title={`Filter to ${total} plant${total === 1 ? "" : "s"}`}
+                        title={`View ${row.value} in tree (${total} plant${total === 1 ? "" : "s"})`}
                       >
                         {row.value}
                       </button>
@@ -520,12 +518,17 @@ export default function PlantInfoDrawer({
                             sibSpecies?.commonName ??
                             sibSpecies?.fullName ??
                             code;
+                          const focusName =
+                            sibSpecies?.taxonomy?.species ?? null;
                           return (
                             <button
                               key={code}
                               type="button"
-                              onClick={() => onApplyShortCodes([code])}
-                              className="text-[11px] leading-none px-2 py-1 rounded-sm bg-white/5 text-white/60 hover:bg-accent/15 hover:text-accent transition-colors cursor-pointer"
+                              onClick={() =>
+                                focusName && onSelectTaxon(focusName)
+                              }
+                              disabled={!focusName}
+                              className="text-[11px] leading-none px-2 py-1 rounded-sm bg-white/5 text-white/60 hover:bg-accent/15 hover:text-accent transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-default"
                               title={sibSpecies?.fullName ?? sibPlant?.fullName ?? code}
                             >
                               {label}

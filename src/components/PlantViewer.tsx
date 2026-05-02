@@ -22,7 +22,7 @@ interface Props {
   onClose: () => void;
   onNavigate: (index: number) => void;
   onSelectPlant: (plant: Plant) => void;
-  onApplyShortCodes: (shortCodes: string[]) => void;
+  onSelectTaxon: (name: string) => void;
 }
 
 export default function PlantViewer({
@@ -37,7 +37,7 @@ export default function PlantViewer({
   onClose,
   onNavigate,
   onSelectPlant,
-  onApplyShortCodes,
+  onSelectTaxon,
 }: Props) {
   const [visible, setVisible] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -495,7 +495,7 @@ export default function PlantViewer({
         annotations={annotations}
         speciesByShortCode={speciesByShortCode}
         onSelectPlant={onSelectPlant}
-        onApplyShortCodes={onApplyShortCodes}
+        onSelectTaxon={onSelectTaxon}
         topOffset={topBarH}
         bottomOffset={bottomBarH}
         slideDir={drawerSlideDir}
