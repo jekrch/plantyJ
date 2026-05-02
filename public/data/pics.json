@@ -9,7 +9,30 @@
       "description": null,
       "image": "images/A fla/1777737459.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-05-02T15:57:40.525Z"
+      "addedAt": "2026-05-02T15:57:40.525Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "b297d520e8af489d",
+      "dominantColors": [
+        [
+          46.2,
+          -8.3,
+          1.0
+        ],
+        [
+          44.1,
+          -11.0,
+          26.5
+        ],
+        [
+          64.1,
+          -0.1,
+          -31.3
+        ]
+      ],
+      "bioclipSpeciesId": "Ceiba pentandra",
+      "bioclipCommonName": "Kapok",
+      "bioclipScore": 0.3295
     },
     {
       "seq": 52,
