@@ -140,6 +140,15 @@
         "native"
       ],
       "description": null
+    },
+    {
+      "shortCode": "m gal",
+      "zoneCode": null,
+      "tags": [
+        "native",
+        "nonresident"
+      ],
+      "description": null
     }
   ]
 }
