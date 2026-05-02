@@ -9,7 +9,30 @@
       "description": null,
       "image": "images/c card/1777739082.jpg",
       "postedBy": "Jacob",
-      "addedAt": "2026-05-02T16:24:43.436Z"
+      "addedAt": "2026-05-02T16:24:43.436Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "ee24a67213997db0",
+      "dominantColors": [
+        [
+          19.8,
+          4.0,
+          2.9
+        ],
+        [
+          54.1,
+          -2.1,
+          21.3
+        ],
+        [
+          66.0,
+          -3.8,
+          -3.5
+        ]
+      ],
+      "bioclipSpeciesId": "Cardinalis cardinalis",
+      "bioclipCommonName": "Northern cardinal",
+      "bioclipScore": 0.972
     },
     {
       "seq": 57,
@@ -20,7 +43,30 @@
       "description": null,
       "image": "images/V ata/1777739058.jpg",
       "postedBy": "Jenny",
-      "addedAt": "2026-05-02T16:24:19.582Z"
+      "addedAt": "2026-05-02T16:24:19.582Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "e6b7999943f20cc8",
+      "dominantColors": [
+        [
+          33.0,
+          -4.1,
+          5.6
+        ],
+        [
+          68.3,
+          -19.5,
+          28.7
+        ],
+        [
+          66.6,
+          -10.2,
+          -32.7
+        ]
+      ],
+      "bioclipSpeciesId": "Vanessa atalanta",
+      "bioclipCommonName": "Red admiral",
+      "bioclipScore": 0.8598
     },
     {
       "seq": 56,

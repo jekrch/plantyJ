@@ -406,5 +406,37 @@
   "Phasianidae": {
     "description": "Phasianidae is a family of heavy, ground-living birds, which includes pheasants, grouse, partridges, junglefowl, chickens, turkeys, Old World quail, and peafowl. The family includes many of the most popular gamebirds. The family includes 185 species divided into 54 genera. It was formerly broken up into two subfamilies, the Phasianinae and the Perdicinae. However, this treatment is now known to be paraphyletic and polyphyletic, respectively, and more recent evidence supports breaking it up into two subfamilies: Rollulinae and Phasianinae, with the latter containing multiple tribes within two clades. The New World quail (Odontophoridae) and guineafowl (Numididae) were formerly sometimes included in this family, but are now typically placed in families of their own; conversely, grouse and turkeys, formerly often treated as distinct families, are now known to be deeply nested within Phasianidae, so they are now included in the present family.",
     "url": "https://en.wikipedia.org/wiki/Phasianidae"
+  },
+  "Arthropoda": {
+    "description": "Arthropods are invertebrates in the phylum Arthropoda. They possess an exoskeleton with a cuticle made of chitin, often mineralised with calcium carbonate, a body with differentiated (metameric) segments, and paired jointed appendages. In order to keep growing, they must go through stages of moulting, a process by which they shed their exoskeleton to reveal a new one. They form an extremely diverse group of up to ten million species.",
+    "url": "https://en.wikipedia.org/wiki/Arthropod"
+  },
+  "Cardinalidae": {
+    "description": "Cardinalidae is a family of New World-endemic passerine birds that consists of cardinals, grosbeaks, and buntings. It also includes several other genera such as the tanager-like Piranga and the warbler-like Granatellus. Membership of this family is not easily defined by a single or even a set of physical characteristics, but instead by molecular work. Among songbirds, they range from average-sized to relatively large and have stout features. Some species have large, heavy bills.",
+    "url": "https://en.wikipedia.org/wiki/Cardinalidae"
+  },
+  "Cardinalis": {
+    "description": "Cardinalis is a genus of birds in the family Cardinalidae. There are three species ranging across North America to northern South America.",
+    "url": "https://en.wikipedia.org/wiki/Cardinalis"
+  },
+  "Insecta": {
+    "description": "Insects are hexapod invertebrates of the class Insecta. They are the largest group within the arthropod phylum. Insects have a chitinous exoskeleton, a three-part body, three pairs of jointed legs, compound eyes, and a pair of antennae. Insects are the most diverse group of animals, with more than a million described species; they represent more than half of all animal species.",
+    "url": "https://en.wikipedia.org/wiki/Insect"
+  },
+  "Lepidoptera": {
+    "description": "Lepidoptera or lepidopterans are an order of winged insects which include butterflies and moths. About 180,000 species of the Lepidoptera have been described, representing 10% of the total described species of living organisms, making it the second largest insect order with 126 families and 46 superfamilies, and one of the most widespread and widely recognizable insect orders in the world.",
+    "url": "https://en.wikipedia.org/wiki/Lepidoptera"
+  },
+  "Nymphalidae": {
+    "description": "The Nymphalidae are the largest family of butterflies, with more than 6,000 species distributed throughout most of the world. Belonging to the superfamily Papilionoidea, they are usually medium-sized to large butterflies. Most species have a reduced pair of forelegs and many hold their colourful wings flat when resting. They are also called brush-footed butterflies or four-footed butterflies, because they are known to stand on only four legs while the other two are curled up; in some species, these forelegs have a brush-like set of hairs, which gives this family its other common name. Many species are brightly coloured and include popular species such as the emperors, monarch butterfly, admirals, tortoiseshells, and fritillaries. However, the under wings are, in contrast, often dull and in some species look remarkably like dead leaves, or are much paler, producing a cryptic effect that helps the butterflies blend into their surroundings.",
+    "url": "https://en.wikipedia.org/wiki/Nymphalidae"
+  },
+  "Passeriformes": {
+    "description": "A passerine is any bird of the order Passeriformes, which includes more than half of all bird species. Sometimes known as perching birds, passerines generally have an anisodactyl arrangement of their toes, which facilitates perching.",
+    "url": "https://en.wikipedia.org/wiki/Passerine"
+  },
+  "Vanessa": {
+    "description": "Vanessa may refer to:",
+    "url": "https://en.wikipedia.org/wiki/Vanessa"
   }
 }

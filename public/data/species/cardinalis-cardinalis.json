@@ -1,0 +1,51 @@
+{
+  "id": "cardinalis-cardinalis",
+  "fullName": "Cardinalis cardinalis",
+  "commonName": "Cardinal",
+  "description": "The northern cardinal (Cardinalis cardinalis), also commonly known as the common cardinal, red cardinal, or simply cardinal, is a bird in the genus Cardinalis. It can be found in southeastern Canada, through the eastern United States from Maine to Minnesota to Texas, New Mexico, southern Arizona, southern California and south through Mexico, Belize, and Guatemala. It is also an introduced species in a few locations such as Bermuda and all major islands of Hawaii since its introduction in 1929. Its habitat includes woodlands, gardens, shrublands, and wetlands. It is the state bird of Illinois, Indiana, Kentucky, North Carolina, Ohio, Virginia, and West Virginia.\nThe northern cardinal is a mid-sized perching songbird with a body length of 21\u201323 cm (8.3\u20139.1 in) and a crest on the top of its head. The species expresses sexual dimorphism: Females are a reddish olive color, and have a gray mask around the beak, while males are a vibrant red color, and have a black mask on the face, as well as a larger crest. Juvenile cardinals do not have the distinctive red-orange beak seen in adult birds until they are almost fully mature. On hatching, their beaks are grayish-black and they do not become the trademark orange-red color until they acquire their final adult plumage in the fall. \nThe northern cardinal is mainly granivorous but also feeds on insects and fruit. The male behaves territorially, marking out his territory with song. During courtship, the male feeds seed to the female beak-to-beak. The northern cardinal's clutch typically contains three to four eggs, with two to four clutches produced each year. It was once prized as a pet, but its sale was banned in the United States by the Migratory Bird Treaty Act of 1918.",
+  "vernacularNames": [
+    "Common Cardinal",
+    "Northern Cardinal",
+    "Northern Cardinal (Common)",
+    "Northern Cardinal/Pyrrhuloxia",
+    "Typical Cardinals"
+  ],
+  "taxonomy": {
+    "kingdom": "Animalia",
+    "phylum": "Chordata",
+    "class": "Aves",
+    "order": "Passeriformes",
+    "family": "Cardinalidae",
+    "genus": "Cardinalis",
+    "species": "Cardinalis cardinalis",
+    "canonicalName": "Cardinalis cardinalis"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/2490384"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Cardinalis_cardinalis"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/9080"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.105565"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 371420
+}
