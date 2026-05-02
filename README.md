@@ -71,6 +71,22 @@ For every new image, the GitHub Action computes two things:
 
 *Note: HuggingFace weights and the taxonomic classifier assets are cached via GitHub Actions to speed up incremental runs.*
 
+## Tree View
+
+An interactive phylogenetic tree of all plants in the collection, built from their GBIF taxonomy. Ranks (Kingdom → Species) appear as column headers with edges connecting parent to child nodes. Leaf nodes show a circular plant thumbnail and common name.
+
+- Pan and zoom via mouse wheel or pointer drag
+- Search by species name, common name, or taxon
+- Click any node to see a detail panel with linked photos and a jump to the gallery filtered by that taxon
+- Clicking a taxon rank in the plant info drawer opens the tree focused on that node
+
+## Plant & Zone Views
+
+Clicking a plant short code or zone name opens a **Spotlight** view — a focused, single-subject layout outside the main gallery grid.
+
+- **Plant view:** Hero image of the plant with a thumbnail strip of every other photo of that species. Clicking opens the full info drawer.
+- **Zone view:** Hero image for the zone followed by every plant and zone photo recorded there, sorted newest-first. Thumbnails are labeled with the plant name or zone name.
+
 ## Plant Viewer Info
 
 When viewing a specific photo in the gallery, opening the info drawer surfaces a dense layer of aggregated context about the plant, its location, and its taxonomy:
@@ -78,12 +94,12 @@ When viewing a specific photo in the gallery, opening the info drawer surfaces a
 - **Identity & Notes:** The primary names (`commonName`, `fullName`, `shortCode`), user-provided descriptions, and attached tags.
 - **Photo Timeline:** A scrollable chronological history of all other photos of that specific plant.
 - **Zone Context:** The physical location (`zoneName`) and a visual list of other distinct plants currently sharing that zone.
-- **Species Overview:** A description pulled from Wikipedia. 
+- **Species Overview:** A description pulled from Wikipedia.
 - **Vernacular Names:** Alternative common names pulled from the GBIF API.
-- **Taxonomic Lineage:** The full hierarchical classification (Kingdom down to Species). Each rank is interactive, allowing you to filter the gallery by that rank or expand it to see sibling plants in your garden that share the same classification.
+- **Taxonomic Lineage:** The full hierarchical classification (Kingdom down to Species). Each rank is interactive — click to filter the gallery by that taxon or jump to it in the Tree View.
 - **Native Range:** Geographic origin data pulled from POWO.
 - **BioCLIP Prediction:** The AI-generated species identification and confidence score, including a logic check that flags whether the visual prediction matches, shares a genus with, or contradicts the manually recorded species.
-- **External Sources:** Direct links to the API records (GBIF, POWO, Wikipedia) used to enrich the data.
+- **External Sources:** Direct links to source records — GBIF, POWO, Wikipedia, iNaturalist, Wikidata, and NatureServe (conservation status).
 
 ## Sort modes
 
