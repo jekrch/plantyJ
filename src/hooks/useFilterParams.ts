@@ -3,7 +3,8 @@ import type { Filters } from "../utils/filtering";
 import type { SortMode } from "../utils/sorting";
 import type { ViewMode } from "../components/ViewModeControl";
 
-const FILTER_KEYS: (keyof Filters)[] = ["tags", "zoneCodes", "postedBy", "shortCodes"];
+const SET_FILTER_KEYS = ["tags", "zoneCodes", "postedBy", "shortCodes", "misc"] as const;
+type SetFilterKey = typeof SET_FILTER_KEYS[number];
 const DEFAULT_SORT: SortMode = "newest";
 const DEFAULT_VIEW: ViewMode = "gallery";
 
@@ -23,6 +24,7 @@ function parseFiltersFromURL(): InitialState {
     zoneCodes: new Set(params.get("zones")?.split(",").filter(Boolean) ?? []),
     postedBy: new Set(params.get("postedBy")?.split(",").filter(Boolean) ?? []),
     shortCodes: new Set(params.get("plants")?.split(",").filter(Boolean) ?? []),
+    misc: new Set(params.get("misc")?.split(",").filter(Boolean) ?? []),
   };
 
   const sort = (params.get("sort") as SortMode) ?? DEFAULT_SORT;
@@ -39,11 +41,12 @@ function parseFiltersFromURL(): InitialState {
   return { filters, sort, view, subject, treeNode };
 }
 
-const KEY_TO_PARAM: Record<keyof Filters, string> = {
+const KEY_TO_PARAM: Record<SetFilterKey, string> = {
   tags: "tags",
   zoneCodes: "zones",
   postedBy: "postedBy",
   shortCodes: "plants",
+  misc: "misc",
 };
 
 function buildParams(
@@ -54,7 +57,7 @@ function buildParams(
   treeNode: string | null = null
 ): string {
   const params = new URLSearchParams();
-  for (const key of FILTER_KEYS) {
+  for (const key of SET_FILTER_KEYS) {
     const values = Array.from(filters[key]);
     if (values.length > 0) params.set(KEY_TO_PARAM[key], values.join(","));
   }

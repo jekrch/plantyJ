@@ -26,6 +26,7 @@ export default function FilterControl({
   onFiltersChange,
 }: FilterControlProps) {
   const [open, setOpen] = useState(false);
+  const [miscOpen, setMiscOpen] = useState(false);
   const active = hasActiveFilters(filters);
   const count = activeFilterCount(filters);
 
@@ -35,7 +36,7 @@ export default function FilterControl({
   );
 
   const toggleInSet = useCallback(
-    (key: keyof Filters, value: string) => {
+    (key: "tags" | "zoneCodes" | "postedBy" | "shortCodes" | "misc", value: string) => {
       const next = new Set(filters[key]);
       if (next.has(value)) next.delete(value);
       else next.add(value);
@@ -131,6 +132,80 @@ export default function FilterControl({
               selected={filters.postedBy}
               onToggle={(v) => toggleInSet("postedBy", v)}
             />
+
+            <div className="border-t border-ink-faint/10">
+              <button
+                onClick={() => setMiscOpen((v) => !v)}
+                className="
+                  w-full flex items-center justify-between
+                  px-3 py-2
+                  text-left cursor-pointer
+                  hover:bg-surface-hover transition-colors duration-100
+                "
+              >
+                <span className="font-display text-[10px] tracking-widest text-accent uppercase">
+                  OTHER
+                </span>
+                <span className="flex items-center gap-1.5">
+                  {filters.misc.size > 0 && (
+                    <span className="font-display text-[9px] text-accent tabular-nums">
+                      {filters.misc.size}
+                    </span>
+                  )}
+                  <ChevronDown
+                    size={12}
+                    className={`text-ink-faint transition-transform duration-200 ${
+                      miscOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </span>
+              </button>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateRows: miscOpen ? "1fr" : "0fr",
+                  transition: "grid-template-rows 200ms ease-out",
+                }}
+              >
+                <div className="overflow-hidden">
+                  <div className="px-1 pb-1.5">
+                    {[
+                      { value: "bioclip-conflict", label: "BIOCLIP CONFLICT" },
+                      { value: "bioclip-match", label: "BIOCLIP MATCH" },
+                      { value: "plant", label: "PLANT" },
+                      { value: "animal", label: "ANIMAL" },
+                      { value: "insect", label: "INSECT" },
+                    ].map(({ value, label }) => {
+                      const isActive = filters.misc.has(value);
+                      return (
+                        <button
+                          key={value}
+                          onClick={() => toggleInSet("misc", value)}
+                          className={`
+                            w-full text-left px-2 py-1 rounded-sm
+                            flex items-center gap-1.5
+                            transition-colors duration-100
+                            cursor-pointer
+                            ${
+                              isActive
+                                ? "text-accent bg-accent/8"
+                                : "text-ink-muted hover:text-ink hover:bg-surface-hover"
+                            }
+                          `}
+                        >
+                          {isActive && (
+                            <span className="inline-block w-1 h-1 rounded-full bg-accent shrink-0" />
+                          )}
+                          <span className="font-display text-[10px] tracking-wide uppercase">
+                            {label}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

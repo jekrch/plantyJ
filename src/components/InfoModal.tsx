@@ -164,6 +164,20 @@ function InfoModalContent({
             "opacity 200ms cubic-bezier(0.16, 1, 0.3, 1), transform 200ms cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
+        <div
+          className="absolute inset-y-0 right-0 w-3/4 pointer-events-none z-[-1]"
+          style={{
+            WebkitMaskImage: "linear-gradient(to right, transparent, black 45%)",
+            maskImage: "linear-gradient(to right, transparent, black 45%)",
+          }}
+        >
+          <img
+            src={`${import.meta.env.BASE_URL}images/A tub/1777432564.jpg`}
+            alt=""
+            className="w-full h-full object-cover opacity-[0.05] mix-blend-luminosity"
+            draggable={false}
+          />
+        </div>
         <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-ink-faint/20">
           <div className="flex items-center gap-2">
             <Sprout size={16} strokeWidth={1.5} className="stroke-accent" />
@@ -484,6 +498,7 @@ function EntryCard({
             src={`${base}${image}`}
             alt={altLabel}
             loading="lazy"
+            decoding="async"
             className={`absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-in-out will-change-transform ${interactive ? "group-hover:scale-[1.02]" : ""
               }`}
           />

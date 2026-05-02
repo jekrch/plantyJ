@@ -160,8 +160,8 @@ export default function App() {
   }, []);
 
   const filteredPlants = useMemo(
-    () => applyFilters(plants, filters, annotations),
-    [plants, filters, annotations]
+    () => applyFilters(plants, filters, annotations, speciesByShortCode),
+    [plants, filters, annotations, speciesByShortCode]
   );
 
   useEffect(() => {

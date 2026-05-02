@@ -319,6 +319,7 @@ export default function PlantInfoDrawer({
                       src={`${import.meta.env.BASE_URL}${p.image}`}
                       alt=""
                       loading="lazy"
+                      decoding="async"
                       className="absolute inset-0 w-full h-full object-cover"
                     />
                     <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[9px] text-white/80 bg-gradient-to-t from-black/80 to-transparent leading-tight">
@@ -387,6 +388,7 @@ export default function PlantInfoDrawer({
                       src={`${import.meta.env.BASE_URL}${p.image}`}
                       alt=""
                       loading="lazy"
+                      decoding="async"
                       className="absolute inset-0 w-full h-full object-cover"
                     />
                     <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[9px] text-white/80 bg-gradient-to-t from-black/80 to-transparent leading-tight">
@@ -577,9 +579,9 @@ export default function PlantInfoDrawer({
                 style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
               >
                 <div>
-                  {bioclipWikiUrl && bioclipMatch !== "match" ? (
+                  {bioclipMatch !== "match" ? (
                     <a
-                      href={bioclipWikiUrl}
+                      href={bioclipWikiUrl || `https://www.google.com/search?q=${encodeURIComponent(bioclipSpeciesId ?? "")}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-display text-sm text-white/70 italic leading-snug hover:text-accent transition-colors inline-flex items-center gap-1"

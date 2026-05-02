@@ -1,4 +1,4 @@
-import type { Annotation, Plant, Zone } from "../types";
+import type { Annotation, Plant, Species, Zone } from "../types";
 import { plantTitle } from "./display";
 
 export interface Filters {
@@ -6,6 +6,7 @@ export interface Filters {
   zoneCodes: Set<string>;
   postedBy: Set<string>;
   shortCodes: Set<string>;
+  misc: Set<string>;
 }
 
 export const EMPTY_FILTERS: Filters = {
@@ -13,6 +14,7 @@ export const EMPTY_FILTERS: Filters = {
   zoneCodes: new Set(),
   postedBy: new Set(),
   shortCodes: new Set(),
+  misc: new Set(),
 };
 
 export function hasActiveFilters(filters: Filters): boolean {
@@ -20,7 +22,8 @@ export function hasActiveFilters(filters: Filters): boolean {
     filters.tags.size > 0 ||
     filters.zoneCodes.size > 0 ||
     filters.postedBy.size > 0 ||
-    filters.shortCodes.size > 0
+    filters.shortCodes.size > 0 ||
+    filters.misc.size > 0
   );
 }
 
@@ -29,7 +32,8 @@ export function activeFilterCount(filters: Filters): number {
     filters.tags.size +
     filters.zoneCodes.size +
     filters.postedBy.size +
-    filters.shortCodes.size
+    filters.shortCodes.size +
+    filters.misc.size
   );
 }
 
@@ -53,7 +57,12 @@ export function getEffectiveTags(plant: Plant, annotations: Annotation[]): strin
   return Array.from(all);
 }
 
-export function applyFilters(plants: Plant[], filters: Filters, annotations: Annotation[] = []): Plant[] {
+export function applyFilters(
+  plants: Plant[],
+  filters: Filters,
+  annotations: Annotation[] = [],
+  speciesByShortCode: Map<string, Species> = new Map()
+): Plant[] {
   if (!hasActiveFilters(filters)) return plants;
   return plants.filter((p) => {
     if (!plantMatchesZones(p, filters.zoneCodes)) return false;
@@ -62,6 +71,27 @@ export function applyFilters(plants: Plant[], filters: Filters, annotations: Ann
     if (filters.tags.size > 0) {
       const effective = getEffectiveTags(p, annotations);
       if (!effective.some((t) => filters.tags.has(t))) return false;
+    }
+    if (filters.misc.size > 0) {
+      const kindValues = ["plant", "animal"].filter((k) => filters.misc.has(k));
+      const wantInsect = filters.misc.has("insect");
+      const bioclipValues = ["bioclip-conflict", "bioclip-match"].filter((v) => filters.misc.has(v));
+
+      if (kindValues.length > 0 || wantInsect) {
+        const isInsect =
+          speciesByShortCode.get(p.shortCode)?.taxonomy?.class?.toLowerCase() === "insecta";
+        const picKind = p.kind ?? "plant";
+        const matchesKind = kindValues.includes(picKind);
+        if (!matchesKind && !(wantInsect && isInsect)) return false;
+      }
+
+      if (bioclipValues.length > 0) {
+        const bioclipId = p.bioclipSpeciesId?.trim()?.toLowerCase() || null;
+        const fullName = p.fullName?.trim()?.toLowerCase() || null;
+        if (!bioclipId || !fullName) return false;
+        const status = bioclipId === fullName ? "bioclip-match" : "bioclip-conflict";
+        if (!bioclipValues.includes(status)) return false;
+      }
     }
     return true;
   });
