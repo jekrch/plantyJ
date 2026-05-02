@@ -9,7 +9,30 @@
       "description": null,
       "image": "images/a pla/1777698901.jpg",
       "postedBy": "Jacob",
-      "addedAt": "2026-05-02T05:15:02.839Z"
+      "addedAt": "2026-05-02T05:15:02.839Z",
+      "width": 1280,
+      "height": 960,
+      "phash": "a2f73f8118e60f29",
+      "dominantColors": [
+        [
+          53.9,
+          -1.6,
+          18.4
+        ],
+        [
+          19.5,
+          -0.8,
+          4.4
+        ],
+        [
+          58.3,
+          -0.7,
+          -12.9
+        ]
+      ],
+      "bioclipSpeciesId": "Acer saccharum",
+      "bioclipCommonName": "Sugar Maple",
+      "bioclipScore": 0.1958
     },
     {
       "seq": 51,

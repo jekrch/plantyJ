@@ -374,5 +374,17 @@
   "Cornus": {
     "description": "Cornus is a genus of about 30\u201360 species of woody plants in the family Cornaceae, commonly known as dogwoods or cornels, which can generally be distinguished by their blossoms, berries, and distinctive bark. Most are deciduous trees or shrubs, but a few species are nearly herbaceous perennial subshrubs, and some species are evergreen. Several species have small heads of inconspicuous flowers surrounded by an involucre of large, typically white petal-like bracts, while others have more open clusters of petal-bearing flowers. The various species of dogwood are native throughout much of temperate and boreal Eurasia and North America, with China, Japan, and the southeastern United States being particularly rich in native species. The genus is also known from South America with members such as Cornus peruviana.",
     "url": "https://en.wikipedia.org/wiki/Cornus"
+  },
+  "Acer": {
+    "description": "Acer often refers to:Acer (plant), the genus of trees and shrubs commonly known as maples\nAcer Inc., a computer company in Taiwan",
+    "url": "https://en.wikipedia.org/wiki/Acer"
+  },
+  "Sapindaceae": {
+    "description": "The Sapindaceae are a family of flowering plants in the order Sapindales known as the soapberry family. It contains 138 genera and 1,858 accepted species. Examples include horse chestnut, maples, ackee and lychee.",
+    "url": "https://en.wikipedia.org/wiki/Sapindaceae"
+  },
+  "Sapindales": {
+    "description": "Sapindales is an order of flowering plants. Well-known members of Sapindales include citrus; maples, sumac, horse-chestnuts, lychees and rambutans; mangos and cashews; frankincense and myrrh; mahogany and neem.",
+    "url": "https://en.wikipedia.org/wiki/Sapindales"
   }
 }

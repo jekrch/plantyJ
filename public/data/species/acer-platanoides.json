@@ -1,0 +1,60 @@
+{
+  "id": "acer-platanoides",
+  "fullName": "Acer platanoides",
+  "commonName": "Norway Maple",
+  "description": "Acer platanoides, commonly known as the Norway maple, is a species of maple native to eastern and central Europe and western Asia, from Spain east to Russia, north to southern Scandinavia and southeast to northern Iran. It was introduced to North America in the mid-1700s as a shade tree. It is a member of the family Sapindaceae.",
+  "vernacularNames": [
+    "Norway Maple",
+    "Norway Maple variety",
+    "Plane",
+    "Spitzahorn",
+    "klen ostrolistnyj",
+    "klen platanovidnyj"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Sapindales",
+    "family": "Sapindaceae",
+    "genus": "Acer",
+    "species": "Acer platanoides",
+    "canonicalName": "Acer platanoides"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/3189846"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:781455-1"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Acer_platanoides"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/54763"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q26745"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.140646"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 131993
+}
