@@ -19,6 +19,7 @@ export const SORT_DESCRIPTIONS: Record<SortMode, string> = {
 };
 
 export type EmbeddingMap = Record<string, number[]>;
+export type PicMetadataMap = Record<string, { phash: string; dominantColors: number[][] }>;
 
 interface EmbeddingFile {
   model_version: string;
@@ -31,7 +32,13 @@ interface EmbeddingCacheEntry {
   promise: Promise<EmbeddingMap> | null;
 }
 
+interface PicMetadataCacheEntry {
+  data: PicMetadataMap | null;
+  promise: Promise<PicMetadataMap> | null;
+}
+
 const embeddingCache: EmbeddingCacheEntry = { data: null, promise: null };
+const picMetadataCache: PicMetadataCacheEntry = { data: null, promise: null };
 
 export async function loadEmbeddings(): Promise<EmbeddingMap> {
   if (embeddingCache.data) return embeddingCache.data;
@@ -54,6 +61,31 @@ export async function loadEmbeddings(): Promise<EmbeddingMap> {
     });
 
   return embeddingCache.promise;
+}
+
+export async function loadPicMetadata(): Promise<PicMetadataMap> {
+  if (picMetadataCache.data) return picMetadataCache.data;
+  if (picMetadataCache.promise) return picMetadataCache.promise;
+
+  const url = `${import.meta.env.BASE_URL}data/pic-metadata.json`;
+  picMetadataCache.promise = fetch(url)
+    .then((res) => {
+      if (!res.ok) throw new Error(`Failed to load pic-metadata: ${res.status}`);
+      return res.json();
+    })
+    .then((data: { picMetadata?: { id: string; phash: string; dominantColors: number[][] }[] }) => {
+      const map: PicMetadataMap = {};
+      for (const m of data.picMetadata ?? []) map[m.id] = { phash: m.phash, dominantColors: m.dominantColors };
+      picMetadataCache.data = map;
+      return map;
+    })
+    .catch((err) => {
+      console.error(`Could not load pic-metadata:`, err);
+      picMetadataCache.promise = null;
+      return {} as PicMetadataMap;
+    });
+
+  return picMetadataCache.promise;
 }
 
 function labDistance(a: number[], b: number[]): number {
@@ -95,8 +127,7 @@ export function paletteDistance(
   return sum / minLen;
 }
 
-function colorSortKey(plant: Plant): number {
-  const colors = plant.dominantColors;
+function colorSortKey(colors: number[][] | undefined): number {
   if (!colors || colors.length === 0) return Infinity;
   const CHROMA_THRESHOLD = 8;
   for (const c of colors) {
@@ -158,7 +189,6 @@ function sortByEmbedding(plants: Plant[], embeddings: EmbeddingMap): Plant[] {
 
 export function sortPlants(plants: Plant[], mode: SortMode): Plant[] {
   const sorted = [...plants];
-
   switch (mode) {
     case "newest":
       return sorted.sort(
@@ -168,38 +198,6 @@ export function sortPlants(plants: Plant[], mode: SortMode): Plant[] {
       return sorted.sort(
         (a, b) => new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime()
       );
-    case "duplicates": {
-      if (sorted.length <= 1) return sorted;
-      const withHash: Plant[] = [];
-      const withoutHash: Plant[] = [];
-      for (const p of sorted) {
-        if (p.phash) withHash.push(p);
-        else withoutHash.push(p);
-      }
-      withoutHash.sort(
-        (a, b) => new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime()
-      );
-      if (withHash.length <= 1) return [...withHash, ...withoutHash];
-      const result = nearestNeighborChain(withHash, (a, b) =>
-        hammingDistanceHex(String(a.phash), String(b.phash))
-      );
-      return [...result, ...withoutHash];
-    }
-    case "color": {
-      if (sorted.length <= 1) return sorted;
-      sorted.sort((a, b) => {
-        const ka = colorSortKey(a);
-        const kb = colorSortKey(b);
-        if (ka === Infinity && kb === Infinity) {
-          return new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime();
-        }
-        if (ka !== kb) return ka - kb;
-        return new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime();
-      });
-      return sorted;
-    }
-    case "similarity":
-      return sorted;
     default:
       return sorted;
   }
@@ -209,7 +207,46 @@ export async function sortPlantsAsync(
   plants: Plant[],
   mode: SortMode
 ): Promise<Plant[]> {
-  if (mode !== "similarity") return sortPlants(plants, mode);
-  const embeddings = await loadEmbeddings();
-  return sortByEmbedding([...plants], embeddings);
+  if (mode === "similarity") {
+    const embeddings = await loadEmbeddings();
+    return sortByEmbedding([...plants], embeddings);
+  }
+
+  if (mode === "duplicates") {
+    const meta = await loadPicMetadata();
+    const sorted = [...plants];
+    if (sorted.length <= 1) return sorted;
+    const withHash: Plant[] = [];
+    const withoutHash: Plant[] = [];
+    for (const p of sorted) {
+      if (meta[p.id]?.phash) withHash.push(p);
+      else withoutHash.push(p);
+    }
+    withoutHash.sort(
+      (a, b) => new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime()
+    );
+    if (withHash.length <= 1) return [...withHash, ...withoutHash];
+    const result = nearestNeighborChain(withHash, (a, b) =>
+      hammingDistanceHex(meta[a.id].phash, meta[b.id].phash)
+    );
+    return [...result, ...withoutHash];
+  }
+
+  if (mode === "color") {
+    const meta = await loadPicMetadata();
+    const sorted = [...plants];
+    if (sorted.length <= 1) return sorted;
+    sorted.sort((a, b) => {
+      const ka = colorSortKey(meta[a.id]?.dominantColors);
+      const kb = colorSortKey(meta[b.id]?.dominantColors);
+      if (ka === Infinity && kb === Infinity) {
+        return new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime();
+      }
+      if (ka !== kb) return ka - kb;
+      return new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime();
+    });
+    return sorted;
+  }
+
+  return sortPlants(plants, mode);
 }

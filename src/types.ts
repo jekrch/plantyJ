@@ -1,3 +1,9 @@
+export interface PicMetadata {
+  id: string;
+  phash: string;
+  dominantColors: number[][];
+}
+
 export interface PicRecord {
   seq: number;
   id: string;
@@ -10,8 +16,6 @@ export interface PicRecord {
   addedAt: string;
   width: number;
   height: number;
-  dominantColors: number[][];
-  phash: string;
   bioclipSpeciesId?: string | null;
   bioclipCommonName?: string | null;
   bioclipScore?: number | null;

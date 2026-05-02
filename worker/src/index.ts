@@ -583,6 +583,8 @@ export default {
         image: browserImagePath,
         postedBy,
         addedAt: new Date().toISOString(),
+        width: photo.width,
+        height: photo.height,
         ...(resolvedPic.kind === "animal" && { kind: "animal" }),
       };
 

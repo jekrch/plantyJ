@@ -8,11 +8,16 @@ from sklearn.cluster import KMeans
 
 NUM_DOMINANT_COLORS = 3
 
-METADATA_FIELDS = {"width", "height", "phash", "dominantColors"}
+PIC_FIELDS = {"width", "height"}
+METADATA_FIELDS = {"phash", "dominantColors"}
 
 
-def needs_update(plant: dict) -> bool:
-    return any(plant.get(field) is None for field in METADATA_FIELDS)
+def needs_update(pic: dict, metadata_entry: dict | None) -> bool:
+    if any(pic.get(field) is None for field in PIC_FIELDS):
+        return True
+    if metadata_entry is None:
+        return True
+    return any(metadata_entry.get(field) is None for field in METADATA_FIELDS)
 
 
 def extract_dominant_colors(pixels_lab: np.ndarray, k: int = NUM_DOMINANT_COLORS) -> list:

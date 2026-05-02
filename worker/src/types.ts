@@ -82,6 +82,8 @@ export interface PicEntry {
   image: string;
   postedBy: string;
   addedAt: string;
+  width?: number;
+  height?: number;
   bioclipSpeciesId?: string | null;
   bioclipCommonName?: string | null;
   bioclipScore?: number | null;
