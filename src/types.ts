@@ -19,6 +19,7 @@ export interface PicRecord {
   bioclipSpeciesId?: string | null;
   bioclipCommonName?: string | null;
   bioclipScore?: number | null;
+  bioclipWikiUrl?: string | null;
   kind?: "plant" | "animal";
 }
 

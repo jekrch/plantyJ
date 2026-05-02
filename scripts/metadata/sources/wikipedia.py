@@ -58,6 +58,35 @@ def fetch_wikipedia_intro(title: str, health: IntegrationHealth) -> str | None:
     return text
 
 
+def fetch_wikipedia_url(species_name: str) -> str | None:
+    """Return the canonical Wikipedia URL for species_name if the page exists."""
+    params = {
+        "action": "query",
+        "titles": species_name,
+        "redirects": 1,
+        "format": "json",
+    }
+    try:
+        resp = requests.get(
+            WIKI_API,
+            params=params,
+            headers={"User-Agent": "plantyj/1.0"},
+            timeout=10,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+    except Exception:
+        return None
+
+    pages = data.get("query", {}).get("pages", {})
+    page = next(iter(pages.values()), {})
+    if "missing" in page:
+        return None
+
+    title = page.get("title", species_name)
+    return WIKI_PORTAL.format(title=title.replace(" ", "_"))
+
+
 def backfill_wikipedia(species_entries: list[dict]) -> int:
     health = IntegrationHealth("Wikipedia")
     updated = 0

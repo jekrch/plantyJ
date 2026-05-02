@@ -24,6 +24,7 @@ from metadata.sources.inaturalist import backfill_inaturalist
 from metadata.sources.wikidata import backfill_wikidata
 from metadata.sources.natureserve import backfill_natureserve
 from metadata.sources.taxonomy_wiki import build_taxa_registry
+from metadata.sources.wikipedia import fetch_wikipedia_url
 
 
 def load_species_entries() -> list[dict]:
@@ -62,6 +63,37 @@ def flag_animal_pics(pics: list[dict], plants: list[dict], species_entries: list
             flagged += 1
 
     return flagged
+
+
+def backfill_bioclip_wiki_urls(pics: list[dict], plants: list[dict]) -> int:
+    """For pics where bioclip differs from recorded species, fetch and store a Wikipedia URL."""
+    import time
+
+    short_code_to_full_name = {
+        p["shortCode"]: (p.get("fullName") or "").strip().lower()
+        for p in plants
+        if p.get("shortCode")
+    }
+    updated = 0
+
+    for pic in pics:
+        bioclip_id = (pic.get("bioclipSpeciesId") or "").strip()
+        if not bioclip_id:
+            continue
+        if "bioclipWikiUrl" in pic:
+            continue
+
+        recorded = short_code_to_full_name.get(pic.get("shortCode", ""), "")
+        if bioclip_id.lower() == recorded:
+            continue  # exact match — no separate wiki link needed
+
+        print(f"  Wikipedia URL lookup (bioclip): {bioclip_id}")
+        url = fetch_wikipedia_url(bioclip_id)
+        pic["bioclipWikiUrl"] = url
+        updated += 1
+        time.sleep(0.3)
+
+    return updated
 
 
 def main():
@@ -119,6 +151,10 @@ def main():
         if animal_flagged:
             print(f"  Flagged {animal_flagged} pic(s) as animal based on taxonomy.")
 
+    print("Backfilling bioclip Wikipedia URLs...")
+    bioclip_wiki_count = backfill_bioclip_wiki_urls(pics, plants)
+    print(f"  bioclip Wikipedia URLs processed {bioclip_wiki_count} pic(s).")
+
     updated = 0
     errors = 0
 
@@ -151,7 +187,7 @@ def main():
             print(f"  ERROR: {pic['image']} → {e}", file=sys.stderr)
             errors += 1
 
-    if updated or animal_flagged:
+    if updated or animal_flagged or bioclip_wiki_count:
         PICS_PATH.write_text(json.dumps(pics_doc, indent=2) + "\n")
         pic_meta_doc["picMetadata"] = list(pic_meta_by_id.values())
         PIC_METADATA_PATH.write_text(json.dumps(pic_meta_doc, indent=2) + "\n")

@@ -153,6 +153,7 @@ export default function PlantInfoDrawer({
 
   const bioclipSpeciesId = plant.bioclipSpeciesId?.trim() || null;
   const bioclipCommonName = plant.bioclipCommonName?.trim() || null;
+  const bioclipWikiUrl = plant.bioclipWikiUrl?.trim() || null;
   const bioclipScore =
     typeof plant.bioclipScore === "number" ? plant.bioclipScore : null;
   const recordedSpecies =
@@ -576,9 +577,21 @@ export default function PlantInfoDrawer({
                 style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
               >
                 <div>
-                  <p className="font-display text-sm text-white/70 italic leading-snug">
-                    {bioclipSpeciesId}
-                  </p>
+                  {bioclipWikiUrl && bioclipMatch !== "match" ? (
+                    <a
+                      href={bioclipWikiUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-display text-sm text-white/70 italic leading-snug hover:text-accent transition-colors inline-flex items-center gap-1"
+                    >
+                      {bioclipSpeciesId}
+                      <ExternalLink size={10} strokeWidth={1.5} className="shrink-0 not-italic" />
+                    </a>
+                  ) : (
+                    <p className="font-display text-sm text-white/70 italic leading-snug">
+                      {bioclipSpeciesId}
+                    </p>
+                  )}
                   {bioclipCommonName && (
                     <p className="text-[11px] text-white/50 mt-0.5">
                       {bioclipCommonName}
