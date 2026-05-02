@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "c card",
+      "fullName": "Cardinalis cardinalis",
+      "commonName": "Cardinal",
+      "variety": null
+    },
+    {
       "shortCode": "V ata",
       "fullName": "Vanessa atalanta",
       "commonName": "Red Admiral",
