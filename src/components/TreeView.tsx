@@ -208,6 +208,7 @@ export default function TreeView({
   );
   const [renderedPinned, setRenderedPinned] = useState<HierarchyPointNode<RawNode> | null>(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [pinnedKey, setPinnedKey] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchHi, setSearchHi] = useState(0);
@@ -216,6 +217,7 @@ export default function TreeView({
   // Sync `pinned` to `renderedPinned`
   useEffect(() => {
     if (pinned) {
+      setPinnedKey((k) => k + 1);
       setRenderedPinned(pinned);
       setIsClosing(false);
     } else if (renderedPinned) {
@@ -675,8 +677,8 @@ export default function TreeView({
               {layout.links.map((l, i) => {
                 const isActive =
                   activeNode &&
-                  (l.target === activeNode ||
-                    l.target.ancestors().includes(activeNode));
+                  l.target !== activeNode &&
+                  l.target.ancestors().includes(activeNode);
                 return (
                   <path
                     key={i}
@@ -725,6 +727,7 @@ export default function TreeView({
               {layout.nodes.map((n) => {
                 const isLeaf = !!n.data.plant;
                 const isActive = n === activeNode;
+                const isPinned = n === pinned;
                 const isAncestorOfActive =
                   activeNode && activeNode.ancestors().includes(n);
                 const cx = n.y;
@@ -751,9 +754,35 @@ export default function TreeView({
                       onClick={(e) => {
                         e.stopPropagation();
                         if (panRef.current?.moved) return;
-                        onOpenPlantInList(p, speciesPicsFor(plants, p.shortCode));
+                        setPinned((cur) => (cur === n ? null : n));
                       }}
                     >
+                      {/* Invisible hit rect covering circle + label gap */}
+                      <rect
+                        x={-(r + 2)}
+                        y={-(r + 4)}
+                        width={r * 2 + 4 + LABEL_COL}
+                        height={r * 2 + 8}
+                        fill="transparent"
+                        stroke="none"
+                      />
+                      {isPinned && (
+                        <circle
+                          key={`burst-${pinnedKey}`}
+                          r={r + 14}
+                          fill="url(#leaf-glow)"
+                          className="node-select-burst"
+                        />
+                      )}
+                      {isPinned && (
+                        <circle
+                          r={r + 16}
+                          fill="none"
+                          stroke={nodeColor}
+                          strokeWidth={1.2}
+                          className="node-halo-persist"
+                        />
+                      )}
                       {isActive && (
                         <circle r={r + 12} fill="url(#leaf-glow)" />
                       )}
@@ -845,7 +874,24 @@ export default function TreeView({
                       setPinned((cur) => (cur === n ? null : n));
                     }}
                   >
-                    <circle r={r + 6} fill="transparent" stroke="none" />
+                    <circle r={r + 14} fill="transparent" stroke="none" />
+                    {isPinned && (
+                      <circle
+                        key={`burst-${pinnedKey}`}
+                        r={r + 10}
+                        fill="url(#leaf-glow)"
+                        className="node-select-burst"
+                      />
+                    )}
+                    {isPinned && (
+                      <circle
+                        r={r + 9}
+                        fill="none"
+                        stroke="var(--color-ink)"
+                        strokeWidth={0.8}
+                        className="node-halo-persist"
+                      />
+                    )}
                     <circle
                       r={r}
                       fill={
