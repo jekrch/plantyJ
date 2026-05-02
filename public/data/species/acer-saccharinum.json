@@ -1,0 +1,62 @@
+{
+  "id": "acer-saccharinum",
+  "fullName": "Acer saccharinum",
+  "commonName": "Silver Maple",
+  "description": "Acer saccharinum, commonly known as silver maple, creek maple, silverleaf maple, soft maple, large maple, water maple, swamp maple, or white maple, is a species of maple native to the eastern and central United States and southeastern Canada. It is one of the most common trees in the United States.\nAlthough the silver maple's Latin name is similar, it should not be confused with Acer saccharum, the sugar maple. Some of the common names are also applied to other maples, especially Acer rubrum.",
+  "vernacularNames": [
+    "Red Maple",
+    "Silver Maple",
+    "Silver maple (EN); Silber-Ahorn (DE)",
+    "Soft Maple",
+    "White Maple",
+    "river maple",
+    "silver-maple",
+    "soft-maple"
+  ],
+  "taxonomy": {
+    "kingdom": "Plantae",
+    "phylum": "Tracheophyta",
+    "class": "Magnoliopsida",
+    "order": "Sapindales",
+    "family": "Sapindaceae",
+    "genus": "Acer",
+    "species": "Acer saccharinum",
+    "canonicalName": "Acer saccharinum"
+  },
+  "nativeRange": null,
+  "references": [
+    {
+      "name": "GBIF",
+      "url": "https://www.gbif.org/species/3189837"
+    },
+    {
+      "name": "POWO",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1892-2"
+    },
+    {
+      "name": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Acer_saccharinum"
+    },
+    {
+      "name": "iNaturalist",
+      "url": "https://www.inaturalist.org/taxa/54762"
+    },
+    {
+      "name": "Wikidata",
+      "url": "https://www.wikidata.org/wiki/Q158301"
+    },
+    {
+      "name": "NatureServe Explorer",
+      "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.160863"
+    }
+  ],
+  "sources": [
+    "gbif",
+    "powo",
+    "wikipedia",
+    "inaturalist",
+    "wikidata",
+    "natureserve"
+  ],
+  "observationsCount": 57681
+}
