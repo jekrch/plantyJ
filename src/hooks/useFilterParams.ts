@@ -14,6 +14,7 @@ interface InitialState {
   view: ViewMode;
   subject: string | null;
   treeNode: string | null;
+  infoTab: string | null;
 }
 
 function parseFiltersFromURL(): InitialState {
@@ -37,8 +38,9 @@ function parseFiltersFromURL(): InitialState {
   const subject =
     view === "plant" || view === "zone" ? params.get("subject") : null;
   const treeNode = view === "tree" ? params.get("treeNode") : null;
+  const infoTab = params.get("info");
 
-  return { filters, sort, view, subject, treeNode };
+  return { filters, sort, view, subject, treeNode, infoTab };
 }
 
 const KEY_TO_PARAM: Record<SetFilterKey, string> = {
@@ -49,7 +51,7 @@ const KEY_TO_PARAM: Record<SetFilterKey, string> = {
   misc: "misc",
 };
 
-function buildParams(
+export function buildParams(
   filters: Filters,
   sort: SortMode,
   view: ViewMode,
@@ -74,15 +76,27 @@ function buildParams(
   return params.toString();
 }
 
-function pushURL(qs: string) {
+function replaceURL(qs: string) {
   const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
   window.history.replaceState(null, "", url);
+}
+
+function pushURL(qs: string) {
+  const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
+  window.history.pushState(null, "", url);
 }
 
 export function useFilterParams() {
   const initial = useMemo(() => parseFiltersFromURL(), []);
 
   const syncToURL = useCallback(
+    (filters: Filters, sort: SortMode, view: ViewMode, subject: string | null, treeNode: string | null = null) => {
+      replaceURL(buildParams(filters, sort, view, subject, treeNode));
+    },
+    []
+  );
+
+  const pushToURL = useCallback(
     (filters: Filters, sort: SortMode, view: ViewMode, subject: string | null, treeNode: string | null = null) => {
       pushURL(buildParams(filters, sort, view, subject, treeNode));
     },
@@ -95,6 +109,8 @@ export function useFilterParams() {
     initialView: initial.view,
     initialSubject: initial.subject,
     initialTreeNode: initial.treeNode,
+    initialInfoTab: initial.infoTab,
     syncToURL,
+    pushToURL,
   };
 }

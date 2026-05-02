@@ -4,11 +4,13 @@ import type { Plant, PlantRecord, Species, Zone, ZonePic } from "../types";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import StatsPanel from "./StatsPanel";
 
-type Tab = "about" | "stats" | "plants" | "zones";
+export type Tab = "about" | "stats" | "plants" | "zones";
 
 interface Props {
   open: boolean;
   onClose: () => void;
+  activeTab: Tab;
+  onTabChange: (tab: Tab) => void;
   plants: Plant[];
   plantRecords: PlantRecord[];
   zones: Zone[];
@@ -65,6 +67,8 @@ export default function InfoModal(props: Props) {
 
 function InfoModalContent({
   onClose,
+  activeTab,
+  onTabChange,
   plants,
   plantRecords,
   zones,
@@ -76,7 +80,7 @@ function InfoModalContent({
   onSelectTaxon,
   onShowBioclipConflicts,
 }: Props & { visible: boolean }) {
-  const [tab, setTab] = useState<Tab>("about");
+  const tab = activeTab;
   const containerRef = useRef<HTMLDivElement>(null);
 
   useBodyScrollLock(containerRef);
@@ -215,7 +219,7 @@ function InfoModalContent({
                 key={t.id}
                 role="tab"
                 aria-selected={active}
-                onClick={() => setTab(t.id)}
+                onClick={() => onTabChange(t.id)}
                 className={`relative px-3 py-2 text-xs font-display tracking-wide transition-colors ${active ? "text-ink" : "text-ink-muted hover:text-ink"
                   }`}
               >

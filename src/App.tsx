@@ -11,6 +11,7 @@ import { SpinnerState, ErrorState, EmptyState } from "./components/StatusStates"
 import { useFilterParams } from "./hooks/useFilterParams";
 import PlantViewer from "./components/PlantViewer";
 import InfoModal from "./components/InfoModal";
+import type { Tab as InfoTab } from "./components/InfoModal";
 import SpotlightView from "./components/SpotlightView";
 import TreeView from "./components/TreeView";
 import ViewModeControl from "./components/ViewModeControl";
@@ -41,7 +42,9 @@ export default function App() {
     initialView,
     initialSubject,
     initialTreeNode,
+    initialInfoTab,
     syncToURL,
+    pushToURL,
   } = useFilterParams();
   const [sortMode, setSortMode] = useState<SortMode>(initialSort);
   const [filters, setFilters] = useState<Filters>(initialFilters);
@@ -58,7 +61,12 @@ export default function App() {
   const [customViewerPlants, setCustomViewerPlants] = useState<Plant[] | null>(
     null
   );
-  const [infoOpen, setInfoOpen] = useState(false);
+  const INFO_TABS: InfoTab[] = ["about", "stats", "plants", "zones"];
+  const [infoOpen, setInfoOpen] = useState(() => INFO_TABS.includes(initialInfoTab as InfoTab));
+  const [infoTab, setInfoTab] = useState<InfoTab>(
+    INFO_TABS.includes(initialInfoTab as InfoTab) ? (initialInfoTab as InfoTab) : "about"
+  );
+  const pushedInfoStateRef = useRef(!INFO_TABS.includes(initialInfoTab as InfoTab));
   const [viewMode, setViewMode] = useState<ViewMode>(initialView);
   const [spotlightCode, setSpotlightCode] = useState<string | null>(initialSubject);
   const [treeFocusNode, setTreeFocusNode] = useState<string | null>(initialTreeNode);
@@ -73,6 +81,50 @@ export default function App() {
     const ro = new ResizeObserver(update);
     ro.observe(el);
     return () => ro.disconnect();
+  }, []);
+
+  const handleOpenInfo = useCallback(() => {
+    const params = new URLSearchParams(window.location.search);
+    params.set("info", infoTab);
+    window.history.pushState(null, "", `${window.location.pathname}?${params}`);
+    pushedInfoStateRef.current = true;
+    setInfoOpen(true);
+  }, [infoTab]);
+
+  const handleCloseInfo = useCallback(() => {
+    if (pushedInfoStateRef.current) {
+      pushedInfoStateRef.current = false;
+      window.history.back();
+    } else {
+      const params = new URLSearchParams(window.location.search);
+      params.delete("info");
+      const qs = params.toString();
+      window.history.replaceState(null, "", qs ? `${window.location.pathname}?${qs}` : window.location.pathname);
+      setInfoOpen(false);
+    }
+  }, []);
+
+  const handleInfoTabChange = useCallback((tab: InfoTab) => {
+    setInfoTab(tab);
+    const params = new URLSearchParams(window.location.search);
+    params.set("info", tab);
+    window.history.replaceState(null, "", `${window.location.pathname}?${params}`);
+  }, []);
+
+  useEffect(() => {
+    const handler = () => {
+      const params = new URLSearchParams(window.location.search);
+      const infoParam = params.get("info");
+      if (infoParam && INFO_TABS.includes(infoParam as InfoTab)) {
+        setInfoOpen(true);
+        setInfoTab(infoParam as InfoTab);
+        pushedInfoStateRef.current = true;
+      } else {
+        setInfoOpen(false);
+      }
+    };
+    window.addEventListener("popstate", handler);
+    return () => window.removeEventListener("popstate", handler);
   }, []);
 
   const handleFiltersChange = useCallback(
@@ -223,13 +275,17 @@ export default function App() {
       setTreeFocusNode(name);
       setViewMode("tree");
       setSpotlightCode(null);
-      syncToURL(filters, sortMode, "tree", null, name);
+      if (infoOpen) {
+        pushToURL(filters, sortMode, "tree", null, name);
+      } else {
+        syncToURL(filters, sortMode, "tree", null, name);
+      }
       setOpenPlantId(null);
       setViewerScope("filtered");
       setCustomViewerPlants(null);
       setInfoOpen(false);
     },
-    [filters, sortMode, syncToURL]
+    [filters, sortMode, syncToURL, pushToURL, infoOpen]
   );
 
   const handleShowBioclipConflicts = useCallback(() => {
@@ -241,10 +297,14 @@ export default function App() {
     setViewMode("gallery");
     setSpotlightCode(null);
     setTreeFocusNode(null);
-    syncToURL(next, sortMode, "gallery", null);
+    if (infoOpen) {
+      pushToURL(next, sortMode, "gallery", null);
+    } else {
+      syncToURL(next, sortMode, "gallery", null);
+    }
     setInfoOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [sortMode, syncToURL]);
+  }, [sortMode, syncToURL, pushToURL, infoOpen]);
 
   const handleTreeNodeSelect = useCallback(
     (name: string | null) => {
@@ -257,22 +317,30 @@ export default function App() {
     (shortCode: string) => {
       setViewMode("plant");
       setSpotlightCode(shortCode);
-      syncToURL(filters, sortMode, "plant", shortCode);
+      if (infoOpen) {
+        pushToURL(filters, sortMode, "plant", shortCode);
+      } else {
+        syncToURL(filters, sortMode, "plant", shortCode);
+      }
       setInfoOpen(false);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [filters, sortMode, syncToURL]
+    [filters, sortMode, syncToURL, pushToURL, infoOpen]
   );
 
   const handleSpotlightZone = useCallback(
     (zoneCode: string) => {
       setViewMode("zone");
       setSpotlightCode(zoneCode);
-      syncToURL(filters, sortMode, "zone", zoneCode);
+      if (infoOpen) {
+        pushToURL(filters, sortMode, "zone", zoneCode);
+      } else {
+        syncToURL(filters, sortMode, "zone", zoneCode);
+      }
       setInfoOpen(false);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [filters, sortMode, syncToURL]
+    [filters, sortMode, syncToURL, pushToURL, infoOpen]
   );
 
   const spotlightPlants = useMemo(() => {
@@ -330,7 +398,7 @@ export default function App() {
             </h1>
           </div>
           <button
-            onClick={() => setInfoOpen(true)}
+            onClick={handleOpenInfo}
             className="flex items-center justify-center h-8 w-8 mr-2 rounded-md text-ink-muted hover:text-ink hover:bg-white/5 transition-colors"
             title="About this site"
             aria-label="About this site"
@@ -439,7 +507,9 @@ export default function App() {
 
       <InfoModal
         open={infoOpen}
-        onClose={() => setInfoOpen(false)}
+        onClose={handleCloseInfo}
+        activeTab={infoTab}
+        onTabChange={handleInfoTabChange}
         plants={plants}
         plantRecords={plantRecords}
         zones={zones}
