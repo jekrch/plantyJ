@@ -450,5 +450,13 @@
   "Sciurus": {
     "description": "The genus Sciurus contains most of the common, bushy-tailed squirrels in North America, Europe, temperate Asia, Central America and South America.",
     "url": "https://en.wikipedia.org/wiki/Sciurus"
+  },
+  "Passer": {
+    "description": "Passer is a genus of sparrows, also known as the true sparrows. The genus contains 28 species and includes the house sparrow and the Eurasian tree sparrow \u2013 two of the most common birds in the world. They are small birds with thick bills for eating seeds and are mostly coloured grey or brown. Native to the Old World, some species have been introduced throughout the world.",
+    "url": "https://en.wikipedia.org/wiki/Passer"
+  },
+  "Passeridae": {
+    "description": "Old World sparrows are groups of small passerine birds forming the family Passeridae. They are also known as true sparrows, a name which is also used for a particular genus of the family Passer. They are distinct from both the New World sparrows of the family Passerellidae and from a few other birds such as the Java sparrow of the family Estrildidae sharing their name. Many species nest on buildings and the house and Eurasian tree sparrows, in particular, inhabit cities in large numbers. They are primarily seed-eaters, though they also consume small insects. Some species scavenge for food around cities and like pigeons or gulls, will eat small quantities of a diversity of items.",
+    "url": "https://en.wikipedia.org/wiki/Old_World_sparrow"
   }
 }

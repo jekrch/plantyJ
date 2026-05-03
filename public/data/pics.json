@@ -11,7 +11,11 @@
       "postedBy": "Jacob",
       "addedAt": "2026-05-03T16:02:55.242Z",
       "width": 1280,
-      "height": 1047
+      "height": 1047,
+      "kind": "animal",
+      "bioclipSpeciesId": "Passer domesticus",
+      "bioclipCommonName": "House sparrow",
+      "bioclipScore": 0.9621
     },
     {
       "seq": 59,
