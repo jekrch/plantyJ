@@ -438,5 +438,17 @@
   "Vanessa": {
     "description": "Vanessa is a genus of brush-footed butterflies in the tribe Nymphalini. It has a near-global distribution and includes conspicuous species such as the red admirals (e.g., red admiral, Indian red admiral, New Zealand red admiral), the Kamehameha, and the painted ladies of the Cynthia group (formerly a subgenus): Painted lady, American painted lady, West Coast lady, Australian painted lady, etc. For African admirals, see genus Antanartia. Recently, several members traditionally considered to be in the genus Antanartia have been determined to belong within the genus Vanessa.\nThe name of the genus may have been taken from the character Vanessa in Jonathan Swift's poem \"Cadenus and Vanessa,\" which is the source of the woman's name Vanessa. In the poem Vanessa is called a \"nymph\" eleven times, and the genus is closely related to the previously named genus Nymphalis. Though the name has been suggested to be a variant of \"Phanessa\", from the name of an Ancient Greek deity, this is unlikely. The name of the deity is actually not \"Phanessa\" but Phanes. Johan Christian Fabricius, the entomologist who named this genus, normally used the original forms of the names of classical divinities when he created new scientific names.\nNorth American species in the genus Vanessa overwinter as adults.",
     "url": "https://en.wikipedia.org/wiki/Vanessa_(butterfly)"
+  },
+  "Rodentia": {
+    "description": "Rodents are a group of mammals belonging to the order Rodentia characterized by a single pair of continuously growing incisors in each of the upper and lower jaws. Rodents make up about 40% of all mammal species. They are native to all major landmasses except Antarctica and several oceanic islands, though they have subsequently been introduced to most of these landmasses by human activity. Most rodents are small animals with robust bodies, short limbs, and long tails. They use their sharp incisors to gnaw food, excavate burrows, and defend themselves. Most eat seeds or other plant material, but some have more varied diets.",
+    "url": "https://en.wikipedia.org/wiki/Rodent"
+  },
+  "Sciuridae": {
+    "description": "Squirrels are members of the family Sciuridae, a family that includes small or medium-sized rodents. The squirrel family includes tree squirrels, ground squirrels, and flying squirrels. Squirrels are indigenous to the Americas, Eurasia, and Africa, and were introduced by humans to Australia. The earliest known fossilized squirrels date from the Eocene epoch, and among other living rodent families, the squirrels are most closely related to the mountain beaver and dormice.",
+    "url": "https://en.wikipedia.org/wiki/Squirrel"
+  },
+  "Sciurus": {
+    "description": "The genus Sciurus contains most of the common, bushy-tailed squirrels in North America, Europe, temperate Asia, Central America and South America.",
+    "url": "https://en.wikipedia.org/wiki/Sciurus"
   }
 }

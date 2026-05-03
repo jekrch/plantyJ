@@ -11,7 +11,11 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-03T15:46:45.780Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "kind": "animal",
+      "bioclipSpeciesId": "Sciurus carolinensis",
+      "bioclipCommonName": "Eastern gray squirrel",
+      "bioclipScore": 0.9821
     },
     {
       "seq": 58,
