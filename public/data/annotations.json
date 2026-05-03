@@ -167,6 +167,14 @@
         "bird"
       ],
       "description": null
+    },
+    {
+      "shortCode": "S car",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
     }
   ]
 }
