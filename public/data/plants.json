@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "S car",
+      "fullName": "Sciurus carolinensis",
+      "commonName": "Gray Squirrel",
+      "variety": null
+    },
+    {
       "shortCode": "c card",
       "fullName": "Cardinalis cardinalis",
       "commonName": "Cardinal",
