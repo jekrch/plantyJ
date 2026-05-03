@@ -24,6 +24,23 @@ import {
   upsertZone,
 } from "./github";
 
+function isAllowedUser(userId: number | undefined, env: Env): boolean {
+  if (!env.ALLOWED_USER_IDS) return true;
+  if (userId === undefined) return false;
+  return env.ALLOWED_USER_IDS.split(",").some((id) => id.trim() === String(userId));
+}
+
+async function checkAskRateLimit(userId: number, env: Env): Promise<boolean> {
+  if (!env.ASK_CACHE) return true;
+  const today = new Date().toISOString().slice(0, 10);
+  const key = `ratelimit:ask:${userId}:${today}`;
+  const raw = await env.ASK_CACHE.get(key);
+  const count = raw ? parseInt(raw, 10) : 0;
+  if (count >= 100) return false;
+  await env.ASK_CACHE.put(key, String(count + 1), { expirationTtl: 86400 });
+  return true;
+}
+
 function buildHelpText(): string {
   return HELP_HEADER;
 }
@@ -59,7 +76,10 @@ export default {
     }
 
     const secret = request.headers.get("X-Telegram-Bot-Api-Secret-Token");
-    if (env.WEBHOOK_SECRET && secret !== env.WEBHOOK_SECRET) {
+    if (!env.WEBHOOK_SECRET) {
+      return new Response("Webhook secret not configured", { status: 500 });
+    }
+    if (secret !== env.WEBHOOK_SECRET) {
       return new Response("Unauthorized", { status: 403 });
     }
 
@@ -72,6 +92,10 @@ export default {
       return new Response("OK");
     }
 
+    if (!isAllowedUser(message.from?.id, env)) {
+      return new Response("OK");
+    }
+
     if (message.text) {
       const text = message.text.trim();
 
@@ -81,6 +105,10 @@ export default {
           const alias = askMatch[1] ?? "2";
           const question = askMatch[2].trim();
           const model = MODEL_ALIASES[alias];
+          if (message.from && !await checkAskRateLimit(message.from.id, env)) {
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, "Rate limit reached: max 100 /ask queries per day.");
+            return new Response("OK");
+          }
           const reply = await answerQuestion(question, env, model);
           await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, reply);
           return new Response("OK");

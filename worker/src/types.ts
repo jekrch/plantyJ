@@ -8,7 +8,8 @@ export interface Env {
   TELEGRAM_ALLOWED_CHAT_ID: string;
   GITHUB_TOKEN: string;
   GITHUB_REPO: string;
-  WEBHOOK_SECRET?: string;
+  WEBHOOK_SECRET: string;
+  ALLOWED_USER_IDS?: string;
   DATA_BASE_URL?: string;
   LLM_MODEL?: string;
   GEMINI_API_KEY: string;

@@ -4,6 +4,8 @@ compatibility_date = "2024-12-01"
 
 [vars]
 TELEGRAM_ALLOWED_CHAT_ID = "-5285047199"
+# Comma-separated Telegram user IDs for Jacob and Jenny (find yours via @userinfobot)
+ALLOWED_USER_IDS = "8510422630,8539814055"
 GITHUB_REPO = "jekrch/plantyJ"
 DATA_BASE_URL = "https://plantyj.com/data"
 LLM_MODEL = "gemini-3.1-pro-preview"
