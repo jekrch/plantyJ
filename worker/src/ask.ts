@@ -8,14 +8,14 @@ const CACHE_TTL_SECONDS = 3600;
 
 // /ask  = /ask2, /ask1 = lite (cheap), /ask3 = pro preview (best)
 export const MODEL_ALIASES: Record<string, string> = {
-  "1": "gemini-2.5-flash-lite-preview",
+  "1": "gemini-3.1-flash-lite-preview",
   "2": "gemini-2.5-pro",
   "3": "gemini-3.1-pro-preview",
 };
 
 // $/1M tokens: uncached input, cached input, output (approximate — verify at ai.google.dev/pricing)
 const MODEL_PRICING: Record<string, { i: number; c: number; o: number }> = {
-  "gemini-2.5-flash-lite-preview": { i: 0.10,  c: 0.025, o: 0.40  },
+  "gemini-3.1-flash-lite-preview": { i: 0.10,  c: 0.025, o: 0.40  },
   "gemini-2.5-pro":                { i: 1.25,  c: 0.315, o: 10.00 },
   "gemini-3.1-pro-preview":        { i: 1.25,  c: 0.315, o: 10.00 },
 };

@@ -43,6 +43,26 @@ Each entry is assigned a numeric `seq` ID on creation. The bot responds to:
 - `/update {seq} {field} {value}`: edit a field (`shortCode`, `fullName`, `commonName`, `zoneCode`, `zoneName`, `tags`, `description`)
 - `/help`: usage instructions plus a directory of every known plant `shortCode` and `zoneCode`
 
+### Q&A (Gemini)
+
+Ask anything about the journal in plain English:
+
+```
+/ask which plants are native to MN but missing the mn tag?
+/ask what zones don't have a zone pic yet?
+/ask I want to post a robin photo to the maple zone — what's the caption?
+```
+
+The bot answers from a pre-computed plant rollup and can suggest ready-to-send commands for data gaps. It never executes writes itself. Three model tiers are available:
+
+| Command | Model | Best for |
+|---|---|---|
+| `/ask1` | `gemini-3.1-flash-lite-preview` | Quick lookups |
+| `/ask` / `/ask2` | `gemini-2.5-pro` | Default |
+| `/ask3` | `gemini-3.1-pro-preview` | Complex reasoning |
+
+Each reply includes an approximate token count and cost.
+
 ## Image metadata
 
 A GitHub Action (`compute-metadata.yml`) runs whenever `plants.json` changes. It backfills missing per-image metadata:
