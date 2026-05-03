@@ -5,3 +5,5 @@ compatibility_date = "2024-12-01"
 [vars]
 TELEGRAM_ALLOWED_CHAT_ID = "-5285047199"
 GITHUB_REPO = "jekrch/plantyJ"
+DATA_BASE_URL = "https://plantyj.com/data"
+LLM_MODEL = "gemini-flash-latest"

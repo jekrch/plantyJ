@@ -4,6 +4,9 @@ export interface Env {
   GITHUB_TOKEN: string;
   GITHUB_REPO: string;
   WEBHOOK_SECRET?: string;
+  DATA_BASE_URL?: string;
+  LLM_MODEL?: string;
+  GEMINI_API_KEY: string;
 }
 
 export interface TelegramUser {

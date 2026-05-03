@@ -6,6 +6,9 @@ on:
     paths:
       - "public/data/pics.json"
       - "public/data/plants.json"
+      - "public/data/annotations.json"
+      - "public/data/zones.json"
+      - "public/data/zone_pics.json"
       - "public/images/**"
       - "scripts/**"
       - ".github/workflows/compute-metadata.yml"
@@ -60,11 +63,14 @@ jobs:
       - name: Compute BioCLIP embeddings
         run: python scripts/compute-embeddings.py
 
+      - name: Build rollup
+        run: python scripts/build-rollup.py
+
       - name: Commit updated metadata
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/data/pics.json public/data/pic-metadata.json public/data/plants.json public/data/embeddings.json public/data/species/ public/data/taxa.json
+          git add public/data/pics.json public/data/pic-metadata.json public/data/plants.json public/data/embeddings.json public/data/species/ public/data/taxa.json public/data/rollup.min.json
           if git diff --cached --quiet; then
             echo "No metadata changes to commit."
           else
