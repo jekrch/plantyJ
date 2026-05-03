@@ -2,7 +2,7 @@ import type { AnnotationEntry, Env, PicEntry, PlantRecord, TelegramUpdate, Zone,
 import { parseCaption, resolveFields, UNIDENTIFIED_CODE, UNIDENTIFIED_PREFIX } from "./caption";
 import { downloadFile, sendReply } from "./telegram";
 import { HELP_HEADER } from "./help";
-import { answerQuestion } from "./ask";
+import { answerQuestion, MODEL_ALIASES } from "./ask";
 import {
   acceptBioclip,
   addAnnotationTag,
@@ -76,10 +76,12 @@ export default {
       const text = message.text.trim();
 
       try {
-        const askMatch = text.match(/^\/ask\s+([\s\S]+)$/i);
+        const askMatch = text.match(/^\/ask([123])?\s+([\s\S]+)$/i);
         if (askMatch) {
-          const question = askMatch[1].trim();
-          const reply = await answerQuestion(question, env);
+          const alias = askMatch[1] ?? "2";
+          const question = askMatch[2].trim();
+          const model = MODEL_ALIASES[alias];
+          const reply = await answerQuestion(question, env, model);
           await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, reply);
           return new Response("OK");
         }

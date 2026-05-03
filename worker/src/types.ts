@@ -1,3 +1,8 @@
+export interface KVNamespace {
+  get(key: string): Promise<string | null>;
+  put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
+}
+
 export interface Env {
   TELEGRAM_BOT_TOKEN: string;
   TELEGRAM_ALLOWED_CHAT_ID: string;
@@ -7,6 +12,9 @@ export interface Env {
   DATA_BASE_URL?: string;
   LLM_MODEL?: string;
   GEMINI_API_KEY: string;
+  // KV namespace for persisting Gemini context-cache state between requests.
+  // Optional — caching is skipped gracefully when absent.
+  ASK_CACHE?: KVNamespace;
 }
 
 export interface TelegramUser {

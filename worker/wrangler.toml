@@ -7,3 +7,10 @@ TELEGRAM_ALLOWED_CHAT_ID = "-5285047199"
 GITHUB_REPO = "jekrch/plantyJ"
 DATA_BASE_URL = "https://plantyj.com/data"
 LLM_MODEL = "gemini-3.1-pro-preview"
+
+# KV namespace for Gemini context-cache state (checksum + cache name).
+# To enable caching:
+[[kv_namespaces]]
+binding = "ASK_CACHE"
+id = "6ce8e5b515f140988b9069aafb021e35"
+preview_id = "12d42f7ae38e415cb6cea937066906a4"

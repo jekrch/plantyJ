@@ -4,6 +4,41 @@ import { HELP_HEADER } from "./help";
 
 const MAX_TOOL_ITERATIONS = 3;
 const TELEGRAM_MAX_LEN = 4096;
+const CACHE_TTL_SECONDS = 3600;
+
+// /ask  = /ask2, /ask1 = lite (cheap), /ask3 = pro preview (best)
+export const MODEL_ALIASES: Record<string, string> = {
+  "1": "gemini-2.5-flash-lite-preview",
+  "2": "gemini-2.5-pro",
+  "3": "gemini-3.1-pro-preview",
+};
+
+// $/1M tokens: uncached input, cached input, output (approximate — verify at ai.google.dev/pricing)
+const MODEL_PRICING: Record<string, { i: number; c: number; o: number }> = {
+  "gemini-2.5-flash-lite-preview": { i: 0.10,  c: 0.025, o: 0.40  },
+  "gemini-2.5-pro":                { i: 1.25,  c: 0.315, o: 10.00 },
+  "gemini-3.1-pro-preview":        { i: 1.25,  c: 0.315, o: 10.00 },
+};
+
+interface CacheState {
+  checksum: string;
+  cacheName: string;
+  expiresAt: number;
+}
+
+interface Usage {
+  prompt: number;
+  cached: number;
+  output: number;
+}
+
+async function computeChecksum(text: string): Promise<string> {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("")
+    .slice(0, 16);
+}
 
 async function loadRollup(env: Env): Promise<string> {
   const base = env.DATA_BASE_URL ?? "https://plantyj.com/data";
@@ -64,6 +99,16 @@ function truncateForTelegram(text: string): string {
   return text.slice(0, pos) + "\n[...truncated]";
 }
 
+function formatCost(model: string, usage: Usage): string {
+  const p = MODEL_PRICING[model];
+  if (!p) return "";
+  const uncached = usage.prompt - usage.cached;
+  const cost = (uncached * p.i + usage.cached * p.c + usage.output * p.o) / 1_000_000;
+  const costStr = cost < 0.0001 ? "<$0.0001" : `$${cost.toFixed(4)}`;
+  const cacheNote = usage.cached > 0 ? ` ${usage.cached.toLocaleString()} cached,` : "";
+  return `[${costStr} |${cacheNote} ${usage.prompt.toLocaleString()} in / ${usage.output.toLocaleString()} out]`;
+}
+
 const GET_SPECIES_DECLARATION = {
   name: "get_species",
   description: "Fetch the enriched species record for a plant by its fullName.",
@@ -79,23 +124,101 @@ const GET_SPECIES_DECLARATION = {
   },
 };
 
-export async function answerQuestion(question: string, env: Env): Promise<string> {
+// Returns a valid Gemini cache name from KV, or creates+stores a new one.
+// Falls back to undefined on any error so callers can proceed without caching.
+async function getOrCreateCache(
+  client: GoogleGenAI,
+  model: string,
+  systemPrompt: string,
+  rollupJson: string,
+  env: Env
+): Promise<string | undefined> {
+  if (!env.ASK_CACHE) return undefined;
+  try {
+    const checksum = await computeChecksum(rollupJson);
+    const kvKey = `cache:${model}`;
+    const raw = await env.ASK_CACHE.get(kvKey);
+
+    if (raw) {
+      const state: CacheState = JSON.parse(raw);
+      if (state.checksum === checksum && state.expiresAt > Date.now()) {
+        return state.cacheName;
+      }
+    }
+
+    // Create a new Gemini context cache with the static parts of the prompt.
+    // The model path must use the full resource name for the caching API.
+    const cache = await client.caches.create({
+      model: model.startsWith("models/") ? model : `models/${model}`,
+      config: {
+        systemInstruction: systemPrompt,
+        tools: [{ functionDeclarations: [GET_SPECIES_DECLARATION] }],
+        ttl: `${CACHE_TTL_SECONDS}s`,
+      },
+    });
+
+    const state: CacheState = {
+      checksum,
+      cacheName: cache.name!,
+      expiresAt: Date.now() + (CACHE_TTL_SECONDS - 60) * 1000,
+    };
+    await env.ASK_CACHE.put(kvKey, JSON.stringify(state), {
+      expirationTtl: CACHE_TTL_SECONDS,
+    });
+
+    return cache.name!;
+  } catch {
+    // Caching is best-effort; any failure falls back to uncached.
+    return undefined;
+  }
+}
+
+export async function answerQuestion(
+  question: string,
+  env: Env,
+  modelOverride?: string
+): Promise<string> {
   const rollupJson = await loadRollup(env);
+  const model = modelOverride ?? env.LLM_MODEL ?? MODEL_ALIASES["2"];
   const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
-  const model = env.LLM_MODEL ?? "gemini-2.5-flash";
-  const systemInstruction = buildSystemPrompt(rollupJson);
-  const tools = [{ functionDeclarations: [GET_SPECIES_DECLARATION] }];
+  const systemPrompt = buildSystemPrompt(rollupJson);
+
+  const cacheName = await getOrCreateCache(client, model, systemPrompt, rollupJson, env);
+
+  // When using a cache the system instruction and tools are already stored server-side.
+  const baseConfig = cacheName
+    ? { cachedContent: cacheName }
+    : { systemInstruction: systemPrompt, tools: [{ functionDeclarations: [GET_SPECIES_DECLARATION] }] };
 
   type Part = { text?: string; functionCall?: { name: string; args: Record<string, unknown> }; functionResponse?: unknown };
   type Content = { role: string; parts: Part[] };
   const contents: Content[] = [{ role: "user", parts: [{ text: question }] }];
 
+  const totalUsage: Usage = { prompt: 0, cached: 0, output: 0 };
+
   for (let i = 0; i <= MAX_TOOL_ITERATIONS; i++) {
-    const response = await client.models.generateContent({
-      model,
-      contents,
-      config: { systemInstruction, tools },
-    });
+    let response;
+    try {
+      response = await client.models.generateContent({ model, contents, config: baseConfig });
+    } catch (err: unknown) {
+      // If the cache was deleted or expired on Gemini's side, retry without it.
+      if (cacheName && String(err).includes("404")) {
+        response = await client.models.generateContent({
+          model,
+          contents,
+          config: { systemInstruction: systemPrompt, tools: [{ functionDeclarations: [GET_SPECIES_DECLARATION] }] },
+        });
+      } else {
+        throw err;
+      }
+    }
+
+    const meta = response.usageMetadata;
+    if (meta) {
+      totalUsage.prompt += meta.promptTokenCount ?? 0;
+      totalUsage.cached += meta.cachedContentTokenCount ?? 0;
+      totalUsage.output += meta.candidatesTokenCount ?? 0;
+    }
 
     const parts: Part[] = response.candidates?.[0]?.content?.parts ?? [];
     const calls = parts.filter((p) => p.functionCall);
@@ -106,7 +229,9 @@ export async function answerQuestion(question: string, env: Env): Promise<string
         .map((p) => p.text)
         .join("\n")
         .trim();
-      return truncateForTelegram(text || "No response.");
+      const costLine = formatCost(model, totalUsage);
+      const body = truncateForTelegram(text || "No response.");
+      return costLine ? `${body}\n${costLine}` : body;
     }
 
     contents.push({ role: "model", parts });
