@@ -11,7 +11,11 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-04T21:39:48.255Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "kind": "animal",
+      "bioclipSpeciesId": "Spinus tristis",
+      "bioclipCommonName": "American Goldfinch",
+      "bioclipScore": 0.98
     },
     {
       "seq": 60,

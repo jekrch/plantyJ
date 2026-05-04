@@ -458,5 +458,13 @@
   "Passeridae": {
     "description": "Old World sparrows are groups of small passerine birds forming the family Passeridae. They are also known as true sparrows, a name which is also used for a particular genus of the family Passer. They are distinct from both the New World sparrows of the family Passerellidae and from a few other birds such as the Java sparrow of the family Estrildidae sharing their name. Many species nest on buildings and the house and Eurasian tree sparrows, in particular, inhabit cities in large numbers. They are primarily seed-eaters, though they also consume small insects. Some species scavenge for food around cities and like pigeons or gulls, will eat small quantities of a diversity of items.",
     "url": "https://en.wikipedia.org/wiki/Old_World_sparrow"
+  },
+  "Fringillidae": {
+    "description": "The true finches are small to medium-sized passerine birds in the family Fringillidae. Finches generally have stout conical bills adapted for eating seeds and nuts and often have colourful plumage. They occupy a great range of habitats where they are usually resident and do not migrate. They have a worldwide native distribution except for Australia and the polar regions. The family Fringillidae contains more than two hundred species divided into fifty genera. It includes the canaries, siskins, redpolls, serins, grosbeaks and euphonias, as well as the morphologically divergent Hawaiian honeycreepers.",
+    "url": "https://en.wikipedia.org/wiki/Finch"
+  },
+  "Spinus": {
+    "description": "Spinus may refer to:Spinus (bird), a genus of birds in the finch family (Fringillidae)\nSpinu\u0219, a commune in Bihor County, Romania\n\n",
+    "url": "https://en.wikipedia.org/wiki/Spinus"
   }
 }
