@@ -81,7 +81,6 @@ export interface ParsedCaption {
   zone: ParsedZoneRef | null;
   tags: ParsedTags | null;
   description: string | null;
-  kind: "plant" | "animal";
 }
 
 export interface PicEntry {

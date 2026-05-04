@@ -21,14 +21,7 @@ export const UNIDENTIFIED_PREFIX = "unid-";
  * `/accept` (BioCLIP prediction) or filled in via `/update`.
  */
 export function parseCaption(caption: string): ParsedCaption {
-  let kind: "plant" | "animal" = "plant";
-  let text = caption.trim();
-
-  if (text.toLowerCase().startsWith("animal //")) {
-    kind = "animal";
-    text = text.slice("animal //".length).trim();
-  }
-
+  const text = caption.trim();
   const parts = text.split("//").map((s) => s.trim());
   const shortCode = parts[0];
   if (!shortCode) {
@@ -47,7 +40,6 @@ export function parseCaption(caption: string): ParsedCaption {
       zone,
       tags: null,
       description,
-      kind,
     };
   }
 
@@ -61,7 +53,7 @@ export function parseCaption(caption: string): ParsedCaption {
   const tags = parts[4] ? parseTags(parts[4]) : null;
   const description = parts[5] ? parts[5] : null;
 
-  return { shortCode, fullName, commonName, variety, zone, tags, description, kind };
+  return { shortCode, fullName, commonName, variety, zone, tags, description };
 }
 
 export function isUnidentifiedShortCode(shortCode: string): boolean {
@@ -125,7 +117,6 @@ export interface ResolvedPic {
   zoneCode: string;
   tags: string[];
   description: string | null;
-  kind: "plant" | "animal";
 }
 
 export interface AnnotationTags {
@@ -209,7 +200,6 @@ export function resolveFields(
         zoneCode,
         tags: [],
         description: parsed.description,
-        kind: parsed.kind,
       },
       plantUpsert: null,
       zoneUpserts,
@@ -256,7 +246,6 @@ export function resolveFields(
       zoneCode,
       tags,
       description: parsed.description,
-      kind: parsed.kind,
     },
     plantUpsert,
     zoneUpserts,

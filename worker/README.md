@@ -27,16 +27,14 @@ shortCode // fullName // commonName // Zone Name (zoneCode) // tags // descripti
 
 Only `shortCode` is required. Use `Display Name (code)` to declare a new zone; bare `code` to reuse an existing zone. Empty segments are inherited from the previous chronological entry with the matching `shortCode`.
 
-Prefix with `animal //` for non-plant entries.
-
 ## Text commands
 
 ### Q&A
 
-- `/ask {question}` — ask anything about the garden journal (alias for `/ask2`)
+- `/ask {question}` — ask anything about the garden journal (alias for `/ask3`)
 - `/ask1 {question}` — uses `gemini-3.1-flash-lite-preview` (fastest, cheapest)
-- `/ask2 {question}` — uses `gemini-2.5-pro` (default)
-- `/ask3 {question}` — uses `gemini-3.1-pro-preview` (most capable)
+- `/ask2 {question}` — uses `gemini-2.5-pro` 
+- `/ask3 {question}` — uses `gemini-3.1-pro-preview` (default)
 
 The bot answers factually from the pre-computed plant rollup (`public/data/rollup.min.json`) and can suggest copy-pasteable bot commands to fill data gaps. It never executes writes itself. Each reply includes an approximate token count and cost.
 

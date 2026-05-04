@@ -55,11 +55,11 @@ Ask anything about the journal in plain English:
 
 The bot answers from a pre-computed plant rollup and can suggest ready-to-send commands for data gaps. It never executes writes itself. Three model tiers are available:
 
-| Command | Model | Best for |
+| Command | Model |  |
 |---|---|---|
 | `/ask1` | `gemini-3.1-flash-lite-preview` | Quick lookups |
-| `/ask` / `/ask2` | `gemini-2.5-pro` | Default |
-| `/ask3` | `gemini-3.1-pro-preview` | Complex reasoning |
+| `/ask` / `/ask2` | `gemini-2.5-pro` | |
+| `/ask3` | `gemini-3.1-pro-preview` | Default |
 
 Each reply includes an approximate token count and cost.
 

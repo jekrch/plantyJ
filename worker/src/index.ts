@@ -102,7 +102,7 @@ export default {
       try {
         const askMatch = text.match(/^\/ask([123])?\s+([\s\S]+)$/i);
         if (askMatch) {
-          const alias = askMatch[1] ?? "2";
+          const alias = askMatch[1] ?? "3";
           const question = askMatch[2].trim();
           const model = MODEL_ALIASES[alias];
           if (message.from && !await checkAskRateLimit(message.from.id, env)) {
@@ -549,7 +549,7 @@ export default {
         addedAt: new Date().toISOString(),
         width: photo.width,
         height: photo.height,
-        ...(resolvedPic.kind === "animal" && { kind: "animal" }),
+
       };
 
       const plantUpsertRecord: PlantRecord | null = plantUpsert

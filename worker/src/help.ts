@@ -7,9 +7,6 @@ Add a plant photo:
   Caption format (only shortCode is required):
   shortCode // fullName // commonName // zone // tags // description
 
-  To add an animal photo (squirrel, butterfly, etc.), prefix with "animal //":
-  animal // shortCode // fullName // commonName // zone // tags // description
-
   Zone is either a bare code (fb1) or 'Display Name (code)' to declare/rename.
 
   Tags can be pic-level (no prefix), plant+zone-level (+tag), or plant-level (++tag):

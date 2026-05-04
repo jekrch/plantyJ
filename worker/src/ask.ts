@@ -6,7 +6,7 @@ const MAX_TOOL_ITERATIONS = 3;
 const TELEGRAM_MAX_LEN = 4096;
 const CACHE_TTL_SECONDS = 3600;
 
-// /ask  = /ask2, /ask1 = lite (cheap), /ask3 = pro preview (best)
+// /ask  = /ask3, /ask1 = lite (cheap), /ask3 = pro preview (best)
 export const MODEL_ALIASES: Record<string, string> = {
   "1": "gemini-3.1-flash-lite-preview",
   "2": "gemini-2.5-pro",
@@ -85,7 +85,6 @@ ${rollupJson}
 - When asked about coverage gaps (untagged, missing zone pic, etc.), list affected plants and emit one suggested command per plant.
 - When suggesting a photo caption, use the canonical format:
     shortCode // fullName // commonName // Zone (code) // tags // description
-  Use the "animal //" prefix for non-plants.
 - For native-range questions, prefer get_species() over guessing. If nativeRange is null, fall back to the species description text.
 - When suggesting /delete, /update, /addtag {seq} etc., always use the seq from the rollup — never invent one.
 - Never claim to have executed a command. You are read-only; the user will copy and send commands themselves.
