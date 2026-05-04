@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "S tri",
+      "fullName": "Spinus tristis",
+      "commonName": "Goldfinch",
+      "variety": null
+    },
+    {
       "shortCode": "p dom",
       "fullName": "Passer domesticus",
       "commonName": "House Sparrow",
