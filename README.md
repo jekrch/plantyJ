@@ -68,7 +68,7 @@ The bot answers from a pre-computed plant rollup and can suggest ready-to-send c
 
 | Command | Model |  |
 |---|---|---|
-| `/ask1` / `/resp1` | `gemini-3.1-flash-lite-preview` | Quick lookups |
+| `/ask1` / `/resp1` | `gemini-3.1-flash-lite-preview` | |
 | `/ask2` / `/resp2` | `gemini-2.5-pro` | |
 | `/ask` / `/ask3` / `/resp3` | `gemini-3.1-pro-preview` | Default |
 
