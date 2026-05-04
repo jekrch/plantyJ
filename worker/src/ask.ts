@@ -5,7 +5,6 @@ import { HELP_HEADER } from "./help";
 const MAX_TOOL_ITERATIONS = 3;
 const TELEGRAM_MAX_LEN = 4096;
 const CACHE_TTL_SECONDS = 3600;
-
 // /ask  = /ask3, /ask1 = lite (cheap), /ask3 = pro preview (best)
 export const MODEL_ALIASES: Record<string, string> = {
   "1": "gemini-3.1-flash-lite-preview",
@@ -20,6 +19,14 @@ const MODEL_PRICING: Record<string, { i: number; c: number; o: number }> = {
   "gemini-3.1-pro-preview":        { i: 1.25,  c: 0.315, o: 10.00 },
 };
 
+type Part = { text?: string; functionCall?: { name: string; args: Record<string, unknown> }; functionResponse?: unknown };
+type Content = { role: string; parts: Part[] };
+
+export interface Thread {
+  model: string;
+  history: Content[];
+}
+
 interface CacheState {
   checksum: string;
   cacheName: string;
@@ -30,6 +37,7 @@ interface Usage {
   prompt: number;
   cached: number;
   output: number;
+  cacheCreation: number;
 }
 
 async function computeChecksum(text: string): Promise<string> {
@@ -102,10 +110,14 @@ function formatCost(model: string, usage: Usage): string {
   const p = MODEL_PRICING[model];
   if (!p) return "";
   const uncached = usage.prompt - usage.cached;
-  const cost = (uncached * p.i + usage.cached * p.c + usage.output * p.o) / 1_000_000;
+  const cost =
+    (uncached * p.i + usage.cached * p.c + usage.output * p.o + usage.cacheCreation * p.i) /
+    1_000_000;
   const costStr = cost < 0.0001 ? "<$0.0001" : `$${cost.toFixed(4)}`;
   const cacheNote = usage.cached > 0 ? ` ${usage.cached.toLocaleString()} cached,` : "";
-  return `[${costStr} |${cacheNote} ${usage.prompt.toLocaleString()} in / ${usage.output.toLocaleString()} out]`;
+  const createNote =
+    usage.cacheCreation > 0 ? ` +${usage.cacheCreation.toLocaleString()} cache-create,` : "";
+  return `[${costStr} |${createNote}${cacheNote} ${usage.prompt.toLocaleString()} in / ${usage.output.toLocaleString()} out]`;
 }
 
 const GET_SPECIES_DECLARATION = {
@@ -131,8 +143,8 @@ async function getOrCreateCache(
   systemPrompt: string,
   rollupJson: string,
   env: Env
-): Promise<string | undefined> {
-  if (!env.ASK_CACHE) return undefined;
+): Promise<{ cacheName: string | undefined; cacheCreationTokens: number }> {
+  if (!env.ASK_CACHE) return { cacheName: undefined, cacheCreationTokens: 0 };
   try {
     const checksum = await computeChecksum(rollupJson);
     const kvKey = `cache:${model}`;
@@ -141,7 +153,7 @@ async function getOrCreateCache(
     if (raw) {
       const state: CacheState = JSON.parse(raw);
       if (state.checksum === checksum && state.expiresAt > Date.now()) {
-        return state.cacheName;
+        return { cacheName: state.cacheName, cacheCreationTokens: 0 };
       }
     }
 
@@ -165,35 +177,38 @@ async function getOrCreateCache(
       expirationTtl: CACHE_TTL_SECONDS,
     });
 
-    return cache.name!;
+    const creationTokens = (cache.usageMetadata as { totalTokenCount?: number } | undefined)?.totalTokenCount ?? 0;
+    return { cacheName: cache.name!, cacheCreationTokens: creationTokens };
   } catch {
     // Caching is best-effort; any failure falls back to uncached.
-    return undefined;
+    return { cacheName: undefined, cacheCreationTokens: 0 };
   }
 }
 
 export async function answerQuestion(
   question: string,
   env: Env,
-  modelOverride?: string
-): Promise<string> {
+  modelOverride?: string,
+  priorHistory?: Content[],
+  style?: string
+): Promise<{ reply: string; thread: Thread }> {
   const rollupJson = await loadRollup(env);
   const model = modelOverride ?? env.LLM_MODEL ?? MODEL_ALIASES["2"];
   const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
   const systemPrompt = buildSystemPrompt(rollupJson);
 
-  const cacheName = await getOrCreateCache(client, model, systemPrompt, rollupJson, env);
+  const { cacheName, cacheCreationTokens } = await getOrCreateCache(client, model, systemPrompt, rollupJson, env);
 
   // When using a cache the system instruction and tools are already stored server-side.
   const baseConfig = cacheName
     ? { cachedContent: cacheName }
     : { systemInstruction: systemPrompt, tools: [{ functionDeclarations: [GET_SPECIES_DECLARATION] }] };
 
-  type Part = { text?: string; functionCall?: { name: string; args: Record<string, unknown> }; functionResponse?: unknown };
-  type Content = { role: string; parts: Part[] };
-  const contents: Content[] = [{ role: "user", parts: [{ text: question }] }];
+  // Style is injected per-turn so it doesn't affect the shared model cache.
+  const questionText = style ? `[Respond in this style: ${style}]\n\n${question}` : question;
+  const contents: Content[] = [...(priorHistory ?? []), { role: "user", parts: [{ text: questionText }] }];
 
-  const totalUsage: Usage = { prompt: 0, cached: 0, output: 0 };
+  const totalUsage: Usage = { prompt: 0, cached: 0, output: 0, cacheCreation: cacheCreationTokens };
 
   for (let i = 0; i <= MAX_TOOL_ITERATIONS; i++) {
     let response;
@@ -223,6 +238,7 @@ export async function answerQuestion(
     const calls = parts.filter((p) => p.functionCall);
 
     if (calls.length === 0 || i === MAX_TOOL_ITERATIONS) {
+      contents.push({ role: "model", parts });
       const text = parts
         .filter((p) => p.text)
         .map((p) => p.text)
@@ -230,7 +246,8 @@ export async function answerQuestion(
         .trim();
       const costLine = formatCost(model, totalUsage);
       const body = truncateForTelegram(text || "No response.");
-      return costLine ? `${body}\n${costLine}` : body;
+      const reply = costLine ? `${body}\n${costLine}` : body;
+      return { reply, thread: { model, history: contents } };
     }
 
     contents.push({ role: "model", parts });
@@ -249,5 +266,5 @@ export async function answerQuestion(
     contents.push({ role: "user", parts: results });
   }
 
-  return "Could not generate a response.";
+  return { reply: "Could not generate a response.", thread: { model, history: contents } };
 }

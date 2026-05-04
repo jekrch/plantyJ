@@ -74,4 +74,12 @@ Zone photo (represents the zone, not a plant):
 Q&A:
   /ask {question} — Ask anything about the garden journal. The bot will
     answer from the current data and suggest copy-pasteable commands for
-    any changes you want to make.`;
+    any changes you want to make.
+  /resp {follow-up} — Continue the previous /ask thread. A new /ask
+    starts a fresh thread. Both commands accept a model suffix (1/2/3)
+    to override the model for that turn.
+  /askstyle {description} — Set a persistent response style for /ask and
+    /resp (e.g. "David Attenborough", "extremely concise", "sourced with
+    links"). Stays active until you clear it.
+  /askstyle — Clear the current style.
+  /showstyle — Show the currently active style.`;

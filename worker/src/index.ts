@@ -2,7 +2,7 @@ import type { AnnotationEntry, Env, PicEntry, PlantRecord, TelegramUpdate, Zone,
 import { parseCaption, resolveFields, UNIDENTIFIED_CODE, UNIDENTIFIED_PREFIX } from "./caption";
 import { downloadFile, sendReply } from "./telegram";
 import { HELP_HEADER } from "./help";
-import { answerQuestion, MODEL_ALIASES } from "./ask";
+import { answerQuestion, MODEL_ALIASES, type Thread } from "./ask";
 import {
   acceptBioclip,
   addAnnotationTag,
@@ -100,6 +100,36 @@ export default {
       const text = message.text.trim();
 
       try {
+        const askStyleMatch = text.match(/^\/askstyle(?:\s+([\s\S]+))?$/i);
+        if (askStyleMatch) {
+          const styleText = askStyleMatch[1]?.trim();
+          if (!message.from || !env.ASK_CACHE) {
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, "Style preferences require user context.");
+            return new Response("OK");
+          }
+          if (styleText) {
+            await env.ASK_CACHE.put(`style:${message.from.id}`, styleText);
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, `Style set: ${styleText}`);
+          } else {
+            await env.ASK_CACHE.delete(`style:${message.from.id}`);
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, "Style cleared.");
+          }
+          return new Response("OK");
+        }
+
+        if (text === "/showstyle") {
+          const style = message.from && env.ASK_CACHE
+            ? await env.ASK_CACHE.get(`style:${message.from.id}`)
+            : null;
+          await sendReply(
+            env.TELEGRAM_BOT_TOKEN,
+            message.chat.id,
+            message.message_id,
+            style ? `Current style: ${style}` : "No style set. Use /askstyle {description} to set one."
+          );
+          return new Response("OK");
+        }
+
         const askMatch = text.match(/^\/ask([123])?\s+([\s\S]+)$/i);
         if (askMatch) {
           const alias = askMatch[1] ?? "3";
@@ -109,8 +139,40 @@ export default {
             await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, "Rate limit reached: max 100 /ask queries per day.");
             return new Response("OK");
           }
-          const reply = await answerQuestion(question, env, model);
+          const style = message.from && env.ASK_CACHE
+            ? await env.ASK_CACHE.get(`style:${message.from.id}`) ?? undefined
+            : undefined;
+          const { reply, thread } = await answerQuestion(question, env, model, undefined, style);
           await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, reply);
+          if (message.from && env.ASK_CACHE) {
+            await env.ASK_CACHE.put(`thread:${message.from.id}`, JSON.stringify(thread));
+          }
+          return new Response("OK");
+        }
+
+        const respMatch = text.match(/^\/resp([123])?\s+([\s\S]+)$/i);
+        if (respMatch) {
+          const aliasOverride = respMatch[1];
+          const question = respMatch[2].trim();
+          if (!message.from || !env.ASK_CACHE) {
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, "No active /ask thread.");
+            return new Response("OK");
+          }
+          const raw = await env.ASK_CACHE.get(`thread:${message.from.id}`);
+          if (!raw) {
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, "No active /ask thread. Start one with /ask.");
+            return new Response("OK");
+          }
+          const thread: Thread = JSON.parse(raw);
+          const model = aliasOverride ? MODEL_ALIASES[aliasOverride] : thread.model;
+          if (!await checkAskRateLimit(message.from.id, env)) {
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, "Rate limit reached: max 100 /ask queries per day.");
+            return new Response("OK");
+          }
+          const style = await env.ASK_CACHE.get(`style:${message.from.id}`) ?? undefined;
+          const { reply, thread: updatedThread } = await answerQuestion(question, env, model, thread.history, style);
+          await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, reply);
+          await env.ASK_CACHE.put(`thread:${message.from.id}`, JSON.stringify(updatedThread));
           return new Response("OK");
         }
 

@@ -53,13 +53,22 @@ Ask anything about the journal in plain English:
 /ask I want to post a robin photo to the maple zone — what's the caption?
 ```
 
+Follow up on the previous answer without re-asking from scratch:
+
+```
+/resp what about animals?
+/resp actually, just list the zone codes
+```
+
+`/resp` continues the last `/ask` thread. A new `/ask` always starts a fresh thread. Both commands accept a model suffix to switch models for that turn (e.g. `/resp1` for a quick follow-up, `/resp3` to go deeper).
+
 The bot answers from a pre-computed plant rollup and can suggest ready-to-send commands for data gaps. It never executes writes itself. Three model tiers are available:
 
 | Command | Model |  |
 |---|---|---|
-| `/ask1` | `gemini-3.1-flash-lite-preview` | Quick lookups |
-| `/ask` / `/ask2` | `gemini-2.5-pro` | |
-| `/ask3` | `gemini-3.1-pro-preview` | Default |
+| `/ask1` / `/resp1` | `gemini-3.1-flash-lite-preview` | Quick lookups |
+| `/ask2` / `/resp2` | `gemini-2.5-pro` | |
+| `/ask` / `/ask3` / `/resp3` | `gemini-3.1-pro-preview` | Default |
 
 Each reply includes an approximate token count and cost.
 
