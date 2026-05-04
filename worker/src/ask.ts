@@ -4,7 +4,7 @@ import { HELP_HEADER } from "./help";
 
 const MAX_TOOL_ITERATIONS = 3;
 const TELEGRAM_MAX_LEN = 4096;
-const CACHE_TTL_SECONDS = 3600;
+const CACHE_TTL_SECONDS = 30 * 24 * 3600; // 30 days; recreated only when rollup checksum changes
 // /ask  = /ask3, /ask1 = lite (cheap), /ask3 = pro preview (best)
 export const MODEL_ALIASES: Record<string, string> = {
   "1": "gemini-3.1-flash-lite-preview",
@@ -215,8 +215,10 @@ export async function answerQuestion(
     try {
       response = await client.models.generateContent({ model, contents, config: baseConfig });
     } catch (err: unknown) {
-      // If the cache was deleted or expired on Gemini's side, retry without it.
+      // If Gemini evicted the cache early, clear the stale KV entry and retry uncached.
+      // The next request will recreate the cache.
       if (cacheName && String(err).includes("404")) {
+        if (env.ASK_CACHE) await env.ASK_CACHE.delete(`cache:${model}`).catch(() => {});
         response = await client.models.generateContent({
           model,
           contents,
