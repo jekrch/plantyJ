@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "bun build src/sw.ts --outdir public --target browser && tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "bun test"
   },
   "dependencies": {
     "d3-hierarchy": "^3.1.2",
