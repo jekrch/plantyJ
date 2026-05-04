@@ -7,7 +7,8 @@ import {
   applyFilters,
   computeFacets,
 } from "../utils/filtering";
-import type { Annotation, Filters, Zone } from "../types";
+import type { Annotation, Zone } from "../types";
+import type { Filters } from "../utils/filtering";
 import { plant } from "./helpers";
 
 describe("hasActiveFilters", () => {
