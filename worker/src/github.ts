@@ -1,4 +1,5 @@
 import type {
+  AiAnalysisEntry,
   AnnotationEntry,
   Env,
   Gallery,
@@ -16,6 +17,7 @@ const PLANTS_PATH = "public/data/plants.json";
 const ZONES_PATH = "public/data/zones.json";
 const ZONE_PICS_PATH = "public/data/zone_pics.json";
 const ANNOTATIONS_PATH = "public/data/annotations.json";
+const AI_ANALYSIS_PATH = "public/data/ai_analysis.json";
 
 function githubHeaders(token: string): Record<string, string> {
   return {
@@ -782,4 +784,24 @@ export async function readAnnotations(env: Env): Promise<AnnotationEntry[]> {
     { annotations: [] }
   );
   return data.annotations ?? [];
+}
+
+export async function readAiAnalyses(
+  env: Env
+): Promise<{ analyses: AiAnalysisEntry[]; sha: string | null }> {
+  const { data, sha } = await readJsonFile<{ analyses?: AiAnalysisEntry[] }>(
+    env,
+    AI_ANALYSIS_PATH,
+    { analyses: [] }
+  );
+  return { analyses: data.analyses ?? [], sha };
+}
+
+export async function writeAiAnalyses(
+  env: Env,
+  analyses: AiAnalysisEntry[],
+  sha: string | null,
+  commitMessage: string
+): Promise<void> {
+  await writeJsonFile(env, AI_ANALYSIS_PATH, { analyses }, sha, commitMessage);
 }

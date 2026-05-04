@@ -82,4 +82,11 @@ Q&A:
     /resp (e.g. "David Attenborough", "extremely concise", "sourced with
     links"). Stays active until you clear it.
   /askstyle — Clear the current style.
-  /showstyle — Show the currently active style.`;
+  /showstyle — Show the currently active style.
+
+Ecological analysis:
+  /analyze — Generate a 1–2 paragraph ecological-niche analysis (good/bad/
+    mixed, native insects, urban wildlife) for every plant+zone pair that
+    doesn't have one yet. Saved to ai_analysis.json with grounded source URLs.
+  /analyze {zoneCode} — Same, but limited to a single zone (full property
+    context still informs the reasoning).`;

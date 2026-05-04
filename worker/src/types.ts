@@ -130,6 +130,14 @@ export interface AnnotationEntry {
   description: string | null;
 }
 
+export interface AiAnalysisEntry {
+  shortCode: string;
+  zoneCode: string;
+  analysis: string;
+  references: string[];
+  created: string;
+}
+
 export interface Gallery {
   pics: PicEntry[];
   plants: PlantRecord[];

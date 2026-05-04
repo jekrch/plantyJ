@@ -3,6 +3,7 @@ import { parseCaption, resolveFields, UNIDENTIFIED_CODE, UNIDENTIFIED_PREFIX } f
 import { downloadFile, sendReply } from "./telegram";
 import { HELP_HEADER } from "./help";
 import { answerQuestion, MODEL_ALIASES, type Thread } from "./ask";
+import { runAnalyze } from "./analyze";
 import {
   acceptBioclip,
   addAnnotationTag,
@@ -69,8 +70,13 @@ function buildZonesText(zones: Zone[]): string {
   return `Zones:\n${lines.join("\n")}`;
 }
 
+interface ExecutionContext {
+  waitUntil(promise: Promise<unknown>): void;
+  passThroughOnException(): void;
+}
+
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     if (request.method !== "POST") {
       return new Response("OK", { status: 200 });
     }
@@ -173,6 +179,43 @@ export default {
           const { reply, thread: updatedThread } = await answerQuestion(question, env, model, thread.history, style);
           await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, reply);
           await env.ASK_CACHE.put(`thread:${message.from.id}`, JSON.stringify(updatedThread));
+          return new Response("OK");
+        }
+
+        const analyzeMatch = text.match(/^\/analyze(?:\s+(\S+))?$/i);
+        if (analyzeMatch) {
+          const zoneFilter = analyzeMatch[1]?.trim() || null;
+          const scopeLabel = zoneFilter ? `zone ${zoneFilter}` : "all zones";
+          await sendReply(
+            env.TELEGRAM_BOT_TOKEN,
+            message.chat.id,
+            message.message_id,
+            `Analyzing missing specimen+zone pairs (${scopeLabel}). I'll reply when done — this can take a minute or two.`
+          );
+          ctx.waitUntil(
+            (async () => {
+              try {
+                const result = await runAnalyze(env, zoneFilter);
+                const reply = result.ok
+                  ? `Analyzed ${result.analyzed} new pair(s)${result.analyzed < result.totalPairs ? ` of ${result.totalPairs} requested` : ""}. Grounded URLs: ${result.groundingUrls}. Tokens: ${result.promptTokens.toLocaleString()} in / ${result.outputTokens.toLocaleString()} out.`
+                  : result.message;
+                await sendReply(
+                  env.TELEGRAM_BOT_TOKEN,
+                  message.chat.id,
+                  message.message_id,
+                  reply
+                );
+              } catch (err) {
+                const msg = err instanceof Error ? err.message : "Unknown error";
+                await sendReply(
+                  env.TELEGRAM_BOT_TOKEN,
+                  message.chat.id,
+                  message.message_id,
+                  `Analyze failed: ${msg}`
+                );
+              }
+            })()
+          );
           return new Response("OK");
         }
 
