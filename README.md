@@ -1,4 +1,6 @@
 # PlantyJ :seedling:
+[![Deploy frontend to GitHub Pages](https://github.com/jekrch/plantyJ/actions/workflows/deploy-frontend.yml/badge.svg)](https://github.com/jekrch/plantyJ/actions/workflows/deploy-frontend.yml)
+
 
 A private garden journal for my partner and me. Snap a plant, send it to a Telegram group with a caption, and it shows up on the site.
 
