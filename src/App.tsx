@@ -497,6 +497,7 @@ export default function App() {
           plants={plants}
           speciesByShortCode={speciesByShortCode}
           taxa={taxa}
+          zones={zones}
           headerHeight={headerHeight}
           onOpenPlantInList={handleOpenInList}
           onSpotlightPlant={handleSpotlightPlant}

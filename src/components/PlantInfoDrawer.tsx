@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, ExternalLink } from "lucide-react";
+import { ChevronDown, ExternalLink, Leaf } from "lucide-react";
 import type { Annotation, Plant, Species, SpeciesTaxonomy, Zone, ZonePic } from "../types";
 import { plantTitle } from "../utils/display";
 
@@ -14,11 +14,43 @@ export interface AIAnalysis {
   created: string;
 }
 
-const VERDICT_STYLES: Record<AIVerdict, string> = {
-  GOOD: "text-emerald-300/90 bg-emerald-300/10",
-  BAD: "text-rose-300/90 bg-rose-300/10",
-  MIXED: "text-amber-300/90 bg-amber-300/10",
+const VERDICT_METER: Record<AIVerdict, { filled: number; color: string }> = {
+  GOOD: { filled: 3, color: "text-accent" },
+  MIXED: { filled: 2, color: "text-amber-300" },
+  BAD: { filled: 1, color: "text-rose-300" },
 };
+
+function VerdictMeter({ verdict }: { verdict: AIVerdict }) {
+  const { filled, color } = VERDICT_METER[verdict];
+  return (
+    <div
+      className="inline-flex items-center gap-1.5"
+      title={`${verdict} fit`}
+      aria-label={`Ecological fit: ${verdict}`}
+    >
+      <div className="inline-flex items-center gap-0.5">
+        {[0, 1, 2].map((i) => {
+          const active = i < filled;
+          return (
+            <Leaf
+              key={i}
+              size={12}
+              strokeWidth={1.5}
+              className={active ? color : "text-white/15"}
+              fill={active ? "currentColor" : "none"}
+              style={{
+                transform: `rotate(${-20 + i * 12}deg)`,
+              }}
+            />
+          );
+        })}
+      </div>
+      <span className={`text-[9px] uppercase tracking-widest font-mono ${color}`}>
+        {verdict}
+      </span>
+    </div>
+  );
+}
 
 interface Props {
   open: boolean;
@@ -666,11 +698,7 @@ export default function PlantInfoDrawer({
                 <p className="text-[10px] uppercase tracking-widest text-white/50">
                   Ecological Fit Analysis (AI-generated)
                 </p>
-                <span
-                  className={`text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded-sm font-mono ${VERDICT_STYLES[currentAnalysis.verdict]}`}
-                >
-                  {currentAnalysis.verdict}
-                </span>
+                <VerdictMeter verdict={currentAnalysis.verdict} />
               </div>
               <div
                 className="rounded px-4 py-3"

@@ -6,6 +6,7 @@ import { buildTree, linkPath } from "./treeUtils";
 import { usePanZoom } from "./usePanZoom";
 import { useTreeSearch } from "./useTreeSearch";
 import { NodeDetail } from "./NodeDetail";
+import type { AIAnalysis } from "../PlantInfoDrawer";
 import { CtrlBtn } from "./CtrlBtn";
 import {
   RANKS,
@@ -24,12 +25,22 @@ export default function TreeView({
   plants,
   speciesByShortCode,
   taxa,
+  zones,
   headerHeight,
   onOpenPlantInList,
   onSpotlightPlant,
   initialTreeNode,
   onNodeSelect,
 }: Props) {
+  const [aiAnalyses, setAiAnalyses] = useState<AIAnalysis[]>([]);
+
+  useEffect(() => {
+    fetch(`${import.meta.env.BASE_URL}data/ai_analysis.json`)
+      .then((res) => res.json())
+      .then((data) => setAiAnalyses(data.analyses ?? []))
+      .catch(console.error);
+  }, []);
+
   const baseURL = import.meta.env.BASE_URL;
 
   const { root } = useMemo(
@@ -278,7 +289,9 @@ export default function TreeView({
               node={renderedPinned}
               plants={plants}
               taxa={taxa}
+              zones={zones}
               speciesByShortCode={speciesByShortCode}
+              aiAnalyses={aiAnalyses}
               isClosing={isClosing}
               onAnimationEnd={() => { if (isClosing) setRenderedPinned(null); }}
               onClose={() => setPinned(null)}

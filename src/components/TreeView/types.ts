@@ -1,4 +1,4 @@
-import type { Plant, Species, TaxaInfo } from "../../types";
+import type { Plant, Species, TaxaInfo, Zone } from "../../types";
 
 export const RANKS = [
   "kingdom",
@@ -24,6 +24,7 @@ export interface Props {
   plants: Plant[];
   speciesByShortCode: Map<string, Species>;
   taxa: Record<string, TaxaInfo>;
+  zones: Zone[];
   headerHeight: number;
   onOpenPlantInList: (plant: Plant, list: Plant[]) => void;
   onSpotlightPlant: (shortCode: string) => void;

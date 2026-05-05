@@ -1,18 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
-import { ExternalLink, Sprout, X } from "lucide-react";
+import { ExternalLink, Leaf, Sprout, X } from "lucide-react";
 import type { HierarchyPointNode } from "d3-hierarchy";
-import type { Plant, Species, TaxaInfo } from "../../types";
+import type { Plant, Species, TaxaInfo, Zone } from "../../types";
 import type { RawNode } from "./types";
 import { RANK_LABEL } from "./types";
 import { plantTitle } from "../../utils/display";
 import { speciesPicsFor } from "./treeUtils";
 import { TabBtn } from "./CtrlBtn";
+import type { AIAnalysis, AIVerdict } from "../PlantInfoDrawer";
 
 interface Props {
   node: HierarchyPointNode<RawNode>;
   plants: Plant[];
   taxa: Record<string, TaxaInfo>;
+  zones: Zone[];
   speciesByShortCode: Map<string, Species>;
+  aiAnalyses?: AIAnalysis[];
   isClosing?: boolean;
   onAnimationEnd?: () => void;
   onClose: () => void;
@@ -20,11 +23,49 @@ interface Props {
   onSpotlightPlant: (shortCode: string) => void;
 }
 
+const VERDICT_COLOR: Record<AIVerdict, { color: string; filled: number }> = {
+  GOOD: { color: "text-accent", filled: 3 },
+  MIXED: { color: "text-amber-300", filled: 2 },
+  BAD: { color: "text-rose-300", filled: 1 },
+};
+
+function VerdictBadge({ verdict }: { verdict: AIVerdict }) {
+  const { color, filled } = VERDICT_COLOR[verdict];
+  return (
+    <div
+      className="inline-flex items-center gap-1.5"
+      title={`${verdict} fit`}
+      aria-label={`Ecological fit: ${verdict}`}
+    >
+      <div className="inline-flex items-center gap-0.5">
+        {[0, 1, 2].map((i) => {
+          const active = i < filled;
+          return (
+            <Leaf
+              key={i}
+              size={11}
+              strokeWidth={1.5}
+              className={active ? color : "text-white/15"}
+              fill={active ? "currentColor" : "none"}
+              style={{ transform: `rotate(${-20 + i * 12}deg)` }}
+            />
+          );
+        })}
+      </div>
+      <span className={`text-[9px] uppercase tracking-widest font-mono ${color}`}>
+        {verdict}
+      </span>
+    </div>
+  );
+}
+
 export function NodeDetail({
   node,
   plants,
   taxa,
+  zones,
   speciesByShortCode,
+  aiAnalyses = [],
   isClosing,
   onAnimationEnd,
   onClose,
@@ -51,6 +92,31 @@ export function NodeDetail({
   const [tab, setTab] = useState<"info" | "images">("info");
 
   useEffect(() => { setTab("info"); }, [node]);
+
+  const speciesAnalyses = useMemo(() => {
+    if (!isLeaf || !node.data.shortCode) return [] as AIAnalysis[];
+    return aiAnalyses.filter((a) => a.shortCode === node.data.shortCode);
+  }, [isLeaf, node, aiAnalyses]);
+
+  const zoneNameByCode = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const z of zones) if (z.name) m.set(z.code, z.name);
+    return m;
+  }, [zones]);
+
+  const [selectedZone, setSelectedZone] = useState<string | null>(null);
+
+  useEffect(() => {
+    setSelectedZone(speciesAnalyses[0]?.zoneCode ?? null);
+  }, [speciesAnalyses]);
+
+  const currentAnalysis = useMemo(() => {
+    if (speciesAnalyses.length === 0) return null;
+    return (
+      speciesAnalyses.find((a) => a.zoneCode === selectedZone) ??
+      speciesAnalyses[0]
+    );
+  }, [speciesAnalyses, selectedZone]);
 
   const shortCodes = useMemo(() => {
     const set = new Set<string>();
@@ -160,6 +226,83 @@ export function NodeDetail({
               </p>
             )}
           </div>
+          {currentAnalysis && (
+            <div className="pt-2 border-t border-ink-faint/15">
+              <div className="flex items-center justify-between gap-2 mb-1.5">
+                <div className="text-[9px] font-mono uppercase tracking-wider text-ink-faint">
+                  Ecological Fit Analysis (AI-generated)
+                </div>
+                <VerdictBadge verdict={currentAnalysis.verdict} />
+              </div>
+              {speciesAnalyses.length > 1 ? (
+                <div className="flex flex-wrap items-center gap-1 mb-1.5">
+                  <span className="text-[9px] font-mono uppercase tracking-wider text-ink-faint mr-1">
+                    Zone
+                  </span>
+                  {speciesAnalyses.map((a) => {
+                    const active = a.zoneCode === currentAnalysis.zoneCode;
+                    const label = zoneNameByCode.get(a.zoneCode) ?? a.zoneCode;
+                    return (
+                      <button
+                        key={a.zoneCode}
+                        type="button"
+                        onClick={() => setSelectedZone(a.zoneCode)}
+                        className={`text-[10px] leading-none px-2 py-1 rounded-sm transition-colors cursor-pointer ${
+                          active
+                            ? "bg-accent/20 text-accent ring-1 ring-inset ring-accent/40"
+                            : "bg-white/5 text-ink-muted hover:bg-white/10 hover:text-ink"
+                        }`}
+                        title={label}
+                      >
+                        {label}
+                        <span className="ml-1 text-[9px] font-mono opacity-60">
+                          {a.zoneCode}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-[10px] text-ink-faint mb-1.5">
+                  Zone:{" "}
+                  <span className="text-ink-muted">
+                    {zoneNameByCode.get(currentAnalysis.zoneCode) ??
+                      currentAnalysis.zoneCode}
+                  </span>{" "}
+                  <span className="font-mono opacity-60">
+                    {currentAnalysis.zoneCode}
+                  </span>
+                </div>
+              )}
+              <p className="text-[12px] leading-relaxed text-ink/85 whitespace-pre-line">
+                {currentAnalysis.analysis}
+              </p>
+              {currentAnalysis.references && currentAnalysis.references.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {currentAnalysis.references.map((url) => {
+                    let label = url;
+                    try {
+                      label = new URL(url).hostname.replace("www.", "");
+                    } catch {
+                      // keep raw URL
+                    }
+                    return (
+                      <a
+                        key={url}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[10px] text-ink-muted hover:text-accent transition-colors px-1.5 py-0.5 rounded-sm bg-white/5 hover:bg-white/8"
+                      >
+                        {label}
+                        <ExternalLink size={9} strokeWidth={1.5} />
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
           {references.length > 0 && (
             <div className="pt-2 border-t border-ink-faint/15">
               <div className="text-[9px] font-mono uppercase tracking-wider text-ink-faint mb-1.5">
