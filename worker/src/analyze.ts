@@ -3,11 +3,8 @@ import type { AiAnalysisEntry, Env } from "./types";
 import { readAiAnalyses, writeAiAnalyses } from "./github";
 
 const ANALYSIS_MODEL = "gemini-3.1-pro-preview";
-// One Gemini call covers up to this many pairs per /analyze invocation.
-// Cap exists so the call always finishes inside the Worker's wall budget.
-// If more pairs are missing, the run does this many, commits, and reports
-// remaining count — the user re-runs /analyze to continue.
-const MAX_PAIRS_PER_CALL = 15;
+const JOB_KV_KEY = "analyze:job";
+const JOB_KV_TTL = 86400; // 24h — matches the Batch API SLA ceiling.
 
 interface RollupPlant {
   shortCode: string;
@@ -30,6 +27,13 @@ interface Rollup {
 interface Pair {
   shortCode: string;
   zoneCode: string;
+}
+
+interface PendingJob {
+  name: string;
+  zoneFilter: string | null;
+  pairCount: number;
+  submittedAt: string;
 }
 
 async function loadRollupParsed(env: Env): Promise<{ raw: string; rollup: Rollup }> {
@@ -90,6 +94,8 @@ For ANIMALS, cover:
 - What it eats, predates, pollinates, or competes with — given the plants currently in that zone and its neighbors
 - Whether it is native, naturalized, or invasive in the Twin Cities area, and any management considerations
 
+Use the googleSearch tool to ground claims in real sources. In each entry's "references", include ONLY URLs you actually retrieved via search. Do not invent URLs — if you have no grounded URL for an entry, return an empty array.
+
 # Pairs to analyze
 ${pairList}
 
@@ -98,7 +104,8 @@ Return ONLY a JSON array — no prose, no markdown fences, no commentary before 
 {
   "shortCode": string,
   "zoneCode": string,
-  "analysis": string
+  "analysis": string,
+  "references": string[]
 }
 Output exactly one object per pair, in the same order as listed above. Begin your response with [ and end it with ].`;
 }
@@ -120,42 +127,66 @@ interface RawEntry {
   shortCode?: unknown;
   zoneCode?: unknown;
   analysis?: unknown;
+  references?: unknown;
 }
 
-export interface AnalyzeOutcome {
+function collectGroundingUrls(response: unknown): Set<string> {
+  const urls = new Set<string>();
+  const candidates = (response as { candidates?: Array<{ groundingMetadata?: { groundingChunks?: Array<{ web?: { uri?: string } }> } }> })?.candidates;
+  const chunks = candidates?.[0]?.groundingMetadata?.groundingChunks ?? [];
+  for (const c of chunks) {
+    const uri = c?.web?.uri;
+    if (typeof uri === "string" && uri.startsWith("http")) urls.add(uri);
+  }
+  return urls;
+}
+
+function elapsedSince(iso: string): string {
+  const ms = Date.now() - new Date(iso).getTime();
+  if (ms < 60_000) return `${Math.round(ms / 1000)}s`;
+  if (ms < 3_600_000) return `${Math.round(ms / 60_000)}m`;
+  return `${Math.round(ms / 3_600_000)}h`;
+}
+
+export interface SubmitOk {
   ok: true;
-  analyzed: number;
-  totalPairs: number;
-  batchSize: number;
-  remaining: number;
-  promptTokens: number;
-  outputTokens: number;
+  jobName: string;
+  pairCount: number;
 }
-
-export interface AnalyzeError {
+export interface SubmitErr {
   ok: false;
   message: string;
 }
 
-export async function runAnalyze(
+export async function submitAnalyzeBatch(
   env: Env,
   zoneFilter: string | null
-): Promise<AnalyzeOutcome | AnalyzeError> {
-  const t0 = Date.now();
-  console.log(`[analyze] start, zoneFilter=${zoneFilter ?? "(none)"}`);
+): Promise<SubmitOk | SubmitErr> {
+  console.log(`[analyze.submit] start, zoneFilter=${zoneFilter ?? "(none)"}`);
+
+  if (!env.ASK_CACHE) {
+    return { ok: false, message: "KV not configured — batch tracking requires ASK_CACHE." };
+  }
+
+  const existingRaw = await env.ASK_CACHE.get(JOB_KV_KEY);
+  if (existingRaw) {
+    const job: PendingJob = JSON.parse(existingRaw);
+    return {
+      ok: false,
+      message: `A batch job is already pending (submitted ${elapsedSince(job.submittedAt)} ago, ${job.pairCount} pair(s)). Run /analyze-load to check or fetch it before starting another.`,
+    };
+  }
 
   const { raw: rollupJson, rollup } = await loadRollupParsed(env);
-  console.log(`[analyze] loaded rollup (${rollupJson.length} bytes)`);
-
   if (zoneFilter && !rollup.zones.some((z) => z.code === zoneFilter)) {
     return { ok: false, message: `Unknown zone "${zoneFilter}". See /zones.` };
   }
 
-  const initial = await readAiAnalyses(env);
-  const allPairs = findMissingPairs(rollup, initial.analyses, zoneFilter);
-  console.log(`[analyze] ${allPairs.length} pair(s) missing analyses`);
+  const { analyses: existing } = await readAiAnalyses(env);
+  const pairs = findMissingPairs(rollup, existing, zoneFilter);
+  console.log(`[analyze.submit] ${pairs.length} pair(s) missing analyses`);
 
-  if (allPairs.length === 0) {
+  if (pairs.length === 0) {
     return {
       ok: false,
       message: zoneFilter
@@ -164,70 +195,170 @@ export async function runAnalyze(
     };
   }
 
-  const batch = allPairs.slice(0, MAX_PAIRS_PER_CALL);
-  const remaining = allPairs.length - batch.length;
-  console.log(`[analyze] processing ${batch.length} pair(s) this call, ${remaining} deferred`);
-
   const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
+  const prompt = buildBatchPrompt(rollupJson, pairs, zoneFilter);
 
-  let response;
+  console.log(`[analyze.submit] creating batch, prompt=${prompt.length} chars, pairs=${pairs.length}`);
+  let job;
   try {
-    response = await client.models.generateContent({
+    job = await client.batches.create({
       model: ANALYSIS_MODEL,
-      contents: [{ role: "user", parts: [{ text: buildBatchPrompt(rollupJson, batch, zoneFilter) }] }],
+      src: [
+        {
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          config: {
+            tools: [{ googleSearch: {} }],
+          },
+        },
+      ],
+      config: {
+        displayName: `plantyj-analyze-${zoneFilter ?? "all"}-${Date.now()}`,
+      },
     });
   } catch (err) {
     const msg = (err as Error).message;
-    console.log(`[analyze] gemini error: ${msg}`);
-    return { ok: false, message: `Gemini call failed: ${msg}` };
+    console.log(`[analyze.submit] batch create failed: ${msg}`);
+    return { ok: false, message: `Batch submit failed: ${msg}` };
   }
-  console.log(`[analyze] gemini returned in ${Date.now() - t0}ms`);
 
-  const meta = response.usageMetadata;
-  const promptTokens = meta?.promptTokenCount ?? 0;
-  const outputTokens = meta?.candidatesTokenCount ?? 0;
+  if (!job.name) {
+    return { ok: false, message: "Batch created but returned no job name." };
+  }
+  console.log(`[analyze.submit] created job ${job.name}, state=${job.state}`);
 
-  const text = (response.candidates?.[0]?.content?.parts ?? [])
+  const pending: PendingJob = {
+    name: job.name,
+    zoneFilter,
+    pairCount: pairs.length,
+    submittedAt: new Date().toISOString(),
+  };
+  await env.ASK_CACHE.put(JOB_KV_KEY, JSON.stringify(pending), { expirationTtl: JOB_KV_TTL });
+
+  return { ok: true, jobName: job.name, pairCount: pairs.length };
+}
+
+export type LoadResult =
+  | { kind: "no-job" }
+  | { kind: "running"; state: string; pairCount: number; elapsed: string }
+  | { kind: "failed"; reason: string }
+  | {
+      kind: "done";
+      analyzed: number;
+      requested: number;
+      groundingUrls: number;
+      promptTokens: number;
+      outputTokens: number;
+    };
+
+export async function loadAnalyzeBatch(env: Env): Promise<LoadResult> {
+  if (!env.ASK_CACHE) {
+    return { kind: "failed", reason: "KV not configured." };
+  }
+
+  const raw = await env.ASK_CACHE.get(JOB_KV_KEY);
+  if (!raw) return { kind: "no-job" };
+
+  const pending: PendingJob = JSON.parse(raw);
+  console.log(`[analyze.load] checking job ${pending.name}`);
+
+  const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
+
+  let job;
+  try {
+    job = await client.batches.get({ name: pending.name });
+  } catch (err) {
+    const msg = (err as Error).message;
+    console.log(`[analyze.load] batches.get failed: ${msg}`);
+    return { kind: "failed", reason: `batches.get error: ${msg}` };
+  }
+
+  const state = job.state ?? "JOB_STATE_UNSPECIFIED";
+  console.log(`[analyze.load] state=${state}`);
+
+  if (
+    state === "JOB_STATE_PENDING" ||
+    state === "JOB_STATE_QUEUED" ||
+    state === "JOB_STATE_RUNNING" ||
+    state === "JOB_STATE_UPDATING"
+  ) {
+    return {
+      kind: "running",
+      state,
+      pairCount: pending.pairCount,
+      elapsed: elapsedSince(pending.submittedAt),
+    };
+  }
+
+  if (
+    state === "JOB_STATE_FAILED" ||
+    state === "JOB_STATE_CANCELLED" ||
+    state === "JOB_STATE_CANCELLING" ||
+    state === "JOB_STATE_EXPIRED"
+  ) {
+    const reason = job.error?.message ?? state;
+    await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
+    return { kind: "failed", reason };
+  }
+
+  // SUCCEEDED or PARTIALLY_SUCCEEDED — pull responses and commit.
+  const inlined = job.dest?.inlinedResponses ?? [];
+  if (inlined.length === 0) {
+    await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
+    return { kind: "failed", reason: `Job ${state} but no inlinedResponses returned.` };
+  }
+
+  const first = inlined[0];
+  if (first.error) {
+    await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
+    return { kind: "failed", reason: `Inlined response error: ${first.error.message ?? "unknown"}` };
+  }
+
+  const response = first.response;
+  const text = (response?.candidates?.[0]?.content?.parts ?? [])
     .map((p) => (p as { text?: string }).text ?? "")
     .join("")
     .trim();
 
   if (!text) {
-    return { ok: false, message: "Model returned no text." };
+    await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
+    return { kind: "failed", reason: "Inlined response had no text." };
   }
 
   let parsed: unknown;
   try {
     parsed = JSON.parse(stripJsonFences(text));
   } catch (err) {
-    console.log(`[analyze] parse error: ${(err as Error).message}; head=${text.slice(0, 200)}`);
-    return { ok: false, message: `Failed to parse model JSON: ${(err as Error).message}` };
+    await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
+    return { kind: "failed", reason: `Failed to parse model JSON: ${(err as Error).message}` };
   }
 
   if (!Array.isArray(parsed)) {
-    return { ok: false, message: "Model output was not a JSON array." };
+    await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
+    return { kind: "failed", reason: "Model output was not a JSON array." };
   }
 
-  const requested = new Set(batch.map((p) => `${p.shortCode}|${p.zoneCode}`));
+  const groundedUrls = collectGroundingUrls(response);
   const now = new Date().toISOString();
-
   const newEntries: AiAnalysisEntry[] = [];
   for (const e of parsed as RawEntry[]) {
     const shortCode = typeof e.shortCode === "string" ? e.shortCode : null;
     const zoneCode = typeof e.zoneCode === "string" ? e.zoneCode : null;
     const analysis = typeof e.analysis === "string" ? e.analysis.trim() : "";
     if (!shortCode || !zoneCode || !analysis) continue;
-    if (!requested.has(`${shortCode}|${zoneCode}`)) continue;
-    newEntries.push({ shortCode, zoneCode, analysis, references: [], created: now });
+
+    const rawRefs = Array.isArray(e.references) ? e.references : [];
+    const references = rawRefs
+      .filter((r): r is string => typeof r === "string" && r.startsWith("http"))
+      .filter((r) => groundedUrls.has(r));
+
+    newEntries.push({ shortCode, zoneCode, analysis, references, created: now });
   }
-  console.log(`[analyze] usable entries: ${newEntries.length}/${batch.length}`);
 
   if (newEntries.length === 0) {
-    return { ok: false, message: "Model produced no usable entries." };
+    await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
+    return { kind: "failed", reason: "Model produced no usable entries." };
   }
 
-  // Re-read just before write so we commit on top of the latest sha (in case
-  // a parallel run or upstream commit landed during the Gemini call).
   const { analyses: latest, sha: latestSha } = await readAiAnalyses(env);
   const merged = [...latest];
   for (const e of newEntries) {
@@ -243,22 +374,24 @@ export async function runAnalyze(
       : a.shortCode.localeCompare(b.shortCode)
   );
 
-  const scope = zoneFilter ? ` (zone ${zoneFilter})` : "";
+  const scope = pending.zoneFilter ? ` (zone ${pending.zoneFilter})` : "";
   await writeAiAnalyses(
     env,
     merged,
     latestSha,
     `Add AI analyses${scope}: ${newEntries.length} pair(s) [skip-deploy]`
   );
-  console.log(`[analyze] committed ${newEntries.length} entries to GitHub`);
+  console.log(`[analyze.load] committed ${newEntries.length} entries`);
 
+  await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
+
+  const meta = response?.usageMetadata;
   return {
-    ok: true,
+    kind: "done",
     analyzed: newEntries.length,
-    totalPairs: allPairs.length,
-    batchSize: batch.length,
-    remaining: remaining + (batch.length - newEntries.length),
-    promptTokens,
-    outputTokens,
+    requested: pending.pairCount,
+    groundingUrls: groundedUrls.size,
+    promptTokens: meta?.promptTokenCount ?? 0,
+    outputTokens: meta?.candidatesTokenCount ?? 0,
   };
 }

@@ -3,7 +3,7 @@ import { parseCaption, resolveFields, UNIDENTIFIED_CODE, UNIDENTIFIED_PREFIX } f
 import { downloadFile, sendReply } from "./telegram";
 import { HELP_HEADER } from "./help";
 import { answerQuestion, MODEL_ALIASES, type Thread } from "./ask";
-import { runAnalyze } from "./analyze";
+import { submitAnalyzeBatch, loadAnalyzeBatch } from "./analyze";
 import {
   acceptBioclip,
   addAnnotationTag,
@@ -177,59 +177,44 @@ export default {
           return new Response("OK");
         }
 
+        if (text === "/analyze-load") {
+          try {
+            const result = await loadAnalyzeBatch(env);
+            let reply: string;
+            switch (result.kind) {
+              case "no-job":
+                reply = "No batch job pending. Run /analyze [zone] to start one.";
+                break;
+              case "running":
+                reply = `Batch still ${result.state.replace("JOB_STATE_", "").toLowerCase()} — ${result.pairCount} pair(s), submitted ${result.elapsed} ago. Try /analyze-load again in a few minutes.`;
+                break;
+              case "failed":
+                reply = `Batch failed: ${result.reason}`;
+                break;
+              case "done":
+                reply = `Loaded ${result.analyzed} of ${result.requested} pair(s) and committed to ai_analysis.json. Grounded URLs: ${result.groundingUrls}. Tokens: ${result.promptTokens.toLocaleString()} in / ${result.outputTokens.toLocaleString()} out.`;
+                break;
+            }
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, reply);
+          } catch (err) {
+            const msg = err instanceof Error ? err.message : "Unknown error";
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, `Analyze-load failed: ${msg}`);
+          }
+          return new Response("OK");
+        }
+
         const analyzeMatch = text.match(/^\/analyze(?:\s+(\S+))?$/i);
         if (analyzeMatch) {
           const zoneFilter = analyzeMatch[1]?.trim() || null;
-          const scopeLabel = zoneFilter ? `zone ${zoneFilter}` : "all zones";
-
-          // Telegram's webhook timeout (~60s) is shorter than a grounded Pro
-          // call, so Telegram may retry while we're still working. Lock in KV
-          // so retries become no-ops instead of duplicate runs.
-          const lockKey = `analyze:lock:${zoneFilter ?? "all"}`;
-          if (env.ASK_CACHE) {
-            const held = await env.ASK_CACHE.get(lockKey);
-            if (held) {
-              await sendReply(
-                env.TELEGRAM_BOT_TOKEN,
-                message.chat.id,
-                message.message_id,
-                `An /analyze run for ${scopeLabel} is already in progress. Wait for it to finish before starting another.`
-              );
-              return new Response("OK");
-            }
-            await env.ASK_CACHE.put(lockKey, "1", { expirationTtl: 600 });
-          }
-
-          await sendReply(
-            env.TELEGRAM_BOT_TOKEN,
-            message.chat.id,
-            message.message_id,
-            `Analyzing missing specimen+zone pairs (${scopeLabel}). This can take a minute or two — Telegram may show a connection timeout, that's expected; the result will arrive when the model is done.`
-          );
-
           try {
-            const result = await runAnalyze(env, zoneFilter);
+            const result = await submitAnalyzeBatch(env, zoneFilter);
             const reply = result.ok
-              ? `Analyzed ${result.analyzed} pair(s) this run (batch of ${result.batchSize} from ${result.totalPairs} missing). ${result.remaining > 0 ? `${result.remaining} remaining — re-run /analyze${zoneFilter ? ` ${zoneFilter}` : ""} to continue. ` : ""}Tokens: ${result.promptTokens.toLocaleString()} in / ${result.outputTokens.toLocaleString()} out.`
+              ? `Submitted batch job for ${result.pairCount} pair(s)${zoneFilter ? ` in zone ${zoneFilter}` : ""}. Run /analyze-load in a few minutes to fetch the result.`
               : result.message;
-            await sendReply(
-              env.TELEGRAM_BOT_TOKEN,
-              message.chat.id,
-              message.message_id,
-              reply
-            );
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, reply);
           } catch (err) {
             const msg = err instanceof Error ? err.message : "Unknown error";
-            await sendReply(
-              env.TELEGRAM_BOT_TOKEN,
-              message.chat.id,
-              message.message_id,
-              `Analyze failed: ${msg}`
-            );
-          } finally {
-            if (env.ASK_CACHE) {
-              await env.ASK_CACHE.delete(lockKey).catch(() => {});
-            }
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, `Analyze submit failed: ${msg}`);
           }
           return new Response("OK");
         }

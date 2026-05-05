@@ -85,8 +85,14 @@ Q&A:
   /showstyle — Show the currently active style.
 
 Ecological analysis:
-  /analyze — Generate a 1–2 paragraph ecological-niche analysis (good/bad/
-    mixed, native insects, urban wildlife) for every plant+zone pair that
-    doesn't have one yet. Saved to ai_analysis.json with grounded source URLs.
-  /analyze {zoneCode} — Same, but limited to a single zone (full property
-    context still informs the reasoning).`;
+  /analyze — Submit a Gemini batch job that produces a 1–2 paragraph
+    ecological-niche analysis (good/bad/mixed, native insects, urban
+    wildlife, with grounded source URLs) for every plant+zone pair that
+    doesn't have one yet. Returns immediately with a job receipt.
+  /analyze {zoneCode} — Same, scoped to a single zone (full property
+    context still informs the reasoning).
+  /analyze-load — Check the pending batch job. If still running, reports
+    elapsed time and state. If finished, parses the responses, filters
+    references against the actually-grounded URLs, and commits to
+    ai_analysis.json. Only one batch job at a time; submit another with
+    /analyze after loading.`;
