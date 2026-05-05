@@ -12,7 +12,7 @@ const JOB_KV_TTL = 7 * 86400;
 // One Gemini batch request per chunk. Smaller chunks keep each response
 // inside the model's max-output-tokens budget so they don't get truncated
 // mid-array. The whole job still fans out in parallel on Google's side.
-const PAIRS_PER_CHUNK = 15;
+const PAIRS_PER_CHUNK = 25;
 
 interface RollupPlant {
   shortCode: string;

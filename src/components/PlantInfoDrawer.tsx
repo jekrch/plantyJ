@@ -3,6 +3,14 @@ import { ChevronDown, ExternalLink } from "lucide-react";
 import type { Annotation, Plant, Species, SpeciesTaxonomy, Zone, ZonePic } from "../types";
 import { plantTitle } from "../utils/display";
 
+export interface AIAnalysis {
+  shortCode: string;
+  zoneCode: string;
+  analysis: string;
+  references: string[];
+  created: string;
+}
+
 interface Props {
   open: boolean;
   plant: Plant;
@@ -11,6 +19,7 @@ interface Props {
   zonePics: ZonePic[];
   annotations: Annotation[];
   speciesByShortCode: Map<string, Species>;
+  aiAnalyses?: AIAnalysis[];
   onSelectPlant: (plant: Plant) => void;
   onSelectTaxon: (name: string) => void;
   topOffset?: number;
@@ -58,6 +67,7 @@ export default function PlantInfoDrawer({
   zonePics,
   annotations,
   speciesByShortCode,
+  aiAnalyses = [],
   onSelectPlant,
   onSelectTaxon,
   topOffset = 0,
@@ -188,6 +198,12 @@ export default function PlantInfoDrawer({
       (a) => a.shortCode === plant.shortCode && a.zoneCode === plant.zoneCode
     ) ?? null;
   const zoneName = zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode;
+
+  const currentAnalysis = useMemo(() => {
+    return aiAnalyses.find(
+      (a) => a.shortCode === plant.shortCode && a.zoneCode === plant.zoneCode
+    ) ?? null;
+  }, [aiAnalyses, plant.shortCode, plant.zoneCode]);
 
   const show = open && !closing;
 
@@ -628,6 +644,50 @@ export default function PlantInfoDrawer({
                 About BioCLIP
                 <ExternalLink size={10} strokeWidth={1.5} />
               </a>
+            </div>
+          </>
+        )}
+
+        {/* AI Ecological Fit Analysis */}
+        {currentAnalysis && (
+          <>
+            <div className="border-t border-white/8" />
+            <div>
+              <p className="text-[10px] uppercase tracking-widest text-white/50 mb-2">
+                Ecological Fit Analysis (AI-generated)
+              </p>
+              <div
+                className="rounded px-4 py-3"
+                style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
+              >
+                <p className="text-xs text-white/60 leading-relaxed whitespace-pre-line">
+                  {currentAnalysis.analysis}
+                </p>
+                {currentAnalysis.references && currentAnalysis.references.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {currentAnalysis.references.map((url) => {
+                      let label = url;
+                      try {
+                        label = new URL(url).hostname.replace('www.', '');
+                      } catch (e) {
+                        // Keep raw URL or fallback if parsing fails
+                      }
+                      return (
+                        <a
+                          key={url}
+                          href={url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-[10px] text-white/40 hover:text-accent transition-colors px-1.5 py-0.5 rounded-sm bg-white/5 hover:bg-white/8"
+                        >
+                          {label}
+                          <ExternalLink size={8} strokeWidth={1.5} />
+                        </a>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
           </>
         )}

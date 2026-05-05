@@ -7,7 +7,7 @@ import { useBarMeasure } from "../hooks/useBarMeasure";
 import { useGestureHandler } from "../hooks/useGestureHandler";
 import { useSlideNavigation } from "../hooks/useSlideNavigation";
 import NavButton from "./NavButton";
-import PlantInfoDrawer from "./PlantInfoDrawer";
+import PlantInfoDrawer, { AIAnalysis } from "./PlantInfoDrawer";
 import { plantTitle } from "../utils/display";
 
 interface Props {
@@ -77,6 +77,15 @@ export default function PlantViewer({
   const { slideTrackRef, slideActive, slideAnimating, swipeOffset, commitSlide } = slide;
 
   const gestures = useGestureHandler(zoomPan, slide, hasPrev, hasNext);
+
+  const [aiAnalyses, setAiAnalyses] = useState<AIAnalysis[]>([]);
+
+  useEffect(() => {
+    fetch(`${import.meta.env.BASE_URL}data/ai_analysis.json`)
+      .then(res => res.json())
+      .then(data => setAiAnalyses(data.analyses)) 
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
@@ -499,6 +508,7 @@ export default function PlantViewer({
         topOffset={topBarH}
         bottomOffset={bottomBarH}
         slideDir={drawerSlideDir}
+        aiAnalyses={aiAnalyses}
       />
     </div>
   );
