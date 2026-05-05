@@ -210,7 +210,7 @@ export default {
           try {
             const result = await runAnalyze(env, zoneFilter);
             const reply = result.ok
-              ? `Analyzed ${result.analyzed} new pair(s)${result.analyzed < result.totalPairs ? ` of ${result.totalPairs} requested` : ""}. Grounded URLs: ${result.groundingUrls}. Tokens: ${result.promptTokens.toLocaleString()} in / ${result.outputTokens.toLocaleString()} out.`
+              ? `Analyzed ${result.analyzed} pair(s) this run (batch of ${result.batchSize} from ${result.totalPairs} missing). ${result.remaining > 0 ? `${result.remaining} remaining — re-run /analyze${zoneFilter ? ` ${zoneFilter}` : ""} to continue. ` : ""}Tokens: ${result.promptTokens.toLocaleString()} in / ${result.outputTokens.toLocaleString()} out.`
               : result.message;
             await sendReply(
               env.TELEGRAM_BOT_TOKEN,

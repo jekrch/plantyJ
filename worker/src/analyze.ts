@@ -3,7 +3,11 @@ import type { AiAnalysisEntry, Env } from "./types";
 import { readAiAnalyses, writeAiAnalyses } from "./github";
 
 const ANALYSIS_MODEL = "gemini-3.1-pro-preview";
-const MAX_PAIRS_PER_RUN = 80;
+// One Gemini call covers up to this many pairs per /analyze invocation.
+// Cap exists so the call always finishes inside the Worker's wall budget.
+// If more pairs are missing, the run does this many, commits, and reports
+// remaining count — the user re-runs /analyze to continue.
+const MAX_PAIRS_PER_CALL = 15;
 
 interface RollupPlant {
   shortCode: string;
@@ -55,14 +59,18 @@ export function findMissingPairs(
   return out;
 }
 
-function buildPrompt(rollupJson: string, pairs: Pair[], zoneFilter: string | null): string {
+function buildBatchPrompt(
+  rollupJson: string,
+  pairs: Pair[],
+  zoneFilter: string | null
+): string {
   const filterNote = zoneFilter
-    ? `\nThe user has scoped this run to zone "${zoneFilter}". Still consider neighboring zones and the property as a whole when judging ecological fit — don't restrict your reasoning to that zone.`
+    ? `\nThis run is scoped to zone "${zoneFilter}". Still consider neighboring zones and the property as a whole when judging ecological fit — don't restrict reasoning to that zone.`
     : "";
 
   const pairList = pairs.map((p) => `- ${p.shortCode} in zone ${p.zoneCode}`).join("\n");
 
-  return `You are analyzing the ecological niche of specimens (plants and animals) observed in a Minneapolis, MN garden journal. The property is on the NW corner of a city block, USDA hardiness zone 4b/5a, clay/loam soil. The owners prioritize native plants, edibles, medicinals, and supporting local ecology.${filterNote}
+  return `You are analyzing the ecological niche of specimens (plants and animals) observed in a Minneapolis, MN garden journal. The property is on the NW corner of a city block, USDA hardiness zone 4b/5a, clay/loam soil. Owners prioritize native plants, edibles, medicinals, and supporting local ecology.${filterNote}
 
 # Garden context (full rollup)
 # Schema: zones[]: {code, name}; plants[]: {shortCode, fullName, commonName, tags, byZone, pics, zonesSeen, kind?, ...}
@@ -82,18 +90,15 @@ For ANIMALS, cover:
 - What it eats, predates, pollinates, or competes with — given the plants currently in that zone and its neighbors
 - Whether it is native, naturalized, or invasive in the Twin Cities area, and any management considerations
 
-Use the googleSearch tool to ground claims in real sources. In each entry's "references" field, include ONLY URLs you actually retrieved via search. Do not invent URLs. If you have no grounded URL for an entry, return an empty array.
-
 # Pairs to analyze
 ${pairList}
 
 # Output format
-Return ONLY a JSON array — no prose, no markdown fences, no commentary before or after. Each element must be:
+Return ONLY a JSON array — no prose, no markdown fences, no commentary before or after. Each element must be exactly:
 {
   "shortCode": string,
   "zoneCode": string,
-  "analysis": string,
-  "references": string[]
+  "analysis": string
 }
 Output exactly one object per pair, in the same order as listed above. Begin your response with [ and end it with ].`;
 }
@@ -103,7 +108,6 @@ function stripJsonFences(text: string): string {
   if (t.startsWith("```")) {
     t = t.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/i, "");
   }
-  // Some models emit a leading sentinel; trim to the first '['.
   const firstBracket = t.indexOf("[");
   const lastBracket = t.lastIndexOf("]");
   if (firstBracket > 0 && lastBracket > firstBracket) {
@@ -116,30 +120,14 @@ interface RawEntry {
   shortCode?: unknown;
   zoneCode?: unknown;
   analysis?: unknown;
-  references?: unknown;
-}
-
-function coerceEntries(raw: unknown): RawEntry[] {
-  if (!Array.isArray(raw)) throw new Error("Model output was not a JSON array.");
-  return raw as RawEntry[];
-}
-
-function collectGroundingUrls(response: unknown): Set<string> {
-  const urls = new Set<string>();
-  const candidates = (response as { candidates?: Array<{ groundingMetadata?: { groundingChunks?: Array<{ web?: { uri?: string } }> } }> })?.candidates;
-  const chunks = candidates?.[0]?.groundingMetadata?.groundingChunks ?? [];
-  for (const c of chunks) {
-    const uri = c?.web?.uri;
-    if (typeof uri === "string" && uri.startsWith("http")) urls.add(uri);
-  }
-  return urls;
 }
 
 export interface AnalyzeOutcome {
   ok: true;
   analyzed: number;
   totalPairs: number;
-  groundingUrls: number;
+  batchSize: number;
+  remaining: number;
   promptTokens: number;
   outputTokens: number;
 }
@@ -153,80 +141,95 @@ export async function runAnalyze(
   env: Env,
   zoneFilter: string | null
 ): Promise<AnalyzeOutcome | AnalyzeError> {
+  const t0 = Date.now();
+  console.log(`[analyze] start, zoneFilter=${zoneFilter ?? "(none)"}`);
+
   const { raw: rollupJson, rollup } = await loadRollupParsed(env);
+  console.log(`[analyze] loaded rollup (${rollupJson.length} bytes)`);
 
   if (zoneFilter && !rollup.zones.some((z) => z.code === zoneFilter)) {
     return { ok: false, message: `Unknown zone "${zoneFilter}". See /zones.` };
   }
 
-  const { analyses: existing, sha } = await readAiAnalyses(env);
-  const pairs = findMissingPairs(rollup, existing, zoneFilter);
+  const initial = await readAiAnalyses(env);
+  const allPairs = findMissingPairs(rollup, initial.analyses, zoneFilter);
+  console.log(`[analyze] ${allPairs.length} pair(s) missing analyses`);
 
-  if (pairs.length === 0) {
-    return { ok: false, message: zoneFilter
-      ? `All plants in zone "${zoneFilter}" already have analyses.`
-      : "All specimen+zone pairs already have analyses." };
-  }
-
-  if (pairs.length > MAX_PAIRS_PER_RUN) {
+  if (allPairs.length === 0) {
     return {
       ok: false,
-      message: `Too many missing pairs (${pairs.length}). Re-run with a zone filter, e.g. /analyze fy. Cap is ${MAX_PAIRS_PER_RUN}.`,
+      message: zoneFilter
+        ? `All plants in zone "${zoneFilter}" already have analyses.`
+        : "All specimen+zone pairs already have analyses.",
     };
   }
 
-  const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
-  const prompt = buildPrompt(rollupJson, pairs, zoneFilter);
+  const batch = allPairs.slice(0, MAX_PAIRS_PER_CALL);
+  const remaining = allPairs.length - batch.length;
+  console.log(`[analyze] processing ${batch.length} pair(s) this call, ${remaining} deferred`);
 
-  // googleSearch grounding is incompatible with context caching and structured-output schema
-  // on Gemini 3.1 Pro, so we ask for JSON inline and parse it.
-  const response = await client.models.generateContent({
-    model: ANALYSIS_MODEL,
-    contents: [{ role: "user", parts: [{ text: prompt }] }],
-    config: {
-      tools: [{ googleSearch: {} }],
-    },
-  });
+  const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
+
+  let response;
+  try {
+    response = await client.models.generateContent({
+      model: ANALYSIS_MODEL,
+      contents: [{ role: "user", parts: [{ text: buildBatchPrompt(rollupJson, batch, zoneFilter) }] }],
+    });
+  } catch (err) {
+    const msg = (err as Error).message;
+    console.log(`[analyze] gemini error: ${msg}`);
+    return { ok: false, message: `Gemini call failed: ${msg}` };
+  }
+  console.log(`[analyze] gemini returned in ${Date.now() - t0}ms`);
+
+  const meta = response.usageMetadata;
+  const promptTokens = meta?.promptTokenCount ?? 0;
+  const outputTokens = meta?.candidatesTokenCount ?? 0;
 
   const text = (response.candidates?.[0]?.content?.parts ?? [])
     .map((p) => (p as { text?: string }).text ?? "")
     .join("")
     .trim();
 
-  if (!text) return { ok: false, message: "Model returned no text." };
+  if (!text) {
+    return { ok: false, message: "Model returned no text." };
+  }
 
-  let parsed: RawEntry[];
+  let parsed: unknown;
   try {
-    parsed = coerceEntries(JSON.parse(stripJsonFences(text)));
+    parsed = JSON.parse(stripJsonFences(text));
   } catch (err) {
+    console.log(`[analyze] parse error: ${(err as Error).message}; head=${text.slice(0, 200)}`);
     return { ok: false, message: `Failed to parse model JSON: ${(err as Error).message}` };
   }
 
-  const groundedUrls = collectGroundingUrls(response);
-  const requested = new Set(pairs.map((p) => `${p.shortCode}|${p.zoneCode}`));
+  if (!Array.isArray(parsed)) {
+    return { ok: false, message: "Model output was not a JSON array." };
+  }
+
+  const requested = new Set(batch.map((p) => `${p.shortCode}|${p.zoneCode}`));
   const now = new Date().toISOString();
 
   const newEntries: AiAnalysisEntry[] = [];
-  for (const e of parsed) {
+  for (const e of parsed as RawEntry[]) {
     const shortCode = typeof e.shortCode === "string" ? e.shortCode : null;
     const zoneCode = typeof e.zoneCode === "string" ? e.zoneCode : null;
     const analysis = typeof e.analysis === "string" ? e.analysis.trim() : "";
     if (!shortCode || !zoneCode || !analysis) continue;
     if (!requested.has(`${shortCode}|${zoneCode}`)) continue;
-
-    const rawRefs = Array.isArray(e.references) ? e.references : [];
-    const references = rawRefs
-      .filter((r): r is string => typeof r === "string" && r.startsWith("http"))
-      .filter((r) => groundedUrls.has(r));
-
-    newEntries.push({ shortCode, zoneCode, analysis, references, created: now });
+    newEntries.push({ shortCode, zoneCode, analysis, references: [], created: now });
   }
+  console.log(`[analyze] usable entries: ${newEntries.length}/${batch.length}`);
 
   if (newEntries.length === 0) {
     return { ok: false, message: "Model produced no usable entries." };
   }
 
-  const merged = [...existing];
+  // Re-read just before write so we commit on top of the latest sha (in case
+  // a parallel run or upstream commit landed during the Gemini call).
+  const { analyses: latest, sha: latestSha } = await readAiAnalyses(env);
+  const merged = [...latest];
   for (const e of newEntries) {
     const idx = merged.findIndex(
       (m) => m.shortCode === e.shortCode && m.zoneCode === e.zoneCode
@@ -244,17 +247,18 @@ export async function runAnalyze(
   await writeAiAnalyses(
     env,
     merged,
-    sha,
+    latestSha,
     `Add AI analyses${scope}: ${newEntries.length} pair(s) [skip-deploy]`
   );
+  console.log(`[analyze] committed ${newEntries.length} entries to GitHub`);
 
-  const meta = response.usageMetadata;
   return {
     ok: true,
     analyzed: newEntries.length,
-    totalPairs: pairs.length,
-    groundingUrls: groundedUrls.size,
-    promptTokens: meta?.promptTokenCount ?? 0,
-    outputTokens: meta?.candidatesTokenCount ?? 0,
+    totalPairs: allPairs.length,
+    batchSize: batch.length,
+    remaining: remaining + (batch.length - newEntries.length),
+    promptTokens,
+    outputTokens,
   };
 }
