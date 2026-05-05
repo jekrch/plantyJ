@@ -3,406 +3,464 @@
     {
       "shortCode": "A fla",
       "zoneCode": "nbv",
-      "analysis": "GOOD. Aesculus flava (Yellow Buckeye) is an excellent, large-growing tree native to the Ohio Valley and Appalachian regions, but adaptable to zone 4b/5a Minnesota soils. It produces robust spring flowers that act as a rich nectar source for native hummingbirds, bees, and butterflies, and later yields large seeds that feed squirrels and other urban wildlife. While somewhat coarse for a small boulevard, its deep taproot and preference for loamy soils make it a sturdy and ecologically beneficial shade tree alternative to invasive maples.",
+      "verdict": "GOOD",
+      "analysis": "Aesculus flava (Yellow Buckeye) is an excellent, large-growing tree native to the Ohio Valley and Appalachian regions, but adaptable to zone 4b/5a Minnesota soils. It produces robust spring flowers that act as a rich nectar source for native hummingbirds, bees, and butterflies, and later yields large seeds that feed squirrels and other urban wildlife. While somewhat coarse for a small boulevard, its deep taproot and preference for loamy soils make it a sturdy and ecologically beneficial shade tree alternative to invasive maples.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "A mil",
       "zoneCode": "fy",
-      "analysis": "GOOD. Achillea millefolium (Yarrow) is a hardy native perennial that thrives in the heavy clay/loam soils and full sun likely present in the front yard. Its flat-topped flower clusters serve as a critical landing pad and nectar source for a vast array of small native pollinators, including syrphid flies, parasitic wasps, and various bees. Furthermore, its drought tolerance makes it a highly practical, low-maintenance choice for an ecology-focused garden in zone 4b/5a.",
+      "verdict": "GOOD",
+      "analysis": "Achillea millefolium (Yarrow) is a hardy native perennial that thrives in the heavy clay/loam soils and full sun likely present in the front yard. Its flat-topped flower clusters serve as a critical landing pad and nectar source for a vast array of small native pollinators, including syrphid flies, parasitic wasps, and various bees. Furthermore, its drought tolerance makes it a highly practical, low-maintenance choice for an ecology-focused garden in zone 4b/5a.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "a pla",
       "zoneCode": "mpg",
-      "analysis": "BAD. Acer platanoides (Norway Maple) is an invasive, non-native tree listed by the Minnesota DNR due to its aggressive spread into natural woodlands. Its extremely dense canopy and allelopathic shallow root system create a \"zone of death\" underneath it, making it exceptionally difficult to grow native woodland wildflowers or sedges. From an ecological perspective, this tree actively suppresses local biodiversity and should ideally be removed and replaced with a native oak, maple, or basswood.",
+      "verdict": "BAD",
+      "analysis": "Acer platanoides (Norway Maple) is an invasive, non-native tree listed by the Minnesota DNR due to its aggressive spread into natural woodlands. Its extremely dense canopy and allelopathic shallow root system create a \"zone of death\" underneath it, making it exceptionally difficult to grow native woodland wildflowers or sedges. From an ecological perspective, this tree actively suppresses local biodiversity and should ideally be removed and replaced with a native oak, maple, or basswood.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "A sac",
       "zoneCode": "nbv",
-      "analysis": "MIXED. Acer saccharinum (Silver Maple) is a native tree that provides early spring pollen for bees and serves as a host plant for numerous native moth species, offering substantial ecological value. However, its extremely fast growth rate, weak wood prone to storm damage, and aggressive, shallow root system make it a problematic choice for a confined boulevard (North Boulevard) setting. It frequently heaves sidewalks and outcompetes understory plantings in clay soils, meaning the owners must carefully manage the space around it.",
+      "verdict": "MIXED",
+      "analysis": "Acer saccharinum (Silver Maple) is a native tree that provides early spring pollen for bees and serves as a host plant for numerous native moth species, offering substantial ecological value. However, its extremely fast growth rate, weak wood prone to storm damage, and aggressive, shallow root system make it a problematic choice for a confined boulevard (North Boulevard) setting. It frequently heaves sidewalks and outcompetes understory plantings in clay soils, meaning the owners must carefully manage the space around it.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "A sac",
       "zoneCode": "wbv",
-      "analysis": "MIXED. Similar to the North Boulevard specimen, Acer saccharinum in the West Boulevard offers excellent early-season ecological benefits, acting as a critical early pollen source for emerging native bees and hosting a variety of Lepidoptera. However, it is an oversized, brittle tree for a boulevard strip, with shallow, moisture-seeking roots that perform well in clay but often destroy urban infrastructure and create a difficult, dry-shade microclimate for other native plants below it.",
+      "verdict": "MIXED",
+      "analysis": "Similar to the North Boulevard specimen, Acer saccharinum in the West Boulevard offers excellent early-season ecological benefits, acting as a critical early pollen source for emerging native bees and hosting a variety of Lepidoptera. However, it is an oversized, brittle tree for a boulevard strip, with shallow, moisture-seeking roots that perform well in clay but often destroy urban infrastructure and create a difficult, dry-shade microclimate for other native plants below it.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "A scr",
       "zoneCode": "fy",
-      "analysis": "GOOD. Agastache scrophulariifolia (Purple Giant Hyssop) is a phenomenal native plant for Minnesota gardens, thriving in loamy soils and offering exceptional ecological value. Its towering, late-summer spikes of pale purple flowers are a high-value nectar source for bees and butterflies, notably including the federally endangered Rusty Patched Bumblebee. As a robust biennial or short-lived perennial, it readily self-sows and thrives in the competitive environment of a front yard native planting.",
+      "verdict": "GOOD",
+      "analysis": "Agastache scrophulariifolia (Purple Giant Hyssop) is a phenomenal native plant for Minnesota gardens, thriving in loamy soils and offering exceptional ecological value. Its towering, late-summer spikes of pale purple flowers are a high-value nectar source for bees and butterflies, notably including the federally endangered Rusty Patched Bumblebee. As a robust biennial or short-lived perennial, it readily self-sows and thrives in the competitive environment of a front yard native planting.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "a tri",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Allium tricoccum (Wild Leek / Ramps) is a highly prized native edible that thrives in the rich, loamy spring soil of deciduous woodlands. Ecologically, its early spring foliage captures sunlight before the tree canopy closes, and its later summer flowers provide a surprisingly valuable nectar source for native bees. Growing ramps on-site perfectly marries the owners' edible and native-ecology priorities while reducing the pressure of wild foraging.",
+      "verdict": "GOOD",
+      "analysis": "Allium tricoccum (Wild Leek / Ramps) is a highly prized native edible that thrives in the rich, loamy spring soil of deciduous woodlands. Ecologically, its early spring foliage captures sunlight before the tree canopy closes, and its later summer flowers provide a surprisingly valuable nectar source for native bees. Growing ramps on-site perfectly marries the owners' edible and native-ecology priorities while reducing the pressure of wild foraging.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "A tub",
       "zoneCode": "nbv",
-      "analysis": "GOOD. Asclepias tuberosa (Butterfly Weed) is an essential native perennial that serves as a vital host plant for Monarch butterfly caterpillars and provides high-quality nectar for diverse pollinators. Its deep taproot allows it to thrive in the challenging, dry conditions of a boulevard strip, and it adapts well to well-drained loam or clay-loam in zone 4b/5a. Planting this in the boulevard directly supports the owners' priority of enhancing local ecology and pollinator pathways.",
+      "verdict": "GOOD",
+      "analysis": "Asclepias tuberosa (Butterfly Weed) is an essential native perennial that serves as a vital host plant for Monarch butterfly caterpillars and provides high-quality nectar for diverse pollinators. Its deep taproot allows it to thrive in the challenging, dry conditions of a boulevard strip, and it adapts well to well-drained loam or clay-loam in zone 4b/5a. Planting this in the boulevard directly supports the owners' priority of enhancing local ecology and pollinator pathways.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "c card",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Cardinalis cardinalis (Northern Cardinal) is a beloved native bird that utilizes dense shrubbery for nesting and feeds heavily on seeds, fruits, and insects. In an ecology-minded garden with diverse native shrubs (like dogwood and elderberry) and seed-bearing perennials, the Cardinal finds excellent year-round habitat and helps control insect pest populations. Its presence is a clear indicator that the garden's structural layers and food resources are functioning well for urban wildlife, requiring no active management beyond providing the habitat.",
+      "verdict": "GOOD",
+      "analysis": "Cardinalis cardinalis (Northern Cardinal) is a beloved native bird that utilizes dense shrubbery for nesting and feeds heavily on seeds, fruits, and insects. In an ecology-minded garden with diverse native shrubs (like dogwood and elderberry) and seed-bearing perennials, the Cardinal finds excellent year-round habitat and helps control insect pest populations. Its presence is a clear indicator that the garden's structural layers and food resources are functioning well for urban wildlife, requiring no active management beyond providing the habitat.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "c daf",
       "zoneCode": "fy",
-      "analysis": "MIXED. Narcissus cyclamineus 'Tete a Tete' (Dwarf Daffodil) is a non-native spring bulb that provides bright, early color but relatively low ecological value, as most native bees prefer indigenous spring ephemerals. However, daffodils are highly practical in an urban setting because they are completely deer, rabbit, and squirrel resistant due to their toxic alkaloids. They offer harmless aesthetic cheer without becoming invasive, though they do not actively feed the local food web.",
+      "verdict": "MIXED",
+      "analysis": "Narcissus cyclamineus 'Tete a Tete' (Dwarf Daffodil) is a non-native spring bulb that provides bright, early color but relatively low ecological value, as most native bees prefer indigenous spring ephemerals. However, daffodils are highly practical in an urban setting because they are completely deer, rabbit, and squirrel resistant due to their toxic alkaloids. They offer harmless aesthetic cheer without becoming invasive, though they do not actively feed the local food web.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "c ros",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Carex rosea (Rosy Sedge) is a native, clump-forming sedge that is arguably one of the best plants for dry, shaded areas under deciduous trees. It provides excellent habitat and overwintering cover for beneficial insects and ground beetles, while its seeds are eaten by woodland birds. Its fine texture creates a beautiful, low-maintenance \"green mulch\" that stabilizes clay/loam soils, outcompeting invasive weeds without harming delicate spring ephemerals.",
+      "verdict": "GOOD",
+      "analysis": "Carex rosea (Rosy Sedge) is a native, clump-forming sedge that is arguably one of the best plants for dry, shaded areas under deciduous trees. It provides excellent habitat and overwintering cover for beneficial insects and ground beetles, while its seeds are eaten by woodland birds. Its fine texture creates a beautiful, low-maintenance \"green mulch\" that stabilizes clay/loam soils, outcompeting invasive weeds without harming delicate spring ephemerals.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "C ser",
       "zoneCode": "fy",
-      "analysis": "GOOD. Cornus sericea (Red Osier Dogwood) is a highly adaptable native shrub that provides immense value to urban wildlife and thrives in clay-heavy Minnesota soils. Its spring flowers attract specialist bees and butterflies, while its lipid-rich white berries are a crucial late-summer food source for migrating and resident birds. The bright red winter stems provide striking seasonal interest, making it both a practical and ecologically robust anchor for the front yard.",
+      "verdict": "GOOD",
+      "analysis": "Cornus sericea (Red Osier Dogwood) is a highly adaptable native shrub that provides immense value to urban wildlife and thrives in clay-heavy Minnesota soils. Its spring flowers attract specialist bees and butterflies, while its lipid-rich white berries are a crucial late-summer food source for migrating and resident birds. The bright red winter stems provide striking seasonal interest, making it both a practical and ecologically robust anchor for the front yard.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "c vir",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Clematis virginiana (Virgin's Bower) is a vigorous native vine that provides immense ecological benefits in late summer, erupting in fragrant white flowers that attract a huge diversity of bees, wasps, and flies. Later, its fluffy seed heads provide winter interest and nesting material for birds. It does grow aggressively and will scramble over shrubs and fences, so it requires mindful placement and pruning, but it is an outstanding native alternative to invasive Sweet Autumn Clematis.",
+      "verdict": "GOOD",
+      "analysis": "Clematis virginiana (Virgin's Bower) is a vigorous native vine that provides immense ecological benefits in late summer, erupting in fragrant white flowers that attract a huge diversity of bees, wasps, and flies. Later, its fluffy seed heads provide winter interest and nesting material for birds. It does grow aggressively and will scramble over shrubs and fences, so it requires mindful placement and pruning, but it is an outstanding native alternative to invasive Sweet Autumn Clematis.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "e ame",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Erythronium americanum (Yellow Trout Lily) is a quintessential native spring ephemeral that blankets the woodland floor before the trees leaf out. Its early blooms are incredibly important for early-emerging native bees (including specialized Andrena bees) seeking pollen and nectar. Over time, it forms dense colonies in loamy soils, functioning as an essential ecological anchor for the spring woodland garden.",
+      "verdict": "GOOD",
+      "analysis": "Erythronium americanum (Yellow Trout Lily) is a quintessential native spring ephemeral that blankets the woodland floor before the trees leaf out. Its early blooms are incredibly important for early-emerging native bees (including specialized Andrena bees) seeking pollen and nectar. Over time, it forms dense colonies in loamy soils, functioning as an essential ecological anchor for the spring woodland garden.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "E mac",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Eurybia macrophylla (Big-leaved Aster) is a superb native groundcover for the dry, shaded conditions often found beneath maples. It fills a critical ecological niche by providing late-season nectar and pollen for asters-specialist bees and migrating butterflies when few other understory plants are blooming. Its broad, basal leaves suppress weeds and protect soil moisture in clay/loam, perfectly aligning with the garden's ecological and native-plant priorities.",
+      "verdict": "GOOD",
+      "analysis": "Eurybia macrophylla (Big-leaved Aster) is a superb native groundcover for the dry, shaded conditions often found beneath maples. It fills a critical ecological niche by providing late-season nectar and pollen for asters-specialist bees and migrating butterflies when few other understory plants are blooming. Its broad, basal leaves suppress weeds and protect soil moisture in clay/loam, perfectly aligning with the garden's ecological and native-plant priorities.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "E pur",
       "zoneCode": "bb",
-      "analysis": "GOOD. Echinacea purpurea (Purple Coneflower) is a quintessential native medicinal and pollinator plant that performs beautifully in the berry border. Its large, accessible flowers attract a wide array of butterflies, skippers, and bees throughout mid-summer. Additionally, if the seedheads are left standing through the winter, they become an invaluable food source for urban seed-eating birds like the native Goldfinch (Spinus tristis).",
+      "verdict": "GOOD",
+      "analysis": "Echinacea purpurea (Purple Coneflower) is a quintessential native medicinal and pollinator plant that performs beautifully in the berry border. Its large, accessible flowers attract a wide array of butterflies, skippers, and bees throughout mid-summer. Additionally, if the seedheads are left standing through the winter, they become an invaluable food source for urban seed-eating birds like the native Goldfinch (Spinus tristis).",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "E yuc",
       "zoneCode": "fy",
-      "analysis": "GOOD. Eryngium yuccifolium (Rattlesnake Master) is an ecologically outstanding native prairie plant that provides structural diversity and vital resources in a front yard setting. Its unique, spherical white flower heads are an absolute magnet for diverse pollinators, particularly solitary wasps, native bees, and predatory insects that help control garden pests. Its deep taproot makes it exceptionally drought-resistant and perfectly adapted to zone 4b/5a clay/loam once established.",
+      "verdict": "GOOD",
+      "analysis": "Eryngium yuccifolium (Rattlesnake Master) is an ecologically outstanding native prairie plant that provides structural diversity and vital resources in a front yard setting. Its unique, spherical white flower heads are an absolute magnet for diverse pollinators, particularly solitary wasps, native bees, and predatory insects that help control garden pests. Its deep taproot makes it exceptionally drought-resistant and perfectly adapted to zone 4b/5a clay/loam once established.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "F cat",
       "zoneCode": "sy",
-      "analysis": "BAD. Felis catus (Domestic Cat) is an invasive, non-native predator that poses a massive threat to local ecosystems, killing billions of native birds and mammals annually in the US. In a garden expressly designed to support native wildlife—such as ground-foraging birds, fledgling robins, and native small mammals—allowing a free-roaming cat actively undermines the owners' ecological priorities. To protect the local food web, Dolly should be kept indoors or restricted to a secure \"catio.\"",
+      "verdict": "BAD",
+      "analysis": "Felis catus (Domestic Cat) is an invasive, non-native predator that poses a massive threat to local ecosystems, killing billions of native birds and mammals annually in the US. In a garden expressly designed to support native wildlife—such as ground-foraging birds, fledgling robins, and native small mammals—allowing a free-roaming cat actively undermines the owners' ecological priorities. To protect the local food web, Dolly should be kept indoors or restricted to a secure \"catio.\"",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "h acu",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Hepatica acutiloba (Sharp-lobed Hepatica) is one of the absolute earliest native woodland wildflowers to bloom in Minnesota, making it a critical lifeline for the very first emerging bees and syrphid flies of the season. It thrives in the loamy, shaded environment of the maple zone, where its semi-evergreen leaves persist through winter. This plant perfectly embodies the owners' goal of supporting local ecology from the very start of the growing season.",
+      "verdict": "GOOD",
+      "analysis": "Hepatica acutiloba (Sharp-lobed Hepatica) is one of the absolute earliest native woodland wildflowers to bloom in Minnesota, making it a critical lifeline for the very first emerging bees and syrphid flies of the season. It thrives in the loamy, shaded environment of the maple zone, where its semi-evergreen leaves persist through winter. This plant perfectly embodies the owners' goal of supporting local ecology from the very start of the growing season.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "H arb",
       "zoneCode": "hbd",
-      "analysis": "GOOD. Hydrangea arborescens (Smooth Hydrangea) is a native woodland edge shrub that performs very well in zone 4b/5a, tolerating clay/loam soils gracefully. As long as it is a fertile, lacecap-style variety (rather than a fully sterile \"mophead\" cultivar), its tiny fertile flowers provide excellent foraging for native bees, hoverflies, and beetles. It offers practical structure for the hydrangea border while adhering to the owners' native-priority mandate.",
+      "verdict": "GOOD",
+      "analysis": "Hydrangea arborescens (Smooth Hydrangea) is a native woodland edge shrub that performs very well in zone 4b/5a, tolerating clay/loam soils gracefully. As long as it is a fertile, lacecap-style variety (rather than a fully sterile \"mophead\" cultivar), its tiny fertile flowers provide excellent foraging for native bees, hoverflies, and beetles. It offers practical structure for the hydrangea border while adhering to the owners' native-priority mandate.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "H lup Wil",
       "zoneCode": "bb",
-      "analysis": "MIXED. Humulus lupulus 'Willamette' (Hops) is a vigorous, native-derived edible and medicinal vine that serves as a host plant for Comma and Question Mark butterflies. However, its aggressive, rapid growth can easily overwhelm neighboring plants in the berry border, requiring constant pruning and trellising to keep it in check. While it meets the edible and medicinal criteria, its sheer vigor in clay/loam makes it a high-maintenance addition that could outcompete more delicate flora.",
+      "verdict": "MIXED",
+      "analysis": "Humulus lupulus 'Willamette' (Hops) is a vigorous, native-derived edible and medicinal vine that serves as a host plant for Comma and Question Mark butterflies. However, its aggressive, rapid growth can easily overwhelm neighboring plants in the berry border, requiring constant pruning and trellising to keep it in check. While it meets the edible and medicinal criteria, its sheer vigor in clay/loam makes it a high-maintenance addition that could outcompete more delicate flora.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "h tel aut",
       "zoneCode": "bb",
-      "analysis": "MIXED. Hylotelephium telephium 'Autumn Joy' (Sedum) is a non-native, highly cultivated perennial that is very popular for its late-season blooms and drought tolerance. While it does attract a flurry of honeybees and generalist butterflies in the fall, it provides no larval host benefits and displaces space that could be used by native late-season powerhouses like asters or goldenrods in the berry border. It is practically indestructible in clay/loam but represents a missed opportunity for deeper ecological impact.",
+      "verdict": "MIXED",
+      "analysis": "Hylotelephium telephium 'Autumn Joy' (Sedum) is a non-native, highly cultivated perennial that is very popular for its late-season blooms and drought tolerance. While it does attract a flurry of honeybees and generalist butterflies in the fall, it provides no larval host benefits and displaces space that could be used by native late-season powerhouses like asters or goldenrods in the berry border. It is practically indestructible in clay/loam but represents a missed opportunity for deeper ecological impact.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "H vir",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Hamamelis virginiana (Witch Hazel) is a fantastic native understory shrub with potent medicinal uses, perfectly suited to the dappled shade of the maple zone. It occupies a unique ecological niche by blooming incredibly late in the fall (October/November), providing a critical, final nectar source for late-season pollinators like owlet moths. It is highly adaptable to clay/loam soils and deeply aligned with both the medicinal and ecological goals of the property.",
+      "verdict": "GOOD",
+      "analysis": "Hamamelis virginiana (Witch Hazel) is a fantastic native understory shrub with potent medicinal uses, perfectly suited to the dappled shade of the maple zone. It occupies a unique ecological niche by blooming incredibly late in the fall (October/November), providing a critical, final nectar source for late-season pollinators like owlet moths. It is highly adaptable to clay/loam soils and deeply aligned with both the medicinal and ecological goals of the property.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "L car",
       "zoneCode": "mpg",
-      "analysis": "BAD. Leonurus cardiaca (Motherwort) is an aggressive, non-native invasive weed in Minnesota, particularly problematic in woodland margins and shaded areas like the maple zone. While it has historical medicinal uses and attracts some bees, it spreads rapidly via rhizomes and prolific seeding, displacing sensitive native ephemeral wildflowers and understory sedges. For an ecology-focused garden, this invasive species should be eradicated and replaced with native woodland mints or medicinal alternatives.",
+      "verdict": "BAD",
+      "analysis": "Leonurus cardiaca (Motherwort) is an aggressive, non-native invasive weed in Minnesota, particularly problematic in woodland margins and shaded areas like the maple zone. While it has historical medicinal uses and attracts some bees, it spreads rapidly via rhizomes and prolific seeding, displacing sensitive native ephemeral wildflowers and understory sedges. For an ecology-focused garden, this invasive species should be eradicated and replaced with native woodland mints or medicinal alternatives.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "M dom 'red'",
       "zoneCode": "sy",
-      "analysis": "MIXED. Malus domestica 'Red Rome' (Apple) is a non-native tree, but it is highly valued in an edible landscape and provides a spectacular early-spring nectar flow that benefits native bees and honeybees alike. While it does not support the deep web of native Lepidoptera that indigenous crabapples (Malus coronaria) do, its dwarf rootstock makes it a practical, manageable fruit producer in a tight side yard. It requires careful organic management to prevent pests without harming local pollinators.",
+      "verdict": "MIXED",
+      "analysis": "Malus domestica 'Red Rome' (Apple) is a non-native tree, but it is highly valued in an edible landscape and provides a spectacular early-spring nectar flow that benefits native bees and honeybees alike. While it does not support the deep web of native Lepidoptera that indigenous crabapples (Malus coronaria) do, its dwarf rootstock makes it a practical, manageable fruit producer in a tight side yard. It requires careful organic management to prevent pests without harming local pollinators.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "m gal",
       "zoneCode": "nbv",
-      "analysis": "MIXED. Meleagris gallopavo (Wild Turkey) is a native bird that has successfully readapted to urban/suburban environments in the Twin Cities. While it is fascinating to see them foraging for insects, fallen seeds, and nuts, a flock can be highly destructive to an urban garden, scratching up newly planted beds, uprooting delicate native ephemerals, and eating edible crops. They are a natural part of the ecology, but their presence requires gardeners to protect vulnerable young plants with fencing or netting.",
+      "verdict": "MIXED",
+      "analysis": "Meleagris gallopavo (Wild Turkey) is a native bird that has successfully readapted to urban/suburban environments in the Twin Cities. While it is fascinating to see them foraging for insects, fallen seeds, and nuts, a flock can be highly destructive to an urban garden, scratching up newly planted beds, uprooting delicate native ephemerals, and eating edible crops. They are a natural part of the ecology, but their presence requires gardeners to protect vulnerable young plants with fencing or netting.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "m vir",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Mertensia virginica (Virginia Bluebells) is a stunning native spring ephemeral that is highly adapted to the rich, loamy soils of a deciduous woodland understory. Its tubular pink-to-blue flowers are specially adapted for early-emerging bumblebee queens, who rely heavily on them for nectar while establishing their nests. Once it goes dormant in early summer, it naturally makes way for later-emerging woodland plants like ferns and sedges.",
+      "verdict": "GOOD",
+      "analysis": "Mertensia virginica (Virginia Bluebells) is a stunning native spring ephemeral that is highly adapted to the rich, loamy soils of a deciduous woodland understory. Its tubular pink-to-blue flowers are specially adapted for early-emerging bumblebee queens, who rely heavily on them for nectar while establishing their nests. Once it goes dormant in early summer, it naturally makes way for later-emerging woodland plants like ferns and sedges.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "O mac",
       "zoneCode": "wbv",
-      "analysis": "GOOD. Oenothera macrocarpa (Missouri Evening Primrose) is a tough, low-growing native plant that thrives in the harsh, dry, and potentially compacted environment of a west-facing boulevard. Ecologically, it is spectacular, opening its massive yellow flowers in the late afternoon and night to attract specialized nocturnal pollinators, particularly sphinx moths. Its drought tolerance and ability to thrive in poor soils make it a highly practical and ecologically valuable choice.",
+      "verdict": "GOOD",
+      "analysis": "Oenothera macrocarpa (Missouri Evening Primrose) is a tough, low-growing native plant that thrives in the harsh, dry, and potentially compacted environment of a west-facing boulevard. Ecologically, it is spectacular, opening its massive yellow flowers in the late afternoon and night to attract specialized nocturnal pollinators, particularly sphinx moths. Its drought tolerance and ability to thrive in poor soils make it a highly practical and ecologically valuable choice.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "P arm",
       "zoneCode": "sy",
-      "analysis": "MIXED. Prunus armeniaca (Apricot) on semi-dwarf rootstock fulfills the owners' desire for edible landscaping, but as a non-native species, it offers fewer ecological linkages than native Prunus species (like wild plum or chokecherry). It does provide early spring pollen for bees, but in zone 4b/5a, its early blooms are highly susceptible to late frosts, which can wipe out both the fruit crop and the nectar resource. It requires good soil drainage and careful pruning.",
+      "verdict": "MIXED",
+      "analysis": "Prunus armeniaca (Apricot) on semi-dwarf rootstock fulfills the owners' desire for edible landscaping, but as a non-native species, it offers fewer ecological linkages than native Prunus species (like wild plum or chokecherry). It does provide early spring pollen for bees, but in zone 4b/5a, its early blooms are highly susceptible to late frosts, which can wipe out both the fruit crop and the nectar resource. It requires good soil drainage and careful pruning.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "P cor",
       "zoneCode": "sy",
-      "analysis": "MIXED. Philadelphus coronarius (Mock Orange) is an old-fashioned, non-native shrub prized for its intensely fragrant white blooms, but it provides relatively little ecological value compared to native alternatives. While it attracts some generalist pollinators during its short bloom window, it does not serve as a host plant for native Lepidoptera and lacks edible berries for birds. Given the native-priority focus of the garden, native shrubs like Ninebark or native Philadelphus species would be ecologically superior.",
+      "verdict": "MIXED",
+      "analysis": "Philadelphus coronarius (Mock Orange) is an old-fashioned, non-native shrub prized for its intensely fragrant white blooms, but it provides relatively little ecological value compared to native alternatives. While it attracts some generalist pollinators during its short bloom window, it does not serve as a host plant for native Lepidoptera and lacks edible berries for birds. Given the native-priority focus of the garden, native shrubs like Ninebark or native Philadelphus species would be ecologically superior.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "p dom",
       "zoneCode": "mpg",
-      "analysis": "BAD. Passer domesticus (House Sparrow) is a highly aggressive, non-native invasive bird that wreaks havoc on local avian ecology. They actively hunt down, evict, and kill native cavity-nesting birds—such as Eastern Bluebirds, Tree Swallows, and Chickadees—to steal their nesting sites and compete for seeds. Because they adapt so well to urban environments, managing their population (by removing their nests or using sparrow-resistant birdhouses) is a sad but necessary step to protect native bird species in the garden.",
+      "verdict": "BAD",
+      "analysis": "Passer domesticus (House Sparrow) is a highly aggressive, non-native invasive bird that wreaks havoc on local avian ecology. They actively hunt down, evict, and kill native cavity-nesting birds—such as Eastern Bluebirds, Tree Swallows, and Chickadees—to steal their nesting sites and compete for seeds. Because they adapt so well to urban environments, managing their population (by removing their nests or using sparrow-resistant birdhouses) is a sad but necessary step to protect native bird species in the garden.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "P pyr Peg",
       "zoneCode": "sy",
-      "analysis": "MIXED. Pyrus pyrifolia 'Peggy Pear' (Asian Pear) provides excellent edible yields for the owners but lacks the deep evolutionary ties to native insects found in indigenous trees. It does offer early spring blossoms that attract native bees and syrphid flies, contributing to the early-season pollinator food web. In a zone 4b/5a side yard, the dwarf rootstock is practical for space management, though the tree requires ongoing maintenance and monitoring for diseases like fire blight.",
+      "verdict": "MIXED",
+      "analysis": "Pyrus pyrifolia 'Peggy Pear' (Asian Pear) provides excellent edible yields for the owners but lacks the deep evolutionary ties to native insects found in indigenous trees. It does offer early spring blossoms that attract native bees and syrphid flies, contributing to the early-season pollinator food web. In a zone 4b/5a side yard, the dwarf rootstock is practical for space management, though the tree requires ongoing maintenance and monitoring for diseases like fire blight.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "P sub",
       "zoneCode": "fy",
-      "analysis": "GOOD. Phlox subulata (Creeping Phlox) is a hardy, semi-evergreen native groundcover that forms a dense, weed-suppressing mat in the sunny front yard. It erupts into a carpet of flowers in early spring, offering a vital and easily accessible nectar source for early-emerging butterflies, long-tongued bees, and skippers. Its ability to thrive in relatively poor, well-drained pockets of clay/loam makes it a low-maintenance, high-reward ecological asset.",
+      "verdict": "GOOD",
+      "analysis": "Phlox subulata (Creeping Phlox) is a hardy, semi-evergreen native groundcover that forms a dense, weed-suppressing mat in the sunny front yard. It erupts into a carpet of flowers in early spring, offering a vital and easily accessible nectar source for early-emerging butterflies, long-tongued bees, and skippers. Its ability to thrive in relatively poor, well-drained pockets of clay/loam makes it a low-maintenance, high-reward ecological asset.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "R bla",
       "zoneCode": "fy",
-      "analysis": "GOOD. Rosa blanda (Smooth Rose) is an exceptional native shrub that is nearly thornless and highly adaptable to Minnesota's clay/loam soils. It provides abundant, easily accessible pollen for native bumblebees and solitary bees in early summer, and its vitamin C-rich rose hips (which fulfill the medicinal/edible priority) persist into winter, feeding birds and mammals. It is a rugged, ecologically vital addition to a native front yard planting.",
+      "verdict": "GOOD",
+      "analysis": "Rosa blanda (Smooth Rose) is an exceptional native shrub that is nearly thornless and highly adaptable to Minnesota's clay/loam soils. It provides abundant, easily accessible pollen for native bumblebees and solitary bees in early summer, and its vitamin C-rich rose hips (which fulfill the medicinal/edible priority) persist into winter, feeding birds and mammals. It is a rugged, ecologically vital addition to a native front yard planting.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "R hir",
       "zoneCode": "sy",
-      "analysis": "GOOD. Rudbeckia hirta (Black-eyed Susan) is a pioneer native species that establishes quickly and provides brilliant summer color while supporting a robust ecosystem. Its composite flowers are heavily visited by native bees, beneficial wasps, and butterflies, while its seeds are a favorite of overwintering songbirds. It tolerates clay and loam effortlessly, acting as an excellent short-lived perennial or self-sowing biennial in the side yard.",
+      "verdict": "GOOD",
+      "analysis": "Rudbeckia hirta (Black-eyed Susan) is a pioneer native species that establishes quickly and provides brilliant summer color while supporting a robust ecosystem. Its composite flowers are heavily visited by native bees, beneficial wasps, and butterflies, while its seeds are a favorite of overwintering songbirds. It tolerates clay and loam effortlessly, acting as an excellent short-lived perennial or self-sowing biennial in the side yard.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "r ida",
       "zoneCode": "bb",
-      "analysis": "GOOD. Rubus idaeus 'Joan J' (Raspberry) is a fantastic edible crop that also provides excellent ecological benefits. As a native-derived species, the raspberry thicket provides dense, thorny cover for nesting birds, while the early white flowers are highly attractive to native bees. Furthermore, the hollow, pithy stems of raspberries, if left partially intact after pruning, provide critical overwintering habitat for small native cavity-nesting bees.",
+      "verdict": "GOOD",
+      "analysis": "Rubus idaeus 'Joan J' (Raspberry) is a fantastic edible crop that also provides excellent ecological benefits. As a native-derived species, the raspberry thicket provides dense, thorny cover for nesting birds, while the early white flowers are highly attractive to native bees. Furthermore, the hollow, pithy stems of raspberries, if left partially intact after pruning, provide critical overwintering habitat for small native cavity-nesting bees.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "R lac",
       "zoneCode": "sy",
-      "analysis": "GOOD. Rudbeckia laciniata (Cutleaf Coneflower / Sochan) perfectly hits the intersection of native ecology and edible landscaping, as its spring greens are traditionally foraged and cooked. Ecologically, this towering perennial is a powerhouse, attracting swarms of native bees, wasps, and butterflies to its late-summer blooms, and feeding finches with its seeds in the fall. It can be an aggressive spreader in moist loam, so its placement in the side yard will require some spatial management.",
+      "verdict": "GOOD",
+      "analysis": "Rudbeckia laciniata (Cutleaf Coneflower / Sochan) perfectly hits the intersection of native ecology and edible landscaping, as its spring greens are traditionally foraged and cooked. Ecologically, this towering perennial is a powerhouse, attracting swarms of native bees, wasps, and butterflies to its late-summer blooms, and feeding finches with its seeds in the fall. It can be an aggressive spreader in moist loam, so its placement in the side yard will require some spatial management.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "r pix",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Ribes uva-crispa x missouriense 'Pixwell' (Gooseberry) is a hardy, disease-resistant hybrid that includes native Ribes genetics, making it a great fit for the garden's edible and ecological goals. It blooms early in the spring, providing nectar for early bumblebees, and later produces tart berries for human harvest (or for birds, if left unnetted). It tolerates partial shade and clay soils beautifully, functioning well in the maple understory.",
+      "verdict": "GOOD",
+      "analysis": "Ribes uva-crispa x missouriense 'Pixwell' (Gooseberry) is a hardy, disease-resistant hybrid that includes native Ribes genetics, making it a great fit for the garden's edible and ecological goals. It blooms early in the spring, providing nectar for early bumblebees, and later produces tart berries for human harvest (or for birds, if left unnetted). It tolerates partial shade and clay soils beautifully, functioning well in the maple understory.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "r rub",
       "zoneCode": "bb",
-      "analysis": "MIXED. Ribes rubrum 'Jonkheer Van Tets' (Red Currant) is a European species that provides excellent, reliable fruit yields for the owners and early spring nectar for local bees. While it is not a native shrub and therefore hosts fewer specialized insects than native Ribes species, it is a well-behaved, shade-tolerant edible that does not act invasively. It fills the edible priority well but has a slightly lower ecological ceiling than a purely native planting.",
+      "verdict": "MIXED",
+      "analysis": "Ribes rubrum 'Jonkheer Van Tets' (Red Currant) is a European species that provides excellent, reliable fruit yields for the owners and early spring nectar for local bees. While it is not a native shrub and therefore hosts fewer specialized insects than native Ribes species, it is a well-behaved, shade-tolerant edible that does not act invasively. It fills the edible priority well but has a slightly lower ecological ceiling than a purely native planting.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "r rub pc",
       "zoneCode": "bb",
-      "analysis": "MIXED. Ribes rubrum 'Pink Champagne' (Pink Currant) shares the same profile as the red currant: it is a high-yielding, non-native edible that provides delicious fruit and early spring bee forage. It grows well in the heavy soils of zone 4b/5a and tolerates partial shade in the berry border. Ecologically, it is benign and moderately helpful for pollinators, though it lacks the deep co-evolutionary ties of a native shrub.",
+      "verdict": "MIXED",
+      "analysis": "Ribes rubrum 'Pink Champagne' (Pink Currant) shares the same profile as the red currant: it is a high-yielding, non-native edible that provides delicious fruit and early spring bee forage. It grows well in the heavy soils of zone 4b/5a and tolerates partial shade in the berry border. Ecologically, it is benign and moderately helpful for pollinators, though it lacks the deep co-evolutionary ties of a native shrub.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "S alb",
       "zoneCode": "sy",
-      "analysis": "GOOD. Spiraea alba (White Meadowsweet) is a superb native shrub that thrives in loamy, slightly moist soils and provides immense value to summer pollinators. Its fuzzy white spires are a favorite of native bees, flies, and small butterflies, and the plant serves as a larval host for several native moths. It is a fantastic, ecologically productive alternative to non-native, overused landscape spireas, fitting perfectly into the owners' native-focused vision.",
+      "verdict": "GOOD",
+      "analysis": "Spiraea alba (White Meadowsweet) is a superb native shrub that thrives in loamy, slightly moist soils and provides immense value to summer pollinators. Its fuzzy white spires are a favorite of native bees, flies, and small butterflies, and the plant serves as a larval host for several native moths. It is a fantastic, ecologically productive alternative to non-native, overused landscape spireas, fitting perfectly into the owners' native-focused vision.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "s can bob",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Sambucus canadensis 'Bob Gordon' (Elderberry) is a selected cultivar of a native powerhouse shrub that perfectly bridges the gap between ecological restoration and edible/medicinal landscaping. Its massive umbels of white flowers attract countless tiny pollinators, and its heavy clusters of dark purple berries are both a prized medicinal harvest for humans and a beloved food for native birds. It thrives in loamy soils and tolerates the partial shade of the maple zone perfectly.",
+      "verdict": "GOOD",
+      "analysis": "Sambucus canadensis 'Bob Gordon' (Elderberry) is a selected cultivar of a native powerhouse shrub that perfectly bridges the gap between ecological restoration and edible/medicinal landscaping. Its massive umbels of white flowers attract countless tiny pollinators, and its heavy clusters of dark purple berries are both a prized medicinal harvest for humans and a beloved food for native birds. It thrives in loamy soils and tolerates the partial shade of the maple zone perfectly.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "s can wyl",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Sambucus canadensis 'Wyldewood' (Elderberry) complements the 'Bob Gordon' variety perfectly, as planting multiple cultivars ensures cross-pollination and maximized fruit set. This native shrub supports stem-nesting bees in its pithy branches and feeds a vast array of wildlife. It is a rapid grower that responds well to hard pruning, making it highly adaptable to the space constraints of an urban property while fulfilling all the owners' primary goals.",
+      "verdict": "GOOD",
+      "analysis": "Sambucus canadensis 'Wyldewood' (Elderberry) complements the 'Bob Gordon' variety perfectly, as planting multiple cultivars ensures cross-pollination and maximized fruit set. This native shrub supports stem-nesting bees in its pithy branches and feeds a vast array of wildlife. It is a rapid grower that responds well to hard pruning, making it highly adaptable to the space constraints of an urban property while fulfilling all the owners' primary goals.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "S car",
       "zoneCode": "mpg",
-      "analysis": "MIXED. Sciurus carolinensis (Gray Squirrel) is a native urban mammal that plays a natural role in seed dispersal (especially for oaks and walnuts) and serves as prey for local raptors. However, in a dense urban garden focused on edibles and delicate native plantings, squirrels can become nuisance herbivores, digging up native bulbs (like Allium tricoccum), eating fruit crops before they ripen, and damaging tree bark. They belong in the ecosystem but may require physical exclusion tactics (like netting) around high-value edibles.",
+      "verdict": "MIXED",
+      "analysis": "Sciurus carolinensis (Gray Squirrel) is a native urban mammal that plays a natural role in seed dispersal (especially for oaks and walnuts) and serves as prey for local raptors. However, in a dense urban garden focused on edibles and delicate native plantings, squirrels can become nuisance herbivores, digging up native bulbs (like Allium tricoccum), eating fruit crops before they ripen, and damaging tree bark. They belong in the ecosystem but may require physical exclusion tactics (like netting) around high-value edibles.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "s fle",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Solidago flexicaulis (Zig Zag Goldenrod) is an essential native woodland perennial that lights up the shady maple understory in late summer and early fall. Because most goldenrods require full sun, this shade-tolerant species fills a vital ecological gap, providing critical late-season nectar and pollen to migrating butterflies and overwintering queen bumblebees. Its ability to spread gently via rhizomes makes it a reliable, weed-suppressing groundcover in clay/loam.",
+      "verdict": "GOOD",
+      "analysis": "Solidago flexicaulis (Zig Zag Goldenrod) is an essential native woodland perennial that lights up the shady maple understory in late summer and early fall. Because most goldenrods require full sun, this shade-tolerant species fills a vital ecological gap, providing critical late-season nectar and pollen to migrating butterflies and overwintering queen bumblebees. Its ability to spread gently via rhizomes makes it a reliable, weed-suppressing groundcover in clay/loam.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "S lan",
       "zoneCode": "fy",
-      "analysis": "GOOD. Scrophularia lanceolata (Early Figwort) is an often-overlooked native powerhouse for pollinators, blooming in early to mid-summer. Its small, inconspicuous flowers produce copious amounts of nectar, making it one of the absolute best plants for supporting native wasps, bumblebees, and ruby-throated hummingbirds. It adapts well to the clay/loam of a zone 4b/5a front yard and directly supports the goal of maximizing local ecological health.",
+      "verdict": "GOOD",
+      "analysis": "Scrophularia lanceolata (Early Figwort) is an often-overlooked native powerhouse for pollinators, blooming in early to mid-summer. Its small, inconspicuous flowers produce copious amounts of nectar, making it one of the absolute best plants for supporting native wasps, bumblebees, and ruby-throated hummingbirds. It adapts well to the clay/loam of a zone 4b/5a front yard and directly supports the goal of maximizing local ecological health.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "s lat",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Symphyotrichum lateriflorum (Calico Aster) is a spectacular native woodland-edge aster that is smothered in tiny white flowers with pink/purple centers in the fall. It pairs perfectly with Zig Zag Goldenrod to create a late-season feast for specialized solitary bees, hoverflies, and migrating monarchs. It is incredibly tough, tolerating both clay soils and the root competition of nearby trees, making it a highly practical ecological asset.",
+      "verdict": "GOOD",
+      "analysis": "Symphyotrichum lateriflorum (Calico Aster) is a spectacular native woodland-edge aster that is smothered in tiny white flowers with pink/purple centers in the fall. It pairs perfectly with Zig Zag Goldenrod to create a late-season feast for specialized solitary bees, hoverflies, and migrating monarchs. It is incredibly tough, tolerating both clay soils and the root competition of nearby trees, making it a highly practical ecological asset.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "S mar",
       "zoneCode": "fy",
-      "analysis": "GOOD. Scrophularia marilandica (Late Figwort) is the late-season counterpart to S. lanceolata, stepping in to provide abundant nectar from mid-summer into fall. It is a towering, shade-tolerant native that acts as an insect magnet, supporting specialized bees, wasps, and migrating hummingbirds just as they need to build energy reserves. Planting both figworts ensures a continuous, high-volume nectar flow in the front yard.",
+      "verdict": "GOOD",
+      "analysis": "Scrophularia marilandica (Late Figwort) is the late-season counterpart to S. lanceolata, stepping in to provide abundant nectar from mid-summer into fall. It is a towering, shade-tolerant native that acts as an insect magnet, supporting specialized bees, wasps, and migrating hummingbirds just as they need to build energy reserves. Planting both figworts ensures a continuous, high-volume nectar flow in the front yard.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "S pul",
       "zoneCode": "mpg",
-      "analysis": "MIXED. Sedum pulchellum (Widow's Cross) is native to the central and southern US (like Missouri and Illinois) but is slightly out of its historic native range in Minnesota, where it acts as a winter annual. It is a beautiful, pollinator-friendly groundcover that provides nectar for bees, but in the shaded, clay-heavy environment under a maple, it may struggle to reseed and thrive compared to its preferred sunny limestone glades.",
+      "verdict": "MIXED",
+      "analysis": "Sedum pulchellum (Widow's Cross) is native to the central and southern US (like Missouri and Illinois) but is slightly out of its historic native range in Minnesota, where it acts as a winter annual. It is a beautiful, pollinator-friendly groundcover that provides nectar for bees, but in the shaded, clay-heavy environment under a maple, it may struggle to reseed and thrive compared to its preferred sunny limestone glades.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "S ter",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Sedum ternatum (Wild Stonecrop) is a fantastic, shade-tolerant native succulent that makes an excellent living mulch beneath the dense canopy of maples. It blooms in the spring with star-like white flowers that attract early-emerging native bees and hoverflies. Because it has shallow roots and tolerates dry shade, it thrives where grass fails, stabilizing the clay/loam soil without competing heavily with tree roots.",
+      "verdict": "GOOD",
+      "analysis": "Sedum ternatum (Wild Stonecrop) is a fantastic, shade-tolerant native succulent that makes an excellent living mulch beneath the dense canopy of maples. It blooms in the spring with star-like white flowers that attract early-emerging native bees and hoverflies. Because it has shallow roots and tolerates dry shade, it thrives where grass fails, stabilizing the clay/loam soil without competing heavily with tree roots.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "S tri",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Spinus tristis (American Goldfinch) is a native, resident bird that is highly beneficial and indicative of a healthy, seed-rich garden ecology. It relies heavily on the seedheads of native composites (like Echinacea, Rudbeckia, and Symphyotrichum) and thistle-down for nesting material later in the summer. Its presence confirms that the native plantings in the garden are successfully providing natural, year-round forage without any management intervention needed.",
+      "verdict": "GOOD",
+      "analysis": "Spinus tristis (American Goldfinch) is a native, resident bird that is highly beneficial and indicative of a healthy, seed-rich garden ecology. It relies heavily on the seedheads of native composites (like Echinacea, Rudbeckia, and Symphyotrichum) and thistle-down for nesting material later in the summer. Its presence confirms that the native plantings in the garden are successfully providing natural, year-round forage without any management intervention needed.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "S vul",
       "zoneCode": "mpg",
-      "analysis": "MIXED. Syringa vulgaris (Common Lilac) is a classic, non-native shrub that offers intense spring fragrance and is a nostalgic favorite, but it provides minimal ecological value compared to native species. Its flowers attract some generalist butterflies, but it hosts almost no native caterpillars, and its aggressive suckering habit can crowd out desirable understory plants. Furthermore, it is increasingly susceptible to lilac leaf spot fungi in humid Midwestern summers, making it a high-footprint, low-reward plant ecologically.",
+      "verdict": "MIXED",
+      "analysis": "Syringa vulgaris (Common Lilac) is a classic, non-native shrub that offers intense spring fragrance and is a nostalgic favorite, but it provides minimal ecological value compared to native species. Its flowers attract some generalist butterflies, but it hosts almost no native caterpillars, and its aggressive suckering habit can crowd out desirable understory plants. Furthermore, it is increasingly susceptible to lilac leaf spot fungi in humid Midwestern summers, making it a high-footprint, low-reward plant ecologically.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "T can",
       "zoneCode": "mpg",
-      "analysis": "MIXED. Teucrium canadense (Canada Germander) is a native, woodland-edge perennial that provides an excellent mid-summer nectar source for long-tongued bees, hummingbirds, and hummingbird moths. However, it is an incredibly aggressive spreader via rhizomes and can act somewhat weedy, easily overrunning more delicate spring ephemerals and woodland forbs under the maple. While ecologically beneficial, its aggressive habit in rich loam requires ruthless management in a small urban plot.",
+      "verdict": "MIXED",
+      "analysis": "Teucrium canadense (Canada Germander) is a native, woodland-edge perennial that provides an excellent mid-summer nectar source for long-tongued bees, hummingbirds, and hummingbird moths. However, it is an incredibly aggressive spreader via rhizomes and can act somewhat weedy, easily overrunning more delicate spring ephemerals and woodland forbs under the maple. While ecologically beneficial, its aggressive habit in rich loam requires ruthless management in a small urban plot.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "T cor",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Tiarella cordifolia (Foamflower) is a quintessential native woodland groundcover that excels in the shaded, loamy environment beneath mature maples. Its early spring blooms provide vital nectar and pollen for small native bees and syrphid flies just as they emerge. Its semi-evergreen foliage forms a beautiful, weed-suppressing mat that cools the soil and retains moisture, perfectly supporting the garden's ecological architecture.",
+      "verdict": "GOOD",
+      "analysis": "Tiarella cordifolia (Foamflower) is a quintessential native woodland groundcover that excels in the shaded, loamy environment beneath mature maples. Its early spring blooms provide vital nectar and pollen for small native bees and syrphid flies just as they emerge. Its semi-evergreen foliage forms a beautiful, weed-suppressing mat that cools the soil and retains moisture, perfectly supporting the garden's ecological architecture.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "u dio",
       "zoneCode": "mpg",
-      "analysis": "GOOD. Urtica dioica (Stinging Nettle) is a highly nutritious native edible and medicinal plant that also serves as the obligatory larval host for the Red Admiral, Milbert's Tortoiseshell, and Comma butterflies. Because it is highly aggressive and spreads rapidly via rhizomes, the owners have wisely planted it in a pot within the maple zone. This keeps it from taking over the garden while still providing its immense ecological and edible benefits.",
+      "verdict": "GOOD",
+      "analysis": "Urtica dioica (Stinging Nettle) is a highly nutritious native edible and medicinal plant that also serves as the obligatory larval host for the Red Admiral, Milbert's Tortoiseshell, and Comma butterflies. Because it is highly aggressive and spreads rapidly via rhizomes, the owners have wisely planted it in a pot within the maple zone. This keeps it from taking over the garden while still providing its immense ecological and edible benefits.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "V ata",
       "zoneCode": "fy",
-      "analysis": "GOOD. Vanessa atalanta (Red Admiral) is a beautiful native butterfly whose presence indicates a successful, life-cycle-supporting habitat. Because the garden includes Urtica dioica (Stinging Nettle) in the maple zone, the Red Admiral has a dedicated larval host plant to lay its eggs and feed on. Adult butterflies will actively pollinate the various native nectar sources in the front yard, requiring no management and beautifully demonstrating the success of the owners' native-priority strategy.",
+      "verdict": "GOOD",
+      "analysis": "Vanessa atalanta (Red Admiral) is a beautiful native butterfly whose presence indicates a successful, life-cycle-supporting habitat. Because the garden includes Urtica dioica (Stinging Nettle) in the maple zone, the Red Admiral has a dedicated larval host plant to lay its eggs and feed on. Adult butterflies will actively pollinate the various native nectar sources in the front yard, requiring no management and beautifully demonstrating the success of the owners' native-priority strategy.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "V vir",
       "zoneCode": "fy",
-      "analysis": "GOOD. Veronicastrum virginicum (Culver's Root) is a striking, architectural native plant that thrives in full sun and loamy soils. Its elegant white floral spikes bloom in mid-to-late summer and are an absolute magnet for a massive diversity of native bees, sphecid wasps, and butterflies. Its deep root system improves clay soils, and it adds brilliant vertical structure to the front yard while acting as a keystone pollinator resource.",
+      "verdict": "GOOD",
+      "analysis": "Veronicastrum virginicum (Culver's Root) is a striking, architectural native plant that thrives in full sun and loamy soils. Its elegant white floral spikes bloom in mid-to-late summer and are an absolute magnet for a massive diversity of native bees, sphecid wasps, and butterflies. Its deep root system improves clay soils, and it adds brilliant vertical structure to the front yard while acting as a keystone pollinator resource.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
       "shortCode": "Z aur",
       "zoneCode": "nbv",
-      "analysis": "GOOD. Zizia aurea (Golden Alexanders) is an invaluable native perennial that blooms early in the spring, bridging the \"nectar gap\" for short-tongued bees, wasps, and early butterflies. Crucially, it belongs to the carrot family (Apiaceae) and serves as a vital larval host plant for the Black Swallowtail butterfly. Its tolerance for various soils and moisture levels makes it a resilient, ecologically dense addition to the boulevard.",
+      "verdict": "GOOD",
+      "analysis": "Zizia aurea (Golden Alexanders) is an invaluable native perennial that blooms early in the spring, bridging the \"nectar gap\" for short-tongued bees, wasps, and early butterflies. Crucially, it belongs to the carrot family (Apiaceae) and serves as a vital larval host plant for the Black Swallowtail butterfly. Its tolerance for various soils and moisture levels makes it a resilient, ecologically dense addition to the boulevard.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     }

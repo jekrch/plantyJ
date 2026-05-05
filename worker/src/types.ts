@@ -130,9 +130,12 @@ export interface AnnotationEntry {
   description: string | null;
 }
 
+export type AiVerdict = "GOOD" | "BAD" | "MIXED";
+
 export interface AiAnalysisEntry {
   shortCode: string;
   zoneCode: string;
+  verdict: AiVerdict;
   analysis: string;
   references: string[];
   created: string;

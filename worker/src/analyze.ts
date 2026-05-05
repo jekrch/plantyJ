@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import type { AiAnalysisEntry, Env } from "./types";
+import type { AiAnalysisEntry, AiVerdict, Env } from "./types";
 import { readAiAnalyses, writeAiAnalyses } from "./github";
 
 const ANALYSIS_MODEL = "gemini-3.1-pro-preview";
@@ -90,7 +90,7 @@ function buildBatchPrompt(
 ${rollupJson}
 
 # Task
-For EACH of the ${pairs.length} specimen + zone pairs below, write a 1–2 paragraph analysis. State the verdict (GOOD / BAD / MIXED) explicitly in the first sentence.
+For EACH of the ${pairs.length} specimen + zone pairs below, decide a verdict (GOOD / BAD / MIXED) and write a 1–2 paragraph analysis. The verdict goes in its own "verdict" field — do NOT repeat it as a prefix in the analysis prose.
 
 For PLANTS, cover:
 - Whether the ecological niche is GOOD, BAD, or MIXED for that zone (factor in zone neighbors but don't restrict to them)
@@ -112,10 +112,11 @@ Return ONLY a JSON array — no prose, no markdown fences, no commentary before 
 {
   "shortCode": string,
   "zoneCode": string,
+  "verdict": "GOOD" | "BAD" | "MIXED",
   "analysis": string,
   "references": string[]
 }
-Output exactly one object per pair, in the same order as listed above. Begin your response with [ and end it with ].`;
+The "analysis" string should NOT begin with "GOOD." / "BAD." / "MIXED." — that information lives in "verdict". Output exactly one object per pair, in the same order as listed above. Begin your response with [ and end it with ].`;
 }
 
 function stripJsonFences(text: string): string {
@@ -203,8 +204,27 @@ function chunkPairs(pairs: Pair[], size: number): Pair[][] {
 interface RawEntry {
   shortCode?: unknown;
   zoneCode?: unknown;
+  verdict?: unknown;
   analysis?: unknown;
   references?: unknown;
+}
+
+// Pulls a leading "GOOD." / "BAD." / "MIXED." off the analysis prose so older
+// model behavior (which embedded the verdict in the first sentence) doesn't
+// double up with the new dedicated field. Returns the verdict if found.
+function extractLeadingVerdict(text: string): { verdict: AiVerdict | null; rest: string } {
+  const m = text.match(/^\s*(GOOD|BAD|MIXED)\b[.:\s-]+/i);
+  if (!m) return { verdict: null, rest: text };
+  return {
+    verdict: m[1].toUpperCase() as AiVerdict,
+    rest: text.slice(m[0].length),
+  };
+}
+
+function coerceVerdict(v: unknown): AiVerdict | null {
+  if (typeof v !== "string") return null;
+  const u = v.trim().toUpperCase();
+  return u === "GOOD" || u === "BAD" || u === "MIXED" ? u : null;
 }
 
 function normalizeEntry(
@@ -214,13 +234,20 @@ function normalizeEntry(
 ): AiAnalysisEntry | null {
   const shortCode = typeof e.shortCode === "string" ? e.shortCode : null;
   const zoneCode = typeof e.zoneCode === "string" ? e.zoneCode : null;
-  const analysis = typeof e.analysis === "string" ? e.analysis.trim() : "";
-  if (!shortCode || !zoneCode || !analysis) return null;
+  const rawAnalysis = typeof e.analysis === "string" ? e.analysis.trim() : "";
+  if (!shortCode || !zoneCode || !rawAnalysis) return null;
+
+  const stripped = extractLeadingVerdict(rawAnalysis);
+  const verdict = coerceVerdict(e.verdict) ?? stripped.verdict;
+  if (!verdict) return null;
+  const analysis = stripped.rest.trim();
+  if (!analysis) return null;
+
   const rawRefs = Array.isArray(e.references) ? e.references : [];
   const references = rawRefs
     .filter((r): r is string => typeof r === "string" && r.startsWith("http"))
     .filter((r) => groundedUrls.has(r));
-  return { shortCode, zoneCode, analysis, references, created: now };
+  return { shortCode, zoneCode, verdict, analysis, references, created: now };
 }
 
 function collectGroundingUrls(response: unknown): Set<string> {

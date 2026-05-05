@@ -3,13 +3,22 @@ import { ChevronDown, ExternalLink } from "lucide-react";
 import type { Annotation, Plant, Species, SpeciesTaxonomy, Zone, ZonePic } from "../types";
 import { plantTitle } from "../utils/display";
 
+export type AIVerdict = "GOOD" | "BAD" | "MIXED";
+
 export interface AIAnalysis {
   shortCode: string;
   zoneCode: string;
+  verdict: AIVerdict;
   analysis: string;
   references: string[];
   created: string;
 }
+
+const VERDICT_STYLES: Record<AIVerdict, string> = {
+  GOOD: "text-emerald-300/90 bg-emerald-300/10",
+  BAD: "text-rose-300/90 bg-rose-300/10",
+  MIXED: "text-amber-300/90 bg-amber-300/10",
+};
 
 interface Props {
   open: boolean;
@@ -653,9 +662,16 @@ export default function PlantInfoDrawer({
           <>
             <div className="border-t border-white/8" />
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/50 mb-2">
-                Ecological Fit Analysis (AI-generated)
-              </p>
+              <div className="flex items-center justify-between mb-2 gap-2">
+                <p className="text-[10px] uppercase tracking-widest text-white/50">
+                  Ecological Fit Analysis (AI-generated)
+                </p>
+                <span
+                  className={`text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded-sm font-mono ${VERDICT_STYLES[currentAnalysis.verdict]}`}
+                >
+                  {currentAnalysis.verdict}
+                </span>
+              </div>
               <div
                 className="rounded px-4 py-3"
                 style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
