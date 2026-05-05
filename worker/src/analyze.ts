@@ -4,7 +4,15 @@ import { readAiAnalyses, writeAiAnalyses } from "./github";
 
 const ANALYSIS_MODEL = "gemini-3.1-pro-preview";
 const JOB_KV_KEY = "analyze:job";
-const JOB_KV_TTL = 86400; // 24h — matches the Batch API SLA ceiling.
+const FAILED_TEXT_KV_KEY = "analyze:last-failed-text";
+// 7 days — Gemini's Batch API SLA is up to ~72h, and the result file is
+// retained on Google's side for a while after that, so giving ourselves a
+// week of slack means we'll never lose a job pointer to KV expiry.
+const JOB_KV_TTL = 7 * 86400;
+// One Gemini batch request per chunk. Smaller chunks keep each response
+// inside the model's max-output-tokens budget so they don't get truncated
+// mid-array. The whole job still fans out in parallel on Google's side.
+const PAIRS_PER_CHUNK = 15;
 
 interface RollupPlant {
   shortCode: string;
@@ -123,11 +131,96 @@ function stripJsonFences(text: string): string {
   return t;
 }
 
+// Walk a possibly-truncated JSON array and pull out every complete top-level
+// object. Used when the model hits max-output-tokens mid-array and JSON.parse
+// chokes on the unterminated tail.
+function salvageJsonObjects(text: string): unknown[] {
+  const start = text.indexOf("[");
+  if (start === -1) return [];
+  const out: unknown[] = [];
+  let i = start + 1;
+  while (i < text.length) {
+    while (i < text.length && /[\s,]/.test(text[i])) i++;
+    if (i >= text.length || text[i] === "]") break;
+    if (text[i] !== "{") break;
+    let depth = 0;
+    let inStr = false;
+    let escape = false;
+    let j = i;
+    let closed = false;
+    for (; j < text.length; j++) {
+      const c = text[j];
+      if (escape) { escape = false; continue; }
+      if (inStr) {
+        if (c === "\\") escape = true;
+        else if (c === '"') inStr = false;
+        continue;
+      }
+      if (c === '"') inStr = true;
+      else if (c === "{") depth++;
+      else if (c === "}") {
+        depth--;
+        if (depth === 0) { j++; closed = true; break; }
+      }
+    }
+    if (!closed) break;
+    try {
+      out.push(JSON.parse(text.slice(i, j)));
+    } catch {
+      break;
+    }
+    i = j;
+  }
+  return out;
+}
+
+interface ParseResult {
+  objects: unknown[] | null;
+  salvaged: boolean;
+  reason: string;
+}
+
+function parseOrSalvage(text: string): ParseResult {
+  try {
+    const v = JSON.parse(text);
+    if (Array.isArray(v)) return { objects: v, salvaged: false, reason: "" };
+    return { objects: null, salvaged: false, reason: "model output was not a JSON array" };
+  } catch (err) {
+    const salvage = salvageJsonObjects(text);
+    if (salvage.length > 0) {
+      return { objects: salvage, salvaged: true, reason: (err as Error).message };
+    }
+    return { objects: null, salvaged: false, reason: `parse failed: ${(err as Error).message}` };
+  }
+}
+
+function chunkPairs(pairs: Pair[], size: number): Pair[][] {
+  const out: Pair[][] = [];
+  for (let i = 0; i < pairs.length; i += size) out.push(pairs.slice(i, i + size));
+  return out;
+}
+
 interface RawEntry {
   shortCode?: unknown;
   zoneCode?: unknown;
   analysis?: unknown;
   references?: unknown;
+}
+
+function normalizeEntry(
+  e: RawEntry,
+  groundedUrls: Set<string>,
+  now: string
+): AiAnalysisEntry | null {
+  const shortCode = typeof e.shortCode === "string" ? e.shortCode : null;
+  const zoneCode = typeof e.zoneCode === "string" ? e.zoneCode : null;
+  const analysis = typeof e.analysis === "string" ? e.analysis.trim() : "";
+  if (!shortCode || !zoneCode || !analysis) return null;
+  const rawRefs = Array.isArray(e.references) ? e.references : [];
+  const references = rawRefs
+    .filter((r): r is string => typeof r === "string" && r.startsWith("http"))
+    .filter((r) => groundedUrls.has(r));
+  return { shortCode, zoneCode, analysis, references, created: now };
 }
 
 function collectGroundingUrls(response: unknown): Set<string> {
@@ -196,21 +289,24 @@ export async function submitAnalyzeBatch(
   }
 
   const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
-  const prompt = buildBatchPrompt(rollupJson, pairs, zoneFilter);
+  const chunks = chunkPairs(pairs, PAIRS_PER_CHUNK);
+  const src = chunks.map((chunk) => ({
+    contents: [
+      { role: "user", parts: [{ text: buildBatchPrompt(rollupJson, chunk, zoneFilter) }] },
+    ],
+    config: {
+      tools: [{ googleSearch: {} }],
+    },
+  }));
 
-  console.log(`[analyze.submit] creating batch, prompt=${prompt.length} chars, pairs=${pairs.length}`);
+  console.log(
+    `[analyze.submit] creating batch, ${chunks.length} chunk(s) of ≤${PAIRS_PER_CHUNK}, pairs=${pairs.length}`
+  );
   let job;
   try {
     job = await client.batches.create({
       model: ANALYSIS_MODEL,
-      src: [
-        {
-          contents: [{ role: "user", parts: [{ text: prompt }] }],
-          config: {
-            tools: [{ googleSearch: {} }],
-          },
-        },
-      ],
+      src,
       config: {
         displayName: `plantyj-analyze-${zoneFilter ?? "all"}-${Date.now()}`,
       },
@@ -240,7 +336,7 @@ export async function submitAnalyzeBatch(
 export type LoadResult =
   | { kind: "no-job" }
   | { kind: "running"; state: string; pairCount: number; elapsed: string }
-  | { kind: "failed"; reason: string }
+  | { kind: "failed"; reason: string; rawTextSaved?: boolean }
   | {
       kind: "done";
       analyzed: number;
@@ -248,6 +344,9 @@ export type LoadResult =
       groundingUrls: number;
       promptTokens: number;
       outputTokens: number;
+      truncatedChunks: number;
+      failedChunks: number;
+      totalChunks: number;
     };
 
 export async function loadAnalyzeBatch(env: Env): Promise<LoadResult> {
@@ -303,60 +402,83 @@ export async function loadAnalyzeBatch(env: Env): Promise<LoadResult> {
   // SUCCEEDED or PARTIALLY_SUCCEEDED — pull responses and commit.
   const inlined = job.dest?.inlinedResponses ?? [];
   if (inlined.length === 0) {
-    await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
     return { kind: "failed", reason: `Job ${state} but no inlinedResponses returned.` };
   }
 
-  const first = inlined[0];
-  if (first.error) {
-    await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
-    return { kind: "failed", reason: `Inlined response error: ${first.error.message ?? "unknown"}` };
-  }
-
-  const response = first.response;
-  const text = (response?.candidates?.[0]?.content?.parts ?? [])
-    .map((p) => (p as { text?: string }).text ?? "")
-    .join("")
-    .trim();
-
-  if (!text) {
-    await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
-    return { kind: "failed", reason: "Inlined response had no text." };
-  }
-
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(stripJsonFences(text));
-  } catch (err) {
-    await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
-    return { kind: "failed", reason: `Failed to parse model JSON: ${(err as Error).message}` };
-  }
-
-  if (!Array.isArray(parsed)) {
-    await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
-    return { kind: "failed", reason: "Model output was not a JSON array." };
-  }
-
-  const groundedUrls = collectGroundingUrls(response);
   const now = new Date().toISOString();
   const newEntries: AiAnalysisEntry[] = [];
-  for (const e of parsed as RawEntry[]) {
-    const shortCode = typeof e.shortCode === "string" ? e.shortCode : null;
-    const zoneCode = typeof e.zoneCode === "string" ? e.zoneCode : null;
-    const analysis = typeof e.analysis === "string" ? e.analysis.trim() : "";
-    if (!shortCode || !zoneCode || !analysis) continue;
+  const allGroundedUrls = new Set<string>();
+  let promptTokens = 0;
+  let outputTokens = 0;
+  let truncatedChunks = 0;
+  let failedChunks = 0;
+  const debugChunks: { idx: number; reason?: string; text?: string }[] = [];
 
-    const rawRefs = Array.isArray(e.references) ? e.references : [];
-    const references = rawRefs
-      .filter((r): r is string => typeof r === "string" && r.startsWith("http"))
-      .filter((r) => groundedUrls.has(r));
+  for (let i = 0; i < inlined.length; i++) {
+    const item = inlined[i];
+    if (item.error) {
+      failedChunks++;
+      debugChunks.push({ idx: i, reason: `inlined error: ${item.error.message ?? "unknown"}` });
+      console.log(`[analyze.load] chunk ${i} errored: ${item.error.message ?? "unknown"}`);
+      continue;
+    }
+    const response = item.response;
+    const text = (response?.candidates?.[0]?.content?.parts ?? [])
+      .map((p) => (p as { text?: string }).text ?? "")
+      .join("")
+      .trim();
 
-    newEntries.push({ shortCode, zoneCode, analysis, references, created: now });
+    const meta = response?.usageMetadata;
+    promptTokens += meta?.promptTokenCount ?? 0;
+    outputTokens += meta?.candidatesTokenCount ?? 0;
+
+    const groundedUrls = collectGroundingUrls(response);
+    for (const u of groundedUrls) allGroundedUrls.add(u);
+
+    if (!text) {
+      failedChunks++;
+      debugChunks.push({ idx: i, reason: "no text in response" });
+      continue;
+    }
+
+    const parsed = parseOrSalvage(stripJsonFences(text));
+    if (!parsed.objects) {
+      failedChunks++;
+      debugChunks.push({ idx: i, reason: parsed.reason, text });
+      console.log(`[analyze.load] chunk ${i} parse failed: ${parsed.reason}`);
+      continue;
+    }
+    if (parsed.salvaged) {
+      truncatedChunks++;
+      console.log(
+        `[analyze.load] chunk ${i} truncated, salvaged ${parsed.objects.length} object(s): ${parsed.reason}`
+      );
+    }
+
+    for (const e of parsed.objects as RawEntry[]) {
+      const entry = normalizeEntry(e, groundedUrls, now);
+      if (entry) newEntries.push(entry);
+    }
   }
 
   if (newEntries.length === 0) {
-    await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
-    return { kind: "failed", reason: "Model produced no usable entries." };
+    // Nothing usable came back. Stash the raw text under a debug key (kept for
+    // the same TTL as the job pointer) and leave the job pointer in place so
+    // the user can retry /analyze-load or inspect the response.
+    let saved = false;
+    try {
+      await env.ASK_CACHE.put(FAILED_TEXT_KV_KEY, JSON.stringify(debugChunks), {
+        expirationTtl: JOB_KV_TTL,
+      });
+      saved = true;
+    } catch (err) {
+      console.log(`[analyze.load] failed to stash debug text: ${(err as Error).message}`);
+    }
+    return {
+      kind: "failed",
+      reason: `Model produced no usable entries (${failedChunks}/${inlined.length} chunks unparseable).`,
+      rawTextSaved: saved,
+    };
   }
 
   const { analyses: latest, sha: latestSha } = await readAiAnalyses(env);
@@ -381,17 +503,68 @@ export async function loadAnalyzeBatch(env: Env): Promise<LoadResult> {
     latestSha,
     `Add AI analyses${scope}: ${newEntries.length} pair(s) [skip-deploy]`
   );
-  console.log(`[analyze.load] committed ${newEntries.length} entries`);
+  console.log(
+    `[analyze.load] committed ${newEntries.length} entries (truncated=${truncatedChunks}, failed=${failedChunks}/${inlined.length})`
+  );
 
   await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
+  if (failedChunks > 0 || truncatedChunks > 0) {
+    await env.ASK_CACHE.put(FAILED_TEXT_KV_KEY, JSON.stringify(debugChunks), {
+      expirationTtl: JOB_KV_TTL,
+    }).catch(() => {});
+  } else {
+    await env.ASK_CACHE.delete(FAILED_TEXT_KV_KEY).catch(() => {});
+  }
 
-  const meta = response?.usageMetadata;
   return {
     kind: "done",
     analyzed: newEntries.length,
     requested: pending.pairCount,
-    groundingUrls: groundedUrls.size,
-    promptTokens: meta?.promptTokenCount ?? 0,
-    outputTokens: meta?.candidatesTokenCount ?? 0,
+    groundingUrls: allGroundedUrls.size,
+    promptTokens,
+    outputTokens,
+    truncatedChunks,
+    failedChunks,
+    totalChunks: inlined.length,
   };
+}
+
+export interface AttachOk {
+  ok: true;
+  jobName: string;
+}
+export interface AttachErr {
+  ok: false;
+  message: string;
+}
+
+export async function attachAnalyzeBatch(
+  env: Env,
+  jobName: string
+): Promise<AttachOk | AttachErr> {
+  if (!env.ASK_CACHE) {
+    return { ok: false, message: "KV not configured." };
+  }
+  if (!jobName.startsWith("batches/")) {
+    return { ok: false, message: `Job name must start with "batches/" — got "${jobName}".` };
+  }
+
+  const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
+  let job;
+  try {
+    job = await client.batches.get({ name: jobName });
+  } catch (err) {
+    return { ok: false, message: `batches.get failed: ${(err as Error).message}` };
+  }
+
+  const inlined = job.dest?.inlinedResponses ?? [];
+  const pairCount = inlined.length * PAIRS_PER_CHUNK;
+  const pending: PendingJob = {
+    name: jobName,
+    zoneFilter: null,
+    pairCount,
+    submittedAt: new Date().toISOString(),
+  };
+  await env.ASK_CACHE.put(JOB_KV_KEY, JSON.stringify(pending), { expirationTtl: JOB_KV_TTL });
+  return { ok: true, jobName };
 }

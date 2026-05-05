@@ -95,4 +95,8 @@ Ecological analysis:
     elapsed time and state. If finished, parses the responses, filters
     references against the actually-grounded URLs, and commits to
     ai_analysis.json. Only one batch job at a time; submit another with
-    /analyze after loading.`;
+    /analyze after loading.
+  /analyze-attach {jobName} — Re-attach to an existing Gemini batch job
+    (e.g. "batches/abc123") so /analyze-load can pull it. Use this if the
+    KV pointer was lost or expired but the job still exists on Google's
+    side.`;

@@ -3,7 +3,7 @@ import { parseCaption, resolveFields, UNIDENTIFIED_CODE, UNIDENTIFIED_PREFIX } f
 import { downloadFile, sendReply } from "./telegram";
 import { HELP_HEADER } from "./help";
 import { answerQuestion, MODEL_ALIASES, type Thread } from "./ask";
-import { submitAnalyzeBatch, loadAnalyzeBatch } from "./analyze";
+import { submitAnalyzeBatch, loadAnalyzeBatch, attachAnalyzeBatch } from "./analyze";
 import {
   acceptBioclip,
   addAnnotationTag,
@@ -188,17 +188,41 @@ export default {
               case "running":
                 reply = `Batch still ${result.state.replace("JOB_STATE_", "").toLowerCase()} — ${result.pairCount} pair(s), submitted ${result.elapsed} ago. Try /analyze-load again in a few minutes.`;
                 break;
-              case "failed":
-                reply = `Batch failed: ${result.reason}`;
+              case "failed": {
+                const suffix = result.rawTextSaved
+                  ? " (raw text stashed under analyze:last-failed-text)"
+                  : "";
+                reply = `Batch failed: ${result.reason}${suffix}`;
                 break;
-              case "done":
-                reply = `Loaded ${result.analyzed} of ${result.requested} pair(s) and committed to ai_analysis.json. Grounded URLs: ${result.groundingUrls}. Tokens: ${result.promptTokens.toLocaleString()} in / ${result.outputTokens.toLocaleString()} out.`;
+              }
+              case "done": {
+                const chunkNote =
+                  result.truncatedChunks > 0 || result.failedChunks > 0
+                    ? ` Chunks: ${result.totalChunks} total, ${result.truncatedChunks} truncated, ${result.failedChunks} failed.`
+                    : "";
+                reply = `Loaded ${result.analyzed} of ${result.requested} pair(s) and committed to ai_analysis.json. Grounded URLs: ${result.groundingUrls}. Tokens: ${result.promptTokens.toLocaleString()} in / ${result.outputTokens.toLocaleString()} out.${chunkNote}`;
                 break;
+              }
             }
             await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, reply);
           } catch (err) {
             const msg = err instanceof Error ? err.message : "Unknown error";
             await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, `Analyze-load failed: ${msg}`);
+          }
+          return new Response("OK");
+        }
+
+        const attachMatch = text.match(/^\/analyze-attach\s+(\S+)$/i);
+        if (attachMatch) {
+          try {
+            const result = await attachAnalyzeBatch(env, attachMatch[1]);
+            const reply = result.ok
+              ? `Attached to ${result.jobName}. Run /analyze-load to fetch.`
+              : result.message;
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, reply);
+          } catch (err) {
+            const msg = err instanceof Error ? err.message : "Unknown error";
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, `Attach failed: ${msg}`);
           }
           return new Response("OK");
         }
