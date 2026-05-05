@@ -18,11 +18,6 @@ id = "6ce8e5b515f140988b9069aafb021e35"
 preview_id = "12d42f7ae38e415cb6cea937066906a4"
 
 [observability]
-[observability.logs]
-enabled = false
-invocation_logs = true
-
-[observability]
 enabled = false
 head_sampling_rate = 1
 
