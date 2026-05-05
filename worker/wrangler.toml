@@ -16,3 +16,23 @@ LLM_MODEL = "gemini-3.1-pro-preview"
 binding = "ASK_CACHE"
 id = "6ce8e5b515f140988b9069aafb021e35"
 preview_id = "12d42f7ae38e415cb6cea937066906a4"
+
+[observability]
+[observability.logs]
+enabled = false
+invocation_logs = true
+
+[observability]
+enabled = false
+head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+persist = true
+invocation_logs = true
+
+[observability.traces]
+enabled = false
+persist = true
+head_sampling_rate = 1

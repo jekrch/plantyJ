@@ -70,13 +70,8 @@ function buildZonesText(zones: Zone[]): string {
   return `Zones:\n${lines.join("\n")}`;
 }
 
-interface ExecutionContext {
-  waitUntil(promise: Promise<unknown>): void;
-  passThroughOnException(): void;
-}
-
 export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  async fetch(request: Request, env: Env): Promise<Response> {
     if (request.method !== "POST") {
       return new Response("OK", { status: 200 });
     }
@@ -186,36 +181,56 @@ export default {
         if (analyzeMatch) {
           const zoneFilter = analyzeMatch[1]?.trim() || null;
           const scopeLabel = zoneFilter ? `zone ${zoneFilter}` : "all zones";
+
+          // Telegram's webhook timeout (~60s) is shorter than a grounded Pro
+          // call, so Telegram may retry while we're still working. Lock in KV
+          // so retries become no-ops instead of duplicate runs.
+          const lockKey = `analyze:lock:${zoneFilter ?? "all"}`;
+          if (env.ASK_CACHE) {
+            const held = await env.ASK_CACHE.get(lockKey);
+            if (held) {
+              await sendReply(
+                env.TELEGRAM_BOT_TOKEN,
+                message.chat.id,
+                message.message_id,
+                `An /analyze run for ${scopeLabel} is already in progress. Wait for it to finish before starting another.`
+              );
+              return new Response("OK");
+            }
+            await env.ASK_CACHE.put(lockKey, "1", { expirationTtl: 600 });
+          }
+
           await sendReply(
             env.TELEGRAM_BOT_TOKEN,
             message.chat.id,
             message.message_id,
-            `Analyzing missing specimen+zone pairs (${scopeLabel}). I'll reply when done — this can take a minute or two.`
+            `Analyzing missing specimen+zone pairs (${scopeLabel}). This can take a minute or two — Telegram may show a connection timeout, that's expected; the result will arrive when the model is done.`
           );
-          ctx.waitUntil(
-            (async () => {
-              try {
-                const result = await runAnalyze(env, zoneFilter);
-                const reply = result.ok
-                  ? `Analyzed ${result.analyzed} new pair(s)${result.analyzed < result.totalPairs ? ` of ${result.totalPairs} requested` : ""}. Grounded URLs: ${result.groundingUrls}. Tokens: ${result.promptTokens.toLocaleString()} in / ${result.outputTokens.toLocaleString()} out.`
-                  : result.message;
-                await sendReply(
-                  env.TELEGRAM_BOT_TOKEN,
-                  message.chat.id,
-                  message.message_id,
-                  reply
-                );
-              } catch (err) {
-                const msg = err instanceof Error ? err.message : "Unknown error";
-                await sendReply(
-                  env.TELEGRAM_BOT_TOKEN,
-                  message.chat.id,
-                  message.message_id,
-                  `Analyze failed: ${msg}`
-                );
-              }
-            })()
-          );
+
+          try {
+            const result = await runAnalyze(env, zoneFilter);
+            const reply = result.ok
+              ? `Analyzed ${result.analyzed} new pair(s)${result.analyzed < result.totalPairs ? ` of ${result.totalPairs} requested` : ""}. Grounded URLs: ${result.groundingUrls}. Tokens: ${result.promptTokens.toLocaleString()} in / ${result.outputTokens.toLocaleString()} out.`
+              : result.message;
+            await sendReply(
+              env.TELEGRAM_BOT_TOKEN,
+              message.chat.id,
+              message.message_id,
+              reply
+            );
+          } catch (err) {
+            const msg = err instanceof Error ? err.message : "Unknown error";
+            await sendReply(
+              env.TELEGRAM_BOT_TOKEN,
+              message.chat.id,
+              message.message_id,
+              `Analyze failed: ${msg}`
+            );
+          } finally {
+            if (env.ASK_CACHE) {
+              await env.ASK_CACHE.delete(lockKey).catch(() => {});
+            }
+          }
           return new Response("OK");
         }
 
