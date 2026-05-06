@@ -102,6 +102,24 @@ For every new image, the GitHub Action computes two things:
 
 *Note: HuggingFace weights and the taxonomic classifier assets are cached via GitHub Actions to speed up incremental runs.*
 
+## Ecological fit analysis
+
+For every specimen + zone pair (plant or animal), the bot can produce a 1–2 paragraph ecological-niche write-up grounded against Google Search. Each entry gets a `GOOD` / `BAD` / `MIXED` verdict and a list of source URLs filtered against the model's actually-grounded results, so cited links can't be hallucinated. Results are committed to `ai_analysis.json`.
+
+Submission goes through Gemini's Batch API to keep cost low, so the workflow is two steps:
+
+- `/analyze` — submit a batch covering every pair that doesn't have an analysis yet
+- `/analyze {zoneCode}` — same, scoped to one zone (the full property rollup still informs reasoning)
+- `/analyze-load` — poll the pending job; when it's finished, parse, validate references, and commit
+- `/analyze-attach {jobName}` — reattach to an existing Gemini batch if the KV pointer was lost
+
+Verdicts and analyses surface in two places on the site:
+
+- **Plant info drawer:** an "Ecological Fit Analysis" section with a colored verdict meter, the prose analysis, and grounded source pills for the current photo's plant in its current zone.
+- **Tree node detail:** species nodes in the Tree View show the same analysis. When a species has been recorded in multiple zones, a per-zone switcher lets you compare verdicts across locations.
+
+The Filters bar also exposes a `Verdict` multi-select to narrow the gallery to GOOD / BAD / MIXED entries.
+
 ## Tree View
 
 An interactive phylogenetic tree of all plants in the collection, built from their GBIF taxonomy. Ranks (Kingdom → Species) appear as column headers with edges connecting parent to child nodes. Leaf nodes show a circular plant thumbnail and common name.
