@@ -3,7 +3,7 @@ import type { Filters } from "../utils/filtering";
 import type { SortMode } from "../utils/sorting";
 import type { ViewMode } from "../components/ViewModeControl";
 
-const SET_FILTER_KEYS = ["tags", "zoneCodes", "postedBy", "shortCodes", "misc"] as const;
+const SET_FILTER_KEYS = ["tags", "zoneCodes", "postedBy", "shortCodes", "misc", "aiVerdicts"] as const;
 type SetFilterKey = typeof SET_FILTER_KEYS[number];
 const DEFAULT_SORT: SortMode = "newest";
 const DEFAULT_VIEW: ViewMode = "gallery";
@@ -26,6 +26,7 @@ function parseFiltersFromURL(): InitialState {
     postedBy: new Set(params.get("postedBy")?.split(",").filter(Boolean) ?? []),
     shortCodes: new Set(params.get("plants")?.split(",").filter(Boolean) ?? []),
     misc: new Set(params.get("misc")?.split(",").filter(Boolean) ?? []),
+    aiVerdicts: new Set(params.get("ecoFit")?.split(",").filter(Boolean) ?? []),
   };
 
   const sort = (params.get("sort") as SortMode) ?? DEFAULT_SORT;
@@ -49,6 +50,7 @@ const KEY_TO_PARAM: Record<SetFilterKey, string> = {
   postedBy: "postedBy",
   shortCodes: "plants",
   misc: "misc",
+  aiVerdicts: "ecoFit",
 };
 
 export function buildParams(

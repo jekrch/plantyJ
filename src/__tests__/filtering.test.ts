@@ -45,6 +45,7 @@ describe("activeFilterCount", () => {
       postedBy: new Set<string>(),
       shortCodes: new Set<string>(),
       misc: new Set(["x"]),
+      aiVerdicts: new Set<string>(),
     };
     expect(activeFilterCount(f)).toBe(4);
   });

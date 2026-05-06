@@ -59,13 +59,15 @@ async function loadRollup(env: Env): Promise<string> {
 
 async function getSpecies(fullName: string, env: Env): Promise<string> {
   const base = env.DATA_BASE_URL ?? "https://plantyj.com/data";
-  const slug = fullName.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-  const res = await fetch(`${base}/species/${slug}.json`, {
+  const slug = fullName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const res = await fetch(`${base}/species.json`, {
     cf: { cacheTtl: 60, cacheEverything: true } as RequestInitCfProperties,
   });
-  if (res.status === 404) return `No species record found for "${fullName}".`;
-  if (!res.ok) throw new Error(`Failed to fetch species ${slug}: ${res.status}`);
-  return res.text();
+  if (!res.ok) throw new Error(`Failed to fetch species bundle: ${res.status}`);
+  const bundle = (await res.json()) as { species?: Record<string, unknown> };
+  const entry = bundle.species?.[slug];
+  if (!entry) return `No species record found for "${fullName}".`;
+  return JSON.stringify(entry);
 }
 
 function buildSystemPrompt(rollupJson: string): string {

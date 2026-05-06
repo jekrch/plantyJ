@@ -1,18 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, ExternalLink, Leaf } from "lucide-react";
-import type { Annotation, Plant, Species, SpeciesTaxonomy, Zone, ZonePic } from "../types";
+import type { AIAnalysis, AIVerdict, Annotation, Plant, Species, SpeciesTaxonomy, Zone, ZonePic } from "../types";
 import { plantTitle } from "../utils/display";
 
-export type AIVerdict = "GOOD" | "BAD" | "MIXED";
-
-export interface AIAnalysis {
-  shortCode: string;
-  zoneCode: string;
-  verdict: AIVerdict;
-  analysis: string;
-  references: string[];
-  created: string;
-}
+export type { AIAnalysis, AIVerdict };
 
 const VERDICT_METER: Record<AIVerdict, { filled: number; color: string }> = {
   GOOD: { filled: 3, color: "text-accent" },

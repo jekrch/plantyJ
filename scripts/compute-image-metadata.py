@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Compute per-image metadata for pics.json and refresh per-species
-enrichment files in public/data/species/.
+Compute per-image metadata for pics.json and refresh species
+enrichment records in public/data/species.json.
 
 For images: dimensions, perceptual hash, and dominant CIELAB colors.
 For species: GBIF taxonomy + vernacular names, POWO native range,
@@ -15,8 +15,8 @@ import json
 import sys
 
 from metadata.image_metadata import compute_metadata, needs_update
-from metadata.paths import IMAGE_ROOT, PIC_METADATA_PATH, PICS_PATH, PLANTS_PATH, SPECIES_DIR
-from metadata.seed import seed_species
+from metadata.paths import IMAGE_ROOT, PIC_METADATA_PATH, PICS_PATH, PLANTS_PATH
+from metadata.seed import load_species_bundle, seed_species
 from metadata.sources.gbif import backfill_gbif
 from metadata.sources.powo import backfill_powo
 from metadata.sources.wikipedia import backfill_wikipedia
@@ -28,15 +28,8 @@ from metadata.sources.wikipedia import fetch_wikipedia_url
 
 
 def load_species_entries() -> list[dict]:
-    if not SPECIES_DIR.exists():
-        return []
-    entries = []
-    for path in sorted(SPECIES_DIR.glob("*.json")):
-        try:
-            entries.append(json.loads(path.read_text()))
-        except Exception as e:
-            print(f"  WARN: failed to parse {path}: {e}", file=sys.stderr)
-    return entries
+    bundle = load_species_bundle()
+    return [bundle[k] for k in sorted(bundle)]
 
 
 def flag_animal_pics(pics: list[dict], plants: list[dict], species_entries: list[dict]) -> int:
@@ -194,6 +187,7 @@ def main():
         print(f"\nUpdated {updated} pic(s). Errors: {errors}.")
     else:
         print("\nNo pic images needed updating.")
+
 
 
 if __name__ == "__main__":

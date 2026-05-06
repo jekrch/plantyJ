@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo, useCallback, useRef } from "react";
-import type { Annotation, PicRecord, Plant, PlantRecord, Species, TaxaInfo, Zone, ZonePic } from "./types";
+import type { AIAnalysis, Annotation, PicRecord, Plant, PlantRecord, Species, TaxaInfo, Zone, ZonePic } from "./types";
 import { Sprout, House } from "lucide-react";
 import { sortPlantsAsync } from "./utils/sorting.ts";
 import type { SortMode } from "./utils/sorting.ts";
@@ -34,6 +34,7 @@ export default function App() {
     Map<string, Species>
   >(new Map());
   const [taxa, setTaxa] = useState<Record<string, TaxaInfo>>({});
+  const [aiAnalyses, setAiAnalyses] = useState<AIAnalysis[]>([]);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const {
@@ -187,33 +188,36 @@ export default function App() {
         setTaxa(taxaData ?? {});
         setStatus("ready");
 
-        // Load species data in parallel — non-blocking; fills in once available.
+        // Load combined species bundle — non-blocking; fills in once available.
         const records = plantsData.plants ?? [];
-        Promise.all(
-          records.map(async (p) => {
-            if (!p.fullName) return null;
-            const slug = slugifyName(p.fullName);
-            try {
-              const res = await fetch(`${base}data/species/${slug}.json`);
-              if (!res.ok) return null;
-              const sp = (await res.json()) as Species;
-              return [p.shortCode, sp] as const;
-            } catch {
-              return null;
+        fetchJson<{ species?: Record<string, Species> }>("data/species.json")
+          .then((bundle) => {
+            const bySlug = bundle.species ?? {};
+            const m = new Map<string, Species>();
+            for (const p of records) {
+              if (!p.fullName) continue;
+              const sp = bySlug[slugifyName(p.fullName)];
+              if (sp) m.set(p.shortCode, sp);
             }
+            setSpeciesByShortCode(m);
           })
-        ).then((entries) => {
-          const m = new Map<string, Species>();
-          for (const e of entries) if (e) m.set(e[0], e[1]);
-          setSpeciesByShortCode(m);
-        });
+          .catch(() => {
+            setSpeciesByShortCode(new Map());
+          });
       })
       .catch(() => setStatus("error"));
   }, []);
 
+  useEffect(() => {
+    fetch(`${import.meta.env.BASE_URL}data/ai_analysis.json`)
+      .then((res) => res.json())
+      .then((data) => setAiAnalyses(data.analyses ?? []))
+      .catch(() => setAiAnalyses([]));
+  }, []);
+
   const filteredPlants = useMemo(
-    () => applyFilters(plants, filters, annotations, speciesByShortCode),
-    [plants, filters, annotations, speciesByShortCode]
+    () => applyFilters(plants, filters, annotations, speciesByShortCode, aiAnalyses),
+    [plants, filters, annotations, speciesByShortCode, aiAnalyses]
   );
 
   useEffect(() => {
@@ -453,6 +457,7 @@ export default function App() {
                   allPlants={plants}
                   zones={zones}
                   annotations={annotations}
+                  aiAnalyses={aiAnalyses}
                   sortMode={sortMode}
                   onSort={handleSortChange}
                   filters={filters}

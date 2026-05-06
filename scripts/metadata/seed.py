@@ -1,37 +1,46 @@
 """
-Build/refresh per-species enrichment files keyed on `fullName`.
+Build/refresh species enrichment records keyed by `fullName`, stored as a single
+bundle at `public/data/species.json` ({"species": {slug: entry}}).
 
-For each plant in `plants.json`, ensure a file at
-`public/data/species/{slug}.json` exists. New files are seeded with the
-identifying name and an empty references/sources list, leaving the
-description/taxonomy fields blank for the GBIF/POWO/Wikipedia passes to fill in.
+For each plant in `plants.json`, ensure an entry exists in the bundle. New
+entries are seeded with the identifying name and empty references/sources,
+leaving description/taxonomy fields blank for the GBIF/POWO/Wikipedia passes
+to fill in.
 """
 import json
 
-from .paths import SPECIES_DIR
+from .paths import SPECIES_BUNDLE_PATH
 from .text import slugify
 
 
-def species_path(full_name: str):
-    SPECIES_DIR.mkdir(parents=True, exist_ok=True)
-    return SPECIES_DIR / f"{slugify(full_name)}.json"
+def load_species_bundle() -> dict[str, dict]:
+    if not SPECIES_BUNDLE_PATH.exists():
+        return {}
+    doc = json.loads(SPECIES_BUNDLE_PATH.read_text())
+    return doc.get("species", {})
+
+
+def write_species_bundle(bundle: dict[str, dict]) -> None:
+    SPECIES_BUNDLE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    sorted_bundle = {k: bundle[k] for k in sorted(bundle)}
+    SPECIES_BUNDLE_PATH.write_text(
+        json.dumps({"species": sorted_bundle}, indent=2) + "\n"
+    )
 
 
 def load_species(full_name: str) -> dict | None:
-    path = species_path(full_name)
-    if not path.exists():
-        return None
-    return json.loads(path.read_text())
+    return load_species_bundle().get(slugify(full_name))
 
 
 def save_species(entry: dict) -> None:
-    path = species_path(entry["fullName"])
-    path.write_text(json.dumps(entry, indent=2) + "\n")
+    bundle = load_species_bundle()
+    bundle[slugify(entry["fullName"])] = entry
+    write_species_bundle(bundle)
 
 
 def seed_species(plants: list) -> None:
-    """Ensure a species file exists for each distinct fullName in plants.json."""
-    SPECIES_DIR.mkdir(parents=True, exist_ok=True)
+    """Ensure a bundle entry exists for each distinct fullName in plants.json."""
+    bundle = load_species_bundle()
 
     seen = set()
     added = 0
@@ -41,12 +50,12 @@ def seed_species(plants: list) -> None:
             continue
         seen.add(full_name)
 
-        path = species_path(full_name)
-        if path.exists():
+        slug = slugify(full_name)
+        if slug in bundle:
             continue
 
-        entry = {
-            "id": slugify(full_name),
+        bundle[slug] = {
+            "id": slug,
             "fullName": full_name,
             "commonName": plant.get("commonName"),
             "description": "",
@@ -56,8 +65,8 @@ def seed_species(plants: list) -> None:
             "references": [],
             "sources": [],
         }
-        save_species(entry)
         added += 1
 
     if added:
-        print(f"Seeded {added} new species file(s) in {SPECIES_DIR}.")
+        write_species_bundle(bundle)
+        print(f"Seeded {added} new species in {SPECIES_BUNDLE_PATH}.")

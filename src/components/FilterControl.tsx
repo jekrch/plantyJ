@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import type { Annotation, Plant, Zone } from "../types";
+import type { AIAnalysis, Annotation, Plant, Zone } from "../types";
 import type { Filters } from "../utils/filtering";
 import {
   hasActiveFilters,
@@ -14,6 +14,7 @@ interface FilterControlProps {
   plants: Plant[];
   zones: Zone[];
   annotations: Annotation[];
+  aiAnalyses?: AIAnalysis[];
   filters: Filters;
   onFiltersChange: (filters: Filters) => void;
 }
@@ -22,6 +23,7 @@ export default function FilterControl({
   plants,
   zones,
   annotations,
+  aiAnalyses = [],
   filters,
   onFiltersChange,
 }: FilterControlProps) {
@@ -30,13 +32,16 @@ export default function FilterControl({
   const active = hasActiveFilters(filters);
   const count = activeFilterCount(filters);
 
-  const { tagItems, zoneItems, postedByItems, shortCodeItems } = useMemo(
-    () => computeFacets(plants, filters, zones, annotations),
-    [plants, filters, zones, annotations]
+  const { tagItems, zoneItems, postedByItems, shortCodeItems, verdictItems } = useMemo(
+    () => computeFacets(plants, filters, zones, annotations, aiAnalyses),
+    [plants, filters, zones, annotations, aiAnalyses]
   );
 
   const toggleInSet = useCallback(
-    (key: "tags" | "zoneCodes" | "postedBy" | "shortCodes" | "misc", value: string) => {
+    (
+      key: "tags" | "zoneCodes" | "postedBy" | "shortCodes" | "misc" | "aiVerdicts",
+      value: string
+    ) => {
       const next = new Set(filters[key]);
       if (next.has(value)) next.delete(value);
       else next.add(value);
@@ -109,7 +114,7 @@ export default function FilterControl({
             )}
 
             <FacetSection
-              title="PLANT"
+              title="SPECIES"
               items={shortCodeItems}
               selected={filters.shortCodes}
               onToggle={(v) => toggleInSet("shortCodes", v)}
@@ -131,6 +136,12 @@ export default function FilterControl({
               items={postedByItems}
               selected={filters.postedBy}
               onToggle={(v) => toggleInSet("postedBy", v)}
+            />
+            <FacetSection
+              title="ECO FIT (AI)"
+              items={verdictItems}
+              selected={filters.aiVerdicts}
+              onToggle={(v) => toggleInSet("aiVerdicts", v)}
             />
 
             <div className="border-t border-ink-faint/10">

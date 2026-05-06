@@ -1,0 +1,3422 @@
+{
+  "species": {
+    "acer-platanoides": {
+      "id": "acer-platanoides",
+      "fullName": "Acer platanoides",
+      "commonName": "Norway Maple",
+      "description": "Acer platanoides, commonly known as the Norway maple, is a species of maple native to eastern and central Europe and western Asia, from Spain east to Russia, north to southern Scandinavia and southeast to northern Iran. It was introduced to North America in the mid-1700s as a shade tree. It is a member of the family Sapindaceae.",
+      "vernacularNames": [
+        "Norway Maple",
+        "Norway Maple variety",
+        "Plane",
+        "Spitzahorn",
+        "klen ostrolistnyj",
+        "klen platanovidnyj"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Sapindales",
+        "family": "Sapindaceae",
+        "genus": "Acer",
+        "species": "Acer platanoides",
+        "canonicalName": "Acer platanoides"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3189846"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:781455-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Acer_platanoides"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/54763"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q26745"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.140646"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 131993
+    },
+    "acer-saccharinum": {
+      "id": "acer-saccharinum",
+      "fullName": "Acer saccharinum",
+      "commonName": "Silver Maple",
+      "description": "Acer saccharinum, commonly known as silver maple, creek maple, silverleaf maple, soft maple, large maple, water maple, swamp maple, or white maple, is a species of maple native to the eastern and central United States and southeastern Canada. It is one of the most common trees in the United States.\nAlthough the silver maple's Latin name is similar, it should not be confused with Acer saccharum, the sugar maple. Some of the common names are also applied to other maples, especially Acer rubrum.",
+      "vernacularNames": [
+        "Red Maple",
+        "Silver Maple",
+        "Silver maple (EN); Silber-Ahorn (DE)",
+        "Soft Maple",
+        "White Maple",
+        "river maple",
+        "silver-maple",
+        "soft-maple"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Sapindales",
+        "family": "Sapindaceae",
+        "genus": "Acer",
+        "species": "Acer saccharinum",
+        "canonicalName": "Acer saccharinum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3189837"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1892-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Acer_saccharinum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/54762"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q158301"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.160863"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 57681
+    },
+    "achillea-millefolium": {
+      "id": "achillea-millefolium",
+      "fullName": "Achillea millefolium",
+      "commonName": "Yarrow",
+      "description": "Achillea millefolium, commonly known as yarrow () or common yarrow, is a flowering plant in the family Asteraceae. Growing to 1 metre (3+1\u20443 feet) tall, it is characterized by small whitish flowers, a tall stem of fernlike leaves, and a pungent odor.\nThe plant is native to temperate regions of Eurasia and North America. It has been introduced as feed for livestock in New Zealand and Australia. It has some potential uses, including in traditional medicine.",
+      "vernacularNames": [
+        "Bloodwort",
+        "Carpenter's Weed",
+        "Common Yarrow",
+        "Milenrama",
+        "Milfoil",
+        "common yarrow complex"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Asterales",
+        "family": "Asteraceae",
+        "genus": "Achillea",
+        "species": "Achillea millefolium",
+        "canonicalName": "Achillea millefolium"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3120060"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:2294-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Achillea_millefolium"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/1105043"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q25408"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.134462"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 323993
+    },
+    "aesculus-flava": {
+      "id": "aesculus-flava",
+      "fullName": "Aesculus flava",
+      "commonName": "Yellow Buckeye",
+      "description": "Aesculus flava, also known commonly as the common buckeye, the sweet buckeye, and the yellow buckeye, is a species of deciduous tree in the subfamily Hippocastanoideae of the family Sapindaceae. The species is native to the Ohio Valley and Appalachian Mountains of the Eastern United States. It grows in mesophytic forests or floodplains, generally in acidic to circumneutral soil, reaching a height of 20 to 48 m (66 to 157 ft).",
+      "vernacularNames": [
+        "Appalachen-Rosskastanie (DE)",
+        "Yellow buckeye (EN)",
+        "sweet buckeye",
+        "yellow buckeye",
+        "buckeyes and horse-chestnuts"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Sapindales",
+        "family": "Sapindaceae",
+        "genus": "Aesculus",
+        "species": "Aesculus flava",
+        "canonicalName": "Aesculus flava"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3189824"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:271789-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Aesculus_flava"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/53350"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q159620"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.158410"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 203708
+    },
+    "agastache-scrophulariifolia": {
+      "id": "agastache-scrophulariifolia",
+      "fullName": "Agastache scrophulariifolia",
+      "commonName": "Purple Giant Hyssop",
+      "description": "Agastache scrophulariifolia, also known as the purple giant hyssop, is a perennial plant that grows throughout the United States and northern Ontario, Canada. Its name comes from the similarity of its leaves to plants of the genus Scrophularia. It is a beneficial plant to pollinators and is noted for its medicinal properties, as many plants in the mint family are. It tends to grow in disturbed or open areas where it does not have to interact with non-native competitive plants.",
+      "vernacularNames": [
+        "Purple Giant Hyssop",
+        "figwort giant-hyssop",
+        "purple giant-hyssop",
+        "Figwort Giant Hyssop"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Lamiales",
+        "family": "Lamiaceae",
+        "genus": "Agastache",
+        "species": "Agastache scrophulariifolia",
+        "canonicalName": "Agastache scrophulariifolia"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2926394"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1063608-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Agastache_scrophulariifolia"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/158084"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q15339351"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.136311"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 2618
+    },
+    "allium-tricoccum": {
+      "id": "allium-tricoccum",
+      "fullName": "Allium tricoccum",
+      "commonName": "wild leek",
+      "description": "Allium tricoccum (commonly known as ramps, ramson, wild leek, wood leek, or wild garlic) is a bulbous perennial flowering plant in the amaryllis family Amaryllidaceae. It is a North American species of wild onion or garlic found in eastern North America. Many of the common English names for this plant are also used for other Allium species, particularly the similar Allium ursinum, which is native to Eurasia.\nAn edible plant, Allium tricoccum is used in a variety of North American and indigenous cuisines, and has also been used by Native Americans in traditional medicine. A French rendering (chicagou) of a Miami\u2013Illinois name for this plant is the namesake of the American city of Chicago.",
+      "vernacularNames": [
+        "Ramp",
+        "Small White Leek",
+        "Wild Garlic",
+        "Wild Leek",
+        "Wood Leek",
+        "small wild leek",
+        "wild leeks"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Liliopsida",
+        "order": "Asparagales",
+        "family": "Amaryllidaceae",
+        "genus": "Allium",
+        "species": "Allium tricoccum",
+        "canonicalName": "Allium tricoccum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2856301"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:529037-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Allium_tricoccum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/1457593"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q2714893"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.794001"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 30319
+    },
+    "asclepias-tuberosa": {
+      "id": "asclepias-tuberosa",
+      "fullName": "Asclepias tuberosa",
+      "commonName": "Butterfly Weed",
+      "description": "Asclepias tuberosa, commonly known as butterfly weed, is a species of milkweed native to eastern and southwestern North America. It is commonly known as butterfly weed because of the butterflies that are attracted to the plant by its color and its copious production of nectar.",
+      "vernacularNames": [
+        "Butterfly Milkweed",
+        "Butterfly-weed",
+        "Chieger-flower",
+        "Pleurisy-root",
+        "butterflyweed",
+        "orange milkweed",
+        "pleurisy root",
+        "butterfly milkweed"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Gentianales",
+        "family": "Apocynaceae",
+        "genus": "Asclepias",
+        "species": "Asclepias tuberosa",
+        "canonicalName": "Asclepias tuberosa"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3170305"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:94704-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Asclepias_tuberosa"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/47912"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q311131"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.129775"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 66298
+    },
+    "cardinalis-cardinalis": {
+      "id": "cardinalis-cardinalis",
+      "fullName": "Cardinalis cardinalis",
+      "commonName": "Cardinal",
+      "description": "The northern cardinal (Cardinalis cardinalis), also commonly known as the common cardinal, red cardinal, or simply cardinal, is a bird in the genus Cardinalis. It can be found in southeastern Canada, through the eastern United States from Maine to Minnesota to Texas, New Mexico, southern Arizona, southern California and south through Mexico, Belize, and Guatemala. It is also an introduced species in a few locations such as Bermuda and all major islands of Hawaii since its introduction in 1929. Its habitat includes woodlands, gardens, shrublands, and wetlands. It is the state bird of Illinois, Indiana, Kentucky, North Carolina, Ohio, Virginia, and West Virginia.\nThe northern cardinal is a mid-sized perching songbird with a body length of 21\u201323 cm (8.3\u20139.1 in) and a crest on the top of its head. The species expresses sexual dimorphism: Females are a reddish olive color, and have a gray mask around the beak, while males are a vibrant red color, and have a black mask on the face, as well as a larger crest. Juvenile cardinals do not have the distinctive red-orange beak seen in adult birds until they are almost fully mature. On hatching, their beaks are grayish-black and they do not become the trademark orange-red color until they acquire their final adult plumage in the fall. \nThe northern cardinal is mainly granivorous but also feeds on insects and fruit. The male behaves territorially, marking out his territory with song. During courtship, the male feeds seed to the female beak-to-beak. The northern cardinal's clutch typically contains three to four eggs, with two to four clutches produced each year. It was once prized as a pet, but its sale was banned in the United States by the Migratory Bird Treaty Act of 1918.",
+      "vernacularNames": [
+        "Common Cardinal",
+        "Northern Cardinal",
+        "Northern Cardinal (Common)",
+        "Northern Cardinal/Pyrrhuloxia",
+        "Typical Cardinals"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Chordata",
+        "class": "Aves",
+        "order": "Passeriformes",
+        "family": "Cardinalidae",
+        "genus": "Cardinalis",
+        "species": "Cardinalis cardinalis",
+        "canonicalName": "Cardinalis cardinalis"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2490384"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Cardinalis_cardinalis"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/9080"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.105565"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 371420
+    },
+    "carex-rosea": {
+      "id": "carex-rosea",
+      "fullName": "Carex rosea",
+      "commonName": "Rosy Sedge",
+      "description": "Carex rosea, the rosy sedge, is a flowering plant and part of the family Cyperaceae. Synonyms for Carex rosea include Carex concoluta, and Carex flaccidula. It is native to central and eastern North America and it exists in wet to dry soils. Carex rosea can be found in shores of streams and bottomlands, as well as ponds. It is known to have good adaptations to dry-shade locations. It is an evergreen plant which is easy to grow.",
+      "vernacularNames": [
+        "Rosy Sedge",
+        "Curly-styled Wood Sedge",
+        "Stellate Sedge",
+        "Carex Rosea Clade"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Liliopsida",
+        "order": "Poales",
+        "family": "Cyperaceae",
+        "genus": "Carex",
+        "species": "Carex rosea",
+        "canonicalName": "Carex rosea"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2727476"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:20008065-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Carex_rosea"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/1459717"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q15582169"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.140103"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 9488
+    },
+    "clematis-virginiana": {
+      "id": "clematis-virginiana",
+      "fullName": "Clematis virginiana",
+      "commonName": "Virgin's Bower",
+      "description": "Clematis virginiana (also known as devil's darning needles, devil's hair, love vine, traveller's joy, virgin's bower, Virginia virgin's bower, wild hops, and woodbine; syn. Clematis virginiana L. var. missouriensis (Rydb.) Palmer & Steyermark ) is a vine of the Ranunculaceae (buttercup family) native to North America from Newfoundland to southern Manitoba down to the Gulf of Mexico. The rationale for some of the common names is unclear, as they include examples normally applied to unrelated plants, including twining parasites (e.g. \"devil's hair\" for Cuscuta). The name \"Love Vine\" also is applied to alleged aphrodisiacs, such as Caribbean species of Cassytha, which are unrelated to Clematis, not being in the family Ranunculaceae.",
+      "vernacularNames": [
+        "Devil's Darning Needles",
+        "Virgin's Bower",
+        "Virginia Bower",
+        "Virginia clematis",
+        "Virginia virgin's-bower",
+        "devil's darning needle",
+        "devil's-darning-needles",
+        "virgin's-bower"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Ranunculales",
+        "family": "Ranunculaceae",
+        "genus": "Clematis",
+        "species": "Clematis virginiana",
+        "canonicalName": "Clematis virginiana"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3033541"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:710188-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Clematis_virginiana"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/62778"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q4266308"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.137741"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 28502
+    },
+    "cornus-sericea": {
+      "id": "cornus-sericea",
+      "fullName": "Cornus sericea",
+      "commonName": "Red Osier Dogwood",
+      "description": "Cornus sericea, the red osier or red-osier dogwood, is a species of flowering plant in the family Cornaceae, native to much of North America. It has sometimes been considered a synonym of the Asian species Cornus alba. Other names include red brush, red willow, redstem dogwood, redtwig dogwood, red-rood, American dogwood, creek dogwood, and western dogwood.",
+      "vernacularNames": [
+        "Red-osier Dogwood",
+        "Red-osier Dogwood (EN)",
+        "Red-osier Dogwood, Red Willow",
+        "Redosier",
+        "Redosier Dogwood",
+        "Seidiger Hartriegel (DE)"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Cornales",
+        "family": "Cornaceae",
+        "genus": "Cornus",
+        "species": "Cornus sericea",
+        "canonicalName": "Cornus sericea"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3082244"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:66169-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Cornus_sericea"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/53387"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q164130"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.140261"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 81666
+    },
+    "echinacea-purpurea": {
+      "id": "echinacea-purpurea",
+      "fullName": "Echinacea purpurea",
+      "commonName": "Purple Coneflower",
+      "description": "Echinacea purpurea, the eastern purple coneflower, purple coneflower, hedgehog coneflower, or Echinacea, is a North American species of flowering plant in the family Asteraceae. It is native to parts of eastern North America and present to some extent in the wild in much of the eastern, southeastern and midwestern United States, as well as in the Canadian Province of Ontario. It is most common in the Ozarks, the Mississippi Valley, and the Ohio Valley. Its habitats include dry open woods, prairies, and barrens.",
+      "vernacularNames": [
+        "Eastern Purple Coneflower",
+        "Purple Coneflower",
+        "Purple-coneflower",
+        "broad-leaved purple coneflower",
+        "eastern purple-coneflower",
+        "echinacija purpurovaja",
+        "\uc790\uc8fc\ucc9c\uc778\uad6d",
+        "Purple Cone-flower"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Asterales",
+        "family": "Asteraceae",
+        "genus": "Echinacea",
+        "species": "Echinacea purpurea",
+        "canonicalName": "Echinacea purpurea"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3150935"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1174497-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Echinacea_purpurea"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/48627"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q272661"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.132226"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 46280
+    },
+    "eryngium-yuccifolium": {
+      "id": "eryngium-yuccifolium",
+      "fullName": "Eryngium yuccifolium",
+      "commonName": "Rattlesnake Master",
+      "description": "Eryngium yuccifolium, known as rattlesnake master, button eryngo, and button snake-root, is a perennial herb of the parsley family native to the tallgrass prairies of central and eastern North America. It grows from Minnesota east to Ohio and south to Texas and Florida, including a few spots in Connecticut, New Jersey, Maryland, and Delaware. There are two varieties found in the wild, the northern rattlesnake master (Eryngium yuccifolium var. yuccifolium) and the southern rattlesnake master (Eryngium yuccifolium var. synchaetum).",
+      "vernacularNames": [
+        "Button Eryngo",
+        "Yuccaleaf eryngo",
+        "button snakeroot",
+        "rattlesnake master",
+        "rattlesnake-master"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Apiales",
+        "family": "Apiaceae",
+        "genus": "Eryngium",
+        "species": "Eryngium yuccifolium",
+        "canonicalName": "Eryngium yuccifolium"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3034408"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:842103-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Eryngium_yuccifolium"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/128695"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q3299859"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.137869"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 23101
+    },
+    "erythronium-americanum": {
+      "id": "erythronium-americanum",
+      "fullName": "Erythronium americanum",
+      "commonName": "Yellow Trout Lily",
+      "description": "Erythronium americanum, the trout lily, yellow trout lily, fawn lily, yellow adder's-tongue, or yellow dogtooth violet, is a species of perennial, colony forming, spring ephemeral flower native to North America and dwelling in woodland habitats. Within its range it is a very common and widespread species, especially in eastern North America. The common name \"trout lily\" refers to the appearance of its gray-green leaves mottled with brown or gray, which allegedly resemble the coloring of brook trout.\nThe range is from Labrador south to Georgia, west to Mississippi, and north to Minnesota.",
+      "vernacularNames": [
+        "Amberbell",
+        "American trout lily",
+        "Dogtooth Violet",
+        "Trout-lily",
+        "Yellow Adder's-tongue",
+        "yellow dog's-tooth violet",
+        "yellow trout lily"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Liliopsida",
+        "order": "Liliales",
+        "family": "Liliaceae",
+        "genus": "Erythronium",
+        "species": "Erythronium americanum",
+        "canonicalName": "Erythronium americanum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2752815"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:276827-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Erythronium_americanum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/48240"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q159580"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.128434"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 76862
+    },
+    "eurybia-macrophylla": {
+      "id": "eurybia-macrophylla",
+      "fullName": "Eurybia macrophylla",
+      "commonName": "Big-leaved Aster",
+      "description": "Eurybia macrophylla, commonly known as the bigleaf aster, large-leaved aster, largeleaf aster or bigleaf wood aster, is an herbaceous perennial in the family Asteraceae that was formerly treated in the genus Aster. It is native to eastern North America, with a range extending from eastern and central Canada (from Nova Scotia to Manitoba) through the northeastern deciduous and mixed forests of New England and the Great Lakes region and south along the Appalachians as far as the northeastern corner of Georgia, and west as far as Minnesota, Missouri and Arkansas. The flowers appear in the late summer to early fall and show ray florets that are usually either a deep lavender or violet, but sometimes white, and disc florets that are cream-coloured or light yellow, becoming purple as they mature. It is one of the parent species of the hybrid Eurybia \u00d7 herveyi.",
+      "vernacularNames": [
+        "Bigleaf Aster",
+        "big-leaf aster",
+        "big-leaved aster",
+        "large-leaf aster",
+        "large-leaved aster",
+        "large-leaved wood aster"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Asterales",
+        "family": "Asteraceae",
+        "genus": "Eurybia",
+        "species": "Eurybia macrophylla",
+        "canonicalName": "Eurybia macrophylla"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5396106"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1032470-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Eurybia_macrophylla"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/126655"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q19848825"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.134249"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 22817
+    },
+    "felis-catus": {
+      "id": "felis-catus",
+      "fullName": "Felis catus",
+      "commonName": "Cat",
+      "description": "The cat (Felis catus), also called domestic cat and house cat, is a small carnivorous mammal. It is an obligate carnivore, requiring a predominantly meat-based diet. Its retractable claws are adapted to killing small prey species such as mice and rats. It has a strong, flexible body, quick reflexes, and sharp teeth, and its night vision and sense of smell are well developed. It is a social species, but a solitary hunter and a crepuscular predator.\nCat communication includes meowing, purring, trilling, hissing, growling, grunting, and body language. It can hear sounds too faint or too high in frequency for human ears, such as those made by small mammals. It secretes and perceives pheromones. Cat intelligence is evident in its ability to adapt, learn through observation, and solve problems. \nFemale domestic cats can have kittens from spring to late autumn in temperate zones and throughout the year in equatorial regions, with litter sizes often ranging from two to five kittens.\nThe domestic cat is the only domesticated species of the family Felidae. Advances in archaeology and genetics have shown that the domestication of the cat started in the Near East around 7500 BCE. Today, the domestic cat occurs across the globe and is valued by humans for companionship and its ability to kill vermin. It is commonly kept as a pet, working cat, and pedigreed cat shown at cat fancy events.\nOut of the estimated 600 million domestic cats worldwide, 400 million reside in Asia, including 58 million in China. About 73.8 million cats are estimated to live in the United States, and about 10.9 million cats in the United Kingdom. It also ranges freely as a feral cat, avoiding human contact. Pet abandonment contributes to increasing of the global feral cat population, which has driven the decline of bird, mammal, and reptile species. Population control includes spaying and neutering.",
+      "vernacularNames": [
+        "Cat",
+        "Domestic Cat",
+        "Domestic Cat, House Cat, Feral Cat",
+        "Feral Cat",
+        "Hauskatze",
+        "Pushi",
+        "house cat",
+        "poti",
+        "pusiniveikau"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Chordata",
+        "class": "Mammalia",
+        "order": "Carnivora",
+        "family": "Felidae",
+        "genus": "Felis",
+        "species": "Felis catus",
+        "canonicalName": "Felis catus"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2435035"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Felis_catus"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/118552"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.103979"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 175045
+    },
+    "hamamelis-virginiana": {
+      "id": "hamamelis-virginiana",
+      "fullName": "Hamamelis virginiana",
+      "commonName": "Witch Hazel",
+      "description": "Hamamelis virginiana, known as witch-hazel, common witch-hazel, American witch-hazel and beadwood, is a species of flowering shrub native to eastern North America, from Nova Scotia west to Minnesota, and south to central Florida to eastern Texas.",
+      "vernacularNames": [
+        "American Witchhazel",
+        "American Witchhzel",
+        "American witch-hazel",
+        "American witchhazel (EN)",
+        "Common Witchhzel",
+        "Snapping Hazelnut",
+        "Spotted Alder",
+        "Striped Alder",
+        "Water-Witch",
+        "Winterbloom",
+        "Witch-Hazel",
+        "Witchhazel",
+        "hamam\u00e9lis",
+        "northern witch-hazel",
+        "Common Witch-hazel",
+        "common witch-hazel"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Saxifragales",
+        "family": "Hamamelidaceae",
+        "genus": "Hamamelis",
+        "species": "Hamamelis virginiana",
+        "canonicalName": "Hamamelis virginiana"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3152827"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:430697-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Hamamelis_virginiana"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/51970"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q913129"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.128564"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 48380
+    },
+    "hepatica-acutiloba": {
+      "id": "hepatica-acutiloba",
+      "fullName": "Hepatica acutiloba",
+      "commonName": "sharp lobed hepatica",
+      "description": "Hepatica acutiloba, the sharp-lobed hepatica, is a herbaceous flowering plant in the buttercup family Ranunculaceae. It is sometimes considered part of the genus Anemone, as Anemone acutiloba, A. hepatica, or A. nobilis.\nEach clump-forming plant grows 5 to 19 cm (2.0 to 7.5 in) tall, flowering in the early to mid spring. The flowers are greenish-white, white, purple or pinkish in color, with a rounded shape. After flowering the fruits are produced in small, rounded columned heads, on pedicels 1 to 4 mm long. When the fruits, called achenes, are ripe they are ovoid in shape, 3.5\u20134.7 mm long and 1.3\u20131.9 mm wide, slightly winged and tend to lack a beak.\nHepatica acutiloba is native to central eastern North America where it can be found growing in deciduous open woods, most often in calcareous soils.",
+      "vernacularNames": [
+        "sharp-lobed hepatica",
+        "sharp-lobed liverleaf"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Ranunculales",
+        "family": "Ranunculaceae",
+        "genus": "Hepatica",
+        "species": "Hepatica acutiloba",
+        "canonicalName": "Hepatica acutiloba"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/6374883"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:77330585-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Hepatica_acutiloba"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/179786"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q50346840"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.138420"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 34053
+    },
+    "humulus-lupulus": {
+      "id": "humulus-lupulus",
+      "fullName": "Humulus lupulus",
+      "commonName": "Hops",
+      "description": "Humulus lupulus, the common hop or hops, is a species of flowering plant in the hemp family, Cannabaceae. It is a perennial, herbaceous climbing plant which sends up new shoots in early spring and dies back to a cold-hardy rhizome in autumn. It is dioecious (having separate male and female plants) and native to West Asia, Europe and North America.\nAs the female cone-shaped flowers (hops) are used to preserve and flavor beer, the species is widely cultivated for the brewing industry.",
+      "vernacularNames": [
+        "Bine",
+        "Common Hop",
+        "Common Hop (EN)",
+        "Common Hop, Hops",
+        "Common Hops",
+        "European hop",
+        "Gew\u00f6hnlicher Hopfen (DE)",
+        "Hop",
+        "Hops"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Rosales",
+        "family": "Cannabaceae",
+        "genus": "Humulus",
+        "species": "Humulus lupulus",
+        "canonicalName": "Humulus lupulus"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2984535"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:303502-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Humulus_lupulus"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/1603987"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q104212"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.1227253"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 41481
+    },
+    "hydrangea-arborescens": {
+      "id": "hydrangea-arborescens",
+      "fullName": "Hydrangea arborescens",
+      "commonName": "Smooth Hydrangea",
+      "description": "Hydrangea arborescens, commonly known as smooth hydrangea or sevenbark, is a species of flowering plant in the family Hydrangeaceae. It is a small- to medium-sized, multi-stemmed, deciduous shrub up to 2 m (7 ft) tall that is native to the eastern United States.",
+      "vernacularNames": [
+        "Sevenbark",
+        "Smooth Hydrangea",
+        "Smooth Hydrangea, Wild Hydrangea, Sevenbark, Sheep Flower",
+        "Tree Hydrangea",
+        "Wild Hydrangea",
+        "migugsugug",
+        "\ubbf8\uad6d\uc218\uad6d",
+        "wild hydrangea"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Cornales",
+        "family": "Hydrangeaceae",
+        "genus": "Hydrangea",
+        "species": "Hydrangea arborescens",
+        "canonicalName": "Hydrangea arborescens"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2985986"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:30010549-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Hydrangea_arborescens"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/130554"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q278173"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.134902"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 22092
+    },
+    "hylotelephium-telephium": {
+      "id": "hylotelephium-telephium",
+      "fullName": "Hylotelephium telephium",
+      "commonName": "Sedum",
+      "description": "Hylotelephium telephium (synonym Sedum telephium), known as orpine, livelong, frog's-stomach, harping Johnny, life-everlasting, live-forever, midsummer-men, Orphan John, witch's moneybags, and garden stonecrop is a succulent perennial plant of the family Crassulaceae native to Eurasia. The flowers are held in dense heads and can be reddish or yellowish-white. A number of cultivars, often with purplish leaves, are grown in gardens as well as hybrids between this species and the related Hylotelephium spectabile (iceplant), especially the popular 'Herbstfreude' ('Autumn Joy'). Occasionally garden plants may escape and naturalise as has happened in parts of North America.",
+      "vernacularNames": [
+        "Live-forever",
+        "Orpine",
+        "Purple-flower Stonecrop",
+        "Purpur-waldfetthenne",
+        "Vit-toujours",
+        "Witch's Moneybags",
+        "garden orpine",
+        "garden stonecrop",
+        "live-forever stonecrop",
+        "purple stonecrop",
+        "witches' moneybags"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Saxifragales",
+        "family": "Crassulaceae",
+        "genus": "Hylotelephium",
+        "species": "Hylotelephium telephium",
+        "canonicalName": "Hylotelephium telephium"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2985865"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:274226-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Hylotelephium_telephium"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/1420906"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q1327535"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.153618"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 32525
+    },
+    "leonurus-cardiaca": {
+      "id": "leonurus-cardiaca",
+      "fullName": "Leonurus cardiaca",
+      "commonName": "Motherwort",
+      "description": "Leonurus cardiaca, known as motherwort, is an herbaceous perennial plant in the mint family, Lamiaceae. Other common names include throw-wort, lion's ear, and lion's tail. Lion's tail is also a common name for Leonotis leonurus, and lion's ear, a common name for Leonotis nepetifolia. Originally from Central Asia and southeastern Europe, it is now found worldwide, spread largely due to its use as a herbal remedy.",
+      "vernacularNames": [
+        "Common Motherwort",
+        "Motherwort",
+        "common motherwort"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Lamiales",
+        "family": "Lamiaceae",
+        "genus": "Leonurus",
+        "species": "Leonurus cardiaca",
+        "canonicalName": "Leonurus cardiaca"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5341389"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:449168-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Leonurus_cardiaca"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/56171"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q161130"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.128520"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 36678
+    },
+    "malus-domestica": {
+      "id": "malus-domestica",
+      "fullName": "Malus domestica",
+      "commonName": "Apple",
+      "description": "An apple is the round, edible fruit of an apple tree (Malus spp.). Fruit trees of the orchard or domestic apple (Malus domestica), the most widely grown in the genus, are cultivated worldwide. The tree originated in Central Asia, where its wild ancestor, Malus sieversii, is still found. Apples have been grown for thousands of years in Eurasia before they were introduced to North America by European colonists. Apples have cultural significance in many mythologies (including Norse and Greek) and religions (such as Christianity in Europe).\nApples grown from seeds tend to be very different from those of their parents, and the resultant fruit frequently lacks desired characteristics. For commercial purposes, including botanical evaluation, apple cultivars are propagated by clonal grafting onto rootstocks. Apple trees grown without rootstocks tend to be larger and much slower to fruit after planting. Rootstocks are used to control the speed of growth and the size of the resulting tree, allowing for easier harvesting.\nThere are more than 7,500 cultivars of apples. Different cultivars are bred for various tastes and uses, including cooking, eating raw, and cider or apple juice production. Trees and fruit are prone to fungal, bacterial, and pest problems, which can be controlled by a number of organic and non-organic means. In 2010, the fruit's genome was sequenced as part of research on disease control and selective breeding in apple production.",
+      "vernacularNames": [
+        "Apple",
+        "Common Crabapple",
+        "Orchard Crabapple",
+        "Paradise Crabapple",
+        "apple tree",
+        "cultivated apple"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Rosales",
+        "family": "Rosaceae",
+        "genus": "Malus",
+        "species": "Malus domestica",
+        "canonicalName": "Malus domestica"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3001244"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:726282-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Malus_domestica"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/469472"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q18674606"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.961330"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 55740
+    },
+    "meleagris-gallopavo": {
+      "id": "meleagris-gallopavo",
+      "fullName": "Meleagris gallopavo",
+      "commonName": "Wild Turkey",
+      "description": "The wild turkey (Meleagris gallopavo) is an upland game bird native to North America, one of two extant species of turkey and the heaviest member of the order Galliformes. It is the ancestor to the domestic turkey (M. g. domesticus), which was originally derived from a southern Mexican subspecies of wild turkey (not the related ocellated turkey).",
+      "vernacularNames": [
+        "Common Turkey",
+        "Domestic Turkey",
+        "Turkey",
+        "Wild Turkey"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Chordata",
+        "class": "Aves",
+        "order": "Galliformes",
+        "family": "Phasianidae",
+        "genus": "Meleagris",
+        "species": "Meleagris gallopavo",
+        "canonicalName": "Meleagris gallopavo"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/9606290"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Meleagris_gallopavo"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/906"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.104229"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 180129
+    },
+    "mertensia-virginica": {
+      "id": "mertensia-virginica",
+      "fullName": "mertensia virginica",
+      "commonName": "Virginia bluebells",
+      "description": "Mertensia virginica (common names Virginia bluebells, Virginia cowslip, lungwort oysterleaf, Roanoke bells) is a spring ephemeral plant in the Boraginaceae (borage) family with bell-shaped sky-blue flowers, native to eastern North America.",
+      "vernacularNames": [
+        "Bluebells",
+        "Roanoke-bells",
+        "Virginia Bluebells",
+        "Virginia Cowslip",
+        "Virginia lungwort",
+        "Virginia-bluebells",
+        "eastern bluebells",
+        "tree lungwort"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Boraginales",
+        "family": "Boraginaceae",
+        "genus": "Mertensia",
+        "species": "Mertensia virginica",
+        "canonicalName": "Mertensia virginica"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5341242"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:118695-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/mertensia_virginica"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/59771"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.138078"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 51172
+    },
+    "narcissus-cyclamineus": {
+      "id": "narcissus-cyclamineus",
+      "fullName": "Narcissus cyclamineus",
+      "commonName": "Dwarf Daffodil",
+      "description": "Narcissus cyclamineus, the cyclamen-flowered daffodil, is a species of flowering plant in the family Amaryllidaceae, native to North West Portugal and North West Spain.",
+      "vernacularNames": [
+        "Cyclamen-Flowered Daffodil",
+        "cyclamen-flower daffodil",
+        "Head-to-head Daffodil"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Liliopsida",
+        "order": "Asparagales",
+        "family": "Amaryllidaceae",
+        "genus": "Narcissus",
+        "species": "Narcissus cyclamineus",
+        "canonicalName": "Narcissus cyclamineus"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2858654"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:65999-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Narcissus_cyclamineus"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/1062301"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q1727024"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 648
+    },
+    "oenothera-macrocarpa": {
+      "id": "oenothera-macrocarpa",
+      "fullName": "Oenothera macrocarpa",
+      "commonName": "Missouri Evening Primrose",
+      "description": "Oenothera macrocarpa (syn. Oenothera missouriensis), the bigfruit evening primrose, Ozark sundrops, Missouri evening primrose, or Missouri primrose, is a species of flowering plant in the evening primrose family Onagraceae, native to northeast Mexico and the south-central United States, where it is found in calcareous prairies and limestone outcrops.",
+      "vernacularNames": [
+        "Ozark sundrop",
+        "bigfruit evening primrose",
+        "bigfruit evening-primrose",
+        "bigfruit eveningprimrose"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Myrtales",
+        "family": "Onagraceae",
+        "genus": "Oenothera",
+        "species": "Oenothera macrocarpa",
+        "canonicalName": "Oenothera macrocarpa"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3188904"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:173157-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Oenothera_macrocarpa"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/119117"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q9373395"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.129287"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 5267
+    },
+    "passer-domesticus": {
+      "id": "passer-domesticus",
+      "fullName": "Passer domesticus",
+      "commonName": "House Sparrow",
+      "description": "The house sparrow (Passer domesticus) is a bird of the sparrow family Passeridae, found in most parts of the world. It is a small bird that has a typical length of 16 cm (6.3 in) and a mass of 24\u201339.5 g (0.85\u20131.39 oz). Females and young birds are coloured pale brown and grey, and males have brighter black, white, and brown markings. One of about 25 species in the genus Passer, the house sparrow is native to most of Europe, the Mediterranean Basin, and a large part of Asia. Its intentional or accidental introductions to many regions, including parts of Australasia, Africa, and the Americas, make it the most widely distributed wild bird.\nThe house sparrow is strongly associated with human habitation, and can live in urban or rural settings. Though found in widely varied habitats and climates, it typically avoids extensive woodlands, grasslands, polar regions, and hot, dry deserts far away from human development. For sustenance, the house sparrow routinely feeds at home and public bird feeding stations, but naturally feeds on the seeds of grains, flowering plants and weeds. However, it is an opportunistic, omnivorous eater, and commonly catches invertebrates such as insects and their larvae, caterpillars, and many other natural foods.\nBecause of its numbers, ubiquity, and association with human settlements, the house sparrow is culturally prominent. It is extensively, and usually unsuccessfully, persecuted as an agricultural pest. It has also often been kept as a pet, as well as being a food item and a symbol of lust, sexual potency, commonness, and vulgarity. Though it is widespread and abundant, its numbers have declined in some areas. The bird's conservation status is listed as least concern on the IUCN Red List.",
+      "vernacularNames": [
+        "English sparrow",
+        "Europese huismuis",
+        "Gorrion domestico",
+        "House Sparrow",
+        "House/Eurasian Tree Sparrow",
+        "House/Italian Sparrow",
+        "House/Spanish Sparrow"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Chordata",
+        "class": "Aves",
+        "order": "Passeriformes",
+        "family": "Passeridae",
+        "genus": "Passer",
+        "species": "Passer domesticus",
+        "canonicalName": "Passer domesticus"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5231190"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Passer_domesticus"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/13858"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.868650"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 518357
+    },
+    "philadelphus-coronarius": {
+      "id": "philadelphus-coronarius",
+      "fullName": "Philadelphus coronarius",
+      "commonName": "Mock Orange",
+      "description": "Philadelphus coronarius (sweet mock orange, English dogwood) is a species of flowering plant in the family Hydrangeaceae, native to the Caucasus and northeastern Turkey.",
+      "vernacularNames": [
+        "European mock-orange",
+        "Mock Orange",
+        "Mock-orange",
+        "Philadelphia mock-orange",
+        "Sweet Mock Orange",
+        "garden syringa"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Cornales",
+        "family": "Hydrangeaceae",
+        "genus": "Philadelphus",
+        "species": "Philadelphus coronarius",
+        "canonicalName": "Philadelphus coronarius"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2986045"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:792194-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Philadelphus_coronarius"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/52468"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q163791"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.154656"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 19131
+    },
+    "phlox-subulata": {
+      "id": "phlox-subulata",
+      "fullName": "Phlox subulata",
+      "commonName": "Phlox",
+      "description": "Phlox subulata the creeping phlox, moss phlox, moss pink or mountain phlox, is a species of flowering plant in the family Polemoniaceae, native to the eastern and central United States, and widely cultivated.\nThe odor given off by the plants may be mistaken for that of marijuana.",
+      "vernacularNames": [
+        "Moss Phlox",
+        "Moss-pink",
+        "Mountain Phlox",
+        "ground pink",
+        "hana-tsumekusa",
+        "moss pink",
+        "\uc9c0\uba74\ud328\ub7ad\uc774\uaf43",
+        "Rock Pink",
+        "moss phlox"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Ericales",
+        "family": "Polemoniaceae",
+        "genus": "Phlox",
+        "species": "Phlox subulata",
+        "canonicalName": "Phlox subulata"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2927727"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:193691-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Phlox_subulata"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/68884"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q1045366"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.152830"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 20643
+    },
+    "prunus-armeniaca": {
+      "id": "prunus-armeniaca",
+      "fullName": "Prunus armeniaca",
+      "commonName": "Apricot",
+      "description": "Prunus armeniaca is the most commonly cultivated apricot species. The native range is somewhat uncertain due to its extensive prehistoric cultivation. Genetic studies indicate Central Asia is the center of origin. It is extensively cultivated in many countries and has escaped into the wild in many places. The specific epithet armeniaca refers to the country of Armenia.",
+      "vernacularNames": [
+        "Apricot",
+        "Siberian apricot",
+        "Tibetan Apricot",
+        "abric\u00f3",
+        "albaricoque",
+        "ansu Apricot"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Rosales",
+        "family": "Rosaceae",
+        "genus": "Prunus",
+        "species": "Prunus armeniaca",
+        "canonicalName": "Prunus armeniaca"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/7818643"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:729463-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Prunus_armeniaca"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/135331"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q37453"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.134026"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 7941
+    },
+    "prunus-jacquemontii-x-japonica": {
+      "id": "prunus-jacquemontii-x-japonica",
+      "fullName": "Prunus jacquemontii x japonica",
+      "commonName": "joel bush cherry",
+      "description": "",
+      "vernacularNames": [],
+      "taxonomy": null,
+      "nativeRange": null,
+      "references": [],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ]
+    },
+    "prunus-japonica-prunus-jacquemontii": {
+      "id": "prunus-japonica-prunus-jacquemontii",
+      "fullName": "Prunus japonica \u00d7 Prunus jacquemontii",
+      "commonName": "Joel Bush Cherry",
+      "description": "",
+      "vernacularNames": [],
+      "taxonomy": null,
+      "nativeRange": null,
+      "references": [],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ]
+    },
+    "pyrus-pyrifolia": {
+      "id": "pyrus-pyrifolia",
+      "fullName": "Pyrus pyrifolia",
+      "commonName": "Asian Pear",
+      "description": "Pyrus pyrifolia is a species of pear tree native to southern China and northern Indochina that has been introduced to Korea, Japan and other parts of the world. The tree's edible fruit is known by many names, including Asian pear, Persian pear, Japanese pear, Chinese pear, Korean pear, Taiwanese pear, apple pear, zodiac pear, three-halves pear, papple, naspati, bata kisbis, Fefeta grained pear and sand pear. Along with cultivars of P. \u00d7 bretschneideri and Pyrus ussuriensis, the fruit is also called the nashi pear. Cultivars derived from Pyrus pyrifolia are grown throughout East Asia, and in other countries such Pakistan, Nepal, Australia, New Zealand, and America. Traditionally in East Asia the tree's flowers are a popular symbol of early spring, and it is a common sight in gardens and the countryside.\n\nThe fruits are not generally baked in pies or made into jams because they have a high water content and a crisp, grainy texture, very different from the European varieties. They are commonly served raw and peeled. The fruit tends to be quite large and fragrant. When carefully wrapped, having a tendency to bruise because of its juiciness, it can last for several weeks (or more) in a cold, dry place.",
+      "vernacularNames": [
+        "Asian pear",
+        "Chinese Pear",
+        "Nashi",
+        "Oriental Pear",
+        "Oriental pear tree",
+        "Orientalische Birne",
+        "Sand pear",
+        "dolbaenamu",
+        "\ub3cc\ubc30\ub098\ubb34"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Rosales",
+        "family": "Rosaceae",
+        "genus": "Pyrus",
+        "species": "Pyrus pyrifolia",
+        "canonicalName": "Pyrus pyrifolia"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5362786"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:731158-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Pyrus_pyrifolia"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/122783"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q838963"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.144147"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 1390
+    },
+    "pyrus-pyrifolia-shinseiki": {
+      "id": "pyrus-pyrifolia-shinseiki",
+      "fullName": "Pyrus pyrifolia 'Shinseiki\"",
+      "commonName": "Asian Pear",
+      "description": "",
+      "vernacularNames": [
+        "Asian pear",
+        "Chinese Pear",
+        "Oriental pear tree",
+        "Sand pear",
+        "dolbaenamu",
+        "\ub3cc\ubc30\ub098\ubb34"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Rosales",
+        "family": "Rosaceae",
+        "genus": "Pyrus",
+        "species": "Pyrus pyrifolia",
+        "canonicalName": "Pyrus pyrifolia"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5362786"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ]
+    },
+    "ribes-hirtellum": {
+      "id": "ribes-hirtellum",
+      "fullName": "Ribes hirtellum",
+      "commonName": "Gooseberry",
+      "description": "Ribes hirtellum is a species of gooseberry commonly known as wild gooseberry or swamp gooseberry. It is native to Canada and the northern United States. Cultivated gooseberries are derived from this species and from Ribes uva-crispa.\nRibes hirtellum is known by several other names, including American gooseberry, hairy-stem gooseberry, hairy gooseberry, low wild gooseberry northern gooseberry, smooth gooseberry, and wedge-leaf gooseberry.",
+      "vernacularNames": [
+        "American Gooseberry",
+        "Hairy Gooseberry",
+        "Hairy-stem Gooseberry",
+        "Hairystem Gooseberry",
+        "Wedge-leaf Gooseberry",
+        "low wild gooseberry",
+        "northern gooseberry",
+        "smooth gooseberry",
+        "swamp gooseberry",
+        "wedge-leaved gooseberry",
+        "wild gooseberry",
+        "Smooth Gooseberry"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Saxifragales",
+        "family": "Grossulariaceae",
+        "genus": "Ribes",
+        "species": "Ribes hirtellum",
+        "canonicalName": "Ribes hirtellum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2986164"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:220946-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Ribes_hirtellum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/136605"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q15441429"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.140983"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 1849
+    },
+    "ribes-rubrum": {
+      "id": "ribes-rubrum",
+      "fullName": "Ribes rubrum",
+      "commonName": "Red Currant",
+      "description": "The redcurrant or red currant (Ribes rubrum) is a member of the genus Ribes in the family Grossulariaceae. It is native to western Europe. The species is widely cultivated and has escaped into the wild in many regions.",
+      "vernacularNames": [
+        "Common Currant",
+        "Cultivated Currant",
+        "European red currant",
+        "Garden Currant",
+        "Red Currant",
+        "Red Garden Currant",
+        "Redcurrant"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Saxifragales",
+        "family": "Grossulariaceae",
+        "genus": "Ribes",
+        "species": "Ribes rubrum",
+        "canonicalName": "Ribes rubrum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2986097"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:792965-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Ribes_rubrum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/54431"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.139389"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 11721
+    },
+    "ribes-uva-crispa-x-missouriense-pixwell": {
+      "id": "ribes-uva-crispa-x-missouriense-pixwell",
+      "fullName": "Ribes uva-crispa x missouriense 'Pixwell'",
+      "commonName": "Gooseberry",
+      "description": "",
+      "vernacularNames": [],
+      "taxonomy": null,
+      "nativeRange": null,
+      "references": [],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ]
+    },
+    "rosa-blanda": {
+      "id": "rosa-blanda",
+      "fullName": "Rosa blanda",
+      "commonName": "Smooth Rose",
+      "description": "Rosa blanda, commonly known as the smooth rose, meadow/wild rose, or prairie rose, is a species of rose native to North America. Among roses, it is closest to a \"thornless\" rose, with just a few thorns at the base. The meadow rose occurs as a colony-forming shrub growing to 1 m (3.3 ft) high, naturally in prairies and meadows. The roses are quite variable, the characteristics such as leaf tip number of prickles and glandular hairs usually do not always remain constant, thus it is often confused with Rosa arkansana or Rosa carolina, the two other prairie rose species.",
+      "vernacularNames": [
+        "Smooth Rose",
+        "Smooth rose (EN); Labrador-Rose (DE)",
+        "meadow rose",
+        "smooth wild rose"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Rosales",
+        "family": "Rosaceae",
+        "genus": "Rosa",
+        "species": "Rosa blanda",
+        "canonicalName": "Rosa blanda"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3002372"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:222243-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Rosa_blanda"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/83062"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q952147"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.145493"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 6613
+    },
+    "rubus-idaeus": {
+      "id": "rubus-idaeus",
+      "fullName": "Rubus idaeus",
+      "commonName": "Raspberry",
+      "description": "Rubus idaeus (raspberry, also called red raspberry or occasionally European red raspberry to distinguish it from other raspberry species) is a red-fruited species of Rubus native to Europe and northern Asia and commonly cultivated in other temperate regions.",
+      "vernacularNames": [
+        "American Red Raspberry",
+        "Common Red Raspberry",
+        "European red raspberry",
+        "Raspberry",
+        "Raspberry, Red Raspberry",
+        "Red Raspberry",
+        "Western Red Raspberry",
+        "red raspberry"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Rosales",
+        "family": "Rosaceae",
+        "genus": "Rubus",
+        "species": "Rubus idaeus",
+        "canonicalName": "Rubus idaeus"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2993094"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:298089-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Rubus_idaeus"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/54436"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q12252383"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.961934"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 74786
+    },
+    "rudbeckia-hirta": {
+      "id": "rudbeckia-hirta",
+      "fullName": "Rudbeckia hirta",
+      "commonName": "Black-eyed Susan",
+      "description": "Rudbeckia hirta, commonly called black-eyed Susan and yellow coneflower, is a North American flowering plant in the family Asteraceae. It grows to 1 metre (3+1\u20442 ft) tall with daisy-like yellow flower heads. There are numerous cultivars. It is toxic when ingested by cats, but was used medicinally by Native Americans. It is the state flower of Maryland.",
+      "vernacularNames": [
+        "Black-eyed Susan",
+        "Black-eyed-Susan",
+        "Black-eyed-Susan (EN)",
+        "Blackeyed Susan",
+        "Rauher Sonnenhut (DE)"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Asterales",
+        "family": "Asteraceae",
+        "genus": "Rudbeckia",
+        "species": "Rudbeckia hirta",
+        "canonicalName": "Rudbeckia hirta"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3114225"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:223740-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Rudbeckia_hirta"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/62741"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q2532820"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.128304"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 94622
+    },
+    "rudbeckia-laciniata": {
+      "id": "rudbeckia-laciniata",
+      "fullName": "Rudbeckia laciniata",
+      "commonName": "Sochan",
+      "description": "Rudbeckia laciniata, the cutleaf coneflower, is a species of flowering plant in the family Asteraceae. Other common names include cutleaf, goldenglow, green-headed coneflower, tall coneflower, sochan and thimbleweed. It is native to North American floodplains, stream banks, and moist forests. Although toxic to animals, the leaves have culinary uses.",
+      "vernacularNames": [
+        "Coneflower",
+        "Cut-leaf Coneflower",
+        "Cutleaf Coneflower",
+        "cutleaf coneflower"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Asterales",
+        "family": "Asteraceae",
+        "genus": "Rudbeckia",
+        "species": "Rudbeckia laciniata",
+        "canonicalName": "Rudbeckia laciniata"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3114229"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:241716-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Rudbeckia_laciniata"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/116735"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q1194614"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.128829"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 36686
+    },
+    "sambucus-canadensis": {
+      "id": "sambucus-canadensis",
+      "fullName": "Sambucus canadensis",
+      "commonName": "Elderberry",
+      "description": "Sambucus canadensis, the American black elderberry, Canada elderberry, or common elderberry, is a North American species of elderberry. Although many parts of the plant are toxic, including the seeds, the flower and ripe berries are edible\u2014most safely after cooking.",
+      "vernacularNames": [
+        "American Black Elderberry",
+        "American Elder",
+        "American elderberry",
+        "Canada elderberry",
+        "Sweet Elder",
+        "common elderberry",
+        "white elder",
+        "American black elderberry"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Dipsacales",
+        "family": "Viburnaceae",
+        "genus": "Sambucus",
+        "species": "Sambucus canadensis",
+        "canonicalName": "Sambucus canadensis"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/6369819"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:321978-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Sambucus_canadensis"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/84300"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q21877280"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.638868"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 70902
+    },
+    "sciurus-carolinensis": {
+      "id": "sciurus-carolinensis",
+      "fullName": "Sciurus carolinensis",
+      "commonName": "Gray Squirrel",
+      "description": "The eastern gray squirrel (Sciurus carolinensis), spelled as grey squirrel outside of the United States, is a species of tree squirrel in the genus Sciurus. It is native to eastern North America, where it is the most prodigious and ecologically essential natural forest regenerator. Widely introduced to certain places around the world, the eastern gray squirrel in Europe, in particular, is regarded as an invasive species.\nIn Europe, Sciurus carolinensis is included (since 2016) in the list of Invasive Alien Species of Union concern (the Union list). This implies that this species cannot be imported, bred, transported, commercialized, or intentionally released into the environment in the whole of the European Union.",
+      "vernacularNames": [
+        "Ardilla Gris Oriental",
+        "Eastern Gray Squirrel",
+        "Eastern Grey Squirrel",
+        "Ecureuil Gris",
+        "Grauhoernchen",
+        "Gray Squirrel",
+        "Grey Squirrel",
+        "Ostliches Grauhdrnchen"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Chordata",
+        "class": "Mammalia",
+        "order": "Rodentia",
+        "family": "Sciuridae",
+        "genus": "Sciurus",
+        "species": "Sciurus carolinensis",
+        "canonicalName": "Sciurus carolinensis"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5219681"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Sciurus_carolinensis"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/46017"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.104371"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 375545
+    },
+    "scrophularia-lanceolata": {
+      "id": "scrophularia-lanceolata",
+      "fullName": "Scrophularia lanceolata",
+      "commonName": "Early Figwort",
+      "description": "Scrophularia lanceolata is a species of flowering plant in the figwort family known by the common names lanceleaf figwort and American figwort. It is native to North America, where it is known from western and eastern Canada and much of the United States except for the southeastern quadrant. Past common names include Western figwort when the western US plants were grouped under the name Scrophularia occidentalis and the eastern US plants were called Scrophularia leporella with the common name hare figwort.",
+      "vernacularNames": [
+        "American Figwort",
+        "Lanceleaf Figwort",
+        "hare figwort",
+        "lance-leaved figwort",
+        "Lanceolate Figwort",
+        "lanceleaf figwort"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Lamiales",
+        "family": "Scrophulariaceae",
+        "genus": "Scrophularia",
+        "species": "Scrophularia lanceolata",
+        "canonicalName": "Scrophularia lanceolata"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3170878"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:809288-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Scrophularia_lanceolata"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/79012"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q7439304"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.161263"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 3818
+    },
+    "scrophularia-marilandica": {
+      "id": "scrophularia-marilandica",
+      "fullName": "Scrophularia marilandica",
+      "commonName": "Late Figwort",
+      "description": "Scrophularia marilandica, also called late figwort, Maryland figwort, carpenter's square, or eastern figwort, is a flowering plant in the family Scrophulariaceae, native throughout eastern and central North America, where it is found growing in dry woods from Manitoba and Quebec south to Texas and Florida.\nIt grows 1.5\u20133 metres (4 ft 11 in \u2013 9 ft 10 in) tall, with opposite, ovate leaves up to 15 centimetres (5.9 in) long and 9 centimetres (3.5 in) broad. The flowers are rounded, 8\u20139 millimetres (0.31\u20130.35 in) long, with a cup-like mouth that look somewhat like a horse's mouth with a bad overbite; they are a deep reddish-purple color on the inside, with a greenish to almost brown cast on the outside. They are commonly visited by hummingbirds in late summer.\nPast common names for Scrophularia marilandica have included heal-all, pilewort, and scrofula-plant. It was once used as an herbal remedy for hemorrhoids. During the 19th century, the root extract was used to treat insomnia and anxiety.",
+      "vernacularNames": [
+        "Carpenter's Square",
+        "Eastern Figwort",
+        "Figwort",
+        "Maryland Figwort",
+        "carpenter's square figwort",
+        "carpenter's-square",
+        "late figwort",
+        "Carpenter's Figwort",
+        "Woodland Figwort"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Lamiales",
+        "family": "Scrophulariaceae",
+        "genus": "Scrophularia",
+        "species": "Scrophularia marilandica",
+        "canonicalName": "Scrophularia marilandica"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3170885"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:809334-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Scrophularia_marilandica"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/82413"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q7439305"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.143114"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 4995
+    },
+    "sedum-pulchellum": {
+      "id": "sedum-pulchellum",
+      "fullName": "Sedum pulchellum",
+      "commonName": "Widow's Cross",
+      "description": "Sedum pulchellum is a species of flowering plant in the family Crassulaceae known by the common names widowscross and widow's cross. It is native to calcareous areas of the South-Central and Southeastern United States, where it is found on flat rock outcrops, particularly cedar glades. Most populations are in the Interior Low Plateau, and Ozark and Ouachita Mountains.\nIt produces pink-white flowers in late spring. It is a winter annual, germinating in the fall and dying in the summer.",
+      "vernacularNames": [
+        "widowscross",
+        "Widow's-cross"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Saxifragales",
+        "family": "Crassulaceae",
+        "genus": "Sedum",
+        "species": "Sedum pulchellum",
+        "canonicalName": "Sedum pulchellum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5361999"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:275864-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Sedum_pulchellum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/168746"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q15486335"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.131789"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 3175
+    },
+    "sedum-ternatum": {
+      "id": "sedum-ternatum",
+      "fullName": "Sedum ternatum",
+      "commonName": "Wild Stonecrop",
+      "description": "Sedum ternatum is the most widespread native Sedum species in eastern North America, commonly known as woodland stonecrop. It has white flowers, blooming April to May. This shade-tolerant species is often found in the forest understory, although it can also grow in sunnier locations when sufficient moisture is present. Its common name of \"stonecrop\" evokes its ability to thrive atop boulders, where its succulent leaves help it to retain moisture in shallow soil. It adapts well to garden use.\nSedum ternatum is native to much of the eastern United States, as far west as Arkansas and Iowa, south down the Appalachian Mountains, and north to near the Canada\u2013United States border.\nSedum ternatum can be distinguished from other sedums, native and cultivated, which are commonly found in the United States by the white flowers with four (not five) petals, and by the leaves in whorls of three, whence the species name. The plant flowers for about a month in late spring to early summer.",
+      "vernacularNames": [
+        "Wild Stonecrop",
+        "Woodland Stonecrop",
+        "whorled stonecrop",
+        "woodland stonecrop"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Saxifragales",
+        "family": "Crassulaceae",
+        "genus": "Sedum",
+        "species": "Sedum ternatum",
+        "canonicalName": "Sedum ternatum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5362037"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:284835-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Sedum_ternatum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/127597"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q7445445"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.146949"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 16240
+    },
+    "solidago-flexicaulis": {
+      "id": "solidago-flexicaulis",
+      "fullName": "Solidago flexicaulis",
+      "commonName": "Zig Zag Goldenrod",
+      "description": "Solidago flexicaulis, the broadleaved goldenrod, or zigzag goldenrod, is a North American species of herbaceous perennial plants in the family Asteraceae. It is native to the eastern and central parts of the United States and Canada, from Nova Scotia west to Ontario and the Dakotas, and south as far as Alabama and Louisiana. It grows in a variety of habitats including mesic upland forests, well drained floodplain forests, seepage swamp hummocks, and rocky woodlands.\nThe plant is called the \"zigzag goldenrod\" because the thin, wiry stem zigs and zags back and forth, changing direction at each node (leaf attachment point). The plant bears sometimes as many as 250 small yellow flower heads, some at the end of the stem, others in the axils of the leaves. The leaves are very broad, almost round, but with an elongated tip at the end and large teeth along the edges.\nSolidago flexicaulis shares some similarities to Solidago albopilosa, both molecularly and physically. There is some evidence indicating that the plant is an ancient autopolyploid of S. flexicaulis.",
+      "vernacularNames": [
+        "Broadleaf Goldenrod",
+        "Zig-zag Goldenrod",
+        "Zigzag Goldenrod",
+        "broad-leaved goldenrod"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Asterales",
+        "family": "Asteraceae",
+        "genus": "Solidago",
+        "species": "Solidago flexicaulis",
+        "canonicalName": "Solidago flexicaulis"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5389012"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:240229-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Solidago_flexicaulis"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/119154"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q3489405"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.135850"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 21990
+    },
+    "spinus-tristis": {
+      "id": "spinus-tristis",
+      "fullName": "Spinus tristis",
+      "commonName": "Goldfinch",
+      "description": "The American goldfinch (Spinus tristis) is a small North American bird in the finch family. It is migratory, ranging from mid-Alberta to North Carolina during the breeding season, and from just south of the Canada\u2013United States border to Mexico during the winter.\nThe only finch in its subfamily to undergo a complete molt, the American goldfinch displays sexual dichromatism: the male is a vibrant yellow in the summer and an olive color during the winter, while the female is a dull yellow-brown shade which brightens only slightly during the summer. The male displays brightly colored plumage during the breeding season to attract a mate.\nThe American goldfinch is a granivore and adapted for the consumption of seedheads, with a conical beak to remove the seeds and agile feet to grip the stems of seedheads while feeding. It is a social bird and will gather in large flocks while feeding and migrating. It may behave territorially during nest construction, but this aggression is short-lived. Its breeding season is tied to the peak of food supply, beginning in late July, which is relatively late in the year for a finch. This species is generally monogamous and produces one brood each year.\nHuman activity has generally benefited the American goldfinch. It is often found in residential areas because it is attracted to bird feeders, which increase its survival rate in these areas. Deforestation also creates open meadow areas, which are its preferred habitat.",
+      "vernacularNames": [
+        "American Goldfinch"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Chordata",
+        "class": "Aves",
+        "order": "Passeriformes",
+        "family": "Fringillidae",
+        "genus": "Spinus",
+        "species": "Spinus tristis",
+        "canonicalName": "Spinus tristis"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5231640"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Spinus_tristis"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/145310"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.105854"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 180050
+    },
+    "spiraea-alba": {
+      "id": "spiraea-alba",
+      "fullName": "Spiraea alba",
+      "commonName": "Meadowsweet",
+      "description": "Spiraea alba, commonly known as meadowsweet, white meadowsweet, narrowleaf meadowsweet, the botanical pale bridewort, or pipestem, is native to the wet soils of the Allegheny Mountains and other portions of eastern North America, but is currently endangered in the state of Missouri. It is naturalized in other parts of the world.",
+      "vernacularNames": [
+        "Meadowsweet",
+        "Pale Bridewort",
+        "Wei\u00dfer Spierstrauch (DE)",
+        "White Meadowsweet",
+        "White meadowsweet (EN)",
+        "spirea",
+        "white meadowsweet"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Rosales",
+        "family": "Rosaceae",
+        "genus": "Spiraea",
+        "species": "Spiraea alba",
+        "canonicalName": "Spiraea alba"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3026585"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:30043519-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Spiraea_alba"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/126823"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q7577709"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.961595"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 38805
+    },
+    "symphyotrichum-lateriflorum": {
+      "id": "symphyotrichum-lateriflorum",
+      "fullName": "Symphyotrichum lateriflorum",
+      "commonName": "Calico Aster",
+      "description": "Symphyotrichum lateriflorum (formerly Aster lateriflorus) is a species of flowering plant in the aster family (Asteraceae). Commonly known as calico aster, starved aster, and white woodland aster, it is native to eastern and central North America. It is a perennial and herbaceous plant that may reach heights up to 120 centimeters (4 feet) and widths up to 30 centimeters (1 foot).\nThe flowers of calico aster are small compared to most Symphyotrichum species. They have an average of 7\u201315 short white ray florets, which are rarely tinted pink or purple. The flower centers, composed of disk florets, begin as cream to yellow and often become pink, purple, or brown as they mature. There are roughly 8\u201316 disk florets, each with five lobes that strongly reflex (bend backwards) when open. The mostly hairless leaves have a characteristic hairy midrib on their back faces, and branching is usually horizontal or in what can appear to be a zigzag pattern. Flower heads grow along one side of the branches and sometimes in clusters at the ends.\nSymphyotrichum lateriflorum is a conservationally secure species and grows in a variety of habitats. It can be found throughout most of the eastern and east-central United States and Canada. There is also a native population in the state of Veracruz, Mexico. Its late-summer and fall appearing flowers are visited by small pollinators and nectar-seeking insects such as sweat bees, miner bees, and hoverflies. As well as occurring naturally in several varieties, S. lateriflorum has multiple cultivars and has been grown for at least 250 years in Europe. Some modern-day cultivars are 'Bleke Bet', 'Lady in Black', and 'Prince'. It has been used by Indigenous peoples of the Americas as a medicinal plant.",
+      "vernacularNames": [
+        "Calico Aster",
+        "Calico Or One-sided Or White Woodland Or Starved Aster",
+        "Goblet Aster",
+        "One-side Aster",
+        "Side-flower Aster",
+        "Starved Aster",
+        "White Woodland Aster",
+        "one-sided aster",
+        "side-flowering aster",
+        "Farewell Summer"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Asterales",
+        "family": "Asteraceae",
+        "genus": "Symphyotrichum",
+        "species": "Symphyotrichum lateriflorum",
+        "canonicalName": "Symphyotrichum lateriflorum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/7832723"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:247115-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Symphyotrichum_lateriflorum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/122249"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q7661732"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.159157"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 32652
+    },
+    "syringa-vulgaris": {
+      "id": "syringa-vulgaris",
+      "fullName": "Syringa vulgaris",
+      "commonName": "Lilac",
+      "description": "Syringa vulgaris, the lilac or common lilac, is a species of flowering plant in the olive family, Oleaceae. Native to the Balkan Peninsula, it is widely cultivated for its scented flowers in Europe (particularly the north and west) and North America.",
+      "vernacularNames": [
+        "Common Lilac",
+        "Flieder (DE)",
+        "Lilac",
+        "Lilac (EN)",
+        "common lilac"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Lamiales",
+        "family": "Oleaceae",
+        "genus": "Syringa",
+        "species": "Syringa vulgaris",
+        "canonicalName": "Syringa vulgaris"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5415039"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:289009-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Syringa_vulgaris"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/83072"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q6565319"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.161652"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 58175
+    },
+    "teucrium-canadense": {
+      "id": "teucrium-canadense",
+      "fullName": "Teucrium canadense",
+      "commonName": "Germander",
+      "description": "Teucrium canadense, commonly known as Canada germander, American germander, or wood sage, is a perennial herb in the family Lamiaceae. It is native to North America where it is found across the contiguous states of the United States and in much of Canada.",
+      "vernacularNames": [
+        "American Germander",
+        "Canada Germander",
+        "Hairy Germander",
+        "Wild Germander",
+        "Wood Sage",
+        "creeping germander",
+        "head betony",
+        "wood-sage",
+        "American germander"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Lamiales",
+        "family": "Lamiaceae",
+        "genus": "Teucrium",
+        "species": "Teucrium canadense",
+        "canonicalName": "Teucrium canadense"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2926899"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:30057247-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Teucrium_canadense"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/64547"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q15370692"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.153321"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 29973
+    },
+    "tiarella-cordifolia": {
+      "id": "tiarella-cordifolia",
+      "fullName": "Tiarella cordifolia",
+      "commonName": "Foamflower",
+      "description": "Tiarella cordifolia, the heart-leaved foamflower, is a species of flowering plant in the family Saxifragaceae. The specific name cordifolia means \"with heart-shaped leaves\", a characteristic shared by all taxa of Tiarella in eastern North America. It is also referred to as Allegheny foamflower, false miterwort, and coolwort.\nHistorically, the name Tiarella cordifolia has referred to the one and only species of Tiarella in eastern North America, but in 2021, the species was split into multiple taxa, which caused the name to have a different meaning. For clarity, the qualified name Tiarella cordifolia sensu stricto (abbreviated s.s.) refers to the new taxon while Tiarella cordifolia sensu lato refers to the old taxon.\nTiarella cordifolia sensu lato is wide-ranging across eastern North America while Tiarella cordifolia sensu stricto is narrowly confined to the East Coast of the United States. Cultivars of Tiarella are valued in horticulture for their erect stems of foamy cream-colored flowers.",
+      "vernacularNames": [
+        "False Mitrewort",
+        "Foamflower",
+        "Heart-leaf Foamflower",
+        "Heartleaf Foamflower",
+        "heart-leaved foamflower",
+        "Coolwort"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Saxifragales",
+        "family": "Saxifragaceae",
+        "genus": "Tiarella",
+        "species": "Tiarella cordifolia",
+        "canonicalName": "Tiarella cordifolia"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5371610"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:30175905-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Tiarella_cordifolia"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/1569249"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q11891603"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.136435"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 21285
+    },
+    "urtica-dioica": {
+      "id": "urtica-dioica",
+      "fullName": "Urtica dioica",
+      "commonName": "Stinging Nettle",
+      "description": "Urtica dioica, often known as common nettle, burn nettle, stinging nettle, nettle leaf, or just a nettle or stinger, is a herbaceous perennial flowering plant in the family Urticaceae. Originally native to Europe, much of temperate Asia and western North Africa, it is now found worldwide. \nThe species is divided into six subspecies, five of which have many hollow stinging hairs called trichomes on the leaves and stems, which act like hypodermic needles, injecting histamine and other chemicals that produce a stinging sensation upon contact (\"contact urticaria\", a form of contact dermatitis).\nThe plant has a long history of use as a source for traditional medicine, food, tea, and textile raw material in ancient (such as Saxon) and modern societies.",
+      "vernacularNames": [
+        "California Nettle",
+        "Common Nettle",
+        "European Nettle",
+        "Giant Nettle",
+        "Nettle",
+        "Slender Nettle",
+        "Stinging Nettle"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Rosales",
+        "family": "Urticaceae",
+        "genus": "Urtica",
+        "species": "Urtica dioica",
+        "canonicalName": "Urtica dioica"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/7960979"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:260630-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Urtica_dioica"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/1631210"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q155909"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.135381"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 198833
+    },
+    "vanessa-atalanta": {
+      "id": "vanessa-atalanta",
+      "fullName": "Vanessa atalanta",
+      "commonName": "Red Admiral",
+      "description": "Vanessa atalanta, the red admiral or, previously, the red admirable, is a well-characterized, medium-sized butterfly with black wings, red bands, and white spots. It has a wingspan of about 2 inches (5 cm). It was first described by Carl Linnaeus in his 1758 10th edition of Systema Naturae.\nThe red admiral is widely distributed across temperate regions of North Africa, North America, Europe, Asia, and the Caribbean. It resides in warmer areas, but migrates north in spring and sometimes again in autumn. Typically found in moist woodlands, the red admiral caterpillar's primary host plant is the stinging nettle (Urtica dioica); it can also be found on the false nettle (Boehmeria cylindrica). The adult butterfly drinks from flowering plants like Buddleja and overripe fruit.\nRed admirals are territorial; females will only mate with males that hold territory. Males with superior flight abilities are more likely to successfully court females. It is known as an unusually calm butterfly, often allowing observation at a very close distance before flying away, also landing on and using humans as perches.",
+      "vernacularNames": [
+        "Red Admiral",
+        "Red admiral butterfly"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Lepidoptera",
+        "family": "Nymphalidae",
+        "genus": "Vanessa",
+        "species": "Vanessa atalanta",
+        "canonicalName": "Vanessa atalanta"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/1898286"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Vanessa_atalanta"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/49133"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q156454"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.109374"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 258436
+    },
+    "veronicastrum-virginicum": {
+      "id": "veronicastrum-virginicum",
+      "fullName": "Veronicastrum virginicum",
+      "commonName": "Culver's Root",
+      "description": "Veronicastrum virginicum, or Culver's root, is a species of flowering plant in the plantain family, Plantaginaceae. It is native to the eastern United States and south-eastern Canada. Growing to 200 cm (79 in) tall by 45 cm (18 in) broad, it is an erect herbaceous perennial with slender racemes of white or occasionally pink or purple flowers in summer.",
+      "vernacularNames": [
+        "Blackroot",
+        "Bowman's-root",
+        "Culver's Root",
+        "Culver's-root",
+        "Tall-speedwell",
+        "Virginia Culver's root"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Lamiales",
+        "family": "Plantaginaceae",
+        "genus": "Veronicastrum",
+        "species": "Veronicastrum virginicum",
+        "canonicalName": "Veronicastrum virginicum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3172206"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:264772-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Veronicastrum_virginicum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/141767"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q4108065"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.138942"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 13391
+    },
+    "viola-sororia": {
+      "id": "viola-sororia",
+      "fullName": "Viola sororia",
+      "commonName": "violet",
+      "description": "Viola sororia ( vy-OH-l\u0259 s\u0259-ROR-ee-\u0259), known commonly as the common blue violet, is a short-stemmed herbaceous perennial plant native to eastern North America. It is known by a number of common names, including common meadow violet, purple violet, woolly blue violet, hooded violet, and wood violet.\nThis perennial plant is distributed in the eastern half of the United States, Canada, and a part of eastern Mexico. Its native habitats are rich, moist woods, and swamps located in the eastern half of the United States and Canada. Its cultivar 'Albiflora' has gained the Royal Horticultural Society's Award of Garden Merit.\nSelf-seeding freely in lawns and gardens, it can be considered a weed by some. Cleistogamous seed heads may also appear on short stems in late summer and early autumn.",
+      "vernacularNames": [
+        "Bayou Violet",
+        "Blue Praire Violet",
+        "Common Blue Violet",
+        "Dooryard Violet",
+        "Downy Blue Violet",
+        "Sister Violet",
+        "Violet",
+        "Woolly Blue Violet",
+        "amerika-fuki-sumire",
+        "amerika-sumire-saishin",
+        "blue prairie violet",
+        "hooded blue violet",
+        "common blue violet"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Malpighiales",
+        "family": "Violaceae",
+        "genus": "Viola",
+        "species": "Viola sororia",
+        "canonicalName": "Viola sororia"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5331238"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:266976-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Viola_sororia"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/82816"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q1077055"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.158850"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 108208
+    },
+    "zizia-aurea": {
+      "id": "zizia-aurea",
+      "fullName": "Zizia aurea",
+      "commonName": "Golden Alexanders",
+      "description": "Zizia aurea (golden alexanders, golden zizia) is a flowering herbaceous perennial plant of the carrot family Apiaceae. It is native to eastern Canada and the United States, from the eastern Great Plains to the Atlantic Coast. The genus is named for Johann Baptist Ziz, a German botanist. The common name is based on the similarity to alexanders (Smyrnium olusatrum), another member of the carrot family from coastal areas in Europe and Northern Africa.",
+      "vernacularNames": [
+        "Golden Alexanders",
+        "Golden Zizia",
+        "Golden Alexander",
+        "Common Alexanders",
+        "Golden Meadowparsnip"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Apiales",
+        "family": "Apiaceae",
+        "genus": "Zizia",
+        "species": "Zizia aurea",
+        "canonicalName": "Zizia aurea"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3034521"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:850044-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Zizia_aurea"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/83154"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q926091"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.144433"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 32829
+    }
+  }
+}

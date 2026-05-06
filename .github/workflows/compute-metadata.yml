@@ -70,7 +70,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/data/pics.json public/data/pic-metadata.json public/data/plants.json public/data/embeddings.json public/data/species/ public/data/taxa.json public/data/rollup.min.json
+          git add public/data/pics.json public/data/pic-metadata.json public/data/plants.json public/data/embeddings.json public/data/species.json public/data/taxa.json public/data/rollup.min.json
           if git diff --cached --quiet; then
             echo "No metadata changes to commit."
           else

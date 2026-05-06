@@ -97,3 +97,14 @@ export interface TaxaInfo {
   description: string;
   url: string;
 }
+
+export type AIVerdict = "GOOD" | "BAD" | "MIXED";
+
+export interface AIAnalysis {
+  shortCode: string;
+  zoneCode: string;
+  verdict: AIVerdict;
+  analysis: string;
+  references: string[];
+  created: string;
+}

@@ -3,6 +3,6 @@ from pathlib import Path
 PICS_PATH = Path("public/data/pics.json")
 PIC_METADATA_PATH = Path("public/data/pic-metadata.json")
 PLANTS_PATH = Path("public/data/plants.json")
-SPECIES_DIR = Path("public/data/species")
+SPECIES_BUNDLE_PATH = Path("public/data/species.json")
 IMAGE_ROOT = Path("public")
 TAXA_PATH = Path("public/data/taxa.json")

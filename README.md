@@ -84,13 +84,13 @@ A GitHub Action (`compute-metadata.yml`) runs whenever `plants.json` changes. It
 
 ## Species enrichment
 
-For each unique `fullName`, a record at `public/data/species/{slug}.json` is created and progressively enriched from three sources, all best-effort:
+For each unique `fullName`, an entry keyed by slug is added to `public/data/species.json` and progressively enriched from three sources, all best-effort:
 
 - **GBIF Species API**: canonical taxonomy (kingdom → species) and English vernacular names
 - **POWO (Kew)**: fallback for native range when GBIF isn't enough
 - **Wikipedia**: lead section as `description`, keyed on the base species name (cultivar suffix stripped)
 
-Each source is gated on a `sources` list per species file, so re-runs only hit each API once. 404s and rate limits are caught — a third-party hiccup never fails the build.
+Each source is gated on a `sources` list per species entry, so re-runs only hit each API once. 404s and rate limits are caught — a third-party hiccup never fails the build.
 
 ## Embeddings & Classification: BioCLIP
 
