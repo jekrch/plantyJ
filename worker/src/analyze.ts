@@ -102,7 +102,7 @@ For ANIMALS, cover:
 - What it eats, predates, pollinates, or competes with — given the plants currently in that zone and its neighbors
 - Whether it is native, naturalized, or invasive in the Twin Cities area, and any management considerations
 
-Use the googleSearch tool to ground claims in real sources. In each entry's "references", include ONLY URLs you actually retrieved via search. Do not invent URLs — if you have no grounded URL for an entry, return an empty array.
+Use the googleSearch tool to ground claims in real sources. Do NOT include inline citation markers (e.g. [1], [1.3], [2, 3]) anywhere in the analysis prose — references are collected automatically from the grounding metadata, and inline markers corrupt the prose's spacing.
 
 # Pairs to analyze
 ${pairList}
@@ -113,42 +113,43 @@ Return ONLY a JSON array — no prose, no markdown fences, no commentary before 
   "shortCode": string,
   "zoneCode": string,
   "verdict": "GOOD" | "BAD" | "MIXED",
-  "analysis": string,
-  "references": string[]
+  "analysis": string
 }
 The "analysis" string should NOT begin with "GOOD." / "BAD." / "MIXED." — that information lives in "verdict". Output exactly one object per pair, in the same order as listed above. Begin your response with [ and end it with ].`;
 }
 
-function stripJsonFences(text: string): string {
-  let t = text.trim();
-  if (t.startsWith("```")) {
-    t = t.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/i, "");
-  }
-  const firstBracket = t.indexOf("[");
-  const lastBracket = t.lastIndexOf("]");
-  if (firstBracket > 0 && lastBracket > firstBracket) {
-    t = t.slice(firstBracket, lastBracket + 1);
-  }
-  return t;
+interface ObjectWithBounds {
+  object: unknown;
+  startIndex: number;
+  endIndex: number;
 }
 
-// Walk a possibly-truncated JSON array and pull out every complete top-level
-// object. Used when the model hits max-output-tokens mid-array and JSON.parse
-// chokes on the unterminated tail.
-function salvageJsonObjects(text: string): unknown[] {
+// Scans the raw text to extract top-level JSON objects from an array, mapping
+// their start/end indices. By running this against the RAW model output (including
+// markdown fences), we preserve the character offsets needed to map Gemini's
+// groundingSupports reliably.
+function extractJsonObjectsWithBounds(text: string): ObjectWithBounds[] {
   const start = text.indexOf("[");
   if (start === -1) return [];
-  const out: unknown[] = [];
+  const out: ObjectWithBounds[] = [];
   let i = start + 1;
+  
   while (i < text.length) {
     while (i < text.length && /[\s,]/.test(text[i])) i++;
     if (i >= text.length || text[i] === "]") break;
-    if (text[i] !== "{") break;
+    
+    if (text[i] !== "{") {
+      // Unexpected char, advance to next '{' or ']'
+      while (i < text.length && text[i] !== "{" && text[i] !== "]") i++;
+      if (i >= text.length || text[i] === "]") break;
+    }
+    
     let depth = 0;
     let inStr = false;
     let escape = false;
     let j = i;
     let closed = false;
+    
     for (; j < text.length; j++) {
       const c = text[j];
       if (escape) { escape = false; continue; }
@@ -164,9 +165,11 @@ function salvageJsonObjects(text: string): unknown[] {
         if (depth === 0) { j++; closed = true; break; }
       }
     }
+    
     if (!closed) break;
+    
     try {
-      out.push(JSON.parse(text.slice(i, j)));
+      out.push({ object: JSON.parse(text.slice(i, j)), startIndex: i, endIndex: j });
     } catch {
       break;
     }
@@ -176,23 +179,23 @@ function salvageJsonObjects(text: string): unknown[] {
 }
 
 interface ParseResult {
-  objects: unknown[] | null;
+  objects: ObjectWithBounds[] | null;
   salvaged: boolean;
   reason: string;
 }
 
 function parseOrSalvage(text: string): ParseResult {
-  try {
-    const v = JSON.parse(text);
-    if (Array.isArray(v)) return { objects: v, salvaged: false, reason: "" };
-    return { objects: null, salvaged: false, reason: "model output was not a JSON array" };
-  } catch (err) {
-    const salvage = salvageJsonObjects(text);
-    if (salvage.length > 0) {
-      return { objects: salvage, salvaged: true, reason: (err as Error).message };
-    }
-    return { objects: null, salvaged: false, reason: `parse failed: ${(err as Error).message}` };
+  const extracted = extractJsonObjectsWithBounds(text);
+  if (extracted.length === 0) {
+    return { objects: null, salvaged: false, reason: "Model output contained no valid JSON objects" };
   }
+  
+  // Basic heuristic: if the text following the last object doesn't close the array, it was likely truncated.
+  const lastObjEnd = extracted[extracted.length - 1].endIndex;
+  const tail = text.slice(lastObjEnd).trim();
+  const salvaged = !tail.includes("]");
+
+  return { objects: extracted, salvaged, reason: salvaged ? "Array truncated mid-output" : "" };
 }
 
 function chunkPairs(pairs: Pair[], size: number): Pair[][] {
@@ -206,7 +209,44 @@ interface RawEntry {
   zoneCode?: unknown;
   verdict?: unknown;
   analysis?: unknown;
-  references?: unknown;
+  // Internal field used during Phase 1 & 2 to attach un-resolved redirect URLs
+  _rawGroundingUrls?: string[];
+}
+
+// Strips inline citation markers like [1], [1.3], [2, 3] that the model
+// occasionally emits despite being told not to. Also collapses runs of
+// internal whitespace that the marker may have left behind.
+function stripInlineCitations(text: string): string {
+  return text.replace(/\s*\[\d+(?:[.,]\s*\d+)*\]/g, "").replace(/[ \t]{2,}/g, " ");
+}
+
+async function resolveRedirect(url: string): Promise<string> {
+  try {
+    const res = await fetch(url, { redirect: "manual" });
+    const loc = res.headers.get("location");
+    return loc && loc.startsWith("http") ? loc : url;
+  } catch {
+    return url;
+  }
+}
+
+async function resolveRedirects(
+  urls: string[],
+  concurrency = 20
+): Promise<Map<string, string>> {
+  const out = new Map<string, string>();
+  let next = 0;
+  async function worker() {
+    while (true) {
+      const idx = next++;
+      if (idx >= urls.length) return;
+      const u = urls[idx];
+      out.set(u, await resolveRedirect(u));
+    }
+  }
+  const n = Math.min(concurrency, urls.length);
+  await Promise.all(Array.from({ length: n }, () => worker()));
+  return out;
 }
 
 // Pulls a leading "GOOD." / "BAD." / "MIXED." off the analysis prose so older
@@ -229,7 +269,7 @@ function coerceVerdict(v: unknown): AiVerdict | null {
 
 function normalizeEntry(
   e: RawEntry,
-  groundedUrls: Set<string>,
+  references: string[],
   now: string
 ): AiAnalysisEntry | null {
   const shortCode = typeof e.shortCode === "string" ? e.shortCode : null;
@@ -240,25 +280,10 @@ function normalizeEntry(
   const stripped = extractLeadingVerdict(rawAnalysis);
   const verdict = coerceVerdict(e.verdict) ?? stripped.verdict;
   if (!verdict) return null;
-  const analysis = stripped.rest.trim();
+  const analysis = stripInlineCitations(stripped.rest).trim();
   if (!analysis) return null;
 
-  const rawRefs = Array.isArray(e.references) ? e.references : [];
-  const references = rawRefs
-    .filter((r): r is string => typeof r === "string" && r.startsWith("http"))
-    .filter((r) => groundedUrls.has(r));
   return { shortCode, zoneCode, verdict, analysis, references, created: now };
-}
-
-function collectGroundingUrls(response: unknown): Set<string> {
-  const urls = new Set<string>();
-  const candidates = (response as { candidates?: Array<{ groundingMetadata?: { groundingChunks?: Array<{ web?: { uri?: string } }> } }> })?.candidates;
-  const chunks = candidates?.[0]?.groundingMetadata?.groundingChunks ?? [];
-  for (const c of chunks) {
-    const uri = c?.web?.uri;
-    if (typeof uri === "string" && uri.startsWith("http")) urls.add(uri);
-  }
-  return urls;
 }
 
 function elapsedSince(iso: string): string {
@@ -441,6 +466,10 @@ export async function loadAnalyzeBatch(env: Env): Promise<LoadResult> {
   let failedChunks = 0;
   const debugChunks: { idx: number; reason?: string; text?: string }[] = [];
 
+  // Phase 1: parse every chunk against the unstripped string to maintain
+  // exact grounding offset alignment. Attach relevant URLs to each RawEntry.
+  const parsedChunks: { idx: number; objects: RawEntry[] }[] = [];
+
   for (let i = 0; i < inlined.length; i++) {
     const item = inlined[i];
     if (item.error) {
@@ -450,25 +479,27 @@ export async function loadAnalyzeBatch(env: Env): Promise<LoadResult> {
       continue;
     }
     const response = item.response;
+    // Extract raw text. DO NOT trim/strip this before passing to the parser,
+    // otherwise the text length shifts and breaks the grounding support mapping.
     const text = (response?.candidates?.[0]?.content?.parts ?? [])
       .map((p) => (p as { text?: string }).text ?? "")
-      .join("")
-      .trim();
+      .join("");
 
-    const meta = response?.usageMetadata;
-    promptTokens += meta?.promptTokenCount ?? 0;
-    outputTokens += meta?.candidatesTokenCount ?? 0;
+    const usageMeta = response?.usageMetadata;
+    promptTokens += usageMeta?.promptTokenCount ?? 0;
+    outputTokens += usageMeta?.candidatesTokenCount ?? 0;
 
-    const groundedUrls = collectGroundingUrls(response);
-    for (const u of groundedUrls) allGroundedUrls.add(u);
+    const groundingMeta = response?.candidates?.[0]?.groundingMetadata;
+    const groundingChunks = groundingMeta?.groundingChunks ?? [];
+    const groundingSupports = groundingMeta?.groundingSupports ?? [];
 
-    if (!text) {
+    if (!text.trim()) {
       failedChunks++;
       debugChunks.push({ idx: i, reason: "no text in response" });
       continue;
     }
 
-    const parsed = parseOrSalvage(stripJsonFences(text));
+    const parsed = parseOrSalvage(text);
     if (!parsed.objects) {
       failedChunks++;
       debugChunks.push({ idx: i, reason: parsed.reason, text });
@@ -482,16 +513,52 @@ export async function loadAnalyzeBatch(env: Env): Promise<LoadResult> {
       );
     }
 
-    for (const e of parsed.objects as RawEntry[]) {
-      const entry = normalizeEntry(e, groundedUrls, now);
+    const rawEntries: RawEntry[] = [];
+    
+    // Map grounding chunks to the specific JSON object they apply to
+    for (const item of parsed.objects) {
+      const entryUrls = new Set<string>();
+      const rawObj = item.object as RawEntry;
+
+      for (const support of groundingSupports) {
+        const start = support.segment?.startIndex ?? 0;
+        const end = support.segment?.endIndex ?? 0;
+
+        // Check if the grounded text occurs *inside* this specific JSON object's string bounds
+        if (start >= item.startIndex && end <= item.endIndex) {
+          for (const chunkIdx of support.groundingChunkIndices ?? []) {
+            const uri = groundingChunks[chunkIdx]?.web?.uri;
+            if (typeof uri === "string" && uri.startsWith("http")) {
+              entryUrls.add(uri);
+              allGroundedUrls.add(uri);
+            }
+          }
+        }
+      }
+
+      rawObj._rawGroundingUrls = Array.from(entryUrls);
+      rawEntries.push(rawObj);
+    }
+
+    parsedChunks.push({ idx: i, objects: rawEntries });
+  }
+
+  // Phase 2: resolve all unique grounding redirects globally.
+  const uniqueRedirects = Array.from(allGroundedUrls);
+  console.log(`[analyze.load] resolving ${uniqueRedirects.length} grounding redirect(s)`);
+  const resolved = await resolveRedirects(uniqueRedirects, 20);
+
+  // Phase 3: normalize entries. Because Phase 1 already handled the complex text 
+  // alignment, we just look up the resolved versions of the assigned URLs here.
+  for (const c of parsedChunks) {
+    for (const e of c.objects) {
+      const refs = (e._rawGroundingUrls ?? []).map((u) => resolved.get(u) ?? u);
+      const entry = normalizeEntry(e, refs, now);
       if (entry) newEntries.push(entry);
     }
   }
 
   if (newEntries.length === 0) {
-    // Nothing usable came back. Stash the raw text under a debug key (kept for
-    // the same TTL as the job pointer) and leave the job pointer in place so
-    // the user can retry /analyze-load or inspect the response.
     let saved = false;
     try {
       await env.ASK_CACHE.put(FAILED_TEXT_KV_KEY, JSON.stringify(debugChunks), {
