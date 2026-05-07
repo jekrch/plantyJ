@@ -23,26 +23,48 @@ permissions:
 
 jobs:
   compute:
+    # Skip self-triggered runs from the bot's own metadata-refresh push.
+    # Manual dispatch always runs.
+    if: github.actor != 'github-actions[bot]' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check for pending work
+        id: guard
+        run: python3 scripts/check-pending-work.py
+
       - name: Set up Python
+        if: steps.guard.outputs.any_work == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Cache pip wheels
+      - name: Set up uv
+        if: steps.guard.outputs.any_work == 'true'
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+          cache-dependency-glob: "scripts/requirements.txt"
+
+      - name: Cache venv
+        if: steps.guard.outputs.any_work == 'true'
+        id: venv-cache
         uses: actions/cache@v4
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('scripts/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          path: .venv
+          key: ${{ runner.os }}-venv-py3.11-${{ hashFiles('scripts/requirements.txt') }}
 
-      - name: Cache HuggingFace + torchvision weights
+      - name: Install dependencies
+        if: steps.guard.outputs.any_work == 'true' && steps.venv-cache.outputs.cache-hit != 'true'
+        run: |
+          uv venv .venv --python 3.11
+          uv pip install --python .venv/bin/python -r scripts/requirements.txt
+
+      - name: Cache HuggingFace + bioclip weights
+        if: steps.guard.outputs.needs_embeddings == 'true'
         uses: actions/cache@v4
         with:
           path: |
@@ -54,19 +76,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-models-
 
-      - name: Install dependencies
-        run: pip install -r scripts/requirements.txt
-
       - name: Compute image metadata + species enrichment
-        run: python scripts/compute-image-metadata.py
+        if: steps.guard.outputs.needs_metadata == 'true'
+        run: .venv/bin/python scripts/compute-image-metadata.py
 
       - name: Compute BioCLIP embeddings
-        run: python scripts/compute-embeddings.py
+        if: steps.guard.outputs.needs_embeddings == 'true'
+        run: .venv/bin/python scripts/compute-embeddings.py
 
       - name: Build rollup
-        run: python scripts/build-rollup.py
+        if: steps.guard.outputs.any_work == 'true'
+        run: .venv/bin/python scripts/build-rollup.py
 
       - name: Commit updated metadata
+        if: steps.guard.outputs.any_work == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
