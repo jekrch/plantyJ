@@ -17,14 +17,6 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
-      "shortCode": "a pla",
-      "zoneCode": "mpg",
-      "verdict": "BAD",
-      "analysis": "Acer platanoides (Norway Maple) is an invasive, non-native tree listed by the Minnesota DNR due to its aggressive spread into natural woodlands. Its extremely dense canopy and allelopathic shallow root system create a \"zone of death\" underneath it, making it exceptionally difficult to grow native woodland wildflowers or sedges. From an ecological perspective, this tree actively suppresses local biodiversity and should ideally be removed and replaced with a native oak, maple, or basswood.",
-      "references": [],
-      "created": "2026-05-05T02:52:53.830Z"
-    },
-    {
       "shortCode": "A sac",
       "zoneCode": "nbv",
       "verdict": "MIXED",

@@ -514,18 +514,40 @@ export async function loadAnalyzeBatch(env: Env): Promise<LoadResult> {
     }
 
     const rawEntries: RawEntry[] = [];
-    
+
+    // Gemini's grounding segment indices are UTF-8 byte offsets within the
+    // part, but extractJsonObjectsWithBounds returns JS character (UTF-16)
+    // offsets. Convert object bounds to bytes so comparisons line up — any
+    // multi-byte char in the prose (em-dashes, etc.) silently breaks the
+    // overlap check otherwise.
+    const enc = new TextEncoder();
+    let walkChar = 0;
+    let walkByte = 0;
+    const objectBounds = parsed.objects.map((item) => {
+      walkByte += enc.encode(text.slice(walkChar, item.startIndex)).length;
+      walkChar = item.startIndex;
+      const startByte = walkByte;
+      walkByte += enc.encode(text.slice(walkChar, item.endIndex)).length;
+      walkChar = item.endIndex;
+      return { obj: item, startByte, endByte: walkByte };
+    });
+
     // Map grounding chunks to the specific JSON object they apply to
-    for (const item of parsed.objects) {
+    for (const { obj, startByte, endByte } of objectBounds) {
       const entryUrls = new Set<string>();
-      const rawObj = item.object as RawEntry;
+      const rawObj = obj.object as RawEntry;
 
       for (const support of groundingSupports) {
+        // Byte offsets are relative to a specific part. We joined parts into
+        // one string above, so only part 0 lines up with our walkByte math.
+        // In practice batch responses are a single text part.
+        if ((support.segment?.partIndex ?? 0) !== 0) continue;
+
         const start = support.segment?.startIndex ?? 0;
         const end = support.segment?.endIndex ?? 0;
 
-        // Check if the grounded text occurs *inside* this specific JSON object's string bounds
-        if (start >= item.startIndex && end <= item.endIndex) {
+        // Check if the grounded text occurs *inside* this specific JSON object's byte bounds
+        if (start >= startByte && end <= endByte) {
           for (const chunkIdx of support.groundingChunkIndices ?? []) {
             const uri = groundingChunks[chunkIdx]?.web?.uri;
             if (typeof uri === "string" && uri.startsWith("http")) {
