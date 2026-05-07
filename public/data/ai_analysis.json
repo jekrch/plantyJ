@@ -17,6 +17,14 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "a pla",
+      "zoneCode": "mpg",
+      "verdict": "BAD",
+      "analysis": "The Norway Maple (Acer platanoides) is an invasive species in Minnesota and is actively detrimental to the native-focused goals of this garden. In the \"mpg\" zone, the owners have cultivated a rich understory of native woodland ephemerals and shade plants, including Virginia Bluebells, Trout Lily, Hepatica, and Foamflower. The Norway maple works directly against these plantings by casting an exceptionally dense shade and deploying an aggressive, shallow root system that monopolizes moisture and nutrients in the clay/loam soil. Furthermore, its leaf litter is known to alter soil chemistry and heavily suppress the growth of native flora. For a Zone 4b/5a property prioritizing local ecology, this tree creates a hostile microclimate for the very understory plants the owners are trying to nurture.\n\nEcologically, Acer platanoides offers very little support to North American food webs. Benefiting from \"enemy release,\" its foliage is largely unrecognized by native insects, meaning it fails to host the specialized caterpillars that native maples (such as the Silver Maple found elsewhere on the property) support in abundance. While its early spring blooms can provide some minor nectar and pollen for generalist pollinators, the overall lack of insect herbivory means the tree provides minimal food value for urban insectivores and birds, such as the Cardinals and Goldfinches seen in this zone, which rely heavily on native caterpillars to rear their young. Given its status as a highly disruptive invasive tree that escapes into and degrades native Twin Cities woodlands, its presence is a significant ecological liability.",
+      "references": [],
+      "created": "2026-05-07T12:06:49.849Z"
+    },
+    {
       "shortCode": "A sac",
       "zoneCode": "nbv",
       "verdict": "MIXED",
