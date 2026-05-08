@@ -26,6 +26,14 @@
     },
     {
       "shortCode": "A sac",
+      "zoneCode": "nbv",
+      "verdict": "MIXED",
+      "analysis": "Silver Maple (Acer saccharinum) is a fast-growing shade tree native to Minnesota, perfectly adapted to the local climate (USDA Zone 4b/5a) and highly tolerant of the property's clay/loam soil. From an ecological perspective, it is a powerhouse that aligns well with the owners' priorities. It is one of the earliest trees to bloom in the region, offering critical early-season pollen and nectar for emerging native bees. The tree also acts as a keystone host plant for hundreds of native Lepidoptera species, including the spectacular Cecropia moth. Its abundant winged seeds (samaras) provide a vital early food source for urban wildlife, including small mammals and birds like the wild turkeys (Meleagris gallopavo) already observed foraging in the North Boulevard zone.\n\nDespite its immense wildlife value, a Silver Maple's placement in a boulevard presents significant practical challenges. The species has a notoriously shallow and aggressive root system that frequently buckles sidewalks and clogs underground utility pipes—a major liability in a constrained street-side planting. Furthermore, Silver Maples are known for having brittle, weak wood that is highly susceptible to storm and ice damage, requiring proactive arboricultural management to mitigate the safety risks of dropping limbs over the public right-of-way. Finally, as this large canopy tree matures, the dense shade and root competition it creates will likely challenge the sun-loving native prairie plants currently sharing the North Boulevard, such as the Butterfly Weed (Asclepias tuberosa) and Golden Alexanders (Zizia aurea).",
+      "references": [],
+      "created": "2026-05-08T00:28:59.258Z"
+    },
+    {
+      "shortCode": "A sac",
       "zoneCode": "wbv",
       "verdict": "MIXED",
       "analysis": "Similar to the North Boulevard specimen, Acer saccharinum in the West Boulevard offers excellent early-season ecological benefits, acting as a critical early pollen source for emerging native bees and hosting a variety of Lepidoptera. However, it is an oversized, brittle tree for a boulevard strip, with shallow, moisture-seeking roots that perform well in clay but often destroy urban infrastructure and create a difficult, dry-shade microclimate for other native plants below it.",
