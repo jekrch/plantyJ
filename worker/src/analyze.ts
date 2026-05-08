@@ -222,43 +222,63 @@ async function analyzeOnePair(
   now: string
 ): Promise<PairResult> {
   const prompt = buildSinglePairPrompt(rollupJson, pair, zoneFilter);
-  let response;
+
+  // Stream the response: each chunk arriving resets Cloudflare's ~100s
+  // gateway timer, so a slow grounded call doesn't 524. We accumulate text
+  // deltas and snapshot the latest groundingMetadata / usageMetadata seen
+  // (the final chunk normally carries the complete versions).
+  let textAcc = "";
+  let lastGroundingMeta: import("@google/genai").GroundingMetadata | undefined;
+  let lastFinishReason: string | undefined;
+  let lastModelVersion: string | undefined;
+  let promptTokens = 0;
+  let outputTokens = 0;
+  let lastUrlContextMeta: unknown;
+
   try {
-    response = await client.models.generateContent({
+    const stream = await client.models.generateContentStream({
       model: ANALYSIS_MODEL,
       contents: [{ role: "user", parts: [{ text: prompt }] }],
       config: { tools: [{ googleSearch: {} }] },
     });
+    for await (const chunk of stream) {
+      const cand = chunk.candidates?.[0];
+      const parts = cand?.content?.parts ?? [];
+      for (const p of parts) {
+        const t = (p as { text?: string }).text;
+        if (typeof t === "string") textAcc += t;
+      }
+      if (cand?.groundingMetadata) lastGroundingMeta = cand.groundingMetadata;
+      if (cand?.finishReason) lastFinishReason = cand.finishReason;
+      if (cand?.urlContextMetadata) lastUrlContextMeta = cand.urlContextMetadata;
+      if (chunk.modelVersion) lastModelVersion = chunk.modelVersion;
+      const usage = chunk.usageMetadata;
+      if (usage?.promptTokenCount != null) promptTokens = usage.promptTokenCount;
+      if (usage?.candidatesTokenCount != null) outputTokens = usage.candidatesTokenCount;
+    }
   } catch (err) {
     return {
       pair,
-      error: `generateContent failed: ${(err as Error).message}`,
-      promptTokens: 0,
-      outputTokens: 0,
+      error: `generateContentStream failed: ${(err as Error).message}`,
+      promptTokens,
+      outputTokens,
       diag: emptyDiag(pair),
     };
   }
 
-  const candidate = response.candidates?.[0];
-  const text = (candidate?.content?.parts ?? [])
-    .map((p) => (p as { text?: string }).text ?? "")
-    .join("");
-  const promptTokens = response.usageMetadata?.promptTokenCount ?? 0;
-  const outputTokens = response.usageMetadata?.candidatesTokenCount ?? 0;
-
-  const groundingMeta = candidate?.groundingMetadata;
-  const groundingChunks = groundingMeta?.groundingChunks ?? [];
+  const text = textAcc;
+  const groundingChunks = lastGroundingMeta?.groundingChunks ?? [];
   const webChunks = groundingChunks.filter((c) => c.web?.uri);
   const diag: GroundingDiag = {
     shortCode: pair.shortCode,
     zoneCode: pair.zoneCode,
-    modelVersion: response.modelVersion ?? null,
-    finishReason: candidate?.finishReason ?? null,
-    webSearchQueries: groundingMeta?.webSearchQueries ?? [],
+    modelVersion: lastModelVersion ?? null,
+    finishReason: lastFinishReason ?? null,
+    webSearchQueries: lastGroundingMeta?.webSearchQueries ?? [],
     groundingChunkCount: groundingChunks.length,
-    groundingSupportCount: groundingMeta?.groundingSupports?.length ?? 0,
+    groundingSupportCount: lastGroundingMeta?.groundingSupports?.length ?? 0,
     webChunkCount: webChunks.length,
-    hasUrlContextMetadata: !!candidate?.urlContextMetadata,
+    hasUrlContextMetadata: !!lastUrlContextMeta,
     sampleUris: webChunks.slice(0, 3).map((c) => c.web?.uri ?? "").filter(Boolean),
   };
 
