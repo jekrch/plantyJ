@@ -3,16 +3,20 @@ import type { AiAnalysisEntry, AiVerdict, Env } from "./types";
 import { readAiAnalyses, writeAiAnalyses } from "./github";
 
 const ANALYSIS_MODEL = "gemini-3.1-pro-preview";
-const JOB_KV_KEY = "analyze:job";
+// Queue + run-state KV keys.
+const QUEUE_KV_KEY = "analyze:queue";
+const META_KV_KEY = "analyze:meta";
+const LOCK_KV_KEY = "analyze:lock";
 const FAILED_TEXT_KV_KEY = "analyze:last-failed-text";
-// 7 days — Gemini's Batch API SLA is up to ~72h, and the result file is
-// retained on Google's side for a while after that, so giving ourselves a
-// week of slack means we'll never lose a job pointer to KV expiry.
-const JOB_KV_TTL = 7 * 86400;
-// One Gemini batch request per chunk. Smaller chunks keep each response
-// inside the model's max-output-tokens budget so they don't get truncated
-// mid-array. The whole job still fans out in parallel on Google's side.
-const PAIRS_PER_CHUNK = 25;
+// 7 days — long enough that a paused/abandoned run survives normal poking.
+const QUEUE_KV_TTL = 7 * 86400;
+// Best-effort lock TTL: a single cron tick should never run longer than this,
+// and if a worker dies mid-tick we want the next cron to pick up the slack.
+const LOCK_TTL_SECONDS = 240;
+// Per-tick processing budget. Each pair is one non-batch generateContent call
+// with grounding (~10–25s). With concurrency 5 we stay inside the worker's
+// wall-time budget while still making meaningful progress per minute.
+const PAIRS_PER_TICK = 5;
 
 interface RollupPlant {
   shortCode: string;
@@ -37,11 +41,16 @@ interface Pair {
   zoneCode: string;
 }
 
-interface PendingJob {
-  name: string;
+interface RunMeta {
   zoneFilter: string | null;
-  pairCount: number;
-  submittedAt: string;
+  total: number;
+  succeeded: number;
+  failed: number;
+  promptTokens: number;
+  outputTokens: number;
+  startedAt: string;
+  lastTickAt?: string;
+  finishedAt?: string;
 }
 
 async function loadRollupParsed(env: Env): Promise<{ raw: string; rollup: Rollup }> {
@@ -71,18 +80,16 @@ export function findMissingPairs(
   return out;
 }
 
-function buildBatchPrompt(
+function buildSinglePairPrompt(
   rollupJson: string,
-  pairs: Pair[],
+  pair: Pair,
   zoneFilter: string | null
 ): string {
   const filterNote = zoneFilter
     ? `\nThis run is scoped to zone "${zoneFilter}". Still consider neighboring zones and the property as a whole when judging ecological fit — don't restrict reasoning to that zone.`
     : "";
 
-  const pairList = pairs.map((p) => `- ${p.shortCode} in zone ${p.zoneCode}`).join("\n");
-
-  return `You are analyzing the ecological niche of specimens (plants and animals) observed in a Minneapolis, MN garden journal. The property is on the NW corner of a city block, USDA hardiness zone 4b/5a, clay/loam soil. Owners prioritize native plants, edibles, medicinals, and supporting local ecology.${filterNote}
+  return `You are analyzing the ecological niche of a single specimen (plant or animal) observed in a Minneapolis, MN garden journal. The property is on the NW corner of a city block, USDA hardiness zone 4b/5a, clay/loam soil. Owners prioritize native plants, edibles, medicinals, and supporting local ecology.${filterNote}
 
 # Garden context (full rollup)
 # Schema: zones[]: {code, name}; plants[]: {shortCode, fullName, commonName, tags, byZone, pics, zonesSeen, kind?, ...}
@@ -90,7 +97,7 @@ function buildBatchPrompt(
 ${rollupJson}
 
 # Task
-For EACH of the ${pairs.length} specimen + zone pairs below, decide a verdict (GOOD / BAD / MIXED) and write a 1–2 paragraph analysis. The verdict goes in its own "verdict" field — do NOT repeat it as a prefix in the analysis prose.
+Decide a verdict (GOOD / BAD / MIXED) and write a 1–2 paragraph analysis for the specimen "${pair.shortCode}" in zone "${pair.zoneCode}". The verdict goes in its own "verdict" field — do NOT repeat it as a prefix in the analysis prose.
 
 For PLANTS, cover:
 - Whether the ecological niche is GOOD, BAD, or MIXED for that zone (factor in zone neighbors but don't restrict to them)
@@ -104,154 +111,30 @@ For ANIMALS, cover:
 
 Use the googleSearch tool to ground claims in real sources. Do NOT include inline citation markers (e.g. [1], [1.3], [2, 3]) anywhere in the analysis prose — references are collected automatically from the grounding metadata, and inline markers corrupt the prose's spacing.
 
-# Pairs to analyze
-${pairList}
-
 # Output format
-Return ONLY a JSON array — no prose, no markdown fences, no commentary before or after. Each element must be exactly:
+Return ONLY a JSON object — no prose, no markdown fences, no commentary before or after. Exactly:
 {
-  "shortCode": string,
-  "zoneCode": string,
   "verdict": "GOOD" | "BAD" | "MIXED",
   "analysis": string
 }
-The "analysis" string should NOT begin with "GOOD." / "BAD." / "MIXED." — that information lives in "verdict". Output exactly one object per pair, in the same order as listed above. Begin your response with [ and end it with ].`;
+The "analysis" string should NOT begin with "GOOD." / "BAD." / "MIXED." — that information lives in "verdict". Begin your response with { and end it with }.`;
 }
 
-interface ObjectWithBounds {
-  object: unknown;
-  startIndex: number;
-  endIndex: number;
-}
-
-// Scans the raw text to extract top-level JSON objects from an array, mapping
-// their start/end indices. By running this against the RAW model output (including
-// markdown fences), we preserve the character offsets needed to map Gemini's
-// groundingSupports reliably.
-function extractJsonObjectsWithBounds(text: string): ObjectWithBounds[] {
-  const start = text.indexOf("[");
-  if (start === -1) return [];
-  const out: ObjectWithBounds[] = [];
-  let i = start + 1;
-  
-  while (i < text.length) {
-    while (i < text.length && /[\s,]/.test(text[i])) i++;
-    if (i >= text.length || text[i] === "]") break;
-    
-    if (text[i] !== "{") {
-      // Unexpected char, advance to next '{' or ']'
-      while (i < text.length && text[i] !== "{" && text[i] !== "]") i++;
-      if (i >= text.length || text[i] === "]") break;
-    }
-    
-    let depth = 0;
-    let inStr = false;
-    let escape = false;
-    let j = i;
-    let closed = false;
-    
-    for (; j < text.length; j++) {
-      const c = text[j];
-      if (escape) { escape = false; continue; }
-      if (inStr) {
-        if (c === "\\") escape = true;
-        else if (c === '"') inStr = false;
-        continue;
-      }
-      if (c === '"') inStr = true;
-      else if (c === "{") depth++;
-      else if (c === "}") {
-        depth--;
-        if (depth === 0) { j++; closed = true; break; }
-      }
-    }
-    
-    if (!closed) break;
-    
-    try {
-      out.push({ object: JSON.parse(text.slice(i, j)), startIndex: i, endIndex: j });
-    } catch {
-      break;
-    }
-    i = j;
+function stripJsonFences(text: string): string {
+  let t = text.trim();
+  if (t.startsWith("```")) {
+    t = t.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/i, "");
   }
-  return out;
+  const first = t.indexOf("{");
+  const last = t.lastIndexOf("}");
+  if (first >= 0 && last > first) t = t.slice(first, last + 1);
+  return t;
 }
 
-interface ParseResult {
-  objects: ObjectWithBounds[] | null;
-  salvaged: boolean;
-  reason: string;
-}
-
-function parseOrSalvage(text: string): ParseResult {
-  const extracted = extractJsonObjectsWithBounds(text);
-  if (extracted.length === 0) {
-    return { objects: null, salvaged: false, reason: "Model output contained no valid JSON objects" };
-  }
-  
-  // Basic heuristic: if the text following the last object doesn't close the array, it was likely truncated.
-  const lastObjEnd = extracted[extracted.length - 1].endIndex;
-  const tail = text.slice(lastObjEnd).trim();
-  const salvaged = !tail.includes("]");
-
-  return { objects: extracted, salvaged, reason: salvaged ? "Array truncated mid-output" : "" };
-}
-
-function chunkPairs(pairs: Pair[], size: number): Pair[][] {
-  const out: Pair[][] = [];
-  for (let i = 0; i < pairs.length; i += size) out.push(pairs.slice(i, i + size));
-  return out;
-}
-
-interface RawEntry {
-  shortCode?: unknown;
-  zoneCode?: unknown;
-  verdict?: unknown;
-  analysis?: unknown;
-  // Internal field used during Phase 1 & 2 to attach un-resolved redirect URLs
-  _rawGroundingUrls?: string[];
-}
-
-// Strips inline citation markers like [1], [1.3], [2, 3] that the model
-// occasionally emits despite being told not to. Also collapses runs of
-// internal whitespace that the marker may have left behind.
 function stripInlineCitations(text: string): string {
   return text.replace(/\s*\[\d+(?:[.,]\s*\d+)*\]/g, "").replace(/[ \t]{2,}/g, " ");
 }
 
-async function resolveRedirect(url: string): Promise<string> {
-  try {
-    const res = await fetch(url, { redirect: "manual" });
-    const loc = res.headers.get("location");
-    return loc && loc.startsWith("http") ? loc : url;
-  } catch {
-    return url;
-  }
-}
-
-async function resolveRedirects(
-  urls: string[],
-  concurrency = 20
-): Promise<Map<string, string>> {
-  const out = new Map<string, string>();
-  let next = 0;
-  async function worker() {
-    while (true) {
-      const idx = next++;
-      if (idx >= urls.length) return;
-      const u = urls[idx];
-      out.set(u, await resolveRedirect(u));
-    }
-  }
-  const n = Math.min(concurrency, urls.length);
-  await Promise.all(Array.from({ length: n }, () => worker()));
-  return out;
-}
-
-// Pulls a leading "GOOD." / "BAD." / "MIXED." off the analysis prose so older
-// model behavior (which embedded the verdict in the first sentence) doesn't
-// double up with the new dedicated field. Returns the verdict if found.
 function extractLeadingVerdict(text: string): { verdict: AiVerdict | null; rest: string } {
   const m = text.match(/^\s*(GOOD|BAD|MIXED)\b[.:\s-]+/i);
   if (!m) return { verdict: null, rest: text };
@@ -267,23 +150,124 @@ function coerceVerdict(v: unknown): AiVerdict | null {
   return u === "GOOD" || u === "BAD" || u === "MIXED" ? u : null;
 }
 
-function normalizeEntry(
-  e: RawEntry,
-  references: string[],
+async function resolveRedirect(url: string): Promise<string> {
+  try {
+    const res = await fetch(url, { redirect: "manual" });
+    const loc = res.headers.get("location");
+    return loc && loc.startsWith("http") ? loc : url;
+  } catch {
+    return url;
+  }
+}
+
+async function resolveRedirects(urls: string[], concurrency = 10): Promise<Map<string, string>> {
+  const out = new Map<string, string>();
+  let next = 0;
+  async function worker() {
+    while (true) {
+      const idx = next++;
+      if (idx >= urls.length) return;
+      const u = urls[idx];
+      out.set(u, await resolveRedirect(u));
+    }
+  }
+  const n = Math.min(concurrency, urls.length);
+  await Promise.all(Array.from({ length: n }, () => worker()));
+  return out;
+}
+
+interface PairResult {
+  pair: Pair;
+  entry?: AiAnalysisEntry;
+  error?: string;
+  promptTokens: number;
+  outputTokens: number;
+}
+
+async function analyzeOnePair(
+  client: GoogleGenAI,
+  rollupJson: string,
+  pair: Pair,
+  zoneFilter: string | null,
   now: string
-): AiAnalysisEntry | null {
-  const shortCode = typeof e.shortCode === "string" ? e.shortCode : null;
-  const zoneCode = typeof e.zoneCode === "string" ? e.zoneCode : null;
-  const rawAnalysis = typeof e.analysis === "string" ? e.analysis.trim() : "";
-  if (!shortCode || !zoneCode || !rawAnalysis) return null;
+): Promise<PairResult> {
+  const prompt = buildSinglePairPrompt(rollupJson, pair, zoneFilter);
+  let response;
+  try {
+    response = await client.models.generateContent({
+      model: ANALYSIS_MODEL,
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      config: { tools: [{ googleSearch: {} }] },
+    });
+  } catch (err) {
+    return {
+      pair,
+      error: `generateContent failed: ${(err as Error).message}`,
+      promptTokens: 0,
+      outputTokens: 0,
+    };
+  }
 
+  const candidate = response.candidates?.[0];
+  const text = (candidate?.content?.parts ?? [])
+    .map((p) => (p as { text?: string }).text ?? "")
+    .join("");
+  const promptTokens = response.usageMetadata?.promptTokenCount ?? 0;
+  const outputTokens = response.usageMetadata?.candidatesTokenCount ?? 0;
+
+  if (!text.trim()) {
+    return { pair, error: "empty response text", promptTokens, outputTokens };
+  }
+
+  let parsed: { verdict?: unknown; analysis?: unknown };
+  try {
+    parsed = JSON.parse(stripJsonFences(text));
+  } catch (err) {
+    return {
+      pair,
+      error: `JSON parse failed: ${(err as Error).message}`,
+      promptTokens,
+      outputTokens,
+    };
+  }
+
+  const rawAnalysis = typeof parsed.analysis === "string" ? parsed.analysis.trim() : "";
+  if (!rawAnalysis) {
+    return { pair, error: "missing analysis field", promptTokens, outputTokens };
+  }
   const stripped = extractLeadingVerdict(rawAnalysis);
-  const verdict = coerceVerdict(e.verdict) ?? stripped.verdict;
-  if (!verdict) return null;
+  const verdict = coerceVerdict(parsed.verdict) ?? stripped.verdict;
+  if (!verdict) {
+    return { pair, error: "no verdict found", promptTokens, outputTokens };
+  }
   const analysis = stripInlineCitations(stripped.rest).trim();
-  if (!analysis) return null;
+  if (!analysis) {
+    return { pair, error: "analysis empty after cleanup", promptTokens, outputTokens };
+  }
 
-  return { shortCode, zoneCode, verdict, analysis, references, created: now };
+  // Per-pair grounding: every URL in groundingChunks applies to this single
+  // entry. No offset matching needed.
+  const rawUrls = new Set<string>();
+  for (const chunk of candidate?.groundingMetadata?.groundingChunks ?? []) {
+    const uri = chunk.web?.uri;
+    if (typeof uri === "string" && uri.startsWith("http")) rawUrls.add(uri);
+  }
+  const resolved = await resolveRedirects(Array.from(rawUrls));
+  const references = Array.from(rawUrls).map((u) => resolved.get(u) ?? u);
+
+  return {
+    pair,
+    entry: {
+      shortCode: pair.shortCode,
+      zoneCode: pair.zoneCode,
+      verdict,
+      analysis,
+      references,
+      created: now,
+    },
+    promptTokens,
+    outputTokens,
+  };
 }
 
 function elapsedSince(iso: string): string {
@@ -295,42 +279,39 @@ function elapsedSince(iso: string): string {
 
 export interface SubmitOk {
   ok: true;
-  jobName: string;
-  pairCount: number;
+  enqueued: number;
 }
 export interface SubmitErr {
   ok: false;
   message: string;
 }
 
-export async function submitAnalyzeBatch(
+export async function submitAnalyzeRun(
   env: Env,
   zoneFilter: string | null
 ): Promise<SubmitOk | SubmitErr> {
-  console.log(`[analyze.submit] start, zoneFilter=${zoneFilter ?? "(none)"}`);
-
   if (!env.ASK_CACHE) {
-    return { ok: false, message: "KV not configured — batch tracking requires ASK_CACHE." };
+    return { ok: false, message: "KV not configured — analyze runs require ASK_CACHE." };
   }
 
-  const existingRaw = await env.ASK_CACHE.get(JOB_KV_KEY);
-  if (existingRaw) {
-    const job: PendingJob = JSON.parse(existingRaw);
-    return {
-      ok: false,
-      message: `A batch job is already pending (submitted ${elapsedSince(job.submittedAt)} ago, ${job.pairCount} pair(s)). Run /analyze-load to check or fetch it before starting another.`,
-    };
+  const queueRaw = await env.ASK_CACHE.get(QUEUE_KV_KEY);
+  if (queueRaw) {
+    const pending: Pair[] = JSON.parse(queueRaw);
+    if (pending.length > 0) {
+      return {
+        ok: false,
+        message: `A run is already in progress (${pending.length} pair(s) remaining). Run /analyze-load to check progress, or wait for the cron to drain it.`,
+      };
+    }
   }
 
-  const { raw: rollupJson, rollup } = await loadRollupParsed(env);
+  const { rollup } = await loadRollupParsed(env);
   if (zoneFilter && !rollup.zones.some((z) => z.code === zoneFilter)) {
     return { ok: false, message: `Unknown zone "${zoneFilter}". See /zones.` };
   }
 
   const { analyses: existing } = await readAiAnalyses(env);
   const pairs = findMissingPairs(rollup, existing, zoneFilter);
-  console.log(`[analyze.submit] ${pairs.length} pair(s) missing analyses`);
-
   if (pairs.length === 0) {
     return {
       ok: false,
@@ -340,347 +321,186 @@ export async function submitAnalyzeBatch(
     };
   }
 
-  const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
-  const chunks = chunkPairs(pairs, PAIRS_PER_CHUNK);
-  const src = chunks.map((chunk) => ({
-    contents: [
-      { role: "user", parts: [{ text: buildBatchPrompt(rollupJson, chunk, zoneFilter) }] },
-    ],
-    config: {
-      tools: [{ googleSearch: {} }],
-    },
-  }));
-
-  console.log(
-    `[analyze.submit] creating batch, ${chunks.length} chunk(s) of ≤${PAIRS_PER_CHUNK}, pairs=${pairs.length}`
-  );
-  let job;
-  try {
-    job = await client.batches.create({
-      model: ANALYSIS_MODEL,
-      src,
-      config: {
-        displayName: `plantyj-analyze-${zoneFilter ?? "all"}-${Date.now()}`,
-      },
-    });
-  } catch (err) {
-    const msg = (err as Error).message;
-    console.log(`[analyze.submit] batch create failed: ${msg}`);
-    return { ok: false, message: `Batch submit failed: ${msg}` };
-  }
-
-  if (!job.name) {
-    return { ok: false, message: "Batch created but returned no job name." };
-  }
-  console.log(`[analyze.submit] created job ${job.name}, state=${job.state}`);
-
-  const pending: PendingJob = {
-    name: job.name,
+  const meta: RunMeta = {
     zoneFilter,
-    pairCount: pairs.length,
-    submittedAt: new Date().toISOString(),
+    total: pairs.length,
+    succeeded: 0,
+    failed: 0,
+    promptTokens: 0,
+    outputTokens: 0,
+    startedAt: new Date().toISOString(),
   };
-  await env.ASK_CACHE.put(JOB_KV_KEY, JSON.stringify(pending), { expirationTtl: JOB_KV_TTL });
+  await env.ASK_CACHE.put(QUEUE_KV_KEY, JSON.stringify(pairs), { expirationTtl: QUEUE_KV_TTL });
+  await env.ASK_CACHE.put(META_KV_KEY, JSON.stringify(meta), { expirationTtl: QUEUE_KV_TTL });
 
-  return { ok: true, jobName: job.name, pairCount: pairs.length };
+  return { ok: true, enqueued: pairs.length };
 }
 
-export type LoadResult =
-  | { kind: "no-job" }
-  | { kind: "running"; state: string; pairCount: number; elapsed: string }
-  | { kind: "failed"; reason: string; rawTextSaved?: boolean }
+export type StatusResult =
+  | { kind: "no-run" }
   | {
-      kind: "done";
-      analyzed: number;
-      requested: number;
-      groundingUrls: number;
+      kind: "running" | "done";
+      total: number;
+      succeeded: number;
+      failed: number;
+      remaining: number;
       promptTokens: number;
       outputTokens: number;
-      truncatedChunks: number;
-      failedChunks: number;
-      totalChunks: number;
+      elapsed: string;
+      zoneFilter: string | null;
     };
 
-export async function loadAnalyzeBatch(env: Env): Promise<LoadResult> {
-  if (!env.ASK_CACHE) {
-    return { kind: "failed", reason: "KV not configured." };
-  }
+export async function analyzeStatus(env: Env): Promise<StatusResult> {
+  if (!env.ASK_CACHE) return { kind: "no-run" };
+  const metaRaw = await env.ASK_CACHE.get(META_KV_KEY);
+  if (!metaRaw) return { kind: "no-run" };
+  const meta: RunMeta = JSON.parse(metaRaw);
+  const queueRaw = await env.ASK_CACHE.get(QUEUE_KV_KEY);
+  const remaining = queueRaw ? (JSON.parse(queueRaw) as Pair[]).length : 0;
+  return {
+    kind: remaining === 0 ? "done" : "running",
+    total: meta.total,
+    succeeded: meta.succeeded,
+    failed: meta.failed,
+    remaining,
+    promptTokens: meta.promptTokens,
+    outputTokens: meta.outputTokens,
+    elapsed: elapsedSince(meta.startedAt),
+    zoneFilter: meta.zoneFilter,
+  };
+}
 
-  const raw = await env.ASK_CACHE.get(JOB_KV_KEY);
-  if (!raw) return { kind: "no-job" };
+export interface TickResult {
+  ranTick: boolean;
+  reason?: string;
+  processed?: number;
+  succeeded?: number;
+  failed?: number;
+  remaining?: number;
+}
 
-  const pending: PendingJob = JSON.parse(raw);
-  console.log(`[analyze.load] checking job ${pending.name}`);
+// Drains up to PAIRS_PER_TICK pairs from the queue: runs them concurrently as
+// non-batch generateContent calls, commits successful entries to GitHub, and
+// updates run meta in KV. Called from the scheduled cron handler.
+export async function processAnalyzeTick(env: Env): Promise<TickResult> {
+  if (!env.ASK_CACHE) return { ranTick: false, reason: "no KV" };
 
-  const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
+  const queueRaw = await env.ASK_CACHE.get(QUEUE_KV_KEY);
+  if (!queueRaw) return { ranTick: false, reason: "no queue" };
+  const queue: Pair[] = JSON.parse(queueRaw);
+  if (queue.length === 0) return { ranTick: false, reason: "queue empty" };
 
-  let job;
+  // Best-effort lock — KV has no CAS, so this is racy but reduces overlap.
+  const lockHeld = await env.ASK_CACHE.get(LOCK_KV_KEY);
+  if (lockHeld) return { ranTick: false, reason: "locked" };
+  await env.ASK_CACHE.put(LOCK_KV_KEY, new Date().toISOString(), {
+    expirationTtl: LOCK_TTL_SECONDS,
+  });
+
   try {
-    job = await client.batches.get({ name: pending.name });
-  } catch (err) {
-    const msg = (err as Error).message;
-    console.log(`[analyze.load] batches.get failed: ${msg}`);
-    return { kind: "failed", reason: `batches.get error: ${msg}` };
-  }
+    const batch = queue.slice(0, PAIRS_PER_TICK);
+    const remainingAfter = queue.slice(batch.length);
+    // Pop the batch now so a subsequent tick won't re-pick it even if this
+    // tick crashes mid-processing.
+    await env.ASK_CACHE.put(QUEUE_KV_KEY, JSON.stringify(remainingAfter), {
+      expirationTtl: QUEUE_KV_TTL,
+    });
 
-  const state = job.state ?? "JOB_STATE_UNSPECIFIED";
-  console.log(`[analyze.load] state=${state}`);
+    const { raw: rollupJson } = await loadRollupParsed(env);
+    const metaRaw = await env.ASK_CACHE.get(META_KV_KEY);
+    const meta: RunMeta = metaRaw
+      ? JSON.parse(metaRaw)
+      : {
+          zoneFilter: null,
+          total: batch.length,
+          succeeded: 0,
+          failed: 0,
+          promptTokens: 0,
+          outputTokens: 0,
+          startedAt: new Date().toISOString(),
+        };
 
-  if (
-    state === "JOB_STATE_PENDING" ||
-    state === "JOB_STATE_QUEUED" ||
-    state === "JOB_STATE_RUNNING" ||
-    state === "JOB_STATE_UPDATING"
-  ) {
-    return {
-      kind: "running",
-      state,
-      pairCount: pending.pairCount,
-      elapsed: elapsedSince(pending.submittedAt),
-    };
-  }
+    const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
+    const now = new Date().toISOString();
 
-  if (
-    state === "JOB_STATE_FAILED" ||
-    state === "JOB_STATE_CANCELLED" ||
-    state === "JOB_STATE_CANCELLING" ||
-    state === "JOB_STATE_EXPIRED"
-  ) {
-    const reason = job.error?.message ?? state;
-    await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
-    return { kind: "failed", reason };
-  }
+    const results = await Promise.all(
+      batch.map((p) => analyzeOnePair(client, rollupJson, p, meta.zoneFilter, now))
+    );
 
-  // SUCCEEDED or PARTIALLY_SUCCEEDED — pull responses and commit.
-  const inlined = job.dest?.inlinedResponses ?? [];
-  if (inlined.length === 0) {
-    return { kind: "failed", reason: `Job ${state} but no inlinedResponses returned.` };
-  }
-
-  const now = new Date().toISOString();
-  const newEntries: AiAnalysisEntry[] = [];
-  const allGroundedUrls = new Set<string>();
-  let promptTokens = 0;
-  let outputTokens = 0;
-  let truncatedChunks = 0;
-  let failedChunks = 0;
-  const debugChunks: { idx: number; reason?: string; text?: string }[] = [];
-
-  // Phase 1: parse every chunk against the unstripped string to maintain
-  // exact grounding offset alignment. Attach relevant URLs to each RawEntry.
-  const parsedChunks: { idx: number; objects: RawEntry[] }[] = [];
-
-  for (let i = 0; i < inlined.length; i++) {
-    const item = inlined[i];
-    if (item.error) {
-      failedChunks++;
-      debugChunks.push({ idx: i, reason: `inlined error: ${item.error.message ?? "unknown"}` });
-      console.log(`[analyze.load] chunk ${i} errored: ${item.error.message ?? "unknown"}`);
-      continue;
-    }
-    const response = item.response;
-    // Extract raw text. DO NOT trim/strip this before passing to the parser,
-    // otherwise the text length shifts and breaks the grounding support mapping.
-    const text = (response?.candidates?.[0]?.content?.parts ?? [])
-      .map((p) => (p as { text?: string }).text ?? "")
-      .join("");
-
-    const usageMeta = response?.usageMetadata;
-    promptTokens += usageMeta?.promptTokenCount ?? 0;
-    outputTokens += usageMeta?.candidatesTokenCount ?? 0;
-
-    const groundingMeta = response?.candidates?.[0]?.groundingMetadata;
-    const groundingChunks = groundingMeta?.groundingChunks ?? [];
-    const groundingSupports = groundingMeta?.groundingSupports ?? [];
-
-    if (!text.trim()) {
-      failedChunks++;
-      debugChunks.push({ idx: i, reason: "no text in response" });
-      continue;
+    const newEntries: AiAnalysisEntry[] = [];
+    const failures: { pair: Pair; error: string }[] = [];
+    let promptTokens = 0;
+    let outputTokens = 0;
+    for (const r of results) {
+      promptTokens += r.promptTokens;
+      outputTokens += r.outputTokens;
+      if (r.entry) newEntries.push(r.entry);
+      else failures.push({ pair: r.pair, error: r.error ?? "unknown" });
     }
 
-    const parsed = parseOrSalvage(text);
-    if (!parsed.objects) {
-      failedChunks++;
-      debugChunks.push({ idx: i, reason: parsed.reason, text });
-      console.log(`[analyze.load] chunk ${i} parse failed: ${parsed.reason}`);
-      continue;
-    }
-    if (parsed.salvaged) {
-      truncatedChunks++;
-      console.log(
-        `[analyze.load] chunk ${i} truncated, salvaged ${parsed.objects.length} object(s): ${parsed.reason}`
+    if (newEntries.length > 0) {
+      const { analyses: latest, sha: latestSha } = await readAiAnalyses(env);
+      const merged = [...latest];
+      for (const e of newEntries) {
+        const idx = merged.findIndex(
+          (m) => m.shortCode === e.shortCode && m.zoneCode === e.zoneCode
+        );
+        if (idx === -1) merged.push(e);
+        else merged[idx] = e;
+      }
+      merged.sort((a, b) =>
+        a.shortCode === b.shortCode
+          ? a.zoneCode.localeCompare(b.zoneCode)
+          : a.shortCode.localeCompare(b.shortCode)
+      );
+      const scope = meta.zoneFilter ? ` (zone ${meta.zoneFilter})` : "";
+      await writeAiAnalyses(
+        env,
+        merged,
+        latestSha,
+        `Add AI analyses${scope}: ${newEntries.length} pair(s) [skip-deploy]`
       );
     }
 
-    const rawEntries: RawEntry[] = [];
-
-    // Gemini's grounding segment indices are UTF-8 byte offsets within the
-    // part, but extractJsonObjectsWithBounds returns JS character (UTF-16)
-    // offsets. Convert object bounds to bytes so comparisons line up — any
-    // multi-byte char in the prose (em-dashes, etc.) silently breaks the
-    // overlap check otherwise.
-    const enc = new TextEncoder();
-    let walkChar = 0;
-    let walkByte = 0;
-    const objectBounds = parsed.objects.map((item) => {
-      walkByte += enc.encode(text.slice(walkChar, item.startIndex)).length;
-      walkChar = item.startIndex;
-      const startByte = walkByte;
-      walkByte += enc.encode(text.slice(walkChar, item.endIndex)).length;
-      walkChar = item.endIndex;
-      return { obj: item, startByte, endByte: walkByte };
+    meta.succeeded += newEntries.length;
+    meta.failed += failures.length;
+    meta.promptTokens += promptTokens;
+    meta.outputTokens += outputTokens;
+    meta.lastTickAt = new Date().toISOString();
+    if (remainingAfter.length === 0) meta.finishedAt = meta.lastTickAt;
+    await env.ASK_CACHE.put(META_KV_KEY, JSON.stringify(meta), {
+      expirationTtl: QUEUE_KV_TTL,
     });
 
-    // Map grounding chunks to the specific JSON object they apply to
-    for (const { obj, startByte, endByte } of objectBounds) {
-      const entryUrls = new Set<string>();
-      const rawObj = obj.object as RawEntry;
-
-      for (const support of groundingSupports) {
-        // Byte offsets are relative to a specific part. We joined parts into
-        // one string above, so only part 0 lines up with our walkByte math.
-        // In practice batch responses are a single text part.
-        if ((support.segment?.partIndex ?? 0) !== 0) continue;
-
-        const start = support.segment?.startIndex ?? 0;
-        const end = support.segment?.endIndex ?? 0;
-
-        // Check if the grounded text occurs *inside* this specific JSON object's byte bounds
-        if (start >= startByte && end <= endByte) {
-          for (const chunkIdx of support.groundingChunkIndices ?? []) {
-            const uri = groundingChunks[chunkIdx]?.web?.uri;
-            if (typeof uri === "string" && uri.startsWith("http")) {
-              entryUrls.add(uri);
-              allGroundedUrls.add(uri);
-            }
-          }
-        }
-      }
-
-      rawObj._rawGroundingUrls = Array.from(entryUrls);
-      rawEntries.push(rawObj);
+    if (failures.length > 0) {
+      console.log(
+        `[analyze.tick] ${failures.length} failure(s):`,
+        failures.map((f) => `${f.pair.shortCode}|${f.pair.zoneCode}: ${f.error}`).join("; ")
+      );
+      await env.ASK_CACHE.put(
+        FAILED_TEXT_KV_KEY,
+        JSON.stringify(failures.map((f) => ({ ...f.pair, error: f.error }))),
+        { expirationTtl: QUEUE_KV_TTL }
+      ).catch(() => {});
     }
 
-    parsedChunks.push({ idx: i, objects: rawEntries });
-  }
-
-  // Phase 2: resolve all unique grounding redirects globally.
-  const uniqueRedirects = Array.from(allGroundedUrls);
-  console.log(`[analyze.load] resolving ${uniqueRedirects.length} grounding redirect(s)`);
-  const resolved = await resolveRedirects(uniqueRedirects, 20);
-
-  // Phase 3: normalize entries. Because Phase 1 already handled the complex text 
-  // alignment, we just look up the resolved versions of the assigned URLs here.
-  for (const c of parsedChunks) {
-    for (const e of c.objects) {
-      const refs = (e._rawGroundingUrls ?? []).map((u) => resolved.get(u) ?? u);
-      const entry = normalizeEntry(e, refs, now);
-      if (entry) newEntries.push(entry);
-    }
-  }
-
-  if (newEntries.length === 0) {
-    let saved = false;
-    try {
-      await env.ASK_CACHE.put(FAILED_TEXT_KV_KEY, JSON.stringify(debugChunks), {
-        expirationTtl: JOB_KV_TTL,
-      });
-      saved = true;
-    } catch (err) {
-      console.log(`[analyze.load] failed to stash debug text: ${(err as Error).message}`);
-    }
     return {
-      kind: "failed",
-      reason: `Model produced no usable entries (${failedChunks}/${inlined.length} chunks unparseable).`,
-      rawTextSaved: saved,
+      ranTick: true,
+      processed: batch.length,
+      succeeded: newEntries.length,
+      failed: failures.length,
+      remaining: remainingAfter.length,
     };
+  } finally {
+    await env.ASK_CACHE.delete(LOCK_KV_KEY).catch(() => {});
   }
-
-  const { analyses: latest, sha: latestSha } = await readAiAnalyses(env);
-  const merged = [...latest];
-  for (const e of newEntries) {
-    const idx = merged.findIndex(
-      (m) => m.shortCode === e.shortCode && m.zoneCode === e.zoneCode
-    );
-    if (idx === -1) merged.push(e);
-    else merged[idx] = e;
-  }
-  merged.sort((a, b) =>
-    a.shortCode === b.shortCode
-      ? a.zoneCode.localeCompare(b.zoneCode)
-      : a.shortCode.localeCompare(b.shortCode)
-  );
-
-  const scope = pending.zoneFilter ? ` (zone ${pending.zoneFilter})` : "";
-  await writeAiAnalyses(
-    env,
-    merged,
-    latestSha,
-    `Add AI analyses${scope}: ${newEntries.length} pair(s) [skip-deploy]`
-  );
-  console.log(
-    `[analyze.load] committed ${newEntries.length} entries (truncated=${truncatedChunks}, failed=${failedChunks}/${inlined.length})`
-  );
-
-  await env.ASK_CACHE.delete(JOB_KV_KEY).catch(() => {});
-  if (failedChunks > 0 || truncatedChunks > 0) {
-    await env.ASK_CACHE.put(FAILED_TEXT_KV_KEY, JSON.stringify(debugChunks), {
-      expirationTtl: JOB_KV_TTL,
-    }).catch(() => {});
-  } else {
-    await env.ASK_CACHE.delete(FAILED_TEXT_KV_KEY).catch(() => {});
-  }
-
-  return {
-    kind: "done",
-    analyzed: newEntries.length,
-    requested: pending.pairCount,
-    groundingUrls: allGroundedUrls.size,
-    promptTokens,
-    outputTokens,
-    truncatedChunks,
-    failedChunks,
-    totalChunks: inlined.length,
-  };
 }
 
-export interface AttachOk {
-  ok: true;
-  jobName: string;
-}
-export interface AttachErr {
-  ok: false;
-  message: string;
-}
-
-export async function attachAnalyzeBatch(
-  env: Env,
-  jobName: string
-): Promise<AttachOk | AttachErr> {
-  if (!env.ASK_CACHE) {
-    return { ok: false, message: "KV not configured." };
-  }
-  if (!jobName.startsWith("batches/")) {
-    return { ok: false, message: `Job name must start with "batches/" — got "${jobName}".` };
-  }
-
-  const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
-  let job;
-  try {
-    job = await client.batches.get({ name: jobName });
-  } catch (err) {
-    return { ok: false, message: `batches.get failed: ${(err as Error).message}` };
-  }
-
-  const inlined = job.dest?.inlinedResponses ?? [];
-  const pairCount = inlined.length * PAIRS_PER_CHUNK;
-  const pending: PendingJob = {
-    name: jobName,
-    zoneFilter: null,
-    pairCount,
-    submittedAt: new Date().toISOString(),
-  };
-  await env.ASK_CACHE.put(JOB_KV_KEY, JSON.stringify(pending), { expirationTtl: JOB_KV_TTL });
-  return { ok: true, jobName };
+export async function clearAnalyzeRun(env: Env): Promise<void> {
+  if (!env.ASK_CACHE) return;
+  await Promise.all([
+    env.ASK_CACHE.delete(QUEUE_KV_KEY),
+    env.ASK_CACHE.delete(META_KV_KEY),
+    env.ASK_CACHE.delete(LOCK_KV_KEY),
+  ]).catch(() => {});
 }

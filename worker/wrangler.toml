@@ -17,6 +17,11 @@ binding = "ASK_CACHE"
 id = "6ce8e5b515f140988b9069aafb021e35"
 preview_id = "12d42f7ae38e415cb6cea937066906a4"
 
+# Drains the analyze queue (one batch of pairs per tick) via the scheduled
+# handler in src/index.ts. See processAnalyzeTick in src/analyze.ts.
+[triggers]
+crons = ["* * * * *"]
+
 [observability]
 enabled = false
 head_sampling_rate = 1

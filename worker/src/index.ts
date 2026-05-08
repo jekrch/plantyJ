@@ -3,7 +3,12 @@ import { parseCaption, resolveFields, UNIDENTIFIED_CODE, UNIDENTIFIED_PREFIX } f
 import { downloadFile, sendReply } from "./telegram";
 import { HELP_HEADER } from "./help";
 import { answerQuestion, MODEL_ALIASES, type Thread } from "./ask";
-import { submitAnalyzeBatch, loadAnalyzeBatch, attachAnalyzeBatch } from "./analyze";
+import {
+  submitAnalyzeRun,
+  analyzeStatus,
+  processAnalyzeTick,
+  clearAnalyzeRun,
+} from "./analyze";
 import {
   acceptBioclip,
   addAnnotationTag,
@@ -179,30 +184,18 @@ export default {
 
         if (text === "/analyze-load") {
           try {
-            const result = await loadAnalyzeBatch(env);
+            const result = await analyzeStatus(env);
             let reply: string;
-            switch (result.kind) {
-              case "no-job":
-                reply = "No batch job pending. Run /analyze [zone] to start one.";
-                break;
-              case "running":
-                reply = `Batch still ${result.state.replace("JOB_STATE_", "").toLowerCase()} — ${result.pairCount} pair(s), submitted ${result.elapsed} ago. Try /analyze-load again in a few minutes.`;
-                break;
-              case "failed": {
-                const suffix = result.rawTextSaved
-                  ? " (raw text stashed under analyze:last-failed-text)"
-                  : "";
-                reply = `Batch failed: ${result.reason}${suffix}`;
-                break;
-              }
-              case "done": {
-                const chunkNote =
-                  result.truncatedChunks > 0 || result.failedChunks > 0
-                    ? ` Chunks: ${result.totalChunks} total, ${result.truncatedChunks} truncated, ${result.failedChunks} failed.`
-                    : "";
-                reply = `Loaded ${result.analyzed} of ${result.requested} pair(s) and committed to ai_analysis.json. Grounded URLs: ${result.groundingUrls}. Tokens: ${result.promptTokens.toLocaleString()} in / ${result.outputTokens.toLocaleString()} out.${chunkNote}`;
-                break;
-              }
+            if (result.kind === "no-run") {
+              reply = "No analyze run pending. Run /analyze [zone] to start one.";
+            } else {
+              const scope = result.zoneFilter ? ` (zone ${result.zoneFilter})` : "";
+              const tokens = `${result.promptTokens.toLocaleString()} in / ${result.outputTokens.toLocaleString()} out`;
+              const status =
+                result.kind === "done"
+                  ? "Done"
+                  : `Running (${result.remaining} remaining, cron drains every minute)`;
+              reply = `${status}${scope}: ${result.succeeded}/${result.total} succeeded, ${result.failed} failed. Tokens: ${tokens}. Elapsed: ${result.elapsed}.`;
             }
             await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, reply);
           } catch (err) {
@@ -212,17 +205,13 @@ export default {
           return new Response("OK");
         }
 
-        const attachMatch = text.match(/^\/analyze-attach\s+(\S+)$/i);
-        if (attachMatch) {
+        if (text === "/analyze-cancel") {
           try {
-            const result = await attachAnalyzeBatch(env, attachMatch[1]);
-            const reply = result.ok
-              ? `Attached to ${result.jobName}. Run /analyze-load to fetch.`
-              : result.message;
-            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, reply);
+            await clearAnalyzeRun(env);
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, "Cleared analyze queue and run state.");
           } catch (err) {
             const msg = err instanceof Error ? err.message : "Unknown error";
-            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, `Attach failed: ${msg}`);
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, `Cancel failed: ${msg}`);
           }
           return new Response("OK");
         }
@@ -231,9 +220,9 @@ export default {
         if (analyzeMatch) {
           const zoneFilter = analyzeMatch[1]?.trim() || null;
           try {
-            const result = await submitAnalyzeBatch(env, zoneFilter);
+            const result = await submitAnalyzeRun(env, zoneFilter);
             const reply = result.ok
-              ? `Submitted batch job for ${result.pairCount} pair(s)${zoneFilter ? ` in zone ${zoneFilter}` : ""}. Run /analyze-load in a few minutes to fetch the result.`
+              ? `Queued ${result.enqueued} pair(s)${zoneFilter ? ` in zone ${zoneFilter}` : ""}. Cron drains the queue every minute — run /analyze-load to check progress.`
               : result.message;
             await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, reply);
           } catch (err) {
@@ -748,5 +737,25 @@ export default {
     }
 
     return new Response("OK");
+  },
+
+  async scheduled(
+    _event: { cron?: string; scheduledTime?: number },
+    env: Env,
+    ctx: { waitUntil: (p: Promise<unknown>) => void }
+  ): Promise<void> {
+    ctx.waitUntil(
+      processAnalyzeTick(env)
+        .then((r) => {
+          if (r.ranTick) {
+            console.log(
+              `[analyze.cron] processed=${r.processed} succeeded=${r.succeeded} failed=${r.failed} remaining=${r.remaining}`
+            );
+          }
+        })
+        .catch((err) => {
+          console.log(`[analyze.cron] tick failed: ${(err as Error).message}`);
+        })
+    );
   },
 };
