@@ -182,6 +182,36 @@ interface PairResult {
   error?: string;
   promptTokens: number;
   outputTokens: number;
+  diag: GroundingDiag;
+}
+
+interface GroundingDiag {
+  shortCode: string;
+  zoneCode: string;
+  modelVersion: string | null;
+  finishReason: string | null;
+  webSearchQueries: string[];
+  groundingChunkCount: number;
+  groundingSupportCount: number;
+  webChunkCount: number;
+  hasUrlContextMetadata: boolean;
+  // First few URIs (resolved or not) so we can eyeball the structure.
+  sampleUris: string[];
+}
+
+function emptyDiag(pair: Pair): GroundingDiag {
+  return {
+    shortCode: pair.shortCode,
+    zoneCode: pair.zoneCode,
+    modelVersion: null,
+    finishReason: null,
+    webSearchQueries: [],
+    groundingChunkCount: 0,
+    groundingSupportCount: 0,
+    webChunkCount: 0,
+    hasUrlContextMetadata: false,
+    sampleUris: [],
+  };
 }
 
 async function analyzeOnePair(
@@ -205,6 +235,7 @@ async function analyzeOnePair(
       error: `generateContent failed: ${(err as Error).message}`,
       promptTokens: 0,
       outputTokens: 0,
+      diag: emptyDiag(pair),
     };
   }
 
@@ -215,8 +246,24 @@ async function analyzeOnePair(
   const promptTokens = response.usageMetadata?.promptTokenCount ?? 0;
   const outputTokens = response.usageMetadata?.candidatesTokenCount ?? 0;
 
+  const groundingMeta = candidate?.groundingMetadata;
+  const groundingChunks = groundingMeta?.groundingChunks ?? [];
+  const webChunks = groundingChunks.filter((c) => c.web?.uri);
+  const diag: GroundingDiag = {
+    shortCode: pair.shortCode,
+    zoneCode: pair.zoneCode,
+    modelVersion: response.modelVersion ?? null,
+    finishReason: candidate?.finishReason ?? null,
+    webSearchQueries: groundingMeta?.webSearchQueries ?? [],
+    groundingChunkCount: groundingChunks.length,
+    groundingSupportCount: groundingMeta?.groundingSupports?.length ?? 0,
+    webChunkCount: webChunks.length,
+    hasUrlContextMetadata: !!candidate?.urlContextMetadata,
+    sampleUris: webChunks.slice(0, 3).map((c) => c.web?.uri ?? "").filter(Boolean),
+  };
+
   if (!text.trim()) {
-    return { pair, error: "empty response text", promptTokens, outputTokens };
+    return { pair, error: "empty response text", promptTokens, outputTokens, diag };
   }
 
   let parsed: { verdict?: unknown; analysis?: unknown };
@@ -228,27 +275,28 @@ async function analyzeOnePair(
       error: `JSON parse failed: ${(err as Error).message}`,
       promptTokens,
       outputTokens,
+      diag,
     };
   }
 
   const rawAnalysis = typeof parsed.analysis === "string" ? parsed.analysis.trim() : "";
   if (!rawAnalysis) {
-    return { pair, error: "missing analysis field", promptTokens, outputTokens };
+    return { pair, error: "missing analysis field", promptTokens, outputTokens, diag };
   }
   const stripped = extractLeadingVerdict(rawAnalysis);
   const verdict = coerceVerdict(parsed.verdict) ?? stripped.verdict;
   if (!verdict) {
-    return { pair, error: "no verdict found", promptTokens, outputTokens };
+    return { pair, error: "no verdict found", promptTokens, outputTokens, diag };
   }
   const analysis = stripInlineCitations(stripped.rest).trim();
   if (!analysis) {
-    return { pair, error: "analysis empty after cleanup", promptTokens, outputTokens };
+    return { pair, error: "analysis empty after cleanup", promptTokens, outputTokens, diag };
   }
 
   // Per-pair grounding: every URL in groundingChunks applies to this single
   // entry. No offset matching needed.
   const rawUrls = new Set<string>();
-  for (const chunk of candidate?.groundingMetadata?.groundingChunks ?? []) {
+  for (const chunk of groundingChunks) {
     const uri = chunk.web?.uri;
     if (typeof uri === "string" && uri.startsWith("http")) rawUrls.add(uri);
   }
@@ -267,6 +315,7 @@ async function analyzeOnePair(
     },
     promptTokens,
     outputTokens,
+    diag,
   };
 }
 
@@ -483,6 +532,17 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
         { expirationTtl: QUEUE_KV_TTL }
       ).catch(() => {});
     }
+
+    for (const r of results) {
+      console.log(
+        `[analyze.tick.diag] ${r.pair.shortCode}|${r.pair.zoneCode} model=${r.diag.modelVersion} finish=${r.diag.finishReason} webQueries=${r.diag.webSearchQueries.length} chunks=${r.diag.groundingChunkCount} webChunks=${r.diag.webChunkCount} supports=${r.diag.groundingSupportCount}`
+      );
+    }
+    await env.ASK_CACHE.put(
+      "analyze:last-diag",
+      JSON.stringify({ tickAt: new Date().toISOString(), diags: results.map((r) => r.diag) }),
+      { expirationTtl: QUEUE_KV_TTL }
+    ).catch(() => {});
 
     return {
       ranTick: true,
