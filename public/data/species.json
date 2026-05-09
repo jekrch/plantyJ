@@ -122,6 +122,69 @@
       ],
       "observationsCount": 57681
     },
+    "acer-saccharum": {
+      "id": "acer-saccharum",
+      "fullName": "Acer saccharum",
+      "commonName": "Silver Maple",
+      "description": "Acer saccharum, the sugar maple, is a species of flowering plant in the soapberry and lychee family Sapindaceae. It is native to the hardwood forests of eastern Canada and the eastern United States. Sugar maple is best known for being the primary source of maple syrup and for its brightly colored autumn foliage. It may also be called \"rock maple,\" \"sugar tree,\" \"sweet maple,\" or, particularly in reference to the wood, \"hard maple,\" \"birds-eye maple,\" or \"curly maple,\" the last two being specially figured lumber.",
+      "vernacularNames": [
+        "Ohw\u00e1hda\u0294",
+        "Sugar Maple",
+        "Sugar maple (EN); Zucker-Ahorn (DE)",
+        "Ucikh\u00e9\u0294ta\u0294",
+        "Wahda'",
+        "hard maple",
+        "rock maple",
+        "\u13e7\u13e9\u13a9",
+        "Hard Maples"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Sapindales",
+        "family": "Sapindaceae",
+        "genus": "Acer",
+        "species": "Acer saccharum",
+        "canonicalName": "Acer saccharum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3189859"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:56795-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Acer_saccharum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/1466282"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q214733"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.160863"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 107411
+    },
     "achillea-millefolium": {
       "id": "achillea-millefolium",
       "fullName": "Achillea millefolium",

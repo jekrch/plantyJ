@@ -135,7 +135,8 @@
       "height": 960,
       "bioclipSpeciesId": "Acer saccharinum",
       "bioclipCommonName": "Silver maple",
-      "bioclipScore": 0.1441
+      "bioclipScore": 0.1441,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Acer_saccharinum"
     },
     {
       "seq": 53,
