@@ -3,6 +3,8 @@ import { parseCaption, resolveFields, UNIDENTIFIED_CODE, UNIDENTIFIED_PREFIX } f
 import { downloadFile, sendReply } from "./telegram";
 import { HELP_HEADER } from "./help";
 import { answerQuestion, MODEL_ALIASES, type Thread } from "./ask";
+import { proposeActions, type ProposedCommand } from "./do";
+import { executeCommand } from "./execute";
 import {
   submitAnalyzeRun,
   analyzeStatus,
@@ -65,6 +67,36 @@ function buildTagsText(pics: PicEntry[], annotations: AnnotationEntry[]): string
   for (const a of annotations) for (const t of a.tags) tags.add(t);
   if (tags.size === 0) return "No tags yet.";
   return `Tags:\n${[...tags].sort().map((t) => `  ${t}`).join("\n")}`;
+}
+
+interface PendingDo {
+  proposals: ProposedCommand[];
+  createdAt: string;
+}
+
+const PENDING_TTL_SECONDS = 3600;
+
+function pendingKey(userId: number): string {
+  return `pending:do:${userId}`;
+}
+
+function formatProposals(p: ProposedCommand[]): string {
+  return p
+    .map((x, i) => `  ${i + 1}. ${x.command}\n     ${x.rationale}`)
+    .join("\n");
+}
+
+function parseConfirmIndices(text: string, max: number): number[] | "all" | "invalid" {
+  const rest = text.slice("/confirm".length).trim();
+  if (rest === "") return "all";
+  const tokens = rest.split(/[\s,]+/).filter(Boolean);
+  const out: number[] = [];
+  for (const t of tokens) {
+    const n = parseInt(t, 10);
+    if (isNaN(n) || String(n) !== t || n < 1 || n > max) return "invalid";
+    if (!out.includes(n)) out.push(n);
+  }
+  return out.length === 0 ? "invalid" : out;
 }
 
 function buildZonesText(zones: Zone[]): string {
@@ -171,6 +203,95 @@ async function handleUpdate(update: TelegramUpdate, env: Env): Promise<Response>
             message.message_id,
             style ? `Current style: ${style}` : "No style set. Use /askstyle {description} to set one."
           );
+          return new Response("OK");
+        }
+
+        const doMatch = text.match(/^\/do(?:\s+([\s\S]+))?$/i);
+        if (doMatch) {
+          const request = doMatch[1]?.trim();
+          if (!message.from || !env.ASK_CACHE) {
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+              "/do requires KV (ASK_CACHE) and a known user.");
+            return new Response("OK");
+          }
+          if (!request) {
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+              "Usage: /do {what you want changed}\nThe bot will propose commands and wait for /confirm.");
+            return new Response("OK");
+          }
+          if (!await checkAskRateLimit(message.from.id, env)) {
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+              "Rate limit reached: max 100 LLM queries per day.");
+            return new Response("OK");
+          }
+          const style = await env.ASK_CACHE.get(`style:${message.from.id}`) ?? undefined;
+          const { summary, proposals } = await proposeActions(request, env, style);
+          if (proposals.length === 0) {
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+              `${summary}\n\n(no commands proposed)`);
+            await env.ASK_CACHE.delete(pendingKey(message.from.id)).catch(() => {});
+            return new Response("OK");
+          }
+          const pending: PendingDo = { proposals, createdAt: new Date().toISOString() };
+          await env.ASK_CACHE.put(pendingKey(message.from.id), JSON.stringify(pending),
+            { expirationTtl: PENDING_TTL_SECONDS });
+          const reply = [
+            summary,
+            "",
+            "Proposed commands:",
+            formatProposals(proposals),
+            "",
+            "Reply /confirm to run all, /confirm 1 3 to run a subset, or /cancel to drop.",
+          ].join("\n");
+          await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, reply);
+          return new Response("OK");
+        }
+
+        if (text === "/cancel") {
+          if (message.from && env.ASK_CACHE) {
+            await env.ASK_CACHE.delete(pendingKey(message.from.id)).catch(() => {});
+          }
+          await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+            "Cancelled. No commands run.");
+          return new Response("OK");
+        }
+
+        if (text === "/confirm" || text.startsWith("/confirm ") || text.startsWith("/confirm\t")) {
+          if (!message.from || !env.ASK_CACHE) {
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+              "/confirm requires KV and a known user.");
+            return new Response("OK");
+          }
+          const raw = await env.ASK_CACHE.get(pendingKey(message.from.id));
+          if (!raw) {
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+              "Nothing to confirm. Start with /do {request}.");
+            return new Response("OK");
+          }
+          const pending: PendingDo = JSON.parse(raw);
+          const sel = parseConfirmIndices(text, pending.proposals.length);
+          if (sel === "invalid") {
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+              `Invalid selection. Use /confirm (all) or /confirm N [N ...] with numbers 1..${pending.proposals.length}.`);
+            return new Response("OK");
+          }
+          const indices = sel === "all"
+            ? pending.proposals.map((_, i) => i + 1)
+            : sel;
+          const lines: string[] = [];
+          for (const n of indices) {
+            const proposal = pending.proposals[n - 1];
+            try {
+              const result = await executeCommand(proposal.command, env);
+              lines.push(`${n}. ${proposal.command}\n   ${result.ok ? "OK" : "FAIL"}: ${result.reply.split("\n")[0]}`);
+            } catch (err) {
+              const msg = err instanceof Error ? err.message : "unknown error";
+              lines.push(`${n}. ${proposal.command}\n   FAIL: ${msg}`);
+            }
+          }
+          await env.ASK_CACHE.delete(pendingKey(message.from.id)).catch(() => {});
+          await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+            `Ran ${indices.length}/${pending.proposals.length}:\n${lines.join("\n")}`);
           return new Response("OK");
         }
 

@@ -84,6 +84,14 @@ Q&A:
   /askstyle — Clear the current style.
   /showstyle — Show the currently active style.
 
+Action agent (propose-then-confirm):
+  /do {request} — Describe a change in natural language. The bot proposes
+    a numbered list of bot commands (no /deletezone) and waits.
+  /confirm — Run all proposed commands.
+  /confirm 1 3 — Run only the listed proposals (space- or comma-separated).
+  /cancel — Drop the pending proposals without running anything.
+  Pending proposals expire after 1 hour.
+
 Ecological analysis:
   /analyze — Queue a 1–2 paragraph ecological-niche analysis (good/bad/
     mixed, native insects, urban wildlife, with grounded source URLs)
