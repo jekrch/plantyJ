@@ -109,15 +109,16 @@ For ANIMALS, cover:
 - What it eats, predates, pollinates, or competes with — given the plants currently in that zone and its neighbors
 - Whether it is native, naturalized, or invasive in the Twin Cities area, and any management considerations
 
-Use the googleSearch tool to ground claims in real sources. Do NOT include inline citation markers (e.g. [1], [1.3], [2, 3]) anywhere in the analysis prose — references are collected automatically from the grounding metadata, and inline markers corrupt the prose's spacing.
+Use the googleSearch tool to ground claims in real sources. Do NOT include inline citation markers (e.g. [1], [1.3], [2, 3]) anywhere in the analysis prose — they corrupt spacing. Sources go in the "references" array instead.
 
 # Output format
 Return ONLY a JSON object — no prose, no markdown fences, no commentary before or after. Exactly:
 {
   "verdict": "GOOD" | "BAD" | "MIXED",
-  "analysis": string
+  "analysis": string,
+  "references": string[]
 }
-The "analysis" string should NOT begin with "GOOD." / "BAD." / "MIXED." — that information lives in "verdict". Begin your response with { and end it with }.`;
+The "analysis" string should NOT begin with "GOOD." / "BAD." / "MIXED." — that information lives in "verdict". Populate "references" with the URLs of sources you actually retrieved via googleSearch (Google grounding-api-redirect URLs are fine — they'll be resolved downstream). Do NOT invent URLs; if you have no grounded sources, return an empty array. Begin your response with { and end it with }.`;
 }
 
 function stripJsonFences(text: string): string {
@@ -286,7 +287,7 @@ async function analyzeOnePair(
     return { pair, error: "empty response text", promptTokens, outputTokens, diag };
   }
 
-  let parsed: { verdict?: unknown; analysis?: unknown };
+  let parsed: { verdict?: unknown; analysis?: unknown; references?: unknown };
   try {
     parsed = JSON.parse(stripJsonFences(text));
   } catch (err) {
@@ -313,9 +314,15 @@ async function analyzeOnePair(
     return { pair, error: "analysis empty after cleanup", promptTokens, outputTokens, diag };
   }
 
-  // Per-pair grounding: every URL in groundingChunks applies to this single
-  // entry. No offset matching needed.
+  // The model emits its retrieved URLs in `references`. Prefer those over
+  // groundingMetadata, which 3.1-pro-preview doesn't reliably populate. Fall
+  // back to any web URIs in groundingMetadata if the model omitted them.
   const rawUrls = new Set<string>();
+  if (Array.isArray(parsed.references)) {
+    for (const r of parsed.references) {
+      if (typeof r === "string" && r.startsWith("http")) rawUrls.add(r);
+    }
+  }
   for (const chunk of groundingChunks) {
     const uri = chunk.web?.uri;
     if (typeof uri === "string" && uri.startsWith("http")) rawUrls.add(uri);
