@@ -31,6 +31,7 @@ export default function TreeView({
   onSpotlightPlant,
   initialTreeNode,
   onNodeSelect,
+  speciesLoaded,
 }: Props) {
   const [aiAnalyses, setAiAnalyses] = useState<AIAnalysis[]>([]);
 
@@ -105,7 +106,7 @@ export default function TreeView({
     onPointerDown,
     onPointerMove,
     onPointerUp,
-  } = usePanZoom({ layoutWidth: layout.width, layoutHeight: layout.height });
+  } = usePanZoom({ layoutWidth: layout.width, layoutHeight: layout.height, dataReady: speciesLoaded });
 
   const focusNode = useCallback(
     (n: HierarchyPointNode<RawNode>) => {

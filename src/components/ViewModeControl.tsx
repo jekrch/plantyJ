@@ -1,4 +1,10 @@
-import { useMemo, useState, useRef, useEffect } from "react";
+import {
+  useMemo,
+  useState,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+} from "react";
 import type { Plant, PlantRecord, Zone } from "../types";
 import {
   ChevronDown,
@@ -102,38 +108,21 @@ export default function ViewModeControl({
       ? activeOptions.find((o) => o.code === subjectCode)
       : null;
 
+  const segments: { key: ViewMode; label: string; Icon: typeof LayoutGrid }[] =
+    [
+      { key: "gallery", label: "Gallery", Icon: LayoutGrid },
+      { key: "plant", label: "Plant", Icon: Sprout },
+      { key: "zone", label: "Zone", Icon: MapIcon },
+      { key: "tree", label: "Tree", Icon: TreeDeciduous },
+    ];
+
   return (
-    <div className="view-mode-control flex flex-col px-1">
-      <div className="inline-flex items-center rounded-md bg-surface-raised ring-1 ring-inset ring-white/5 p-0.5 self-start">
-        <SegBtn
-          active={mode === "gallery"}
-          onClick={() => setMode("gallery")}
-          label="Gallery"
-        >
-          <LayoutGrid size={13} strokeWidth={1.5} />
-        </SegBtn>
-        <SegBtn
-          active={mode === "plant"}
-          onClick={() => setMode("plant")}
-          label="Plant"
-        >
-          <Sprout size={13} strokeWidth={1.5} />
-        </SegBtn>
-        <SegBtn
-          active={mode === "zone"}
-          onClick={() => setMode("zone")}
-          label="Zone"
-        >
-          <MapIcon size={13} strokeWidth={1.5} />
-        </SegBtn>
-        <SegBtn
-          active={mode === "tree"}
-          onClick={() => setMode("tree")}
-          label="Tree"
-        >
-          <TreeDeciduous size={13} strokeWidth={1.5} />
-        </SegBtn>
-      </div>
+    <div className="view-mode-control flex flex-col items-center px-1">
+      <SegmentedControl
+        segments={segments}
+        active={mode}
+        onSelect={(next) => setMode(next)}
+      />
 
       {hasSubject && (
         <div className="mt-4 self-center -mb-3">
@@ -229,30 +218,112 @@ function ArrowBtn({
   );
 }
 
-function SegBtn({
+let hasMountedBefore = false;
+
+function SegmentedControl({
+  segments,
   active,
-  onClick,
-  label,
-  children,
+  onSelect,
 }: {
-  active: boolean;
-  onClick: () => void;
-  label: string;
-  children: React.ReactNode;
+  segments: { key: ViewMode; label: string; Icon: typeof LayoutGrid }[];
+  active: ViewMode;
+  onSelect: (next: ViewMode) => void;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const btnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const [indicator, setIndicator] = useState<{
+    left: number;
+    width: number;
+  } | null>(null);
+  const [hasMeasured, setHasMeasured] = useState(false);
+  const [visible, setVisible] = useState(!hasMountedBefore);
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const btn = btnRefs.current[active];
+      const container = containerRef.current;
+      if (!btn || !container) return;
+      const cRect = container.getBoundingClientRect();
+      const bRect = btn.getBoundingClientRect();
+      setIndicator({ left: bRect.left - cRect.left, width: bRect.width });
+      setHasMeasured(true);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    const container = containerRef.current;
+    let ro: ResizeObserver | null = null;
+    if (container && typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(measure);
+      ro.observe(container);
+      Object.values(btnRefs.current).forEach((el) => {
+        if (el) ro!.observe(el);
+      });
+    }
+    return () => {
+      window.removeEventListener("resize", measure);
+      ro?.disconnect();
+    };
+  }, [active]);
+
+  useEffect(() => {
+    if (!hasMeasured) return;
+    if (!hasMountedBefore) {
+      hasMountedBefore = true;
+      return;
+    }
+    const id = requestAnimationFrame(() => setVisible(true));
+    return () => cancelAnimationFrame(id);
+  }, [hasMeasured]);
+
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded font-display text-[11px] tracking-wider uppercase transition-colors ${
-        active
-          ? "bg-accent/15 text-accent"
-          : "text-ink-muted hover:text-ink"
-      }`}
+    <div
+      ref={containerRef}
+      className="relative inline-flex items-end gap-1 border-b border-white/[0.06] pb-0"
     >
-      {children}
-      <span>{label}</span>
-    </button>
+      {segments.map(({ key, label, Icon }) => {
+        const isActive = key === active;
+        return (
+          <button
+            key={key}
+            ref={(el) => {
+              btnRefs.current[key] = el;
+            }}
+            type="button"
+            onClick={() => onSelect(key)}
+            className={`group relative flex items-center gap-2 px-4 py-2.5 font-display text-[11px] tracking-[0.18em] uppercase transition-colors duration-200 ${
+              isActive
+                ? "text-accent"
+                : "text-ink-muted/70 hover:text-ink"
+            }`}
+          >
+            <Icon
+              size={13}
+              strokeWidth={1.5}
+              className={`transition-all duration-300 ${
+                isActive
+                  ? "scale-105"
+                  : "opacity-70 group-hover:opacity-100"
+              }`}
+            />
+            <span>{label}</span>
+          </button>
+        );
+      })}
+      {indicator && (
+        <span
+          aria-hidden
+          className="absolute -bottom-px h-[1.5px] bg-accent/80 pointer-events-none rounded-full"
+          style={{
+            left: indicator.left,
+            width: indicator.width,
+            opacity: visible ? 1 : 0,
+            transition: hasMeasured
+              ? "left 320ms cubic-bezier(0.22, 1, 0.36, 1), width 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 280ms ease-out"
+              : "opacity 280ms ease-out",
+          }}
+        />
+      )}
+    </div>
   );
 }
 

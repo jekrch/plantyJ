@@ -1,4 +1,11 @@
-import { useEffect, useState, useMemo, useCallback, useRef } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useState,
+  useMemo,
+  useCallback,
+  useRef,
+} from "react";
 import type { AIAnalysis, Annotation, PicRecord, Plant, PlantRecord, Species, TaxaInfo, Zone, ZonePic } from "./types";
 import { Sprout, House } from "lucide-react";
 import { sortPlantsAsync } from "./utils/sorting.ts";
@@ -33,6 +40,7 @@ export default function App() {
   const [speciesByShortCode, setSpeciesByShortCode] = useState<
     Map<string, Species>
   >(new Map());
+  const [speciesLoaded, setSpeciesLoaded] = useState(false);
   const [taxa, setTaxa] = useState<Record<string, TaxaInfo>>({});
   const [aiAnalyses, setAiAnalyses] = useState<AIAnalysis[]>([]);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
@@ -74,7 +82,7 @@ export default function App() {
   const headerRef = useRef<HTMLElement>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = headerRef.current;
     if (!el) return;
     const update = () => setHeaderHeight(el.offsetHeight);
@@ -83,6 +91,13 @@ export default function App() {
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
+
+  // Re-measure synchronously when the header's content swaps (e.g. ViewModeControl
+  // moves into the header in tree mode), so TreeView mounts with the correct top
+  // offset instead of catching up via the ResizeObserver after paint.
+  useLayoutEffect(() => {
+    if (headerRef.current) setHeaderHeight(headerRef.current.offsetHeight);
+  }, [viewMode, status]);
 
   const handleOpenInfo = useCallback(() => {
     const params = new URLSearchParams(window.location.search);
@@ -203,6 +218,9 @@ export default function App() {
           })
           .catch(() => {
             setSpeciesByShortCode(new Map());
+          })
+          .finally(() => {
+            setSpeciesLoaded(true);
           });
       })
       .catch(() => setStatus("error"));
@@ -425,6 +443,18 @@ export default function App() {
       </header>
 
       <main className="content-container px-1 pt-0 pb-12 sm:px-1 sm:pt-0">
+        {status === "ready" && plants.length > 0 && viewMode !== "tree" && (
+          <div className="pt-2 pb-3">
+            <ViewModeControl
+              mode={viewMode}
+              subjectCode={spotlightCode}
+              plants={plants}
+              plantRecords={plantRecords}
+              zones={zones}
+              onChange={handleViewModeChange}
+            />
+          </div>
+        )}
         {(status === "loading" ||
           (status === "ready" &&
             plants.length > 0 &&
@@ -437,19 +467,6 @@ export default function App() {
             className="transition-opacity duration-700 ease-out"
             style={{ opacity: viewMode !== "gallery" || imagesLoaded ? 1 : 0 }}
           >
-            {viewMode !== "tree" && (
-              <div className="pt-2 pb-3">
-                <ViewModeControl
-                  mode={viewMode}
-                  subjectCode={spotlightCode}
-                  plants={plants}
-                  plantRecords={plantRecords}
-                  zones={zones}
-                  onChange={handleViewModeChange}
-                />
-              </div>
-            )}
-
             {viewMode === "gallery" && (
               <>
                 <MasonryGrid
@@ -508,6 +525,7 @@ export default function App() {
           onSpotlightPlant={handleSpotlightPlant}
           initialTreeNode={treeFocusNode}
           onNodeSelect={handleTreeNodeSelect}
+          speciesLoaded={speciesLoaded}
         />
       )}
 

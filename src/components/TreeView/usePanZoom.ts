@@ -4,6 +4,7 @@ import { PAD_X, PAD_Y, INITIAL_ZOOM_FACTOR } from "./types";
 interface PanZoomOptions {
   layoutWidth: number;
   layoutHeight: number;
+  dataReady: boolean;
 }
 
 export interface Transform {
@@ -12,7 +13,7 @@ export interface Transform {
   k: number;
 }
 
-export function usePanZoom({ layoutWidth, layoutHeight }: PanZoomOptions) {
+export function usePanZoom({ layoutWidth, layoutHeight, dataReady }: PanZoomOptions) {
   const [transform, setTransform] = useState<Transform>({ x: 0, y: PAD_Y, k: 1 });
   const [ready, setReady] = useState(false);
 
@@ -72,9 +73,12 @@ export function usePanZoom({ layoutWidth, layoutHeight }: PanZoomOptions) {
   }, [layoutWidth, layoutHeight]);
 
   // Run the initial fit synchronously before paint so the user never sees the un-fitted frame.
+  // Wait for upstream data (species) so the layout dimensions are final on first fit;
+  // otherwise the tree visibly jumps when species loads and the layout grows.
   useLayoutEffect(() => {
+    if (!dataReady) return;
     if (initialView()) setReady(true);
-  }, [initialView]);
+  }, [initialView, dataReady]);
 
   // Keep the right edge anchored when the container resizes.
   useEffect(() => {

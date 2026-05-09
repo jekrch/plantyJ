@@ -30,6 +30,7 @@ export interface Props {
   onSpotlightPlant: (shortCode: string) => void;
   initialTreeNode?: string | null;
   onNodeSelect?: (name: string | null) => void;
+  speciesLoaded: boolean;
 }
 
 export const LEAF_RADIUS = 22;
