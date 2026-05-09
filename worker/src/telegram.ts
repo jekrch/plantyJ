@@ -1,6 +1,7 @@
 import type { TelegramFileResponse } from "./types";
 
 const TELEGRAM_API = "https://api.telegram.org";
+const TELEGRAM_MAX_MESSAGE = 4096;
 
 /** Download a photo from Telegram by file_id. */
 export async function downloadFile(
@@ -24,20 +25,39 @@ export async function downloadFile(
   return downloadResp.arrayBuffer();
 }
 
-/** Send a reply message in a Telegram chat. */
+function chunkForTelegram(text: string): string[] {
+  if (text.length <= TELEGRAM_MAX_MESSAGE) return [text];
+  const chunks: string[] = [];
+  let remaining = text;
+  while (remaining.length > TELEGRAM_MAX_MESSAGE) {
+    let cut = remaining.lastIndexOf("\n", TELEGRAM_MAX_MESSAGE);
+    if (cut < TELEGRAM_MAX_MESSAGE / 2) cut = TELEGRAM_MAX_MESSAGE;
+    chunks.push(remaining.slice(0, cut));
+    remaining = remaining.slice(cut).replace(/^\n/, "");
+  }
+  if (remaining.length > 0) chunks.push(remaining);
+  return chunks;
+}
+
+/** Send a reply message in a Telegram chat. Splits messages over 4096 chars. */
 export async function sendReply(
   botToken: string,
   chatId: number,
   replyToId: number,
   text: string
 ): Promise<void> {
-  await fetch(`${TELEGRAM_API}/bot${botToken}/sendMessage`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      chat_id: chatId,
-      text,
-      reply_to_message_id: replyToId,
-    }),
-  });
+  const chunks = chunkForTelegram(text);
+  for (let i = 0; i < chunks.length; i++) {
+    const body: Record<string, unknown> = { chat_id: chatId, text: chunks[i] };
+    if (i === 0) body.reply_to_message_id = replyToId;
+    const res = await fetch(`${TELEGRAM_API}/bot${botToken}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      const errText = await res.text().catch(() => "");
+      console.log(`sendReply failed: ${res.status} ${errText}`);
+    }
+  }
 }
