@@ -177,8 +177,7 @@
       "id": "C ser-1777603191",
       "shortCode": "C ser",
       "zoneCode": "fy",
-      "tags": [
-      ],
+      "tags": [],
       "description": null,
       "image": "images/C ser/1777603191.jpg",
       "postedBy": "Jenny",
@@ -214,9 +213,7 @@
       "id": "H arb-1777602663",
       "shortCode": "H arb",
       "zoneCode": "hbd",
-      "tags": [
-        "native"
-      ],
+      "tags": [],
       "description": null,
       "image": "images/H arb/1777602663.jpg",
       "postedBy": "Jenny",
@@ -250,7 +247,6 @@
       "shortCode": "R bla",
       "zoneCode": "fy",
       "tags": [
-        "native",
         "medicinal"
       ],
       "description": null,
@@ -270,8 +266,7 @@
       "shortCode": "H vir",
       "zoneCode": "mpg",
       "tags": [
-        "medicinal",
-        "native"
+        "medicinal"
       ],
       "description": null,
       "image": "images/H vir/1777602105.jpg",
@@ -289,9 +284,7 @@
       "id": "R hir-1777601996",
       "shortCode": "R hir",
       "zoneCode": "sy",
-      "tags": [
-        "native"
-      ],
+      "tags": [],
       "description": null,
       "image": "images/R hir/1777601996.jpg",
       "postedBy": "Jenny",
@@ -309,7 +302,6 @@
       "shortCode": "H lup Wil",
       "zoneCode": "bb",
       "tags": [
-        "edible",
         "medicinal"
       ],
       "description": null,
@@ -327,9 +319,7 @@
       "id": "P pyr Peg-1777601505",
       "shortCode": "P pyr Peg",
       "zoneCode": "sy",
-      "tags": [
-        "edible"
-      ],
+      "tags": [],
       "description": "dwarf rootstock",
       "image": "images/P pyr Peg/1777601505.jpg",
       "postedBy": "Jenny",
@@ -383,9 +373,7 @@
       "id": "P sub-1777601099",
       "shortCode": "P sub",
       "zoneCode": "fy",
-      "tags": [
-        "native"
-      ],
+      "tags": [],
       "description": null,
       "image": "images/P sub/1777601099.jpg",
       "postedBy": "Jenny",
@@ -437,10 +425,7 @@
       "id": "R lac-1777515770",
       "shortCode": "R lac",
       "zoneCode": "sy",
-      "tags": [
-        "edible",
-        "native"
-      ],
+      "tags": [],
       "description": null,
       "image": "images/R lac/1777515770.jpg",
       "postedBy": "Jenny",
@@ -475,9 +460,7 @@
       "id": "E yuc-1777515566",
       "shortCode": "E yuc",
       "zoneCode": "fy",
-      "tags": [
-
-      ],
+      "tags": [],
       "description": null,
       "image": "images/E yuc/1777515566.jpg",
       "postedBy": "Jenny",
@@ -494,8 +477,7 @@
       "id": "A scr-1777515506",
       "shortCode": "A scr",
       "zoneCode": "fy",
-      "tags": [
-      ],
+      "tags": [],
       "description": null,
       "image": "images/A scr/1777515506.jpg",
       "postedBy": "Jenny",
@@ -531,9 +513,7 @@
       "id": "M dom 'red'-1777514915",
       "shortCode": "M dom 'red'",
       "zoneCode": "sy",
-      "tags": [
-        "edible"
-      ],
+      "tags": [],
       "description": "dwarf rootstock",
       "image": "images/M dom 'red'/1777514915.jpg",
       "postedBy": "Jenny",
@@ -549,9 +529,7 @@
       "id": "P arm-1777514589",
       "shortCode": "P arm",
       "zoneCode": "sy",
-      "tags": [
-        "edible"
-      ],
+      "tags": [],
       "description": "semi-dwarf on Marianna 2624 rootstock",
       "image": "images/P arm/1777514589.jpg",
       "postedBy": "Jenny",
@@ -585,8 +563,7 @@
       "id": "A tub-1777432564",
       "shortCode": "A tub",
       "zoneCode": "nbv",
-      "tags": [
-      ],
+      "tags": [],
       "description": null,
       "image": "images/A tub/1777432564.jpg",
       "postedBy": "Jenny",
@@ -602,8 +579,7 @@
       "id": "E mac-1777432166",
       "shortCode": "E mac",
       "zoneCode": "mpg",
-      "tags": [
-      ],
+      "tags": [],
       "description": null,
       "image": "images/E mac/1777432166.jpg",
       "postedBy": "Jenny",
@@ -729,9 +705,7 @@
       "id": "O mac-1777431320",
       "shortCode": "O mac",
       "zoneCode": "wbv",
-      "tags": [
-        "native"
-      ],
+      "tags": [],
       "description": null,
       "image": "images/O mac/1777431320.jpg",
       "postedBy": "Jenny",
