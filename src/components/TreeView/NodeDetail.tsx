@@ -8,6 +8,7 @@ import { plantTitle } from "../../utils/display";
 import { speciesPicsFor } from "./treeUtils";
 import { TabBtn } from "./CtrlBtn";
 import type { AIAnalysis, AIVerdict } from "../PlantInfoDrawer";
+import { ModelAttribution } from "../ModelAttribution";
 
 interface Props {
   node: HierarchyPointNode<RawNode>;
@@ -250,8 +251,9 @@ export function NodeDetail({
           {currentAnalysis && (
             <div className="pt-2 border-t border-ink-faint/15">
               <div className="flex items-center justify-between gap-2 mb-1.5">
-                <div className="text-[9px] font-mono uppercase tracking-wider text-ink-faint">
+                <div className="text-[9px] font-mono uppercase tracking-wider text-ink-faint inline-flex items-center gap-1.5">
                   Ecological Fit Analysis (AI-generated)
+                  <ModelAttribution iconSize={10} />
                 </div>
                 <VerdictBadge verdict={currentAnalysis.verdict} />
               </div>

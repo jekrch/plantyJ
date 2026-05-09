@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, ExternalLink, Leaf } from "lucide-react";
 import type { AIAnalysis, AIVerdict, Annotation, Plant, Species, SpeciesTaxonomy, Zone, ZonePic } from "../types";
 import { plantTitle } from "../utils/display";
+import { ModelAttribution } from "./ModelAttribution";
 
 export type { AIAnalysis, AIVerdict };
 
@@ -723,8 +724,9 @@ export default function PlantInfoDrawer({
             <div className="border-t border-white/8" />
             <div>
               <div className="flex items-center justify-between mb-2 gap-2">
-                <p className="text-[10px] uppercase tracking-widest text-white/50">
+                <p className="text-[10px] uppercase tracking-widest text-white/50 inline-flex items-center gap-1.5">
                   Ecological Fit Analysis (AI-generated)
+                  <ModelAttribution iconSize={11} />
                 </p>
                 <VerdictMeter verdict={currentAnalysis.verdict} />
               </div>
