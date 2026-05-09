@@ -2,8 +2,8 @@ import type { AnnotationEntry, Env, PicEntry, PlantRecord, TelegramUpdate, Zone,
 import { parseCaption, resolveFields, UNIDENTIFIED_CODE, UNIDENTIFIED_PREFIX } from "./caption";
 import { downloadFile, sendReply } from "./telegram";
 import { HELP_HEADER } from "./help";
-import { answerQuestion, MODEL_ALIASES, type Thread } from "./ask";
-import { proposeActions, type ProposedCommand } from "./do";
+import { MODEL_ALIASES, type Thread } from "./ask";
+import { type ProposedCommand } from "./do";
 import { executeCommand } from "./execute";
 import {
   submitAnalyzeRun,
@@ -11,6 +11,7 @@ import {
   processAnalyzeTick,
   clearAnalyzeRun,
 } from "./analyze";
+import { enqueueJob, processJobsTick } from "./jobs";
 import {
   acceptBioclip,
   addAnnotationTag,
@@ -74,16 +75,8 @@ interface PendingDo {
   createdAt: string;
 }
 
-const PENDING_TTL_SECONDS = 3600;
-
 function pendingKey(userId: number): string {
   return `pending:do:${userId}`;
-}
-
-function formatProposals(p: ProposedCommand[]): string {
-  return p
-    .map((x, i) => `  ${i + 1}. ${x.command}\n     ${x.rationale}`)
-    .join("\n");
 }
 
 function parseConfirmIndices(text: string, max: number): number[] | "all" | "invalid" {
@@ -144,17 +137,30 @@ export default {
     ctx: { waitUntil: (p: Promise<unknown>) => void }
   ): Promise<void> {
     ctx.waitUntil(
-      processAnalyzeTick(env)
-        .then((r) => {
-          if (r.ranTick) {
-            console.log(
-              `[analyze.cron] processed=${r.processed} succeeded=${r.succeeded} failed=${r.failed} remaining=${r.remaining}`
-            );
-          }
-        })
-        .catch((err) => {
-          console.log(`[analyze.cron] tick failed: ${(err as Error).message}`);
-        })
+      Promise.all([
+        processAnalyzeTick(env)
+          .then((r) => {
+            if (r.ranTick) {
+              console.log(
+                `[analyze.cron] processed=${r.processed} succeeded=${r.succeeded} failed=${r.failed} remaining=${r.remaining}`
+              );
+            }
+          })
+          .catch((err) => {
+            console.log(`[analyze.cron] tick failed: ${(err as Error).message}`);
+          }),
+        processJobsTick(env)
+          .then((r) => {
+            if (r.ranTick) {
+              console.log(
+                `[jobs.cron] succeeded=${r.succeeded} failed=${r.failed} remaining=${r.remaining}`
+              );
+            }
+          })
+          .catch((err) => {
+            console.log(`[jobs.cron] tick failed: ${(err as Error).message}`);
+          }),
+      ])
     );
   },
 };
@@ -225,25 +231,19 @@ async function handleUpdate(update: TelegramUpdate, env: Env): Promise<Response>
             return new Response("OK");
           }
           const style = await env.ASK_CACHE.get(`style:${message.from.id}`) ?? undefined;
-          const { summary, proposals } = await proposeActions(request, env, style);
-          if (proposals.length === 0) {
-            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
-              `${summary}\n\n(no commands proposed)`);
-            await env.ASK_CACHE.delete(pendingKey(message.from.id)).catch(() => {});
-            return new Response("OK");
-          }
-          const pending: PendingDo = { proposals, createdAt: new Date().toISOString() };
-          await env.ASK_CACHE.put(pendingKey(message.from.id), JSON.stringify(pending),
-            { expirationTtl: PENDING_TTL_SECONDS });
-          const reply = [
-            summary,
-            "",
-            "Proposed commands:",
-            formatProposals(proposals),
-            "",
-            "Reply /confirm to run all, /confirm 1 3 to run a subset, or /cancel to drop.",
-          ].join("\n");
-          await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, reply);
+          await enqueueJob(env, {
+            id: `do-${message.from.id}-${message.message_id}`,
+            kind: "do",
+            chatId: message.chat.id,
+            messageId: message.message_id,
+            userId: message.from.id,
+            request,
+            style,
+            createdAt: new Date().toISOString(),
+            attempts: 0,
+          });
+          await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+            "Queued — proposals will arrive shortly.");
           return new Response("OK");
         }
 
@@ -300,18 +300,32 @@ async function handleUpdate(update: TelegramUpdate, env: Env): Promise<Response>
           const alias = askMatch[1] ?? "3";
           const question = askMatch[2].trim();
           const model = MODEL_ALIASES[alias];
+          if (!env.ASK_CACHE) {
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+              "/ask requires KV (ASK_CACHE).");
+            return new Response("OK");
+          }
           if (message.from && !await checkAskRateLimit(message.from.id, env)) {
             await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, "Rate limit reached: max 100 /ask queries per day.");
             return new Response("OK");
           }
-          const style = message.from && env.ASK_CACHE
+          const style = message.from
             ? await env.ASK_CACHE.get(`style:${message.from.id}`) ?? undefined
             : undefined;
-          const { reply, thread } = await answerQuestion(question, env, model, undefined, style);
-          await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, reply);
-          if (message.from && env.ASK_CACHE) {
-            await env.ASK_CACHE.put(`thread:${message.from.id}`, JSON.stringify(thread));
-          }
+          await enqueueJob(env, {
+            id: `ask-${message.from?.id ?? "anon"}-${message.message_id}`,
+            kind: "ask",
+            chatId: message.chat.id,
+            messageId: message.message_id,
+            userId: message.from?.id ?? null,
+            request: question,
+            model,
+            style,
+            createdAt: new Date().toISOString(),
+            attempts: 0,
+          });
+          await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+            "Queued — reply will arrive shortly.");
           return new Response("OK");
         }
 
@@ -335,9 +349,21 @@ async function handleUpdate(update: TelegramUpdate, env: Env): Promise<Response>
             return new Response("OK");
           }
           const style = await env.ASK_CACHE.get(`style:${message.from.id}`) ?? undefined;
-          const { reply, thread: updatedThread } = await answerQuestion(question, env, model, thread.history, style);
-          await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, reply);
-          await env.ASK_CACHE.put(`thread:${message.from.id}`, JSON.stringify(updatedThread));
+          await enqueueJob(env, {
+            id: `resp-${message.from.id}-${message.message_id}`,
+            kind: "ask",
+            chatId: message.chat.id,
+            messageId: message.message_id,
+            userId: message.from.id,
+            request: question,
+            model,
+            history: thread.history,
+            style,
+            createdAt: new Date().toISOString(),
+            attempts: 0,
+          });
+          await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+            "Queued — reply will arrive shortly.");
           return new Response("OK");
         }
 
