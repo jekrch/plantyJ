@@ -336,6 +336,70 @@
         "native"
       ],
       "description": null
+    },
+    {
+      "shortCode": "S lan",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "S mar",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "S pul",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "S ter",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "T can",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "T cor",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "V vir",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "Z aur",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
     }
   ]
 }
