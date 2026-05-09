@@ -182,5 +182,6 @@ export async function executeCommand(text: string, env: Env): Promise<ExecResult
       : fail(`No annotation found for ${scope}.`);
   }
 
-  return fail(`Unsupported or unrecognized command: ${trimmed.split(/\s+/)[0]}`);
+  const verb = trimmed.split(/\s+/)[0];
+  return fail(`Could not parse: "${trimmed}" (verb=${verb})`);
 }
