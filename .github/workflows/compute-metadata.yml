@@ -85,11 +85,9 @@ jobs:
         run: .venv/bin/python scripts/compute-embeddings.py
 
       - name: Build rollup
-        if: steps.guard.outputs.any_work == 'true'
-        run: .venv/bin/python scripts/build-rollup.py
+        run: python3 scripts/build-rollup.py
 
       - name: Commit updated metadata
-        if: steps.guard.outputs.any_work == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
