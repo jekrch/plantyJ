@@ -3,6 +3,8 @@ import {
   acceptBioclip,
   addAnnotationTag,
   addPicTag,
+  removeAnnotationTag,
+  removePicTag,
   deleteAnnotation,
   deletePic,
   deleteZonePic,
@@ -169,6 +171,42 @@ export async function executeCommand(text: string, env: Env): Promise<ExecResult
         : fail(`Tag "${parts[2]}" already present on ${scope}.`);
     }
     return fail(`Invalid /addtag format.`);
+  }
+
+  if (trimmed.startsWith("/removetag ")) {
+    const parts = trimmed.slice("/removetag ".length).split("//").map((s) => s.trim());
+    if (parts.length === 1) {
+      const spaceIdx = parts[0].indexOf(" ");
+      if (spaceIdx === -1) {
+        return fail(`Invalid /removetag format.`);
+      }
+      const first = parts[0].slice(0, spaceIdx).trim();
+      const tag = parts[0].slice(spaceIdx + 1).trim();
+      const seq = parseInt(first, 10);
+      if (!isNaN(seq) && String(seq) === first) {
+        const result = await removePicTag(env, seq, tag);
+        if (!result) return fail(`No pic found with ID ${seq}.`);
+        if (!result.removed) return ok(`Tag "${tag}" not present on pic #${seq} (${result.pic.shortCode}).`);
+        const tags = result.pic.tags.length > 0 ? result.pic.tags.join(", ") : "(none)";
+        return ok(`Removed tag "${tag}" from pic #${seq} (${result.pic.shortCode}). Tags: ${tags}`);
+      }
+      const { entry, removed } = await removeAnnotationTag(env, first, null, tag);
+      if (!removed) return ok(`Tag "${tag}" not present on ${first}.`);
+      const tags = entry && entry.tags.length > 0 ? entry.tags.join(", ") : "(none)";
+      return ok(`Removed tag "${tag}" from ${first}. Tags: ${tags}`);
+    } else if (parts.length === 2) {
+      const { entry, removed } = await removeAnnotationTag(env, parts[0], null, parts[1]);
+      if (!removed) return ok(`Tag "${parts[1]}" not present on ${parts[0]}.`);
+      const tags = entry && entry.tags.length > 0 ? entry.tags.join(", ") : "(none)";
+      return ok(`Removed tag "${parts[1]}" from ${parts[0]}. Tags: ${tags}`);
+    } else if (parts.length === 3) {
+      const scope = `${parts[0]} / ${parts[1]}`;
+      const { entry, removed } = await removeAnnotationTag(env, parts[0], parts[1], parts[2]);
+      if (!removed) return ok(`Tag "${parts[2]}" not present on ${scope}.`);
+      const tags = entry && entry.tags.length > 0 ? entry.tags.join(", ") : "(none)";
+      return ok(`Removed tag "${parts[2]}" from ${scope}. Tags: ${tags}`);
+    }
+    return fail(`Invalid /removetag format.`);
   }
 
   if (trimmed.startsWith("/deleteannotation ")) {

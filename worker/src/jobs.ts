@@ -2,10 +2,12 @@ import type { Env } from "./types";
 import { sendReply } from "./telegram";
 import { answerQuestion, type Thread } from "./ask";
 import { proposeActions } from "./do";
+import { runBatch } from "./batch";
 
-// /ask and /do calls can run for 1–2 minutes. The fetch handler can't keep
-// waitUntil() alive that long, so we enqueue here and let the cron drain the
-// queue from a scheduled invocation (which gets a much larger wall budget).
+// /ask, /do and /confirm calls can exceed Cloudflare's per-invocation limits
+// (waitUntil wall-time for LLM calls; subrequest count for batch /confirm).
+// Enqueue here and let the cron drain the queue across multiple ticks, each
+// with a fresh subrequest budget.
 
 const QUEUE_KV_KEY = "jobs:queue";
 const JOB_PREFIX = "job:";
@@ -18,8 +20,13 @@ const JOBS_PER_TICK = 2;
 // Initial attempt + 1 retry. After two failures we give up and notify the user.
 const MAX_ATTEMPTS = 2;
 const PENDING_DO_TTL_SECONDS = 3600;
+// Batched commits: a chunk of any size costs ~5 GETs + ~5 PUTs (only the
+// dirty manifests) regardless of command count. Image deletions add 2 each.
+// 25 leaves headroom for analyze-tick on the same invocation under Free's
+// 50-subrequest cap and finishes 54-command runs in 3 ticks.
+const CONFIRM_CHUNK_SIZE = 25;
 
-type JobKind = "ask" | "do";
+type JobKind = "ask" | "do" | "confirm";
 
 export interface JobRecord {
   id: string;
@@ -27,10 +34,15 @@ export interface JobRecord {
   chatId: number;
   messageId: number;
   userId: number | null;
-  request: string;
+  // ask/do
+  request?: string;
   model?: string;
   history?: Thread["history"];
   style?: string;
+  // confirm
+  commands?: string[];
+  nextIndex?: number;
+  results?: string[];
   createdAt: string;
   attempts: number;
 }
@@ -48,10 +60,12 @@ export async function enqueueJob(env: Env, job: JobRecord): Promise<void> {
   });
 }
 
-async function runJob(env: Env, job: JobRecord): Promise<void> {
+type RunStatus = "done" | "partial";
+
+async function runJob(env: Env, job: JobRecord): Promise<RunStatus> {
   if (job.kind === "ask") {
     const { reply, thread } = await answerQuestion(
-      job.request,
+      job.request ?? "",
       env,
       job.model,
       job.history,
@@ -61,40 +75,73 @@ async function runJob(env: Env, job: JobRecord): Promise<void> {
     if (job.userId !== null && env.ASK_CACHE) {
       await env.ASK_CACHE.put(`thread:${job.userId}`, JSON.stringify(thread));
     }
-    return;
+    return "done";
   }
 
-  const { summary, proposals } = await proposeActions(job.request, env, job.style);
-  if (proposals.length === 0) {
-    await sendReply(
-      env.TELEGRAM_BOT_TOKEN,
-      job.chatId,
-      job.messageId,
-      `${summary}\n\n(no commands proposed)`
-    );
-    if (job.userId !== null && env.ASK_CACHE) {
-      await env.ASK_CACHE.delete(`pending:do:${job.userId}`).catch(() => {});
+  if (job.kind === "do") {
+    const { summary, proposals } = await proposeActions(job.request ?? "", env, job.style);
+    if (proposals.length === 0) {
+      await sendReply(
+        env.TELEGRAM_BOT_TOKEN,
+        job.chatId,
+        job.messageId,
+        `${summary}\n\n(no commands proposed)`
+      );
+      if (job.userId !== null && env.ASK_CACHE) {
+        await env.ASK_CACHE.delete(`pending:do:${job.userId}`).catch(() => {});
+      }
+      return "done";
     }
-    return;
+
+    if (job.userId !== null && env.ASK_CACHE) {
+      const pending = { proposals, createdAt: new Date().toISOString() };
+      await env.ASK_CACHE.put(`pending:do:${job.userId}`, JSON.stringify(pending), {
+        expirationTtl: PENDING_DO_TTL_SECONDS,
+      });
+    }
+    const lines = [
+      summary,
+      "",
+      "Proposed commands:",
+      proposals
+        .map((x, i) => `  ${i + 1}. ${x.command}\n     ${x.rationale}`)
+        .join("\n"),
+      "",
+      "Reply /confirm to run all, /confirm 1 3 to run a subset, or /cancel to drop.",
+    ];
+    await sendReply(env.TELEGRAM_BOT_TOKEN, job.chatId, job.messageId, lines.join("\n"));
+    return "done";
   }
 
-  if (job.userId !== null && env.ASK_CACHE) {
-    const pending = { proposals, createdAt: new Date().toISOString() };
-    await env.ASK_CACHE.put(`pending:do:${job.userId}`, JSON.stringify(pending), {
-      expirationTtl: PENDING_DO_TTL_SECONDS,
-    });
+  // confirm — batched-execution chunks. Each chunk loads gallery+annotations
+  // once, applies commands in memory, then writes only the dirty manifests.
+  const commands = job.commands ?? [];
+  const results = job.results ?? [];
+  const start = job.nextIndex ?? 0;
+  const end = Math.min(start + CONFIRM_CHUNK_SIZE, commands.length);
+  const chunk = commands.slice(start, end);
+
+  const message = `Batch /confirm: ${chunk.length} command(s) (${start + 1}-${end} of ${commands.length}) [skip-deploy]`;
+  const { results: chunkResults } = await runBatch(env, chunk, message);
+  for (let i = 0; i < chunk.length; i++) {
+    const r = chunkResults[i];
+    const n = start + i + 1;
+    results.push(`${n}. ${chunk[i]}\n   ${r.ok ? "OK" : "FAIL"}: ${r.reply.split("\n")[0]}`);
   }
-  const lines = [
-    summary,
-    "",
-    "Proposed commands:",
-    proposals
-      .map((x, i) => `  ${i + 1}. ${x.command}\n     ${x.rationale}`)
-      .join("\n"),
-    "",
-    "Reply /confirm to run all, /confirm 1 3 to run a subset, or /cancel to drop.",
-  ];
-  await sendReply(env.TELEGRAM_BOT_TOKEN, job.chatId, job.messageId, lines.join("\n"));
+  job.nextIndex = end;
+  job.results = results;
+  // Reset attempts so a per-chunk retry counter doesn't leak across chunks.
+  job.attempts = 0;
+
+  if (end < commands.length) return "partial";
+
+  await sendReply(
+    env.TELEGRAM_BOT_TOKEN,
+    job.chatId,
+    job.messageId,
+    `Ran ${commands.length} command(s):\n${results.join("\n")}`
+  );
+  return "done";
 }
 
 export interface JobsTickResult {
@@ -134,7 +181,14 @@ export async function processJobsTick(env: Env): Promise<JobsTickResult> {
       }
       const job: JobRecord = JSON.parse(recRaw);
       try {
-        await runJob(env, job);
+        const status = await runJob(env, job);
+        if (status === "partial") {
+          // Save progress; leave id in the queue for the next tick.
+          await env.ASK_CACHE.put(`${JOB_PREFIX}${id}`, JSON.stringify(job), {
+            expirationTtl: QUEUE_TTL,
+          });
+          continue;
+        }
         removed.add(id);
         await env.ASK_CACHE.delete(`${JOB_PREFIX}${id}`).catch(() => {});
         succeeded++;

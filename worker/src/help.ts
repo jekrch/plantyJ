@@ -57,6 +57,10 @@ Annotation commands (persistent across all pics):
   /addtag {shortCode} // {tag} — add a tag to a plant annotation
   /addtag {shortCode} // {zoneCode} // {tag} — add a tag to a plant+zone annotation
 
+  /removetag {seq} {tag} — remove a tag from a pic (no-op if absent)
+  /removetag {shortCode} // {tag} — remove a tag from a plant annotation
+  /removetag {shortCode} // {zoneCode} // {tag} — remove a tag from a plant+zone annotation
+
 Zone commands:
   /addzone {code} {name} — Create or rename a zone (name optional)
   /renamezone {code} {name} — Set/replace a zone's display name

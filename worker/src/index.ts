@@ -4,7 +4,6 @@ import { downloadFile, sendReply } from "./telegram";
 import { HELP_HEADER } from "./help";
 import { MODEL_ALIASES, type Thread } from "./ask";
 import { type ProposedCommand } from "./do";
-import { executeCommand } from "./execute";
 import {
   submitAnalyzeRun,
   analyzeStatus,
@@ -16,6 +15,8 @@ import {
   acceptBioclip,
   addAnnotationTag,
   addPicTag,
+  removeAnnotationTag,
+  removePicTag,
   appendPic,
   appendZonePic,
   arrayBufferToBase64,
@@ -278,20 +279,24 @@ async function handleUpdate(update: TelegramUpdate, env: Env): Promise<Response>
           const indices = sel === "all"
             ? pending.proposals.map((_, i) => i + 1)
             : sel;
-          const lines: string[] = [];
-          for (const n of indices) {
-            const proposal = pending.proposals[n - 1];
-            try {
-              const result = await executeCommand(proposal.command, env);
-              lines.push(`${n}. ${proposal.command}\n   ${result.ok ? "OK" : "FAIL"}: ${result.reply.split("\n")[0]}`);
-            } catch (err) {
-              const msg = err instanceof Error ? err.message : "unknown error";
-              lines.push(`${n}. ${proposal.command}\n   FAIL: ${msg}`);
-            }
-          }
+          const commands = indices.map((n) => pending.proposals[n - 1].command);
+          await enqueueJob(env, {
+            id: `confirm-${message.from.id}-${message.message_id}`,
+            kind: "confirm",
+            chatId: message.chat.id,
+            messageId: message.message_id,
+            userId: message.from.id,
+            commands,
+            nextIndex: 0,
+            results: [],
+            createdAt: new Date().toISOString(),
+            attempts: 0,
+          });
           await env.ASK_CACHE.delete(pendingKey(message.from.id)).catch(() => {});
+          // ~25 commands per minute (batched commits), rounded up.
+          const etaMin = Math.ceil(commands.length / 25);
           await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
-            `Ran ${indices.length}/${pending.proposals.length}:\n${lines.join("\n")}`);
+            `Queued ${commands.length} command(s) — batched in chunks of 25/min (~${etaMin} min). Summary will arrive when complete.`);
           return new Response("OK");
         }
 
@@ -690,6 +695,71 @@ async function handleUpdate(update: TelegramUpdate, env: Env): Promise<Response>
           } else {
             await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
               `Invalid format. Use:\n  /addtag {seq} {tag}\n  /addtag {shortCode} // {tag}\n  /addtag {shortCode} // {zoneCode} // {tag}`);
+          }
+          return new Response("OK");
+        }
+
+        if (text.startsWith("/removetag ")) {
+          const parts = text.slice("/removetag ".length).split("//").map((s) => s.trim());
+
+          if (parts.length === 1) {
+            const spaceIdx = parts[0].indexOf(" ");
+            if (spaceIdx === -1) {
+              await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+                `Invalid format. Use:\n  /removetag {seq} {tag}\n  /removetag {shortCode} // {tag}\n  /removetag {shortCode} // {zoneCode} // {tag}`);
+              return new Response("OK");
+            }
+            const first = parts[0].slice(0, spaceIdx).trim();
+            const tag = parts[0].slice(spaceIdx + 1).trim();
+            const seq = parseInt(first, 10);
+            if (!isNaN(seq) && String(seq) === first) {
+              const result = await removePicTag(env, seq, tag);
+              if (!result) {
+                await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+                  `No pic found with ID ${seq}.`);
+              } else if (!result.removed) {
+                await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+                  `Tag "${tag}" not present on pic #${seq} (${result.pic.shortCode}).`);
+              } else {
+                const tags = result.pic.tags.length > 0 ? result.pic.tags.join(", ") : "(none)";
+                await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+                  `Removed tag "${tag}" from pic #${seq} (${result.pic.shortCode}). Tags: ${tags}`);
+              }
+            } else {
+              const { entry, removed } = await removeAnnotationTag(env, first, null, tag);
+              if (!removed) {
+                await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+                  `Tag "${tag}" not present on ${first}.`);
+              } else {
+                const tags = entry && entry.tags.length > 0 ? entry.tags.join(", ") : "(none)";
+                await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+                  `Removed tag "${tag}" from ${first}. Tags: ${tags}`);
+              }
+            }
+          } else if (parts.length === 2) {
+            const { entry, removed } = await removeAnnotationTag(env, parts[0], null, parts[1]);
+            if (!removed) {
+              await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+                `Tag "${parts[1]}" not present on ${parts[0]}.`);
+            } else {
+              const tags = entry && entry.tags.length > 0 ? entry.tags.join(", ") : "(none)";
+              await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+                `Removed tag "${parts[1]}" from ${parts[0]}. Tags: ${tags}`);
+            }
+          } else if (parts.length === 3) {
+            const scope = `${parts[0]} / ${parts[1]}`;
+            const { entry, removed } = await removeAnnotationTag(env, parts[0], parts[1], parts[2]);
+            if (!removed) {
+              await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+                `Tag "${parts[2]}" not present on ${scope}.`);
+            } else {
+              const tags = entry && entry.tags.length > 0 ? entry.tags.join(", ") : "(none)";
+              await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+                `Removed tag "${parts[2]}" from ${scope}. Tags: ${tags}`);
+            }
+          } else {
+            await sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id,
+              `Invalid format. Use:\n  /removetag {seq} {tag}\n  /removetag {shortCode} // {tag}\n  /removetag {shortCode} // {zoneCode} // {tag}`);
           }
           return new Response("OK");
         }

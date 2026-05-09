@@ -772,6 +772,54 @@ export async function addAnnotationTag(
   return { entry, added: true };
 }
 
+export async function removePicTag(
+  env: Env,
+  seq: number,
+  tag: string
+): Promise<{ pic: PicEntry; removed: boolean } | null> {
+  const { gallery, picsSha } = await readGallery(env);
+  const pic = gallery.pics.find((p) => p.seq === seq);
+  if (!pic) return null;
+  if (!pic.tags.includes(tag)) return { pic, removed: false };
+  pic.tags = pic.tags.filter((t) => t !== tag);
+  await writeJsonFile(env, PICS_PATH, { pics: gallery.pics }, picsSha, `Remove tag from pic #${seq}: ${tag}`);
+  return { pic, removed: true };
+}
+
+export async function removeAnnotationTag(
+  env: Env,
+  shortCode: string,
+  zoneCode: string | null,
+  tag: string
+): Promise<{ entry: AnnotationEntry | null; removed: boolean }> {
+  const { data, sha } = await readJsonFile<{ annotations?: AnnotationEntry[] }>(
+    env,
+    ANNOTATIONS_PATH,
+    { annotations: [] }
+  );
+  const annotations = data.annotations ?? [];
+
+  const idx = annotations.findIndex(
+    (a) => a.shortCode === shortCode && a.zoneCode === zoneCode
+  );
+  if (idx === -1) return { entry: null, removed: false };
+
+  const existing = annotations[idx];
+  if (!existing.tags.includes(tag)) return { entry: existing, removed: false };
+
+  const updated: AnnotationEntry = { ...existing, tags: existing.tags.filter((t) => t !== tag) };
+  annotations[idx] = updated;
+
+  // Drop entries that carry no information.
+  const cleaned = annotations.filter(
+    (a) => a.tags.length > 0 || a.description !== null
+  );
+
+  const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
+  await writeJsonFile(env, ANNOTATIONS_PATH, { annotations: cleaned }, sha, `Remove tag from ${scope}: ${tag}`);
+  return { entry: updated, removed: true };
+}
+
 export async function deleteAnnotation(
   env: Env,
   shortCode: string,
@@ -807,6 +855,96 @@ export async function readAnnotations(env: Env): Promise<AnnotationEntry[]> {
     { annotations: [] }
   );
   return data.annotations ?? [];
+}
+
+// --- Batch helpers ---------------------------------------------------------
+// loadBatchState reads gallery + annotations in a single Promise.all (5 GETs).
+// Mutators in batch.ts apply changes to BatchState in memory and mark which
+// JSON files got dirty. commitBatchState then writes only the dirty ones,
+// turning O(N commands) GitHub round-trips into O(1) regardless of chunk size.
+
+export type DirtyFile = "pics" | "plants" | "zones" | "zonePics" | "annotations";
+
+export interface BatchState {
+  gallery: Gallery;
+  annotations: AnnotationEntry[];
+  picsSha: string | null;
+  plantsSha: string | null;
+  zonesSha: string | null;
+  zonePicsSha: string | null;
+  annotationsSha: string | null;
+  dirty: Set<DirtyFile>;
+  // Image files queued for deletion after JSON commits succeed (per /delete and
+  // /deletezonepic). Each costs 2 subrequests: GET sha + DELETE.
+  imagesToDelete: Array<{ path: string; message: string }>;
+}
+
+export async function loadBatchState(env: Env): Promise<BatchState> {
+  const [pics, plants, zones, zonePics, ann] = await Promise.all([
+    readJsonFile<{ pics?: PicEntry[] }>(env, PICS_PATH, { pics: [] }),
+    readJsonFile<{ plants?: PlantRecord[] }>(env, PLANTS_PATH, { plants: [] }),
+    readJsonFile<{ zones?: Zone[] }>(env, ZONES_PATH, { zones: [] }),
+    readJsonFile<{ zonePics?: ZonePicEntry[] }>(env, ZONE_PICS_PATH, { zonePics: [] }),
+    readJsonFile<{ annotations?: AnnotationEntry[] }>(env, ANNOTATIONS_PATH, { annotations: [] }),
+  ]);
+  return {
+    gallery: {
+      pics: pics.data.pics ?? [],
+      plants: plants.data.plants ?? [],
+      zones: zones.data.zones ?? [],
+      zonePics: zonePics.data.zonePics ?? [],
+    },
+    annotations: ann.data.annotations ?? [],
+    picsSha: pics.sha,
+    plantsSha: plants.sha,
+    zonesSha: zones.sha,
+    zonePicsSha: zonePics.sha,
+    annotationsSha: ann.sha,
+    dirty: new Set(),
+    imagesToDelete: [],
+  };
+}
+
+export async function commitBatchState(
+  env: Env,
+  state: BatchState,
+  message: string
+): Promise<{ jsonWrites: number; imagesDeleted: number }> {
+  const writes: Array<Promise<void>> = [];
+  if (state.dirty.has("zones")) {
+    writes.push(writeJsonFile(env, ZONES_PATH, { zones: state.gallery.zones }, state.zonesSha, message));
+  }
+  if (state.dirty.has("plants")) {
+    writes.push(writeJsonFile(env, PLANTS_PATH, { plants: state.gallery.plants }, state.plantsSha, message));
+  }
+  if (state.dirty.has("pics")) {
+    writes.push(writeJsonFile(env, PICS_PATH, { pics: state.gallery.pics }, state.picsSha, message));
+  }
+  if (state.dirty.has("zonePics")) {
+    writes.push(writeJsonFile(env, ZONE_PICS_PATH, { zonePics: state.gallery.zonePics }, state.zonePicsSha, message));
+  }
+  if (state.dirty.has("annotations")) {
+    const cleaned = state.annotations.filter((a) => a.tags.length > 0 || a.description !== null);
+    writes.push(writeJsonFile(env, ANNOTATIONS_PATH, { annotations: cleaned }, state.annotationsSha, message));
+  }
+  await Promise.all(writes);
+
+  let imagesDeleted = 0;
+  for (const img of state.imagesToDelete) {
+    const [owner, repo] = env.GITHUB_REPO.split("/");
+    const fileUrl = `${GITHUB_API}/repos/${owner}/${repo}/contents/${img.path}`;
+    try {
+      const fileResp = await fetch(fileUrl, { headers: githubHeaders(env.GITHUB_TOKEN) });
+      if (fileResp.ok) {
+        const fileData: GitHubContentsResponse = await fileResp.json();
+        await deleteFile(env, img.path, fileData.sha, img.message);
+        imagesDeleted++;
+      }
+    } catch {
+      // Swallow per-image failures; the JSON manifest is the source of truth.
+    }
+  }
+  return { jsonWrites: writes.length, imagesDeleted };
 }
 
 export async function readAiAnalyses(

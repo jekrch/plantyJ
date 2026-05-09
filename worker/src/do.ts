@@ -28,6 +28,7 @@ export interface ProposeResult {
 
 const ALLOWED_VERBS = [
   "/addtag",
+  "/removetag",
   "/update",
   "/accept",
   "/annotate",
