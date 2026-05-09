@@ -326,6 +326,19 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "S alb",
+      "zoneCode": "sy",
+      "verdict": "GOOD",
+      "analysis": "Spiraea alba (White Meadowsweet) is a deciduous shrub native to Minnesota, making it an excellent fit for the property owners' ecological priorities. Hardy down to USDA Zone 3, it easily withstands the Minneapolis winter climate in Zone 4b/5a. While it naturally thrives in wetlands, bogs, and moist meadows, it is highly adaptable to standard garden settings and performs remarkably well in moisture-retentive clay and loam soils, provided it is not subjected to prolonged drought. Positioned in the side yard (\"sy\"), it acts as an understory or mid-level shrub amongst fruit trees like apples, apricots, and pears, offering multi-season interest without demanding significant upkeep.\n\nEcologically, Meadowsweet is a powerhouse that supports both local insect populations and urban wildlife. It serves as a vital larval host plant for over 60 species of Lepidoptera, including the Spring Azure butterfly and various tiger moths. Its dense, conical clusters of fuzzy white flowers bloom from mid-to-late summer, bridging a crucial nectar and pollen gap for bumblebees, solitary bees, and beneficial predatory wasps when earlier shrubs have faded. Additionally, the plant's seed capsules persist into the fall and winter, offering a valuable foraging resource for native ground-feeding songbirds. This aligns perfectly with the garden's other ecologically active side yard plants, such as native Rudbeckia species, fostering a resilient, pollinator-friendly ecosystem.",
+      "references": [
+        "https://www.upnativeplants.com/product-page/white-meadowsweet-spiraea-alba",
+        "https://www.naturalthemes.com/native-plants-for-clay-based-soils/",
+        "https://plants.ces.ncsu.edu/plants/spiraea-alba/",
+        "https://www.leavesforwildlife.com/product-page/meadowsweet-spirea"
+      ],
+      "created": "2026-05-09T00:30:07.442Z"
+    },
+    {
       "shortCode": "s can bob",
       "zoneCode": "mpg",
       "verdict": "GOOD",
@@ -452,6 +465,18 @@
       "analysis": "Viola sororia (Common Blue Violet) is an exceptionally resilient native groundcover that excels in shaded or dappled understory environments, making it an ideal fit for the challenging, dry root zones beneath maple trees. In a clay/loam soil profile, this plant forms a vigorous living mulch through rhizomatic growth and prolific self-seeding, effortlessly filling bare gaps where traditional plants or turf struggle to survive. Because the owners prioritize ecological value and edibles over perfectly manicured lawns, its reputation as an aggressive spreader is a distinct benefit here. Additionally, both the young heart-shaped leaves and spring flowers are edible, nutrient-dense, and rich in vitamins A and C, which strongly aligns with the owners' goals of cultivating foraging and medicinal plants.\n\nEcologically, this violet is a high-value anchor for the local food web. It provides critical early-spring nectar and pollen for emerging pollinators, including specialist mining bees such as Andrena violae. Most importantly, it serves as an obligatory larval host plant for a wide variety of fritillary butterflies, including the Great Spangled, Aphrodite, and Meadow Fritillaries. The plant also engages in myrmecochory; its seeds feature a lipid- and protein-rich elaiosome coating that attracts native ants, which naturally disperse the seeds after feeding the nutrient packets to their larvae. Furthermore, the dense, low-growing foliage provides excellent shelter for ground-dwelling insects, while the seeds provide a foraging source for urban wildlife such as mourning doves, wild turkeys, and small mammals.",
       "references": [],
       "created": "2026-05-06T03:02:38.232Z"
+    },
+    {
+      "shortCode": "V vir",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "Culver's Root (Veronicastrum virginicum) is an excellent, structurally striking addition to this Minneapolis garden. Native to Minnesota's mesic prairies, woodlands, and wet meadows, it is fully hardy in USDA zones 4b/5a and readily adapts to the property's clay/loam soils. Planted in the front yard alongside other robust native perennials like Purple Giant Hyssop, Rattlesnake Master, and native Figworts, it forms part of a cohesive prairie-edge guild that naturally supports vertical interest and deep-rooted resilience without aggressive spreading.\n\nEcologically, this plant is a phenomenal asset for urban wildlife and fits perfectly with the owners' priorities. It is widely recognized as a pollinator magnet, drawing a massive diversity of long- and short-tongued native bees, bumblebees, syrphid flies, and beneficial pollinating wasps to its long-blooming white spikes. It is also highly attractive to butterflies; notably, it is a favored nectar source for the Red Admiral (Vanessa atalanta), which has already been observed frequenting this exact garden zone. Because the plant is highly resistant to browsing by deer and rabbits, it supports local ecology with minimal maintenance or pest management.",
+      "references": [
+        "https://growitbuildit.com/culvers-root-veronicastrum-virginicum/",
+        "https://newmoonnursery.com/nursery-plants/veronicastrum-virginicum/",
+        "https://mgnv.org/wp-content/uploads/2025/08/Veronicsatrum_virginicum.2025.pdf"
+      ],
+      "created": "2026-05-09T00:30:07.442Z"
     },
     {
       "shortCode": "Z aur",
