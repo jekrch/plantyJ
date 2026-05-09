@@ -137,30 +137,6 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
-      "shortCode": "F cat",
-      "zoneCode": "sy",
-      "verdict": "BAD",
-      "analysis": "Felis catus (Domestic Cat) is an invasive, non-native predator that poses a massive threat to local ecosystems, killing billions of native birds and mammals annually in the US. In a garden expressly designed to support native wildlife—such as ground-foraging birds, fledgling robins, and native small mammals—allowing a free-roaming cat actively undermines the owners' ecological priorities. To protect the local food web, Dolly should be kept indoors or restricted to a secure \"catio.\"",
-      "references": [],
-      "created": "2026-05-05T02:52:53.830Z"
-    },
-    {
-      "shortCode": "h acu",
-      "zoneCode": "mpg",
-      "verdict": "GOOD",
-      "analysis": "Hepatica acutiloba (Sharp-lobed Hepatica) is one of the absolute earliest native woodland wildflowers to bloom in Minnesota, making it a critical lifeline for the very first emerging bees and syrphid flies of the season. It thrives in the loamy, shaded environment of the maple zone, where its semi-evergreen leaves persist through winter. This plant perfectly embodies the owners' goal of supporting local ecology from the very start of the growing season.",
-      "references": [],
-      "created": "2026-05-05T02:52:53.830Z"
-    },
-    {
-      "shortCode": "H arb",
-      "zoneCode": "hbd",
-      "verdict": "GOOD",
-      "analysis": "Hydrangea arborescens (Smooth Hydrangea) is a native woodland edge shrub that performs very well in zone 4b/5a, tolerating clay/loam soils gracefully. As long as it is a fertile, lacecap-style variety (rather than a fully sterile \"mophead\" cultivar), its tiny fertile flowers provide excellent foraging for native bees, hoverflies, and beetles. It offers practical structure for the hydrangea border while adhering to the owners' native-priority mandate.",
-      "references": [],
-      "created": "2026-05-05T02:52:53.830Z"
-    },
-    {
       "shortCode": "H lup Wil",
       "zoneCode": "bb",
       "verdict": "MIXED",
@@ -314,14 +290,6 @@
       "zoneCode": "bb",
       "verdict": "MIXED",
       "analysis": "Ribes rubrum 'Jonkheer Van Tets' (Red Currant) is a European species that provides excellent, reliable fruit yields for the owners and early spring nectar for local bees. While it is not a native shrub and therefore hosts fewer specialized insects than native Ribes species, it is a well-behaved, shade-tolerant edible that does not act invasively. It fills the edible priority well but has a slightly lower ecological ceiling than a purely native planting.",
-      "references": [],
-      "created": "2026-05-05T02:52:53.830Z"
-    },
-    {
-      "shortCode": "r rub pc",
-      "zoneCode": "bb",
-      "verdict": "MIXED",
-      "analysis": "Ribes rubrum 'Pink Champagne' (Pink Currant) shares the same profile as the red currant: it is a high-yielding, non-native edible that provides delicious fruit and early spring bee forage. It grows well in the heavy soils of zone 4b/5a and tolerates partial shade in the berry border. Ecologically, it is benign and moderately helpful for pollinators, though it lacks the deep co-evolutionary ties of a native shrub.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
     },

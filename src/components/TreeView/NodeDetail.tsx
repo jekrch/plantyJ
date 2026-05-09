@@ -226,6 +226,27 @@ export function NodeDetail({
               </p>
             )}
           </div>
+          {references.length > 0 && (
+            <div className="pt-2 border-t border-ink-faint/15">
+              <div className="text-[9px] font-mono uppercase tracking-wider text-ink-faint mb-1.5">
+                Sources
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {references.map((r) => (
+                  <a
+                    key={r.url}
+                    href={r.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-ink-muted hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
+                  >
+                    {r.name}
+                    <ExternalLink size={10} strokeWidth={1.5} />
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
           {currentAnalysis && (
             <div className="pt-2 border-t border-ink-faint/15">
               <div className="flex items-center justify-between gap-2 mb-1.5">
@@ -301,27 +322,6 @@ export function NodeDetail({
                   })}
                 </div>
               )}
-            </div>
-          )}
-          {references.length > 0 && (
-            <div className="pt-2 border-t border-ink-faint/15">
-              <div className="text-[9px] font-mono uppercase tracking-wider text-ink-faint mb-1.5">
-                Sources
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {references.map((r) => (
-                  <a
-                    key={r.url}
-                    href={r.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] text-ink-muted hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
-                  >
-                    {r.name}
-                    <ExternalLink size={10} strokeWidth={1.5} />
-                  </a>
-                ))}
-              </div>
             </div>
           )}
         </div>

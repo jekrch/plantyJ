@@ -680,6 +680,43 @@ export default function PlantInfoDrawer({
           </>
         )}
 
+        {/* Sources */}
+        {((species?.references && species.references.length > 0) || (plant.kind === "animal" && plant.fullName)) && (
+          <>
+            <div className="border-t border-white/8" />
+            <div>
+              <p className="text-[10px] uppercase tracking-widest text-white/50 mb-2">
+                Sources
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {species?.references?.map((ref) => (
+                  <a
+                    key={ref.url}
+                    href={ref.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-white/55 hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
+                  >
+                    {ref.name}
+                    <ExternalLink size={10} strokeWidth={1.5} />
+                  </a>
+                ))}
+                {plant.kind === "animal" && plant.fullName && (
+                  <a
+                    href={`https://www.inaturalist.org/taxa/search?q=${encodeURIComponent(plant.fullName)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-white/55 hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
+                  >
+                    iNaturalist
+                    <ExternalLink size={10} strokeWidth={1.5} />
+                  </a>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+
         {/* AI Ecological Fit Analysis */}
         {currentAnalysis && (
           <>
@@ -721,43 +758,6 @@ export default function PlantInfoDrawer({
                       );
                     })}
                   </div>
-                )}
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* Sources */}
-        {((species?.references && species.references.length > 0) || (plant.kind === "animal" && plant.fullName)) && (
-          <>
-            <div className="border-t border-white/8" />
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/50 mb-2">
-                Sources
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {species?.references?.map((ref) => (
-                  <a
-                    key={ref.url}
-                    href={ref.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] text-white/55 hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
-                  >
-                    {ref.name}
-                    <ExternalLink size={10} strokeWidth={1.5} />
-                  </a>
-                ))}
-                {plant.kind === "animal" && plant.fullName && (
-                  <a
-                    href={`https://www.inaturalist.org/taxa/search?q=${encodeURIComponent(plant.fullName)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] text-white/55 hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
-                  >
-                    iNaturalist
-                    <ExternalLink size={10} strokeWidth={1.5} />
-                  </a>
                 )}
               </div>
             </div>
