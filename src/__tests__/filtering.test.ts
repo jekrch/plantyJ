@@ -46,8 +46,21 @@ describe("activeFilterCount", () => {
       shortCodes: new Set<string>(),
       misc: new Set(["x"]),
       aiVerdicts: new Set<string>(),
+      searchQuery: "",
     };
     expect(activeFilterCount(f)).toBe(4);
+  });
+
+  it("counts a non-empty searchQuery", () => {
+    expect(
+      activeFilterCount({ ...EMPTY_FILTERS, searchQuery: "rosa" })
+    ).toBe(1);
+  });
+
+  it("ignores whitespace-only searchQuery", () => {
+    expect(
+      activeFilterCount({ ...EMPTY_FILTERS, searchQuery: "   " })
+    ).toBe(0);
   });
 });
 
@@ -182,6 +195,76 @@ describe("applyFilters", () => {
     ];
     const result = applyFilters([p], { ...EMPTY_FILTERS, tags: new Set(["annotated"]) }, anns);
     expect(result).toHaveLength(1);
+  });
+
+  it("searchQuery matches commonName, fullName, and tags (AND across tokens)", () => {
+    const items = [
+      plant({ id: "s1", shortCode: "rosa", commonName: "Wild Rose", fullName: "Rosa canina", tags: ["native"] }),
+      plant({ id: "s2", shortCode: "iris", commonName: "Blue Flag", fullName: "Iris versicolor", tags: ["perennial"] }),
+      plant({ id: "s3", shortCode: "oak", commonName: "Bur Oak", fullName: "Quercus macrocarpa", tags: ["tree"] }),
+    ];
+    expect(
+      applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "rose" }).map((p) => p.id)
+    ).toEqual(["s1"]);
+    expect(
+      applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "quercus" }).map((p) => p.id)
+    ).toEqual(["s3"]);
+    expect(
+      applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "perennial" }).map((p) => p.id)
+    ).toEqual(["s2"]);
+    // Multi-token AND: "wild" AND "rosa" — both must appear in haystack.
+    expect(
+      applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "wild rosa" }).map((p) => p.id)
+    ).toEqual(["s1"]);
+    // No match
+    expect(
+      applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "xyz" })
+    ).toHaveLength(0);
+  });
+
+  it("searchQuery matches species taxonomy (taxa)", () => {
+    const items = [
+      plant({ id: "t1", shortCode: "rosa" }),
+      plant({ id: "t2", shortCode: "iris" }),
+    ];
+    const speciesByShortCode = new Map([
+      [
+        "rosa",
+        {
+          id: "rosa",
+          fullName: null,
+          commonName: null,
+          description: null,
+          vernacularNames: [],
+          taxonomy: {
+            kingdom: "Plantae",
+            phylum: null,
+            class: null,
+            order: null,
+            family: "Rosaceae",
+            genus: "Rosa",
+            species: null,
+            canonicalName: "Rosa canina",
+          },
+          nativeRange: null,
+          references: [],
+          sources: [],
+        },
+      ],
+    ]);
+    const result = applyFilters(
+      items,
+      { ...EMPTY_FILTERS, searchQuery: "rosaceae" },
+      [],
+      speciesByShortCode
+    );
+    expect(result.map((p) => p.id)).toEqual(["t1"]);
+  });
+
+  it("searchQuery is case-insensitive and ignores empty/whitespace", () => {
+    const items = [plant({ id: "c1", commonName: "Wild Rose" })];
+    expect(applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "WILD" })).toHaveLength(1);
+    expect(applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "   " })).toHaveLength(1);
   });
 });
 

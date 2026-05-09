@@ -27,6 +27,7 @@ function parseFiltersFromURL(): InitialState {
     shortCodes: new Set(params.get("plants")?.split(",").filter(Boolean) ?? []),
     misc: new Set(params.get("misc")?.split(",").filter(Boolean) ?? []),
     aiVerdicts: new Set(params.get("ecoFit")?.split(",").filter(Boolean) ?? []),
+    searchQuery: params.get("q") ?? "",
   };
 
   const sort = (params.get("sort") as SortMode) ?? DEFAULT_SORT;
@@ -65,6 +66,7 @@ export function buildParams(
     const values = Array.from(filters[key]);
     if (values.length > 0) params.set(KEY_TO_PARAM[key], values.join(","));
   }
+  if (filters.searchQuery.trim()) params.set("q", filters.searchQuery);
   if (sort !== DEFAULT_SORT) params.set("sort", sort);
   if (view !== DEFAULT_VIEW) {
     params.set("view", view);
