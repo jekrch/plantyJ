@@ -239,6 +239,103 @@
         "native"
       ],
       "description": null
+    },
+    {
+      "shortCode": "H arb",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "H lup Wil",
+      "zoneCode": null,
+      "tags": [
+        "edible"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "H vir",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "M dom 'red'",
+      "zoneCode": null,
+      "tags": [
+        "edible"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "O mac",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "P arm",
+      "zoneCode": null,
+      "tags": [
+        "edible"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "P pyr Peg",
+      "zoneCode": null,
+      "tags": [
+        "edible"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "P sub",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "R bla",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "R hir",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "R lac",
+      "zoneCode": null,
+      "tags": [
+        "edible",
+        "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "S alb",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
     }
   ]
 }
