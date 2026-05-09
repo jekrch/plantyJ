@@ -137,6 +137,44 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "F cat",
+      "zoneCode": "sy",
+      "verdict": "BAD",
+      "analysis": "Felis catus (Domestic Cat) is a non-native species whose presence outdoors is highly detrimental to the garden's ecological goals. The property owners prioritize supporting local ecology, but domestic cats are highly efficient, introduced predators that kill billions of birds, small mammals, and reptiles in the United States each year. In the side yard, native plants like Black-eyed Susans and Sochan, along with fruiting Apple, Asian Pear, and Apricot trees, are cultivated to draw in pollinators and urban wildlife. Allowing a cat to roam this specific zone essentially turns a carefully designed wildlife haven into an ecological trap, where foraging animals become easy prey rather than supported inhabitants.\n\nWhile Minneapolis city guidelines do not strictly prohibit free-roaming cats, local conservationists and ecologists strongly advise against it to protect local biodiversity. The garden journal already documents native species like Cardinals, Goldfinches, and Gray Squirrels on the property, all of which are highly vulnerable to feline predation and the stress of being actively hunted. To align with the owners' ecological priorities, this pet should be kept indoors, trained to walk on a harness and leash, or given access to a secure outdoor \"catio.\" This management approach entirely neutralizes the threat to local wildlife while keeping the cat safe from urban hazards.",
+      "references": [
+        "https://www.tau.ac.il/lifesci/zoology/members/yom-tov/inbal/cats.pdf",
+        "https://encyclopedia.pub/entry/55601",
+        "https://www.upr.org/utah-news/2021-03-26/minimizing-the-impact-of-domestic-cats-on-wildlife"
+      ],
+      "created": "2026-05-09T00:42:07.417Z"
+    },
+    {
+      "shortCode": "h acu",
+      "zoneCode": "mpg",
+      "verdict": "GOOD",
+      "analysis": "Hepatica acutiloba (Sharp-lobed Hepatica) occupies an excellent ecological niche in this garden, serving as a highly adapted spring ephemeral in the maple zone. Native to Minnesota woodlands, it is perfectly suited to the property's Zone 4b/5a climate and its clay/loam soils. While the dominant Acer platanoides (Norway maple) in this zone creates notoriously difficult, root-competitive dry shade, Hepatica acutiloba expertly sidesteps this challenge. It blooms and gathers energy in early spring, largely completing its most intensive growth phases before the dense maple canopy fully leafs out. In this woodland understory layout, it coexists harmoniously with neighboring native ephemerals like Virginia bluebells and trout lilies, thriving under the native-priority management of the owners.\n\nEcologically, this plant punches above its weight in early spring. Because it is one of the very first wildflowers to emerge, its blooms provide a critical, high-protein pollen source for early-season pollinators, particularly mining bees, sweat bees, small carpenter bees, and newly emerged queen bumblebees. Though it does not produce nectar, the abundant pollen is vital for these species' early survival. Following pollination, Hepatica engages in myrmecochory—a mutualistic relationship with ants. The seeds feature fatty appendages called elaiosomes that entice ants to carry them back to their nests, naturally dispersing and planting the seeds in nutrient-rich microenvironments. Furthermore, the seed capsules provide occasional foraging for urban wildlife like chipmunks and small rodents.",
+      "references": [
+        "https://fmr.org/updates/conservation/minnesota-spring-ephemeral-wildflowers",
+        "https://www.leavesforwildlife.com/product-page/hepatica-sharp-lobed-hepatica-nobilis-var-acuta",
+        "https://www.minnesotawildflowers.info/flower/sharp-lobed-hepatica",
+        "https://www.littlesweetflowerfarm.com/product-page/copy-of-copy-of-ephemeral-plant-2"
+      ],
+      "created": "2026-05-09T00:42:07.417Z"
+    },
+    {
+      "shortCode": "H arb",
+      "zoneCode": "hbd",
+      "verdict": "GOOD",
+      "analysis": "Smooth hydrangea (Hydrangea arborescens) occupies an excellent ecological niche in this Minneapolis garden. While its true historical native range lies primarily to the south and east of Minnesota, it is fully cold-hardy down to USDA Zone 3 and behaves as a highly beneficial, well-adapted naturalized species in the Upper Midwest. This shrub thrives in moisture-retentive conditions, making the property's clay and loam soil profile a perfect substrate for keeping its shallow roots hydrated during the summer. Placing it in a dedicated hydrangea border allows it to spread via suckers to form a dense structural thicket without outcompeting more delicate native woodland plants nearby. For owners prioritizing local ecology, it serves as a rugged, low-maintenance anchor that bridges the gap between native utility and classic ornamental appeal.\n\nThe ecological benefits of smooth hydrangea are immense, functioning as a powerhouse for regional insects. If grown as a straight species or a lacecap variety, its fertile florets provide a bustling nectar and pollen hub for bumblebees, solitary bees, syrphid flies, and tumbling flower beetles. Crucially, regardless of whether the specimen is a highly fertile type or a largely sterile mophead cultivar (such as the ubiquitous 'Annabelle'), its foliage serves as the primary larval host for both the spectacular Hydrangea Sphinx moth and the Hydrangea Leaf-tier moth. Beyond insect support, the shrub's sturdy winter stems create valuable structural shelter for overwintering invertebrates, any fertile dried seedheads will supplement the winter diets of foraging songbirds, and the foliage may occasionally attract browsing from urban deer and rabbits.",
+      "references": [
+        "https://plants.ces.ncsu.edu/plants/hydrangea-arborescens-incrediballtm-blush-ncha4/",
+        "https://www.butterfliesandmoths.org/species/Darapsa-versicolor",
+        "https://www.clayandlimestone.com/2019/07/i-heart-hydrangea-arborescens.html",
+        "https://www.shelterwoodgardens.com/2021/03/hydrangea-arborescens-var-annabelle.html"
+      ],
+      "created": "2026-05-09T00:42:07.417Z"
+    },
+    {
       "shortCode": "H lup Wil",
       "zoneCode": "bb",
       "verdict": "MIXED",
@@ -292,6 +330,19 @@
       "analysis": "Ribes rubrum 'Jonkheer Van Tets' (Red Currant) is a European species that provides excellent, reliable fruit yields for the owners and early spring nectar for local bees. While it is not a native shrub and therefore hosts fewer specialized insects than native Ribes species, it is a well-behaved, shade-tolerant edible that does not act invasively. It fills the edible priority well but has a slightly lower ecological ceiling than a purely native planting.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "r rub pc",
+      "zoneCode": "bb",
+      "verdict": "GOOD",
+      "analysis": "Ribes rubrum 'Pink Champagne' is an excellent fit for the berry border, successfully balancing the owners' focus on edibles and local ecology. While this currant is a European hybrid (a cross of red and white currants) rather than a North American native, it is non-invasive and forms a highly productive edible guild alongside the neighboring red currant, raspberry, and hops. Practically, currants thrive in moisture-retentive clay and loam soils, making the site's soil profile ideal. The specimen is extremely cold-hardy, easily surviving Minneapolis's zone 4b/5a winters. Crucially for native ecology, the 'Pink Champagne' variety has strong resistance to white pine blister rust, meaning it can be grown safely in Minnesota without serving as an alternate host that threatens native white pines.\n\nEcologically, this shrub serves as a valuable resource for urban wildlife. It blooms very early in the spring, acting as a critical nectar and pollen source for generalist early-season pollinators, including emerging bumblebees, native solitary bees, and hoverflies. Though non-native, its floral structure makes it an ecological generalist that seamlessly supports local insect populations. Once pollinated, the plant produces abundant, translucent pink berries in midsummer. These fruits are highly attractive to native urban birds, such as the Northern Cardinal (observed elsewhere in the garden), as well as local mammals like the native Gray Squirrel. Ultimately, this specimen represents an ecologically responsible, dual-purpose shrub that enriches the garden's food web.",
+      "references": [
+        "https://extension.umn.edu/fruit/growing-currants-and-gooseberries-home-garden",
+        "https://www.friendsschoolplantsale.com/variety/11903",
+        "https://grokipedia.com/page/Ribes",
+        "https://www.researchgate.net/publication/233231962_A_Review_of_Red_and_White_Currant_Ribes_rubrum_L"
+      ],
+      "created": "2026-05-09T00:42:07.417Z"
     },
     {
       "shortCode": "S alb",
