@@ -1,4 +1,12 @@
-import type { TelegramFileResponse } from "./types";
+import type { Env, TelegramFileResponse, TelegramMessage } from "./types";
+
+/** A pre-bound reply function for a specific chat/message. */
+export type Replier = (text: string) => Promise<void>;
+
+/** Bind sendReply to a (chat, replyTo) pair so handlers can call `reply(text)`. */
+export function makeReplier(env: Env, message: TelegramMessage): Replier {
+  return (text) => sendReply(env.TELEGRAM_BOT_TOKEN, message.chat.id, message.message_id, text);
+}
 
 const TELEGRAM_API = "https://api.telegram.org";
 const TELEGRAM_MAX_MESSAGE = 4096;
