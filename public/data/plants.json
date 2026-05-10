@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A can",
+      "fullName": "Asarum canadense",
+      "commonName": "Wild Ginger",
+      "variety": null
+    },
+    {
       "shortCode": "C ame",
       "fullName": "Corylus americana",
       "commonName": "American Hazelnut",
