@@ -321,34 +321,45 @@ export default function WebView({
   });
 
   const [hovered, setHovered] = useState<string | null>(null);
-  const [pinnedCode, setPinnedCode] = useState<string | null>(null);
-  const [renderedPinnedCode, setRenderedPinnedCode] = useState<string | null>(null);
+  
+  // Selection vs Detail States
+  const [selectedCode, setSelectedCode] = useState<string | null>(null);
+  const [detailCode, setDetailCode] = useState<string | null>(null);
+  const [renderedDetailCode, setRenderedDetailCode] = useState<string | null>(null);
   const [isClosing, setIsClosing] = useState(false);
-  const [pinnedKey, setPinnedKey] = useState(0);
+  const [selectBurstKey, setSelectBurstKey] = useState(0);
 
+  // Trigger burst animation purely on selection change
   useEffect(() => {
-    if (pinnedCode) {
-      setPinnedKey((k) => k + 1);
-      setRenderedPinnedCode(pinnedCode);
+    if (selectedCode) setSelectBurstKey((k) => k + 1);
+  }, [selectedCode]);
+
+  // Handle viewer animation mount/unmount
+  useEffect(() => {
+    if (detailCode) {
+      setRenderedDetailCode(detailCode);
       setIsClosing(false);
-    } else if (renderedPinnedCode) {
+    } else if (renderedDetailCode) {
       setIsClosing(true);
     }
-  }, [pinnedCode, renderedPinnedCode]);
+  }, [detailCode, renderedDetailCode]);
 
-  // If filters drop the pinned node out of the graph, close the detail.
+  // If filters drop the selected node out of the graph, reset states
   useEffect(() => {
-    if (pinnedCode && !nodeCodes.includes(pinnedCode)) setPinnedCode(null);
-  }, [pinnedCode, nodeCodes]);
+    if (selectedCode && !nodeCodes.includes(selectedCode)) {
+      setSelectedCode(null);
+      setDetailCode(null);
+    }
+  }, [selectedCode, nodeCodes]);
 
-  const renderedPinnedNode = useMemo(() => {
-    if (!renderedPinnedCode) return null;
-    const plant = plantByCode.get(renderedPinnedCode);
+  const renderedDetailNode = useMemo(() => {
+    if (!renderedDetailCode) return null;
+    const plant = plantByCode.get(renderedDetailCode);
     if (!plant) return null;
-    return buildWebNode(plant, speciesByShortCode.get(renderedPinnedCode));
-  }, [renderedPinnedCode, plantByCode, speciesByShortCode]);
+    return buildWebNode(plant, speciesByShortCode.get(renderedDetailCode));
+  }, [renderedDetailCode, plantByCode, speciesByShortCode]);
 
-  const activeCode = pinnedCode ?? hovered;
+  const activeCode = selectedCode ?? hovered;
 
   // Highlight edges + neighbor nodes touching the active node.
   const highlightedEdges = useMemo(() => {
@@ -379,23 +390,18 @@ export default function WebView({
 
   const toggleType = (id: string) => {
     setEnabledTypes((prev) => {
-      // If all are currently selected, isolate the clicked type
       if (prev.size === relationships.types.length) {
         return new Set([id]);
       }
-
       const next = new Set(prev);
       if (next.has(id)) {
         next.delete(id);
       } else {
         next.add(id);
       }
-
-      // If they uncheck the very last filter, reset back to all selected
       if (next.size === 0) {
         return new Set(relationships.types.map((t) => t.id));
       }
-
       return next;
     });
   };
@@ -434,7 +440,8 @@ export default function WebView({
         onPointerCancel={onPointerUp}
         onClick={() => {
           if (panRef.current?.moved) return;
-          setPinnedCode(null);
+          setSelectedCode(null);
+          setDetailCode(null);
         }}
       >
         {nodeCodes.length === 0 ? (
@@ -498,7 +505,6 @@ export default function WebView({
                 const midX = (x1 + x2) / 2;
                 const midY = (y1 + y2) / 2;
 
-                // 1. Calculate a consistent normal vector relative to the node pair (regardless of dir)
                 const isFromSmaller = e.rel.from < e.rel.to;
                 const normX1 = isFromSmaller ? e.fromX : e.toX;
                 const normY1 = isFromSmaller ? e.fromY : e.toY;
@@ -511,17 +517,14 @@ export default function WebView({
                 const nx = -baseDy / baseLen;
                 const ny = baseDx / baseLen;
 
-                // 2. Expand out edges into a bundle using their groupIndex
                 const spread = 24; 
                 const offset = (e.groupIndex - (e.groupTotal - 1) / 2) * spread;
 
-                // To shift the curve's midpoint exactly by 'offset', the control point needs 2x the offset
                 const cx = midX + nx * (offset * 2);
                 const cy = midY + ny * (offset * 2);
 
                 const pathD = `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
 
-                // The text sits right on the curve's midpoint
                 const textMidX = midX + nx * offset;
                 const textMidY = midY + ny * offset;
 
@@ -566,7 +569,7 @@ export default function WebView({
 
             <g>
               {layout.nodes.map((n) => {
-                const isPinned = n.code === pinnedCode;
+                const isSelected = n.code === selectedCode;
                 const isActive = n.code === activeCode;
                 const isNeighbor =
                   activeCode != null && highlightedNodes.has(n.code) && !isActive;
@@ -598,7 +601,15 @@ export default function WebView({
                     onClick={(e) => {
                       e.stopPropagation();
                       if (panRef.current?.moved) return;
-                      setPinnedCode((cur) => (cur === n.code ? null : n.code));
+                      
+                      if (selectedCode === n.code) {
+                        // Second click: toggle the detail viewer
+                        setDetailCode((cur) => (cur === n.code ? null : n.code));
+                      } else {
+                        // First click: select the node, keep viewer closed
+                        setSelectedCode(n.code);
+                        setDetailCode(null);
+                      }
                     }}
                   >
                     {/* Generous hit target */}
@@ -607,15 +618,15 @@ export default function WebView({
                       fill="transparent"
                       stroke="none"
                     />
-                    {isPinned && (
+                    {isSelected && (
                       <circle
-                        key={`burst-${pinnedKey}-${n.code}`}
+                        key={`burst-${selectBurstKey}-${n.code}`}
                         r={r + 14}
                         fill="url(#web-leaf-glow)"
                         className="node-select-burst"
                       />
                     )}
-                    {isPinned && (
+                    {isSelected && (
                       <circle
                         r={r + 16}
                         fill="none"
@@ -624,7 +635,7 @@ export default function WebView({
                         className="node-halo-persist"
                       />
                     )}
-                    {isActive && !isPinned && (
+                    {isActive && !isSelected && (
                       <circle r={r + 12} fill="url(#web-leaf-glow)" />
                     )}
                     <circle
@@ -790,7 +801,7 @@ export default function WebView({
         )}
       </div>
 
-      {renderedPinnedNode && (
+      {renderedDetailNode && (
         <div className="absolute bottom-0 left-0 right-0 z-20 flex justify-center pointer-events-none">
           <div
             className="w-full max-w-3xl pointer-events-auto"
@@ -799,7 +810,7 @@ export default function WebView({
             onPointerDown={stop}
           >
             <NodeDetail
-              node={renderedPinnedNode}
+              node={renderedDetailNode}
               plants={plants}
               taxa={taxa}
               zones={zones}
@@ -808,9 +819,9 @@ export default function WebView({
               relationships={relationships}
               isClosing={isClosing}
               onAnimationEnd={() => {
-                if (isClosing) setRenderedPinnedCode(null);
+                if (isClosing) setRenderedDetailCode(null);
               }}
-              onClose={() => setPinnedCode(null)}
+              onClose={() => setDetailCode(null)}
               onOpenPlantInList={onOpenPlantInList}
               onSpotlightPlant={onSpotlightPlant}
             />
