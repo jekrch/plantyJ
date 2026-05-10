@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A rus",
+      "fullName": "Armoracia rusticana",
+      "commonName": "Horseradish",
+      "variety": null
+    },
+    {
       "shortCode": "S vul alb",
       "fullName": "Syringa vulgaris alba",
       "commonName": "Common White Lilac",

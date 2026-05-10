@@ -423,6 +423,66 @@
       ],
       "observationsCount": 30319
     },
+    "asarum-canadense": {
+      "id": "asarum-canadense",
+      "fullName": "Asarum canadense",
+      "commonName": "Wild Ginger",
+      "description": "Asarum canadense, commonly known as Canada wild ginger, Canadian snakeroot, Indian Ginger, Coltsfoot, and Broad-Leaved Asarabacca, is a herbaceous, perennial plant. It should not be confused for Asarum reflexum, a closely related species, or Asarum acuminatum, a variety of A. canadense.\nIt forms dense colonies in the understory of deciduous forests throughout its native range in eastern North America. It is protected as a threatened species in Maine due to habitat loss. The species has been used by Native Americans for cooking and medicine, although recent research has suggested that compounds within the plant could cause negative health problems.",
+      "vernacularNames": [
+        "American Wild Ginger",
+        "Canada Snakeroot",
+        "Canada wild ginger",
+        "Canadian Wild Ginger",
+        "Canadian Wildginger",
+        "Wild Ginger"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Piperales",
+        "family": "Aristolochiaceae",
+        "genus": "Asarum",
+        "species": "Asarum canadense",
+        "canonicalName": "Asarum canadense"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2873947"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:93467-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Asarum_canadense"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/1473616"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q2866323"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.159592"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 42794
+    },
     "asclepias-tuberosa": {
       "id": "asclepias-tuberosa",
       "fullName": "Asclepias tuberosa",
@@ -3172,6 +3232,38 @@
         "natureserve"
       ],
       "observationsCount": 58175
+    },
+    "syringa-vulgaris-alba": {
+      "id": "syringa-vulgaris-alba",
+      "fullName": "Syringa vulgaris alba",
+      "commonName": "Common White Lilac",
+      "description": "",
+      "vernacularNames": [],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Lamiales",
+        "family": "Oleaceae",
+        "genus": "Syringa",
+        "species": "Syringa vulgaris",
+        "canonicalName": "Syringa vulgaris alba"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/7737992"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ]
     },
     "teucrium-canadense": {
       "id": "teucrium-canadense",
