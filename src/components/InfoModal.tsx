@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { X, ExternalLink, Sprout, Github, BugIcon, Building, Flower, Cpu, Globe, BookOpen, Database, Leaf } from "lucide-react";
-import type { Plant, PlantRecord, Species, Zone, ZonePic } from "../types";
+import type { AIAnalysis, AIVerdict, Plant, PlantRecord, Species, Zone, ZonePic } from "../types";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import StatsPanel from "./StatsPanel";
 
@@ -16,10 +16,12 @@ interface Props {
   zones: Zone[];
   zonePics: ZonePic[];
   speciesByShortCode: Map<string, Species>;
+  aiAnalyses: AIAnalysis[];
   onSpotlightPlant: (shortCode: string) => void;
   onSpotlightZone: (zoneCode: string) => void;
   onSelectTaxon: (name: string) => void;
   onShowBioclipConflicts: () => void;
+  onShowEcoFit: (verdict: AIVerdict) => void;
 }
 
 interface PlantEntry {
@@ -74,11 +76,13 @@ function InfoModalContent({
   zones,
   zonePics,
   speciesByShortCode,
+  aiAnalyses,
   visible,
   onSpotlightPlant,
   onSpotlightZone,
   onSelectTaxon,
   onShowBioclipConflicts,
+  onShowEcoFit,
 }: Props & { visible: boolean }) {
   const tab = activeTab;
   const containerRef = useRef<HTMLDivElement>(null);
@@ -240,9 +244,11 @@ function InfoModalContent({
               plants={plants}
               zones={zones}
               speciesByShortCode={speciesByShortCode}
+              aiAnalyses={aiAnalyses}
               onSelectTaxon={onSelectTaxon}
               onSpotlightZone={onSpotlightZone}
               onShowBioclipConflicts={onShowBioclipConflicts}
+              onShowEcoFit={onShowEcoFit}
             />
           )}
           {tab === "plants" && (

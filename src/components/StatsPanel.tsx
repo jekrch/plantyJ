@@ -1,7 +1,8 @@
 import { useMemo, useRef, useState } from "react";
 import { pie as d3Pie, arc as d3Arc } from "d3-shape";
 import { Cpu, Leaf, PawPrint, MapPin, Sparkles, Image as ImageIcon } from "lucide-react";
-import type { Plant, Species, SpeciesTaxonomy, Zone } from "../types";
+import type { AIAnalysis, AIVerdict, Plant, Species, SpeciesTaxonomy, Zone } from "../types";
+import { ModelAttribution } from "./ModelAttribution";
 
 type TaxonRank = "kingdom" | "phylum" | "class" | "order" | "family" | "genus";
 
@@ -18,10 +19,24 @@ interface Props {
   plants: Plant[];
   zones: Zone[];
   speciesByShortCode: Map<string, Species>;
+  aiAnalyses: AIAnalysis[];
   onSelectTaxon: (name: string) => void;
   onSpotlightZone: (zoneCode: string) => void;
   onShowBioclipConflicts: () => void;
+  onShowEcoFit: (verdict: AIVerdict) => void;
 }
+
+const ECO_FIT_COLORS: Record<AIVerdict, string> = {
+  GOOD: "#7fb069",
+  MIXED: "#c4b76b",
+  BAD: "#b08968",
+};
+
+const ECO_FIT_LABELS: Record<AIVerdict, string> = {
+  GOOD: "Good",
+  MIXED: "Mixed",
+  BAD: "Bad",
+};
 
 const PALETTE = [
   "#7fb069",
@@ -40,11 +55,16 @@ export default function StatsPanel({
   plants,
   zones,
   speciesByShortCode,
+  aiAnalyses,
   onSelectTaxon,
   onSpotlightZone,
   onShowBioclipConflicts,
+  onShowEcoFit,
 }: Props) {
-  const stats = useMemo(() => computeStats(plants, zones, speciesByShortCode), [plants, zones, speciesByShortCode]);
+  const stats = useMemo(
+    () => computeStats(plants, zones, speciesByShortCode, aiAnalyses),
+    [plants, zones, speciesByShortCode, aiAnalyses],
+  );
   const [rank, setRank] = useState<TaxonRank>("family");
   const rankInfo = RANKS.find((r) => r.id === rank) ?? RANKS[4];
   const rankSlices = stats.taxa.slicesByRank[rank];
@@ -113,18 +133,42 @@ export default function StatsPanel({
         </div>
       </Section>
 
+      <Section
+        title="Eco fit (AI)"
+        subtitle="AI's read on each plant in its zone"
+        info={<ModelAttribution iconSize={11} />}
+      >
+        {stats.ecoFit.rated > 0 ? (
+          <EcoFit
+            counts={stats.ecoFit.counts}
+            unrated={stats.ecoFit.unrated}
+            onSelect={onShowEcoFit}
+          />
+        ) : (
+          <p className="text-xs text-ink-faint italic px-1">
+            No AI analyses yet.
+          </p>
+        )}
+      </Section>
+
       <Section title="Machine ID" subtitle="BioCLIP cross-checks every upload">
-        <div className="grid grid-cols-3 gap-2 mb-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
           <MiniStat
             label="Avg confidence"
             value={stats.bioclip.avgConfidence === null ? "—" : `${Math.round(stats.bioclip.avgConfidence * 100)}%`}
           />
           <MiniStat
+            label="Agreements"
+            value={formatScore(stats.bioclip.agreements)}
+            subline={stats.bioclip.genusOnly > 0 ? `+${stats.bioclip.genusOnly} genus` : undefined}
+          />
+          <MiniStat
             label="Disagreements"
-            value={stats.bioclip.disagreements}
+            value={formatScore(stats.bioclip.disagreements)}
             accent={stats.bioclip.disagreements > 0}
             onClick={stats.bioclip.disagreements > 0 ? onShowBioclipConflicts : null}
             hint="View"
+            subline={stats.bioclip.genusOnly > 0 ? `incl. ${stats.bioclip.genusOnly} genus` : undefined}
           />
           <MiniStat label="Unidentified" value={stats.unidentifiedPics} accent={stats.unidentifiedPics > 0} />
         </div>
@@ -147,6 +191,10 @@ export default function StatsPanel({
       </Section>
     </div>
   );
+}
+
+function formatScore(n: number): string {
+  return Number.isInteger(n) ? String(n) : n.toFixed(1);
 }
 
 function HeroBanner({ days, firstDate }: { days: number; firstDate: string | null }) {
@@ -197,14 +245,27 @@ function StatTileRow({ tiles }: { tiles: Tile[] }) {
   );
 }
 
-function Section({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
+function Section({
+  title,
+  subtitle,
+  info,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  info?: React.ReactNode;
+  children: React.ReactNode;
+}) {
   return (
     <div>
-      <div className="mb-3 px-1">
-        <p className="text-[10px] uppercase tracking-widest text-ink-muted">{title}</p>
-        {subtitle && (
-          <p className="text-[11px] text-ink-faint mt-0.5">{subtitle}</p>
-        )}
+      <div className="mb-3 px-1 flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <p className="text-[10px] uppercase tracking-widest text-ink-muted">{title}</p>
+          {subtitle && (
+            <p className="text-[11px] text-ink-faint mt-0.5">{subtitle}</p>
+          )}
+        </div>
+        {info && <div className="shrink-0 mt-0.5">{info}</div>}
       </div>
       {children}
     </div>
@@ -217,12 +278,14 @@ function MiniStat({
   accent,
   onClick,
   hint,
+  subline,
 }: {
   label: string;
   value: number | string;
   accent?: boolean;
   onClick?: (() => void) | null;
   hint?: string;
+  subline?: string;
 }) {
   const interactive = !!onClick;
   const Tag = interactive ? "button" : "div";
@@ -239,8 +302,127 @@ function MiniStat({
       <p className={`font-display text-base tabular-nums leading-none ${accent ? "text-accent" : "text-ink"}`}>
         {value}
       </p>
+      {subline && (
+        <p className="text-[9px] text-ink-faint mt-1 font-mono tracking-wide truncate">{subline}</p>
+      )}
       {interactive && hint && (
         <p className="text-[9px] text-accent/70 mt-1 font-mono tracking-wide">{hint} →</p>
+      )}
+    </Tag>
+  );
+}
+
+function EcoFit({
+  counts,
+  unrated,
+  onSelect,
+}: {
+  counts: Record<AIVerdict, number>;
+  unrated: number;
+  onSelect: (verdict: AIVerdict) => void;
+}) {
+  const order: AIVerdict[] = ["GOOD", "MIXED", "BAD"];
+  const total = order.reduce((acc, v) => acc + counts[v], 0);
+  return (
+    <div>
+      <div
+        role="group"
+        aria-label="Eco fit distribution"
+        className="flex h-6 rounded-md overflow-hidden ring-1 ring-inset ring-white/5 bg-white/3 mb-2"
+      >
+        {order.map((v) => {
+          const n = counts[v];
+          if (n === 0) return null;
+          const pct = (n / total) * 100;
+          return (
+            <button
+              key={v}
+              type="button"
+              onClick={() => onSelect(v)}
+              title={`Filter gallery to ${ECO_FIT_LABELS[v].toLowerCase()} (${n})`}
+              className="flex items-center justify-center text-[10px] font-mono tabular-nums text-surface/85 hover:text-surface hover:brightness-110 transition-all cursor-pointer"
+              style={{ width: `${pct}%`, backgroundColor: ECO_FIT_COLORS[v] }}
+            >
+              {pct >= 12 ? `${pct.toFixed(0)}%` : ""}
+            </button>
+          );
+        })}
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        {order.map((v) => (
+          <EcoFitTile
+            key={v}
+            verdict={v}
+            count={counts[v]}
+            total={total}
+            onClick={counts[v] > 0 ? () => onSelect(v) : null}
+          />
+        ))}
+      </div>
+      {unrated > 0 && (
+        <p className="text-[10px] text-ink-faint mt-2 px-1 font-mono tracking-wide">
+          {unrated} {unrated === 1 ? "photo" : "photos"} not yet analyzed
+        </p>
+      )}
+    </div>
+  );
+}
+
+function EcoFitTile({
+  verdict,
+  count,
+  total,
+  onClick,
+}: {
+  verdict: AIVerdict;
+  count: number;
+  total: number;
+  onClick: (() => void) | null;
+}) {
+  const interactive = !!onClick;
+  const Tag = interactive ? "button" : "div";
+  const pct = total > 0 ? (count / total) * 100 : 0;
+  const color = ECO_FIT_COLORS[verdict];
+  return (
+    <Tag
+      {...(interactive
+        ? {
+            type: "button" as const,
+            onClick: onClick as () => void,
+            title: `Filter gallery to ${ECO_FIT_LABELS[verdict].toLowerCase()}`,
+          }
+        : { "aria-disabled": true })}
+      className={`rounded-md bg-white/3 ring-1 ring-inset ring-white/5 px-2.5 py-2 text-left ${
+        interactive
+          ? "hover:ring-accent/40 hover:bg-white/5 transition-colors cursor-pointer group"
+          : "opacity-60"
+      }`}
+    >
+      <div className="flex items-center gap-1.5 mb-0.5">
+        <span
+          className="w-2 h-2 rounded-sm flex-shrink-0"
+          style={{ backgroundColor: color }}
+          aria-hidden="true"
+        />
+        <span className="text-[9px] uppercase tracking-widest text-ink-muted">
+          {ECO_FIT_LABELS[verdict]}
+        </span>
+      </div>
+      <p
+        className="font-display text-base tabular-nums leading-none"
+        style={{ color: count > 0 ? color : undefined }}
+      >
+        {count}
+      </p>
+      {total > 0 && (
+        <p className="text-[9px] text-ink-faint mt-1 font-mono tabular-nums">
+          {pct.toFixed(0)}%
+          {interactive && (
+            <span className="text-accent/70 ml-1 group-hover:text-accent transition-colors">
+              filter →
+            </span>
+          )}
+        </p>
       )}
     </Tag>
   );
@@ -626,14 +808,25 @@ interface ComputedStats {
   timeline: { buckets: TimelineBucket[]; caption: string };
   topZoneByPics: { code: string; name: string; count: number } | null;
   topZoneByDiversity: { code: string; name: string; count: number } | null;
-  bioclip: { avgConfidence: number | null; disagreements: number };
+  bioclip: {
+    avgConfidence: number | null;
+    agreements: number;
+    disagreements: number;
+    genusOnly: number;
+  };
   unidentifiedPics: number;
+  ecoFit: {
+    counts: Record<AIVerdict, number>;
+    rated: number;
+    unrated: number;
+  };
 }
 
 function computeStats(
   plants: Plant[],
   zones: Zone[],
   speciesByShortCode: Map<string, Species>,
+  aiAnalyses: AIAnalysis[],
 ): ComputedStats {
   const totalPics = plants.length;
 
@@ -731,13 +924,45 @@ function computeStats(
   const avgConfidence = scored.length > 0
     ? scored.reduce((acc, p) => acc + (p.bioclipScore ?? 0), 0) / scored.length
     : null;
-  const disagreements = plants.filter((p) => {
-    if (!p.bioclipSpeciesId || !p.fullName) return false;
-    return p.bioclipSpeciesId.trim().toLowerCase() !== p.fullName.trim().toLowerCase();
-  }).length;
+  // Genus-only matches count as half-credit — the model got the lineage
+  // right even if the species ended up wrong, so they add 0.5 to both
+  // agreements and disagreements.
+  let fullMatches = 0;
+  let genusOnly = 0;
+  let mismatches = 0;
+  for (const p of plants) {
+    if (!p.bioclipSpeciesId || !p.fullName) continue;
+    const a = p.bioclipSpeciesId.trim().toLowerCase();
+    const b = p.fullName.trim().toLowerCase();
+    if (a === b) {
+      fullMatches += 1;
+      continue;
+    }
+    const genusA = a.split(/\s+/)[0];
+    const genusB = b.split(/\s+/)[0];
+    if (genusA && genusA === genusB) genusOnly += 1;
+    else mismatches += 1;
+  }
+  const agreements = fullMatches + 0.5 * genusOnly;
+  const disagreements = mismatches + 0.5 * genusOnly;
 
   // Unidentified — pics without a species fullName attached
   const unidentifiedPics = plants.filter((p) => !p.fullName).length;
+
+  // Eco fit (AI) — verdict is keyed by (shortCode, zoneCode), so each plant
+  // pic inherits the verdict of its (species, zone) pairing.
+  const verdictMap = new Map<string, AIVerdict>();
+  for (const a of aiAnalyses) {
+    verdictMap.set(`${a.shortCode} ${a.zoneCode}`, a.verdict);
+  }
+  const ecoFitCounts: Record<AIVerdict, number> = { GOOD: 0, MIXED: 0, BAD: 0 };
+  let ecoFitUnrated = 0;
+  for (const p of plants) {
+    const v = verdictMap.get(`${p.shortCode} ${p.zoneCode}`);
+    if (v) ecoFitCounts[v] += 1;
+    else ecoFitUnrated += 1;
+  }
+  const ecoFitRated = ecoFitCounts.GOOD + ecoFitCounts.MIXED + ecoFitCounts.BAD;
 
   return {
     totalPics,
@@ -753,8 +978,13 @@ function computeStats(
     timeline,
     topZoneByPics,
     topZoneByDiversity,
-    bioclip: { avgConfidence, disagreements },
+    bioclip: { avgConfidence, agreements, disagreements, genusOnly },
     unidentifiedPics,
+    ecoFit: {
+      counts: ecoFitCounts,
+      rated: ecoFitRated,
+      unrated: ecoFitUnrated,
+    },
   };
 }
 

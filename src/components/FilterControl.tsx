@@ -119,7 +119,7 @@ export default function FilterControl({
                 <input
                   type="text"
                   inputMode="search"
-                  placeholder="Common, full, taxa, tags…"
+                  placeholder="name, taxa, tags…"
                   value={filters.searchQuery}
                   onChange={(e) =>
                     onFiltersChange({ ...filters, searchQuery: e.target.value })

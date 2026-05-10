@@ -6,7 +6,7 @@ import {
   useCallback,
   useRef,
 } from "react";
-import type { AIAnalysis, Annotation, PicRecord, Plant, PlantRecord, Species, TaxaInfo, Zone, ZonePic } from "./types";
+import type { AIAnalysis, AIVerdict, Annotation, PicRecord, Plant, PlantRecord, Species, TaxaInfo, Zone, ZonePic } from "./types";
 import { Sprout, House } from "lucide-react";
 import { sortPlantsAsync } from "./utils/sorting.ts";
 import type { SortMode } from "./utils/sorting.ts";
@@ -328,6 +328,27 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [sortMode, syncToURL, pushToURL, infoOpen]);
 
+  const handleShowEcoFit = useCallback(
+    (verdict: AIVerdict) => {
+      const next: Filters = {
+        ...EMPTY_FILTERS,
+        aiVerdicts: new Set([verdict]),
+      };
+      setFilters(next);
+      setViewMode("gallery");
+      setSpotlightCode(null);
+      setTreeFocusNode(null);
+      if (infoOpen) {
+        pushToURL(next, sortMode, "gallery", null);
+      } else {
+        syncToURL(next, sortMode, "gallery", null);
+      }
+      setInfoOpen(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    [sortMode, syncToURL, pushToURL, infoOpen]
+  );
+
   const handleTreeNodeSelect = useCallback(
     (name: string | null) => {
       syncToURL(filters, sortMode, "tree", null, name);
@@ -539,10 +560,12 @@ export default function App() {
         zones={zones}
         zonePics={zonePics}
         speciesByShortCode={speciesByShortCode}
+        aiAnalyses={aiAnalyses}
         onSpotlightPlant={handleSpotlightPlant}
         onSpotlightZone={handleSpotlightZone}
         onSelectTaxon={handleSelectTaxon}
         onShowBioclipConflicts={handleShowBioclipConflicts}
+        onShowEcoFit={handleShowEcoFit}
       />
 
       {openIndex >= 0 && (
