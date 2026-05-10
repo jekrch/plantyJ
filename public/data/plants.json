@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "S vul alb",
+      "fullName": "Syringa vulgaris alba",
+      "commonName": "Common White Lilac",
+      "variety": null
+    },
+    {
       "shortCode": "A can",
       "fullName": "Asarum canadense",
       "commonName": "Wild Ginger",
