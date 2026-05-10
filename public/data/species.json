@@ -716,6 +716,64 @@
       ],
       "observationsCount": 81666
     },
+    "corylus-americana": {
+      "id": "corylus-americana",
+      "fullName": "Corylus americana",
+      "commonName": "American Hazelnut",
+      "description": "Corylus americana, the American hazelnut or American hazel, is a species of deciduous shrub in the genus Corylus, native to the eastern and central United States and extreme southern parts of eastern and central Canada.",
+      "vernacularNames": [
+        "American Hazelnut",
+        "Hazel",
+        "Hazelnut",
+        "American Hazel"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Fagales",
+        "family": "Betulaceae",
+        "genus": "Corylus",
+        "species": "Corylus americana",
+        "canonicalName": "Corylus americana"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2876060"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:295439-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Corylus_americana"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/54770"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q468659"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.135795"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 16914
+    },
     "echinacea-purpurea": {
       "id": "echinacea-purpurea",
       "fullName": "Echinacea purpurea",
@@ -1445,6 +1503,62 @@
         "natureserve"
       ],
       "observationsCount": 55740
+    },
+    "matteuccia-struthiopteris": {
+      "id": "matteuccia-struthiopteris",
+      "fullName": "Matteuccia struthiopteris",
+      "commonName": "Ostrich Fern",
+      "description": "Matteuccia is a genus of ferns with one species: Matteuccia struthiopteris (common names ostrich fern, fiddlehead fern, or shuttlecock fern). The species epithet struthiopteris comes from Ancient Greek words \u03c3\u03c4\u03c1\u03bf\u03c5\u03b8\u03af\u03c9\u03bd (strouth\u00ed\u014dn) \"ostrich\" and \u03c0\u03c4\u03b5\u03c1\u03af\u03c2 (pter\u00eds) \"fern\".",
+      "vernacularNames": [
+        "Fiddle Fern",
+        "Gaiske banegetta",
+        "Ostrich Fern",
+        "Ostrich Fern (EN)",
+        "Shuttlecock Fern",
+        "Strau\u00dfenfarn (DE)"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Polypodiopsida",
+        "order": "Polypodiales",
+        "family": "Onocleaceae",
+        "genus": "Matteuccia",
+        "species": "Matteuccia struthiopteris",
+        "canonicalName": "Matteuccia struthiopteris"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2650999"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:17275510-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Matteuccia_struthiopteris"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/82574"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.160636"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 45130
     },
     "meleagris-gallopavo": {
       "id": "meleagris-gallopavo",

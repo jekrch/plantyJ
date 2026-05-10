@@ -1,6 +1,30 @@
 {
   "plants": [
     {
+      "shortCode": "S vul alb",
+      "fullName": "Syringa vulgaris alba",
+      "commonName": "Common White Lilac",
+      "variety": null
+    },
+    {
+      "shortCode": "A can",
+      "fullName": "Asarum canadense",
+      "commonName": "Wild Ginger",
+      "variety": null
+    },
+    {
+      "shortCode": "C ame",
+      "fullName": "Corylus americana",
+      "commonName": "American Hazelnut",
+      "variety": null
+    },
+    {
+      "shortCode": "M str",
+      "fullName": "Matteuccia struthiopteris",
+      "commonName": "Ostrich Fern",
+      "variety": null
+    },
+    {
       "shortCode": "S tri",
       "fullName": "Spinus tristis",
       "commonName": "Goldfinch",
