@@ -1,6 +1,19 @@
 {
   "analyses": [
     {
+      "shortCode": "A can",
+      "zoneCode": "sy",
+      "verdict": "GOOD",
+      "analysis": "As a native shade-loving groundcover, Asarum canadense (Wild Ginger) occupies an excellent ecological niche in the side yard. Nestled under the canopy of the nearby fruit trees (apple, apricot, and Asian pear) and mingling with Ostrich Fern, it thrives in the partial-to-full shade and handles the property's clay/loam soil perfectly in USDA zone 4b/5a. Its dense rhizomatous growth forms a thick carpet that naturally suppresses weeds and helps prevent erosion while retaining soil moisture for neighboring shrubs and trees. Because the owners prioritize local ecology, Wild Ginger is a superb addition—it requires little maintenance once established and is vigorous enough to outcompete invasive species like garlic mustard.\n\nThe plant provides highly specialized support for local insects and wildlife. Its unique, ground-hugging maroon flowers bloom in early spring and are specifically adapted for pollination by low-crawling insects like beetles, flies, and ants. It also relies on ants for seed dispersal, a fascinating mutualistic process known as myrmecochory, where ants carry seeds back to their nests to consume the attached, nutrient-rich elaiosomes. Additionally, Wild Ginger serves as a larval host plant for the Pipevine Swallowtail butterfly. For urban wildlife management, its foliage contains compounds that make it highly resistant to browsing by deer and rabbits, ensuring it remains an undisturbed, protective cover for ground-dwelling insects and amphibians. Though historically used as a medicinal and culinary substitute for true ginger, it is primarily valued here for its outstanding ecological services and adaptability.",
+      "references": [
+        "https://www.minnesotawildflowers.info/flower/canadian-wild-ginger",
+        "https://www.naturalshore.com/product/wild-ginger/",
+        "https://www.gardenia.net/plant/asarum-canadense",
+        "https://www.prairienursery.com/wild-ginger-asarum-canadense.html"
+      ],
+      "created": "2026-05-10T20:05:10.452Z"
+    },
+    {
       "shortCode": "A fla",
       "zoneCode": "nbv",
       "verdict": "GOOD",
@@ -25,6 +38,19 @@
       "created": "2026-05-07T12:06:49.849Z"
     },
     {
+      "shortCode": "A rus",
+      "zoneCode": "mpg",
+      "verdict": "MIXED",
+      "analysis": "Horseradish (Armoracia rusticana) presents a conflicting ecological profile for this garden. On the positive side, it satisfies the owners' priority for edible and medicinal plants, is extremely cold-hardy for USDA zone 4b/5a, and possesses enough shade tolerance to survive beneath the maple canopy. However, its placement in the \"mpg\" zone is highly problematic for the local ecology. This zone features a carefully cultivated understory of fragile native woodland ephemerals, including trout lily, hepatica, Virginia bluebells, and wild leeks. Horseradish is notoriously aggressive, spreading vigorously from any root fragments left in the ground. Furthermore, harvesting its deep taproots requires significant soil disturbance, which would destroy the delicate root systems of neighboring spring ephemerals. The garden's clay/loam soil makes clean extraction even more difficult, increasing the likelihood of snapping roots that will spawn new, invasive shoots and permanently disrupt the understory.\n\nFrom a wildlife perspective, this Eurasian member of the Brassicaceae family offers very little support to the native insects prioritized by the owners. It does not serve as a host for native specialist pollinators; instead, its pungent foliage primarily attracts and hosts agricultural pests like flea beetles and the invasive imported cabbageworm (Pieris rapae). Urban mammals and birds generally avoid eating the plant due to its intense mustard oils. To align this specimen with the garden's ecological goals and protect the surrounding flora, its aggressive root system must be contained. Moving it to a deep container—much like the potted stinging nettle and gooseberry already present in this zone—or planting it inside a buried, bottomless bucket would prevent it from outcompeting delicate natives while still providing a robust culinary harvest.",
+      "references": [
+        "https://extension.umn.edu/vegetables/growing-horseradish",
+        "https://hort.extension.wisc.edu/articles/horseradish-armoracia-rusticana/",
+        "https://www.illinoiswildflowers.info/weeds/plants/horseradish.html",
+        "https://www.minnesotawildflowers.info/flower/horseradish"
+      ],
+      "created": "2026-05-10T20:05:10.452Z"
+    },
+    {
       "shortCode": "A sac",
       "zoneCode": "nbv",
       "verdict": "MIXED",
@@ -39,6 +65,32 @@
       "analysis": "Similar to the North Boulevard specimen, Acer saccharinum in the West Boulevard offers excellent early-season ecological benefits, acting as a critical early pollen source for emerging native bees and hosting a variety of Lepidoptera. However, it is an oversized, brittle tree for a boulevard strip, with shallow, moisture-seeking roots that perform well in clay but often destroy urban infrastructure and create a difficult, dry-shade microclimate for other native plants below it.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "A sci",
+      "zoneCode": "nbv",
+      "verdict": "MIXED",
+      "analysis": "The North Boulevard (\"nbv\") represents a highly problematic planting site for Acer saccharum. While the property's Zone 4b/5a climate and clay/loam soils are generally acceptable, boulevards in the Twin Cities endure heavy winter road salt application, pollution, and severe soil compaction. Sugar maples are notoriously intolerant of salt spray, soil salinity, and restricted root zones, frequently leading to canopy decline when used as street trees. Though it grows alongside robust natives like Asclepias tuberosa and Zizia aurea in this zone, the physical realities of a street-side parkway severely threaten the maple's long-term viability and structural integrity.\n\nDespite the harsh site conditions, the tree's ecological contribution aligns perfectly with the owners' conservation priorities. Acer saccharum is a powerhouse host plant for native Lepidoptera, serving as a primary host for the rosy maple moth and providing sap that nourishes adult butterflies like the red admiral, which has already been observed elsewhere on the property. The tree's seeds (samaras) and buds also offer high-value forage for urban wildlife, directly supporting the gray squirrels and wild turkeys documented in the garden's journal. If the owners can actively mitigate soil compaction and shield the root zone from winter salt exposure, this native canopy tree will serve as an invaluable ecological anchor.",
+      "references": [
+        "https://trees.umn.edu/sugar-maple-acer-saccharum",
+        "https://twincities.wildones.org/wp-content/uploads/sites/32/2022/03/NativeTreesforaChangingClimate-WOTC.pdf",
+        "https://nativeplantsunlimitedshop.com/products/sugar-maple-acer-saccharum",
+        "https://breedingbutterflies.com/dryocampa-rubicunda-rosy-maple-moth/"
+      ],
+      "created": "2026-05-10T20:05:10.452Z"
+    },
+    {
+      "shortCode": "A sci",
+      "zoneCode": "wbv",
+      "verdict": "MIXED",
+      "analysis": "While the Sugar Maple is fully hardy in zone 4b/5a and perfectly aligns with the owners' priorities for native and edible plants—offering the potential for tapping homemade maple syrup—its placement in the West Boulevard creates a highly challenging ecological niche. Boulevards in Minneapolis are notoriously difficult environments due to heavy winter road salt applications, restricted root zones, and soil compaction. Sugar Maples are notably sensitive to both salt spray and soil salinity, as well as compacted clay soils. Because the West Boulevard borders the street, this location puts the tree at a high risk for root damage and canopy dieback, requiring the owners to aggressively mitigate salt exposure and avoid compacting the clay/loam base.\n\nIf the specimen can overcome these urban street stressors, Acer saccharum is an absolute keystone species that profoundly enriches the local food web. It serves as a host plant for nearly 300 species of lepidoptera in the region, including the striking Rosy Maple Moth. The sheer volume of caterpillars it supports provides an essential, fat-rich food source for urban nesting birds like black-capped chickadees, tufted titmice, and blue jays. Additionally, its early spring sap flow offers vital, energy-dense hydration for emerging native bees and butterflies, while its winged seeds (samaras) sustain local mammals. Towering above native boulevard neighbors like Missouri Evening Primrose, it has the potential to anchor a thriving micro-habitat, provided the environmental challenges of the street edge are managed.",
+      "references": [
+        "https://www.saintpaulaudubon.org/wp-content/uploads/2017/02/GoNativeBooklet.pdf",
+        "https://www.bushlakeikes.org/blog/13098022",
+        "https://biokids.umich.edu/critters/Dryocampa_rubicunda/",
+        "https://www.fs.usda.gov/nrs/pubs/jrnl/2021/nrs_2021_brandt_001.pdf"
+      ],
+      "created": "2026-05-10T20:05:10.452Z"
     },
     {
       "shortCode": "A scr",
@@ -63,6 +115,18 @@
       "analysis": "Asclepias tuberosa (Butterfly Weed) is an essential native perennial that serves as a vital host plant for Monarch butterfly caterpillars and provides high-quality nectar for diverse pollinators. Its deep taproot allows it to thrive in the challenging, dry conditions of a boulevard strip, and it adapts well to well-drained loam or clay-loam in zone 4b/5a. Planting this in the boulevard directly supports the owners' priority of enhancing local ecology and pollinator pathways.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "C ame",
+      "zoneCode": "hbd",
+      "verdict": "GOOD",
+      "analysis": "The ecological niche for Corylus americana (American Hazelnut) in the hydrangea border is exceptional and perfectly aligned with the owners' priorities. As a Minnesota native, this multi-stemmed understory shrub is fully hardy in USDA zone 4b/5a and easily tolerates the property's clay and loam soils. Planting it alongside Hydrangea arborescens (Smooth Hydrangea) establishes a cohesive, naturalistic woodland edge habitat, as both native shrubs thrive in similar moisture and sun profiles. The hazelnut readily fulfills the edible priority, producing sweet, highly nutritious nuts that can be roasted, eaten raw, or ground into flour, provided the owners harvest them before the local wildlife does. The main practical management concern is its natural tendency to spread via root suckers, which may require occasional pruning if a tidier border is desired instead of a dense thicket.\n\nFrom a wildlife perspective, American Hazelnut is an ecological powerhouse. Though primarily wind-pollinated, its early-blooming male catkins offer an abundant and critical pollen source for early-emerging native bees when floral resources are scarce. It is a prolific larval host plant, supporting dozens of moth species including spectacular Saturniidae like the Luna, Polyphemus, and Io moths. The nuts themselves are immensely valuable to urban wildlife and will reliably feed species already present in or near the garden, such as gray squirrels and the neighborhood wild turkeys. Furthermore, its dense, thicket-forming branching structure provides exceptional nesting habitat and protective winter cover for songbirds like the northern cardinal.",
+      "references": [
+        "https://www.ecobeneficial.com/2018/11/underutilized-native-shrubs-big-ecological-impact/",
+        "https://www.conservect.org/product/crccd-american-hazelnut/",
+        "https://www.backyardecology.net/american-hazelnut/"
+      ],
+      "created": "2026-05-10T20:05:10.452Z"
     },
     {
       "shortCode": "c card",
