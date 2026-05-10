@@ -3610,6 +3610,53 @@
       ],
       "observationsCount": 258436
     },
+    "vanessa-virginiensis": {
+      "id": "vanessa-virginiensis",
+      "fullName": "Vanessa virginiensis",
+      "commonName": "American Painted Lady Butterfly",
+      "description": "The American painted lady or American lady (Vanessa virginiensis) is a butterfly found throughout North America.\nThe larvae feed on various Asteraceae, such as the cudweeds (genus Gnaphalium), the pussytoes (Antennaria), and the everlastings (Anaphalis), which all belong to tribe Gnaphalieae. All stages of the life cycle can be found throughout temperate North America as well as Madeira and the Canary Islands. Occasionally individuals can be found as far as southwest Europe. It has been introduced to Hawaii where it is one of four Vanessa species.",
+      "vernacularNames": [
+        "America Painted Lady",
+        "American Lady",
+        "American Painted Lady",
+        "American Painted Lady, American Lady",
+        "Painted Beauty"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Lepidoptera",
+        "family": "Nymphalidae",
+        "genus": "Vanessa",
+        "species": "Vanessa virginiensis",
+        "canonicalName": "Vanessa virginiensis"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/4299370"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Vanessa_virginiensis"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/48549"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 69187
+    },
     "veronicastrum-virginicum": {
       "id": "veronicastrum-virginicum",
       "fullName": "Veronicastrum virginicum",

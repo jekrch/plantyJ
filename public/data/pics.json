@@ -11,7 +11,11 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-10T20:51:09.306Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "kind": "animal",
+      "bioclipSpeciesId": "Vanessa virginiensis",
+      "bioclipCommonName": "American Lady",
+      "bioclipScore": 0.9896
     },
     {
       "seq": 67,
@@ -27,7 +31,8 @@
       "height": 960,
       "bioclipSpeciesId": "Triquetrella papillata",
       "bioclipCommonName": "",
-      "bioclipScore": 0.0724
+      "bioclipScore": 0.0724,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 66,
