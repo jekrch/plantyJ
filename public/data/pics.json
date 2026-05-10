@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 62,
+      "id": "M str-1778442353",
+      "shortCode": "M str",
+      "zoneCode": "sy",
+      "tags": [],
+      "description": null,
+      "image": "images/M str/1778442353.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-05-10T19:45:54.689Z",
+      "width": 600,
+      "height": 800
+    },
+    {
       "seq": 61,
       "id": "S tri-1777931386",
       "shortCode": "S tri",
