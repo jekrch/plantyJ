@@ -24,7 +24,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-10T20:44:35.273Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "bioclipSpeciesId": "Triquetrella papillata",
+      "bioclipCommonName": "",
+      "bioclipScore": 0.0724
     },
     {
       "seq": 66,
@@ -40,7 +43,8 @@
       "height": 1024,
       "bioclipSpeciesId": "Rumex crispus",
       "bioclipCommonName": "Curled dock",
-      "bioclipScore": 0.0617
+      "bioclipScore": 0.0617,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Rumex_crispus"
     },
     {
       "seq": 65,

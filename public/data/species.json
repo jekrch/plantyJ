@@ -2071,6 +2071,55 @@
       ],
       "observationsCount": 20643
     },
+    "plagiomnium-cuspidatum": {
+      "id": "plagiomnium-cuspidatum",
+      "fullName": "Plagiomnium cuspidatum",
+      "commonName": "Tooth Moss",
+      "description": "Plagiomnium cuspidatum, also known as toothed or \"baby-tooth\" plagiomnium moss and woodsy thyme-moss, is a species of thyme-moss that originated in North America, but can now also be found throughout Middle America, Africa, Northern and Southern Asia (excluding China), and Europe. \nPlagiomnium cuspidatum can commonly be found growing along the base of trees, stumps, coarse woody debris, and rocks in base-rich habitats such as: wet meadows, forested rich peatlands, wet forests, fire-dependent woodlands, mesic hardwood forests, and cliff/talus at low to moderate elevations. It is commonly used by songbirds and salamanders for nesting material in the wild, and by humans as planting material in bioactive terrariums, aquariums, and paludariums due to their anti- microbial and antifungal properties. These properties are also being researched for more medicinal uses.",
+      "vernacularNames": [
+        "Toothed Plagiomnium Moss",
+        "Woodsy Thyme-moss",
+        "Woodsy Leafy Moss"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Bryophyta",
+        "class": "Bryopsida",
+        "order": "Bryales",
+        "family": "Mniaceae",
+        "genus": "Plagiomnium",
+        "species": "Plagiomnium cuspidatum",
+        "canonicalName": "Plagiomnium cuspidatum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/7361336"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Plagiomnium_cuspidatum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/141535"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q292398"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 20426
+    },
     "prunus-armeniaca": {
       "id": "prunus-armeniaca",
       "fullName": "Prunus armeniaca",

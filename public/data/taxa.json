@@ -518,5 +518,25 @@
   "Brassicales": {
     "description": "The Brassicales are an order of flowering plants, belonging to the malvid group of eudicotyledons under the APG IV system. Well-known members of Brassicales include cabbage, cauliflower, Brussels sprout, broccoli, kale, mustard, turnip, bok choy, rapeseed, radish, horseradish, caper, papaya, moringa or drumstick tree, mignonette, nasturtium, and arabidopsis.",
     "url": "https://en.wikipedia.org/wiki/Brassicales"
+  },
+  "Bryales": {
+    "description": "Bryales is an order of mosses.",
+    "url": "https://en.wikipedia.org/wiki/Bryales"
+  },
+  "Bryophyta": {
+    "description": "Bryophyta may refer to:Bryophytes \u2013 Bryophyta sensu lato ; a group of plants regarded as a single division by some, but further split into:\nMosses \u2013 Bryophyta sensu stricto ; a specific group of leafy nonvascular plants, now regarded as Division Bryophyta\nhornworts (Anthocerotophyta)\nliverworts (Marchantiophyta)",
+    "url": "https://en.wikipedia.org/wiki/Bryophyta"
+  },
+  "Bryopsida": {
+    "description": "The Bryopsida constitute the largest class of mosses, containing 95% of all moss species. It consists of approximately 11,500 species, common throughout the whole world.",
+    "url": "https://en.wikipedia.org/wiki/Bryopsida"
+  },
+  "Mniaceae": {
+    "description": "Mniaceae is a moss family in the order Bryales.",
+    "url": "https://en.wikipedia.org/wiki/Mniaceae"
+  },
+  "Plagiomnium": {
+    "description": "Plagiomnium is a genus of mosses in the family Mniaceae. It was formerly a part of a more encompassing genus Mnium and in 1968 Finnish bryologist Timo Juhani Koponen justified splitting the genus into a number of smaller genera.",
+    "url": "https://en.wikipedia.org/wiki/Plagiomnium"
   }
 }
