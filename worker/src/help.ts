@@ -94,6 +94,22 @@ Q&A and actions (propose-then-confirm):
   /askstyle — Clear the current style.
   /showstyle — Show the currently active style.
 
+Relationships (a "web" between plants):
+  /relate {typeId} {fromCode} {toCode} [f|b|u]
+    Register a relationship. Direction is optional:
+      f = forward (from→to), b = backward (to→from), u = undirected.
+    Omit to use the type's default. Examples:
+      /relate companion tmt-c bsl
+      /relate parent-of seed-1 sprout-2
+      /relate parent-of seed-1 sprout-2 u   (override directional type)
+  /unrelate {id} — remove a relationship by its numeric id.
+  /relations {shortCode} — list relationships touching a plant.
+  /reltypes — list all relationship types with descriptions.
+  /reltype {id} // {name} // {description} // [directional|undirected]
+    Create or replace a relationship type. id is lowercase letters/digits/hyphens.
+    Default is undirected. Example:
+      /reltype mimics // Mimics // Looks similar to // directional
+
 Ecological analysis:
   /analyze — Queue a 1–2 paragraph ecological-niche analysis (good/bad/
     mixed, native insects, urban wildlife, with grounded source URLs)

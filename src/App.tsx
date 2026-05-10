@@ -16,11 +16,13 @@ import MasonryGrid from "./components/MasonryGrid";
 import BackgroundEchoes from "./components/BackgroundEchoes";
 import { SpinnerState, ErrorState, EmptyState } from "./components/StatusStates";
 import { useFilterParams } from "./hooks/useFilterParams";
+import { useRelationships } from "./hooks/useRelationships";
 import PlantViewer from "./components/PlantViewer";
 import InfoModal from "./components/InfoModal";
 import type { Tab as InfoTab } from "./components/InfoModal";
 import SpotlightView from "./components/SpotlightView";
 import TreeView from "./components/TreeView";
+import WebView from "./components/WebView";
 import ViewModeControl from "./components/ViewModeControl";
 import type { ViewMode } from "./components/ViewModeControl";
 
@@ -43,6 +45,7 @@ export default function App() {
   const [speciesLoaded, setSpeciesLoaded] = useState(false);
   const [taxa, setTaxa] = useState<Record<string, TaxaInfo>>({});
   const [aiAnalyses, setAiAnalyses] = useState<AIAnalysis[]>([]);
+  const relationshipsData = useRelationships();
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const {
@@ -449,7 +452,7 @@ export default function App() {
             <House color={"#b08968"} size={20} strokeWidth={1.5} />
           </button>
         </div>
-        {status === "ready" && plants.length > 0 && viewMode === "tree" && (
+        {status === "ready" && plants.length > 0 && (viewMode === "tree" || viewMode === "web") && (
           <div className="content-container px-1 pt-2 pb-3 border-t border-ink-faint/20">
             <ViewModeControl
               mode={viewMode}
@@ -464,7 +467,7 @@ export default function App() {
       </header>
 
       <main className="content-container px-1 pt-0 pb-12 sm:px-1 sm:pt-0">
-        {status === "ready" && plants.length > 0 && viewMode !== "tree" && (
+        {status === "ready" && plants.length > 0 && viewMode !== "tree" && viewMode !== "web" && (
           <div className="pt-2 pb-3">
             <ViewModeControl
               mode={viewMode}
@@ -547,6 +550,22 @@ export default function App() {
           initialTreeNode={treeFocusNode}
           onNodeSelect={handleTreeNodeSelect}
           speciesLoaded={speciesLoaded}
+          relationships={relationshipsData}
+        />
+      )}
+
+      {status === "ready" && plants.length > 0 && viewMode === "web" && (
+        <WebView
+          plants={plants}
+          plantRecords={plantRecords}
+          speciesByShortCode={speciesByShortCode}
+          taxa={taxa}
+          zones={zones}
+          aiAnalyses={aiAnalyses}
+          relationships={relationshipsData}
+          headerHeight={headerHeight}
+          onSpotlightPlant={handleSpotlightPlant}
+          onOpenPlantInList={handleOpenInList}
         />
       )}
 

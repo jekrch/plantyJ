@@ -9,6 +9,8 @@ import { speciesPicsFor } from "./treeUtils";
 import { TabBtn } from "./CtrlBtn";
 import type { AIAnalysis, AIVerdict } from "../PlantInfoDrawer";
 import { ModelAttribution } from "../ModelAttribution";
+import { RelationsSubgraph } from "./RelationsSubgraph";
+import type { RelationshipsData } from "../../hooks/useRelationships";
 
 interface Props {
   node: HierarchyPointNode<RawNode>;
@@ -17,6 +19,7 @@ interface Props {
   zones: Zone[];
   speciesByShortCode: Map<string, Species>;
   aiAnalyses?: AIAnalysis[];
+  relationships?: RelationshipsData;
   isClosing?: boolean;
   onAnimationEnd?: () => void;
   onClose: () => void;
@@ -67,6 +70,7 @@ export function NodeDetail({
   zones,
   speciesByShortCode,
   aiAnalyses = [],
+  relationships,
   isClosing,
   onAnimationEnd,
   onClose,
@@ -75,6 +79,22 @@ export function NodeDetail({
 }: Props) {
   const isLeaf = !!node.data.plant;
   const baseURL = import.meta.env.BASE_URL;
+
+  const plantsByCode = useMemo(() => {
+    const m = new Map<string, Plant>();
+    for (const p of plants) {
+      const existing = m.get(p.shortCode);
+      if (!existing || new Date(p.addedAt) > new Date(existing.addedAt)) {
+        m.set(p.shortCode, p);
+      }
+    }
+    return m;
+  }, [plants]);
+
+  const relationCount = useMemo(() => {
+    if (!isLeaf || !node.data.shortCode || !relationships) return 0;
+    return (relationships.neighbors.get(node.data.shortCode) ?? []).length;
+  }, [isLeaf, node, relationships]);
 
   const species = isLeaf && node.data.shortCode
     ? speciesByShortCode.get(node.data.shortCode) ?? null
@@ -90,7 +110,7 @@ export function NodeDetail({
       ? [{ name: "Wikipedia", url: taxaInfo.url }]
       : [];
 
-  const [tab, setTab] = useState<"info" | "images">("info");
+  const [tab, setTab] = useState<"info" | "images" | "relations">("info");
 
   useEffect(() => { setTab("info"); }, [node]);
 
@@ -208,6 +228,16 @@ export function NodeDetail({
               </span>
             )}
           </TabBtn>
+          {isLeaf && relationships && (
+            <TabBtn active={tab === "relations"} onClick={() => setTab("relations")}>
+              Web
+              {relationCount > 0 && (
+                <span className="ml-1 text-ink-faint normal-case tracking-normal">
+                  ({relationCount})
+                </span>
+              )}
+            </TabBtn>
+          )}
         </div>
       </div>
 
@@ -378,6 +408,23 @@ export function NodeDetail({
             </div>
           )}
         </div>
+
+        {isLeaf && relationships && node.data.shortCode && (
+          <div
+            aria-hidden={tab !== "relations"}
+            className={`h-full overflow-y-auto px-3 pt-3 pb-3 thin-scroll ${tab !== "relations" ? "hidden" : ""}`}
+          >
+            <RelationsSubgraph
+              centerCode={node.data.shortCode}
+              centerLabel={title}
+              plants={plants}
+              relationships={relationships.relationships}
+              neighbors={relationships.neighbors}
+              typeById={relationships.typeById}
+              plantsByCode={plantsByCode}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

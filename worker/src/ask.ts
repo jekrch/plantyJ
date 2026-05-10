@@ -53,6 +53,9 @@ const ALLOWED_VERBS = [
   "/deletezonepic",
   "/delete",
   "/deleteannotation",
+  "/relate",
+  "/unrelate",
+  "/reltype",
 ] as const;
 
 interface Usage {
@@ -108,6 +111,10 @@ ${HELP_HEADER}
 #               pics[]: { seq, zone, tags[], description, by, at },
 #               picCount, zonesSeen[], lastSeenAt, firstSeenAt }
 #   orphanPics[]: pics whose shortCode no longer maps to a plant
+#   relationships:
+#     types[]: { id, name, description, directional }
+#     edges[]: [id, typeId, fromCode, toCode, direction] where direction is
+#       "f" (forward), "b" (backward), "u" (undirected), or null = type default.
 # pics[] is newest-first. "kind" is omitted when "plant".
 ${rollupJson}
 
@@ -133,6 +140,7 @@ ${verbList}
 - Never invent seq numbers, shortCodes, or zoneCodes — they must come from the rollup.
 - For /update, the field must be one of: shortCode, fullName, commonName, zoneCode, tags, description.
 - Do not propose duplicates or no-ops (e.g. adding a tag that's already present).
+- For /relate, only use type ids listed in relationships.types. If the user asks for a relationship that doesn't fit an existing type, propose a /reltype to create the type FIRST in the same batch, then /relate using that new id.
 - Never claim to have executed a command. The user runs /confirm to apply proposals.
 - Reply in plain text, no Markdown. Telegram replies are 4096 chars max — keep it tight.`;
 }

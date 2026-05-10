@@ -13,12 +13,23 @@ def load(name):
         return json.load(f)
 
 
+def load_optional(name, default):
+    path = os.path.join(DATA_DIR, name)
+    if not os.path.exists(path):
+        return default
+    with open(path) as f:
+        return json.load(f)
+
+
 def main():
     plants_raw = load("plants.json")["plants"]
     pics_raw = load("pics.json")["pics"]
     zones_raw = load("zones.json")["zones"]
     zone_pics_raw = load("zone_pics.json")["zonePics"]
     annotations_raw = load("annotations.json")["annotations"]
+    relationships_raw = load_optional(
+        "relationships.json", {"types": [], "relationships": []}
+    )
 
     zones_with_pics = {zp["zoneCode"] for zp in zone_pics_raw}
     zones = sorted(
@@ -127,11 +138,32 @@ def main():
 
         plants.append(record)
 
+    rel_types = [
+        {
+            "id": t["id"],
+            "name": t.get("name", t["id"]),
+            "description": t.get("description", ""),
+            "directional": bool(t.get("directional", False)),
+        }
+        for t in relationships_raw.get("types", [])
+    ]
+    rel_edges = [
+        [
+            r["id"],
+            r["type"],
+            r["from"],
+            r["to"],
+            r.get("direction"),
+        ]
+        for r in relationships_raw.get("relationships", [])
+    ]
+
     rollup = {
         "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "zones": zones,
         "plants": plants,
         "orphanPics": orphan_pics,
+        "relationships": {"types": rel_types, "edges": rel_edges},
     }
 
     out_min = os.path.join(DATA_DIR, "rollup.min.json")

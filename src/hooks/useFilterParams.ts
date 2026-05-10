@@ -34,7 +34,7 @@ function parseFiltersFromURL(): InitialState {
 
   const rawView = params.get("view");
   const view: ViewMode =
-    rawView === "plant" || rawView === "zone" || rawView === "tree"
+    rawView === "plant" || rawView === "zone" || rawView === "tree" || rawView === "web"
       ? rawView
       : DEFAULT_VIEW;
   const subject =

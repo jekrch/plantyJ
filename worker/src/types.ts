@@ -147,3 +147,25 @@ export interface Gallery {
   zones: Zone[];
   zonePics: ZonePicEntry[];
 }
+
+export type RelationshipDirection = "f" | "b" | "u";
+
+export interface RelationshipType {
+  id: string;
+  name: string;
+  description: string;
+  directional: boolean;
+}
+
+export interface Relationship {
+  id: number;
+  type: string;
+  from: string;
+  to: string;
+  direction?: RelationshipDirection;
+}
+
+export interface RelationshipsFile {
+  types: RelationshipType[];
+  relationships: Relationship[];
+}

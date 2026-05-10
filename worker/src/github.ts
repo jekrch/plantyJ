@@ -6,6 +6,7 @@ import type {
   GitHubContentsResponse,
   PicEntry,
   PlantRecord,
+  RelationshipsFile,
   Zone,
   ZonePicEntry,
 } from "./types";
@@ -18,6 +19,7 @@ const ZONES_PATH = "public/data/zones.json";
 const ZONE_PICS_PATH = "public/data/zone_pics.json";
 const ANNOTATIONS_PATH = "public/data/annotations.json";
 const AI_ANALYSIS_PATH = "public/data/ai_analysis.json";
+const RELATIONSHIPS_PATH = "public/data/relationships.json";
 
 function githubHeaders(token: string): Record<string, string> {
   return {
@@ -863,16 +865,24 @@ export async function readAnnotations(env: Env): Promise<AnnotationEntry[]> {
 // JSON files got dirty. commitBatchState then writes only the dirty ones,
 // turning O(N commands) GitHub round-trips into O(1) regardless of chunk size.
 
-export type DirtyFile = "pics" | "plants" | "zones" | "zonePics" | "annotations";
+export type DirtyFile =
+  | "pics"
+  | "plants"
+  | "zones"
+  | "zonePics"
+  | "annotations"
+  | "relationships";
 
 export interface BatchState {
   gallery: Gallery;
   annotations: AnnotationEntry[];
+  relationships: RelationshipsFile;
   picsSha: string | null;
   plantsSha: string | null;
   zonesSha: string | null;
   zonePicsSha: string | null;
   annotationsSha: string | null;
+  relationshipsSha: string | null;
   dirty: Set<DirtyFile>;
   // Image files queued for deletion after JSON commits succeed (per /delete and
   // /deletezonepic). Each costs 2 subrequests: GET sha + DELETE.
@@ -880,12 +890,13 @@ export interface BatchState {
 }
 
 export async function loadBatchState(env: Env): Promise<BatchState> {
-  const [pics, plants, zones, zonePics, ann] = await Promise.all([
+  const [pics, plants, zones, zonePics, ann, rels] = await Promise.all([
     readJsonFile<{ pics?: PicEntry[] }>(env, PICS_PATH, { pics: [] }),
     readJsonFile<{ plants?: PlantRecord[] }>(env, PLANTS_PATH, { plants: [] }),
     readJsonFile<{ zones?: Zone[] }>(env, ZONES_PATH, { zones: [] }),
     readJsonFile<{ zonePics?: ZonePicEntry[] }>(env, ZONE_PICS_PATH, { zonePics: [] }),
     readJsonFile<{ annotations?: AnnotationEntry[] }>(env, ANNOTATIONS_PATH, { annotations: [] }),
+    readJsonFile<Partial<RelationshipsFile>>(env, RELATIONSHIPS_PATH, { types: [], relationships: [] }),
   ]);
   return {
     gallery: {
@@ -895,11 +906,16 @@ export async function loadBatchState(env: Env): Promise<BatchState> {
       zonePics: zonePics.data.zonePics ?? [],
     },
     annotations: ann.data.annotations ?? [],
+    relationships: {
+      types: rels.data.types ?? [],
+      relationships: rels.data.relationships ?? [],
+    },
     picsSha: pics.sha,
     plantsSha: plants.sha,
     zonesSha: zones.sha,
     zonePicsSha: zonePics.sha,
     annotationsSha: ann.sha,
+    relationshipsSha: rels.sha,
     dirty: new Set(),
     imagesToDelete: [],
   };
@@ -926,6 +942,9 @@ export async function commitBatchState(
   if (state.dirty.has("annotations")) {
     const cleaned = state.annotations.filter((a) => a.tags.length > 0 || a.description !== null);
     writes.push(writeJsonFile(env, ANNOTATIONS_PATH, { annotations: cleaned }, state.annotationsSha, message));
+  }
+  if (state.dirty.has("relationships")) {
+    writes.push(writeJsonFile(env, RELATIONSHIPS_PATH, state.relationships, state.relationshipsSha, message));
   }
   await Promise.all(writes);
 

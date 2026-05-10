@@ -32,6 +32,7 @@ export default function TreeView({
   initialTreeNode,
   onNodeSelect,
   speciesLoaded,
+  relationships,
 }: Props) {
   const [aiAnalyses, setAiAnalyses] = useState<AIAnalysis[]>([]);
 
@@ -293,6 +294,7 @@ export default function TreeView({
               zones={zones}
               speciesByShortCode={speciesByShortCode}
               aiAnalyses={aiAnalyses}
+              relationships={relationships}
               isClosing={isClosing}
               onAnimationEnd={() => { if (isClosing) setRenderedPinned(null); }}
               onClose={() => setPinned(null)}

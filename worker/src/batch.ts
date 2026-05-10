@@ -6,6 +6,11 @@ import {
   type BatchState,
 } from "./github";
 import { assertValidCode } from "./validation";
+import {
+  applyRelate,
+  applyRelType,
+  applyUnrelate,
+} from "./relationships";
 
 // In-memory mirror of executeCommand. Each mutator operates on a shared
 // BatchState (loaded once per chunk) and marks which JSON files got dirty.
@@ -432,6 +437,38 @@ function applyCommand(state: BatchState, text: string): ExecResult {
       return removeFromAnnotation(parts[0], parts[1], parts[2]);
     }
     return fail(`Invalid /removetag format.`);
+  }
+
+  // /relate <typeId> <fromCode> <toCode> [direction]
+  const relateMatch = trimmed.match(/^\/relate\s+(\S+)\s+(\S+)\s+(\S+)(?:\s+(\S+))?$/);
+  if (relateMatch) {
+    const [, typeId, from, to, direction] = relateMatch;
+    const r = applyRelate(state.relationships, { typeId, from, to, direction });
+    if (r.changed) state.dirty.add("relationships");
+    return r.ok ? ok(r.reply) : fail(r.reply);
+  }
+
+  // /unrelate <id>
+  const unrelateMatch = trimmed.match(/^\/unrelate\s+(\S+)$/);
+  if (unrelateMatch) {
+    const r = applyUnrelate(state.relationships, unrelateMatch[1]);
+    if (r.changed) state.dirty.add("relationships");
+    return r.ok ? ok(r.reply) : fail(r.reply);
+  }
+
+  // /reltype <id> // <name> // <description> // [directional|undirected]
+  if (trimmed.startsWith("/reltype ")) {
+    const parts = trimmed.slice("/reltype ".length).split("//").map((s) => s.trim());
+    if (parts.length < 3) {
+      return fail(
+        "Usage: /reltype <id> // <name> // <description> // [directional|undirected]"
+      );
+    }
+    const [id, name, description, dirToken] = parts;
+    const directional = (dirToken ?? "").toLowerCase() === "directional";
+    const r = applyRelType(state.relationships, { id, name, description, directional });
+    if (r.changed) state.dirty.add("relationships");
+    return r.ok ? ok(r.reply) : fail(r.reply);
   }
 
   // /deleteannotation shortCode [// zoneCode]

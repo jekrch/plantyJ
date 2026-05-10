@@ -26,6 +26,13 @@ import {
   upsertAnnotation,
   upsertZone,
 } from "./github";
+import {
+  handleRelate,
+  handleRelations,
+  handleRelType,
+  handleRelTypes,
+  handleUnrelate,
+} from "./relationships";
 
 interface PendingDo {
   proposals: ProposedCommand[];
@@ -548,6 +555,11 @@ export async function handleTextCommand(
     [/^\/addtag\s/, () => handleAddTag(text, env, reply)],
     [/^\/removetag\s/, () => handleRemoveTag(text, env, reply)],
     [/^\/deleteannotation\s/, () => handleDeleteAnnotation(text, env, reply)],
+    [/^\/relate\s/, () => handleRelate(text, env, reply)],
+    [/^\/unrelate\s/, () => handleUnrelate(text, env, reply)],
+    [/^\/relations\s/, () => handleRelations(text, env, reply)],
+    ["/reltypes", () => handleRelTypes(env, reply)],
+    [/^\/reltype\s/, () => handleRelType(text, env, reply)],
   ];
 
   for (const [pattern, run] of handlers) {

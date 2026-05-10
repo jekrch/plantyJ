@@ -13,10 +13,11 @@ import {
   LayoutGrid,
   Sprout,
   Map as MapIcon,
+  Share2,
   TreeDeciduous,
 } from "lucide-react";
 
-export type ViewMode = "gallery" | "plant" | "zone" | "tree";
+export type ViewMode = "gallery" | "plant" | "zone" | "tree" | "web";
 
 interface Props {
   mode: ViewMode;
@@ -88,7 +89,7 @@ export default function ViewModeControl({
   }, [zones, plants]);
 
   const setMode = (next: ViewMode) => {
-    if (next === "gallery" || next === "tree") {
+    if (next === "gallery" || next === "tree" || next === "web") {
       onChange(next, null);
       return;
     }
@@ -111,9 +112,10 @@ export default function ViewModeControl({
   const segments: { key: ViewMode; label: string; Icon: typeof LayoutGrid }[] =
     [
       { key: "gallery", label: "Wall", Icon: LayoutGrid },
-      { key: "plant", label: "Plant", Icon: Sprout },
-      { key: "zone", label: "Zone", Icon: MapIcon },
       { key: "tree", label: "Tree", Icon: TreeDeciduous },
+      { key: "web", label: "Web", Icon: Share2 },
+      { key: "zone", label: "Zone", Icon: MapIcon },
+      { key: "plant", label: "Plant", Icon: Sprout },
     ];
 
   return (
@@ -229,6 +231,7 @@ function SegmentedControl({
   active: ViewMode;
   onSelect: (next: ViewMode) => void;
 }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const btnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const [indicator, setIndicator] = useState<{
@@ -237,15 +240,14 @@ function SegmentedControl({
   } | null>(null);
   const [hasMeasured, setHasMeasured] = useState(false);
   const [visible, setVisible] = useState(!hasMountedBefore);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
   useLayoutEffect(() => {
     const measure = () => {
       const btn = btnRefs.current[active];
-      const container = containerRef.current;
-      if (!btn || !container) return;
-      const cRect = container.getBoundingClientRect();
-      const bRect = btn.getBoundingClientRect();
-      setIndicator({ left: bRect.left - cRect.left, width: bRect.width });
+      if (!btn) return;
+      setIndicator({ left: btn.offsetLeft, width: btn.offsetWidth });
       setHasMeasured(true);
     };
     measure();
@@ -265,6 +267,36 @@ function SegmentedControl({
     };
   }, [active]);
 
+  useLayoutEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const check = () => {
+      setCanScrollLeft(el.scrollLeft > 1);
+      setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 1);
+    };
+    check();
+    el.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    return () => {
+      el.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    const btn = btnRefs.current[active];
+    const scroll = scrollRef.current;
+    if (!btn || !scroll) return;
+    const btnLeft = btn.offsetLeft;
+    const btnRight = btnLeft + btn.offsetWidth;
+    const { scrollLeft, offsetWidth } = scroll;
+    if (btnLeft < scrollLeft) {
+      scroll.scrollTo({ left: btnLeft - 8, behavior: "smooth" });
+    } else if (btnRight > scrollLeft + offsetWidth) {
+      scroll.scrollTo({ left: btnRight - offsetWidth + 8, behavior: "smooth" });
+    }
+  }, [active]);
+
   useEffect(() => {
     if (!hasMeasured) return;
     if (!hasMountedBefore) {
@@ -276,53 +308,73 @@ function SegmentedControl({
   }, [hasMeasured]);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative inline-flex items-end gap-1 border-b border-white/[0.06] pb-0"
-    >
-      {segments.map(({ key, label, Icon }) => {
-        const isActive = key === active;
-        return (
-          <button
-            key={key}
-            ref={(el) => {
-              btnRefs.current[key] = el;
-            }}
-            type="button"
-            onClick={() => onSelect(key)}
-            className={`group relative flex items-center gap-2 px-4 py-2.5 font-display text-[11px] tracking-[0.18em] uppercase transition-colors duration-200 ${
-              isActive
-                ? "text-accent"
-                : "text-ink-muted/70 hover:text-ink"
-            }`}
-          >
-            <Icon
-              size={13}
-              strokeWidth={1.5}
-              className={`transition-all duration-300 ${
-                isActive
-                  ? "scale-105"
-                  : "opacity-70 group-hover:opacity-100"
-              }`}
+    <div className="relative max-w-full">
+      <div
+        aria-hidden
+        className="absolute left-0 top-0 bottom-0 w-10 pointer-events-none z-10 transition-opacity duration-300"
+        style={{
+          opacity: canScrollLeft ? 1 : 0,
+          background: "linear-gradient(to right, var(--color-surface) 20%, transparent)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute right-0 top-0 bottom-0 w-10 pointer-events-none z-10 transition-opacity duration-300"
+        style={{
+          opacity: canScrollRight ? 1 : 0,
+          background: "linear-gradient(to left, var(--color-surface) 20%, transparent)",
+        }}
+      />
+      <div ref={scrollRef} className="overflow-x-auto no-scrollbar">
+        <div
+          ref={containerRef}
+          className="relative inline-flex items-end gap-1 border-b border-white/6 pb-0"
+        >
+          {segments.map(({ key, label, Icon }) => {
+            const isActive = key === active;
+            return (
+              <button
+                key={key}
+                ref={(el) => {
+                  btnRefs.current[key] = el;
+                }}
+                type="button"
+                onClick={() => onSelect(key)}
+                className={`group relative flex items-center gap-2 px-4 py-2.5 font-display text-[11px] tracking-[0.18em] uppercase transition-colors duration-200 ${
+                  isActive
+                    ? "text-accent"
+                    : "text-ink-muted/70 hover:text-ink"
+                }`}
+              >
+                <Icon
+                  size={13}
+                  strokeWidth={1.5}
+                  className={`transition-all duration-300 ${
+                    isActive
+                      ? "scale-105"
+                      : "opacity-70 group-hover:opacity-100"
+                  }`}
+                />
+                <span>{label}</span>
+              </button>
+            );
+          })}
+          {indicator && (
+            <span
+              aria-hidden
+              className="absolute -bottom-px h-[1.5px] bg-accent/80 pointer-events-none rounded-full"
+              style={{
+                left: indicator.left,
+                width: indicator.width,
+                opacity: visible ? 1 : 0,
+                transition: hasMeasured
+                  ? "left 320ms cubic-bezier(0.22, 1, 0.36, 1), width 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 280ms ease-out"
+                  : "opacity 280ms ease-out",
+              }}
             />
-            <span>{label}</span>
-          </button>
-        );
-      })}
-      {indicator && (
-        <span
-          aria-hidden
-          className="absolute -bottom-px h-[1.5px] bg-accent/80 pointer-events-none rounded-full"
-          style={{
-            left: indicator.left,
-            width: indicator.width,
-            opacity: visible ? 1 : 0,
-            transition: hasMeasured
-              ? "left 320ms cubic-bezier(0.22, 1, 0.36, 1), width 320ms cubic-bezier(0.22, 1, 0.36, 1), opacity 280ms ease-out"
-              : "opacity 280ms ease-out",
-          }}
-        />
-      )}
+          )}
+        </div>
+      </div>
     </div>
   );
 }

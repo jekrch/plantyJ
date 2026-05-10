@@ -1,4 +1,5 @@
 import type { Plant, Species, TaxaInfo, Zone } from "../../types";
+import type { RelationshipsData } from "../../hooks/useRelationships";
 
 export const RANKS = [
   "kingdom",
@@ -31,6 +32,7 @@ export interface Props {
   initialTreeNode?: string | null;
   onNodeSelect?: (name: string | null) => void;
   speciesLoaded: boolean;
+  relationships?: RelationshipsData;
 }
 
 export const LEAF_RADIUS = 22;

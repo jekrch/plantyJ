@@ -1,0 +1,217 @@
+{
+  "types": [
+    {
+      "id": "host-plant",
+      "name": "Host Plant",
+      "description": "The plant serves as the primary food source and egg-laying site for the insect's larval (caterpillar) stage.",
+      "directional": true
+    },
+    {
+      "id": "pollinator",
+      "name": "Pollinator / Nectar Source",
+      "description": "The insect visits the plant in its adult stage to feed on nectar, aiding in pollination.",
+      "directional": true
+    },
+    {
+      "id": "predator-prey",
+      "name": "Predator / Prey",
+      "description": "One animal hunts and consumes another. This includes birds feeding caterpillars to their young, or cats hunting birds and small mammals.",
+      "directional": true
+    },
+    {
+      "id": "forager",
+      "name": "Seed Forager",
+      "description": "An animal that naturally feeds on the seeds of the plant. A welcome sign of a healthy garden ecosystem.",
+      "directional": true
+    },
+    {
+    "id": "frugivore",
+    "name": "Fruit / Nut Consumer",
+    "description": "An animal that feeds on the fruits, nuts, or berries of the plant, often aiding in natural seed dispersal.",
+    "directional": true
+    },
+    {
+      "id": "habitat",
+      "name": "Nesting / Habitat",
+      "description": "Dense shrubs or trees that provide essential shelter, roosting, or nesting sites for birds and small mammals.",
+      "directional": true
+    }
+  ],
+  "relationships": [
+    {
+      "id": 1,
+      "type": "host-plant",
+      "from": "V ata",
+      "to": "u dio",
+      "direction": "directed"
+    },
+    {
+      "id": 2,
+      "type": "pollinator",
+      "from": "V ata",
+      "to": "A tub",
+      "direction": "directed"
+    },
+    {
+      "id": 3,
+      "type": "pollinator",
+      "from": "V virg",
+      "to": "A tub",
+      "direction": "directed"
+    },
+    {
+      "id": 4,
+      "type": "pollinator",
+      "from": "V virg",
+      "to": "E pur",
+      "direction": "directed"
+    },
+    {
+      "id": 5,
+      "type": "pollinator",
+      "from": "V virg",
+      "to": "R hir",
+      "direction": "directed"
+    },
+    {
+      "id": 6,
+      "type": "predator-prey",
+      "from": "c card",
+      "to": "V ata",
+      "direction": "directed"
+    },
+    {
+      "id": 7,
+      "type": "predator-prey",
+      "from": "c card",
+      "to": "V virg",
+      "direction": "directed"
+    },
+    {
+      "id": 8,
+      "type": "predator-prey",
+      "from": "p dom",
+      "to": "V ata",
+      "direction": "directed"
+    },
+    {
+      "id": 9,
+      "type": "forager",
+      "from": "S tri",
+      "to": "E pur",
+      "direction": "directed"
+    },
+    {
+      "id": 10,
+      "type": "forager",
+      "from": "S tri",
+      "to": "R hir",
+      "direction": "directed"
+    },
+    {
+      "id": 11,
+      "type": "predator-prey",
+      "from": "F cat",
+      "to": "S car",
+      "direction": "directed"
+    },
+    {
+      "id": 12,
+      "type": "predator-prey",
+      "from": "F cat",
+      "to": "p dom",
+      "direction": "directed"
+    },
+    {
+      "id": 13,
+      "type": "predator-prey",
+      "from": "F cat",
+      "to": "c card",
+      "direction": "directed"
+    },
+    {
+      "id": 14,
+      "type": "predator-prey",
+      "from": "F cat",
+      "to": "S tri",
+      "direction": "directed"
+    },
+    {
+      "id": 15,
+      "type": "frugivore",
+      "from": "S car",
+      "to": "C ame",
+      "direction": "directed"
+    },
+    {
+      "id": 16,
+      "type": "frugivore",
+      "from": "m gal",
+      "to": "C ame",
+      "direction": "directed"
+    },
+    {
+      "id": 17,
+      "type": "frugivore",
+      "from": "c card",
+      "to": "s can bob",
+      "direction": "directed"
+    },
+    {
+      "id": 18,
+      "type": "frugivore",
+      "from": "c card",
+      "to": "s can wyl",
+      "direction": "directed"
+    },
+    {
+      "id": 19,
+      "type": "frugivore",
+      "from": "c card",
+      "to": "C ser",
+      "direction": "directed"
+    },
+    {
+      "id": 20,
+      "type": "forager",
+      "from": "S car",
+      "to": "A sac",
+      "direction": "directed"
+    },
+    {
+      "id": 21,
+      "type": "pollinator",
+      "from": "V ata",
+      "to": "s fle",
+      "direction": "directed"
+    },
+    {
+      "id": 22,
+      "type": "pollinator",
+      "from": "V virg",
+      "to": "s lat",
+      "direction": "directed"
+    },
+    {
+      "id": 23,
+      "type": "habitat",
+      "from": "c card",
+      "to": "C ser",
+      "direction": "directed"
+    },
+    {
+      "id": 24,
+      "type": "companion",
+      "from": "a tri",
+      "to": "M dom 'red'",
+      "direction": "undirected"
+    },
+    {
+      "id": 25,
+      "type": "companion",
+      "from": "c daf",
+      "to": "P pyr Peg",
+      "direction": "undirected"
+    }
+  ]
+}
