@@ -466,5 +466,33 @@
   "Spinus": {
     "description": "Spinus may refer to:Spinus (bird), a genus of birds in the finch family (Fringillidae)\nSpinu\u0219, a commune in Bihor County, Romania\n\n",
     "url": "https://en.wikipedia.org/wiki/Spinus"
+  },
+  "Betulaceae": {
+    "description": "Betulaceae, the birch family, includes six genera of deciduous nut-bearing trees and shrubs, including the birches, alders, hazels, hornbeams, hazel-hornbeam, and hop-hornbeams, numbering a total of 167 species. They are mostly natives of the temperate Northern Hemisphere, with a few species reaching the Southern Hemisphere in the Andes in South America. Their typical flowers are catkins and often appear before leaves.",
+    "url": "https://en.wikipedia.org/wiki/Betulaceae"
+  },
+  "Corylus": {
+    "description": "Hazels are plants of the genus Corylus of deciduous trees and large shrubs native to the temperate Northern Hemisphere. The genus is usually placed in the birch family, Betulaceae, though some botanists split the hazels into a separate family Corylaceae. The fruit of the hazel is the hazelnut.",
+    "url": "https://en.wikipedia.org/wiki/Hazel"
+  },
+  "Fagales": {
+    "description": "The Fagales are an order of flowering plants in the rosid group of dicotyledons, including some of the best-known trees. Well-known members of Fagales include: beeches, chestnuts, oaks, walnut, pecan, hickory, birches, alders, hazels, hornbeams, she-oaks, and southern beeches. The order name is derived from genus Fagus (beeches).",
+    "url": "https://en.wikipedia.org/wiki/Fagales"
+  },
+  "Matteuccia": {
+    "description": "Matteuccia is a genus of ferns with one species: Matteuccia struthiopteris. The species epithet struthiopteris comes from Ancient Greek words \u03c3\u03c4\u03c1\u03bf\u03c5\u03b8\u03af\u03c9\u03bd (strouth\u00ed\u014dn) \"ostrich\" and \u03c0\u03c4\u03b5\u03c1\u03af\u03c2 (pter\u00eds) \"fern\".",
+    "url": "https://en.wikipedia.org/wiki/Matteuccia"
+  },
+  "Onocleaceae": {
+    "description": "Onocleaceae is a small family of terrestrial ferns in the order Polypodiales. It is placed in the suborder Aspleniineae in the Pteridophyte Phylogeny Group classification of 2016. Alternatively, the family, along with Blechnaceae, may be placed in a very broadly defined family Aspleniaceae as the subfamily Blechnoideae. The family may contain from one to four genera, consisting of five species largely in north temperate climes. The four genera, Matteuccia, Onoclea, Onocleopsis and Pentarhizidium, may be included under the single genus Onoclea.",
+    "url": "https://en.wikipedia.org/wiki/Onocleaceae"
+  },
+  "Polypodiales": {
+    "description": "The order Polypodiales encompasses the major lineages of polypod ferns, which account for more than 80% of today's fern species. They are found in many parts of the world including tropical, semitropical and temperate areas.",
+    "url": "https://en.wikipedia.org/wiki/Polypodiales"
+  },
+  "Polypodiopsida": {
+    "description": "The ferns are a group of vascular plants that reproduce via spores and have neither seeds nor flowers. They differ from non-vascular plants by having specialized transport bundles that conduct water and nutrients from and to the roots, as well as life cycles in which the branched sporophyte is the dominant phase.",
+    "url": "https://en.wikipedia.org/wiki/Fern"
   }
 }
