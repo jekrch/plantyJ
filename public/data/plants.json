@@ -67,8 +67,14 @@
       "variety": null
     },
     {
-      "shortCode": "A sci",
+      "shortCode": "A sac",
       "fullName": "Acer saccharum",
+      "commonName": "Sugar Maple",
+      "variety": null
+    },
+    {
+      "shortCode": "A sci",
+      "fullName": "Acer saccharinum",
       "commonName": "Sugar Maple",
       "variety": null
     },
