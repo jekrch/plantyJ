@@ -1,22 +1,6 @@
 {
   "pics": [
     {
-      "seq": 68,
-      "id": "V vir-1778445966",
-      "shortCode": "V vir",
-      "zoneCode": "fy",
-      "tags": [],
-      "description": null,
-      "image": "images/V vir/1778445966.jpg",
-      "postedBy": "Jenny",
-      "addedAt": "2026-05-10T20:46:07.723Z",
-      "width": 1280,
-      "height": 960,
-      "bioclipSpeciesId": "Vanessa virginiensis",
-      "bioclipCommonName": "American Lady",
-      "bioclipScore": 0.9896
-    },
-    {
       "seq": 67,
       "id": "P cus-1778445874",
       "shortCode": "P cus",
