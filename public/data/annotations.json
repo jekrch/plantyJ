@@ -188,7 +188,8 @@
       "shortCode": "A mil",
       "zoneCode": null,
       "tags": [
-        "native"
+        "native",
+        "medicinal"
       ],
       "description": null
     },
@@ -228,7 +229,8 @@
       "shortCode": "E pur",
       "zoneCode": null,
       "tags": [
-        "native"
+        "native",
+        "medicinal"
       ],
       "description": null
     },
@@ -252,7 +254,8 @@
       "shortCode": "H lup Wil",
       "zoneCode": null,
       "tags": [
-        "edible"
+        "edible",
+        "medicinal"
       ],
       "description": null
     },
@@ -260,7 +263,8 @@
       "shortCode": "H vir",
       "zoneCode": null,
       "tags": [
-        "native"
+        "native",
+        "medicinal"
       ],
       "description": null
     },
@@ -308,7 +312,8 @@
       "shortCode": "R bla",
       "zoneCode": null,
       "tags": [
-        "native"
+        "native",
+        "medicinal"
       ],
       "description": null
     },
@@ -398,6 +403,14 @@
       "zoneCode": null,
       "tags": [
         "native"
+      ],
+      "description": null
+    },
+    {
+      "shortCode": "L car",
+      "zoneCode": null,
+      "tags": [
+        "medicinal"
       ],
       "description": null
     }
