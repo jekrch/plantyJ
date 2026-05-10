@@ -27,7 +27,7 @@ function fail(reply: string): ExecResult {
   return { ok: false, reply };
 }
 
-// Runs a single slash command from the /do propose-confirm flow. Mirrors the
+// Runs a single slash command from the /ask propose-confirm flow. Mirrors the
 // inline handlers in handleUpdate but returns the reply text instead of
 // sending it. Only the mutating subset is supported; any other verb is rejected.
 export async function executeCommand(text: string, env: Env): Promise<ExecResult> {

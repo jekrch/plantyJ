@@ -29,14 +29,21 @@ Only `shortCode` is required. Use `Display Name (code)` to declare a new zone; b
 
 ## Text commands
 
-### Q&A
+### Q&A and actions
 
 - `/ask {question}` — ask anything about the garden journal (alias for `/ask3`)
 - `/ask1 {question}` — uses `gemini-3.1-flash-lite-preview` (fastest, cheapest)
-- `/ask2 {question}` — uses `gemini-2.5-pro` 
+- `/ask2 {question}` — uses `gemini-2.5-pro`
 - `/ask3 {question}` — uses `gemini-3.1-pro-preview` (default)
+- `/resp {follow-up}` — continues the previous `/ask` thread. A new
+  `/ask` starts a fresh thread. Accepts the same `1`/`2`/`3` model suffix.
+- `/confirm` — runs every command from the most recent set of proposals.
+- `/confirm 1 3` — runs only the listed proposals (space- or comma-separated).
+- `/cancel` — drops the pending proposals.
+- `/askstyle {description}` — set a persistent response style (e.g. "extremely concise").
+- `/askstyle` — clear the style. `/showstyle` — show the current one.
 
-The bot answers factually from the pre-computed plant rollup (`public/data/rollup.min.json`) and can suggest copy-pasteable bot commands to fill data gaps. It never executes writes itself. Each reply includes an approximate token count and cost.
+The bot answers factually from the pre-computed plant rollup (`public/data/rollup.min.json`). When the answer involves changes — whether explicitly requested ("tag every tomato as edible") or implied by a question ("which orphan pics are in the maple zone?") — the model also calls a `propose_commands` tool, and the reply is followed by a numbered list of bot commands. Reply with `/confirm` (all) or `/confirm 1 3` (subset) to run them. Pending proposals expire after 1 hour and are replaced by the next turn that proposes commands. Each reply includes an approximate token count and cost.
 
 ### Data management
 
@@ -66,12 +73,16 @@ The bot answers factually from the pre-computed plant rollup (`public/data/rollu
 
 ## AI integration
 
-The `/ask` handler lives in `worker/src/ask.ts`. It:
+The `/ask` and `/resp` commands both run through `worker/src/ask.ts`. It:
 
 1. Fetches `rollup.min.json` — a pre-computed, plant-centric denormalization of the four source JSONs (~12–15KB, ~3.5K tokens)
-2. Optionally reuses a **Gemini context cache** (server-side, 1-hour TTL) keyed by a SHA-256 checksum of the rollup. Cache state (checksum + Gemini cache name) is persisted in a Workers KV namespace (`ASK_CACHE`). The cache is invalidated automatically when the rollup changes.
-3. Runs a tool-call loop (max 3 iterations) with one tool — `get_species(fullName)` — for on-demand taxonomy/Wikipedia lookups
-4. Appends an approximate cost line to every reply
+2. Optionally reuses a **Gemini context cache** (server-side, 30-day TTL) keyed by a SHA-256 checksum of the rollup. Cache state (checksum + Gemini cache name) is persisted in a Workers KV namespace (`ASK_CACHE`) under `cache:v2:{model}`. The cache is invalidated automatically when the rollup changes.
+3. Runs a tool-call loop (max 3 iterations) with two tools:
+   - `get_species(fullName)` — on-demand taxonomy/Wikipedia lookups.
+   - `propose_commands(commands[])` — emits a list of bot commands the model wants the user to run. Output is filtered against an `ALLOWED_VERBS` allowlist (`/addtag`, `/removetag`, `/update`, `/accept`, `/annotate`, `/addzone`, `/renamezone`, `/deletezonepic`, `/delete`, `/deleteannotation`); `/deletezone` is intentionally excluded.
+4. If `propose_commands` was called with a non-empty list, stores it at `pending:do:{userId}` (1-hour TTL) and appends a numbered list to the reply with `/confirm` instructions.
+5. For `/resp`, replays the prior conversation `thread:{userId}` so the model has context. A new turn from `/resp` can produce a fresh proposal that replaces the pending one.
+6. Appends an approximate cost line to every reply.
 
 ## Deployment
 

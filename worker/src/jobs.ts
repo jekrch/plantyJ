@@ -1,10 +1,9 @@
 import type { Env } from "./types";
 import { sendReply } from "./telegram";
 import { answerQuestion, type Thread } from "./ask";
-import { proposeActions } from "./do";
 import { runBatch } from "./batch";
 
-// /ask, /do and /confirm calls can exceed Cloudflare's per-invocation limits
+// /ask and /confirm calls can exceed Cloudflare's per-invocation limits
 // (waitUntil wall-time for LLM calls; subrequest count for batch /confirm).
 // Enqueue here and let the cron drain the queue across multiple ticks, each
 // with a fresh subrequest budget.
@@ -26,7 +25,7 @@ const PENDING_DO_TTL_SECONDS = 3600;
 // 50-subrequest cap and finishes 54-command runs in 3 ticks.
 const CONFIRM_CHUNK_SIZE = 25;
 
-type JobKind = "ask" | "do" | "confirm";
+type JobKind = "ask" | "confirm";
 
 export interface JobRecord {
   id: string;
@@ -34,7 +33,7 @@ export interface JobRecord {
   chatId: number;
   messageId: number;
   userId: number | null;
-  // ask/do
+  // ask
   request?: string;
   model?: string;
   history?: Thread["history"];
@@ -64,52 +63,38 @@ type RunStatus = "done" | "partial";
 
 async function runJob(env: Env, job: JobRecord): Promise<RunStatus> {
   if (job.kind === "ask") {
-    const { reply, thread } = await answerQuestion(
+    const { reply, thread, proposals } = await answerQuestion(
       job.request ?? "",
       env,
       job.model,
       job.history,
       job.style
     );
-    await sendReply(env.TELEGRAM_BOT_TOKEN, job.chatId, job.messageId, reply);
+
+    let body = reply;
+    if (proposals.length > 0) {
+      if (job.userId !== null && env.ASK_CACHE) {
+        const pending = { proposals, createdAt: new Date().toISOString() };
+        await env.ASK_CACHE.put(`pending:do:${job.userId}`, JSON.stringify(pending), {
+          expirationTtl: PENDING_DO_TTL_SECONDS,
+        });
+      }
+      const lines = [
+        "",
+        "Proposed commands:",
+        proposals
+          .map((x, i) => `  ${i + 1}. ${x.command}\n     ${x.rationale}`)
+          .join("\n"),
+        "",
+        "Reply /confirm to run all, /confirm 1 3 to run a subset, or /cancel to drop.",
+      ];
+      body = `${reply}\n${lines.join("\n")}`;
+    }
+
+    await sendReply(env.TELEGRAM_BOT_TOKEN, job.chatId, job.messageId, body);
     if (job.userId !== null && env.ASK_CACHE) {
       await env.ASK_CACHE.put(`thread:${job.userId}`, JSON.stringify(thread));
     }
-    return "done";
-  }
-
-  if (job.kind === "do") {
-    const { summary, proposals } = await proposeActions(job.request ?? "", env, job.style);
-    if (proposals.length === 0) {
-      await sendReply(
-        env.TELEGRAM_BOT_TOKEN,
-        job.chatId,
-        job.messageId,
-        `${summary}\n\n(no commands proposed)`
-      );
-      if (job.userId !== null && env.ASK_CACHE) {
-        await env.ASK_CACHE.delete(`pending:do:${job.userId}`).catch(() => {});
-      }
-      return "done";
-    }
-
-    if (job.userId !== null && env.ASK_CACHE) {
-      const pending = { proposals, createdAt: new Date().toISOString() };
-      await env.ASK_CACHE.put(`pending:do:${job.userId}`, JSON.stringify(pending), {
-        expirationTtl: PENDING_DO_TTL_SECONDS,
-      });
-    }
-    const lines = [
-      summary,
-      "",
-      "Proposed commands:",
-      proposals
-        .map((x, i) => `  ${i + 1}. ${x.command}\n     ${x.rationale}`)
-        .join("\n"),
-      "",
-      "Reply /confirm to run all, /confirm 1 3 to run a subset, or /cancel to drop.",
-    ];
-    await sendReply(env.TELEGRAM_BOT_TOKEN, job.chatId, job.messageId, lines.join("\n"));
     return "done";
   }
 

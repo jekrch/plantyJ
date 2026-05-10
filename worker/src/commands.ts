@@ -1,8 +1,7 @@
 import type { AnnotationEntry, Env, PicEntry, PlantRecord, TelegramMessage, Zone } from "./types";
 import { type Replier } from "./telegram";
 import { HELP_HEADER } from "./help";
-import { MODEL_ALIASES, type Thread } from "./ask";
-import { type ProposedCommand } from "./do";
+import { MODEL_ALIASES, type ProposedCommand, type Thread } from "./ask";
 import {
   submitAnalyzeRun,
   analyzeStatus,
@@ -155,35 +154,6 @@ async function handleShowStyle(message: TelegramMessage, env: Env, reply: Replie
   await reply(style ? `Current style: ${style}` : "No style set. Use /askstyle {description} to set one.");
 }
 
-async function handleDo(text: string, message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
-  const request = text.match(/^\/do(?:\s+([\s\S]+))?$/i)![1]?.trim();
-  if (!message.from || !env.ASK_CACHE) {
-    await reply("/do requires KV (ASK_CACHE) and a known user.");
-    return;
-  }
-  if (!request) {
-    await reply("Usage: /do {what you want changed}\nThe bot will propose commands and wait for /confirm.");
-    return;
-  }
-  if (!(await checkAskRateLimit(message.from.id, env))) {
-    await reply("Rate limit reached: max 100 LLM queries per day.");
-    return;
-  }
-  const style = (await env.ASK_CACHE.get(STYLE_KEY(message.from.id))) ?? undefined;
-  await enqueueJob(env, {
-    id: `do-${message.from.id}-${message.message_id}`,
-    kind: "do",
-    chatId: message.chat.id,
-    messageId: message.message_id,
-    userId: message.from.id,
-    request,
-    style,
-    createdAt: new Date().toISOString(),
-    attempts: 0,
-  });
-  await reply("Queued — proposals will arrive shortly.");
-}
-
 async function handleCancel(message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
   if (message.from && env.ASK_CACHE) {
     await env.ASK_CACHE.delete(PENDING_DO_KEY(message.from.id)).catch(() => {});
@@ -198,7 +168,7 @@ async function handleConfirm(text: string, message: TelegramMessage, env: Env, r
   }
   const raw = await env.ASK_CACHE.get(PENDING_DO_KEY(message.from.id));
   if (!raw) {
-    await reply("Nothing to confirm. Start with /do {request}.");
+    await reply("Nothing to confirm. Start with /ask {request}.");
     return;
   }
   const pending: PendingDo = JSON.parse(raw);
@@ -556,7 +526,6 @@ export async function handleTextCommand(
   const handlers: Array<[RegExp | string, () => Promise<void>]> = [
     [/^\/askstyle(\s|$)/i, () => handleAskStyle(text, message, env, reply)],
     ["/showstyle", () => handleShowStyle(message, env, reply)],
-    [/^\/do(\s|$)/i, () => handleDo(text, message, env, reply)],
     ["/cancel", () => handleCancel(message, env, reply)],
     [/^\/confirm(\s|\t|$)/, () => handleConfirm(text, message, env, reply)],
     [/^\/ask([123])?\s/i, () => handleAsk(text, message, env, reply)],

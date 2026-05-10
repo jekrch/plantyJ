@@ -2,7 +2,7 @@
 [![Deploy frontend to GitHub Pages](https://github.com/jekrch/plantyJ/actions/workflows/deploy-frontend.yml/badge.svg)](https://github.com/jekrch/plantyJ/actions/workflows/deploy-frontend.yml)
 
 
-An agentic garden journal. Everything is driven from a Telegram bot webhook: snap a plant with a caption and it lands on the site; ask the bot a question about the collection and it answers from a live rollup of every plant, zone, and photo; describe a change in plain English and it drafts the bot commands to make it, waiting on your `/confirm` before anything writes.
+An agentic garden journal. Everything is driven from a Telegram bot webhook: snap a plant with a caption and it lands on the site; ask the bot a question about the collection and it answers from a live rollup of every plant, zone, and photo; describe a change in plain English (or just ask a question whose answer implies one) and it drafts the bot commands to make it, waiting on your `/confirm` before anything writes.
 
 [plantyj.com](https://plantyj.com)
 
@@ -64,7 +64,7 @@ Follow up on the previous answer without re-asking from scratch:
 
 `/resp` continues the last `/ask` thread. A new `/ask` always starts a fresh thread. Both commands accept a model suffix to switch models for that turn (e.g. `/resp1` for a quick follow-up, `/resp3` to go deeper).
 
-The bot answers from a pre-computed plant rollup and can suggest ready-to-send commands for data gaps. It never executes writes itself. Three model tiers are available:
+The bot answers from a pre-computed plant rollup and — whenever the answer involves changes — also drafts a numbered list of bot commands to run with `/confirm` (see below). Three model tiers are available:
 
 | Command | Model |  |
 |---|---|---|
@@ -74,23 +74,23 @@ The bot answers from a pre-computed plant rollup and can suggest ready-to-send c
 
 Each reply includes an approximate token count and cost.
 
-### Action agent (`/do`, `/confirm`)
+### Action agent (`/ask`, `/resp`, `/confirm`)
 
-Describe a change in plain English. The bot reads the current plant/zone/photo rollup, may look up species records to disambiguate, and proposes a numbered list of bot commands — then waits.
+`/ask` is also the action agent — describe a change in plain English (or just ask a question whose answer implies one) and the bot proposes a numbered list of bot commands alongside its reply.
 
 ```
-/do tag every tomato as edible
-/do delete the orphan pics in the maple zone
-/do fix the commonName for tmt-c, it's missing
+/ask tag every tomato as edible
+/ask which orphan pics are in the maple zone?       # answer may include a proposal
+/resp also any in the side bed?                     # follow-up; can produce its own proposal
 ```
 
-The agent only proposes existing verbs (`/addtag`, `/removetag`, `/update`, `/delete`, `/addzone`, `/renamezone`, etc.) and never executes anything itself.
+The agent only proposes existing verbs (`/addtag`, `/removetag`, `/update`, `/delete`, `/addzone`, `/renamezone`, `/accept`, `/annotate`, `/deletezonepic`, `/deleteannotation`) and never executes anything itself. `/deletezone` is intentionally never proposed — run it manually if needed.
 
-- `/confirm` — run every proposal
+- `/confirm` — run every proposal from the most recent turn
 - `/confirm 1 3` — run only the listed proposals (space- or comma-separated)
 - `/cancel` — drop the pending list
 
-Pending proposals expire after an hour. Confirmed commands are queued and run in chunks (~25/min) to stay inside Cloudflare and GitHub API limits; a summary is posted when the batch finishes.
+Pending proposals expire after an hour and are replaced when a follow-up `/resp` (or a fresh `/ask`) emits a new set. Confirmed commands are queued and run in chunks (~25/min) to stay inside Cloudflare and GitHub API limits; a summary is posted when the batch finishes.
 
 ## Image metadata
 

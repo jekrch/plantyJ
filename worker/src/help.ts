@@ -75,26 +75,24 @@ Zone photo (represents the zone, not a plant):
   Zone pics live independently of plant pics and aren't grouped by shortCode.
   /deletezonepic {id} — Remove a zone pic by its id
 
-Q&A:
-  /ask {question} — Ask anything about the garden journal. The bot will
-    answer from the current data and suggest copy-pasteable commands for
-    any changes you want to make.
-  /resp {follow-up} — Continue the previous /ask thread. A new /ask
-    starts a fresh thread. Both commands accept a model suffix (1/2/3)
-    to override the model for that turn.
-  /askstyle {description} — Set a persistent response style for /ask and
-    /resp (e.g. "David Attenborough", "extremely concise", "sourced with
-    links"). Stays active until you clear it.
-  /askstyle — Clear the current style.
-  /showstyle — Show the currently active style.
-
-Action agent (propose-then-confirm):
-  /do {request} — Describe a change in natural language. The bot proposes
-    a numbered list of bot commands (no /deletezone) and waits.
-  /confirm — Run all proposed commands.
+Q&A and actions (propose-then-confirm):
+  /ask {question} — Ask anything about the garden journal, or describe a
+    change you want. If the answer involves changes, the bot also proposes
+    a numbered list of bot commands you can run with /confirm.
+  /resp {follow-up} — Continue the previous /ask thread (a new /ask
+    starts a fresh one). Follow-ups can also produce a new set of
+    proposals to /confirm. /ask, and /resp accept a model suffix
+    (1/2/3) to override the model for that turn.
+  /confirm — Run all proposed commands from the most recent turn.
   /confirm 1 3 — Run only the listed proposals (space- or comma-separated).
   /cancel — Drop the pending proposals without running anything.
-  Pending proposals expire after 1 hour.
+  Pending proposals expire after 1 hour and are replaced when a new turn
+  produces fresh proposals. /deletezone is intentionally never proposed —
+  run it manually if needed.
+  /askstyle {description} — Set a persistent response style (e.g. "David
+    Attenborough", "extremely concise"). Stays active until cleared.
+  /askstyle — Clear the current style.
+  /showstyle — Show the currently active style.
 
 Ecological analysis:
   /analyze — Queue a 1–2 paragraph ecological-niche analysis (good/bad/

@@ -25,11 +25,35 @@ export interface Thread {
   history: Content[];
 }
 
+export interface ProposedCommand {
+  command: string;
+  rationale: string;
+}
+
+export interface AnswerResult {
+  reply: string;
+  thread: Thread;
+  proposals: ProposedCommand[];
+}
+
 interface CacheState {
   checksum: string;
   cacheName: string;
   expiresAt: number;
 }
+
+const ALLOWED_VERBS = [
+  "/addtag",
+  "/removetag",
+  "/update",
+  "/accept",
+  "/annotate",
+  "/addzone",
+  "/renamezone",
+  "/deletezonepic",
+  "/delete",
+  "/deleteannotation",
+] as const;
 
 interface Usage {
   prompt: number;
@@ -69,9 +93,10 @@ async function getSpecies(fullName: string, env: Env): Promise<string> {
 }
 
 function buildSystemPrompt(rollupJson: string): string {
-  return `You are the PlantyJ garden-journal assistant. The user keeps a private photo journal of plants, animals, and zones at their home in Minneapolis, MN (USDA hardiness zone 4b/5a). The property sits on the northwest corner of a city block with clay/loam soil. The gardeners prioritize native plants, edibles, medicinals, and supporting local ecology. Answer their questions factually from the data below, and when they want to add or change data, suggest copy-pasteable bot commands they can send to this same Telegram chat.
+  const verbList = ALLOWED_VERBS.join(", ");
+  return `You are the PlantyJ garden-journal assistant. The user keeps a private photo journal of plants, animals, and zones at their home in Minneapolis, MN (USDA hardiness zone 4b/5a). The property sits on the northwest corner of a city block with clay/loam soil. The gardeners prioritize native plants, edibles, medicinals, and supporting local ecology. Answer their questions factually from the data below. When they want to add or change data — or your answer naturally suggests changes worth making — call propose_commands with the list, so the user can run /confirm to execute them.
 
-# Bot command reference (the user will copy these verbatim)
+# Bot command reference
 ${HELP_HEADER}
 
 # Garden rollup (precomputed, plant-centric)
@@ -89,13 +114,26 @@ ${rollupJson}
 # Calling get_species
 # To answer questions about taxonomy, native range, or anything from Wikipedia, call get_species with a plant's fullName. Returns nativeRange (often null), description, taxonomy, vernacularNames.
 
+# Calling propose_commands
+# Whenever your answer involves adding or changing data, call propose_commands ONCE with the full list of commands. Each proposal is { command, rationale }.
+# - command: the literal slash command, exactly as the user would type it (no leading whitespace, no trailing newline)
+# - rationale: a short (one-line) explanation grounded in the rollup data
+# After calling propose_commands, your text reply should be a brief summary describing what you're proposing and any caveats — the user will see a numbered list of commands and reply /confirm (all) or /confirm 1 3 (subset) or /cancel. Do NOT also embed the commands inline in your text reply; the numbered list is appended automatically.
+# For pure read-only questions (no changes implied), do not call propose_commands.
+
+# Allowed verbs for propose_commands (anything else is rejected)
+${verbList}
+# /deletezone is intentionally excluded — recommend it in prose if needed and the user will run it manually.
+
 # Behavior rules
-- When asked about coverage gaps (untagged, missing zone pic, etc.), list affected plants and emit one suggested command per plant.
+- When asked about coverage gaps (untagged, missing zone pic, etc.), propose one command per plant via propose_commands.
 - When suggesting a photo caption, use the canonical format:
     shortCode // fullName // commonName // Zone (code) // tags // description
 - For native-range questions, prefer get_species() over guessing. If nativeRange is null, fall back to the species description text.
-- When suggesting /delete, /update, /addtag {seq} etc., always use the seq from the rollup — never invent one.
-- Never claim to have executed a command. You are read-only; the user will copy and send commands themselves.
+- Never invent seq numbers, shortCodes, or zoneCodes — they must come from the rollup.
+- For /update, the field must be one of: shortCode, fullName, commonName, zoneCode, tags, description.
+- Do not propose duplicates or no-ops (e.g. adding a tag that's already present).
+- Never claim to have executed a command. The user runs /confirm to apply proposals.
 - Reply in plain text, no Markdown. Telegram replies are 4096 chars max — keep it tight.`;
 }
 
@@ -135,6 +173,61 @@ const GET_SPECIES_DECLARATION = {
   },
 };
 
+const PROPOSE_COMMANDS_DECLARATION = {
+  name: "propose_commands",
+  description:
+    "Submit a list of bot commands for the user to confirm. Call this whenever your answer involves changes to data. Call exactly once per turn; the user will see a numbered list and run /confirm.",
+  parameters: {
+    type: Type.OBJECT,
+    properties: {
+      commands: {
+        type: Type.ARRAY,
+        description: "Ordered list of proposals. Empty array means no actions.",
+        items: {
+          type: Type.OBJECT,
+          properties: {
+            command: {
+              type: Type.STRING,
+              description: "The literal slash command, e.g. '/addtag 42 native'",
+            },
+            rationale: {
+              type: Type.STRING,
+              description: "One-line reason grounded in the rollup data.",
+            },
+          },
+          required: ["command", "rationale"],
+        },
+      },
+    },
+    required: ["commands"],
+  },
+};
+
+const TOOL_DECLARATIONS = [GET_SPECIES_DECLARATION, PROPOSE_COMMANDS_DECLARATION];
+
+function isAllowedVerb(command: string): boolean {
+  const verb = command.trim().split(/\s+/)[0];
+  return (ALLOWED_VERBS as readonly string[]).includes(verb);
+}
+
+function sanitizeProposals(raw: unknown): ProposedCommand[] {
+  if (!Array.isArray(raw)) return [];
+  const out: ProposedCommand[] = [];
+  const seen = new Set<string>();
+  for (const item of raw) {
+    if (!item || typeof item !== "object") continue;
+    const r = item as { command?: unknown; rationale?: unknown };
+    const command = typeof r.command === "string" ? r.command.trim() : "";
+    const rationale = typeof r.rationale === "string" ? r.rationale.trim() : "";
+    if (!command || !command.startsWith("/")) continue;
+    if (!isAllowedVerb(command)) continue;
+    if (seen.has(command)) continue;
+    seen.add(command);
+    out.push({ command, rationale: rationale || "(no rationale)" });
+  }
+  return out;
+}
+
 // Returns a valid Gemini cache name from KV, or creates+stores a new one.
 // Falls back to undefined on any error so callers can proceed without caching.
 async function getOrCreateCache(
@@ -147,7 +240,8 @@ async function getOrCreateCache(
   if (!env.ASK_CACHE) return { cacheName: undefined, cacheCreationTokens: 0 };
   try {
     const checksum = await computeChecksum(rollupJson);
-    const kvKey = `cache:${model}`;
+    // v2: cache contents include propose_commands tool — old v1 caches lack it.
+    const kvKey = `cache:v2:${model}`;
     const raw = await env.ASK_CACHE.get(kvKey);
 
     if (raw) {
@@ -163,7 +257,7 @@ async function getOrCreateCache(
       model: model.startsWith("models/") ? model : `models/${model}`,
       config: {
         systemInstruction: systemPrompt,
-        tools: [{ functionDeclarations: [GET_SPECIES_DECLARATION] }],
+        tools: [{ functionDeclarations: TOOL_DECLARATIONS }],
         ttl: `${CACHE_TTL_SECONDS}s`,
       },
     });
@@ -191,7 +285,7 @@ export async function answerQuestion(
   modelOverride?: string,
   priorHistory?: Content[],
   style?: string
-): Promise<{ reply: string; thread: Thread }> {
+): Promise<AnswerResult> {
   const rollupJson = await loadRollup(env);
   const model = modelOverride ?? env.LLM_MODEL ?? MODEL_ALIASES["2"];
   const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
@@ -202,13 +296,14 @@ export async function answerQuestion(
   // When using a cache the system instruction and tools are already stored server-side.
   const baseConfig = cacheName
     ? { cachedContent: cacheName }
-    : { systemInstruction: systemPrompt, tools: [{ functionDeclarations: [GET_SPECIES_DECLARATION] }] };
+    : { systemInstruction: systemPrompt, tools: [{ functionDeclarations: TOOL_DECLARATIONS }] };
 
   // Style is injected per-turn so it doesn't affect the shared model cache.
   const questionText = style ? `[Respond in this style: ${style}]\n\n${question}` : question;
   const contents: Content[] = [...(priorHistory ?? []), { role: "user", parts: [{ text: questionText }] }];
 
   const totalUsage: Usage = { prompt: 0, cached: 0, output: 0, cacheCreation: cacheCreationTokens };
+  let proposals: ProposedCommand[] = [];
 
   for (let i = 0; i <= MAX_TOOL_ITERATIONS; i++) {
     let response;
@@ -218,11 +313,11 @@ export async function answerQuestion(
       // If Gemini evicted the cache early, clear the stale KV entry and retry uncached.
       // The next request will recreate the cache.
       if (cacheName && String(err).includes("404")) {
-        if (env.ASK_CACHE) await env.ASK_CACHE.delete(`cache:${model}`).catch(() => {});
+        if (env.ASK_CACHE) await env.ASK_CACHE.delete(`cache:v2:${model}`).catch(() => {});
         response = await client.models.generateContent({
           model,
           contents,
-          config: { systemInstruction: systemPrompt, tools: [{ functionDeclarations: [GET_SPECIES_DECLARATION] }] },
+          config: { systemInstruction: systemPrompt, tools: [{ functionDeclarations: TOOL_DECLARATIONS }] },
         });
       } else {
         throw err;
@@ -239,6 +334,15 @@ export async function answerQuestion(
     const parts: Part[] = response.candidates?.[0]?.content?.parts ?? [];
     const calls = parts.filter((p) => p.functionCall);
 
+    // Capture proposals from this turn (last call wins if the model misbehaves
+    // and emits more than one).
+    for (const c of calls) {
+      if (c.functionCall?.name === "propose_commands") {
+        const args = (c.functionCall.args ?? {}) as { commands?: unknown };
+        proposals = sanitizeProposals(args.commands);
+      }
+    }
+
     if (calls.length === 0 || i === MAX_TOOL_ITERATIONS) {
       contents.push({ role: "model", parts });
       const text = parts
@@ -249,19 +353,26 @@ export async function answerQuestion(
       const costLine = formatCost(model, totalUsage);
       const body = truncateForTelegram(text || "No response.");
       const reply = costLine ? `${body}\n${costLine}` : body;
-      return { reply, thread: { model, history: contents } };
+      return { reply, thread: { model, history: contents }, proposals };
     }
 
     contents.push({ role: "model", parts });
 
+    // Answer each tool call. propose_commands is acknowledged so the model can
+    // follow up with its summary text; get_species fetches the data.
     const results: Part[] = await Promise.all(
       calls.map(async (p) => {
         const name = p.functionCall?.name ?? "";
         const args = p.functionCall?.args ?? {};
-        const result =
-          name === "get_species"
-            ? await getSpecies(args.fullName as string, env)
-            : `Unknown tool: ${name}`;
+        let result: string;
+        if (name === "get_species") {
+          result = await getSpecies(args.fullName as string, env);
+        } else if (name === "propose_commands") {
+          const count = sanitizeProposals((args as { commands?: unknown }).commands).length;
+          result = `Recorded ${count} proposal(s). Reply with a short plain-text summary for the user (no further tool calls).`;
+        } else {
+          result = `Unknown tool: ${name}`;
+        }
         return { functionResponse: { name, response: { result } } };
       })
     );
@@ -269,5 +380,9 @@ export async function answerQuestion(
     contents.push({ role: "user", parts: results });
   }
 
-  return { reply: "Could not generate a response.", thread: { model, history: contents } };
+  return {
+    reply: "Could not generate a response.",
+    thread: { model, history: contents },
+    proposals,
+  };
 }
