@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "V virg",
+      "fullName": "Vanessa virginiensis",
+      "commonName": "American Painted Lady Butterfly",
+      "variety": null
+    },
+    {
       "shortCode": "P cus",
       "fullName": "Plagiomnium cuspidatum",
       "commonName": "Tooth Moss",
