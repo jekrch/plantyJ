@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P qui",
+      "fullName": "Panax quinquefolius",
+      "commonName": "American Ginseng",
+      "variety": null
+    },
+    {
       "shortCode": "V virg",
       "fullName": "Vanessa virginiensis",
       "commonName": "American Painted Lady Butterfly",
