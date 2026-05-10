@@ -494,5 +494,17 @@
   "Polypodiopsida": {
     "description": "The ferns are a group of vascular plants that reproduce via spores and have neither seeds nor flowers. They differ from non-vascular plants by having specialized transport bundles that conduct water and nutrients from and to the roots, as well as life cycles in which the branched sporophyte is the dominant phase.",
     "url": "https://en.wikipedia.org/wiki/Fern"
+  },
+  "Aristolochiaceae": {
+    "description": "The Aristolochiaceae are a family, the birthwort family, of flowering plants with eight genera and about 400 known species belonging to the order Piperales. The type genus is Aristolochia L.",
+    "url": "https://en.wikipedia.org/wiki/Aristolochiaceae"
+  },
+  "Asarum": {
+    "description": "Asarum is a genus of plants in the birthwort family Aristolochiaceae, commonly known as wild ginger.",
+    "url": "https://en.wikipedia.org/wiki/Asarum"
+  },
+  "Piperales": {
+    "description": "Piperales is an order of flowering plants. It necessarily includes the family Piperaceae but other taxa have been included or disincluded variously over time. Well-known plants which may be included in this order include black pepper, kava, the many Peperomias, pepper elder, lizard's tail, birthwort, and wild ginger. The two perianthless families Piperaceae and Saururaceae are mainly herbaceous plants possessing highly reduced flowers.",
+    "url": "https://en.wikipedia.org/wiki/Piperales"
   }
 }

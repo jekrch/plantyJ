@@ -24,7 +24,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-10T19:49:51.345Z",
       "width": 768,
-      "height": 1024
+      "height": 1024,
+      "bioclipSpeciesId": "Asarum canadense",
+      "bioclipCommonName": "Canada wild ginger",
+      "bioclipScore": 0.9378
     },
     {
       "seq": 63,
@@ -40,7 +43,8 @@
       "height": 1024,
       "bioclipSpeciesId": "Corylus avellana",
       "bioclipCommonName": "Hazel",
-      "bioclipScore": 0.4181
+      "bioclipScore": 0.4181,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Corylus_avellana"
     },
     {
       "seq": 62,
@@ -56,7 +60,8 @@
       "height": 800,
       "bioclipSpeciesId": "Chirosia betuleti",
       "bioclipCommonName": "",
-      "bioclipScore": 0.0206
+      "bioclipScore": 0.0206,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Chirosia_betuleti"
     },
     {
       "seq": 61,
