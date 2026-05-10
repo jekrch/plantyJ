@@ -24,7 +24,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-10T19:51:35.819Z",
       "width": 600,
-      "height": 800
+      "height": 800,
+      "bioclipSpeciesId": "Syringa vulgaris",
+      "bioclipCommonName": "Common lilac",
+      "bioclipScore": 0.7682
     },
     {
       "seq": 64,

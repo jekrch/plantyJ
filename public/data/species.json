@@ -3233,6 +3233,38 @@
       ],
       "observationsCount": 58175
     },
+    "syringa-vulgaris-alba": {
+      "id": "syringa-vulgaris-alba",
+      "fullName": "Syringa vulgaris alba",
+      "commonName": "Common White Lilac",
+      "description": "",
+      "vernacularNames": [],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Lamiales",
+        "family": "Oleaceae",
+        "genus": "Syringa",
+        "species": "Syringa vulgaris",
+        "canonicalName": "Syringa vulgaris alba"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/7737992"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ]
+    },
     "teucrium-canadense": {
       "id": "teucrium-canadense",
       "fullName": "Teucrium canadense",
