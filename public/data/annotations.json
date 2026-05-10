@@ -466,6 +466,15 @@
         "native"
       ],
       "description": null
+    },
+    {
+      "shortCode": "P qui",
+      "zoneCode": null,
+      "tags": [
+        "native",
+        "medicinal"
+      ],
+      "description": null
     }
   ]
 }
