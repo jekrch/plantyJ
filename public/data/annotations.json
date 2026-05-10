@@ -450,6 +450,14 @@
         "edible"
       ],
       "description": null
+    },
+    {
+      "shortCode": "P cus",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
     }
   ]
 }
