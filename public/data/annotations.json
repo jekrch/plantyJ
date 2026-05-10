@@ -416,6 +416,15 @@
         "medicinal"
       ],
       "description": null
+    },
+    {
+      "shortCode": "M str",
+      "zoneCode": null,
+      "tags": [
+        "native",
+        "edible"
+      ],
+      "description": null
     }
   ]
 }
