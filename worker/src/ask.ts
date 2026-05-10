@@ -5,7 +5,7 @@ import { HELP_HEADER } from "./help";
 
 const MAX_TOOL_ITERATIONS = 3;
 const TELEGRAM_MAX_LEN = 4096;
-const CACHE_TTL_SECONDS = 30 * 24 * 3600; // 30 days; recreated only when rollup checksum changes
+const CACHE_TTL_SECONDS = 3600; // 1 hour; recreated only when rollup checksum changes
 // /ask  = /ask3, /ask1 = lite (cheap), /ask3 = pro preview (best)
 export const MODEL_ALIASES: Record<string, string> = {
   "1": "gemini-3.1-flash-lite-preview",

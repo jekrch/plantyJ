@@ -110,7 +110,7 @@ export default function ViewModeControl({
 
   const segments: { key: ViewMode; label: string; Icon: typeof LayoutGrid }[] =
     [
-      { key: "gallery", label: "Gallery", Icon: LayoutGrid },
+      { key: "gallery", label: "Wall", Icon: LayoutGrid },
       { key: "plant", label: "Plant", Icon: Sprout },
       { key: "zone", label: "Zone", Icon: MapIcon },
       { key: "tree", label: "Tree", Icon: TreeDeciduous },
