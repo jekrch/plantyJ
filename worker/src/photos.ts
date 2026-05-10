@@ -1,6 +1,7 @@
 import type { Env, PicEntry, PlantRecord, TelegramMessage, TelegramPhotoSize, Zone, ZonePicEntry } from "./types";
 import { downloadFile, type Replier } from "./telegram";
 import { parseCaption, resolveFields, UNIDENTIFIED_CODE, UNIDENTIFIED_PREFIX } from "./caption";
+import { assertValidCode } from "./validation";
 import {
   appendPic,
   appendZonePic,
@@ -197,6 +198,7 @@ export async function handlePhotoMessage(
     const caption = message.caption.trim();
     const zonePicMatch = caption.match(/^\/zonepic\s+(\S+)(?:\s*\/\/\s*([\s\S]+))?$/);
     if (zonePicMatch) {
+      assertValidCode("zoneCode", zonePicMatch[1]);
       await handleZonePic(zonePicMatch[1], zonePicMatch[2]?.trim() || null, message, env, reply);
     } else {
       await handlePlantPic(message, env, reply);

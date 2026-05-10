@@ -9,6 +9,7 @@ import {
   clearAnalyzeRun,
 } from "./analyze";
 import { enqueueJob } from "./jobs";
+import { assertValidCode } from "./validation";
 import {
   acceptBioclip,
   addAnnotationTag,
@@ -346,6 +347,7 @@ async function handleZonesList(env: Env, reply: Replier): Promise<void> {
 async function handleAddZone(text: string, env: Env, reply: Replier): Promise<void> {
   const m = text.match(/^\/addzone\s+(\S+)(?:\s+([\s\S]+))?$/)!;
   const code = m[1];
+  assertValidCode("zoneCode", code);
   const name = m[2]?.trim() || null;
   const zone = await upsertZone(env, code, name);
   await reply(`Saved zone: ${zone.code}${zone.name ? ` — ${zone.name}` : ""}`);
@@ -354,6 +356,7 @@ async function handleAddZone(text: string, env: Env, reply: Replier): Promise<vo
 async function handleRenameZone(text: string, env: Env, reply: Replier): Promise<void> {
   const m = text.match(/^\/renamezone\s+(\S+)\s+([\s\S]+)$/)!;
   const code = m[1];
+  assertValidCode("zoneCode", code);
   const name = m[2].trim();
   const zone = await upsertZone(env, code, name || null);
   await reply(`Zone ${zone.code} renamed to "${zone.name}"`);
@@ -367,6 +370,7 @@ async function handleDeleteZonePic(text: string, env: Env, reply: Replier): Prom
 
 async function handleDeleteZone(text: string, env: Env, reply: Replier): Promise<void> {
   const code = text.match(/^\/deletezone\s+(\S+)$/)![1];
+  assertValidCode("zoneCode", code);
   const result = await deleteZone(env, code);
   if (!result.zone) {
     await reply(`No zone found with code "${code}".`);
@@ -388,6 +392,7 @@ async function handleAccept(text: string, env: Env, reply: Replier): Promise<voi
   const m = text.match(/^\/accept\s+(\d+)(?:\s+(\S+))?$/)!;
   const seq = parseInt(m[1], 10);
   const targetShortCode = m[2] || null;
+  if (targetShortCode) assertValidCode("shortCode", targetShortCode);
   const result = await acceptBioclip(env, seq, targetShortCode);
 
   if (result === "no-pic") {
@@ -421,6 +426,9 @@ async function handleUpdate(text: string, env: Env, reply: Replier): Promise<voi
     await reply(`Invalid field "${field}". Updatable: shortCode, fullName, commonName, zoneCode, tags, description`);
     return;
   }
+  if (field === "shortCode" || field === "zoneCode") {
+    assertValidCode(field, value);
+  }
   const updated = await updateBySeq(env, seq, field, value);
   await reply(
     updated
@@ -452,6 +460,9 @@ async function handleAnnotate(text: string, env: Env, reply: Replier): Promise<v
     return;
   }
 
+  assertValidCode("shortCode", shortCode);
+  if (zoneCode) assertValidCode("zoneCode", zoneCode);
+
   const entry = await upsertAnnotation(env, shortCode, zoneCode, field, value.trim() === "-" ? "" : value);
   const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
   const lines = joinLines([
@@ -477,6 +488,8 @@ async function handleAddTag(text: string, env: Env, reply: Replier): Promise<voi
     );
     return;
   }
+  assertValidCode("shortCode", target.shortCode);
+  if (target.zoneCode) assertValidCode("zoneCode", target.zoneCode);
   const { entry, added } = await addAnnotationTag(env, target.shortCode, target.zoneCode, target.tag);
   const scope = target.zoneCode ? `${target.shortCode} / ${target.zoneCode}` : target.shortCode;
   await reply(
@@ -504,6 +517,8 @@ async function handleRemoveTag(text: string, env: Env, reply: Replier): Promise<
     }
     return;
   }
+  assertValidCode("shortCode", target.shortCode);
+  if (target.zoneCode) assertValidCode("zoneCode", target.zoneCode);
   const { entry, removed } = await removeAnnotationTag(env, target.shortCode, target.zoneCode, target.tag);
   const scope = target.zoneCode ? `${target.shortCode} / ${target.zoneCode}` : target.shortCode;
   if (!removed) {
@@ -518,6 +533,8 @@ async function handleDeleteAnnotation(text: string, env: Env, reply: Replier): P
   const parts = text.slice("/deleteannotation ".length).split("//").map((s) => s.trim());
   const shortCode = parts[0];
   const zoneCode = parts[1] || null;
+  assertValidCode("shortCode", shortCode);
+  if (zoneCode) assertValidCode("zoneCode", zoneCode);
   const removed = await deleteAnnotation(env, shortCode, zoneCode);
   const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
   await reply(removed ? `Deleted annotation for ${scope}.` : `No annotation found for ${scope}.`);

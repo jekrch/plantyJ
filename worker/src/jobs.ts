@@ -154,20 +154,20 @@ export interface JobsTickResult {
 
 export async function processJobsTick(env: Env): Promise<JobsTickResult> {
   if (!env.ASK_CACHE) return { ranTick: false, reason: "no KV" };
-  if (await env.ASK_CACHE.get(LOCK_KV_KEY)) return { ranTick: false, reason: "locked" };
 
-  // Acquire lock before reading the queue so a concurrent tick that lost the
-  // lock-check race still bails before doing real work most of the time.
+  // Check the queue before touching the lock — on Free-tier KV (1k writes +
+  // 1k deletes/day) the per-minute lock churn alone blew the daily budget.
+  const queueRaw = await env.ASK_CACHE.get(QUEUE_KV_KEY);
+  if (!queueRaw) return { ranTick: false, reason: "no queue" };
+  const ids: string[] = JSON.parse(queueRaw);
+  if (ids.length === 0) return { ranTick: false, reason: "queue empty" };
+
+  if (await env.ASK_CACHE.get(LOCK_KV_KEY)) return { ranTick: false, reason: "locked" };
   await env.ASK_CACHE.put(LOCK_KV_KEY, new Date().toISOString(), {
     expirationTtl: LOCK_TTL,
   });
 
   try {
-    const queueRaw = await env.ASK_CACHE.get(QUEUE_KV_KEY);
-    if (!queueRaw) return { ranTick: false, reason: "no queue" };
-    const ids: string[] = JSON.parse(queueRaw);
-    if (ids.length === 0) return { ranTick: false, reason: "queue empty" };
-
     const batch = ids.slice(0, JOBS_PER_TICK);
     const removed = new Set<string>();
     let succeeded = 0;

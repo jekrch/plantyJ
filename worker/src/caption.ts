@@ -1,4 +1,5 @@
 import type { ParsedCaption, ParsedTags, ParsedZoneRef, PicEntry, PlantRecord, Zone } from "./types";
+import { assertValidCode } from "./validation";
 
 export const UNIDENTIFIED_CODE = "id";
 export const UNIDENTIFIED_PREFIX = "unid-";
@@ -27,6 +28,7 @@ export function parseCaption(caption: string): ParsedCaption {
   if (!shortCode) {
     throw new Error("Caption must start with a shortCode.");
   }
+  assertValidCode("shortCode", shortCode);
 
   if (shortCode.toLowerCase() === UNIDENTIFIED_CODE) {
     const zoneRaw = parts[1] || null;
@@ -77,8 +79,11 @@ function parseZoneRef(segment: string): ParsedZoneRef {
   const m = trimmed.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
   if (m) {
     const name = m[1].trim();
-    return { code: m[2].trim(), name: name || null };
+    const code = m[2].trim();
+    assertValidCode("zoneCode", code);
+    return { code, name: name || null };
   }
+  assertValidCode("zoneCode", trimmed);
   return { code: trimmed, name: null };
 }
 

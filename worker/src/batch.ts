@@ -5,6 +5,7 @@ import {
   isUpdatableField,
   type BatchState,
 } from "./github";
+import { assertValidCode } from "./validation";
 
 // In-memory mirror of executeCommand. Each mutator operates on a shared
 // BatchState (loaded once per chunk) and marks which JSON files got dirty.
@@ -53,6 +54,7 @@ function applyCommand(state: BatchState, text: string): ExecResult {
   const addZoneMatch = trimmed.match(/^\/addzone\s+(\S+)(?:\s+([\s\S]+))?$/);
   if (addZoneMatch) {
     const code = addZoneMatch[1];
+    assertValidCode("zoneCode", code);
     const name = addZoneMatch[2]?.trim() || null;
     const idx = state.gallery.zones.findIndex((z) => z.code === code);
     let zone: Zone;
@@ -71,6 +73,7 @@ function applyCommand(state: BatchState, text: string): ExecResult {
   const renameZoneMatch = trimmed.match(/^\/renamezone\s+(\S+)\s+([\s\S]+)$/);
   if (renameZoneMatch) {
     const code = renameZoneMatch[1];
+    assertValidCode("zoneCode", code);
     const name = renameZoneMatch[2].trim() || null;
     const idx = state.gallery.zones.findIndex((z) => z.code === code);
     let zone: Zone;
@@ -120,6 +123,7 @@ function applyCommand(state: BatchState, text: string): ExecResult {
   if (acceptMatch) {
     const seq = parseInt(acceptMatch[1], 10);
     const targetShortCode = acceptMatch[2] || null;
+    if (targetShortCode) assertValidCode("shortCode", targetShortCode);
     const pic = state.gallery.pics.find((p) => p.seq === seq);
     if (!pic) return fail(`No pic found with ID ${seq}.`);
 
@@ -192,6 +196,9 @@ function applyCommand(state: BatchState, text: string): ExecResult {
       return fail(
         `Invalid field "${field}". Updatable: shortCode, fullName, commonName, zoneCode, tags, description`
       );
+    }
+    if (field === "shortCode" || field === "zoneCode") {
+      assertValidCode(field, value);
     }
     const pic = state.gallery.pics.find((p) => p.seq === seq);
     if (!pic) return fail(`No pic found with ID ${seq}.`);
@@ -290,6 +297,8 @@ function applyCommand(state: BatchState, text: string): ExecResult {
         `Invalid /annotate format. Use:\n  /annotate shortCode // tags // value\n  /annotate shortCode // zoneCode // tags // value`
       );
     }
+    assertValidCode("shortCode", shortCode);
+    if (zoneCode) assertValidCode("zoneCode", zoneCode);
     const cleared = value.trim() === "-";
     const { entry } = findOrCreateAnnotation(state, shortCode, zoneCode);
     if (field === "tags") {
@@ -328,6 +337,7 @@ function applyCommand(state: BatchState, text: string): ExecResult {
         return ok(`Added tag "${tag}" to pic #${seq} (${pic.shortCode}). Tags: ${pic.tags.join(", ")}`);
       }
       // plant-level annotation tag
+      assertValidCode("shortCode", first);
       const { entry } = findOrCreateAnnotation(state, first, null);
       if (entry.tags.includes(tag)) {
         return fail(`Tag "${tag}" already present on ${first}.`);
@@ -339,6 +349,7 @@ function applyCommand(state: BatchState, text: string): ExecResult {
 
     if (parts.length === 2) {
       const [shortCode, tag] = parts;
+      assertValidCode("shortCode", shortCode);
       const { entry } = findOrCreateAnnotation(state, shortCode, null);
       if (entry.tags.includes(tag)) {
         return fail(`Tag "${tag}" already present on ${shortCode}.`);
@@ -350,6 +361,8 @@ function applyCommand(state: BatchState, text: string): ExecResult {
 
     if (parts.length === 3) {
       const [shortCode, zoneCode, tag] = parts;
+      assertValidCode("shortCode", shortCode);
+      assertValidCode("zoneCode", zoneCode);
       const { entry } = findOrCreateAnnotation(state, shortCode, zoneCode);
       const scope = `${shortCode} / ${zoneCode}`;
       if (entry.tags.includes(tag)) {
@@ -371,6 +384,8 @@ function applyCommand(state: BatchState, text: string): ExecResult {
       zoneCode: string | null,
       tag: string
     ): ExecResult => {
+      assertValidCode("shortCode", shortCode);
+      if (zoneCode) assertValidCode("zoneCode", zoneCode);
       const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
       const idx = state.annotations.findIndex(
         (a) => a.shortCode === shortCode && a.zoneCode === zoneCode
@@ -424,6 +439,8 @@ function applyCommand(state: BatchState, text: string): ExecResult {
     const parts = trimmed.slice("/deleteannotation ".length).split("//").map((s) => s.trim());
     const shortCode = parts[0];
     const zoneCode = parts[1] || null;
+    assertValidCode("shortCode", shortCode);
+    if (zoneCode) assertValidCode("zoneCode", zoneCode);
     const idx = state.annotations.findIndex(
       (a) => a.shortCode === shortCode && a.zoneCode === zoneCode
     );
