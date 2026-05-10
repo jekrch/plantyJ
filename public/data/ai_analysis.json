@@ -291,6 +291,18 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "M str",
+      "zoneCode": "sy",
+      "verdict": "GOOD",
+      "analysis": "Native to the Twin Cities region (USDA zones 4b/5a), Matteuccia struthiopteris (Ostrich Fern) is a superb addition to the side yard. It thrives in the dappled shade created by the zone's fruit tree canopy—including the Apple, Apricot, and Asian Pear—and pairs perfectly with fellow shade-loving natives like Wild Ginger (Asarum canadense). Ostrich Fern spreads via underground rhizomes to form dense, weed-suppressing colonies that offer excellent ground cover and erosion control. While the plant readily tolerates the heavy clay-loam soils typical of the area, the owners will need to monitor summer moisture; without consistent watering, the large fronds can scorch and trigger early dormancy. Its spring fiddleheads are a celebrated foraged delicacy, neatly satisfying the owners' goal of cultivating edible, native landscapes.\n\nEcologically, the Ostrich Fern provides exceptional structural habitat. Its tall, umbrella-like fronds offer vital cooling microclimates and shelter for amphibians, small mammals, and ground-foraging birds. Although ferns do not produce nectar for pollinators, this species serves as a valuable larval host plant for several native moth species. Additionally, its high deer and rabbit resistance means it can provide a protective, unpalatable buffer around more heavily browsed plants in the understory. Overall, it forms a resilient, highly productive foundation for the garden's woodland edge.",
+      "references": [
+        "https://plantfinder.nativeplanttrust.org/plant/Matteuccia-struthiopteris",
+        "https://newmoonnursery.com/nursery-plants/matteuccia-struthiopteris/",
+        "https://www.tennesseenaturescapes.com/all-plants/p/matteuccia-struthiopteris-ostrich-fern"
+      ],
+      "created": "2026-05-10T20:07:09.084Z"
+    },
+    {
       "shortCode": "m vir",
       "zoneCode": "mpg",
       "verdict": "GOOD",
@@ -507,6 +519,19 @@
       "analysis": "Syringa vulgaris (Common Lilac) is a classic, non-native shrub that offers intense spring fragrance and is a nostalgic favorite, but it provides minimal ecological value compared to native species. Its flowers attract some generalist butterflies, but it hosts almost no native caterpillars, and its aggressive suckering habit can crowd out desirable understory plants. Furthermore, it is increasingly susceptible to lilac leaf spot fungi in humid Midwestern summers, making it a high-footprint, low-reward plant ecologically.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "S vul alb",
+      "zoneCode": "mpg",
+      "verdict": "MIXED",
+      "analysis": "The ecological niche for the Common White Lilac (Syringa vulgaris alba) in this native-prioritizing garden is mixed. While this non-native shrub from southeastern Europe is extremely hardy in USDA zones 4b/5a and easily tolerates the heavy clay/loam soils of the Minneapolis area, it runs contrary to the owners' goal of supporting local ecology. Common lilac is not currently listed as a severe invasive threat in Minnesota—unlike the related Japanese Tree Lilac—but it does occasionally escape cultivation and spread via root suckers. Because it occupies substantial vertical and root space in the maple zone without providing the rich ecological benefits of native companion shrubs like the nearby elderberry, its long-term presence is a missed opportunity for a fully native-focused landscape.\n\nIn terms of wildlife support, the lilac offers only moderate, transient benefits. Its heavily scented spring blooms provide an early nectar source for generalist pollinators such as bees, swallowtail butterflies, and hummingbirds. However, because it is an introduced species, it does not serve as a host plant for native North American Lepidoptera caterpillars. Furthermore, the shrub provides virtually no food value for urban wildlife; its seeds are largely ignored by local birds like the resident Goldfinches and Cardinals. Its dense, multi-stemmed structure does offer excellent nesting habitat and protective cover for small mammals and songbirds, but overall, it functions more as a sterile ornamental than a productive ecological anchor.",
+      "references": [
+        "https://extension.umn.edu/lawns-and-landscapes/trees-and-shrubs-pollinators",
+        "https://www.misin.msu.edu/facts/67",
+        "http://www.natronacountyconservationdistrict.com/images/L_Deciduous.pdf",
+        "https://www.ecolandscaping.org/04/designing-ecological-landscapes/native-plants/notable-natives-large-shrubs-and-small-trees/"
+      ],
+      "created": "2026-05-10T20:07:09.084Z"
     },
     {
       "shortCode": "T can",
