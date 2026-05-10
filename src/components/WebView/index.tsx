@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { LoaderCircle, Maximize2, ZoomIn, ZoomOut } from "lucide-react";
+import { LoaderCircle, Maximize2, ZoomIn, ZoomOut, Filter } from "lucide-react";
 import type {
   AIAnalysis,
   Plant,
@@ -162,6 +162,7 @@ export default function WebView({
   const [enabledTypes, setEnabledTypes] = useState<Set<string>>(
     () => new Set(relationships.types.map((t) => t.id))
   );
+  const [filtersExpanded, setFiltersExpanded] = useState(false);
 
   useEffect(() => {
     setEnabledTypes(new Set(relationships.types.map((t) => t.id)));
@@ -353,9 +354,23 @@ export default function WebView({
 
   const toggleType = (id: string) => {
     setEnabledTypes((prev) => {
+      // If all are currently selected, isolate the clicked type
+      if (prev.size === relationships.types.length) {
+        return new Set([id]);
+      }
+
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+
+      // If they uncheck the very last filter, reset back to all selected
+      if (next.size === 0) {
+        return new Set(relationships.types.map((t) => t.id));
+      }
+
       return next;
     });
   };
@@ -655,38 +670,65 @@ export default function WebView({
           </div>
         </div>
 
-        {/* Type filter chips */}
+        {/* Type filter chips (Collapsible & High-Tracking) */}
         {relationships.types.length > 0 && (
           <div
-            className="absolute top-3 left-3 flex flex-wrap gap-1.5 max-w-[calc(100%-1.5rem)]"
+            className="absolute top-3 left-3 flex flex-col gap-2 max-w-[calc(100%-1.5rem)]"
             onClick={stop}
             onPointerDown={stop}
             onWheel={stop}
           >
-            {relationships.types.map((t: RelationshipType) => {
-              const active = enabledTypes.has(t.id);
-              const color = colorByType.get(t.id) ?? "var(--color-ink-muted)";
-              return (
-                <button
-                  key={t.id}
-                  type="button"
-                  onClick={() => toggleType(t.id)}
-                  title={t.description}
-                  className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-sm text-[10px] font-mono uppercase tracking-wider transition-colors ${
-                    active
-                      ? "bg-white/8 text-ink"
-                      : "bg-transparent text-ink-faint hover:text-ink-muted"
-                  }`}
-                >
-                  <span
-                    className="inline-block w-2.5"
-                    style={{ background: color, height: "2px", opacity: active ? 1 : 0.4 }}
-                  />
-                  {t.name}
-                  {t.directional ? <span className="text-ink-faint">→</span> : null}
-                </button>
-              );
-            })}
+            {/* Collapsible Trigger */}
+            <button
+              onClick={() => setFiltersExpanded(!filtersExpanded)}
+              className="inline-flex items-center gap-2 px-3 py-1.5 w-max bg-surface/85 backdrop-blur-sm border border-white/10 text-[10px] font-mono uppercase tracking-[0.15em] text-ink-muted hover:text-ink transition-colors rounded-sm"
+            >
+              <Filter size={12} strokeWidth={1.5} />
+              <span>Relationships</span>
+              {enabledTypes.size !== relationships.types.length && (
+                <span className="text-ink">({enabledTypes.size})</span>
+              )}
+            </button>
+
+            {/* Expanded Filter Panel */}
+            {filtersExpanded && (
+              <div className="flex flex-wrap gap-1.5 p-2 bg-surface/85 backdrop-blur-sm border border-white/5 rounded-sm max-w-md">
+                {relationships.types.map((t: RelationshipType) => {
+                  const active = enabledTypes.has(t.id);
+                  const color = colorByType.get(t.id) ?? "var(--color-ink-muted)";
+                  return (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => toggleType(t.id)}
+                      title={t.description}
+                      className={`inline-flex items-center gap-1.5 px-2 py-1 border rounded-sm text-[10px] font-mono uppercase tracking-wider transition-colors ${
+                        active
+                          ? "bg-white/5 border-white/10 text-ink"
+                          : "bg-transparent border-transparent text-ink-faint hover:text-ink-muted hover:bg-white/5"
+                      }`}
+                    >
+                      <span
+                        className="inline-block w-2.5"
+                        style={{ background: color, height: "2px", opacity: active ? 1 : 0.3 }}
+                      />
+                      {t.name}
+                      {t.directional ? <span className="text-ink-faint">→</span> : null}
+                    </button>
+                  );
+                })}
+                
+                {/* Quick Reset Button */}
+                {enabledTypes.size !== relationships.types.length && (
+                  <button
+                    onClick={() => setEnabledTypes(new Set(relationships.types.map((t) => t.id)))}
+                    className="inline-flex items-center gap-1.5 px-2 py-1 ml-1 text-[10px] font-mono uppercase tracking-wider text-ink-faint hover:text-ink transition-colors"
+                  >
+                    Reset
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         )}
 
