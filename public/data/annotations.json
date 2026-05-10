@@ -442,6 +442,14 @@
         "native"
       ],
       "description": null
+    },
+    {
+      "shortCode": "A rus",
+      "zoneCode": null,
+      "tags": [
+        "edible"
+      ],
+      "description": null
     }
   ]
 }
