@@ -484,6 +484,14 @@
         "medicinal"
       ],
       "description": null
+    },
+    {
+      "shortCode": "G mac",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
     }
   ]
 }
