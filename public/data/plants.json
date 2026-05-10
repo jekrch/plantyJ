@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P cus",
+      "fullName": "Plagiomnium cuspidatum",
+      "commonName": "Tooth Moss",
+      "variety": null
+    },
+    {
       "shortCode": "A rus",
       "fullName": "Armoracia rusticana",
       "commonName": "Horseradish",
