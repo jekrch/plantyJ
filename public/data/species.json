@@ -2108,6 +2108,10 @@
         {
           "name": "Wikidata",
           "url": "https://www.wikidata.org/wiki/Q292398"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.125977"
         }
       ],
       "sources": [
