@@ -245,6 +245,66 @@
       ],
       "observationsCount": 323993
     },
+    "actaea-racemosa": {
+      "id": "actaea-racemosa",
+      "fullName": "Actaea racemosa",
+      "commonName": "Black Cohosh",
+      "description": "Actaea racemosa, the black cohosh, black bugbane, black snakeroot, rattle-top, or fairy candle (syn. Cimicifuga racemosa), is a species of flowering plant of the family Ranunculaceae. It is native to eastern North America from the extreme south of Ontario to central Georgia, and west to Missouri and Arkansas. It grows in a variety of woodland habitats, and is often found in small woodland openings.\nThe roots and rhizomes are used in traditional medicine by Native Americans. Its extracts are manufactured as herbal medicines or dietary supplements. Most dietary supplements containing black cohosh are not well-studied or recommended for safe and effective use in treating menopause symptoms or any disease. A thorough literature profiling suggests that Cimicifuga racemosa is more efficient compared to a placebo in treating vasomotor symptoms resulting from natural menopause. The present review clearly encapsulates the use of CR extract for effective and safe therapy to alleviate menopausal symptoms.",
+      "vernacularNames": [
+        "Black Baneberry",
+        "Black Cohosh",
+        "Black Snakeroot",
+        "Juli-Silberkerze",
+        "Park-Wanzenkraut (DE)",
+        "Black Bugbane"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Ranunculales",
+        "family": "Ranunculaceae",
+        "genus": "Actaea",
+        "species": "Actaea racemosa",
+        "canonicalName": "Actaea racemosa"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/6376106"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:316204-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Actaea_racemosa"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/119813"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q682257"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.154359"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 15696
+    },
     "aesculus-flava": {
       "id": "aesculus-flava",
       "fullName": "Aesculus flava",

@@ -546,5 +546,9 @@
   "Panax": {
     "description": "The Panax (ginseng) genus belongs to the Araliaceae (ivy) family. Panax species are characterized by the presence of ginsenosides and gintonin. Panax is one of approximately 60 plant genera with a classical disjunct east Asian and east North American distribution. Furthermore, this disjunct distribution is asymmetric as only two of the ~18 species in genus are native to North America.",
     "url": "https://en.wikipedia.org/wiki/Panax"
+  },
+  "Actaea": {
+    "description": "Actaea may refer to:",
+    "url": "https://en.wikipedia.org/wiki/Actaea"
   }
 }

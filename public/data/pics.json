@@ -11,7 +11,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-10T22:12:15.502Z",
       "width": 768,
-      "height": 1024
+      "height": 1024,
+      "bioclipSpeciesId": "Caulophyllum thalictroides",
+      "bioclipCommonName": "blue cohosh",
+      "bioclipScore": 0.464
     },
     {
       "seq": 69,
