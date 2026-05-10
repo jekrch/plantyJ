@@ -506,5 +506,17 @@
   "Piperales": {
     "description": "Piperales is an order of flowering plants. It necessarily includes the family Piperaceae but other taxa have been included or disincluded variously over time. Well-known plants which may be included in this order include black pepper, kava, the many Peperomias, pepper elder, lizard's tail, birthwort, and wild ginger. The two perianthless families Piperaceae and Saururaceae are mainly herbaceous plants possessing highly reduced flowers.",
     "url": "https://en.wikipedia.org/wiki/Piperales"
+  },
+  "Armoracia": {
+    "description": "Armoracia is a genus of flowering plants of the family Brassicaceae, native to the Palaearctic. Its best known member is horseradish, Armoracia rusticana, which is the type species.",
+    "url": "https://en.wikipedia.org/wiki/Armoracia"
+  },
+  "Brassicaceae": {
+    "description": "Brassicaceae or Cruciferae is a medium-sized and economically important family of flowering plants commonly known as the mustards, the crucifers, or the cabbage family. Most are herbaceous plants, while some are shrubs. The leaves are simple, lack stipules, and appear alternately on stems or in rosettes. The inflorescences are terminal and lack bracts. The flowers have four free sepals, four free alternating petals, two shorter free stamens and four longer free stamens. The fruit has seeds in rows, divided by a thin wall. As of 2023, the family was divided into two subfamilies, Brassicoideae and Aethionemoideae, and as of September\u00a02025, it contained over 350 accepted genera.",
+    "url": "https://en.wikipedia.org/wiki/Brassicaceae"
+  },
+  "Brassicales": {
+    "description": "The Brassicales are an order of flowering plants, belonging to the malvid group of eudicotyledons under the APG IV system. Well-known members of Brassicales include cabbage, cauliflower, Brussels sprout, broccoli, kale, mustard, turnip, bok choy, rapeseed, radish, horseradish, caper, papaya, moringa or drumstick tree, mignonette, nasturtium, and arabidopsis.",
+    "url": "https://en.wikipedia.org/wiki/Brassicales"
   }
 }

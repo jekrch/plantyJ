@@ -11,7 +11,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-10T19:54:51.913Z",
       "width": 768,
-      "height": 1024
+      "height": 1024,
+      "bioclipSpeciesId": "Rumex crispus",
+      "bioclipCommonName": "Curled dock",
+      "bioclipScore": 0.0617
     },
     {
       "seq": 65,
@@ -27,7 +30,8 @@
       "height": 800,
       "bioclipSpeciesId": "Syringa vulgaris",
       "bioclipCommonName": "Common lilac",
-      "bioclipScore": 0.7682
+      "bioclipScore": 0.7682,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Syringa_vulgaris"
     },
     {
       "seq": 64,

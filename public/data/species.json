@@ -423,6 +423,62 @@
       ],
       "observationsCount": 30319
     },
+    "armoracia-rusticana": {
+      "id": "armoracia-rusticana",
+      "fullName": "Armoracia rusticana",
+      "commonName": "Horseradish",
+      "description": "Horseradish (Armoracia rusticana, syn. Cochlearia armoracia) is a perennial plant of the family Brassicaceae (which also includes mustard, wasabi, broccoli, cabbage, and radish). It is a root vegetable, cultivated and used worldwide as a spice and as a condiment. The species is likely native to Southeastern Europe and Western Asia.",
+      "vernacularNames": [
+        "Chr\u011bn",
+        "Garten-Meerrettich (DE)",
+        "Horse-Radish",
+        "Horse-radish (EN)",
+        "Horseradish",
+        "K\u015b\u011bn"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Brassicales",
+        "family": "Brassicaceae",
+        "genus": "Armoracia",
+        "species": "Armoracia rusticana",
+        "canonicalName": "Armoracia rusticana"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3041022"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:278747-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Armoracia_rusticana"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/75566"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.144585"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 13893
+    },
     "asarum-canadense": {
       "id": "asarum-canadense",
       "fullName": "Asarum canadense",
