@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "G mac",
+      "fullName": "Geranium maculatum",
+      "commonName": "Wild Geranium",
+      "variety": null
+    },
+    {
       "shortCode": "A rac",
       "fullName": "Actaea racemosa",
       "commonName": "Black Cohosh",
