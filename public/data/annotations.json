@@ -434,6 +434,14 @@
         "edible"
       ],
       "description": null
+    },
+    {
+      "shortCode": "A can",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
     }
   ]
 }
