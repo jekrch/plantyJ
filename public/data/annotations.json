@@ -69,7 +69,8 @@
       "shortCode": "s can bob",
       "zoneCode": null,
       "tags": [
-        "edible"
+        "edible",
+        "medicinal"
       ],
       "description": null
     },
@@ -77,7 +78,8 @@
       "shortCode": "s can wyl",
       "zoneCode": null,
       "tags": [
-        "edible"
+        "edible",
+        "medicinal"
       ],
       "description": null
     },
@@ -104,7 +106,8 @@
       "zoneCode": null,
       "tags": [
         "edible",
-        "native"
+        "native",
+        "medicinal"
       ],
       "description": null
     },
