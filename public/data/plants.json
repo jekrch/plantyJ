@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "C ame",
+      "fullName": "Corylus americana",
+      "commonName": "American Hazelnut",
+      "variety": null
+    },
+    {
       "shortCode": "M str",
       "fullName": "Matteuccia struthiopteris",
       "commonName": "Ostrich Fern",
