@@ -2,7 +2,7 @@
 [![Deploy frontend to GitHub Pages](https://github.com/jekrch/plantyJ/actions/workflows/deploy-frontend.yml/badge.svg)](https://github.com/jekrch/plantyJ/actions/workflows/deploy-frontend.yml)
 
 
-An agentic garden journal. The whole thing is driven from a Telegram bot: snap a plant with a caption and it lands on the site; ask the bot a question about the collection and it answers from a live rollup of every plant, zone, and photo; describe a change in plain English and it drafts the bot commands to make it, waiting on your `/confirm` before anything writes.
+An agentic garden journal. Everything is driven from a Telegram bot webhook: snap a plant with a caption and it lands on the site; ask the bot a question about the collection and it answers from a live rollup of every plant, zone, and photo; describe a change in plain English and it drafts the bot commands to make it, waiting on your `/confirm` before anything writes.
 
 [plantyj.com](https://plantyj.com)
 
