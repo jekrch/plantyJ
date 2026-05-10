@@ -1,4 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
+import type { Content, Part } from "@google/genai";
 import type { Env } from "./types";
 import { HELP_HEADER } from "./help";
 
@@ -18,9 +19,6 @@ const MODEL_PRICING: Record<string, { i: number; c: number; o: number }> = {
   "gemini-2.5-pro":                { i: 1.25,  c: 0.315, o: 10.00 },
   "gemini-3.1-pro-preview":        { i: 1.25,  c: 0.315, o: 10.00 },
 };
-
-type Part = { text?: string; functionCall?: { name: string; args: Record<string, unknown> }; functionResponse?: unknown };
-type Content = { role: string; parts: Part[] };
 
 export interface Thread {
   model: string;
@@ -258,7 +256,8 @@ export async function answerQuestion(
 
     const results: Part[] = await Promise.all(
       calls.map(async (p) => {
-        const { name, args } = p.functionCall!;
+        const name = p.functionCall?.name ?? "";
+        const args = p.functionCall?.args ?? {};
         const result =
           name === "get_species"
             ? await getSpecies(args.fullName as string, env)

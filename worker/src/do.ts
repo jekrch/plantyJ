@@ -1,4 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
+import type { Content, Part } from "@google/genai";
 import type { Env } from "./types";
 import { HELP_HEADER } from "./help";
 
@@ -8,13 +9,6 @@ const TELEGRAM_MAX_LEN = 4096;
 // /do uses the same model tier as /ask3 — proposing actions benefits from the
 // stronger model since misparses become incorrect commits.
 const DO_MODEL = "gemini-3.1-pro-preview";
-
-type Part = {
-  text?: string;
-  functionCall?: { name: string; args: Record<string, unknown> };
-  functionResponse?: unknown;
-};
-type Content = { role: string; parts: Part[] };
 
 export interface ProposedCommand {
   command: string;
@@ -224,9 +218,10 @@ export async function proposeActions(
 
     const proposeCall = calls.find((p) => p.functionCall?.name === "propose_commands");
     if (proposeCall) {
-      proposals = sanitizeProposals(
-        (proposeCall.functionCall!.args as { commands?: unknown }).commands
-      );
+      const proposeArgs = (proposeCall.functionCall?.args ?? {}) as {
+        commands?: unknown;
+      };
+      proposals = sanitizeProposals(proposeArgs.commands);
       // Tell the model the list was recorded and ask for the summary text.
       contents.push({
         role: "user",
@@ -260,7 +255,8 @@ export async function proposeActions(
     // Otherwise these are get_species (or unknown) calls — answer them and loop.
     const results: Part[] = await Promise.all(
       calls.map(async (p) => {
-        const { name, args } = p.functionCall!;
+        const name = p.functionCall?.name ?? "";
+        const args = p.functionCall?.args ?? {};
         const result =
           name === "get_species"
             ? await getSpecies(args.fullName as string, env)

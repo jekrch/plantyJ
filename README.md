@@ -2,7 +2,7 @@
 [![Deploy frontend to GitHub Pages](https://github.com/jekrch/plantyJ/actions/workflows/deploy-frontend.yml/badge.svg)](https://github.com/jekrch/plantyJ/actions/workflows/deploy-frontend.yml)
 
 
-A private garden journal for my partner and me. Snap a plant, send it to a Telegram group with a caption, and it shows up on the site.
+An agentic garden journal. The whole thing is driven from a Telegram bot: snap a plant with a caption and it lands on the site; ask the bot a question about the collection and it answers from a live rollup of every plant, zone, and photo; describe a change in plain English and it drafts the bot commands to make it, waiting on your `/confirm` before anything writes.
 
 [plantyj.com](https://plantyj.com)
 
@@ -73,6 +73,24 @@ The bot answers from a pre-computed plant rollup and can suggest ready-to-send c
 | `/ask` / `/ask3` / `/resp3` | `gemini-3.1-pro-preview` | Default |
 
 Each reply includes an approximate token count and cost.
+
+### Action agent (`/do`, `/confirm`)
+
+Describe a change in plain English. The bot reads the current plant/zone/photo rollup, may look up species records to disambiguate, and proposes a numbered list of bot commands — then waits.
+
+```
+/do tag every tomato as edible
+/do delete the orphan pics in the maple zone
+/do fix the commonName for tmt-c, it's missing
+```
+
+The agent only proposes existing verbs (`/addtag`, `/removetag`, `/update`, `/delete`, `/addzone`, `/renamezone`, etc.) and never executes anything itself.
+
+- `/confirm` — run every proposal
+- `/confirm 1 3` — run only the listed proposals (space- or comma-separated)
+- `/cancel` — drop the pending list
+
+Pending proposals expire after an hour. Confirmed commands are queued and run in chunks (~25/min) to stay inside Cloudflare and GitHub API limits; a summary is posted when the batch finishes.
 
 ## Image metadata
 
