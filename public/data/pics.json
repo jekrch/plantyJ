@@ -13,7 +13,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-10T22:09:10.822Z",
       "width": 768,
-      "height": 1024
+      "height": 1024,
+      "bioclipSpeciesId": "Panax quinquefolius",
+      "bioclipCommonName": "American ginseng",
+      "bioclipScore": 0.2834
     },
     {
       "seq": 68,

@@ -1895,6 +1895,66 @@
       ],
       "observationsCount": 5267
     },
+    "panax-quinquefolius": {
+      "id": "panax-quinquefolius",
+      "fullName": "Panax quinquefolius",
+      "commonName": "American Ginseng",
+      "description": "American ginseng (Panax quinquefolius) is a species of flowering plant in the ivy family Araliaceae. It is native to eastern North America although its cultivation was successfully introduced to China in 1975. The specific epithet quinquefolius means \"five-leaved\", which refers to the typical number of leaflets per leaf. It is one of a group of taxa known as \"ginseng\".\nThe conservation status of wild American ginseng is globally vulnerable. To control international trade and prevent global extinction of the wild species, the United States Fish and Wildlife Service implements a CITES Export Program that authorizes 19 states and one tribe to export American ginseng from the United States. From 1978 to 2019, the bulk of exports have come from southern Appalachian states, especially Kentucky, West Virginia, and Tennessee.\nAs wild populations declined in the late 19th century, American ginseng became a domesticated crop. It is cultivated primarily in Ontario, British Columbia, Wisconsin, and China.",
+      "vernacularNames": [
+        "Aissihatka",
+        "American Ginseng",
+        "Ginseng",
+        "Heles-hvtke",
+        "Occidental Ginseng",
+        "Sang",
+        "Sheng",
+        "five-leaved ginseng",
+        "redberry",
+        "xi yang shen"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Apiales",
+        "family": "Araliaceae",
+        "genus": "Panax",
+        "species": "Panax quinquefolius",
+        "canonicalName": "Panax quinquefolius"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5372246"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:300467-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Panax_quinquefolius"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/116333"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.130734"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 3933
+    },
     "passer-domesticus": {
       "id": "passer-domesticus",
       "fullName": "Passer domesticus",

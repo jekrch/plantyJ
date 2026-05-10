@@ -538,5 +538,13 @@
   "Plagiomnium": {
     "description": "Plagiomnium is a genus of mosses in the family Mniaceae. It was formerly a part of a more encompassing genus Mnium and in 1968 Finnish bryologist Timo Juhani Koponen justified splitting the genus into a number of smaller genera.",
     "url": "https://en.wikipedia.org/wiki/Plagiomnium"
+  },
+  "Araliaceae": {
+    "description": "The Araliaceae are a family of flowering plants composed of about 43 genera and around 1500 species consisting of primarily woody plants and some herbaceous plants commonly called the ivy or ginseng family. The morphology of Araliaceae varies widely, but it is predominantly distinguishable based on its woody habit, tropical distribution, and the presence of simple umbels.",
+    "url": "https://en.wikipedia.org/wiki/Araliaceae"
+  },
+  "Panax": {
+    "description": "The Panax (ginseng) genus belongs to the Araliaceae (ivy) family. Panax species are characterized by the presence of ginsenosides and gintonin. Panax is one of approximately 60 plant genera with a classical disjunct east Asian and east North American distribution. Furthermore, this disjunct distribution is asymmetric as only two of the ~18 species in genus are native to North America.",
+    "url": "https://en.wikipedia.org/wiki/Panax"
   }
 }
