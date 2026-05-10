@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A rac",
+      "fullName": "Actaea racemosa",
+      "commonName": "Black Cohosh",
+      "variety": null
+    },
+    {
       "shortCode": "P qui",
       "fullName": "Panax quinquefolius",
       "commonName": "American Ginseng",
