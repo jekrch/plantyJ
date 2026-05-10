@@ -244,11 +244,13 @@ async function getOrCreateCache(
     const kvKey = `cache:v2:${model}`;
     const raw = await env.ASK_CACHE.get(kvKey);
 
+    let staleCacheName: string | undefined;
     if (raw) {
       const state: CacheState = JSON.parse(raw);
       if (state.checksum === checksum && state.expiresAt > Date.now()) {
         return { cacheName: state.cacheName, cacheCreationTokens: 0 };
       }
+      staleCacheName = state.cacheName;
     }
 
     // Create a new Gemini context cache with the static parts of the prompt.
@@ -261,6 +263,13 @@ async function getOrCreateCache(
         ttl: `${CACHE_TTL_SECONDS}s`,
       },
     });
+
+    // Replacing an existing cache: explicitly delete the old one so it doesn't
+    // sit unreferenced on Gemini's side until its TTL expires. Best-effort —
+    // a 404 here just means Gemini already evicted it.
+    if (staleCacheName) {
+      await client.caches.delete({ name: staleCacheName }).catch(() => {});
+    }
 
     const state: CacheState = {
       checksum,

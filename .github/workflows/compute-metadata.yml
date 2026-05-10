@@ -91,8 +91,21 @@ jobs:
           git add public/data/pics.json public/data/pic-metadata.json public/data/plants.json public/data/embeddings.json public/data/species.json public/data/taxa.json public/data/rollup.min.json
           if git diff --cached --quiet; then
             echo "No metadata changes to commit."
-          else
-            git commit -m "chore: refresh plant metadata + embeddings"
-            git pull --rebase origin main
-            git push
+            exit 0
           fi
+          git commit -m "chore: refresh plant metadata + embeddings"
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Pushed on attempt $attempt."
+              exit 0
+            fi
+            echo "Push failed on attempt $attempt; rebasing on origin/main with -X theirs (prefer freshly-computed metadata)."
+            git fetch origin main
+            git rebase -X theirs origin/main || {
+              echo "Rebase failed; aborting and retrying."
+              git rebase --abort || true
+              sleep $((attempt * 2))
+            }
+          done
+          echo "Failed to push after 5 attempts." >&2
+          exit 1
