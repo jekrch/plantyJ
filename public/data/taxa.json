@@ -550,5 +550,17 @@
   "Actaea": {
     "description": "Actaea may refer to:",
     "url": "https://en.wikipedia.org/wiki/Actaea"
+  },
+  "Geraniaceae": {
+    "description": "Geraniaceae is a family of flowering plants placed in the order Geraniales. The family name is derived from the genus Geranium. The family includes both the genus Geranium and the garden plants called geraniums, which modern botany classifies as genus Pelargonium, along with other related genera.",
+    "url": "https://en.wikipedia.org/wiki/Geraniaceae"
+  },
+  "Geraniales": {
+    "description": "Geraniales is a small order of flowering plants, included within the rosid subclade of eudicots. The largest family in the order is Geraniaceae with over 800 species. In addition, the order includes the smaller Francoaceae with about 40 species. Most Geraniales are herbaceous, but there are also shrubs and small trees.",
+    "url": "https://en.wikipedia.org/wiki/Geraniales"
+  },
+  "Geranium": {
+    "description": "Geranium is a genus of 422 species of annual, biennial, and perennial plants that are commonly known as geraniums, hardy geraniums, or cranesbills. They are found throughout the temperate regions of the world and the mountains of the tropics, with the greatest diversity in the eastern part of the Mediterranean region.",
+    "url": "https://en.wikipedia.org/wiki/Geranium"
   }
 }

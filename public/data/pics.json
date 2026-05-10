@@ -13,7 +13,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-10T22:17:21.553Z",
       "width": 768,
-      "height": 1024
+      "height": 1024,
+      "bioclipSpeciesId": "Geranium maculatum",
+      "bioclipCommonName": "Spotted geranium",
+      "bioclipScore": 0.9096
     },
     {
       "seq": 70,
@@ -29,7 +32,8 @@
       "height": 1024,
       "bioclipSpeciesId": "Caulophyllum thalictroides",
       "bioclipCommonName": "blue cohosh",
-      "bioclipScore": 0.464
+      "bioclipScore": 0.464,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Caulophyllum_thalictroides"
     },
     {
       "seq": 69,

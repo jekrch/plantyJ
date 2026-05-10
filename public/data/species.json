@@ -1247,6 +1247,60 @@
       ],
       "observationsCount": 175045
     },
+    "geranium-maculatum": {
+      "id": "geranium-maculatum",
+      "fullName": "Geranium maculatum",
+      "commonName": "Wild Geranium",
+      "description": "Geranium maculatum, the wild geranium, spotted geranium, or wood geranium, is a perennial plant native to woodlands in eastern North America, from southern Manitoba and southwestern Quebec south to Alabama and Georgia and west to Oklahoma and South Dakota.",
+      "vernacularNames": [
+        "Spotted Crane's-bill",
+        "Spotted Geranium",
+        "Wild Crane's-bill",
+        "Wild Geranium"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Geraniales",
+        "family": "Geraniaceae",
+        "genus": "Geranium",
+        "species": "Geranium maculatum",
+        "canonicalName": "Geranium maculatum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/7808016"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:376512-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Geranium_maculatum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/47699"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q5549871"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 74528
+    },
     "hamamelis-virginiana": {
       "id": "hamamelis-virginiana",
       "fullName": "Hamamelis virginiana",
