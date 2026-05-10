@@ -60,6 +60,8 @@ interface PositionedEdge {
   toY: number;
   color: string;
   dir: "fwd" | "bwd" | "u";
+  groupIndex: number;
+  groupTotal: number;
 }
 
 // Fruchterman–Reingold force-directed layout. Deterministic given a seed so
@@ -249,7 +251,9 @@ export default function WebView({
         isAnimal: plant?.kind === "animal",
       };
     });
-    const edges: PositionedEdge[] = filteredEdges.map((r) => {
+
+    // First map to base edge structure
+    const rawEdges = filteredEdges.map((r) => {
       const a = positions.get(r.from)!;
       const b = positions.get(r.to)!;
       const dir = effectiveDirection(r, relationships.typeById.get(r.type));
@@ -264,6 +268,27 @@ export default function WebView({
         dir,
       };
     });
+
+    // Group edges by their node pair to calculate bundles for rendering
+    const edgeGroups = new Map<string, typeof rawEdges>();
+    for (const e of rawEdges) {
+      // Sort to group A->B and B->A into the same visual pair
+      const pairId = [e.rel.from, e.rel.to].sort().join("|");
+      if (!edgeGroups.has(pairId)) edgeGroups.set(pairId, []);
+      edgeGroups.get(pairId)!.push(e);
+    }
+
+    const edges: PositionedEdge[] = [];
+    for (const group of edgeGroups.values()) {
+      group.forEach((e, i) => {
+        edges.push({
+          ...e,
+          groupIndex: i,
+          groupTotal: group.length,
+        });
+      });
+    }
+
     return { nodes, edges };
   }, [
     nodeCodes,
@@ -472,24 +497,50 @@ export default function WebView({
 
                 const midX = (x1 + x2) / 2;
                 const midY = (y1 + y2) / 2;
+
+                // 1. Calculate a consistent normal vector relative to the node pair (regardless of dir)
+                const isFromSmaller = e.rel.from < e.rel.to;
+                const normX1 = isFromSmaller ? e.fromX : e.toX;
+                const normY1 = isFromSmaller ? e.fromY : e.toY;
+                const normX2 = isFromSmaller ? e.toX : e.fromX;
+                const normY2 = isFromSmaller ? e.toY : e.fromY;
+
+                const baseDx = normX2 - normX1;
+                const baseDy = normY2 - normY1;
+                const baseLen = Math.max(0.01, Math.hypot(baseDx, baseDy));
+                const nx = -baseDy / baseLen;
+                const ny = baseDx / baseLen;
+
+                // 2. Expand out edges into a bundle using their groupIndex
+                const spread = 24; 
+                const offset = (e.groupIndex - (e.groupTotal - 1) / 2) * spread;
+
+                // To shift the curve's midpoint exactly by 'offset', the control point needs 2x the offset
+                const cx = midX + nx * (offset * 2);
+                const cy = midY + ny * (offset * 2);
+
+                const pathD = `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
+
+                // The text sits right on the curve's midpoint
+                const textMidX = midX + nx * offset;
+                const textMidY = midY + ny * offset;
+
                 let angle = (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI;
                 if (angle > 90) angle -= 180;
                 else if (angle < -90) angle += 180;
 
                 return (
                   <g key={`edge-${e.rel.id}-${i}`}>
-                    <line
-                      x1={x1}
-                      y1={y1}
-                      x2={x2}
-                      y2={y2}
+                    <path
+                      d={pathD}
+                      fill="none"
                       stroke={e.color}
                       strokeOpacity={opacity}
                       strokeWidth={width}
                       markerEnd={directed ? `url(#web-arr-${e.rel.type})` : undefined}
                     />
                     <g
-                      transform={`translate(${midX},${midY}) rotate(${angle})`}
+                      transform={`translate(${textMidX},${textMidY}) rotate(${angle})`}
                       pointerEvents="none"
                     >
                       <text
