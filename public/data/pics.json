@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 71,
+      "id": "G mac-1778451440",
+      "shortCode": "G mac",
+      "zoneCode": "mpg",
+      "tags": [
+        "foliage"
+      ],
+      "description": null,
+      "image": "images/G mac/1778451440.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-05-10T22:17:21.553Z",
+      "width": 768,
+      "height": 1024
+    },
+    {
       "seq": 70,
       "id": "A rac-1778451134",
       "shortCode": "A rac",
