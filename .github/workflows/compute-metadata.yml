@@ -45,9 +45,6 @@ jobs:
       - name: Set up uv
         if: steps.guard.outputs.any_work == 'true'
         uses: astral-sh/setup-uv@v4
-        with:
-          enable-cache: true
-          cache-dependency-glob: "scripts/requirements.txt"
 
       - name: Cache venv
         if: steps.guard.outputs.any_work == 'true'
