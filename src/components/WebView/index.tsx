@@ -64,50 +64,68 @@ interface PositionedEdge {
   groupTotal: number;
 }
 
-// Fruchterman–Reingold force-directed layout. Deterministic given a seed so
-// the graph doesn't reshuffle on every re-render.
+// Organic force-directed layout without artificial bounding box constraints.
 function layoutGraph(
   nodes: string[],
-  edges: Array<[string, string]>,
-  width: number,
-  height: number
-): Map<string, { x: number; y: number }> {
+  edges: Array<[string, string]>
+): { positions: Map<string, { x: number; y: number }>; width: number; height: number } {
   const positions = new Map<string, { x: number; y: number }>();
-  if (nodes.length === 0) return positions;
-  const cx = width / 2;
-  const cy = height / 2;
-  const r0 = Math.min(width, height) * 0.35;
+  if (nodes.length === 0) return { positions, width: 1600, height: 1000 };
+
+  // Initialize in a tight cluster near 0,0
   nodes.forEach((n, i) => {
     const angle = (i / nodes.length) * Math.PI * 2;
-    positions.set(n, {
-      x: cx + Math.cos(angle) * r0,
-      y: cy + Math.sin(angle) * r0,
-    });
+    const r = 200 * Math.random();
+    positions.set(n, { x: Math.cos(angle) * r, y: Math.sin(angle) * r });
   });
-  if (nodes.length === 1) return positions;
 
-  const iterations = 250;
-  const area = width * height;
-  const k = Math.sqrt(area / nodes.length) * 0.6;
-  let temp = Math.min(width, height) / 8;
-  const pad = LEAF_RADIUS + 30;
+  if (nodes.length === 1) {
+    positions.get(nodes[0])!.x = 800;
+    positions.get(nodes[0])!.y = 500;
+    return { positions, width: 1600, height: 1000 };
+  }
+
+  const iterations = 350;
+  const k = 200; // Fixed ideal distance between connected nodes (allows edge text breathing room)
+  let temp = k * 2;
+  const minDistance = LEAF_RADIUS * 4 + 60; // Strict anti-collision padding
+  const gravity = 0.35; // Gentle pull toward origin to keep separate clusters from flying away
 
   for (let it = 0; it < iterations; it++) {
     const disp = new Map<string, { x: number; y: number }>();
     for (const n of nodes) disp.set(n, { x: 0, y: 0 });
 
     for (let i = 0; i < nodes.length; i++) {
+      const a = positions.get(nodes[i])!;
+      const da = disp.get(nodes[i])!;
+
+      // Apply center gravity
+      da.x -= a.x * gravity;
+      da.y -= a.y * gravity;
+
       for (let j = i + 1; j < nodes.length; j++) {
-        const a = positions.get(nodes[i])!;
         const b = positions.get(nodes[j])!;
-        const dx = a.x - b.x;
-        const dy = a.y - b.y;
-        const dist = Math.max(0.01, Math.hypot(dx, dy));
-        const force = (k * k) / dist;
+        const db = disp.get(nodes[j])!;
+        
+        let dx = a.x - b.x;
+        let dy = a.y - b.y;
+        let dist = Math.hypot(dx, dy);
+        
+        if (dist < 0.01) {
+          dx = Math.random() - 0.5;
+          dy = Math.random() - 0.5;
+          dist = Math.hypot(dx, dy);
+        }
+
+        let force = (k * k) / dist;
+        if (dist < minDistance) {
+           // Aggressive repulsion if nodes physically overlap
+           force += Math.pow(minDistance - dist, 2);
+        }
+
         const ux = dx / dist;
         const uy = dy / dist;
-        const da = disp.get(nodes[i])!;
-        const db = disp.get(nodes[j])!;
+        
         da.x += ux * force;
         da.y += uy * force;
         db.x -= ux * force;
@@ -119,12 +137,21 @@ function layoutGraph(
       const a = positions.get(u);
       const b = positions.get(v);
       if (!a || !b) continue;
-      const dx = a.x - b.x;
-      const dy = a.y - b.y;
-      const dist = Math.max(0.01, Math.hypot(dx, dy));
+      
+      let dx = a.x - b.x;
+      let dy = a.y - b.y;
+      let dist = Math.hypot(dx, dy);
+      
+      if (dist < 0.01) {
+        dx = Math.random() - 0.5;
+        dy = Math.random() - 0.5;
+        dist = Math.hypot(dx, dy);
+      }
+
       const force = (dist * dist) / k;
       const ux = dx / dist;
       const uy = dy / dist;
+      
       const da = disp.get(u)!;
       const db = disp.get(v)!;
       da.x -= ux * force;
@@ -133,18 +160,70 @@ function layoutGraph(
       db.y += uy * force;
     }
 
+    // Apply displacement without artificial walls
     for (const n of nodes) {
       const d = disp.get(n)!;
       const dlen = Math.max(0.01, Math.hypot(d.x, d.y));
       const p = positions.get(n)!;
       p.x += (d.x / dlen) * Math.min(dlen, temp);
       p.y += (d.y / dlen) * Math.min(dlen, temp);
-      p.x = Math.max(pad, Math.min(width - pad, p.x));
-      p.y = Math.max(pad, Math.min(height - pad, p.y));
     }
-    temp *= 0.97;
+    temp *= 0.98;
   }
-  return positions;
+
+  // Measure the final organic size of the graph
+  let minX = Infinity, minY = Infinity;
+  let maxX = -Infinity, maxY = -Infinity;
+  positions.forEach(p => {
+    if (p.x < minX) minX = p.x;
+    if (p.y < minY) minY = p.y;
+    if (p.x > maxX) maxX = p.x;
+    if (p.y > maxY) maxY = p.y;
+  });
+
+  if (maxX === minX) maxX += 10;
+  if (maxY === minY) maxY += 10;
+
+  // Find the densest node (the one with the most relationships) to use as our focal point
+  const degrees = new Map<string, number>();
+  nodes.forEach((n) => degrees.set(n, 0));
+  edges.forEach(([u, v]) => {
+    degrees.set(u, (degrees.get(u) || 0) + 1);
+    degrees.set(v, (degrees.get(v) || 0) + 1);
+  });
+
+  let densestNode = nodes[0];
+  let maxDegree = -1;
+  degrees.forEach((deg, n) => {
+    if (deg > maxDegree) {
+      maxDegree = deg;
+      densestNode = n;
+    }
+  });
+
+  // Create a fixed virtual canvas size. By making this smaller than the 
+  // graph's maximum bounding box, the pan/zoom hook will start in a naturally 
+  // zoomed-in state.
+  const width = 1600;
+  const height = 1000;
+
+  // Center the densest cluster in the middle of our view
+  const cx = densestNode && positions.has(densestNode) ? positions.get(densestNode)!.x : (minX + maxX) / 2;
+  const cy = densestNode && positions.has(densestNode) ? positions.get(densestNode)!.y : (minY + maxY) / 2;
+  
+  const targetCx = width / 2;
+  const targetCy = height / 2;
+  
+  // Shift the graph cluster so our focal point centers in our viewport
+  const offsetX = targetCx - cx;
+  const offsetY = targetCy - cy;
+
+  positions.forEach(p => {
+    p.x += offsetX;
+    p.y += offsetY;
+  });
+
+  return { positions, width, height };
 }
 
 export default function WebView({
@@ -220,23 +299,12 @@ export default function WebView({
     };
   }, [relationships.relationships, enabledTypes]);
 
-  // Fixed virtual canvas sized loosely by node count; pan/zoom navigates it.
-  const VIRT_W = useMemo(
-    () => Math.max(1400, Math.ceil(Math.sqrt(Math.max(1, nodeCodes.length)) * 320)),
-    [nodeCodes.length]
-  );
-  const VIRT_H = useMemo(
-    () => Math.max(1000, Math.ceil(Math.sqrt(Math.max(1, nodeCodes.length)) * 240)),
-    [nodeCodes.length]
-  );
-
   const layout = useMemo(() => {
-    const positions = layoutGraph(
+    const { positions, width: layoutWidth, height: layoutHeight } = layoutGraph(
       nodeCodes,
-      filteredEdges.map((r) => [r.from, r.to] as [string, string]),
-      VIRT_W,
-      VIRT_H
+      filteredEdges.map((r) => [r.from, r.to] as [string, string])
     );
+    
     const nodes: PositionedNode[] = nodeCodes.map((code) => {
       const p = positions.get(code)!;
       const lbl = labelByCode.get(code);
@@ -289,12 +357,10 @@ export default function WebView({
       });
     }
 
-    return { nodes, edges };
+    return { nodes, edges, layoutWidth, layoutHeight };
   }, [
     nodeCodes,
     filteredEdges,
-    VIRT_W,
-    VIRT_H,
     labelByCode,
     plantByCode,
     colorByType,
@@ -313,8 +379,8 @@ export default function WebView({
     onPointerMove,
     onPointerUp,
   } = usePanZoom({
-    layoutWidth: VIRT_W,
-    layoutHeight: VIRT_H,
+    layoutWidth: layout.layoutWidth,
+    layoutHeight: layout.layoutHeight,
     dataReady: relationships.loaded && nodeCodes.length > 0,
     minK: 0.1,
     maxK: 4,
@@ -455,14 +521,15 @@ export default function WebView({
           </div>
         ) : (
           <svg
-            width={VIRT_W}
-            height={VIRT_H}
+            width={layout.layoutWidth}
+            height={layout.layoutHeight}
             style={{
               transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.k})`,
               transformOrigin: "0 0",
               display: "block",
               opacity: ready ? 1 : 0,
               transition: "opacity 220ms ease-out",
+              overflow: "visible",
             }}
           >
             <defs>
@@ -517,7 +584,7 @@ export default function WebView({
                 const nx = -baseDy / baseLen;
                 const ny = baseDx / baseLen;
 
-                const spread = 24; 
+                const spread = 40; 
                 const offset = (e.groupIndex - (e.groupTotal - 1) / 2) * spread;
 
                 const cx = midX + nx * (offset * 2);
@@ -555,8 +622,8 @@ export default function WebView({
                         fill={isActive ? "var(--color-ink)" : "var(--color-ink-muted)"}
                         fillOpacity={dim ? 0.2 : isActive ? 1 : 0.85}
                         stroke="var(--color-surface)"
-                        strokeWidth={3}
-                        strokeOpacity={0.85}
+                        strokeWidth={4} 
+                        strokeOpacity={0.9}
                         paintOrder="stroke fill"
                       >
                         {e.typeName}
@@ -603,16 +670,13 @@ export default function WebView({
                       if (panRef.current?.moved) return;
                       
                       if (selectedCode === n.code) {
-                        // Second click: toggle the detail viewer
                         setDetailCode((cur) => (cur === n.code ? null : n.code));
                       } else {
-                        // First click: select the node, keep viewer closed
                         setSelectedCode(n.code);
                         setDetailCode(null);
                       }
                     }}
                   >
-                    {/* Generous hit target */}
                     <circle
                       r={r + 14}
                       fill="transparent"
@@ -732,7 +796,7 @@ export default function WebView({
           </div>
         </div>
 
-        {/* Type filter chips (Collapsible & High-Tracking) */}
+        {/* Type filter chips */}
         {relationships.types.length > 0 && (
           <div
             className="absolute top-3 left-3 flex flex-col gap-2 max-w-[calc(100%-1.5rem)]"
@@ -740,7 +804,6 @@ export default function WebView({
             onPointerDown={stop}
             onWheel={stop}
           >
-            {/* Collapsible Trigger */}
             <button
               onClick={() => setFiltersExpanded(!filtersExpanded)}
               className="inline-flex items-center gap-2 px-3 py-1.5 w-max bg-surface/85 backdrop-blur-sm border border-white/10 text-[10px] font-mono uppercase tracking-[0.15em] text-ink-muted hover:text-ink transition-colors rounded-sm"
@@ -752,7 +815,6 @@ export default function WebView({
               )}
             </button>
 
-            {/* Expanded Filter Panel */}
             {filtersExpanded && (
               <div className="flex flex-wrap gap-1.5 p-2 bg-surface/85 backdrop-blur-sm border border-white/5 rounded-sm max-w-md">
                 {relationships.types.map((t: RelationshipType) => {
@@ -780,7 +842,6 @@ export default function WebView({
                   );
                 })}
                 
-                {/* Quick Reset Button */}
                 {enabledTypes.size !== relationships.types.length && (
                   <button
                     onClick={() => setEnabledTypes(new Set(relationships.types.map((t) => t.id)))}
