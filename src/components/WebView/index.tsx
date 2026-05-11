@@ -384,6 +384,7 @@ export default function WebView({
     dataReady: relationships.loaded && nodeCodes.length > 0,
     minK: 0.1,
     maxK: 4,
+    initialZoom: 0.7,
   });
 
   const [hovered, setHovered] = useState<string | null>(null);

@@ -12,9 +12,11 @@ export interface PanZoomOptions {
   dataReady: boolean;
   minK?: number;
   maxK?: number;
+  // Optional field to explicitly set the starting zoom scale
+  initialZoom?: number;
   // Compute the initial transform once layout + container are measured.
-  // Defaults to a centered fit-to-view.
-  initialTransform?: (cw: number, ch: number, lw: number, lh: number) => Transform;
+  // Defaults to a centered fit-to-view, or uses initialZoom if provided.
+  initialTransform?: (cw: number, ch: number, lw: number, lh: number, zoom?: number) => Transform;
   // Optional resize hook. Receives previous and current container sizes plus
   // the current transform and may return a partial transform to merge in.
   onContainerResize?: (
@@ -28,9 +30,18 @@ function clamp(v: number, lo: number, hi: number): number {
   return Math.min(hi, Math.max(lo, v));
 }
 
-const defaultInitial = (cw: number, ch: number, lw: number, lh: number): Transform => {
+const defaultInitial = (
+  cw: number, 
+  ch: number, 
+  lw: number, 
+  lh: number, 
+  initialZoom?: number
+): Transform => {
   if (!cw || !ch) return { x: 0, y: 0, k: 1 };
-  const k = Math.min(cw / lw, ch / lh, 1);
+  
+  // Use the provided initialZoom, otherwise default to a fit-to-view scale
+  const k = initialZoom !== undefined ? initialZoom : Math.min(cw / lw, ch / lh, 1);
+  
   return {
     x: (cw - lw * k) / 2,
     y: (ch - lh * k) / 2,
@@ -44,6 +55,7 @@ export function usePanZoom({
   dataReady,
   minK = 0.1,
   maxK = 4,
+  initialZoom,
   initialTransform = defaultInitial,
   onContainerResize,
 }: PanZoomOptions) {
@@ -102,9 +114,9 @@ export function usePanZoom({
     const cw = el.clientWidth;
     const ch = el.clientHeight;
     if (!cw || !ch) return false;
-    setTransform(initialTransform(cw, ch, layoutWidth, layoutHeight));
+    setTransform(initialTransform(cw, ch, layoutWidth, layoutHeight, initialZoom));
     return true;
-  }, [initialTransform, layoutWidth, layoutHeight]);
+  }, [initialTransform, layoutWidth, layoutHeight, initialZoom]);
 
   useLayoutEffect(() => {
     if (!dataReady) return;
