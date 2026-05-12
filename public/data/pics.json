@@ -1,22 +1,6 @@
 {
   "pics": [
     {
-      "seq": 74,
-      "id": "V sor pri-1778605663",
-      "shortCode": "V sor pri",
-      "zoneCode": "fy",
-      "tags": [],
-      "description": null,
-      "image": "images/V sor pri/1778605663.jpg",
-      "postedBy": "Jenny",
-      "addedAt": "2026-05-12T17:07:44.518Z",
-      "width": 1024,
-      "height": 768,
-      "bioclipSpeciesId": "Viola sororia",
-      "bioclipCommonName": "Common violet",
-      "bioclipScore": 0.4111
-    },
-    {
       "seq": 73,
       "id": "P ver-1778605631",
       "shortCode": "P ver",
