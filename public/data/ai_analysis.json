@@ -38,6 +38,17 @@
       "created": "2026-05-07T12:06:49.849Z"
     },
     {
+      "shortCode": "A rac",
+      "zoneCode": "hbd",
+      "verdict": "GOOD",
+      "analysis": "Actaea racemosa (Black Cohosh) is an excellent addition to the hydrangea border, thriving alongside Hydrangea arborescens and Corylus americana as a towering vertical accent in partial shade. While technically a near-native species whose historic range begins just southeast of Minnesota, it is fully hardy to Zone 4 and widely embraced in Twin Cities native gardens as a non-invasive, climate-resilient perennial. The plant easily adapts to the property's clay and loam soils, provided it receives consistent moisture, and its deep rhizomes will help stabilize the soil among the larger shrubs. Given the owners' priority for medicinal species, Black Cohosh is a highly prized inclusion, celebrated historically for its anti-inflammatory properties and root-based remedies.\n\nEcologically, the plant brings immense value to the local food web. Its distinctively sweet but slightly fetid late-summer blooms draw in a diverse array of pollinators, including bumblebees, sweat bees, syrphid flies, and beetles. As a vital Lepidoptera resource, it serves as a larval host plant for Azure butterflies, including the locally common Spring Azure. In autumn, the dried seed pods provide a foraging resource and sturdy perches for native songbirds, perfectly complementing the rich nut and structural resources offered by the neighboring hazelnut. Furthermore, the foliage is highly deer and rabbit resistant, ensuring it can establish without succumbing to urban browsing pressure.",
+      "references": [
+        "https://www.prairiemoon.com/actaea-racemosa-black-cohosh",
+        "https://anokamastergardeners.org/plant-of-the-week/black-cohosh"
+      ],
+      "created": "2026-05-12T05:01:08.712Z"
+    },
+    {
       "shortCode": "A rus",
       "zoneCode": "mpg",
       "verdict": "MIXED",
@@ -65,6 +76,18 @@
       "analysis": "Similar to the North Boulevard specimen, Acer saccharinum in the West Boulevard offers excellent early-season ecological benefits, acting as a critical early pollen source for emerging native bees and hosting a variety of Lepidoptera. However, it is an oversized, brittle tree for a boulevard strip, with shallow, moisture-seeking roots that perform well in clay but often destroy urban infrastructure and create a difficult, dry-shade microclimate for other native plants below it.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "A sci",
+      "zoneCode": "wbv",
+      "verdict": "MIXED",
+      "analysis": "Acer saccharinum (Silver Maple) offers outstanding ecological benefits as a Minnesota native, but its placement in a boulevard zone creates significant practical challenges. Ecologically, it is highly valuable: it is one of the earliest trees to bloom in the spring, providing a critical initial source of pollen and nectar for emerging bees and other insects. It serves as a host plant for numerous native moth species, and its abundant winged seeds (samaras) are heavily foraged by urban wildlife, including birds like finches and small mammals like the Gray Squirrel. Mature trees also frequently develop cavities that offer excellent nesting habitats for local fauna.\n\nHowever, cultivating a Silver Maple in the West Boulevard zone is highly problematic from a structural and maintenance perspective. While it easily tolerates the property's clay/loam soils and USDA Zone 4b/5a winters, this fast-growing species is notorious for having weak, brittle wood that is highly susceptible to breaking under the weight of ice, snow, or high winds—a serious liability near streets and pedestrian walkways. Furthermore, it develops an aggressive, shallow root system that is infamous for buckling sidewalks and invading underground sewer lines. Its dense surface roots and massive annual seed drop will also make it difficult to maintain native understory companions, such as the Missouri Evening Primrose (Oenothera macrocarpa) currently sharing the zone. While it strongly supports the owners' ecological priorities, its destructive potential as a street tree makes this specific niche placement risky.",
+      "references": [
+        "https://trees.umn.edu/silver-maple-acer-saccharium",
+        "https://www.minnesotawildflowers.info/tree/silver-maple",
+        "https://www.gardenia.net/plant/acer-saccharinum-silver-maple"
+      ],
+      "created": "2026-05-12T05:01:08.712Z"
     },
     {
       "shortCode": "A scr",
@@ -184,6 +207,19 @@
         "https://www.upr.org/utah-news/2021-03-26/minimizing-the-impact-of-domestic-cats-on-wildlife"
       ],
       "created": "2026-05-09T00:42:07.417Z"
+    },
+    {
+      "shortCode": "G mac",
+      "zoneCode": "mpg",
+      "verdict": "GOOD",
+      "analysis": "Wild Geranium (Geranium maculatum) is an exceptionally valuable native woodland perennial that fits perfectly into the shaded, understory conditions of the maple zone. Highly adaptable to clay and loam soils, it is robust enough to handle the dense shade and intense root competition typical of maples, including the challenging Norway maple present in this area. Its clump-forming, rhizomatous habit makes it an excellent, low-maintenance groundcover that pairs beautifully with the zone's other spring ephemerals like Virginia bluebells, wild ginger, and foamflower. It establishes a cohesive, layered woodland ecology without aggressively overtaking its neighbors, checking all the boxes for a Zone 4b/5a shade garden.\n\nEcologically, this plant is a powerhouse for early-season insects. It provides critical nectar and pollen for a wide variety of native pollinators and is the obligate host plant for the specialized cranesbill miner bee (Andrena distans), which relies entirely on Geranium species to provision its nests. Its foliage provides cover for beneficial invertebrates, and the unique, catapulting seed capsules provide forage for songbirds and small urban mammals like the resident gray squirrels. Naturally deer- and rabbit-resistant, this resilient native plant flawlessly serves the owners' goals of prioritizing local ecology and supporting specialized wildlife in an urban environment.",
+      "references": [
+        "https://www.umass.edu/agriculture-food-environment/resources/pollinators/managing-landscapes-for-pollinators/native-pollinator-plants/wild-geranium-geranium-maculatum",
+        "https://plantfinder.nativeplanttrust.org/plant/Geranium-maculatum",
+        "https://www.gardenia.net/plant/geranium-maculatum",
+        "https://portal.ct.gov/-/media/caes/publications/final_connecticut-specialist-hosts-list.pdf?rev=1b861c3003cd4bf5b56019a3647b65de&hash=D94C70ADA7631F07A24B361FBE8D82A0"
+      ],
+      "created": "2026-05-12T05:01:08.712Z"
     },
     {
       "shortCode": "h acu",
@@ -323,6 +359,18 @@
       "analysis": "Pyrus pyrifolia 'Peggy Pear' (Asian Pear) provides excellent edible yields for the owners but lacks the deep evolutionary ties to native insects found in indigenous trees. It does offer early spring blossoms that attract native bees and syrphid flies, contributing to the early-season pollinator food web. In a zone 4b/5a side yard, the dwarf rootstock is practical for space management, though the tree requires ongoing maintenance and monitoring for diseases like fire blight.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "P qui",
+      "zoneCode": "mpg",
+      "verdict": "MIXED",
+      "analysis": "American Ginseng (Panax quinquefolius) is a highly prized native woodland herb with immense cultural and medicinal value, aligning perfectly with the owners' priorities. In a healthy Minnesota forest ecosystem, its inconspicuous flowers are pollinated by generalist halictid bees and syrphid flies, while its bright red, late-summer berries rely on woodland birds (especially thrushes) and small mammals for seed dispersal. Given its rarity in the wild due to centuries of overharvesting and severe deer browsing, cultivating it in a protected urban shade garden is a commendable conservation effort. It is thoroughly cold-hardy for Zone 4b/5a and generally thrives in the humus-rich, well-drained loamy soils typical of native deciduous forests.\n\nHowever, its specific placement in the \"mpg\" zone introduces severe microclimate challenges. American ginseng relies on vesicular-arbuscular mycorrhizal (VAM) fungi to acquire nutrients—a symbiotic relationship that evolved under native hardwoods like the Sugar Maple located in the nearby \"nbv\" zone. The \"mpg\" zone's canopy features Acer platanoides (Norway Maple), a non-native tree notorious for creating excessively dense shade, aggressively monopolizing soil moisture with shallow roots, and exuding allelopathic chemicals that can suppress the exact mycorrhizal fungi ginseng depends on. While the clay/loam soil can support ginseng if well-amended, the intense root competition from the Norway Maple makes this a hostile niche. To keep this specimen alive, the owners will need to closely monitor soil moisture, provide supplemental leaf mold to buffer the root zone, or consider relocating it under the more accommodating native Sugar Maple.",
+      "references": [
+        "https://wildlife-species.canada.ca/species-risk-registry/virtual_sara/files/plans/rs_american_ginseng_e_final.pdf",
+        "https://researchrepository.wvu.edu/cgi/viewcontent.cgi?article=3910&context=etd",
+        "https://www.dnr.state.mn.us/rsg/profile.html?action=elementDetail&selectedElement=PDARA09010"
+      ],
+      "created": "2026-05-12T05:01:08.712Z"
     },
     {
       "shortCode": "P sub",
