@@ -1,6 +1,7 @@
 import type { Plant, Species } from "../../types";
 import type { RawNode, Rank } from "./types";
 import { RANKS } from "./types";
+import { plantTitle } from "../../utils/display";
 
 export function speciesPicsFor(plants: Plant[], shortCode: string): Plant[] {
   return plants
@@ -50,8 +51,30 @@ export function buildTree(
         cur.children.push(child);
       }
       if (isLeaf) {
-        child.shortCode = plant.shortCode;
-        child.plant = plant;
+        if (!child.plant && !child.children) {
+          child.shortCode = plant.shortCode;
+          child.plant = plant;
+        } else {
+          // Two plants share the same deepest taxonomy node — convert to an
+          // internal node and give each plant its own variety leaf.
+          if (child.plant) {
+            const existing = child.plant;
+            child.children = [{
+              name: plantTitle(existing),
+              rank: "variety" as Rank,
+              shortCode: existing.shortCode,
+              plant: existing,
+            }];
+            child.shortCode = undefined;
+            child.plant = undefined;
+          }
+          child.children!.push({
+            name: plantTitle(plant),
+            rank: "variety" as Rank,
+            shortCode: plant.shortCode,
+            plant: plant,
+          });
+        }
       }
       cur = child;
     });

@@ -11,7 +11,7 @@ export const RANKS = [
   "species",
 ] as const;
 
-export type Rank = (typeof RANKS)[number] | "root";
+export type Rank = (typeof RANKS)[number] | "root" | "variety";
 
 export interface RawNode {
   name: string;
@@ -57,4 +57,5 @@ export const RANK_LABEL: Record<Rank, string> = {
   family: "Family",
   genus: "Genus",
   species: "Species",
+  variety: "Variety",
 };
