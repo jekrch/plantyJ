@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P ver",
+      "fullName": "Primula veris",
+      "commonName": "Cowslip Primrose",
+      "variety": null
+    },
+    {
       "shortCode": "I uni alb",
       "fullName": "Ipheion uniflorum Album",
       "commonName": "White Starflower",
