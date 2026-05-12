@@ -24,7 +24,10 @@
       "postedBy": "Jacob",
       "addedAt": "2026-05-12T17:07:13.201Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "bioclipSpeciesId": "Primula polyantha",
+      "bioclipCommonName": "False oxlip",
+      "bioclipScore": 0.4553
     },
     {
       "seq": 72,
@@ -40,7 +43,8 @@
       "height": 600,
       "bioclipSpeciesId": "Narcissus poeticus",
       "bioclipCommonName": "Poet's Narcissus",
-      "bioclipScore": 0.3616
+      "bioclipScore": 0.3616,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Narcissus_poeticus"
     },
     {
       "seq": 71,

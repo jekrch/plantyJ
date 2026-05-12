@@ -2334,6 +2334,64 @@
       ],
       "observationsCount": 20426
     },
+    "primula-veris": {
+      "id": "primula-veris",
+      "fullName": "Primula veris",
+      "commonName": "Cowslip Primrose",
+      "description": "Primula veris, the cowslip, common cowslip, or cowslip primrose (syn. Primula officinalis Hill), is a herbaceous perennial flowering plant in the primrose family Primulaceae. The species is native throughout most of temperate Europe and western Asia, and although absent from more northerly areas including much of northwest Scotland, it reappears in northernmost Sutherland and Orkney and in Scandinavia. This species frequently hybridizes with other Primulas such as the common primrose Primula vulgaris to form false oxlip (Primula \u00d7 polyantha) which is often confused with true oxlip (Primula elatior), a much rarer plant.",
+      "vernacularNames": [
+        "Cowslip",
+        "Cowslip Primrose",
+        "English cowslip",
+        "Kuk\u00f3wcz\u00e9 r\u00e3kawice"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Ericales",
+        "family": "Primulaceae",
+        "genus": "Primula",
+        "species": "Primula veris",
+        "canonicalName": "Primula veris"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/8377689"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:702751-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Primula_veris"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/55819"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q157552"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.155094"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 57085
+    },
     "prunus-armeniaca": {
       "id": "prunus-armeniaca",
       "fullName": "Prunus armeniaca",

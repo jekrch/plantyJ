@@ -566,5 +566,13 @@
   "Ipheion": {
     "description": "The flowering plant genus Ipheion belongs to Allioideae, a subfamily of the family Amaryllidaceae. It includes three species native to southern Brazil, northeastern Argentina, and Uruguay.",
     "url": "https://en.wikipedia.org/wiki/Ipheion"
+  },
+  "Primula": {
+    "description": "Primula is a genus of herbaceous flowering plants in the family Primulaceae. They include the primrose, a familiar wildflower of banks and verges. Other common species are P. auricula (auricula), P. veris (cowslip), and P. elatior (oxlip). These species and many others are valued for their ornamental flowers. They have been extensively cultivated and hybridised. Primula are native to the temperate Northern Hemisphere, south into tropical mountains in Ethiopia, Indonesia, and New Guinea, and in temperate southern South America. Almost half of the known species are from the Himalayas.",
+    "url": "https://en.wikipedia.org/wiki/Primula"
+  },
+  "Primulaceae": {
+    "description": "The Primulaceae, commonly known as the primrose family, are a family of herbaceous and woody flowering plants including some favourite garden plants and wildflowers. Most are perennial though some species, such as scarlet pimpernel, are annuals.",
+    "url": "https://en.wikipedia.org/wiki/Primulaceae"
   }
 }
