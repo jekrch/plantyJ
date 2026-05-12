@@ -501,6 +501,14 @@
         "edible"
       ],
       "description": null
+    },
+    {
+      "shortCode": "f cat",
+      "zoneCode": null,
+      "tags": [
+        "neighbor"
+      ],
+      "description": null
     }
   ]
 }
