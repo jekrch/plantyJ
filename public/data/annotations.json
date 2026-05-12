@@ -492,6 +492,15 @@
         "native"
       ],
       "description": null
+    },
+    {
+      "shortCode": "V sor pri",
+      "zoneCode": null,
+      "tags": [
+        "native",
+        "edible"
+      ],
+      "description": null
     }
   ]
 }
