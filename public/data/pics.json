@@ -11,7 +11,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-12T17:30:49.692Z",
       "width": 1024,
-      "height": 768
+      "height": 768,
+      "bioclipSpeciesId": "Viola sororia",
+      "bioclipCommonName": "Common violet",
+      "bioclipScore": 0.4111
     },
     {
       "seq": 73,
@@ -27,7 +30,8 @@
       "height": 960,
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
-      "bioclipScore": 0.4553
+      "bioclipScore": 0.4553,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
