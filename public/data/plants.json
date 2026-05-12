@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "V sor pri",
+      "fullName": "Viola sororia f. priceana",
+      "commonName": "Bicolor Violet",
+      "variety": null
+    },
+    {
       "shortCode": "P ver",
       "fullName": "Primula veris",
       "commonName": "Cowslip Primrose",
