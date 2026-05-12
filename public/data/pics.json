@@ -11,7 +11,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-12T17:07:44.518Z",
       "width": 1024,
-      "height": 768
+      "height": 768,
+      "bioclipSpeciesId": "Viola sororia",
+      "bioclipCommonName": "Common violet",
+      "bioclipScore": 0.4111
     },
     {
       "seq": 73,

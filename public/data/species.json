@@ -4052,6 +4052,44 @@
       ],
       "observationsCount": 108208
     },
+    "viola-sororia-f-priceana": {
+      "id": "viola-sororia-f-priceana",
+      "fullName": "Viola sororia f. priceana",
+      "commonName": "Bicolor Violet",
+      "description": "",
+      "vernacularNames": [
+        "Confederate Violet"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Malpighiales",
+        "family": "Violaceae",
+        "genus": "Viola",
+        "species": "Viola sororia",
+        "canonicalName": "Viola sororia priceana"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5664497"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:294862-2"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ]
+    },
     "zizia-aurea": {
       "id": "zizia-aurea",
       "fullName": "Zizia aurea",
