@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { LoaderCircle, Maximize2, ZoomIn, ZoomOut, Filter } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { LoaderCircle, Maximize2, Search, X, ZoomIn, ZoomOut, Filter } from "lucide-react";
 import type {
   AIAnalysis,
   Plant,
@@ -86,7 +86,7 @@ function layoutGraph(
   }
 
   const iterations = 350;
-  const k = 200; // Fixed ideal distance between connected nodes (allows edge text breathing room)
+  const k = 240; // Fixed ideal distance between connected nodes (allows edge text breathing room)
   let temp = k * 2;
   const minDistance = LEAF_RADIUS * 4 + 60; // Strict anti-collision padding
   const gravity = 0.35; // Gentle pull toward origin to keep separate clusters from flying away
@@ -374,6 +374,7 @@ export default function WebView({
     ready,
     fitToView,
     zoomBy,
+    centerOn,
     onWheel,
     onPointerDown,
     onPointerMove,
@@ -475,6 +476,84 @@ export default function WebView({
 
   const stop = useCallback((e: React.SyntheticEvent) => e.stopPropagation(), []);
 
+  // Search
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchHi, setSearchHi] = useState(0);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const searchIndex = useMemo(() => {
+    return layout.nodes.map((n) => {
+      const fields = [n.label, n.subLabel, n.code, n.plant?.commonName, n.plant?.fullName, n.plant?.variety]
+        .filter(Boolean) as string[];
+      return { node: n, label: n.label, sublabel: n.subLabel ?? n.code, haystack: fields.join(" \n ").toLowerCase() };
+    });
+  }, [layout.nodes]);
+
+  const searchMatches = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return [] as typeof searchIndex;
+    const hits: { item: (typeof searchIndex)[number]; score: number }[] = [];
+    for (const item of searchIndex) {
+      const idx = item.haystack.indexOf(q);
+      if (idx === -1) continue;
+      hits.push({ item, score: (item.label.toLowerCase().startsWith(q) ? 0 : 1000) + idx });
+    }
+    hits.sort((a, b) => a.score - b.score || a.item.label.localeCompare(b.item.label));
+    return hits.slice(0, 12).map((h) => h.item);
+  }, [searchQuery, searchIndex]);
+
+  useEffect(() => { setSearchHi(0); }, [searchMatches]);
+
+  useEffect(() => {
+    if (searchOpen) {
+      const id = window.setTimeout(() => searchInputRef.current?.focus(), 0);
+      return () => window.clearTimeout(id);
+    }
+  }, [searchOpen]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "f") {
+        e.preventDefault();
+        setDetailCode(null);
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
+  const closeSearch = useCallback(() => {
+    setSearchOpen(false);
+    setSearchQuery("");
+    setSearchHi(0);
+  }, []);
+
+  const selectSearchNode = useCallback(
+    (node: PositionedNode) => {
+      closeSearch();
+      centerOn(node.x, node.y);
+      setSelectedCode(node.code);
+      setDetailCode(null);
+    },
+    [closeSearch, centerOn]
+  );
+
+  const onSearchKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Escape") { e.preventDefault(); closeSearch(); }
+      else if (e.key === "ArrowDown") { e.preventDefault(); setSearchHi((i) => Math.min(searchMatches.length - 1, i + 1)); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); setSearchHi((i) => Math.max(0, i - 1)); }
+      else if (e.key === "Enter") {
+        e.preventDefault();
+        const pick = searchMatches[searchHi] ?? searchMatches[0];
+        if (pick) selectSearchNode(pick.node);
+      }
+    },
+    [searchMatches, searchHi, closeSearch, selectSearchNode]
+  );
+
   if (!relationships.loaded) {
     return (
       <div
@@ -509,6 +588,7 @@ export default function WebView({
           if (panRef.current?.moved) return;
           setSelectedCode(null);
           setDetailCode(null);
+          if (searchOpen) closeSearch();
         }}
       >
         {nodeCodes.length === 0 ? (
@@ -585,7 +665,7 @@ export default function WebView({
                 const nx = -baseDy / baseLen;
                 const ny = baseDx / baseLen;
 
-                const spread = 40; 
+                const spread = 60; 
                 const offset = (e.groupIndex - (e.groupTotal - 1) / 2) * spread;
 
                 const cx = midX + nx * (offset * 2);
@@ -777,7 +857,7 @@ export default function WebView({
           </div>
         )}
 
-        {/* Zoom controls */}
+        {/* Zoom + search controls */}
         <div
           className="absolute bottom-3 left-3 flex flex-col-reverse items-start gap-2"
           onClick={stop}
@@ -785,6 +865,13 @@ export default function WebView({
           onWheel={stop}
         >
           <div className="flex items-center gap-1 rounded-md bg-surface/85 backdrop-blur-sm ring-1 ring-inset ring-white/5 p-1">
+            <CtrlBtn
+              label="Search"
+              active={searchOpen}
+              onClick={() => (searchOpen ? closeSearch() : setSearchOpen(true))}
+            >
+              <Search size={13} strokeWidth={1.5} />
+            </CtrlBtn>
             <CtrlBtn label="Zoom out" onClick={() => zoomBy(0.8)}>
               <ZoomOut size={13} strokeWidth={1.5} />
             </CtrlBtn>
@@ -795,6 +882,20 @@ export default function WebView({
               <Maximize2 size={13} strokeWidth={1.5} />
             </CtrlBtn>
           </div>
+
+          {searchOpen && (
+            <WebSearchPanel
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              searchHi={searchHi}
+              setSearchHi={setSearchHi}
+              matches={searchMatches}
+              searchInputRef={searchInputRef}
+              closeSearch={closeSearch}
+              selectNode={selectSearchNode}
+              onKeyDown={onSearchKeyDown}
+            />
+          )}
         </div>
 
         {/* Type filter chips */}
@@ -889,6 +990,84 @@ export default function WebView({
             />
           </div>
         </div>
+      )}
+    </div>
+  );
+}
+
+// --- Search panel ---
+
+type SearchMatch = { node: PositionedNode; label: string; sublabel: string };
+
+function WebSearchPanel({
+  searchQuery,
+  setSearchQuery,
+  searchHi,
+  setSearchHi,
+  matches,
+  searchInputRef,
+  closeSearch,
+  selectNode,
+  onKeyDown,
+}: {
+  searchQuery: string;
+  setSearchQuery: (q: string) => void;
+  searchHi: number;
+  setSearchHi: (i: number) => void;
+  matches: SearchMatch[];
+  searchInputRef: React.RefObject<HTMLInputElement | null>;
+  closeSearch: () => void;
+  selectNode: (node: PositionedNode) => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+}) {
+  return (
+    <div className="w-72 max-w-[80vw] rounded-md bg-surface-raised/95 backdrop-blur-sm ring-1 ring-inset ring-white/10 shadow-xl overflow-hidden">
+      <div className="flex items-center gap-2 px-2 py-1.5 border-b border-ink-faint/15">
+        <Search size={12} strokeWidth={1.5} className="text-ink-muted shrink-0" />
+        <input
+          ref={searchInputRef}
+          type="text"
+          placeholder="Search species…"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={onKeyDown}
+          className="flex-1 min-w-0 bg-transparent text-[12px] text-ink placeholder:text-ink-faint outline-none"
+          autoComplete="off"
+          spellCheck={false}
+        />
+        <button
+          type="button"
+          aria-label="Close search"
+          onClick={closeSearch}
+          className="flex items-center justify-center h-5 w-5 rounded text-ink-muted hover:text-ink hover:bg-white/5 transition-colors shrink-0"
+        >
+          <X size={12} strokeWidth={1.5} />
+        </button>
+      </div>
+      {searchQuery.trim() && (
+        <ul className="max-h-72 overflow-y-auto thin-scroll py-1">
+          {matches.length === 0 ? (
+            <li className="px-3 py-2 text-[11px] text-ink-faint italic">No matches</li>
+          ) : (
+            matches.map((m, i) => (
+              <li key={`wsr-${m.node.code}-${i}`}>
+                <button
+                  type="button"
+                  onMouseEnter={() => setSearchHi(i)}
+                  onClick={() => selectNode(m.node)}
+                  className={`w-full text-left px-3 py-1.5 flex items-baseline gap-2 transition-colors ${
+                    i === searchHi ? "bg-white/8" : "hover:bg-white/5"
+                  }`}
+                >
+                  <span className="text-[12px] text-ink truncate min-w-0">{m.label}</span>
+                  <span className="ml-auto text-[9px] font-mono uppercase tracking-wider text-ink-faint shrink-0">
+                    {m.sublabel}
+                  </span>
+                </button>
+              </li>
+            ))
+          )}
+        </ul>
       )}
     </div>
   );
