@@ -440,9 +440,15 @@ function applyCommand(state: BatchState, text: string): ExecResult {
   }
 
   // /relate <typeId> <fromCode> <toCode> [direction]
-  const relateMatch = trimmed.match(/^\/relate\s+(\S+)\s+(\S+)\s+(\S+)(?:\s+(\S+))?$/);
-  if (relateMatch) {
-    const [, typeId, from, to, direction] = relateMatch;
+  // Split-based (not regex-anchored) to stay consistent with parseRelateCommand
+  // and to give a meaningful error rather than "could not parse" when extra
+  // tokens are present.
+  if (trimmed.startsWith("/relate ")) {
+    const parts = trimmed.slice("/relate ".length).trim().split(/\s+/);
+    if (parts.length < 3 || !parts[0]) {
+      return fail("Usage: /relate <typeId> <fromCode> <toCode> [f|b|u]");
+    }
+    const [typeId, from, to, direction] = parts;
     const r = applyRelate(state.relationships, { typeId, from, to, direction });
     if (r.changed) state.dirty.add("relationships");
     return r.ok ? ok(r.reply) : fail(r.reply);
