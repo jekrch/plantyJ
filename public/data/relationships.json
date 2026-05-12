@@ -25,10 +25,10 @@
       "directional": true
     },
     {
-    "id": "frugivore",
-    "name": "Fruit / Nut Consumer",
-    "description": "An animal that feeds on the fruits, nuts, or berries of the plant, often aiding in natural seed dispersal.",
-    "directional": true
+      "id": "frugivore",
+      "name": "Fruit / Nut Consumer",
+      "description": "An animal that feeds on the fruits, nuts, or berries of the plant, often aiding in natural seed dispersal.",
+      "directional": true
     },
     {
       "id": "habitat",
@@ -212,6 +212,24 @@
       "from": "c daf",
       "to": "P pyr Peg",
       "direction": "undirected"
+    },
+    {
+      "id": 26,
+      "type": "host-plant",
+      "from": "V virg",
+      "to": "E mac"
+    },
+    {
+      "id": 27,
+      "type": "pollinator",
+      "from": "V ata",
+      "to": "V vir"
+    },
+    {
+      "id": 28,
+      "type": "pollinator",
+      "from": "V virg",
+      "to": "V vir"
     }
   ]
 }
