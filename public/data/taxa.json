@@ -348,7 +348,7 @@
     "url": "https://en.wikipedia.org/wiki/Witch-hazel"
   },
   "Rosa": {
-    "description": "A rose is either a woody perennial flowering plant of the genus Rosa (/ˈroʊzə/), in the family Rosaceae (/roʊˈzeɪsiːˌiː/), or the flower it bears. There are over three hundred species and tens of thousands of cultivars. The plants range in size and form, from trailing and erect shrubs to climbers up to 7 metres (23 ft) in height. Sharp prickles appear on the stems of many species. Their flowers vary in size and shape and are usually large and showy, in colours ranging from white through pinks, reds, oranges and yellows.\nMost species are native to Asia, with smaller numbers native to Europe, North America, and Northwest Africa. Species, cultivars and hybrids are all widely grown for their beauty and often are fragrant. Different species hybridize easily, and this has been used in the development of the wide range of garden roses. Roses have acquired cultural significance in many societies.",
+    "description": "A rose is either a woody perennial flowering plant of the genus Rosa (/\u02c8ro\u028az\u0259/), in the family Rosaceae (/ro\u028a\u02c8ze\u026asi\u02d0\u02cci\u02d0/), or the flower it bears. There are over three hundred species and tens of thousands of cultivars. The plants range in size and form, from trailing and erect shrubs to climbers up to 7 metres (23 ft) in height. Sharp prickles appear on the stems of many species. Their flowers vary in size and shape and are usually large and showy, in colours ranging from white through pinks, reds, oranges and yellows.\nMost species are native to Asia, with smaller numbers native to Europe, North America, and Northwest Africa. Species, cultivars and hybrids are all widely grown for their beauty and often are fragrant. Different species hybridize easily, and this has been used in the development of the wide range of garden roses. Roses have acquired cultural significance in many societies.",
     "url": "https://en.wikipedia.org/wiki/Rose"
   },
   "Oleaceae": {
@@ -524,7 +524,7 @@
     "url": "https://en.wikipedia.org/wiki/Bryales"
   },
   "Bryophyta": {
-    "description": "Bryophytes are a group of land plants (embryophytes), sometimes treated as a taxonomic division referred to as Bryophyta sensu lato, that contains three groups of non-vascular land plants: the liverworts, hornworts, and mosses. In the strict sense, the division Bryophyta consists of the mosses only. \n\n Bryophytes are characteristically limited in size and prefer moist habitats although some species can survive in drier environments. The bryophytes consist of about 20,000 plant species. Bryophytes produce enclosed reproductive structures (gametangia and sporangia), but they do not produce flowers or seeds. They reproduce sexually by spores and asexually by fragmentation or the production of gemmae.\n\nThough bryophytes were considered a paraphyletic group in recent years, almost all of the most recent phylogenetic evidence supports the monophyly of this group, as originally classified by Wilhelm Schimper in 1879. The term bryophyte comes from Ancient Greek βρύον (brúon) 'tree moss, liverwort' and φυτόν (phutón) 'plant'.",
+    "description": "Bryophytes are a group of land plants (embryophytes), sometimes treated as a taxonomic division referred to as Bryophyta sensu lato, that contains three groups of non-vascular land plants: the liverworts, hornworts, and mosses. In the strict sense, the division Bryophyta consists of the mosses only. \n\n Bryophytes are characteristically limited in size and prefer moist habitats although some species can survive in drier environments. The bryophytes consist of about 20,000 plant species. Bryophytes produce enclosed reproductive structures (gametangia and sporangia), but they do not produce flowers or seeds. They reproduce sexually by spores and asexually by fragmentation or the production of gemmae.\n\nThough bryophytes were considered a paraphyletic group in recent years, almost all of the most recent phylogenetic evidence supports the monophyly of this group, as originally classified by Wilhelm Schimper in 1879. The term bryophyte comes from Ancient Greek \u03b2\u03c1\u03cd\u03bf\u03bd (br\u00faon) 'tree moss, liverwort' and \u03c6\u03c5\u03c4\u03cc\u03bd (phut\u00f3n) 'plant'.",
     "url": "https://en.wikipedia.org/wiki/Bryophyte"
   },
   "Bryopsida": {
@@ -562,5 +562,9 @@
   "Geranium": {
     "description": "Geranium is a genus of 422 species of annual, biennial, and perennial plants that are commonly known as geraniums, hardy geraniums, or cranesbills. They are found throughout the temperate regions of the world and the mountains of the tropics, with the greatest diversity in the eastern part of the Mediterranean region.",
     "url": "https://en.wikipedia.org/wiki/Geranium"
+  },
+  "Ipheion": {
+    "description": "The flowering plant genus Ipheion belongs to Allioideae, a subfamily of the family Amaryllidaceae. It includes three species native to southern Brazil, northeastern Argentina, and Uruguay.",
+    "url": "https://en.wikipedia.org/wiki/Ipheion"
   }
 }

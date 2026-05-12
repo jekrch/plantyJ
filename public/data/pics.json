@@ -11,7 +11,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-12T17:04:27.758Z",
       "width": 800,
-      "height": 600
+      "height": 600,
+      "bioclipSpeciesId": "Narcissus poeticus",
+      "bioclipCommonName": "Poet's Narcissus",
+      "bioclipScore": 0.3616
     },
     {
       "seq": 71,

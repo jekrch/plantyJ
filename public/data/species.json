@@ -1617,6 +1617,42 @@
       ],
       "observationsCount": 32525
     },
+    "ipheion-uniflorum-album": {
+      "id": "ipheion-uniflorum-album",
+      "fullName": "Ipheion uniflorum Album",
+      "commonName": "White Starflower",
+      "description": "",
+      "vernacularNames": [
+        "Spring Star",
+        "Spring Starflower",
+        "springstar"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Liliopsida",
+        "order": "Asparagales",
+        "family": "Amaryllidaceae",
+        "genus": "Ipheion",
+        "species": "Ipheion uniflorum",
+        "canonicalName": "Ipheion uniflorum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2859597"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ]
+    },
     "leonurus-cardiaca": {
       "id": "leonurus-cardiaca",
       "fullName": "Leonurus cardiaca",
