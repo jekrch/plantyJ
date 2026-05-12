@@ -95,13 +95,13 @@ Q&A and actions (propose-then-confirm):
   /showstyle — Show the currently active style.
 
 Relationships (a "web" between plants):
-  /relate {typeId} {fromCode} {toCode} [f|b|u]
-    Register a relationship. Direction is optional:
-      f = forward (from→to), b = backward (to→from), u = undirected.
+  /relate {typeId} // {fromCode} // {toCode} [// f|b|u]
+    Register a relationship. Use // to separate fields (shortCodes may contain spaces).
+    Direction is optional: f = forward (from→to), b = backward (to→from), u = undirected.
     Omit to use the type's default. Examples:
-      /relate companion tmt-c bsl
-      /relate parent-of seed-1 sprout-2
-      /relate parent-of seed-1 sprout-2 u   (override directional type)
+      /relate companion // tmt-c // bsl
+      /relate host-plant // V virg // E mac
+      /relate parent-of // seed-1 // sprout-2 // u   (override directional type)
   /unrelate {id} — remove a relationship by its numeric id.
   /relations {shortCode} — list relationships touching a plant.
   /reltypes — list all relationship types with descriptions.

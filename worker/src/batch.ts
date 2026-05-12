@@ -439,17 +439,16 @@ function applyCommand(state: BatchState, text: string): ExecResult {
     return fail(`Invalid /removetag format.`);
   }
 
-  // /relate <typeId> <fromCode> <toCode> [direction]
-  // Split-based (not regex-anchored) to stay consistent with parseRelateCommand
-  // and to give a meaningful error rather than "could not parse" when extra
-  // tokens are present.
+  // /relate <typeId> // <fromCode> // <toCode> [// direction]
+  // Uses // delimiters so that multi-word short codes (e.g. "V virg", "I uni alb")
+  // are unambiguous.
   if (trimmed.startsWith("/relate ")) {
-    const parts = trimmed.slice("/relate ".length).trim().split(/\s+/);
-    if (parts.length < 3 || !parts[0]) {
-      return fail("Usage: /relate <typeId> <fromCode> <toCode> [f|b|u]");
+    const parts = trimmed.slice("/relate".length).trim().split("//").map((s) => s.trim());
+    if (parts.length < 3 || !parts[0] || !parts[1] || !parts[2]) {
+      return fail("Usage: /relate <typeId> // <fromCode> // <toCode> [// f|b|u]");
     }
     const [typeId, from, to, direction] = parts;
-    const r = applyRelate(state.relationships, { typeId, from, to, direction });
+    const r = applyRelate(state.relationships, { typeId, from, to, direction: direction || undefined });
     if (r.changed) state.dirty.add("relationships");
     return r.ok ? ok(r.reply) : fail(r.reply);
   }

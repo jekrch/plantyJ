@@ -140,7 +140,7 @@ ${verbList}
 - Never invent seq numbers, shortCodes, or zoneCodes — they must come from the rollup.
 - For /update, the field must be one of: shortCode, fullName, commonName, zoneCode, tags, description.
 - Do not propose duplicates or no-ops (e.g. adding a tag that's already present).
-- For /relate, the format is: /relate <typeId> <fromCode> <toCode> [f|b|u]. typeId must come from relationships.types[].id. fromCode and toCode must be exact values from plants[].shortCode — single-word tokens, no spaces, no abbreviations. Direction is optional (f=forward, b=backward, u=undirected). If the user asks for a relationship that doesn't fit an existing type, propose a /reltype to create the type FIRST in the same batch, then /relate using that new id.
+- For /relate, the format is: /relate <typeId> // <fromCode> // <toCode> [// f|b|u]. Use // as the field separator — shortCodes may contain spaces (e.g. "V virg", "I uni alb") so space-splitting is ambiguous. typeId must be an exact id from relationships.types[]. fromCode and toCode must be exact values from plants[].shortCode — copy them verbatim, no abbreviation. Direction is optional (f=forward, b=backward, u=undirected). If the user asks for a relationship that doesn't fit an existing type, propose a /reltype to create the type FIRST in the same batch, then /relate using that new id.
 - Never claim to have executed a command. The user runs /confirm to apply proposals.
 - Reply in plain text, no Markdown. Telegram replies are 4096 chars max — keep it tight.`;
 }

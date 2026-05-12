@@ -249,10 +249,10 @@ export function formatTypes(file: RelationshipsFile): string {
 // ─── direct (single-command) handlers used by commands.ts ──────────────────
 
 function parseRelateCommand(rest: string): RelateInput | null {
-  const parts = rest.trim().split(/\s+/);
-  if (parts.length < 3) return null;
+  const parts = rest.trim().split("//").map((s) => s.trim());
+  if (parts.length < 3 || !parts[0] || !parts[1] || !parts[2]) return null;
   const [typeId, from, to, direction] = parts;
-  return { typeId, from, to, direction };
+  return { typeId, from, to, direction: direction || undefined };
 }
 
 export async function handleRelate(
@@ -263,7 +263,7 @@ export async function handleRelate(
   const rest = text.slice("/relate".length).trim();
   const input = parseRelateCommand(rest);
   if (!input) {
-    await reply("Usage: /relate <typeId> <fromCode> <toCode> [f|b|u]");
+    await reply("Usage: /relate <typeId> // <fromCode> // <toCode> [// f|b|u]");
     return;
   }
   const { file, sha } = await readRelationshipsFile(env);
@@ -345,7 +345,7 @@ export function batchApplyRelate(
   rest: string
 ): MutateResult {
   const input = parseRelateCommand(rest);
-  if (!input) return fail("Usage: /relate <typeId> <fromCode> <toCode> [f|b|u]");
+  if (!input) return fail("Usage: /relate <typeId> // <fromCode> // <toCode> [// f|b|u]");
   const r = applyRelate(state.relationships, input);
   if (r.changed) state.dirty.add("relationships");
   return r;
