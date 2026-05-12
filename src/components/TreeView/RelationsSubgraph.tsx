@@ -1,6 +1,11 @@
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { Maximize2, ZoomIn, ZoomOut } from "lucide-react";
 import type { Plant, Relationship, RelationshipType } from "../../types";
 import { effectiveDirection } from "../../hooks/useRelationships";
+import { usePanZoom } from "../../hooks/usePanZoom";
+import type { Transform } from "../../hooks/usePanZoom";
+import { LEAF_RADIUS } from "./types";
+import { CtrlBtn } from "./CtrlBtn";
 
 interface Props {
   centerCode: string;
@@ -13,8 +18,6 @@ interface Props {
   onSelectCode?: (shortCode: string) => void;
 }
 
-// A small color palette for relationship types — assigned in declaration order
-// of the typeById Map. Keeps the graph readable without a per-type config.
 const TYPE_COLORS = [
   "var(--color-accent)",
   "#f59e0b",
@@ -25,16 +28,20 @@ const TYPE_COLORS = [
   "#f87171",
 ];
 
-const RING_R1 = 90;
-const RING_R2 = 170;
-const VIEWBOX = 420;
+const MIN_RING_R = 320;
+const NODE_R = LEAF_RADIUS + 2;
+const MIN_GAP = 20;
+const LABEL_PAD = 60;
 
 interface PositionedNode {
   code: string;
   label: string;
-  level: 0 | 1 | 2;
+  subLabel: string | null;
+  isCenter: boolean;
   x: number;
   y: number;
+  plant: Plant | undefined;
+  isAnimal: boolean;
 }
 
 function plantLabel(p: Plant | undefined, fallback: string): string {
@@ -51,6 +58,9 @@ export function RelationsSubgraph({
   plantsByCode,
   onSelectCode,
 }: Props) {
+  const baseURL = import.meta.env.BASE_URL;
+  const [hovered, setHovered] = useState<string | null>(null);
+
   const colorByType = useMemo(() => {
     const m = new Map<string, string>();
     let i = 0;
@@ -61,7 +71,7 @@ export function RelationsSubgraph({
     return m;
   }, [typeById]);
 
-  const { nodes, edges } = useMemo(() => {
+  const { nodes, edges, viewboxSize } = useMemo(() => {
     const l1Codes: string[] = [];
     const l1Set = new Set<string>();
     for (const r of neighbors.get(centerCode) ?? []) {
@@ -71,69 +81,36 @@ export function RelationsSubgraph({
       l1Codes.push(other);
     }
 
-    // L2: neighbors of L1, excluding center + L1 itself.
-    // Map each L2 code → its first L1 anchor (for positioning).
-    const l2AnchorByCode = new Map<string, string>();
-    for (const l1 of l1Codes) {
-      for (const r of neighbors.get(l1) ?? []) {
-        const other = r.from === l1 ? r.to : r.from;
-        if (other === centerCode) continue;
-        if (l1Set.has(other)) continue;
-        if (l2AnchorByCode.has(other)) continue;
-        l2AnchorByCode.set(other, l1);
-      }
-    }
+    const n = l1Codes.length;
+    const minChord = 2 * NODE_R + MIN_GAP;
+    const ringR = n <= 1
+      ? MIN_RING_R
+      : Math.max(MIN_RING_R, minChord / (2 * Math.sin(Math.PI / n)));
+    const vb = Math.round(2 * (ringR + NODE_R + LABEL_PAD));
+    const center = vb / 2;
 
     const positioned: PositionedNode[] = [];
-    const center = VIEWBOX / 2;
-    positioned.push({
-      code: centerCode,
-      label: centerLabel,
-      level: 0,
-      x: center,
-      y: center,
-    });
 
-    const l1Angles = new Map<string, number>();
+    const makeNode = (code: string, label: string, isCenter: boolean, x: number, y: number): PositionedNode => {
+      const plant = plantsByCode.get(code);
+      const sub = plant?.fullName && plant.fullName !== label ? plant.fullName : null;
+      return { code, label, subLabel: sub, isCenter, x, y, plant, isAnimal: plant?.kind === "animal" };
+    };
+
+    positioned.push(makeNode(centerCode, centerLabel, true, center, center));
+
     const baseAngle = -Math.PI / 2;
     l1Codes.forEach((code, i) => {
-      const angle = baseAngle + (i / Math.max(1, l1Codes.length)) * Math.PI * 2;
-      l1Angles.set(code, angle);
-      positioned.push({
-        code,
-        label: plantLabel(plantsByCode.get(code), code),
-        level: 1,
-        x: center + Math.cos(angle) * RING_R1,
-        y: center + Math.sin(angle) * RING_R1,
-      });
+      const angle = baseAngle + (i / Math.max(1, n)) * Math.PI * 2;
+      const label = plantLabel(plantsByCode.get(code), code);
+      positioned.push(makeNode(code, label, false, center + Math.cos(angle) * ringR, center + Math.sin(angle) * ringR));
     });
-
-    // Group L2 by anchor and fan them out in a small arc around the anchor's angle.
-    const l2ByAnchor = new Map<string, string[]>();
-    for (const [code, anchor] of l2AnchorByCode) {
-      if (!l2ByAnchor.has(anchor)) l2ByAnchor.set(anchor, []);
-      l2ByAnchor.get(anchor)!.push(code);
-    }
-    for (const [anchor, codes] of l2ByAnchor) {
-      const anchorAngle = l1Angles.get(anchor) ?? 0;
-      const spread = Math.min(Math.PI / 2.2, 0.35 * codes.length);
-      codes.forEach((code, i) => {
-        const t = codes.length === 1 ? 0 : i / (codes.length - 1) - 0.5;
-        const angle = anchorAngle + t * spread;
-        positioned.push({
-          code,
-          label: plantLabel(plantsByCode.get(code), code),
-          level: 2,
-          x: center + Math.cos(angle) * RING_R2,
-          y: center + Math.sin(angle) * RING_R2,
-        });
-      });
-    }
 
     const codeSet = new Set(positioned.map((n) => n.code));
     const seenEdge = new Set<number>();
     const edgesOut: Array<{
       rel: Relationship;
+      typeName: string;
       fromX: number;
       fromY: number;
       toX: number;
@@ -152,6 +129,7 @@ export function RelationsSubgraph({
       const dir = effectiveDirection(r, typeById.get(r.type));
       edgesOut.push({
         rel: r,
+        typeName: typeById.get(r.type)?.name ?? r.type,
         fromX: a.x,
         fromY: a.y,
         toX: b.x,
@@ -161,8 +139,70 @@ export function RelationsSubgraph({
       });
     }
 
-    return { nodes: positioned, edges: edgesOut };
+    return { nodes: positioned, edges: edgesOut, viewboxSize: vb };
   }, [centerCode, centerLabel, neighbors, relationships, typeById, plantsByCode, colorByType]);
+
+  // When the relations tab is not active the container has display:none (zero size).
+  // Detect the transition from hidden → visible and apply the initial fit transform.
+  const onContainerResize = useCallback(
+    (prev: { w: number; h: number }, next: { w: number; h: number }): Partial<Transform> | null | void => {
+      if (prev.w === 0 && next.w > 0) {
+        const k = Math.min(next.w / viewboxSize, next.h / viewboxSize, 1);
+        return {
+          k,
+          x: (next.w - viewboxSize * k) / 2,
+          y: (next.h - viewboxSize * k) / 2,
+        };
+      }
+      return null;
+    },
+    [viewboxSize]
+  );
+
+  const {
+    containerRef,
+    panRef,
+    fitToView,
+    zoomBy,
+    transform,
+    onWheel,
+    onPointerDown,
+    onPointerMove,
+    onPointerUp,
+  } = usePanZoom({
+    layoutWidth: viewboxSize,
+    layoutHeight: viewboxSize,
+    dataReady: nodes.length > 1,
+    minK: 0.1,
+    maxK: 4,
+    onContainerResize,
+  });
+
+  const typesInUse = useMemo(() => {
+    const ids = new Set(edges.map((e) => e.rel.type));
+    return Array.from(ids)
+      .map((id) => typeById.get(id))
+      .filter((t): t is RelationshipType => !!t);
+  }, [edges, typeById]);
+
+  const highlightedEdges = useMemo(() => {
+    if (!hovered) return new Set<number>();
+    const s = new Set<number>();
+    for (const e of edges) {
+      if (e.rel.from === hovered || e.rel.to === hovered) s.add(e.rel.id);
+    }
+    return s;
+  }, [edges, hovered]);
+
+  const highlightedNodes = useMemo(() => {
+    if (!hovered) return new Set<string>();
+    const s = new Set<string>([hovered]);
+    for (const e of edges) {
+      if (e.rel.from === hovered) s.add(e.rel.to);
+      else if (e.rel.to === hovered) s.add(e.rel.from);
+    }
+    return s;
+  }, [edges, hovered]);
 
   if (nodes.length === 1) {
     return (
@@ -172,102 +212,239 @@ export function RelationsSubgraph({
     );
   }
 
-  // Distinct types present in this subgraph — for the legend.
-  const typesInUse = useMemo(() => {
-    const ids = new Set(edges.map((e) => e.rel.type));
-    return Array.from(ids)
-      .map((id) => typeById.get(id))
-      .filter((t): t is RelationshipType => !!t);
-  }, [edges, typeById]);
+  const r = LEAF_RADIUS;
+  const stop = (e: React.SyntheticEvent) => e.stopPropagation();
 
   return (
     <div className="flex flex-col gap-2">
-      <svg
-        viewBox={`0 0 ${VIEWBOX} ${VIEWBOX}`}
-        className="w-full max-w-[420px] mx-auto"
-        style={{ aspectRatio: "1 / 1" }}
+      <div
+        ref={containerRef}
+        className="relative h-75 overflow-hidden rounded"
+        style={{
+          touchAction: "none",
+          userSelect: "none",
+          WebkitUserSelect: "none",
+          cursor: panRef.current?.moved ? "grabbing" : "grab",
+        }}
+        onWheel={onWheel}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
       >
-        <defs>
-          {Array.from(colorByType.entries()).map(([id, color]) => (
-            <marker
-              key={id}
-              id={`arr-${id}`}
-              viewBox="0 0 10 10"
-              refX="9"
-              refY="5"
-              markerWidth="6"
-              markerHeight="6"
-              orient="auto-start-reverse"
-            >
-              <path d="M0,0 L10,5 L0,10 z" fill={color} />
-            </marker>
-          ))}
-        </defs>
-
-        <g>
-          {edges.map((e, i) => {
-            const reverse = e.dir === "bwd";
-            const x1 = reverse ? e.toX : e.fromX;
-            const y1 = reverse ? e.toY : e.fromY;
-            const x2 = reverse ? e.fromX : e.toX;
-            const y2 = reverse ? e.fromY : e.toY;
-            const directed = e.dir !== "u";
-            return (
-              <line
-                key={`edge-${e.rel.id}-${i}`}
-                x1={x1}
-                y1={y1}
-                x2={x2}
-                y2={y2}
-                stroke={e.color}
-                strokeOpacity={0.55}
-                strokeWidth={1.2}
-                markerEnd={directed ? `url(#arr-${e.rel.type})` : undefined}
-              />
-            );
-          })}
-        </g>
-
-        <g>
-          {nodes.map((n) => {
-            const r = n.level === 0 ? 18 : n.level === 1 ? 12 : 8;
-            const isCenter = n.level === 0;
-            return (
-              <g
-                key={`node-${n.code}`}
-                transform={`translate(${n.x},${n.y})`}
-                style={{ cursor: onSelectCode && !isCenter ? "pointer" : "default" }}
-                onClick={() => {
-                  if (!isCenter && onSelectCode) onSelectCode(n.code);
-                }}
+        <svg
+          width={viewboxSize}
+          height={viewboxSize}
+          style={{
+            transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.k})`,
+            transformOrigin: "0 0",
+            display: "block",
+            overflow: "visible",
+          }}
+        >
+          <defs>
+            <clipPath id="rs-leaf-clip">
+              <circle r={r} />
+            </clipPath>
+            <radialGradient id="rs-leaf-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="var(--color-ink)" stopOpacity="0.45" />
+              <stop offset="100%" stopColor="var(--color-ink)" stopOpacity="0" />
+            </radialGradient>
+            {Array.from(colorByType.entries()).map(([id, color]) => (
+              <marker
+                key={id}
+                id={`rs-arr-${id}`}
+                viewBox="0 0 10 10"
+                refX="9"
+                refY="5"
+                markerWidth="6"
+                markerHeight="6"
+                orient="auto-start-reverse"
               >
-                <circle
-                  r={r}
-                  fill={isCenter ? "var(--color-accent)" : "var(--color-surface)"}
-                  fillOpacity={isCenter ? 0.85 : 1}
-                  stroke="var(--color-ink-muted)"
-                  strokeOpacity={isCenter ? 0.9 : 0.6}
-                  strokeWidth={isCenter ? 1.6 : 1}
-                />
-                <text
-                  y={r + 12}
-                  textAnchor="middle"
-                  fontFamily="'DM Sans', sans-serif"
-                  fontSize={n.level === 2 ? 9 : 11}
-                  fill="var(--color-ink)"
-                  fillOpacity={n.level === 2 ? 0.75 : 0.95}
-                  stroke="var(--color-surface)"
-                  strokeWidth={3}
-                  strokeOpacity={0.85}
-                  paintOrder="stroke fill"
+                <path d="M0,0 L10,5 L0,10 z" fill={color} />
+              </marker>
+            ))}
+          </defs>
+
+          <g>
+            {edges.map((e, i) => {
+              const reverse = e.dir === "bwd";
+              const x1 = reverse ? e.toX : e.fromX;
+              const y1 = reverse ? e.toY : e.fromY;
+              const x2 = reverse ? e.fromX : e.toX;
+              const y2 = reverse ? e.fromY : e.toY;
+              const directed = e.dir !== "u";
+              const isActive = highlightedEdges.has(e.rel.id);
+              const dim = hovered != null && !isActive;
+              const midX = (x1 + x2) / 2;
+              const midY = (y1 + y2) / 2;
+              const pathD = `M ${x1} ${y1} Q ${midX} ${midY} ${x2} ${y2}`;
+
+              let angle = (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI;
+              if (angle > 90) angle -= 180;
+              else if (angle < -90) angle += 180;
+
+              return (
+                <g key={`edge-${e.rel.id}-${i}`}>
+                  <path
+                    d={pathD}
+                    fill="none"
+                    stroke={e.color}
+                    strokeOpacity={dim ? 0.1 : isActive ? 0.95 : 0.55}
+                    strokeWidth={isActive ? 1.8 : 1.2}
+                    markerEnd={directed ? `url(#rs-arr-${e.rel.type})` : undefined}
+                  />
+                  <g
+                    transform={`translate(${midX},${midY}) rotate(${angle})`}
+                    pointerEvents="none"
+                  >
+                    <text
+                      textAnchor="middle"
+                      dy={-5}
+                      fontFamily="'Space Mono', monospace"
+                      fontSize={9}
+                      letterSpacing="0.06em"
+                      fill={isActive ? "var(--color-ink)" : "var(--color-ink-muted)"}
+                      fillOpacity={dim ? 0.15 : isActive ? 1 : 0.85}
+                      stroke="var(--color-surface)"
+                      strokeWidth={4}
+                      strokeOpacity={0.9}
+                      paintOrder="stroke fill"
+                    >
+                      {e.typeName}
+                    </text>
+                  </g>
+                </g>
+              );
+            })}
+          </g>
+
+          <g>
+            {nodes.map((n) => {
+              const isCenter = n.isCenter;
+              const isActive = n.code === hovered;
+              const isNeighbor = hovered != null && highlightedNodes.has(n.code) && !isActive;
+              const dim = hovered != null && !isActive && !isNeighbor;
+              const nodeColor = n.isAnimal
+                ? "var(--color-amber, #f59e0b)"
+                : "var(--color-ink)";
+              const strokeColor = isActive
+                ? nodeColor
+                : n.isAnimal
+                  ? "rgba(245,158,11,0.6)"
+                  : "var(--color-ink-muted)";
+
+              return (
+                <g
+                  key={`node-${n.code}`}
+                  transform={`translate(${n.x},${n.y})`}
+                  style={{
+                    cursor: !isCenter && onSelectCode ? "pointer" : "default",
+                    opacity: dim ? 0.35 : 1,
+                    transition: "opacity 160ms ease-out",
+                  }}
+                  onPointerEnter={() => setHovered(n.code)}
+                  onPointerLeave={() => setHovered((h) => (h === n.code ? null : h))}
+                  onClick={() => {
+                    if (!isCenter && onSelectCode) onSelectCode(n.code);
+                  }}
                 >
-                  {n.label}
-                </text>
-              </g>
-            );
-          })}
-        </g>
-      </svg>
+                  <circle r={r + 14} fill="transparent" stroke="none" />
+                  {isActive && <circle r={r + 12} fill="url(#rs-leaf-glow)" />}
+                  <circle
+                    r={r + 2}
+                    fill="var(--color-surface)"
+                    stroke={strokeColor}
+                    strokeOpacity={isActive ? 0.95 : 0.7}
+                    strokeWidth={isActive ? 1.8 : isCenter ? 1.8 : 1.2}
+                  />
+                  {n.plant ? (
+                    <g clipPath="url(#rs-leaf-clip)">
+                      <image
+                        href={`${baseURL}${n.plant.image}`}
+                        x={-r}
+                        y={-r}
+                        width={r * 2}
+                        height={r * 2}
+                        preserveAspectRatio="xMidYMid slice"
+                      />
+                    </g>
+                  ) : (
+                    <text
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      fontFamily="'Space Mono', monospace"
+                      fontSize={9}
+                      fill="var(--color-ink-muted)"
+                    >
+                      {n.code}
+                    </text>
+                  )}
+                  {isCenter && (
+                    <circle
+                      r={r + 2}
+                      fill="none"
+                      stroke={nodeColor}
+                      strokeWidth={1.8}
+                      strokeOpacity={0.9}
+                    />
+                  )}
+                  <g pointerEvents="none">
+                    <text
+                      y={r + 14}
+                      textAnchor="middle"
+                      fontFamily="'DM Sans', sans-serif"
+                      fontSize={12}
+                      fontWeight={500}
+                      fill="var(--color-ink)"
+                      stroke="var(--color-surface)"
+                      strokeWidth={3}
+                      strokeOpacity={0.85}
+                      paintOrder="stroke fill"
+                    >
+                      {n.label}
+                    </text>
+                    {n.subLabel && (
+                      <text
+                        y={r + 26}
+                        textAnchor="middle"
+                        fontFamily="'DM Sans', sans-serif"
+                        fontStyle="italic"
+                        fontSize={9}
+                        fill="var(--color-ink-muted)"
+                        stroke="var(--color-surface)"
+                        strokeWidth={3}
+                        strokeOpacity={0.85}
+                        paintOrder="stroke fill"
+                      >
+                        {n.subLabel}
+                      </text>
+                    )}
+                  </g>
+                </g>
+              );
+            })}
+          </g>
+        </svg>
+
+        {/* Zoom controls */}
+        <div
+          className="absolute bottom-2 right-2 flex items-center gap-0.5 rounded-md bg-surface/85 backdrop-blur-sm ring-1 ring-inset ring-white/5 p-0.5"
+          onClick={stop}
+          onPointerDown={stop}
+          onWheel={stop}
+        >
+          <CtrlBtn label="Zoom out" onClick={() => zoomBy(0.8)}>
+            <ZoomOut size={13} strokeWidth={1.5} />
+          </CtrlBtn>
+          <CtrlBtn label="Zoom in" onClick={() => zoomBy(1.25)}>
+            <ZoomIn size={13} strokeWidth={1.5} />
+          </CtrlBtn>
+          <CtrlBtn label="Fit to view" onClick={fitToView}>
+            <Maximize2 size={13} strokeWidth={1.5} />
+          </CtrlBtn>
+        </div>
+      </div>
 
       {typesInUse.length > 0 && (
         <div className="flex flex-wrap gap-x-3 gap-y-1 justify-center">
