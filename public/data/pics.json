@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 72,
+      "id": "I uni alb-1778605466",
+      "shortCode": "I uni alb",
+      "zoneCode": "fy",
+      "tags": [],
+      "description": null,
+      "image": "images/I uni alb/1778605466.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-05-12T17:04:27.758Z",
+      "width": 800,
+      "height": 600
+    },
+    {
       "seq": 71,
       "id": "G mac-1778451440",
       "shortCode": "G mac",
