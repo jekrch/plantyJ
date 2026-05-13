@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 75,
+      "id": "C pen-1778691566",
+      "shortCode": "C pen",
+      "zoneCode": "mpg",
+      "tags": [],
+      "description": null,
+      "image": "images/C pen/1778691566.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-05-13T16:59:28.123Z",
+      "width": 1112,
+      "height": 1280
+    },
+    {
       "seq": 74,
       "id": "V sor pri-1778607048",
       "shortCode": "V sor pri",
@@ -31,7 +44,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
