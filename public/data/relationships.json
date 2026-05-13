@@ -35,6 +35,12 @@
       "name": "Nesting / Habitat",
       "description": "Dense shrubs or trees that provide essential shelter, roosting, or nesting sites for birds and small mammals.",
       "directional": true
+    },
+    {
+      "id": "seed-disperser",
+      "name": "Seed Disperser",
+      "description": "The animal disperses the plant's seeds, often by consuming an attached elaiosome (myrmecochory).",
+      "directional": true
     }
   ],
   "relationships": [
@@ -230,6 +236,36 @@
       "type": "pollinator",
       "from": "V virg",
       "to": "V vir"
+    },
+    {
+      "id": 29,
+      "type": "seed-disperser",
+      "from": "C pen",
+      "to": "A can"
+    },
+    {
+      "id": 30,
+      "type": "seed-disperser",
+      "from": "C pen",
+      "to": "h acu"
+    },
+    {
+      "id": 31,
+      "type": "seed-disperser",
+      "from": "C pen",
+      "to": "v sor"
+    },
+    {
+      "id": 32,
+      "type": "seed-disperser",
+      "from": "C pen",
+      "to": "V sor pri"
+    },
+    {
+      "id": 33,
+      "type": "seed-disperser",
+      "from": "C pen",
+      "to": "e ame"
     }
   ]
 }
