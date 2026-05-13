@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "C pen",
+      "fullName": "Camponotus pennsylvanicus",
+      "commonName": "Carpenter Ant",
+      "variety": null
+    },
+    {
       "shortCode": "V sor pri",
       "fullName": "Viola sororia",
       "commonName": "Bicolor Violet",
