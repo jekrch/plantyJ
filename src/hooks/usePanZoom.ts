@@ -85,6 +85,7 @@ export function usePanZoom({
     startTx: number;
     startTy: number;
   } | null>(null);
+  const lastTouchTapRef = useRef<{ time: number; cx: number; cy: number } | null>(null);
 
   const clientToContainer = useCallback((clientX: number, clientY: number) => {
     const el = containerRef.current;
@@ -280,6 +281,14 @@ export function usePanZoom({
         (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
       } catch {}
 
+      // Capture before cleanup for double-tap detection
+      const wasSingleNonMovedTouch =
+        e.pointerType === "touch" &&
+        pointersRef.current.size === 0 &&
+        !pinchRef.current &&
+        panRef.current?.pointerId === e.pointerId &&
+        !panRef.current?.moved;
+
       if (pointersRef.current.size < 2) pinchRef.current = null;
       if (panRef.current?.pointerId === e.pointerId) panRef.current = null;
 
@@ -299,8 +308,26 @@ export function usePanZoom({
           moved: true,
         };
       }
+
+      if (wasSingleNonMovedTouch) {
+        const now = Date.now();
+        const last = lastTouchTapRef.current;
+        const { cx, cy } = clientToContainer(e.clientX, e.clientY);
+        const isNode = (e.target as Element).closest?.("[data-node]");
+
+        if (!isNode && last && now - last.time < 300 && Math.hypot(cx - last.cx, cy - last.cy) < 40) {
+          setTransform((t) => {
+            const k = clamp(t.k * 1.25, minK, maxK);
+            const ratio = k / t.k;
+            return { k, x: cx - (cx - t.x) * ratio, y: cy - (cy - t.y) * ratio };
+          });
+          lastTouchTapRef.current = null;
+        } else {
+          lastTouchTapRef.current = { time: now, cx, cy };
+        }
+      }
     },
-    [transform.x, transform.y]
+    [transform.x, transform.y, clientToContainer, minK, maxK]
   );
 
   return {

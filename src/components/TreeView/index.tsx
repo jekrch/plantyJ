@@ -480,6 +480,7 @@ function LeafNode({
     <g
       transform={`translate(${n.y},${n.x})`}
       style={{ cursor: "pointer" }}
+      data-node="true"
       {...handlers}
     >
       <rect x={-(r + 2)} y={-(r + 4)} width={r * 2 + 4 + LABEL_COL} height={r * 2 + 8} fill="transparent" stroke="none" />
@@ -570,6 +571,7 @@ function InternalNode({
     <g
       transform={`translate(${n.y},${n.x})`}
       style={{ cursor: "pointer" }}
+      data-node="true"
       {...handlers}
     >
       <circle r={r + 14} fill="transparent" stroke="none" />

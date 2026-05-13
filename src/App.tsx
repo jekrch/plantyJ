@@ -596,6 +596,7 @@ export default function App() {
           zonePics={zonePics}
           annotations={annotations}
           speciesByShortCode={speciesByShortCode}
+          relationships={relationshipsData}
           currentIndex={openIndex}
           onClose={handleCloseViewer}
           onNavigate={handleNavigateViewer}

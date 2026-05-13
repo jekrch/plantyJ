@@ -737,6 +737,7 @@ export default function WebView({
                   <g
                     key={`web-node-${n.code}`}
                     transform={`translate(${n.x},${n.y})`}
+                    data-node="true"
                     style={{
                       cursor: "pointer",
                       opacity: dim ? 0.35 : 1,

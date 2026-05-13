@@ -16,6 +16,8 @@ interface Props {
   typeById: Map<string, RelationshipType>;
   plantsByCode: Map<string, Plant>;
   onSelectCode?: (shortCode: string) => void;
+  graphClassName?: string;
+  outerClassName?: string;
 }
 
 const TYPE_COLORS = [
@@ -57,6 +59,8 @@ export function RelationsSubgraph({
   typeById,
   plantsByCode,
   onSelectCode,
+  graphClassName = "relative h-75 overflow-hidden rounded",
+  outerClassName = "flex flex-col gap-2",
 }: Props) {
   const baseURL = import.meta.env.BASE_URL;
   const [hovered, setHovered] = useState<string | null>(null);
@@ -216,10 +220,10 @@ export function RelationsSubgraph({
   const stop = (e: React.SyntheticEvent) => e.stopPropagation();
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className={outerClassName}>
       <div
         ref={containerRef}
-        className="relative h-75 overflow-hidden rounded"
+        className={graphClassName}
         style={{
           touchAction: "none",
           userSelect: "none",

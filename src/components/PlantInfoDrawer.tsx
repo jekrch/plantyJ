@@ -3,6 +3,9 @@ import { ChevronDown, ExternalLink, Leaf } from "lucide-react";
 import type { AIAnalysis, AIVerdict, Annotation, Plant, Species, SpeciesTaxonomy, Zone, ZonePic } from "../types";
 import { plantTitle } from "../utils/display";
 import { ModelAttribution } from "./ModelAttribution";
+import { TabBtn } from "./TreeView/CtrlBtn";
+import { RelationsSubgraph } from "./TreeView/RelationsSubgraph";
+import type { RelationshipsData } from "../hooks/useRelationships";
 
 export type { AIAnalysis, AIVerdict };
 
@@ -53,6 +56,7 @@ interface Props {
   annotations: Annotation[];
   speciesByShortCode: Map<string, Species>;
   aiAnalyses?: AIAnalysis[];
+  relationships?: RelationshipsData;
   onSelectPlant: (plant: Plant) => void;
   onSelectTaxon: (name: string) => void;
   topOffset?: number;
@@ -101,6 +105,7 @@ export default function PlantInfoDrawer({
   annotations,
   speciesByShortCode,
   aiAnalyses = [],
+  relationships,
   onSelectPlant,
   onSelectTaxon,
   topOffset = 0,
@@ -109,13 +114,13 @@ export default function PlantInfoDrawer({
   slideDir = null,
 }: Props) {
   const [descExpanded, setDescExpanded] = useState(false);
-  const [expandedRank, setExpandedRank] = useState<keyof SpeciesTaxonomy | null>(
-    null
-  );
+  const [expandedRank, setExpandedRank] = useState<keyof SpeciesTaxonomy | null>(null);
+  const [tab, setTab] = useState<"info" | "web">("info");
 
   useEffect(() => {
     setDescExpanded(false);
     setExpandedRank(null);
+    setTab("info");
   }, [plant.id]);
 
   const species = speciesByShortCode.get(plant.shortCode) ?? null;
@@ -194,6 +199,13 @@ export default function PlantInfoDrawer({
     });
   }, [species, speciesByShortCode]);
 
+  const relationCount = useMemo(() => {
+    if (!relationships?.loaded) return 0;
+    return (relationships.neighbors.get(plant.shortCode) ?? []).length;
+  }, [relationships, plant.shortCode]);
+
+  const hasRelations = relationCount > 0;
+
   const bioclipSpeciesId = plant.bioclipSpeciesId?.trim() || null;
   const bioclipCommonName = plant.bioclipCommonName?.trim() || null;
   const bioclipWikiUrl = plant.bioclipWikiUrl?.trim() || null;
@@ -248,7 +260,7 @@ export default function PlantInfoDrawer({
 
   return (
     <div
-      className="absolute inset-x-0 z-15 overflow-y-auto info-modal-scroll thin-scroll"
+      className="absolute inset-x-0 z-15 flex flex-col overflow-hidden"
       style={{
         top: topOffset,
         bottom: bottomOffset,
@@ -264,24 +276,47 @@ export default function PlantInfoDrawer({
       onClick={(e) => e.stopPropagation()}
     >
       <div
-        className="px-6 py-6 sm:px-10 sm:py-8 space-y-5 max-w-lg lg:max-w-xl mx-auto w-full"
+        className="flex-1 min-h-0 flex flex-col"
         style={{
           opacity: show ? 1 : 0,
           transform: show ? "translateY(0)" : "translateY(12px)",
           transition: "opacity 0.25s ease-out 0.15s, transform 0.25s ease-out 0.15s",
         }}
       >
+        {/* ── Tab strip — fixed, only when this plant has relationships ── */}
+        {hasRelations && (
+          <div className="shrink-0 px-6 pt-0 sm:px-10 sm:pt-0">
+            <div className="max-w-lg lg:max-w-xl mx-auto w-full">
+              <div className="flex items-center gap-4 border-b border-white/10">
+                <TabBtn active={tab === "info"} onClick={() => setTab("info")}>
+                  Info
+                </TabBtn>
+                <TabBtn active={tab === "web"} onClick={() => setTab("web")}>
+                  Web
+                  <span className="ml-1 text-ink-faint normal-case tracking-normal">
+                    ({relationCount})
+                  </span>
+                </TabBtn>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── Info tab — scrollable content ── */}
+        <div
+          className={`flex-1 min-h-0 overflow-y-auto info-modal-scroll thin-scroll ${tab !== "info" ? "hidden" : ""}`}
+        >
+          <div className="px-6 py-6 sm:px-10 sm:py-8 space-y-5 max-w-lg lg:max-w-xl mx-auto w-full">
+
         {/* Plant identity */}
-        <div 
-          className="relative overflow-hidden rounded px-4 py-3" 
+        <div
+          className="relative overflow-hidden rounded px-4 py-3"
           style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
         >
-          {/* Fading Background Image */}
           {plant.image && (
             <div
               className="absolute inset-y-0 right-0 w-2/3 sm:w-1/2 pointer-events-none z-0"
               style={{
-                // Mask fades from transparent on the left to solid on the right
                 WebkitMaskImage: "linear-gradient(to right, transparent, black 80%)",
                 maskImage: "linear-gradient(to right, transparent, black 80%)",
               }}
@@ -289,12 +324,10 @@ export default function PlantInfoDrawer({
               <img
                 src={`${import.meta.env.BASE_URL}${plant.image}`}
                 alt=""
-                className="w-full h-full object-cover opacity-40 mix-blend-luminosity" 
+                className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
               />
             </div>
           )}
-
-          {/* Text Content */}
           <div className="relative z-10 pointer-events-none">
             <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">{plant.kind === "animal" ? "Animal" : "Plant"}</p>
             <p className="font-display text-sm text-white/90 leading-snug">
@@ -764,6 +797,25 @@ export default function PlantInfoDrawer({
               </div>
             </div>
           </>
+        )}
+          </div>
+        </div>
+
+        {/* ── Web tab — relationship graph ── */}
+        {hasRelations && relationships && (
+          <div className={`flex-1 min-h-0 flex flex-col ${tab !== "web" ? "hidden" : ""}`}>
+            <RelationsSubgraph
+              centerCode={plant.shortCode}
+              centerLabel={plantTitle(plant)}
+              plants={allPlants}
+              relationships={relationships.relationships}
+              neighbors={relationships.neighbors}
+              typeById={relationships.typeById}
+              plantsByCode={plantByShortCode}
+              outerClassName="flex-1 min-h-0 flex flex-col gap-2 px-3 pt-3 pb-3"
+              graphClassName="relative flex-1 min-h-0 overflow-hidden rounded"
+            />
+          </div>
         )}
       </div>
     </div>

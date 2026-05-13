@@ -8,6 +8,7 @@ import { useGestureHandler } from "../hooks/useGestureHandler";
 import { useSlideNavigation } from "../hooks/useSlideNavigation";
 import NavButton from "./NavButton";
 import PlantInfoDrawer, { AIAnalysis } from "./PlantInfoDrawer";
+import type { RelationshipsData } from "../hooks/useRelationships";
 import { plantTitle } from "../utils/display";
 
 interface Props {
@@ -18,6 +19,7 @@ interface Props {
   zonePics: ZonePic[];
   annotations: Annotation[];
   speciesByShortCode: Map<string, Species>;
+  relationships?: RelationshipsData;
   currentIndex: number;
   onClose: () => void;
   onNavigate: (index: number) => void;
@@ -33,6 +35,7 @@ export default function PlantViewer({
   zonePics,
   annotations,
   speciesByShortCode,
+  relationships,
   currentIndex,
   onClose,
   onNavigate,
@@ -503,6 +506,7 @@ export default function PlantViewer({
         zonePics={zonePics}
         annotations={annotations}
         speciesByShortCode={speciesByShortCode}
+        relationships={relationships}
         onSelectPlant={onSelectPlant}
         onSelectTaxon={onSelectTaxon}
         topOffset={topBarH}
