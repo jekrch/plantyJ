@@ -381,6 +381,18 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "P ver",
+      "zoneCode": "sy",
+      "verdict": "MIXED",
+      "analysis": "Primula veris (cowslip primrose) presents a slightly mixed ecological profile for a native-prioritizing Minneapolis garden. Because it is native to Europe and Asia rather than North America, it does not support local specialist insects in their larval stages. However, it still plays a highly beneficial role in the garden's ecology by providing an early, nectar-rich food source for emerging spring bees and butterflies. Situated in the side yard among early-blooming fruit trees like apple, apricot, and Asian pear, it functions as a helpful understory pollinator attractant. Furthermore, its historical European uses as an edible plant—with leaves used in salads and flowers in wines—and as a medicinal herb align perfectly with the owners' permaculture goals.\n\nHorticulturally, cowslip is an excellent match for the site's practical constraints. It is fully cold-hardy down to USDA Zone 3 and actively thrives in moisture-retentive clay and loam soils. In the side yard, it serves as a well-behaved companion to native shade-lovers like wild ginger and ostrich fern. While it is non-native, it is not considered invasive in the upper Midwest and naturalizes gently without smothering nearby plants. Although strict native plant purists might prefer a local ephemeral, cowslip remains a durable, manageable, and highly functional layer in this garden's edible and ecological landscape.",
+      "references": [
+        "https://pfaf.org/user/Plant.aspx?LatinName=Primula%20veris",
+        "https://www.naturescape.co.uk/product/cowslip/",
+        "https://www.gardengatemagazine.com/articles/flowers-plants/plant-guide/cowslip-primula-veris/"
+      ],
+      "created": "2026-05-13T00:45:26.434Z"
+    },
+    {
       "shortCode": "R bla",
       "zoneCode": "fy",
       "verdict": "GOOD",
@@ -606,6 +618,17 @@
         "https://mgnv.org/wp-content/uploads/2025/08/Veronicsatrum_virginicum.2025.pdf"
       ],
       "created": "2026-05-09T00:30:07.442Z"
+    },
+    {
+      "shortCode": "V virg",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "The American Painted Lady butterfly (Vanessa virginiensis) is a native species to the Twin Cities area, and its presence in the front yard strongly indicates a thriving, functional ecosystem. Highly aligned with the owners' goals of prioritizing local ecology, this beneficial insect relies on several native nectar sources distributed across the property. Through its daily foraging, it actively pollinates key native perennials, including butterfly weed in the North Boulevard, purple coneflower in the berry border, black-eyed Susan in the side yard, and calico aster in the maple zone. This cross-zone mobility makes it an invaluable asset for maintaining robust seed sets and sustaining the plant communities throughout the garden.\n\nBeyond pollination, the American Painted Lady serves as a vital component of the urban food web by providing high-quality forage for native songbirds; notably, it is actively hunted by the property's resident Northern Cardinal. While its role as an adult pollinator is well supported by the current floral abundance, the garden currently lacks the specific native host plants required for its caterpillar stage. To encourage the butterfly to complete its full life cycle on the property, the owners could consider introducing native Asteraceae hosts such as pearly everlasting (Anaphalis margaritacea) or field pussytoes (Antennaria neglecta). These additions adapt well to zone 4b/5a clay and loam soils, perfectly complementing the native-focused management plan with no negative ecological drawbacks.",
+      "references": [
+        "https://www.minnesotaseasons.com/Insects/American_lady.html",
+        "https://www.morningskygreenery.com/product/anaphalis-margaritacea/"
+      ],
+      "created": "2026-05-13T00:45:26.434Z"
     },
     {
       "shortCode": "Z aur",
