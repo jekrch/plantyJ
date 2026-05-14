@@ -266,6 +266,24 @@
       "type": "seed-disperser",
       "from": "C pen",
       "to": "e ame"
+    },
+    {
+      "id": 34,
+      "type": "predator-prey",
+      "from": "m gal",
+      "to": "C pen"
+    },
+    {
+      "id": 35,
+      "type": "predator-prey",
+      "from": "c card",
+      "to": "C pen"
+    },
+    {
+      "id": 36,
+      "type": "predator-prey",
+      "from": "p dom",
+      "to": "C pen"
     }
   ]
 }
