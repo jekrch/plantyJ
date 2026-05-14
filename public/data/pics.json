@@ -11,7 +11,11 @@
       "postedBy": "Jacob",
       "addedAt": "2026-05-14T16:09:19.390Z",
       "width": 1280,
-      "height": 878
+      "height": 878,
+      "kind": "animal",
+      "bioclipSpeciesId": "Haemorhous mexicanus",
+      "bioclipCommonName": "House finch",
+      "bioclipScore": 0.9843
     },
     {
       "seq": 75,
@@ -61,7 +65,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
