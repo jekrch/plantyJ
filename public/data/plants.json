@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "H mex",
+      "fullName": "Haemorhous mexicanus",
+      "commonName": "House Finch",
+      "variety": null
+    },
+    {
       "shortCode": "C pen",
       "fullName": "Camponotus pennsylvanicus",
       "commonName": "Carpenter Ant",
