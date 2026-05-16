@@ -1,13 +1,13 @@
 import { hierarchy, type HierarchyPointNode } from "d3-hierarchy";
-import type { Plant, Species } from "../../types";
+import type { Organism, Species } from "../../types";
 import type { RawNode } from "../TreeView/types";
 import { RANKS } from "../TreeView/types";
 
-// Build a single-plant hierarchy that satisfies HierarchyPointNode<RawNode>,
-// so NodeDetail can render its ancestry trail and act on the leaf plant.
+// Build a single-organism hierarchy that satisfies HierarchyPointNode<RawNode>,
+// so NodeDetail can render its ancestry trail and act on the leaf organism.
 // Positions are zeroed since we don't lay it out — the detail panel ignores them.
 export function buildWebNode(
-  plant: Plant,
+  organism: Organism,
   species: Species | undefined
 ): HierarchyPointNode<RawNode> {
   const root: RawNode = { name: "Tree of Life", rank: "root", children: [] };
@@ -22,8 +22,8 @@ export function buildWebNode(
       cur = child;
     }
   }
-  cur.shortCode = plant.shortCode;
-  cur.plant = plant;
+  cur.shortCode = organism.shortCode;
+  cur.organism = organism;
   cur.children = undefined;
 
   const h = hierarchy<RawNode>(root, (d) => d.children);

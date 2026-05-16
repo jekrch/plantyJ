@@ -1,20 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { ExternalLink, Leaf, Sprout, X } from "lucide-react";
 import type { HierarchyPointNode } from "d3-hierarchy";
-import type { Plant, Species, TaxaInfo, Zone } from "../../types";
+import type { Organism, Species, TaxaInfo, Zone } from "../../types";
 import type { RawNode } from "./types";
 import { RANK_LABEL } from "./types";
-import { plantTitle } from "../../utils/display";
+import { organismTitle } from "../../utils/display";
 import { speciesPicsFor } from "./treeUtils";
 import { TabBtn } from "./CtrlBtn";
-import type { AIAnalysis, AIVerdict } from "../PlantInfoDrawer";
+import type { AIAnalysis, AIVerdict } from "../OrganismInfoDrawer";
 import { ModelAttribution } from "../ModelAttribution";
 import { RelationsSubgraph } from "./RelationsSubgraph";
 import type { RelationshipsData } from "../../hooks/useRelationships";
 
 interface Props {
   node: HierarchyPointNode<RawNode>;
-  plants: Plant[];
+  organisms: Organism[];
   taxa: Record<string, TaxaInfo>;
   zones: Zone[];
   speciesByShortCode: Map<string, Species>;
@@ -23,8 +23,8 @@ interface Props {
   isClosing?: boolean;
   onAnimationEnd?: () => void;
   onClose: () => void;
-  onOpenPlantInList: (plant: Plant, list: Plant[]) => void;
-  onSpotlightPlant: (shortCode: string) => void;
+  onOpenOrganismInList: (organism: Organism, list: Organism[]) => void;
+  onSpotlightOrganism: (shortCode: string) => void;
 }
 
 const VERDICT_COLOR: Record<AIVerdict, { color: string; filled: number }> = {
@@ -65,7 +65,7 @@ function VerdictBadge({ verdict }: { verdict: AIVerdict }) {
 
 export function NodeDetail({
   node,
-  plants,
+  organisms,
   taxa,
   zones,
   speciesByShortCode,
@@ -74,22 +74,22 @@ export function NodeDetail({
   isClosing,
   onAnimationEnd,
   onClose,
-  onOpenPlantInList,
-  onSpotlightPlant,
+  onOpenOrganismInList,
+  onSpotlightOrganism,
 }: Props) {
-  const isLeaf = !!node.data.plant;
+  const isLeaf = !!node.data.organism;
   const baseURL = import.meta.env.BASE_URL;
 
-  const plantsByCode = useMemo(() => {
-    const m = new Map<string, Plant>();
-    for (const p of plants) {
+  const organismsByCode = useMemo(() => {
+    const m = new Map<string, Organism>();
+    for (const p of organisms) {
       const existing = m.get(p.shortCode);
       if (!existing || new Date(p.addedAt) > new Date(existing.addedAt)) {
         m.set(p.shortCode, p);
       }
     }
     return m;
-  }, [plants]);
+  }, [organisms]);
 
   const relationCount = useMemo(() => {
     if (!isLeaf || !node.data.shortCode || !relationships) return 0;
@@ -147,24 +147,24 @@ export function NodeDetail({
 
   const items = useMemo(() => {
     if (isLeaf) {
-      return plants
+      return organisms
         .filter((p) => p.shortCode === node.data.shortCode!)
         .sort((a, b) => new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime());
     }
-    const repByCode = new Map<string, Plant>();
-    for (const p of plants) {
+    const repByCode = new Map<string, Organism>();
+    for (const p of organisms) {
       if (!shortCodes.has(p.shortCode)) continue;
       const existing = repByCode.get(p.shortCode);
       if (!existing || new Date(p.addedAt) > new Date(existing.addedAt)) {
         repByCode.set(p.shortCode, p);
       }
     }
-    return Array.from(repByCode.values()).sort((a, b) => plantTitle(a).localeCompare(plantTitle(b)));
-  }, [isLeaf, node, plants, shortCodes]);
+    return Array.from(repByCode.values()).sort((a, b) => organismTitle(a).localeCompare(organismTitle(b)));
+  }, [isLeaf, node, organisms, shortCodes]);
 
   const ancestry = node.ancestors().reverse().filter((n) => n.depth > 0);
-  const title = isLeaf ? plantTitle(node.data.plant!) : node.data.name;
-  const subtitle = isLeaf ? node.data.plant?.fullName : RANK_LABEL[node.data.rank];
+  const title = isLeaf ? organismTitle(node.data.organism!) : node.data.name;
+  const subtitle = isLeaf ? node.data.organism?.fullName : RANK_LABEL[node.data.rank];
 
   const firstImage = items[0]?.image ?? null;
 
@@ -372,13 +372,13 @@ export function NodeDetail({
                   <button
                     key={p.id}
                     type="button"
-                    onClick={() => onOpenPlantInList(p, speciesPicsFor(plants, p.shortCode))}
+                    onClick={() => onOpenOrganismInList(p, speciesPicsFor(organisms, p.shortCode))}
                     className="panel-item relative overflow-hidden rounded-sm bg-surface ring-1 ring-inset ring-white/5 hover:ring-accent/40 transition-all break-inside-avoid mb-1.5 block w-full"
                     style={{ aspectRatio: aspect }}
                   >
                     <img
                       src={`${baseURL}${p.image}`}
-                      alt={plantTitle(p)}
+                      alt={organismTitle(p)}
                       loading="lazy"
                       decoding="async"
                       className="block w-full h-full object-cover"
@@ -386,7 +386,7 @@ export function NodeDetail({
                     />
                     {!isLeaf && (
                       <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[10px] text-white/85 bg-linear-to-t from-black/80 to-black/20 leading-tight truncate pointer-events-none">
-                        {plantTitle(p)}
+                        {organismTitle(p)}
                       </span>
                     )}
                   </button>
@@ -399,11 +399,11 @@ export function NodeDetail({
             <div className="mt-3 flex justify-end">
               <button
                 type="button"
-                onClick={() => onSpotlightPlant(node.data.shortCode!)}
+                onClick={() => onSpotlightOrganism(node.data.shortCode!)}
                 className="flex items-center gap-1.5 text-[11px] font-display tracking-wider uppercase text-accent hover:text-accent-dim transition-colors"
               >
                 <Sprout size={12} strokeWidth={1.5} />
-                Spotlight this plant
+                Spotlight this organism
               </button>
             </div>
           )}
@@ -417,11 +417,11 @@ export function NodeDetail({
             <RelationsSubgraph
               centerCode={node.data.shortCode}
               centerLabel={title}
-              plants={plants}
+              organisms={organisms}
               relationships={relationships.relationships}
               neighbors={relationships.neighbors}
               typeById={relationships.typeById}
-              plantsByCode={plantsByCode}
+              organismsByCode={organismsByCode}
             />
           </div>
         )}

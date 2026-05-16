@@ -26,7 +26,7 @@ export function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center py-32 text-center">
       <p className="text-ink-muted text-sm">
-        No plants yet. Send a photo to the Telegram bot to get started.
+        No organisms yet. Send a photo to the Telegram bot to get started.
       </p>
     </div>
   );

@@ -5,7 +5,7 @@ import {
   useEffect,
   useLayoutEffect,
 } from "react";
-import type { Plant, PlantRecord, Zone } from "../types";
+import type { Organism, OrganismRecord, Zone } from "../types";
 import {
   ChevronDown,
   ChevronLeft,
@@ -22,8 +22,8 @@ export type ViewMode = "gallery" | "plant" | "zone" | "tree" | "web";
 interface Props {
   mode: ViewMode;
   subjectCode: string | null;
-  plants: Plant[];
-  plantRecords: PlantRecord[];
+  organisms: Organism[];
+  organismRecords: OrganismRecord[];
   zones: Zone[];
   onChange: (mode: ViewMode, subjectCode: string | null) => void;
 }
@@ -37,26 +37,26 @@ interface Option {
 export default function ViewModeControl({
   mode,
   subjectCode,
-  plants,
-  plantRecords,
+  organisms,
+  organismRecords,
   zones,
   onChange,
 }: Props) {
   const plantOptions = useMemo<Option[]>(() => {
     const countByCode = new Map<string, number>();
     const animalCodes = new Set<string>();
-    for (const p of plants) {
+    for (const p of organisms) {
       if (p.kind === "animal") {
         animalCodes.add(p.shortCode);
       } else {
         countByCode.set(p.shortCode, (countByCode.get(p.shortCode) ?? 0) + 1);
       }
     }
-    const recordByCode = new Map<string, PlantRecord>();
-    for (const r of plantRecords) recordByCode.set(r.shortCode, r);
+    const recordByCode = new Map<string, OrganismRecord>();
+    for (const r of organismRecords) recordByCode.set(r.shortCode, r);
     const codes = new Set<string>([
-      ...plantRecords.map((r) => r.shortCode),
-      ...plants.map((p) => p.shortCode),
+      ...organismRecords.map((r) => r.shortCode),
+      ...organisms.map((p) => p.shortCode),
     ]);
     return Array.from(codes)
       .filter((code) => !animalCodes.has(code))
@@ -71,11 +71,11 @@ export default function ViewModeControl({
       })
       .filter((o) => o.count > 0)
       .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
-  }, [plants, plantRecords]);
+  }, [organisms, organismRecords]);
 
   const zoneOptions = useMemo<Option[]>(() => {
     const countByZone = new Map<string, number>();
-    for (const p of plants) {
+    for (const p of organisms) {
       countByZone.set(p.zoneCode, (countByZone.get(p.zoneCode) ?? 0) + 1);
     }
     return zones
@@ -86,7 +86,7 @@ export default function ViewModeControl({
       }))
       .filter((o) => o.count > 0)
       .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
-  }, [zones, plants]);
+  }, [zones, organisms]);
 
   const setMode = (next: ViewMode) => {
     if (next === "gallery" || next === "tree" || next === "web") {

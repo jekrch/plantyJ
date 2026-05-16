@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
-import type { Plant, Zone, ZonePic } from "../types";
-import { plantTitle } from "../utils/display";
+import type { Organism, Zone, ZonePic } from "../types";
+import { organismTitle } from "../utils/display";
 
 const DOUBLE_CLICK_DELAY = 400;
 const MOUSE_TOLERANCE = 20;
@@ -11,20 +11,20 @@ export type SpotlightKind = "plant" | "zone";
 interface Props {
   kind: SpotlightKind;
   subjectCode: string;
-  allPlants: Plant[];
+  allOrganisms: Organism[];
   zonePics: ZonePic[];
   zones: Zone[];
-  onOpenViewer: (plant: Plant) => void;
+  onOpenViewer: (organism: Organism) => void;
 }
 
-interface PlantItem {
+interface OrganismItem {
   kind: "plant";
   id: string;
   image: string;
   addedAt: string;
   width: number;
   height: number;
-  plant: Plant;
+  organism: Organism;
 }
 
 interface ZoneItem {
@@ -35,7 +35,7 @@ interface ZoneItem {
   zoneCode: string;
 }
 
-type SpotlightItem = PlantItem | ZoneItem;
+type SpotlightItem = OrganismItem | ZoneItem;
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString(undefined, {
@@ -45,7 +45,7 @@ function formatDate(iso: string): string {
   });
 }
 
-function toPlantItem(p: Plant): PlantItem {
+function toOrganismItem(p: Organism): OrganismItem {
   return {
     kind: "plant",
     id: p.id,
@@ -53,7 +53,7 @@ function toPlantItem(p: Plant): PlantItem {
     addedAt: p.addedAt,
     width: p.width,
     height: p.height,
-    plant: p,
+    organism: p,
   };
 }
 
@@ -70,16 +70,16 @@ function toZoneItem(z: ZonePic): ZoneItem {
 export default function SpotlightView({
   kind,
   subjectCode,
-  allPlants,
+  allOrganisms,
   zonePics,
   zones,
   onOpenViewer,
 }: Props) {
   const items = useMemo<SpotlightItem[]>(() => {
     if (kind === "plant") {
-      const list: SpotlightItem[] = allPlants
+      const list: SpotlightItem[] = allOrganisms
         .filter((p) => p.shortCode === subjectCode)
-        .map(toPlantItem);
+        .map(toOrganismItem);
       return list.sort(
         (a, b) =>
           new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime()
@@ -91,12 +91,12 @@ export default function SpotlightView({
       .filter((z) => z.zoneCode === subjectCode)
       .map(toZoneItem)
       .sort(byAddedDesc);
-    const plantItems: SpotlightItem[] = allPlants
+    const organismItems: SpotlightItem[] = allOrganisms
       .filter((p) => p.zoneCode === subjectCode)
-      .map(toPlantItem)
+      .map(toOrganismItem)
       .sort(byAddedDesc);
-    return [...zoneItems, ...plantItems];
-  }, [allPlants, zonePics, kind, subjectCode]);
+    return [...zoneItems, ...organismItems];
+  }, [allOrganisms, zonePics, kind, subjectCode]);
 
   const [selectedId, setSelectedId] = useState<string | null>(
     items[0]?.id ?? null
@@ -113,7 +113,7 @@ export default function SpotlightView({
 
   const headline = useMemo(() => {
     if (kind === "plant") {
-      return hero?.kind === "plant" ? plantTitle(hero.plant) : subjectCode;
+      return hero?.kind === "plant" ? organismTitle(hero.organism) : subjectCode;
     }
     const z = zones.find((z) => z.code === subjectCode);
     return z?.name ?? subjectCode;
@@ -122,11 +122,11 @@ export default function SpotlightView({
   const subline = useMemo(() => {
     if (!hero) return null;
     if (kind === "plant" && hero.kind === "plant") {
-      const z = zones.find((z) => z.code === hero.plant.zoneCode);
-      return z?.name ?? hero.plant.zoneCode;
+      const z = zones.find((z) => z.code === hero.organism.zoneCode);
+      return z?.name ?? hero.organism.zoneCode;
     }
     if (kind === "zone") {
-      if (hero.kind === "plant") return plantTitle(hero.plant);
+      if (hero.kind === "plant") return organismTitle(hero.organism);
       return "zone photo";
     }
     return null;
@@ -143,7 +143,7 @@ export default function SpotlightView({
   }
 
   const heroSrc = `${import.meta.env.BASE_URL}${hero.image}`;
-  const heroTitle = hero.kind === "plant" ? plantTitle(hero.plant) : headline;
+  const heroTitle = hero.kind === "plant" ? organismTitle(hero.organism) : headline;
   const heroOpensViewer = hero.kind === "plant";
 
   return (
@@ -156,7 +156,7 @@ export default function SpotlightView({
             }`}
             style={{ height: "min(45vh, 360px)" }}
             onClick={() => {
-              if (hero.kind === "plant") onOpenViewer(hero.plant);
+              if (hero.kind === "plant") onOpenViewer(hero.organism);
             }}
             title={heroOpensViewer ? "Open in viewer" : undefined}
           >
@@ -209,10 +209,10 @@ export default function SpotlightView({
             {items.map((it) => {
               let thumbLabel: string | undefined;
               if (kind === "plant" && it.kind === "plant") {
-                const z = zones.find((z) => z.code === it.plant.zoneCode);
-                thumbLabel = z?.name ?? it.plant.zoneCode;
+                const z = zones.find((z) => z.code === it.organism.zoneCode);
+                thumbLabel = z?.name ?? it.organism.zoneCode;
               } else if (kind === "zone" && it.kind === "plant") {
-                thumbLabel = plantTitle(it.plant);
+                thumbLabel = organismTitle(it.organism);
               }
               return (
                 <Thumb
@@ -222,7 +222,7 @@ export default function SpotlightView({
                   label={thumbLabel}
                   onSingleClick={() => setSelectedId(it.id)}
                   onDoubleClick={() => {
-                    if (it.kind === "plant") onOpenViewer(it.plant);
+                    if (it.kind === "plant") onOpenViewer(it.organism);
                     else setSelectedId(it.id);
                   }}
                 />
@@ -286,7 +286,7 @@ function Thumb({ item, active, label, onSingleClick, onDoubleClick }: ThumbProps
       : "3 / 4";
 
   const altText =
-    item.kind === "plant" ? plantTitle(item.plant) : "zone photo";
+    item.kind === "plant" ? organismTitle(item.organism) : "zone photo";
 
   return (
     <button

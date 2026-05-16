@@ -11,8 +11,8 @@ import {
 import { LoaderCircle, Maximize2, Search, X, ZoomIn, ZoomOut, Filter } from "lucide-react";
 import type {
   AIAnalysis,
-  Plant,
-  PlantRecord,
+  Organism,
+  OrganismRecord,
   Relationship,
   RelationshipType,
   Species,
@@ -21,23 +21,23 @@ import type {
 } from "../../types";
 import { effectiveDirection, type RelationshipsData } from "../../hooks/useRelationships";
 import { usePanZoom } from "../../hooks/usePanZoom";
-import { plantTitle } from "../../utils/display";
+import { organismTitle } from "../../utils/display";
 import { LEAF_RADIUS } from "../TreeView/types";
 import { CtrlBtn } from "../TreeView/CtrlBtn";
 import { NodeDetail } from "../TreeView/NodeDetail";
 import { buildWebNode } from "./buildWebNode";
 
 interface Props {
-  plants: Plant[];
-  plantRecords: PlantRecord[];
+  organisms: Organism[];
+  organismRecords: OrganismRecord[];
   speciesByShortCode: Map<string, Species>;
   taxa: Record<string, TaxaInfo>;
   zones: Zone[];
   aiAnalyses?: AIAnalysis[];
   relationships: RelationshipsData;
   headerHeight: number;
-  onSpotlightPlant: (shortCode: string) => void;
-  onOpenPlantInList: (plant: Plant, list: Plant[]) => void;
+  onSpotlightOrganism: (shortCode: string) => void;
+  onOpenOrganismInList: (organism: Organism, list: Organism[]) => void;
 }
 
 const TYPE_COLORS = [
@@ -56,7 +56,7 @@ interface PositionedNode {
   subLabel: string | null;
   x: number;
   y: number;
-  plant: Plant | undefined;
+  organism: Organism | undefined;
   isAnimal: boolean;
 }
 
@@ -201,16 +201,16 @@ function layoutGraph(
 }
 
 export default function WebView({
-  plants,
-  plantRecords,
+  organisms,
+  organismRecords,
   speciesByShortCode,
   taxa,
   zones,
   aiAnalyses = [],
   relationships,
   headerHeight,
-  onSpotlightPlant,
-  onOpenPlantInList,
+  onSpotlightOrganism,
+  onOpenOrganismInList,
 }: Props) {
   const baseURL = import.meta.env.BASE_URL;
 
@@ -225,30 +225,30 @@ export default function WebView({
 
   const labelByCode = useMemo(() => {
     const m = new Map<string, { label: string; sub: string | null }>();
-    for (const r of plantRecords) {
+    for (const r of organismRecords) {
       const label = r.commonName ?? r.fullName ?? r.shortCode;
       const sub = r.fullName && r.fullName !== label ? r.fullName : null;
       m.set(r.shortCode, { label, sub });
     }
-    for (const p of plants) {
+    for (const p of organisms) {
       if (m.has(p.shortCode)) continue;
       const label = p.commonName ?? p.fullName ?? p.shortCode;
       const sub = p.fullName && p.fullName !== label ? p.fullName : null;
       m.set(p.shortCode, { label, sub });
     }
     return m;
-  }, [plants, plantRecords]);
+  }, [organisms, organismRecords]);
 
-  const plantByCode = useMemo(() => {
-    const m = new Map<string, Plant>();
-    for (const p of plants) {
+  const organismByCode = useMemo(() => {
+    const m = new Map<string, Organism>();
+    for (const p of organisms) {
       const existing = m.get(p.shortCode);
       if (!existing || new Date(p.addedAt) > new Date(existing.addedAt)) {
         m.set(p.shortCode, p);
       }
     }
     return m;
-  }, [plants]);
+  }, [organisms]);
 
   const colorByType = useMemo(() => {
     const m = new Map<string, string>();
@@ -286,15 +286,15 @@ export default function WebView({
     const nodes: PositionedNode[] = nodeCodes.map((code) => {
       const p = positions.get(code)!;
       const lbl = labelByCode.get(code);
-      const plant = plantByCode.get(code);
+      const organism = organismByCode.get(code);
       return {
         code,
         label: lbl?.label ?? code,
         subLabel: lbl?.sub ?? null,
         x: p.x,
         y: p.y,
-        plant,
-        isAnimal: plant?.kind === "animal",
+        organism,
+        isAnimal: organism?.kind === "animal",
       };
     });
 
@@ -340,7 +340,7 @@ export default function WebView({
     nodeCodes,
     filteredEdges,
     labelByCode,
-    plantByCode,
+    organismByCode,
     colorByType,
     relationships.typeById,
   ]);
@@ -400,10 +400,10 @@ export default function WebView({
 
   const renderedDetailNode = useMemo(() => {
     if (!renderedDetailCode) return null;
-    const plant = plantByCode.get(renderedDetailCode);
-    if (!plant) return null;
-    return buildWebNode(plant, speciesByShortCode.get(renderedDetailCode));
-  }, [renderedDetailCode, plantByCode, speciesByShortCode]);
+    const organism = organismByCode.get(renderedDetailCode);
+    if (!organism) return null;
+    return buildWebNode(organism, speciesByShortCode.get(renderedDetailCode));
+  }, [renderedDetailCode, organismByCode, speciesByShortCode]);
 
   const activeCode = selectedCode ?? hovered;
 
@@ -430,9 +430,9 @@ export default function WebView({
   const isolatedCount = useMemo(() => {
     const inGraph = new Set(nodeCodes);
     let n = 0;
-    for (const r of plantRecords) if (!inGraph.has(r.shortCode)) n++;
+    for (const r of organismRecords) if (!inGraph.has(r.shortCode)) n++;
     return n;
-  }, [nodeCodes, plantRecords]);
+  }, [nodeCodes, organismRecords]);
 
   const toggleType = (id: string) => {
     setEnabledTypes((prev) => {
@@ -462,7 +462,7 @@ export default function WebView({
 
   const searchIndex = useMemo(() => {
     return layout.nodes.map((n) => {
-      const fields = [n.label, n.subLabel, n.code, n.plant?.commonName, n.plant?.fullName, n.plant?.variety]
+      const fields = [n.label, n.subLabel, n.code, n.organism?.commonName, n.organism?.fullName, n.organism?.variety]
         .filter(Boolean) as string[];
       return { node: n, label: n.label, sublabel: n.subLabel ?? n.code, haystack: fields.join(" \n ").toLowerCase() };
     });
@@ -575,7 +575,7 @@ export default function WebView({
               NO RELATIONSHIPS YET
             </p>
             <p className="text-[11px] text-ink-faint max-w-md">
-              Use /relate &lt;type&gt; &lt;fromCode&gt; &lt;toCode&gt; in Telegram to register a relationship between two plants.
+              Use /relate &lt;type&gt; &lt;fromCode&gt; &lt;toCode&gt; in Telegram to register a relationship between two organisms.
             </p>
           </div>
         ) : (
@@ -769,10 +769,10 @@ export default function WebView({
                       strokeOpacity={isActive ? 0.95 : 0.7}
                       strokeWidth={isActive ? 1.8 : 1.2}
                     />
-                    {n.plant ? (
+                    {n.organism ? (
                       <g clipPath="url(#web-leaf-clip)">
                         <image
-                          href={`${baseURL}${n.plant.image}`}
+                          href={`${baseURL}${n.organism.image}`}
                           x={-r}
                           y={-r}
                           width={r * 2}
@@ -804,7 +804,7 @@ export default function WebView({
                         strokeOpacity={0.85}
                         paintOrder="stroke fill"
                       >
-                        {n.plant ? plantTitle(n.plant) : n.label}
+                        {n.organism ? organismTitle(n.organism) : n.label}
                       </text>
                       {n.subLabel && (
                         <text
@@ -938,7 +938,7 @@ export default function WebView({
 
         {isolatedCount > 0 && nodeCodes.length > 0 && (
           <div className="absolute bottom-3 right-3 text-[10px] font-mono text-ink-faint">
-            {isolatedCount} isolated plant{isolatedCount === 1 ? "" : "s"} hidden
+            {isolatedCount} isolated organism{isolatedCount === 1 ? "" : "s"} hidden
           </div>
         )}
       </div>
@@ -953,7 +953,7 @@ export default function WebView({
           >
             <NodeDetail
               node={renderedDetailNode}
-              plants={plants}
+              organisms={organisms}
               taxa={taxa}
               zones={zones}
               speciesByShortCode={speciesByShortCode}
@@ -964,8 +964,8 @@ export default function WebView({
                 if (isClosing) setRenderedDetailCode(null);
               }}
               onClose={() => setDetailCode(null)}
-              onOpenPlantInList={onOpenPlantInList}
-              onSpotlightPlant={onSpotlightPlant}
+              onOpenOrganismInList={onOpenOrganismInList}
+              onSpotlightOrganism={onSpotlightOrganism}
             />
           </div>
         </div>

@@ -1,21 +1,21 @@
-import type { Plant } from "../types";
+import type { Organism } from "../types";
 
 const UNIDENTIFIED_PREFIX = "unid-";
 
-export function isUnidentified(plant: { shortCode: string; fullName: string | null; commonName: string | null }): boolean {
+export function isUnidentified(organism: { shortCode: string; fullName: string | null; commonName: string | null }): boolean {
   return (
-    plant.shortCode.startsWith(UNIDENTIFIED_PREFIX) &&
-    !plant.fullName &&
-    !plant.commonName
+    organism.shortCode.startsWith(UNIDENTIFIED_PREFIX) &&
+    !organism.fullName &&
+    !organism.commonName
   );
 }
 
-export function plantTitle(plant: Plant): string {
+export function organismTitle(organism: Organism): string {
   let base: string;
-  if (plant.commonName) base = plant.commonName;
-  else if (plant.fullName) base = plant.fullName;
-  else if (isUnidentified(plant)) return "Unidentified";
-  else return plant.shortCode;
-  if (plant.variety) return `${base} '${plant.variety}'`;
+  if (organism.commonName) base = organism.commonName;
+  else if (organism.fullName) base = organism.fullName;
+  else if (isUnidentified(organism)) return "Unidentified";
+  else return organism.shortCode;
+  if (organism.variety) return `${base} '${organism.variety}'`;
   return base;
 }

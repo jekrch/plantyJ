@@ -1,20 +1,20 @@
-import type { Plant, Species } from "../../types";
+import type { Organism, Species } from "../../types";
 import type { RawNode, Rank } from "./types";
 import { RANKS } from "./types";
-import { plantTitle } from "../../utils/display";
+import { organismTitle } from "../../utils/display";
 
-export function speciesPicsFor(plants: Plant[], shortCode: string): Plant[] {
-  return plants
+export function speciesPicsFor(organisms: Organism[], shortCode: string): Organism[] {
+  return organisms
     .filter((p) => p.shortCode === shortCode)
     .sort((a, b) => new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime());
 }
 
 export function buildTree(
-  plants: Plant[],
+  organisms: Organism[],
   speciesByShortCode: Map<string, Species>
-): { root: RawNode; missing: Plant[] } {
-  const repByShortCode = new Map<string, Plant>();
-  for (const p of plants) {
+): { root: RawNode; missing: Organism[] } {
+  const repByShortCode = new Map<string, Organism>();
+  for (const p of organisms) {
     const existing = repByShortCode.get(p.shortCode);
     if (!existing || new Date(p.addedAt) > new Date(existing.addedAt)) {
       repByShortCode.set(p.shortCode, p);
@@ -22,13 +22,13 @@ export function buildTree(
   }
 
   const root: RawNode = { name: "Tree of Life", rank: "root", children: [] };
-  const missing: Plant[] = [];
+  const missing: Organism[] = [];
 
-  for (const [shortCode, plant] of repByShortCode) {
+  for (const [shortCode, organism] of repByShortCode) {
     const sp = speciesByShortCode.get(shortCode);
     const tax = sp?.taxonomy;
     if (!tax) {
-      missing.push(plant);
+      missing.push(organism);
       continue;
     }
     const path: { name: string; rank: Rank }[] = [];
@@ -37,7 +37,7 @@ export function buildTree(
       if (v) path.push({ name: v, rank });
     }
     if (path.length === 0) {
-      missing.push(plant);
+      missing.push(organism);
       continue;
     }
 
@@ -51,28 +51,28 @@ export function buildTree(
         cur.children.push(child);
       }
       if (isLeaf) {
-        if (!child.plant && !child.children) {
-          child.shortCode = plant.shortCode;
-          child.plant = plant;
+        if (!child.organism && !child.children) {
+          child.shortCode = organism.shortCode;
+          child.organism = organism;
         } else {
-          // Two plants share the same deepest taxonomy node — convert to an
-          // internal node and give each plant its own variety leaf.
-          if (child.plant) {
-            const existing = child.plant;
+          // Two organisms share the same deepest taxonomy node — convert to an
+          // internal node and give each organism its own variety leaf.
+          if (child.organism) {
+            const existing = child.organism;
             child.children = [{
-              name: plantTitle(existing),
+              name: organismTitle(existing),
               rank: "variety" as Rank,
               shortCode: existing.shortCode,
-              plant: existing,
+              organism: existing,
             }];
             child.shortCode = undefined;
-            child.plant = undefined;
+            child.organism = undefined;
           }
           child.children!.push({
-            name: plantTitle(plant),
+            name: organismTitle(organism),
             rank: "variety" as Rank,
-            shortCode: plant.shortCode,
-            plant: plant,
+            shortCode: organism.shortCode,
+            organism: organism,
           });
         }
       }

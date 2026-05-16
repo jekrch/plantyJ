@@ -1,20 +1,20 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { X, ZoomIn, ZoomOut, Info } from "lucide-react";
-import type { Annotation, Plant, Species, Zone, ZonePic } from "../types";
+import type { Annotation, Organism, Species, Zone, ZonePic } from "../types";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import { MAX_SCALE, MIN_SCALE, useZoomPan } from "../hooks/useZoomPan";
 import { useBarMeasure } from "../hooks/useBarMeasure";
 import { useGestureHandler } from "../hooks/useGestureHandler";
 import { useSlideNavigation } from "../hooks/useSlideNavigation";
 import NavButton from "./NavButton";
-import PlantInfoDrawer, { AIAnalysis } from "./PlantInfoDrawer";
+import OrganismInfoDrawer, { AIAnalysis } from "./OrganismInfoDrawer";
 import type { RelationshipsData } from "../hooks/useRelationships";
-import { plantTitle } from "../utils/display";
+import { organismTitle } from "../utils/display";
 
 interface Props {
-  plant: Plant;
-  plants: Plant[];
-  allPlants: Plant[];
+  organism: Organism;
+  organisms: Organism[];
+  allOrganisms: Organism[];
   zones: Zone[];
   zonePics: ZonePic[];
   annotations: Annotation[];
@@ -23,14 +23,14 @@ interface Props {
   currentIndex: number;
   onClose: () => void;
   onNavigate: (index: number) => void;
-  onSelectPlant: (plant: Plant) => void;
+  onSelectOrganism: (organism: Organism) => void;
   onSelectTaxon: (name: string) => void;
 }
 
-export default function PlantViewer({
-  plant,
-  plants,
-  allPlants,
+export default function OrganismViewer({
+  organism,
+  organisms,
+  allOrganisms,
   zones,
   zonePics,
   annotations,
@@ -39,7 +39,7 @@ export default function PlantViewer({
   currentIndex,
   onClose,
   onNavigate,
-  onSelectPlant,
+  onSelectOrganism,
   onSelectTaxon,
 }: Props) {
   const [visible, setVisible] = useState(false);
@@ -58,7 +58,7 @@ export default function PlantViewer({
   const [viewportWidth, setViewportWidth] = useState(() => window.innerWidth);
 
   const hasPrev = currentIndex > 0;
-  const hasNext = currentIndex < plants.length - 1;
+  const hasNext = currentIndex < organisms.length - 1;
 
   useBodyScrollLock(containerRef);
   const { topBarH, bottomBarH } = useBarMeasure(topBarRef, bottomBarRef, currentIndex);
@@ -76,7 +76,7 @@ export default function PlantViewer({
     handleDoubleClick,
   } = zoomPan;
 
-  const slide = useSlideNavigation(plants, currentIndex, onNavigate);
+  const slide = useSlideNavigation(organisms, currentIndex, onNavigate);
   const { slideTrackRef, slideActive, slideAnimating, swipeOffset, commitSlide } = slide;
 
   const gestures = useGestureHandler(zoomPan, slide, hasPrev, hasNext);
@@ -130,21 +130,21 @@ export default function PlantViewer({
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    params.set("plant", plant.id);
+    params.set("plant", organism.id);
     const qs = params.toString();
     const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
     window.history.replaceState(null, "", url);
 
     return () => {
       const p = new URLSearchParams(window.location.search);
-      if (p.get("plant") === plant.id) {
+      if (p.get("plant") === organism.id) {
         p.delete("plant");
         const q = p.toString();
         const u = q ? `${window.location.pathname}?${q}` : window.location.pathname;
         window.history.replaceState(null, "", u);
       }
     };
-  }, [plant.id]);
+  }, [organism.id]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -166,14 +166,14 @@ export default function PlantViewer({
   const reservedH = bottomBarH + IMG_PADDING * 2;
   const imgMaxHeight = `calc(100vh - ${reservedH}px)`;
 
-  const totalDigits = String(plants.length).length;
+  const totalDigits = String(organisms.length).length;
   const counterMinWidth = `${totalDigits * 2 * 0.6 + 1.5}em`;
 
-  const prevPlant = hasPrev ? plants[currentIndex - 1] : null;
-  const nextPlant = hasNext ? plants[currentIndex + 1] : null;
+  const prevOrganism = hasPrev ? organisms[currentIndex - 1] : null;
+  const nextOrganism = hasNext ? organisms[currentIndex + 1] : null;
   const showAdjacentSlides = slideActive || slideAnimating || swipeOffset !== 0;
-  const showPrev = !!prevPlant && showAdjacentSlides;
-  const showNext = !!nextPlant && showAdjacentSlides;
+  const showPrev = !!prevOrganism && showAdjacentSlides;
+  const showNext = !!nextOrganism && showAdjacentSlides;
   const adjacentOpacity = Math.min(1, Math.abs(swipeOffset) / (viewportWidth * 0.8));
 
   const slideImgStyle: React.CSSProperties = {
@@ -184,13 +184,13 @@ export default function PlantViewer({
 
   const slideTrackTransform = drawerOpen ? "translateY(-100vh)" : "translateY(0)";
 
-  const titleLine = plantTitle(plant);
+  const titleLine = organismTitle(organism);
   const zoneNameByCode = useMemo(() => {
     const m = new Map<string, string>();
     for (const z of zones) if (z.name) m.set(z.code, z.name);
     return m;
   }, [zones]);
-  const subtitle = zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode;
+  const subtitle = zoneNameByCode.get(organism.zoneCode) ?? organism.zoneCode;
 
   return (
     <div
@@ -232,7 +232,7 @@ export default function PlantViewer({
           <div style={{ pointerEvents: "auto", width: "fit-content" }}>
             <p className="font-display text-sm text-white/90 leading-snug">
               {titleLine}{" "}
-              <span className="text-accent text-xs">{plant.shortCode}</span>
+              <span className="text-accent text-xs">{organism.shortCode}</span>
             </p>
             <p className="text-xs text-white/60 mt-0.5 leading-snug">{subtitle}</p>
           </div>
@@ -301,8 +301,8 @@ export default function PlantViewer({
             </button>
           </div>
           <p className="text-[10px] text-white/30 mt-1 leading-snug whitespace-nowrap mt-2">
-            {plant.postedBy} ·{" "}
-            {new Date(plant.addedAt).toLocaleDateString(undefined, {
+            {organism.postedBy} ·{" "}
+            {new Date(organism.addedAt).toLocaleDateString(undefined, {
               month: "short",
               day: "numeric",
               year: "numeric",
@@ -327,7 +327,7 @@ export default function PlantViewer({
           `}
           style={{ touchAction: "none", pointerEvents: "none" }}
         >
-          {showPrev && prevPlant && (
+          {showPrev && prevOrganism && (
             <div
               className="absolute inset-0 flex items-center justify-center select-none pointer-events-none"
               style={{
@@ -336,7 +336,7 @@ export default function PlantViewer({
               }}
             >
               <img
-                src={`${import.meta.env.BASE_URL}${prevPlant.image}`}
+                src={`${import.meta.env.BASE_URL}${prevOrganism.image}`}
                 alt=""
                 className="block w-auto h-auto object-contain rounded-sm"
                 style={slideImgStyle}
@@ -361,7 +361,7 @@ export default function PlantViewer({
           >
             <img
               ref={imgRef}
-              src={`${import.meta.env.BASE_URL}${plant.image}`}
+              src={`${import.meta.env.BASE_URL}${organism.image}`}
               alt={titleLine}
               className="block w-auto h-auto object-contain rounded-sm"
               style={slideImgStyle}
@@ -370,7 +370,7 @@ export default function PlantViewer({
             />
           </div>
 
-          {showNext && nextPlant && (
+          {showNext && nextOrganism && (
             <div
               className="absolute inset-0 flex items-center justify-center select-none pointer-events-none"
               style={{
@@ -379,7 +379,7 @@ export default function PlantViewer({
               }}
             >
               <img
-                src={`${import.meta.env.BASE_URL}${nextPlant.image}`}
+                src={`${import.meta.env.BASE_URL}${nextOrganism.image}`}
                 alt=""
                 className="block w-auto h-auto object-contain rounded-sm"
                 style={slideImgStyle}
@@ -437,7 +437,7 @@ export default function PlantViewer({
                   className="text-[11px] text-white/50 tabular-nums tracking-wide select-none text-center inline-block font-mono"
                   style={{ minWidth: counterMinWidth }}
                 >
-                  {currentIndex + 1} / {plants.length}
+                  {currentIndex + 1} / {organisms.length}
                 </span>
 
                 <NavButton
@@ -497,17 +497,17 @@ export default function PlantViewer({
         )}
       </div>
 
-      <PlantInfoDrawer
+      <OrganismInfoDrawer
         open={drawerOpen}
         closing={closing}
-        plant={plant}
-        allPlants={allPlants}
+        organism={organism}
+        allOrganisms={allOrganisms}
         zones={zones}
         zonePics={zonePics}
         annotations={annotations}
         speciesByShortCode={speciesByShortCode}
         relationships={relationships}
-        onSelectPlant={onSelectPlant}
+        onSelectOrganism={onSelectOrganism}
         onSelectTaxon={onSelectTaxon}
         topOffset={topBarH}
         bottomOffset={bottomBarH}

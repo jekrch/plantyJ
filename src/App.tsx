@@ -6,9 +6,9 @@ import {
   useCallback,
   useRef,
 } from "react";
-import type { AIAnalysis, AIVerdict, Annotation, PicRecord, Plant, PlantRecord, Species, TaxaInfo, Zone, ZonePic } from "./types";
+import type { AIAnalysis, AIVerdict, Annotation, PicRecord, Organism, OrganismRecord, Species, TaxaInfo, Zone, ZonePic } from "./types";
 import { Sprout, House } from "lucide-react";
-import { sortPlantsAsync } from "./utils/sorting.ts";
+import { sortOrganismsAsync } from "./utils/sorting.ts";
 import type { SortMode } from "./utils/sorting.ts";
 import type { Filters } from "./utils/filtering.ts";
 import { applyFilters, hasActiveFilters, EMPTY_FILTERS } from "./utils/filtering.ts";
@@ -17,7 +17,7 @@ import BackgroundEchoes from "./components/BackgroundEchoes";
 import { SpinnerState, ErrorState, EmptyState } from "./components/StatusStates";
 import { useFilterParams } from "./hooks/useFilterParams";
 import { useRelationships } from "./hooks/useRelationships";
-import PlantViewer from "./components/PlantViewer";
+import OrganismViewer from "./components/OrganismViewer";
 import InfoModal from "./components/InfoModal";
 import type { Tab as InfoTab } from "./components/InfoModal";
 import SpotlightView from "./components/SpotlightView";
@@ -34,8 +34,8 @@ function slugifyName(name: string): string {
 }
 
 export default function App() {
-  const [plants, setPlants] = useState<Plant[]>([]);
-  const [plantRecords, setPlantRecords] = useState<PlantRecord[]>([]);
+  const [organisms, setOrganisms] = useState<Organism[]>([]);
+  const [organismRecords, setOrganismRecords] = useState<OrganismRecord[]>([]);
   const [zones, setZones] = useState<Zone[]>([]);
   const [zonePics, setZonePics] = useState<ZonePic[]>([]);
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
@@ -60,17 +60,17 @@ export default function App() {
   } = useFilterParams();
   const [sortMode, setSortMode] = useState<SortMode>(initialSort);
   const [filters, setFilters] = useState<Filters>(initialFilters);
-  const [sortedPlants, setSortedPlants] = useState<Plant[]>([]);
-  const [plantPositions, setPlantPositions] = useState<
-    { plant: Plant; y: number; h: number }[]
+  const [sortedOrganisms, setSortedOrganisms] = useState<Organism[]>([]);
+  const [organismPositions, setOrganismPositions] = useState<
+    { organism: Organism; y: number; h: number }[]
   >([]);
-  const [openPlantId, setOpenPlantId] = useState<string | null>(
+  const [openOrganismId, setOpenOrganismId] = useState<string | null>(
     () => new URLSearchParams(window.location.search).get("plant")
   );
   const [viewerScope, setViewerScope] = useState<
     "filtered" | "all" | "spotlight" | "custom"
   >("filtered");
-  const [customViewerPlants, setCustomViewerPlants] = useState<Plant[] | null>(
+  const [customViewerOrganisms, setCustomViewerOrganisms] = useState<Organism[] | null>(
     null
   );
   const INFO_TABS: InfoTab[] = ["about", "stats", "plants", "zones"];
@@ -172,7 +172,7 @@ export default function App() {
 
     Promise.all([
       fetchJson<{ pics?: PicRecord[] }>("data/pics.json"),
-      fetchJson<{ plants?: PlantRecord[] }>("data/plants.json"),
+      fetchJson<{ plants?: OrganismRecord[] }>("data/plants.json"),
       fetchJson<{ zones?: Zone[] }>("data/zones.json"),
       fetchJson<{ zonePics?: ZonePic[] }>("data/zone_pics.json").catch(
         () => ({ zonePics: [] as ZonePic[] })
@@ -184,22 +184,22 @@ export default function App() {
         () => ({} as Record<string, TaxaInfo>)
       ),
     ])
-      .then(([picsData, plantsData, zonesData, zonePicsData, annotationsData, taxaData]) => {
-        const plantsByCode = new Map<string, PlantRecord>();
-        for (const p of plantsData.plants ?? []) plantsByCode.set(p.shortCode, p);
+      .then(([picsData, organismsData, zonesData, zonePicsData, annotationsData, taxaData]) => {
+        const organismsByCode = new Map<string, OrganismRecord>();
+        for (const p of organismsData.plants ?? []) organismsByCode.set(p.shortCode, p);
 
-        const merged: Plant[] = (picsData.pics ?? []).map((pic) => {
-          const plant = plantsByCode.get(pic.shortCode);
+        const merged: Organism[] = (picsData.pics ?? []).map((pic) => {
+          const organism = organismsByCode.get(pic.shortCode);
           return {
             ...pic,
-            fullName: plant?.fullName ?? null,
-            commonName: plant?.commonName ?? null,
-            variety: plant?.variety ?? null,
+            fullName: organism?.fullName ?? null,
+            commonName: organism?.commonName ?? null,
+            variety: organism?.variety ?? null,
           };
         });
 
-        setPlants(merged);
-        setPlantRecords(plantsData.plants ?? []);
+        setOrganisms(merged);
+        setOrganismRecords(organismsData.plants ?? []);
         setZones(zonesData.zones ?? []);
         setZonePics(zonePicsData.zonePics ?? []);
         setAnnotations(annotationsData.annotations ?? []);
@@ -207,7 +207,7 @@ export default function App() {
         setStatus("ready");
 
         // Load combined species bundle — non-blocking; fills in once available.
-        const records = plantsData.plants ?? [];
+        const records = organismsData.plants ?? [];
         fetchJson<{ species?: Record<string, Species> }>("data/species.json")
           .then((bundle) => {
             const bySlug = bundle.species ?? {};
@@ -236,45 +236,45 @@ export default function App() {
       .catch(() => setAiAnalyses([]));
   }, []);
 
-  const filteredPlants = useMemo(
-    () => applyFilters(plants, filters, annotations, speciesByShortCode, aiAnalyses),
-    [plants, filters, annotations, speciesByShortCode, aiAnalyses]
+  const filteredOrganisms = useMemo(
+    () => applyFilters(organisms, filters, annotations, speciesByShortCode, aiAnalyses),
+    [organisms, filters, annotations, speciesByShortCode, aiAnalyses]
   );
 
   useEffect(() => {
     let cancelled = false;
-    sortPlantsAsync(filteredPlants, sortMode).then((result) => {
-      if (!cancelled) setSortedPlants(result);
+    sortOrganismsAsync(filteredOrganisms, sortMode).then((result) => {
+      if (!cancelled) setSortedOrganisms(result);
     });
     return () => {
       cancelled = true;
     };
-  }, [filteredPlants, sortMode]);
+  }, [filteredOrganisms, sortMode]);
 
   const handleLayoutReady = useCallback(() => {
     setImagesLoaded(true);
   }, []);
 
-  const handleOpenPlant = useCallback((plant: Plant) => {
+  const handleOpenOrganism = useCallback((organism: Organism) => {
     setViewerScope("filtered");
-    setOpenPlantId(plant.id);
+    setOpenOrganismId(organism.id);
   }, []);
 
-  const handleOpenFromSpotlight = useCallback((plant: Plant) => {
+  const handleOpenFromSpotlight = useCallback((organism: Organism) => {
     setViewerScope("spotlight");
-    setOpenPlantId(plant.id);
+    setOpenOrganismId(organism.id);
   }, []);
 
-  const handleOpenInList = useCallback((plant: Plant, list: Plant[]) => {
-    setCustomViewerPlants(list);
+  const handleOpenInList = useCallback((organism: Organism, list: Organism[]) => {
+    setCustomViewerOrganisms(list);
     setViewerScope("custom");
-    setOpenPlantId(plant.id);
+    setOpenOrganismId(organism.id);
   }, []);
 
   const handleCloseViewer = useCallback(() => {
-    setOpenPlantId(null);
+    setOpenOrganismId(null);
     setViewerScope("filtered");
-    setCustomViewerPlants(null);
+    setCustomViewerOrganisms(null);
   }, []);
 
   const handleViewModeChange = useCallback(
@@ -286,13 +286,13 @@ export default function App() {
     [filters, sortMode, syncToURL]
   );
 
-  const handleSelectPlant = useCallback(
-    (plant: Plant) => {
-      const inFiltered = sortedPlants.some((p) => p.id === plant.id);
+  const handleSelectOrganism = useCallback(
+    (organism: Organism) => {
+      const inFiltered = sortedOrganisms.some((p) => p.id === organism.id);
       setViewerScope(inFiltered ? "filtered" : "all");
-      setOpenPlantId(plant.id);
+      setOpenOrganismId(organism.id);
     },
-    [sortedPlants]
+    [sortedOrganisms]
   );
 
   const handleSelectTaxon = useCallback(
@@ -305,9 +305,9 @@ export default function App() {
       } else {
         syncToURL(filters, sortMode, "tree", null, name);
       }
-      setOpenPlantId(null);
+      setOpenOrganismId(null);
       setViewerScope("filtered");
-      setCustomViewerPlants(null);
+      setCustomViewerOrganisms(null);
       setInfoOpen(false);
     },
     [filters, sortMode, syncToURL, pushToURL, infoOpen]
@@ -359,7 +359,7 @@ export default function App() {
     [filters, sortMode, syncToURL]
   );
 
-  const handleSpotlightPlant = useCallback(
+  const handleSpotlightOrganism = useCallback(
     (shortCode: string) => {
       setViewMode("plant");
       setSpotlightCode(shortCode);
@@ -389,44 +389,44 @@ export default function App() {
     [filters, sortMode, syncToURL, pushToURL, infoOpen]
   );
 
-  const spotlightPlants = useMemo(() => {
+  const spotlightOrganisms = useMemo(() => {
     if (viewMode === "gallery" || !spotlightCode) return [];
     const list =
       viewMode === "plant"
-        ? plants.filter((p) => p.shortCode === spotlightCode)
-        : plants.filter((p) => p.zoneCode === spotlightCode);
+        ? organisms.filter((p) => p.shortCode === spotlightCode)
+        : organisms.filter((p) => p.zoneCode === spotlightCode);
     return [...list].sort(
       (a, b) =>
         new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime()
     );
-  }, [plants, viewMode, spotlightCode]);
+  }, [organisms, viewMode, spotlightCode]);
 
-  const viewerPlants =
-    viewerScope === "custom" && customViewerPlants
-      ? customViewerPlants
-      : viewerScope === "spotlight" && spotlightPlants.length > 0
-      ? spotlightPlants
+  const viewerOrganisms =
+    viewerScope === "custom" && customViewerOrganisms
+      ? customViewerOrganisms
+      : viewerScope === "spotlight" && spotlightOrganisms.length > 0
+      ? spotlightOrganisms
       : viewerScope === "all"
-      ? plants
-      : sortedPlants;
+      ? organisms
+      : sortedOrganisms;
 
   const handleNavigateViewer = useCallback(
     (idx: number) => {
-      const target = viewerPlants[idx];
-      if (target) setOpenPlantId(target.id);
+      const target = viewerOrganisms[idx];
+      if (target) setOpenOrganismId(target.id);
     },
-    [viewerPlants]
+    [viewerOrganisms]
   );
 
   const openIndex = useMemo(() => {
-    if (!openPlantId) return -1;
-    return viewerPlants.findIndex((p) => p.id === openPlantId);
-  }, [openPlantId, viewerPlants]);
+    if (!openOrganismId) return -1;
+    return viewerOrganisms.findIndex((p) => p.id === openOrganismId);
+  }, [openOrganismId, viewerOrganisms]);
 
   return (
     <div className="min-h-screen bg-surface relative">
       {viewMode === "gallery" && (
-        <BackgroundEchoes plantPositions={plantPositions} />
+        <BackgroundEchoes organismPositions={organismPositions} />
       )}
       <header ref={headerRef} className="sticky top-0 z-40 bg-surface/90 backdrop-blur-sm border-b border-ink-faint/30">
         <div className="content-container px-1 py-0 flex items-center justify-between">
@@ -452,13 +452,13 @@ export default function App() {
             <House color={"#b08968"} size={20} strokeWidth={1.5} />
           </button>
         </div>
-        {status === "ready" && plants.length > 0 && (viewMode === "tree" || viewMode === "web") && (
+        {status === "ready" && organisms.length > 0 && (viewMode === "tree" || viewMode === "web") && (
           <div className="content-container px-1 pt-2 pb-3 border-t border-ink-faint/20">
             <ViewModeControl
               mode={viewMode}
               subjectCode={spotlightCode}
-              plants={plants}
-              plantRecords={plantRecords}
+              organisms={organisms}
+              organismRecords={organismRecords}
               zones={zones}
               onChange={handleViewModeChange}
             />
@@ -467,13 +467,13 @@ export default function App() {
       </header>
 
       <main className="content-container px-1 pt-0 pb-12 sm:px-1 sm:pt-0">
-        {status === "ready" && plants.length > 0 && viewMode !== "tree" && viewMode !== "web" && (
+        {status === "ready" && organisms.length > 0 && viewMode !== "tree" && viewMode !== "web" && (
           <div className="pt-2 pb-3">
             <ViewModeControl
               mode={viewMode}
               subjectCode={spotlightCode}
-              plants={plants}
-              plantRecords={plantRecords}
+              organisms={organisms}
+              organismRecords={organismRecords}
               zones={zones}
               onChange={handleViewModeChange}
             />
@@ -481,12 +481,12 @@ export default function App() {
         )}
         {(status === "loading" ||
           (status === "ready" &&
-            plants.length > 0 &&
+            organisms.length > 0 &&
             viewMode === "gallery" &&
             !imagesLoaded)) && <SpinnerState />}
         {status === "error" && <ErrorState />}
-        {status === "ready" && plants.length === 0 && <EmptyState />}
-        {status === "ready" && plants.length > 0 && (
+        {status === "ready" && organisms.length === 0 && <EmptyState />}
+        {status === "ready" && organisms.length > 0 && (
           <div
             className="transition-opacity duration-700 ease-out"
             style={{ opacity: viewMode !== "gallery" || imagesLoaded ? 1 : 0 }}
@@ -494,8 +494,8 @@ export default function App() {
             {viewMode === "gallery" && (
               <>
                 <MasonryGrid
-                  plants={sortedPlants}
-                  allPlants={plants}
+                  organisms={sortedOrganisms}
+                  allOrganisms={organisms}
                   zones={zones}
                   annotations={annotations}
                   aiAnalyses={aiAnalyses}
@@ -504,10 +504,10 @@ export default function App() {
                   filters={filters}
                   onFiltersChange={handleFiltersChange}
                   onLayoutReady={handleLayoutReady}
-                  onPlantPositions={setPlantPositions}
-                  onOpenPlant={handleOpenPlant}
+                  onOrganismPositions={setOrganismPositions}
+                  onOpenOrganism={handleOpenOrganism}
                 />
-                {hasActiveFilters(filters) && sortedPlants.length === 0 && (
+                {hasActiveFilters(filters) && sortedOrganisms.length === 0 && (
                   <div className="flex flex-col items-center justify-center py-20 text-center">
                     <p className="text-ink-muted text-sm font-display tracking-wide">
                       NO MATCHES
@@ -527,7 +527,7 @@ export default function App() {
               <SpotlightView
                 kind={viewMode}
                 subjectCode={spotlightCode}
-                allPlants={plants}
+                allOrganisms={organisms}
                 zonePics={zonePics}
                 zones={zones}
                 onOpenViewer={handleOpenFromSpotlight}
@@ -538,15 +538,15 @@ export default function App() {
         )}
       </main>
 
-      {status === "ready" && plants.length > 0 && viewMode === "tree" && (
+      {status === "ready" && organisms.length > 0 && viewMode === "tree" && (
         <TreeView
-          plants={plants}
+          organisms={organisms}
           speciesByShortCode={speciesByShortCode}
           taxa={taxa}
           zones={zones}
           headerHeight={headerHeight}
-          onOpenPlantInList={handleOpenInList}
-          onSpotlightPlant={handleSpotlightPlant}
+          onOpenOrganismInList={handleOpenInList}
+          onSpotlightOrganism={handleSpotlightOrganism}
           initialTreeNode={treeFocusNode}
           onNodeSelect={handleTreeNodeSelect}
           speciesLoaded={speciesLoaded}
@@ -554,18 +554,18 @@ export default function App() {
         />
       )}
 
-      {status === "ready" && plants.length > 0 && viewMode === "web" && (
+      {status === "ready" && organisms.length > 0 && viewMode === "web" && (
         <WebView
-          plants={plants}
-          plantRecords={plantRecords}
+          organisms={organisms}
+          organismRecords={organismRecords}
           speciesByShortCode={speciesByShortCode}
           taxa={taxa}
           zones={zones}
           aiAnalyses={aiAnalyses}
           relationships={relationshipsData}
           headerHeight={headerHeight}
-          onSpotlightPlant={handleSpotlightPlant}
-          onOpenPlantInList={handleOpenInList}
+          onSpotlightOrganism={handleSpotlightOrganism}
+          onOpenOrganismInList={handleOpenInList}
         />
       )}
 
@@ -574,13 +574,13 @@ export default function App() {
         onClose={handleCloseInfo}
         activeTab={infoTab}
         onTabChange={handleInfoTabChange}
-        plants={plants}
-        plantRecords={plantRecords}
+        organisms={organisms}
+        organismRecords={organismRecords}
         zones={zones}
         zonePics={zonePics}
         speciesByShortCode={speciesByShortCode}
         aiAnalyses={aiAnalyses}
-        onSpotlightPlant={handleSpotlightPlant}
+        onSpotlightOrganism={handleSpotlightOrganism}
         onSpotlightZone={handleSpotlightZone}
         onSelectTaxon={handleSelectTaxon}
         onShowBioclipConflicts={handleShowBioclipConflicts}
@@ -588,10 +588,10 @@ export default function App() {
       />
 
       {openIndex >= 0 && (
-        <PlantViewer
-          plant={viewerPlants[openIndex]}
-          plants={viewerPlants}
-          allPlants={plants}
+        <OrganismViewer
+          organism={viewerOrganisms[openIndex]}
+          organisms={viewerOrganisms}
+          allOrganisms={organisms}
           zones={zones}
           zonePics={zonePics}
           annotations={annotations}
@@ -600,7 +600,7 @@ export default function App() {
           currentIndex={openIndex}
           onClose={handleCloseViewer}
           onNavigate={handleNavigateViewer}
-          onSelectPlant={handleSelectPlant}
+          onSelectOrganism={handleSelectOrganism}
           onSelectTaxon={handleSelectTaxon}
         />
       )}

@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { Maximize2, ZoomIn, ZoomOut } from "lucide-react";
-import type { Plant, Relationship, RelationshipType } from "../../types";
+import type { Organism, Relationship, RelationshipType } from "../../types";
 import { effectiveDirection } from "../../hooks/useRelationships";
 import { usePanZoom } from "../../hooks/usePanZoom";
 import type { Transform } from "../../hooks/usePanZoom";
@@ -10,11 +10,11 @@ import { CtrlBtn } from "./CtrlBtn";
 interface Props {
   centerCode: string;
   centerLabel: string;
-  plants: Plant[];
+  organisms: Organism[];
   relationships: Relationship[];
   neighbors: Map<string, Relationship[]>;
   typeById: Map<string, RelationshipType>;
-  plantsByCode: Map<string, Plant>;
+  organismsByCode: Map<string, Organism>;
   onSelectCode?: (shortCode: string) => void;
   graphClassName?: string;
   outerClassName?: string;
@@ -42,11 +42,11 @@ interface PositionedNode {
   isCenter: boolean;
   x: number;
   y: number;
-  plant: Plant | undefined;
+  organism: Organism | undefined;
   isAnimal: boolean;
 }
 
-function plantLabel(p: Plant | undefined, fallback: string): string {
+function organismLabel(p: Organism | undefined, fallback: string): string {
   if (!p) return fallback;
   return p.commonName ?? p.fullName ?? p.shortCode;
 }
@@ -57,7 +57,7 @@ export function RelationsSubgraph({
   relationships,
   neighbors,
   typeById,
-  plantsByCode,
+  organismsByCode,
   onSelectCode,
   graphClassName = "relative h-75 overflow-hidden rounded",
   outerClassName = "flex flex-col gap-2",
@@ -96,9 +96,9 @@ export function RelationsSubgraph({
     const positioned: PositionedNode[] = [];
 
     const makeNode = (code: string, label: string, isCenter: boolean, x: number, y: number): PositionedNode => {
-      const plant = plantsByCode.get(code);
-      const sub = plant?.fullName && plant.fullName !== label ? plant.fullName : null;
-      return { code, label, subLabel: sub, isCenter, x, y, plant, isAnimal: plant?.kind === "animal" };
+      const organism = organismsByCode.get(code);
+      const sub = organism?.fullName && organism.fullName !== label ? organism.fullName : null;
+      return { code, label, subLabel: sub, isCenter, x, y, organism, isAnimal: organism?.kind === "animal" };
     };
 
     positioned.push(makeNode(centerCode, centerLabel, true, center, center));
@@ -106,7 +106,7 @@ export function RelationsSubgraph({
     const baseAngle = -Math.PI / 2;
     l1Codes.forEach((code, i) => {
       const angle = baseAngle + (i / Math.max(1, n)) * Math.PI * 2;
-      const label = plantLabel(plantsByCode.get(code), code);
+      const label = organismLabel(organismsByCode.get(code), code);
       positioned.push(makeNode(code, label, false, center + Math.cos(angle) * ringR, center + Math.sin(angle) * ringR));
     });
 
@@ -144,7 +144,7 @@ export function RelationsSubgraph({
     }
 
     return { nodes: positioned, edges: edgesOut, viewboxSize: vb };
-  }, [centerCode, centerLabel, neighbors, relationships, typeById, plantsByCode, colorByType]);
+  }, [centerCode, centerLabel, neighbors, relationships, typeById, organismsByCode, colorByType]);
 
   // When the relations tab is not active the container has display:none (zero size).
   // Detect the transition from hidden → visible and apply the initial fit transform.
@@ -211,7 +211,7 @@ export function RelationsSubgraph({
   if (nodes.length === 1) {
     return (
       <p className="text-[11px] text-ink-faint italic">
-        No relationships defined for this plant. Use /relate in Telegram to add one.
+        No relationships defined for this organism. Use /relate in Telegram to add one.
       </p>
     );
   }
@@ -362,10 +362,10 @@ export function RelationsSubgraph({
                     strokeOpacity={isActive ? 0.95 : 0.7}
                     strokeWidth={isActive ? 1.8 : isCenter ? 1.8 : 1.2}
                   />
-                  {n.plant ? (
+                  {n.organism ? (
                     <g clipPath="url(#rs-leaf-clip)">
                       <image
-                        href={`${baseURL}${n.plant.image}`}
+                        href={`${baseURL}${n.organism.image}`}
                         x={-r}
                         y={-r}
                         width={r * 2}

@@ -1,8 +1,8 @@
-import type { Plant } from "../types";
+import type { Organism } from "../types";
 
 let seq = 0;
 
-export function plant(overrides: Partial<Plant> = {}): Plant {
+export function organism(overrides: Partial<Organism> = {}): Organism {
   return {
     seq: ++seq,
     id: `plant-${seq}`,

@@ -1,8 +1,8 @@
 import { describe, it, expect } from "bun:test";
 import { speciesPicsFor, buildTree, linkPath } from "../components/TreeView/treeUtils";
-import type { Plant, Species } from "../types";
+import type { Organism, Species } from "../types";
 import type { RawNode } from "../components/TreeView/types";
-import { plant } from "./helpers";
+import { organism } from "./helpers";
 
 function makeSpecies(shortCode: string, overrides: Partial<Species> = {}): [string, Species] {
   return [
@@ -32,41 +32,41 @@ function makeSpecies(shortCode: string, overrides: Partial<Species> = {}): [stri
 }
 
 describe("speciesPicsFor", () => {
-  const plants: Plant[] = [
-    plant({ id: "a", shortCode: "rosa", addedAt: "2024-01-01T00:00:00Z" }),
-    plant({ id: "b", shortCode: "rosa", addedAt: "2024-06-01T00:00:00Z" }),
-    plant({ id: "c", shortCode: "iris", addedAt: "2024-03-01T00:00:00Z" }),
+  const organisms: Organism[] = [
+    organism({ id: "a", shortCode: "rosa", addedAt: "2024-01-01T00:00:00Z" }),
+    organism({ id: "b", shortCode: "rosa", addedAt: "2024-06-01T00:00:00Z" }),
+    organism({ id: "c", shortCode: "iris", addedAt: "2024-03-01T00:00:00Z" }),
   ];
 
   it("returns only plants matching the shortCode", () => {
-    const result = speciesPicsFor(plants, "rosa");
+    const result = speciesPicsFor(organisms, "rosa");
     expect(result.every((p) => p.shortCode === "rosa")).toBe(true);
     expect(result.map((p) => p.id)).not.toContain("c");
   });
 
   it("sorts results newest first", () => {
-    const result = speciesPicsFor(plants, "rosa");
+    const result = speciesPicsFor(organisms, "rosa");
     expect(result[0].id).toBe("b");
     expect(result[1].id).toBe("a");
   });
 
   it("returns empty array for an unknown shortCode", () => {
-    expect(speciesPicsFor(plants, "unknown")).toEqual([]);
+    expect(speciesPicsFor(organisms, "unknown")).toEqual([]);
   });
 
   it("returns all entries when every plant has the same shortCode", () => {
     const same = [
-      plant({ id: "x", shortCode: "oak" }),
-      plant({ id: "y", shortCode: "oak" }),
+      organism({ id: "x", shortCode: "oak" }),
+      organism({ id: "y", shortCode: "oak" }),
     ];
     expect(speciesPicsFor(same, "oak")).toHaveLength(2);
   });
 });
 
 describe("buildTree", () => {
-  const p1 = plant({ id: "r1", shortCode: "rosa", addedAt: "2024-01-01T00:00:00Z" });
-  const p2 = plant({ id: "i1", shortCode: "iris", addedAt: "2024-01-01T00:00:00Z" });
-  const pUnknown = plant({ id: "u1", shortCode: "unid-1", addedAt: "2024-01-01T00:00:00Z" });
+  const p1 = organism({ id: "r1", shortCode: "rosa", addedAt: "2024-01-01T00:00:00Z" });
+  const p2 = organism({ id: "i1", shortCode: "iris", addedAt: "2024-01-01T00:00:00Z" });
+  const pUnknown = organism({ id: "u1", shortCode: "unid-1", addedAt: "2024-01-01T00:00:00Z" });
 
   const speciesMap = new Map<string, Species>([
     makeSpecies("rosa", {
@@ -119,12 +119,12 @@ describe("buildTree", () => {
     }
     const leaf = findLeaf(root);
     expect(leaf?.shortCode).toBe("rosa");
-    expect(leaf?.plant?.id).toBe("r1");
+    expect(leaf?.organism?.id).toBe("r1");
   });
 
   it("picks the most-recently-added plant as species representative", () => {
-    const older = plant({ id: "old", shortCode: "rosa", addedAt: "2023-01-01T00:00:00Z" });
-    const newer = plant({ id: "new", shortCode: "rosa", addedAt: "2025-01-01T00:00:00Z" });
+    const older = organism({ id: "old", shortCode: "rosa", addedAt: "2023-01-01T00:00:00Z" });
+    const newer = organism({ id: "new", shortCode: "rosa", addedAt: "2025-01-01T00:00:00Z" });
     const { root } = buildTree([older, newer], speciesMap);
     function findLeaf(node: RawNode): RawNode | undefined {
       if (node.shortCode === "rosa") return node;
@@ -133,7 +133,7 @@ describe("buildTree", () => {
         if (found) return found;
       }
     }
-    expect(findLeaf(root)?.plant?.id).toBe("new");
+    expect(findLeaf(root)?.organism?.id).toBe("new");
   });
 
   it("sorts children alphabetically at each level", () => {

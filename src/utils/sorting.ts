@@ -1,4 +1,4 @@
-import type { Plant } from "../types";
+import type { Organism } from "../types";
 
 export type SortMode = "newest" | "oldest" | "color" | "similarity" | "duplicates";
 
@@ -14,7 +14,7 @@ export const SORT_DESCRIPTIONS: Record<SortMode, string> = {
   newest: "Most recently added first.",
   oldest: "Oldest entries first.",
   color: "Walks the gallery by dominant color in CIELAB space.",
-  similarity: "Visual similarity via BioCLIP embeddings (plant-aware vision model).",
+  similarity: "Visual similarity via BioCLIP embeddings (species-aware vision model).",
   duplicates: "Groups near-duplicate photos by perceptual hash (phash).",
 };
 
@@ -170,10 +170,10 @@ function nearestNeighborChain<T>(
   return result;
 }
 
-function sortByEmbedding(plants: Plant[], embeddings: EmbeddingMap): Plant[] {
-  const withEmb: Plant[] = [];
-  const withoutEmb: Plant[] = [];
-  for (const p of plants) {
+function sortByEmbedding(organisms: Organism[], embeddings: EmbeddingMap): Organism[] {
+  const withEmb: Organism[] = [];
+  const withoutEmb: Organism[] = [];
+  for (const p of organisms) {
     if (embeddings[p.id]) withEmb.push(p);
     else withoutEmb.push(p);
   }
@@ -187,8 +187,8 @@ function sortByEmbedding(plants: Plant[], embeddings: EmbeddingMap): Plant[] {
   return [...sorted, ...withoutEmb];
 }
 
-export function sortPlants(plants: Plant[], mode: SortMode): Plant[] {
-  const sorted = [...plants];
+export function sortOrganisms(organisms: Organism[], mode: SortMode): Organism[] {
+  const sorted = [...organisms];
   switch (mode) {
     case "newest":
       return sorted.sort(
@@ -203,21 +203,21 @@ export function sortPlants(plants: Plant[], mode: SortMode): Plant[] {
   }
 }
 
-export async function sortPlantsAsync(
-  plants: Plant[],
+export async function sortOrganismsAsync(
+  organisms: Organism[],
   mode: SortMode
-): Promise<Plant[]> {
+): Promise<Organism[]> {
   if (mode === "similarity") {
     const embeddings = await loadEmbeddings();
-    return sortByEmbedding([...plants], embeddings);
+    return sortByEmbedding([...organisms], embeddings);
   }
 
   if (mode === "duplicates") {
     const meta = await loadPicMetadata();
-    const sorted = [...plants];
+    const sorted = [...organisms];
     if (sorted.length <= 1) return sorted;
-    const withHash: Plant[] = [];
-    const withoutHash: Plant[] = [];
+    const withHash: Organism[] = [];
+    const withoutHash: Organism[] = [];
     for (const p of sorted) {
       if (meta[p.id]?.phash) withHash.push(p);
       else withoutHash.push(p);
@@ -234,7 +234,7 @@ export async function sortPlantsAsync(
 
   if (mode === "color") {
     const meta = await loadPicMetadata();
-    const sorted = [...plants];
+    const sorted = [...organisms];
     if (sorted.length <= 1) return sorted;
     sorted.sort((a, b) => {
       const ka = colorSortKey(meta[a.id]?.dominantColors);
@@ -248,5 +248,5 @@ export async function sortPlantsAsync(
     return sorted;
   }
 
-  return sortPlants(plants, mode);
+  return sortOrganisms(organisms, mode);
 }

@@ -225,10 +225,10 @@ export default function FillerLabels({
   const seen = new Set<string>();
 
   const tryAdd = (edge: Edge) => {
-    const plant = neighbors[edge];
-    if (!plant) return;
+    const organism = neighbors[edge];
+    if (!organism) return;
 
-    const label = plant.commonName ?? plant.fullName ?? plant.shortCode;
+    const label = organism.commonName ?? organism.fullName ?? organism.shortCode;
     if (!label || seen.has(label)) return;
 
     const isHorizontal = edge === "top" || edge === "bottom";

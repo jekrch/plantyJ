@@ -23,7 +23,7 @@ export interface PicRecord {
   kind?: "plant" | "animal";
 }
 
-export interface PlantRecord {
+export interface OrganismRecord {
   shortCode: string;
   fullName: string | null;
   commonName: string | null;
@@ -44,9 +44,9 @@ export interface ZonePic {
   description: string | null;
 }
 
-// Runtime view: a pic joined with its plant record (lookup by shortCode).
+// Runtime view: a pic joined with its organism record (lookup by shortCode).
 // Components consume this merged shape.
-export interface Plant extends PicRecord {
+export interface Organism extends PicRecord {
   fullName: string | null;
   commonName: string | null;
   variety?: string | null;
@@ -54,13 +54,13 @@ export interface Plant extends PicRecord {
 
 export interface Gallery {
   pics: PicRecord[];
-  plants: PlantRecord[];
+  organisms: OrganismRecord[];
   zones: Zone[];
 }
 
 export interface Annotation {
   shortCode: string;
-  zoneCode: string | null;  // null = plant-level; string = plant+zone level
+  zoneCode: string | null;  // null = organism-level; string = organism+zone level
   tags: string[];
   description: string | null;
 }

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { X, ExternalLink, Sprout, Github, BugIcon, Building, Flower, Cpu, Globe, BookOpen, Database, Leaf } from "lucide-react";
-import type { AIAnalysis, AIVerdict, Plant, PlantRecord, Species, Zone, ZonePic } from "../types";
+import type { AIAnalysis, AIVerdict, Organism, OrganismRecord, Species, Zone, ZonePic } from "../types";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import StatsPanel from "./StatsPanel";
 
@@ -11,20 +11,20 @@ interface Props {
   onClose: () => void;
   activeTab: Tab;
   onTabChange: (tab: Tab) => void;
-  plants: Plant[];
-  plantRecords: PlantRecord[];
+  organisms: Organism[];
+  organismRecords: OrganismRecord[];
   zones: Zone[];
   zonePics: ZonePic[];
   speciesByShortCode: Map<string, Species>;
   aiAnalyses: AIAnalysis[];
-  onSpotlightPlant: (shortCode: string) => void;
+  onSpotlightOrganism: (shortCode: string) => void;
   onSpotlightZone: (zoneCode: string) => void;
   onSelectTaxon: (name: string) => void;
   onShowBioclipConflicts: () => void;
   onShowEcoFit: (verdict: AIVerdict) => void;
 }
 
-interface PlantEntry {
+interface OrganismEntry {
   shortCode: string;
   label: string;
   baseLabel: string;
@@ -71,14 +71,14 @@ function InfoModalContent({
   onClose,
   activeTab,
   onTabChange,
-  plants,
-  plantRecords,
+  organisms,
+  organismRecords,
   zones,
   zonePics,
   speciesByShortCode,
   aiAnalyses,
   visible,
-  onSpotlightPlant,
+  onSpotlightOrganism,
   onSpotlightZone,
   onSelectTaxon,
   onShowBioclipConflicts,
@@ -101,20 +101,20 @@ function InfoModalContent({
     return () => window.removeEventListener("keydown", handler);
   }, [handleClose]);
 
-  const plantEntries: PlantEntry[] = useMemo(() => {
+  const organismEntries: OrganismEntry[] = useMemo(() => {
     const countByCode = new Map<string, number>();
     const imageByCode = new Map<string, string>();
-    for (const p of plants) {
+    for (const p of organisms) {
       countByCode.set(p.shortCode, (countByCode.get(p.shortCode) ?? 0) + 1);
       if (!imageByCode.has(p.shortCode)) imageByCode.set(p.shortCode, p.image);
     }
-    const recordByCode = new Map<string, PlantRecord>();
-    for (const r of plantRecords) recordByCode.set(r.shortCode, r);
+    const recordByCode = new Map<string, OrganismRecord>();
+    for (const r of organismRecords) recordByCode.set(r.shortCode, r);
     const codes = new Set<string>([
-      ...plantRecords.map((r) => r.shortCode),
-      ...plants.map((p) => p.shortCode),
+      ...organismRecords.map((r) => r.shortCode),
+      ...organisms.map((p) => p.shortCode),
     ]);
-    const entries: PlantEntry[] = Array.from(codes).map((code) => {
+    const entries: OrganismEntry[] = Array.from(codes).map((code) => {
       const rec = recordByCode.get(code);
       const base = rec?.commonName ?? rec?.fullName ?? code;
       const variety = rec?.variety ?? null;
@@ -132,7 +132,7 @@ function InfoModalContent({
     return entries
       .filter((e) => e.image !== null)
       .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
-  }, [plants, plantRecords]);
+  }, [organisms, organismRecords]);
 
   const zoneEntries: ZoneEntry[] = useMemo(() => {
     const picByZone = new Map<string, string>();
@@ -141,7 +141,7 @@ function InfoModalContent({
     }
     const fallback = new Map<string, string>();
     const countByZone = new Map<string, number>();
-    for (const p of plants) {
+    for (const p of organisms) {
       if (!fallback.has(p.zoneCode)) fallback.set(p.zoneCode, p.image);
       countByZone.set(p.zoneCode, (countByZone.get(p.zoneCode) ?? 0) + 1);
     }
@@ -154,7 +154,7 @@ function InfoModalContent({
       .sort((a, b) =>
         (a.zone.name ?? a.zone.code).localeCompare(b.zone.name ?? b.zone.code)
       );
-  }, [zones, zonePics, plants]);
+  }, [zones, zonePics, organisms]);
 
   return (
     <div
@@ -241,7 +241,7 @@ function InfoModalContent({
           {tab === "about" && <AboutPanel />}
           {tab === "stats" && (
             <StatsPanel
-              plants={plants}
+              organisms={organisms}
               zones={zones}
               speciesByShortCode={speciesByShortCode}
               aiAnalyses={aiAnalyses}
@@ -252,7 +252,7 @@ function InfoModalContent({
             />
           )}
           {tab === "plants" && (
-            <PlantsPanel entries={plantEntries} onFilter={onSpotlightPlant} />
+            <OrganismsPanel entries={organismEntries} onFilter={onSpotlightOrganism} />
           )}
           {tab === "zones" && (
             <ZonesPanel entries={zoneEntries} onFilter={onSpotlightZone} />
@@ -420,11 +420,11 @@ function AboutPanel() {
   );
 }
 
-function PlantsPanel({
+function OrganismsPanel({
   entries,
   onFilter,
 }: {
-  entries: PlantEntry[];
+  entries: OrganismEntry[];
   onFilter: (shortCode: string) => void;
 }) {
   return (

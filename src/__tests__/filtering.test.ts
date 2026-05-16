@@ -9,7 +9,7 @@ import {
 } from "../utils/filtering";
 import type { Annotation, Zone } from "../types";
 import type { Filters } from "../utils/filtering";
-import { plant } from "./helpers";
+import { organism } from "./helpers";
 
 describe("hasActiveFilters", () => {
   it("returns false for empty filters", () => {
@@ -66,13 +66,13 @@ describe("activeFilterCount", () => {
 
 describe("getEffectiveTags", () => {
   it("returns plant tags when no annotations", () => {
-    const p = plant({ tags: ["native", "perennial"] });
+    const p = organism({ tags: ["native", "perennial"] });
     expect(getEffectiveTags(p, [])).toEqual(expect.arrayContaining(["native", "perennial"]));
     expect(getEffectiveTags(p, [])).toHaveLength(2);
   });
 
   it("merges plant-level annotation tags", () => {
-    const p = plant({ shortCode: "rosa", tags: ["native"] });
+    const p = organism({ shortCode: "rosa", tags: ["native"] });
     const ann: Annotation[] = [
       { shortCode: "rosa", zoneCode: null, tags: ["pollinator"], description: null },
     ];
@@ -82,7 +82,7 @@ describe("getEffectiveTags", () => {
   });
 
   it("merges zone-level annotation tags", () => {
-    const p = plant({ shortCode: "rosa", zoneCode: "Z1", tags: [] });
+    const p = organism({ shortCode: "rosa", zoneCode: "Z1", tags: [] });
     const ann: Annotation[] = [
       { shortCode: "rosa", zoneCode: "Z1", tags: ["shade"], description: null },
     ];
@@ -90,7 +90,7 @@ describe("getEffectiveTags", () => {
   });
 
   it("does not include zone-level annotations for a different zone", () => {
-    const p = plant({ shortCode: "rosa", zoneCode: "Z1", tags: [] });
+    const p = organism({ shortCode: "rosa", zoneCode: "Z1", tags: [] });
     const ann: Annotation[] = [
       { shortCode: "rosa", zoneCode: "Z2", tags: ["sun"], description: null },
     ];
@@ -98,7 +98,7 @@ describe("getEffectiveTags", () => {
   });
 
   it("deduplicates tags across sources", () => {
-    const p = plant({ shortCode: "rosa", tags: ["native"] });
+    const p = organism({ shortCode: "rosa", tags: ["native"] });
     const ann: Annotation[] = [
       { shortCode: "rosa", zoneCode: null, tags: ["native"], description: null },
     ];
@@ -107,38 +107,38 @@ describe("getEffectiveTags", () => {
 });
 
 describe("applyFilters", () => {
-  const plants = [
-    plant({ id: "p1", shortCode: "rosa", zoneCode: "Z1", tags: ["native"], postedBy: "alice", kind: "plant" }),
-    plant({ id: "p2", shortCode: "iris", zoneCode: "Z2", tags: ["perennial"], postedBy: "bob", kind: "plant" }),
-    plant({ id: "p3", shortCode: "oak", zoneCode: "Z1", tags: ["tree"], postedBy: "alice", kind: "plant" }),
+  const organisms = [
+    organism({ id: "p1", shortCode: "rosa", zoneCode: "Z1", tags: ["native"], postedBy: "alice", kind: "plant" }),
+    organism({ id: "p2", shortCode: "iris", zoneCode: "Z2", tags: ["perennial"], postedBy: "bob", kind: "plant" }),
+    organism({ id: "p3", shortCode: "oak", zoneCode: "Z1", tags: ["tree"], postedBy: "alice", kind: "plant" }),
   ];
 
   it("returns all plants when filters are empty", () => {
-    expect(applyFilters(plants, EMPTY_FILTERS)).toHaveLength(3);
+    expect(applyFilters(organisms, EMPTY_FILTERS)).toHaveLength(3);
   });
 
   it("filters by zoneCode", () => {
-    const result = applyFilters(plants, { ...EMPTY_FILTERS, zoneCodes: new Set(["Z1"]) });
+    const result = applyFilters(organisms, { ...EMPTY_FILTERS, zoneCodes: new Set(["Z1"]) });
     expect(result.map((p) => p.id)).toEqual(["p1", "p3"]);
   });
 
   it("filters by shortCode", () => {
-    const result = applyFilters(plants, { ...EMPTY_FILTERS, shortCodes: new Set(["iris"]) });
+    const result = applyFilters(organisms, { ...EMPTY_FILTERS, shortCodes: new Set(["iris"]) });
     expect(result.map((p) => p.id)).toEqual(["p2"]);
   });
 
   it("filters by postedBy", () => {
-    const result = applyFilters(plants, { ...EMPTY_FILTERS, postedBy: new Set(["bob"]) });
+    const result = applyFilters(organisms, { ...EMPTY_FILTERS, postedBy: new Set(["bob"]) });
     expect(result.map((p) => p.id)).toEqual(["p2"]);
   });
 
   it("filters by tag", () => {
-    const result = applyFilters(plants, { ...EMPTY_FILTERS, tags: new Set(["native"]) });
+    const result = applyFilters(organisms, { ...EMPTY_FILTERS, tags: new Set(["native"]) });
     expect(result.map((p) => p.id)).toEqual(["p1"]);
   });
 
   it("applies multiple filter dimensions as AND logic", () => {
-    const result = applyFilters(plants, {
+    const result = applyFilters(organisms, {
       ...EMPTY_FILTERS,
       zoneCodes: new Set(["Z1"]),
       postedBy: new Set(["alice"]),
@@ -147,14 +147,14 @@ describe("applyFilters", () => {
   });
 
   it("returns empty array when no plants match", () => {
-    const result = applyFilters(plants, { ...EMPTY_FILTERS, zoneCodes: new Set(["Z99"]) });
+    const result = applyFilters(organisms, { ...EMPTY_FILTERS, zoneCodes: new Set(["Z99"]) });
     expect(result).toHaveLength(0);
   });
 
   it("filters by kind=plant, excluding kind=animal", () => {
     const mixed = [
-      plant({ id: "a", kind: "plant" }),
-      plant({ id: "b", kind: "animal" }),
+      organism({ id: "a", kind: "plant" }),
+      organism({ id: "b", kind: "animal" }),
     ];
     const result = applyFilters(mixed, { ...EMPTY_FILTERS, misc: new Set(["plant"]) });
     expect(result.map((p) => p.id)).toEqual(["a"]);
@@ -162,8 +162,8 @@ describe("applyFilters", () => {
 
   it("filters by kind=animal", () => {
     const mixed = [
-      plant({ id: "a", kind: "plant" }),
-      plant({ id: "b", kind: "animal" }),
+      organism({ id: "a", kind: "plant" }),
+      organism({ id: "b", kind: "animal" }),
     ];
     const result = applyFilters(mixed, { ...EMPTY_FILTERS, misc: new Set(["animal"]) });
     expect(result.map((p) => p.id)).toEqual(["b"]);
@@ -171,9 +171,9 @@ describe("applyFilters", () => {
 
   it("filters by bioclip-match", () => {
     const withBioclip = [
-      plant({ id: "m", fullName: "rosa canina", bioclipSpeciesId: "rosa canina" }),
-      plant({ id: "c", fullName: "iris versicolor", bioclipSpeciesId: "other species" }),
-      plant({ id: "n", fullName: null, bioclipSpeciesId: null }),
+      organism({ id: "m", fullName: "rosa canina", bioclipSpeciesId: "rosa canina" }),
+      organism({ id: "c", fullName: "iris versicolor", bioclipSpeciesId: "other species" }),
+      organism({ id: "n", fullName: null, bioclipSpeciesId: null }),
     ];
     const result = applyFilters(withBioclip, { ...EMPTY_FILTERS, misc: new Set(["bioclip-match"]) });
     expect(result.map((p) => p.id)).toEqual(["m"]);
@@ -181,15 +181,15 @@ describe("applyFilters", () => {
 
   it("filters by bioclip-conflict", () => {
     const withBioclip = [
-      plant({ id: "m", fullName: "rosa canina", bioclipSpeciesId: "rosa canina" }),
-      plant({ id: "c", fullName: "iris versicolor", bioclipSpeciesId: "other species" }),
+      organism({ id: "m", fullName: "rosa canina", bioclipSpeciesId: "rosa canina" }),
+      organism({ id: "c", fullName: "iris versicolor", bioclipSpeciesId: "other species" }),
     ];
     const result = applyFilters(withBioclip, { ...EMPTY_FILTERS, misc: new Set(["bioclip-conflict"]) });
     expect(result.map((p) => p.id)).toEqual(["c"]);
   });
 
   it("matches tag from plant-level annotation when filtering by tag", () => {
-    const p = plant({ id: "ann", shortCode: "oak", zoneCode: "Z1", tags: [], postedBy: "user" });
+    const p = organism({ id: "ann", shortCode: "oak", zoneCode: "Z1", tags: [], postedBy: "user" });
     const anns: Annotation[] = [
       { shortCode: "oak", zoneCode: null, tags: ["annotated"], description: null },
     ];
@@ -199,9 +199,9 @@ describe("applyFilters", () => {
 
   it("searchQuery matches commonName, fullName, and tags (AND across tokens)", () => {
     const items = [
-      plant({ id: "s1", shortCode: "rosa", commonName: "Wild Rose", fullName: "Rosa canina", tags: ["native"] }),
-      plant({ id: "s2", shortCode: "iris", commonName: "Blue Flag", fullName: "Iris versicolor", tags: ["perennial"] }),
-      plant({ id: "s3", shortCode: "oak", commonName: "Bur Oak", fullName: "Quercus macrocarpa", tags: ["tree"] }),
+      organism({ id: "s1", shortCode: "rosa", commonName: "Wild Rose", fullName: "Rosa canina", tags: ["native"] }),
+      organism({ id: "s2", shortCode: "iris", commonName: "Blue Flag", fullName: "Iris versicolor", tags: ["perennial"] }),
+      organism({ id: "s3", shortCode: "oak", commonName: "Bur Oak", fullName: "Quercus macrocarpa", tags: ["tree"] }),
     ];
     expect(
       applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "rose" }).map((p) => p.id)
@@ -224,8 +224,8 @@ describe("applyFilters", () => {
 
   it("searchQuery matches species taxonomy (taxa)", () => {
     const items = [
-      plant({ id: "t1", shortCode: "rosa" }),
-      plant({ id: "t2", shortCode: "iris" }),
+      organism({ id: "t1", shortCode: "rosa" }),
+      organism({ id: "t2", shortCode: "iris" }),
     ];
     const speciesByShortCode = new Map([
       [
@@ -262,17 +262,17 @@ describe("applyFilters", () => {
   });
 
   it("searchQuery is case-insensitive and ignores empty/whitespace", () => {
-    const items = [plant({ id: "c1", commonName: "Wild Rose" })];
+    const items = [organism({ id: "c1", commonName: "Wild Rose" })];
     expect(applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "WILD" })).toHaveLength(1);
     expect(applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "   " })).toHaveLength(1);
   });
 });
 
 describe("computeFacets", () => {
-  const plants = [
-    plant({ id: "1", shortCode: "rosa", zoneCode: "Z1", tags: ["native"], postedBy: "alice", commonName: "Wild Rose" }),
-    plant({ id: "2", shortCode: "iris", zoneCode: "Z2", tags: ["perennial"], postedBy: "bob", commonName: "Blue Flag" }),
-    plant({ id: "3", shortCode: "rosa", zoneCode: "Z1", tags: ["native"], postedBy: "alice", commonName: "Wild Rose" }),
+  const organisms = [
+    organism({ id: "1", shortCode: "rosa", zoneCode: "Z1", tags: ["native"], postedBy: "alice", commonName: "Wild Rose" }),
+    organism({ id: "2", shortCode: "iris", zoneCode: "Z2", tags: ["perennial"], postedBy: "bob", commonName: "Blue Flag" }),
+    organism({ id: "3", shortCode: "rosa", zoneCode: "Z1", tags: ["native"], postedBy: "alice", commonName: "Wild Rose" }),
   ];
   const zones: Zone[] = [
     { code: "Z1", name: "Front Yard" },
@@ -280,42 +280,42 @@ describe("computeFacets", () => {
   ];
 
   it("counts plants per zone", () => {
-    const { zoneItems } = computeFacets(plants, EMPTY_FILTERS, zones);
+    const { zoneItems } = computeFacets(organisms, EMPTY_FILTERS, zones);
     const z1 = zoneItems.find((z) => z.value === "Z1");
     expect(z1?.count).toBe(2);
   });
 
   it("uses zone name as label", () => {
-    const { zoneItems } = computeFacets(plants, EMPTY_FILTERS, zones);
+    const { zoneItems } = computeFacets(organisms, EMPTY_FILTERS, zones);
     expect(zoneItems.find((z) => z.value === "Z1")?.label).toBe("Front Yard");
   });
 
   it("falls back to zone code when zone has no name", () => {
     const zonesNoName: Zone[] = [{ code: "Z1", name: null }];
-    const { zoneItems } = computeFacets(plants.slice(0, 1), EMPTY_FILTERS, zonesNoName);
+    const { zoneItems } = computeFacets(organisms.slice(0, 1), EMPTY_FILTERS, zonesNoName);
     expect(zoneItems.find((z) => z.value === "Z1")?.label).toBe("Z1");
   });
 
   it("counts plants per tag", () => {
-    const { tagItems } = computeFacets(plants, EMPTY_FILTERS, zones);
+    const { tagItems } = computeFacets(organisms, EMPTY_FILTERS, zones);
     expect(tagItems.find((t) => t.value === "native")?.count).toBe(2);
     expect(tagItems.find((t) => t.value === "perennial")?.count).toBe(1);
   });
 
   it("sorts facet items alphabetically by label", () => {
-    const { zoneItems } = computeFacets(plants, EMPTY_FILTERS, zones);
+    const { zoneItems } = computeFacets(organisms, EMPTY_FILTERS, zones);
     const labels = zoneItems.map((z) => z.label);
     expect(labels).toEqual([...labels].sort((a, b) => a.localeCompare(b)));
   });
 
   it("excludes species filtered out by active zone when counting shortCodes", () => {
     const filtersZ1 = { ...EMPTY_FILTERS, zoneCodes: new Set(["Z1"]) };
-    const { shortCodeItems } = computeFacets(plants, filtersZ1, zones);
+    const { shortCodeItems } = computeFacets(organisms, filtersZ1, zones);
     expect(shortCodeItems.find((s) => s.value === "iris")).toBeUndefined();
   });
 
   it("counts postedBy entries", () => {
-    const { postedByItems } = computeFacets(plants, EMPTY_FILTERS, zones);
+    const { postedByItems } = computeFacets(organisms, EMPTY_FILTERS, zones);
     expect(postedByItems.find((p) => p.value === "alice")?.count).toBe(2);
     expect(postedByItems.find((p) => p.value === "bob")?.count).toBe(1);
   });

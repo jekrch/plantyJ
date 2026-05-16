@@ -196,7 +196,7 @@ interface HatchFillerProps {
    * styles. Assigned by MasonryGrid in layout order.
    */
   fillerIndex?: number;
-  /** Adjacent plant info for rendering edge labels. */
+  /** Adjacent organism info for rendering edge labels. */
   neighbors?: NeighborMap | null;
 }
 

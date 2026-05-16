@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from "react";
 import { pie as d3Pie, arc as d3Arc } from "d3-shape";
 import { Cpu, Leaf, PawPrint, MapPin, Sparkles, Image as ImageIcon } from "lucide-react";
-import type { AIAnalysis, AIVerdict, Plant, Species, SpeciesTaxonomy, Zone } from "../types";
+import type { AIAnalysis, AIVerdict, Organism, Species, SpeciesTaxonomy, Zone } from "../types";
 import { ModelAttribution } from "./ModelAttribution";
 
 type TaxonRank = "kingdom" | "phylum" | "class" | "order" | "family" | "genus";
@@ -16,7 +16,7 @@ const RANKS: { id: TaxonRank; label: string; plural: string }[] = [
 ];
 
 interface Props {
-  plants: Plant[];
+  organisms: Organism[];
   zones: Zone[];
   speciesByShortCode: Map<string, Species>;
   aiAnalyses: AIAnalysis[];
@@ -52,7 +52,7 @@ const PALETTE = [
 ];
 
 export default function StatsPanel({
-  plants,
+  organisms,
   zones,
   speciesByShortCode,
   aiAnalyses,
@@ -62,15 +62,15 @@ export default function StatsPanel({
   onShowEcoFit,
 }: Props) {
   const stats = useMemo(
-    () => computeStats(plants, zones, speciesByShortCode, aiAnalyses),
-    [plants, zones, speciesByShortCode, aiAnalyses],
+    () => computeStats(organisms, zones, speciesByShortCode, aiAnalyses),
+    [organisms, zones, speciesByShortCode, aiAnalyses],
   );
   const [rank, setRank] = useState<TaxonRank>("family");
   const rankInfo = RANKS.find((r) => r.id === rank) ?? RANKS[4];
   const rankSlices = stats.taxa.slicesByRank[rank];
   const rankCount = stats.taxa.countsByRank[rank];
 
-  if (plants.length === 0) {
+  if (organisms.length === 0) {
     return (
       <div className="px-6 py-10 text-center">
         <p className="text-sm text-ink-muted">No data yet.</p>
@@ -84,7 +84,7 @@ export default function StatsPanel({
 
       <StatTileRow tiles={[
         { icon: ImageIcon, label: "Photos", value: stats.totalPics },
-        { icon: Leaf, label: "Plants", value: stats.uniquePlantSpecies, hint: `${stats.plantPicCount} photos` },
+        { icon: Leaf, label: "Plants", value: stats.uniqueOrganismSpecies, hint: `${stats.organismPicCount} photos` },
         { icon: PawPrint, label: "Animals", value: stats.uniqueAnimalSpecies, hint: `${stats.animalPicCount} photos` },
         { icon: MapPin, label: "Zones", value: stats.zonesWithPics, hint: `of ${stats.totalZones}` },
       ]} />
@@ -135,7 +135,7 @@ export default function StatsPanel({
 
       <Section
         title="Eco fit (AI)"
-        subtitle="AI's read on each plant in its zone"
+        subtitle="AI's read on each organism in its zone"
         info={<ModelAttribution iconSize={11} />}
       >
         {stats.ecoFit.rated > 0 ? (
@@ -795,9 +795,9 @@ interface ComputedStats {
   totalPics: number;
   daysSinceFirst: number;
   firstDate: string | null;
-  uniquePlantSpecies: number;
+  uniqueOrganismSpecies: number;
   uniqueAnimalSpecies: number;
-  plantPicCount: number;
+  organismPicCount: number;
   animalPicCount: number;
   zonesWithPics: number;
   totalZones: number;
@@ -823,15 +823,15 @@ interface ComputedStats {
 }
 
 function computeStats(
-  plants: Plant[],
+  organisms: Organism[],
   zones: Zone[],
   speciesByShortCode: Map<string, Species>,
   aiAnalyses: AIAnalysis[],
 ): ComputedStats {
-  const totalPics = plants.length;
+  const totalPics = organisms.length;
 
   // Days since seq=1 pic
-  const seqOne = plants.find((p) => p.seq === 1);
+  const seqOne = organisms.find((p) => p.seq === 1);
   const earliest = seqOne ? new Date(seqOne.addedAt) : null;
   let daysSinceFirst = 0;
   let firstDate: string | null = null;
@@ -845,15 +845,15 @@ function computeStats(
     });
   }
 
-  // Plants vs animals — split by `kind`, default to plant when missing
-  const plantPics = plants.filter((p) => (p.kind ?? "plant") === "plant");
-  const animalPics = plants.filter((p) => p.kind === "animal");
-  const uniquePlantSpecies = new Set(plantPics.map((p) => p.shortCode)).size;
+  // Plants vs animals — split by `kind`, default to organism when missing
+  const organismPics = organisms.filter((p) => (p.kind ?? "plant") === "plant");
+  const animalPics = organisms.filter((p) => p.kind === "animal");
+  const uniqueOrganismSpecies = new Set(organismPics.map((p) => p.shortCode)).size;
   const uniqueAnimalSpecies = new Set(animalPics.map((p) => p.shortCode)).size;
 
   // Zones
-  const picsByZone = new Map<string, Plant[]>();
-  for (const p of plants) {
+  const picsByZone = new Map<string, Organism[]>();
+  for (const p of organisms) {
     const list = picsByZone.get(p.zoneCode) ?? [];
     list.push(p);
     picsByZone.set(p.zoneCode, list);
@@ -885,7 +885,7 @@ function computeStats(
     family: new Map(),
     genus: new Map(),
   };
-  for (const p of plants) {
+  for (const p of organisms) {
     const sp = speciesByShortCode.get(p.shortCode);
     const tx = sp?.taxonomy;
     if (!tx) continue;
@@ -915,10 +915,10 @@ function computeStats(
   }
 
   // Timeline auto-bucketing
-  const timeline = buildTimeline(plants, earliest);
+  const timeline = buildTimeline(organisms, earliest);
 
   // BioCLIP
-  const scored = plants.filter(
+  const scored = organisms.filter(
     (p) => typeof p.bioclipScore === "number" && !Number.isNaN(p.bioclipScore),
   );
   const avgConfidence = scored.length > 0
@@ -930,7 +930,7 @@ function computeStats(
   let fullMatches = 0;
   let genusOnly = 0;
   let mismatches = 0;
-  for (const p of plants) {
+  for (const p of organisms) {
     if (!p.bioclipSpeciesId || !p.fullName) continue;
     const a = p.bioclipSpeciesId.trim().toLowerCase();
     const b = p.fullName.trim().toLowerCase();
@@ -947,9 +947,9 @@ function computeStats(
   const disagreements = mismatches + 0.5 * genusOnly;
 
   // Unidentified — pics without a species fullName attached
-  const unidentifiedPics = plants.filter((p) => !p.fullName).length;
+  const unidentifiedPics = organisms.filter((p) => !p.fullName).length;
 
-  // Eco fit (AI) — verdict is keyed by (shortCode, zoneCode), so each plant
+  // Eco fit (AI) — verdict is keyed by (shortCode, zoneCode), so each organism
   // pic inherits the verdict of its (species, zone) pairing.
   const verdictMap = new Map<string, AIVerdict>();
   for (const a of aiAnalyses) {
@@ -957,7 +957,7 @@ function computeStats(
   }
   const ecoFitCounts: Record<AIVerdict, number> = { GOOD: 0, MIXED: 0, BAD: 0 };
   let ecoFitUnrated = 0;
-  for (const p of plants) {
+  for (const p of organisms) {
     const v = verdictMap.get(`${p.shortCode} ${p.zoneCode}`);
     if (v) ecoFitCounts[v] += 1;
     else ecoFitUnrated += 1;
@@ -968,9 +968,9 @@ function computeStats(
     totalPics,
     daysSinceFirst,
     firstDate,
-    uniquePlantSpecies,
+    uniqueOrganismSpecies,
     uniqueAnimalSpecies,
-    plantPicCount: plantPics.length,
+    organismPicCount: organismPics.length,
     animalPicCount: animalPics.length,
     zonesWithPics: picsByZone.size,
     totalZones: zones.length,
@@ -988,8 +988,8 @@ function computeStats(
   };
 }
 
-function buildTimeline(plants: Plant[], earliest: Date | null): { buckets: TimelineBucket[]; caption: string } {
-  if (!earliest || plants.length === 0) return { buckets: [], caption: "Photos over time" };
+function buildTimeline(organisms: Organism[], earliest: Date | null): { buckets: TimelineBucket[]; caption: string } {
+  if (!earliest || organisms.length === 0) return { buckets: [], caption: "Photos over time" };
   const now = new Date();
   const spanDays = (now.getTime() - earliest.getTime()) / 86400000;
 
@@ -1022,7 +1022,7 @@ function buildTimeline(plants: Plant[], earliest: Date | null): { buckets: Timel
     if (cursor.getTime() > now.getTime() + bucketSizeMs(granularity)) break;
   }
 
-  for (const p of plants) {
+  for (const p of organisms) {
     const d = new Date(p.addedAt);
     if (Number.isNaN(d.getTime())) continue;
     const b = startOfBucket(d, granularity).getTime();

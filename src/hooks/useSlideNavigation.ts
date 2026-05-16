@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import type { Plant } from "../types";
+import type { Organism } from "../types";
 
 export interface SlideNavigationState {
     slideTrackRef: React.RefObject<HTMLDivElement | null>;
@@ -21,7 +21,7 @@ export interface SlideNavigationState {
  * commit/snap-back, and DOM resets on navigation.
  */
 export function useSlideNavigation(
-    panels: Plant[],
+    panels: Organism[],
     currentIndex: number,
     onNavigate: (index: number) => void
 ): SlideNavigationState {
@@ -96,9 +96,9 @@ export function useSlideNavigation(
                         return;
                     }
 
-                    const newPlant = panels[newIndex];
+                    const newOrganism = panels[newIndex];
                     const preload = new Image();
-                    preload.src = `${import.meta.env.BASE_URL}${newPlant.image}`;
+                    preload.src = `${import.meta.env.BASE_URL}${newOrganism.image}`;
 
                     const doNavigate = () => onNavigate(newIndex);
 

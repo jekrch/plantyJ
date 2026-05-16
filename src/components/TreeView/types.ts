@@ -1,4 +1,4 @@
-import type { Plant, Species, TaxaInfo, Zone } from "../../types";
+import type { Organism, Species, TaxaInfo, Zone } from "../../types";
 import type { RelationshipsData } from "../../hooks/useRelationships";
 
 export const RANKS = [
@@ -17,18 +17,18 @@ export interface RawNode {
   name: string;
   rank: Rank;
   shortCode?: string;
-  plant?: Plant;
+  organism?: Organism;
   children?: RawNode[];
 }
 
 export interface Props {
-  plants: Plant[];
+  organisms: Organism[];
   speciesByShortCode: Map<string, Species>;
   taxa: Record<string, TaxaInfo>;
   zones: Zone[];
   headerHeight: number;
-  onOpenPlantInList: (plant: Plant, list: Plant[]) => void;
-  onSpotlightPlant: (shortCode: string) => void;
+  onOpenOrganismInList: (organism: Organism, list: Organism[]) => void;
+  onSpotlightOrganism: (shortCode: string) => void;
   initialTreeNode?: string | null;
   onNodeSelect?: (name: string | null) => void;
   speciesLoaded: boolean;

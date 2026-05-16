@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import type { RawNode } from "./types";
 import { RANK_LABEL } from "./types";
-import { plantTitle } from "../../utils/display";
+import { organismTitle } from "../../utils/display";
 
 export interface SearchItem {
   node: HierarchyPointNode<RawNode>;
@@ -45,9 +45,9 @@ export function useTreeSearch(
     const items: SearchItem[] = [];
     for (const n of nodes) {
       if (n.depth === 0) continue;
-      if (n.data.plant) {
-        const p = n.data.plant;
-        const label = plantTitle(p);
+      if (n.data.organism) {
+        const p = n.data.organism;
+        const label = organismTitle(p);
         const sublabel = p.fullName ?? RANK_LABEL[n.data.rank];
         const fields = [p.commonName, p.fullName, p.variety, p.shortCode, n.data.name].filter(
           Boolean

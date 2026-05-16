@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import type { AIAnalysis, Annotation, Plant, Zone } from "../types";
+import type { AIAnalysis, Annotation, Organism, Zone } from "../types";
 import type { Filters } from "../utils/filtering";
 import {
   hasActiveFilters,
@@ -11,7 +11,7 @@ import FacetSection from "./FacetSection";
 import { ChevronDown, Search, X, XCircle } from "lucide-react";
 
 interface FilterControlProps {
-  plants: Plant[];
+  organisms: Organism[];
   zones: Zone[];
   annotations: Annotation[];
   aiAnalyses?: AIAnalysis[];
@@ -20,7 +20,7 @@ interface FilterControlProps {
 }
 
 export default function FilterControl({
-  plants,
+  organisms,
   zones,
   annotations,
   aiAnalyses = [],
@@ -33,8 +33,8 @@ export default function FilterControl({
   const count = activeFilterCount(filters);
 
   const { tagItems, zoneItems, postedByItems, shortCodeItems, verdictItems } = useMemo(
-    () => computeFacets(plants, filters, zones, annotations, aiAnalyses),
-    [plants, filters, zones, annotations, aiAnalyses]
+    () => computeFacets(organisms, filters, zones, annotations, aiAnalyses),
+    [organisms, filters, zones, annotations, aiAnalyses]
   );
 
   const toggleInSet = useCallback(

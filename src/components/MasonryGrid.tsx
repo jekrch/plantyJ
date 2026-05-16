@@ -1,8 +1,8 @@
 import { useRef, useState, useCallback, useEffect, useMemo } from "react";
-import type { AIAnalysis, Annotation, Plant, Zone } from "../types";
+import type { AIAnalysis, Annotation, Organism, Zone } from "../types";
 import type { SortMode } from "../utils/sorting";
 import type { Filters } from "../utils/filtering";
-import PlantCard from "./PlantCard";
+import OrganismCard from "./OrganismCard";
 import FilterControl from "./FilterControl";
 import SortControl from "./SortControl";
 import HatchFiller from "./HatchFiller";
@@ -23,20 +23,20 @@ function getColumnCount() {
   return 3;
 }
 
-function getAspect(plant: Plant): number {
-  if (plant.width && plant.height && plant.width > 0 && plant.height > 0) {
-    return plant.width / plant.height;
+function getAspect(organism: Organism): number {
+  if (organism.width && organism.height && organism.width > 0 && organism.height > 0) {
+    return organism.width / organism.height;
   }
   return DEFAULT_ASPECT;
 }
 
-function isWide(plant: Plant): boolean {
-  return getAspect(plant) >= WIDE_THRESHOLD;
+function isWide(organism: Organism): boolean {
+  return getAspect(organism) >= WIDE_THRESHOLD;
 }
 
-interface PlacedPlant {
+interface PlacedOrganism {
   kind: "panel";
-  plant: Plant;
+  organism: Organism;
   x: number;
   y: number;
   w: number;
@@ -55,7 +55,7 @@ interface PlacedFiller {
   neighbors: NeighborMap;
 }
 
-type PlacedItem = PlacedPlant | PlacedFiller;
+type PlacedItem = PlacedOrganism | PlacedFiller;
 
 function assignStampsToFillers(fillers: PlacedFiller[]): void {
   const pool = buildStampPool();
@@ -66,13 +66,13 @@ function assignStampsToFillers(fillers: PlacedFiller[]): void {
   }
 }
 
-function getPlantHeight(plant: Plant, width: number): number {
-  const aspect = getAspect(plant);
+function getOrganismHeight(organism: Organism, width: number): number {
+  const aspect = getAspect(organism);
   return width / aspect;
 }
 
 function computeLayout(
-  plants: Plant[],
+  organisms: Organism[],
   colCount: number,
   containerWidth: number,
   initialHeights: number[]
@@ -85,10 +85,10 @@ function computeLayout(
   const placeholder: StampDef = { type: "word", value: "" };
   const emptyNeighbors: NeighborMap = {};
 
-  for (let idx = 0; idx < plants.length; idx++) {
-    const plant = plants[idx];
-    const aspect = getAspect(plant);
-    const wide = isWide(plant) && colCount >= 2;
+  for (let idx = 0; idx < organisms.length; idx++) {
+    const organism = organisms[idx];
+    const aspect = getAspect(organism);
+    const wide = isWide(organism) && colCount >= 2;
 
     if (wide) {
       let bestStart = 0;
@@ -108,7 +108,7 @@ function computeLayout(
       if (heights[col1] < tallest) {
         items.push({
           kind: "filler",
-          key: `filler-${plant.id}-L`,
+          key: `filler-${organism.id}-L`,
           x: colX(col1),
           y: heights[col1],
           w: colWidth,
@@ -122,7 +122,7 @@ function computeLayout(
       if (heights[col2] < tallest) {
         items.push({
           kind: "filler",
-          key: `filler-${plant.id}-R`,
+          key: `filler-${organism.id}-R`,
           x: colX(col2),
           y: heights[col2],
           w: colWidth,
@@ -135,16 +135,16 @@ function computeLayout(
       }
 
       const spanW = colWidth * 2 + GAP;
-      const plantH = spanW / aspect;
+      const organismH = spanW / aspect;
       items.push({
         kind: "panel",
-        plant,
+        organism,
         x: colX(col1),
         y: tallest,
         w: spanW,
       });
 
-      const newH = tallest + plantH + GAP;
+      const newH = tallest + organismH + GAP;
       heights[col1] = newH;
       heights[col2] = newH;
     } else {
@@ -163,15 +163,15 @@ function computeLayout(
         }
       }
 
-      const plantH = colWidth / aspect;
+      const organismH = colWidth / aspect;
       items.push({
         kind: "panel",
-        plant,
+        organism,
         x: colX(targetCol),
         y: heights[targetCol],
         w: colWidth,
       });
-      heights[targetCol] += plantH + GAP;
+      heights[targetCol] += organismH + GAP;
     }
   }
 
@@ -205,11 +205,11 @@ function computeLayout(
       if (item.kind === "panel") {
         return {
           kind: "panel" as const,
-          panel: item.plant,
+          panel: item.organism,
           x: item.x,
           y: item.y,
           w: item.w,
-          h: getPlantHeight(item.plant, item.w),
+          h: getOrganismHeight(item.organism, item.w),
         };
       }
       return {
@@ -221,7 +221,7 @@ function computeLayout(
         h: item.h,
       };
     }),
-    getPlantHeight
+    getOrganismHeight
   );
 
   for (const filler of fillers) {
@@ -233,8 +233,8 @@ function computeLayout(
 }
 
 interface MasonryGridProps {
-  plants: Plant[];
-  allPlants: Plant[];
+  organisms: Organism[];
+  allOrganisms: Organism[];
   zones: Zone[];
   annotations: Annotation[];
   aiAnalyses?: AIAnalysis[];
@@ -243,13 +243,13 @@ interface MasonryGridProps {
   filters: Filters;
   onFiltersChange: (filters: Filters) => void;
   onLayoutReady?: () => void;
-  onPlantPositions?: (positions: { plant: Plant; y: number; h: number }[]) => void;
-  onOpenPlant: (plant: Plant) => void;
+  onOrganismPositions?: (positions: { organism: Organism; y: number; h: number }[]) => void;
+  onOpenOrganism: (organism: Organism) => void;
 }
 
 export default function MasonryGrid({
-  plants,
-  allPlants,
+  organisms,
+  allOrganisms,
   zones,
   annotations,
   aiAnalyses,
@@ -258,8 +258,8 @@ export default function MasonryGrid({
   filters,
   onFiltersChange,
   onLayoutReady,
-  onPlantPositions,
-  onOpenPlant,
+  onOrganismPositions,
+  onOpenOrganism,
 }: MasonryGridProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const filterRef = useRef<HTMLDivElement>(null);
@@ -296,7 +296,7 @@ export default function MasonryGrid({
       initialHeights[lastCol] = sortRef.current.offsetHeight + GAP;
     }
 
-    const result = computeLayout(plants, cc, containerWidth, initialHeights);
+    const result = computeLayout(organisms, cc, containerWidth, initialHeights);
 
     const fillers = result.items.filter(
       (i): i is PlacedFiller => i.kind === "filler"
@@ -320,16 +320,16 @@ export default function MasonryGrid({
     requestAnimationFrame(() => {
       window.dispatchEvent(new CustomEvent("masonry-layout"));
     });
-  }, [plants]);
+  }, [organisms]);
 
-  const prevPlantIdsRef = useRef<string>("");
+  const prevOrganismIdsRef = useRef<string>("");
   useEffect(() => {
-    const ids = plants.map((p) => p.id).join(",");
-    if (ids !== prevPlantIdsRef.current) {
-      prevPlantIdsRef.current = ids;
+    const ids = organisms.map((p) => p.id).join(",");
+    if (ids !== prevOrganismIdsRef.current) {
+      prevOrganismIdsRef.current = ids;
       stampCacheRef.current.clear();
     }
-  }, [plants]);
+  }, [organisms]);
 
   useEffect(() => {
     layout();
@@ -403,16 +403,16 @@ export default function MasonryGrid({
   const lastColX = (colCount - 1) * (colWidth + GAP);
 
   useEffect(() => {
-    if (!onPlantPositions || placed.length === 0) return;
+    if (!onOrganismPositions || placed.length === 0) return;
     const positions = placed
-      .filter((item): item is PlacedPlant => item.kind === "panel")
+      .filter((item): item is PlacedOrganism => item.kind === "panel")
       .map((item) => ({
-        plant: item.plant,
+        organism: item.organism,
         y: item.y,
-        h: getPlantHeight(item.plant, item.w),
+        h: getOrganismHeight(item.organism, item.w),
       }));
-    onPlantPositions(positions);
-  }, [placed, onPlantPositions]);
+    onOrganismPositions(positions);
+  }, [placed, onOrganismPositions]);
 
   return (
     <>
@@ -427,7 +427,7 @@ export default function MasonryGrid({
           style={{ width: colWidth > 0 ? `${colWidth}px` : undefined }}
         >
           <FilterControl
-            plants={allPlants}
+            organisms={allOrganisms}
             zones={zones}
             annotations={annotations}
             aiAnalyses={aiAnalyses}
@@ -472,7 +472,7 @@ export default function MasonryGrid({
           }
           return (
             <div
-              key={item.plant.id}
+              key={item.organism.id}
               className="absolute"
               style={{
                 left: `${item.x}px`,
@@ -480,10 +480,10 @@ export default function MasonryGrid({
                 width: `${item.w}px`,
               }}
             >
-              <PlantCard
-                plant={item.plant}
+              <OrganismCard
+                organism={item.organism}
                 zoneNameByCode={zoneNameByCode}
-                onOpen={onOpenPlant}
+                onOpen={onOpenOrganism}
               />
             </div>
           );

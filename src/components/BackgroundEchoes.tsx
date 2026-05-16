@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import type { Plant } from "../types";
+import type { Organism } from "../types";
 
 interface EchoDef {
-  plant: Plant;
+  organism: Organism;
   y: number;
   h: number;
   side: "left" | "right";
 }
 
 interface BackgroundEchoesProps {
-  plantPositions: { plant: Plant; y: number; h: number }[];
+  organismPositions: { organism: Organism; y: number; h: number }[];
 }
 
 const ECHO_INTERVAL = 2;
@@ -20,7 +20,7 @@ const PILLAR_EM = 3;
 const PARALLAX = 0;
 
 export default function BackgroundEchoes({
-  plantPositions,
+  organismPositions,
 }: BackgroundEchoesProps) {
   const [contentRect, setContentRect] = useState<{
     left: number;
@@ -54,7 +54,7 @@ export default function BackgroundEchoes({
       window.removeEventListener("resize", measure);
       clearTimeout(t);
     };
-  }, [plantPositions.length]);
+  }, [organismPositions.length]);
 
   useEffect(() => {
     function onScroll() {
@@ -88,16 +88,16 @@ export default function BackgroundEchoes({
 
   // Compute the gallery extent so echoes stay within bounds
   const galleryHeight =
-    plantPositions.length > 0
-      ? Math.max(...plantPositions.map((p) => p.y + p.h))
+    organismPositions.length > 0
+      ? Math.max(...organismPositions.map((p) => p.y + p.h))
       : 0;
 
   const echoes: EchoDef[] = [];
-  for (let i = 0; i < plantPositions.length; i++) {
+  for (let i = 0; i < organismPositions.length; i++) {
     if (i % ECHO_INTERVAL !== 1) continue;
-    const pos = plantPositions[i];
+    const pos = organismPositions[i];
     echoes.push({
-      plant: pos.plant,
+      organism: pos.organism,
       y: pos.y,
       h: pos.h,
       side: echoes.length % 2 === 0 ? "left" : "right",
@@ -118,7 +118,7 @@ export default function BackgroundEchoes({
       }}
     >
       {echoes.map((echo, idx) => {
-        const src = `${import.meta.env.BASE_URL}${echo.plant.image}`;
+        const src = `${import.meta.env.BASE_URL}${echo.organism.image}`;
         const echoHeight = echo.h * 1.8;
         const baseY = echo.y - echo.h * 0.4;
         const drift = (scrollY - echo.y) * PARALLAX;
@@ -159,7 +159,7 @@ export default function BackgroundEchoes({
         const scaleY = echoHeight / pixelH;
 
         return (
-          <div key={`echo-${echo.plant.id}-${idx}`} style={outerStyle}>
+          <div key={`echo-${echo.organism.id}-${idx}`} style={outerStyle}>
             <div
               style={{
                 width: PIXEL_SIZE,

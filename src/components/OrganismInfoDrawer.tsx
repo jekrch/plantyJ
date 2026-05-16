@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, ExternalLink, Leaf } from "lucide-react";
-import type { AIAnalysis, AIVerdict, Annotation, Plant, Species, SpeciesTaxonomy, Zone, ZonePic } from "../types";
-import { plantTitle } from "../utils/display";
+import type { AIAnalysis, AIVerdict, Annotation, Organism, Species, SpeciesTaxonomy, Zone, ZonePic } from "../types";
+import { organismTitle } from "../utils/display";
 import { ModelAttribution } from "./ModelAttribution";
 import { TabBtn } from "./TreeView/CtrlBtn";
 import { RelationsSubgraph } from "./TreeView/RelationsSubgraph";
@@ -49,15 +49,15 @@ function VerdictMeter({ verdict }: { verdict: AIVerdict }) {
 
 interface Props {
   open: boolean;
-  plant: Plant;
-  allPlants: Plant[];
+  organism: Organism;
+  allOrganisms: Organism[];
   zones: Zone[];
   zonePics: ZonePic[];
   annotations: Annotation[];
   speciesByShortCode: Map<string, Species>;
   aiAnalyses?: AIAnalysis[];
   relationships?: RelationshipsData;
-  onSelectPlant: (plant: Plant) => void;
+  onSelectOrganism: (organism: Organism) => void;
   onSelectTaxon: (name: string) => void;
   topOffset?: number;
   bottomOffset?: number;
@@ -96,17 +96,17 @@ interface TaxonomyRow {
   matchingShortCodes: string[];
 }
 
-export default function PlantInfoDrawer({
+export default function OrganismInfoDrawer({
   open,
-  plant,
-  allPlants,
+  organism,
+  allOrganisms,
   zones,
   zonePics,
   annotations,
   speciesByShortCode,
   aiAnalyses = [],
   relationships,
-  onSelectPlant,
+  onSelectOrganism,
   onSelectTaxon,
   topOffset = 0,
   bottomOffset = 0,
@@ -121,12 +121,12 @@ export default function PlantInfoDrawer({
     setDescExpanded(false);
     setExpandedRank(null);
     setTab("info");
-  }, [plant.id]);
+  }, [organism.id]);
 
-  const species = speciesByShortCode.get(plant.shortCode) ?? null;
+  const species = speciesByShortCode.get(organism.shortCode) ?? null;
 
-  const samePlantTimeline = allPlants
-    .filter((p) => p.shortCode === plant.shortCode && p.id !== plant.id)
+  const sameOrganismTimeline = allOrganisms
+    .filter((p) => p.shortCode === organism.shortCode && p.id !== organism.id)
     .sort((a, b) => new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime());
 
   const zoneNameByCode = useMemo(() => {
@@ -136,9 +136,9 @@ export default function PlantInfoDrawer({
   }, [zones]);
 
   const matchingZonePic = useMemo(() => {
-    const candidates = zonePics.filter((z) => z.zoneCode === plant.zoneCode);
+    const candidates = zonePics.filter((z) => z.zoneCode === organism.zoneCode);
     if (candidates.length === 0) return null;
-    const target = new Date(plant.addedAt).getTime();
+    const target = new Date(organism.addedAt).getTime();
     let best = candidates[0];
     let bestDelta = Math.abs(new Date(best.addedAt).getTime() - target);
     for (let i = 1; i < candidates.length; i++) {
@@ -149,25 +149,25 @@ export default function PlantInfoDrawer({
       }
     }
     return best;
-  }, [zonePics, plant.zoneCode, plant.addedAt]);
+  }, [zonePics, organism.zoneCode, organism.addedAt]);
 
-  const sharingZone = allPlants
+  const sharingZone = allOrganisms
     .filter(
       (p) =>
-        p.shortCode !== plant.shortCode &&
-        p.zoneCode === plant.zoneCode
+        p.shortCode !== organism.shortCode &&
+        p.zoneCode === organism.zoneCode
     )
-    .reduce<Plant[]>((acc, p) => {
+    .reduce<Organism[]>((acc, p) => {
       if (!acc.some((existing) => existing.shortCode === p.shortCode)) acc.push(p);
       return acc;
     }, []);
 
-  const sharingHeader = `Others in ${zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode}`;
+  const sharingHeader = `Others in ${zoneNameByCode.get(organism.zoneCode) ?? organism.zoneCode}`;
 
   const otherVernaculars = useMemo(() => {
     if (!species?.vernacularNames?.length) return [] as string[];
     const known = new Set(
-      [plant.commonName, species.commonName]
+      [organism.commonName, species.commonName]
         .filter((s): s is string => !!s)
         .map((s) => s.toLowerCase())
     );
@@ -178,13 +178,13 @@ export default function PlantInfoDrawer({
       seen.add(key);
       return true;
     });
-  }, [species, plant.commonName]);
+  }, [species, organism.commonName]);
 
-  const plantByShortCode = useMemo(() => {
-    const m = new Map<string, Plant>();
-    for (const p of allPlants) if (!m.has(p.shortCode)) m.set(p.shortCode, p);
+  const organismByShortCode = useMemo(() => {
+    const m = new Map<string, Organism>();
+    for (const p of allOrganisms) if (!m.has(p.shortCode)) m.set(p.shortCode, p);
     return m;
-  }, [allPlants]);
+  }, [allOrganisms]);
 
   const taxonomyRows: TaxonomyRow[] = useMemo(() => {
     if (!species?.taxonomy) return [];
@@ -201,18 +201,18 @@ export default function PlantInfoDrawer({
 
   const relationCount = useMemo(() => {
     if (!relationships?.loaded) return 0;
-    return (relationships.neighbors.get(plant.shortCode) ?? []).length;
-  }, [relationships, plant.shortCode]);
+    return (relationships.neighbors.get(organism.shortCode) ?? []).length;
+  }, [relationships, organism.shortCode]);
 
   const hasRelations = relationCount > 0;
 
-  const bioclipSpeciesId = plant.bioclipSpeciesId?.trim() || null;
-  const bioclipCommonName = plant.bioclipCommonName?.trim() || null;
-  const bioclipWikiUrl = plant.bioclipWikiUrl?.trim() || null;
+  const bioclipSpeciesId = organism.bioclipSpeciesId?.trim() || null;
+  const bioclipCommonName = organism.bioclipCommonName?.trim() || null;
+  const bioclipWikiUrl = organism.bioclipWikiUrl?.trim() || null;
   const bioclipScore =
-    typeof plant.bioclipScore === "number" ? plant.bioclipScore : null;
+    typeof organism.bioclipScore === "number" ? organism.bioclipScore : null;
   const recordedSpecies =
-    species?.fullName?.trim() || plant.fullName?.trim() || null;
+    species?.fullName?.trim() || organism.fullName?.trim() || null;
   const bioclipMatch: "match" | "genus" | "mismatch" | null = (() => {
     if (!bioclipSpeciesId || !recordedSpecies) return null;
     const a = bioclipSpeciesId.toLowerCase();
@@ -233,22 +233,22 @@ export default function PlantInfoDrawer({
       : firstSentenceOrTrim(description, DESCRIPTION_PREVIEW_CHARS)
     : null;
 
-  const note = plant.description?.trim() || null;
-  const tags = plant.tags ?? [];
+  const note = organism.description?.trim() || null;
+  const tags = organism.tags ?? [];
 
-  const plantAnnotation =
-    annotations.find((a) => a.shortCode === plant.shortCode && a.zoneCode === null) ?? null;
+  const organismAnnotation =
+    annotations.find((a) => a.shortCode === organism.shortCode && a.zoneCode === null) ?? null;
   const zoneAnnotation =
     annotations.find(
-      (a) => a.shortCode === plant.shortCode && a.zoneCode === plant.zoneCode
+      (a) => a.shortCode === organism.shortCode && a.zoneCode === organism.zoneCode
     ) ?? null;
-  const zoneName = zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode;
+  const zoneName = zoneNameByCode.get(organism.zoneCode) ?? organism.zoneCode;
 
   const currentAnalysis = useMemo(() => {
     return aiAnalyses.find(
-      (a) => a.shortCode === plant.shortCode && a.zoneCode === plant.zoneCode
+      (a) => a.shortCode === organism.shortCode && a.zoneCode === organism.zoneCode
     ) ?? null;
-  }, [aiAnalyses, plant.shortCode, plant.zoneCode]);
+  }, [aiAnalyses, organism.shortCode, organism.zoneCode]);
 
   const show = open && !closing;
 
@@ -283,7 +283,7 @@ export default function PlantInfoDrawer({
           transition: "opacity 0.25s ease-out 0.15s, transform 0.25s ease-out 0.15s",
         }}
       >
-        {/* ── Tab strip — fixed, only when this plant has relationships ── */}
+        {/* ── Tab strip — fixed, only when this organism has relationships ── */}
         {hasRelations && (
           <div className="shrink-0 px-6 pt-0 sm:px-10 sm:pt-0">
             <div className="max-w-lg lg:max-w-xl mx-auto w-full">
@@ -308,12 +308,12 @@ export default function PlantInfoDrawer({
         >
           <div className="px-6 py-6 sm:px-10 sm:py-8 space-y-5 max-w-lg lg:max-w-xl mx-auto w-full">
 
-        {/* Plant identity */}
+        {/* Organism identity */}
         <div
           className="relative overflow-hidden rounded px-4 py-3"
           style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
         >
-          {plant.image && (
+          {organism.image && (
             <div
               className="absolute inset-y-0 right-0 w-2/3 sm:w-1/2 pointer-events-none z-0"
               style={{
@@ -322,38 +322,38 @@ export default function PlantInfoDrawer({
               }}
             >
               <img
-                src={`${import.meta.env.BASE_URL}${plant.image}`}
+                src={`${import.meta.env.BASE_URL}${organism.image}`}
                 alt=""
                 className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
               />
             </div>
           )}
           <div className="relative z-10 pointer-events-none">
-            <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">{plant.kind === "animal" ? "Animal" : "Plant"}</p>
+            <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">{organism.kind === "animal" ? "Animal" : "Plant"}</p>
             <p className="font-display text-sm text-white/90 leading-snug">
-              {plantTitle(plant)}{" "}
-              <span className="text-accent text-xs">{plant.shortCode}</span>
+              {organismTitle(organism)}{" "}
+              <span className="text-accent text-xs">{organism.shortCode}</span>
             </p>
-            {plant.fullName && plant.commonName && (
-              <p className="text-[11px] text-white/50 italic mt-0.5">{plant.fullName}{plant.variety && ` '${plant.variety}'`}</p>
+            {organism.fullName && organism.commonName && (
+              <p className="text-[11px] text-white/50 italic mt-0.5">{organism.fullName}{organism.variety && ` '${organism.variety}'`}</p>
             )}
-            {!plant.commonName && plant.variety && (
-              <p className="text-[11px] text-white/40 mt-0.5">'{plant.variety}'</p>
+            {!organism.commonName && organism.variety && (
+              <p className="text-[11px] text-white/40 mt-0.5">'{organism.variety}'</p>
             )}
           </div>
         </div>
 
-        {/* Plant, zone, and photo annotations — all side by side if they fit */}
-        {(plantAnnotation || zoneAnnotation || note || tags.length > 0) && (
+        {/* Organism, zone, and photo annotations — all side by side if they fit */}
+        {(organismAnnotation || zoneAnnotation || note || tags.length > 0) && (
           <>
             <div className="border-t border-white/8" />
             <div className="flex flex-wrap gap-x-6 gap-y-3 items-start">
-              {plantAnnotation && (plantAnnotation.description || plantAnnotation.tags.length > 0) && (
+              {organismAnnotation && (organismAnnotation.description || organismAnnotation.tags.length > 0) && (
                 <AnnotationGroup
                   noteLabel="Plant notes"
                   tagsLabel="Plant tags"
-                  description={plantAnnotation.description}
-                  tags={plantAnnotation.tags}
+                  description={organismAnnotation.description}
+                  tags={organismAnnotation.tags}
                 />
               )}
               {zoneAnnotation && (zoneAnnotation.description || zoneAnnotation.tags.length > 0) && (
@@ -376,23 +376,23 @@ export default function PlantInfoDrawer({
           </>
         )}
 
-        {/* Same plant timeline */}
-        {samePlantTimeline.length > 0 && (
+        {/* Same organism timeline */}
+        {sameOrganismTimeline.length > 0 && (
           <>
             <div className="border-t border-white/8" />
             <div>
               <div className="flex items-center gap-1.5 mb-2 text-[10px] uppercase tracking-widest text-white/50">
-                <span>More photos of this {plant.kind === "animal" ? "animal" : "plant"}</span>
+                <span>More photos of this {organism.kind === "animal" ? "animal" : "plant"}</span>
                 <span className="text-white/20 normal-case tracking-normal">
-                  · {samePlantTimeline.length}
+                  · {sameOrganismTimeline.length}
                 </span>
               </div>
               <div className="flex gap-2 overflow-x-auto pb-1 info-related-scroll">
-                {samePlantTimeline.map((p) => (
+                {sameOrganismTimeline.map((p) => (
                   <button
                     key={p.id}
                     type="button"
-                    onClick={() => onSelectPlant(p)}
+                    onClick={() => onSelectOrganism(p)}
                     className="relative shrink-0 h-24 rounded-sm overflow-hidden bg-white/5 ring-1 ring-inset ring-white/5 hover:ring-white/25 transition-colors"
                     style={{ aspectRatio: `${p.width} / ${p.height}` }}
                     title={new Date(p.addedAt).toLocaleDateString()}
@@ -441,13 +441,13 @@ export default function PlantInfoDrawer({
           <div className="relative z-10 pointer-events-none">
             <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Zone</p>
             <p className="font-display text-sm text-white/90 leading-snug">
-              {zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode}{" "}
-              <span className="text-accent text-xs">{plant.zoneCode}</span>
+              {zoneNameByCode.get(organism.zoneCode) ?? organism.zoneCode}{" "}
+              <span className="text-accent text-xs">{organism.zoneCode}</span>
             </p>
           </div>
         </div>
 
-        {/* Other plants sharing a zone */}
+        {/* Other organisms sharing a zone */}
         {sharingZone.length > 0 && (
           <>
             <div className="border-t border-white/8" />
@@ -461,7 +461,7 @@ export default function PlantInfoDrawer({
                   <button
                     key={p.id}
                     type="button"
-                    onClick={() => onSelectPlant(p)}
+                    onClick={() => onSelectOrganism(p)}
                     className="relative shrink-0 h-24 rounded-sm overflow-hidden bg-white/5 ring-1 ring-inset ring-white/5 hover:ring-white/25 transition-colors"
                     style={{ aspectRatio: `${p.width} / ${p.height}` }}
                     title={p.commonName ?? p.shortCode}
@@ -538,7 +538,7 @@ export default function PlantInfoDrawer({
               {taxonomyRows.map((row, idx) => {
                 const isLast = idx === taxonomyRows.length - 1;
                 const siblingCodes = row.matchingShortCodes.filter(
-                  (c) => c !== plant.shortCode
+                  (c) => c !== organism.shortCode
                 );
                 const total = row.matchingShortCodes.length;
                 const isExpandable = siblingCodes.length > 0;
@@ -555,7 +555,7 @@ export default function PlantInfoDrawer({
                         className={`text-left hover:text-accent transition-colors cursor-pointer ${
                           isLast ? "text-accent italic" : "text-white/65"
                         }`}
-                        title={`View ${row.value} in tree (${total} plant${total === 1 ? "" : "s"})`}
+                        title={`View ${row.value} in tree (${total} organism${total === 1 ? "" : "s"})`}
                       >
                         {row.value}
                       </button>
@@ -595,11 +595,11 @@ export default function PlantInfoDrawer({
                         style={{ paddingLeft: "calc(3.5rem + 0.5rem)" }}
                       >
                         {siblingCodes.map((code) => {
-                          const sibPlant = plantByShortCode.get(code);
+                          const sibOrganism = organismByShortCode.get(code);
                           const sibSpecies = speciesByShortCode.get(code);
                           const label =
-                            sibPlant?.commonName ??
-                            sibPlant?.fullName ??
+                            sibOrganism?.commonName ??
+                            sibOrganism?.fullName ??
                             sibSpecies?.commonName ??
                             sibSpecies?.fullName ??
                             code;
@@ -614,7 +614,7 @@ export default function PlantInfoDrawer({
                               }
                               disabled={!focusName}
                               className="text-[11px] leading-none px-2 py-1 rounded-sm bg-white/5 text-white/60 hover:bg-accent/15 hover:text-accent transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-default"
-                              title={sibSpecies?.fullName ?? sibPlant?.fullName ?? code}
+                              title={sibSpecies?.fullName ?? sibOrganism?.fullName ?? code}
                             >
                               {label}
                             </button>
@@ -715,7 +715,7 @@ export default function PlantInfoDrawer({
         )}
 
         {/* Sources */}
-        {((species?.references && species.references.length > 0) || (plant.kind === "animal" && plant.fullName)) && (
+        {((species?.references && species.references.length > 0) || (organism.kind === "animal" && organism.fullName)) && (
           <>
             <div className="border-t border-white/8" />
             <div>
@@ -735,9 +735,9 @@ export default function PlantInfoDrawer({
                     <ExternalLink size={10} strokeWidth={1.5} />
                   </a>
                 ))}
-                {plant.kind === "animal" && plant.fullName && (
+                {organism.kind === "animal" && organism.fullName && (
                   <a
-                    href={`https://www.inaturalist.org/taxa/search?q=${encodeURIComponent(plant.fullName)}`}
+                    href={`https://www.inaturalist.org/taxa/search?q=${encodeURIComponent(organism.fullName)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 text-[11px] text-white/55 hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
@@ -805,13 +805,13 @@ export default function PlantInfoDrawer({
         {hasRelations && relationships && (
           <div className={`flex-1 min-h-0 flex flex-col ${tab !== "web" ? "hidden" : ""}`}>
             <RelationsSubgraph
-              centerCode={plant.shortCode}
-              centerLabel={plantTitle(plant)}
-              plants={allPlants}
+              centerCode={organism.shortCode}
+              centerLabel={organismTitle(organism)}
+              organisms={allOrganisms}
               relationships={relationships.relationships}
               neighbors={relationships.neighbors}
               typeById={relationships.typeById}
-              plantsByCode={plantByShortCode}
+              organismsByCode={organismByShortCode}
               outerClassName="flex-1 min-h-0 flex flex-col gap-2 px-3 pt-3 pb-3"
               graphClassName="relative flex-1 min-h-0 overflow-hidden rounded"
             />

@@ -1,34 +1,34 @@
 import { useRef, useCallback } from "react";
-import type { Plant } from "../types";
+import type { Organism } from "../types";
 import { Expand } from "lucide-react";
-import { plantTitle } from "../utils/display";
+import { organismTitle } from "../utils/display";
 
 const DOUBLE_CLICK_DELAY = 400;
 const MOUSE_TOLERANCE = 20;
 const TOUCH_TOLERANCE = 30;
 
 interface Props {
-  plant: Plant;
+  organism: Organism;
   zoneNameByCode: Map<string, string>;
-  onOpen: (plant: Plant) => void;
+  onOpen: (organism: Organism) => void;
 }
 
-export default function PlantCard({ plant, zoneNameByCode, onOpen }: Props) {
+export default function OrganismCard({ organism, zoneNameByCode, onOpen }: Props) {
   const lastTap = useRef<{ time: number; x: number; y: number } | null>(null);
   const lastClick = useRef<{ time: number; x: number; y: number } | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
 
-  const imgSrc = `${import.meta.env.BASE_URL}${plant.image}`;
+  const imgSrc = `${import.meta.env.BASE_URL}${organism.image}`;
 
   const aspectRatio =
-    plant.width && plant.height && plant.width > 0 && plant.height > 0
-      ? `${plant.width} / ${plant.height}`
+    organism.width && organism.height && organism.width > 0 && organism.height > 0
+      ? `${organism.width} / ${organism.height}`
       : "3 / 4";
 
   const openViewer = useCallback(() => {
-    onOpen(plant);
-  }, [onOpen, plant]);
+    onOpen(organism);
+  }, [onOpen, organism]);
 
   const handlePointerUp = useCallback(
     (e: React.PointerEvent) => {
@@ -62,8 +62,8 @@ export default function PlantCard({ plant, zoneNameByCode, onOpen }: Props) {
     [openViewer]
   );
 
-  const titleLine = plantTitle(plant);
-  const subtitle = zoneNameByCode.get(plant.zoneCode) ?? plant.zoneCode;
+  const titleLine = organismTitle(organism);
+  const subtitle = zoneNameByCode.get(organism.zoneCode) ?? organism.zoneCode;
 
   return (
     <div
@@ -121,17 +121,17 @@ export default function PlantCard({ plant, zoneNameByCode, onOpen }: Props) {
 
         <p className="font-display text-sm text-white leading-tight">
           {titleLine}{" "}
-          <span className="text-accent text-[10px]">{plant.shortCode}</span>
+          <span className="text-accent text-[10px]">{organism.shortCode}</span>
         </p>
         <p className="text-xs text-ink-muted mt-0.5">{subtitle}</p>
-        {/* {plant.description && (
+        {/* {organism.description && (
           <p className="text-xs text-ink-muted/70 mt-1 italic leading-snug line-clamp-2">
-            {plant.description}
+            {organism.description}
           </p>
         )} */}
-        {plant.tags?.length > 0 && (
+        {organism.tags?.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-1.5">
-            {plant.tags.map((tag) => (
+            {organism.tags.map((tag) => (
               <span
                 key={tag}
                 className="text-[10px] leading-none px-1.5 py-0.5 rounded-sm bg-white/10 text-ink-muted"

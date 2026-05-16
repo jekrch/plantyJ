@@ -1,13 +1,13 @@
-import type { Plant } from "./types";
+import type { Organism } from "./types";
 
 
 // Neighbor map — which panels border a filler on each edge
 
 export interface NeighborMap {
-  top?: Plant;
-  bottom?: Plant;
-  left?: Plant;
-  right?: Plant;
+  top?: Organism;
+  bottom?: Organism;
+  left?: Organism;
+  right?: Organism;
 }
 
 
@@ -20,17 +20,17 @@ interface Rect {
   h: number;
 }
 
-interface PlacedPlantLike extends Rect {
+interface PlacedOrganismLike extends Rect {
   kind: "panel";
-  panel: Plant;
-  /** Plant height must be derived externally (aspect ratio). */
+  panel: Organism;
+  /** Organism height must be derived externally (aspect ratio). */
 }
 
 interface PlacedFillerLike extends Rect {
   kind: "filler";
 }
 
-type PlacedItemLike = PlacedPlantLike | PlacedFillerLike;
+type PlacedItemLike = PlacedOrganismLike | PlacedFillerLike;
 
 
 // Edge overlap helpers
@@ -55,21 +55,21 @@ function rangeOverlap(
 
 /**
  * Given the full list of placed items and a function to compute panel
- * height (since PlacedPlant doesn't store `h` directly), returns a Map
+ * height (since PlacedOrganism doesn't store `h` directly), returns a Map
  * from filler key → NeighborMap.
  *
- * `getPlantHeight` receives a Plant and the rendered width and should
+ * `getOrganismHeight` receives a Organism and the rendered width and should
  * return the pixel height of that panel card.
  */
 export function resolveNeighbors(
   items: PlacedItemLike[],
-  getPlantHeight: (panel: Plant, width: number) => number
+  getOrganismHeight: (panel: Organism, width: number) => number
 ): Map<string, NeighborMap> {
   // Build bounding rects for every item
   interface BoundedItem {
     kind: "panel" | "filler";
     key: string;
-    panel?: Plant;
+    panel?: Organism;
     x: number;
     y: number;
     w: number;
@@ -78,7 +78,7 @@ export function resolveNeighbors(
 
   const bounded: BoundedItem[] = items.map((item) => {
     if (item.kind === "panel") {
-      const p = item as PlacedPlantLike;
+      const p = item as PlacedOrganismLike;
       return {
         kind: "panel",
         key: p.panel.id,
@@ -86,7 +86,7 @@ export function resolveNeighbors(
         x: p.x,
         y: p.y,
         w: p.w,
-        h: getPlantHeight(p.panel, p.w),
+        h: getOrganismHeight(p.panel, p.w),
       };
     }
     const f = item as PlacedFillerLike & { key: string };

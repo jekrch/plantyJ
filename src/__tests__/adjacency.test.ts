@@ -1,17 +1,17 @@
 import { describe, it, expect } from "bun:test";
 import { resolveNeighbors } from "../adjacency";
-import type { Plant } from "../types";
-import { plant } from "./helpers";
+import type { Organism } from "../types";
+import { organism } from "./helpers";
 
 const PANEL_H = 100;
-const getHeight = (_: Plant, _w: number) => PANEL_H;
+const getHeight = (_: Organism, _w: number) => PANEL_H;
 
 // Filler items need a 'key' property which the internal code reads via (f as any).key
 type AnyItem = any;
 
 describe("resolveNeighbors", () => {
   it("detects a panel directly above the filler (top neighbor)", () => {
-    const p = plant({ id: "p1" });
+    const p = organism({ id: "p1" });
     const items: AnyItem[] = [
       { kind: "panel", x: 0, y: 0, w: 100, h: 0, panel: p },
       // filler top edge at y=100 = panel bottom edge (0 + getHeight=100)
@@ -22,7 +22,7 @@ describe("resolveNeighbors", () => {
   });
 
   it("detects a panel directly below the filler (bottom neighbor)", () => {
-    const p = plant({ id: "p1" });
+    const p = organism({ id: "p1" });
     const items: AnyItem[] = [
       { kind: "panel", x: 0, y: 50, w: 100, h: 0, panel: p },
       // filler bottom edge at y=50 = panel top edge
@@ -33,7 +33,7 @@ describe("resolveNeighbors", () => {
   });
 
   it("detects a panel to the left of the filler", () => {
-    const p = plant({ id: "p1" });
+    const p = organism({ id: "p1" });
     const items: AnyItem[] = [
       { kind: "panel", x: 0, y: 0, w: 100, h: 0, panel: p },
       // filler left edge at x=100 = panel right edge
@@ -44,7 +44,7 @@ describe("resolveNeighbors", () => {
   });
 
   it("detects a panel to the right of the filler", () => {
-    const p = plant({ id: "p1" });
+    const p = organism({ id: "p1" });
     const items: AnyItem[] = [
       { kind: "panel", x: 150, y: 0, w: 100, h: 0, panel: p },
       // filler right edge at x=150 = panel left edge
@@ -55,7 +55,7 @@ describe("resolveNeighbors", () => {
   });
 
   it("returns an empty neighbor map when no panels are adjacent", () => {
-    const p = plant({ id: "p1" });
+    const p = organism({ id: "p1" });
     const items: AnyItem[] = [
       { kind: "panel", x: 500, y: 500, w: 100, h: 0, panel: p },
       { kind: "filler", key: "f1", x: 0, y: 0, w: 100, h: 100 },
@@ -65,7 +65,7 @@ describe("resolveNeighbors", () => {
   });
 
   it("creates an entry for every filler, even ones with no neighbors", () => {
-    const p = plant({ id: "p1" });
+    const p = organism({ id: "p1" });
     const items: AnyItem[] = [
       { kind: "panel", x: 0, y: 0, w: 100, h: 0, panel: p },
       { kind: "filler", key: "f1", x: 0, y: 100, w: 100, h: 50 },
@@ -78,7 +78,7 @@ describe("resolveNeighbors", () => {
 
   it("does not match a panel whose horizontal span does not overlap the filler", () => {
     // Panel is entirely to the right of the filler's column — no horizontal overlap
-    const p = plant({ id: "p1" });
+    const p = organism({ id: "p1" });
     const items: AnyItem[] = [
       { kind: "panel", x: 200, y: 0, w: 100, h: 0, panel: p },
       { kind: "filler", key: "f1", x: 0, y: 100, w: 50, h: 50 },
@@ -88,7 +88,7 @@ describe("resolveNeighbors", () => {
   });
 
   it("returns an empty map when there are no fillers", () => {
-    const p = plant({ id: "p1" });
+    const p = organism({ id: "p1" });
     const items: AnyItem[] = [
       { kind: "panel", x: 0, y: 0, w: 100, h: 0, panel: p },
     ];
@@ -96,10 +96,10 @@ describe("resolveNeighbors", () => {
     expect(result.size).toBe(0);
   });
 
-  it("uses getPlantHeight to determine panel bottom edge", () => {
-    const p = plant({ id: "p1" });
+  it("uses getOrganismHeight to determine panel bottom edge", () => {
+    const p = organism({ id: "p1" });
     // Panel has h=0 in the item, but getHeight returns 200
-    const tallHeight = (_: Plant, _w: number) => 200;
+    const tallHeight = (_: Organism, _w: number) => 200;
     const items: AnyItem[] = [
       { kind: "panel", x: 0, y: 0, w: 100, h: 0, panel: p },
       { kind: "filler", key: "f1", x: 0, y: 200, w: 100, h: 50 },

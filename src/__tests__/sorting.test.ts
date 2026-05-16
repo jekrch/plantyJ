@@ -1,6 +1,6 @@
 import { describe, it, expect } from "bun:test";
-import { cosineDistance, hammingDistanceHex, paletteDistance, sortPlants } from "../utils/sorting";
-import { plant } from "./helpers";
+import { cosineDistance, hammingDistanceHex, paletteDistance, sortOrganisms } from "../utils/sorting";
+import { organism } from "./helpers";
 
 describe("cosineDistance", () => {
   it("returns 0 for identical unit vectors", () => {
@@ -81,33 +81,33 @@ describe("paletteDistance", () => {
   });
 });
 
-describe("sortPlants", () => {
-  const p1 = plant({ id: "p1", addedAt: "2024-01-01T00:00:00Z" });
-  const p2 = plant({ id: "p2", addedAt: "2024-03-15T00:00:00Z" });
-  const p3 = plant({ id: "p3", addedAt: "2023-06-01T00:00:00Z" });
+describe("sortOrganisms", () => {
+  const p1 = organism({ id: "p1", addedAt: "2024-01-01T00:00:00Z" });
+  const p2 = organism({ id: "p2", addedAt: "2024-03-15T00:00:00Z" });
+  const p3 = organism({ id: "p3", addedAt: "2023-06-01T00:00:00Z" });
 
   it("sorts newest first", () => {
-    const sorted = sortPlants([p1, p2, p3], "newest");
+    const sorted = sortOrganisms([p1, p2, p3], "newest");
     expect(sorted.map((p) => p.id)).toEqual(["p2", "p1", "p3"]);
   });
 
   it("sorts oldest first", () => {
-    const sorted = sortPlants([p1, p2, p3], "oldest");
+    const sorted = sortOrganisms([p1, p2, p3], "oldest");
     expect(sorted.map((p) => p.id)).toEqual(["p3", "p1", "p2"]);
   });
 
   it("does not mutate the input array", () => {
     const input = [p1, p2, p3];
     const origIds = input.map((p) => p.id);
-    sortPlants(input, "newest");
+    sortOrganisms(input, "newest");
     expect(input.map((p) => p.id)).toEqual(origIds);
   });
 
   it("handles a single-element array", () => {
-    expect(sortPlants([p1], "newest")).toEqual([p1]);
+    expect(sortOrganisms([p1], "newest")).toEqual([p1]);
   });
 
   it("handles an empty array", () => {
-    expect(sortPlants([], "newest")).toEqual([]);
+    expect(sortOrganisms([], "newest")).toEqual([]);
   });
 });

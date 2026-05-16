@@ -1,6 +1,6 @@
 import { describe, it, expect } from "bun:test";
-import { isUnidentified, plantTitle } from "../utils/display";
-import { plant } from "./helpers";
+import { isUnidentified, organismTitle } from "../utils/display";
+import { organism } from "./helpers";
 
 describe("isUnidentified", () => {
   it("returns true when shortCode starts with unid- and no names", () => {
@@ -20,34 +20,34 @@ describe("isUnidentified", () => {
   });
 });
 
-describe("plantTitle", () => {
+describe("organismTitle", () => {
   it("prefers commonName over fullName", () => {
-    expect(plantTitle(plant({ commonName: "Wild Rose", fullName: "Rosa canina" }))).toBe("Wild Rose");
+    expect(organismTitle(organism({ commonName: "Wild Rose", fullName: "Rosa canina" }))).toBe("Wild Rose");
   });
 
   it("falls back to fullName when no commonName", () => {
-    expect(plantTitle(plant({ fullName: "Rosa canina", commonName: null }))).toBe("Rosa canina");
+    expect(organismTitle(organism({ fullName: "Rosa canina", commonName: null }))).toBe("Rosa canina");
   });
 
   it("returns 'Unidentified' for unid- plants with no names", () => {
-    expect(plantTitle(plant({ shortCode: "unid-1", fullName: null, commonName: null }))).toBe("Unidentified");
+    expect(organismTitle(organism({ shortCode: "unid-1", fullName: null, commonName: null }))).toBe("Unidentified");
   });
 
   it("returns shortCode as last fallback", () => {
-    expect(plantTitle(plant({ shortCode: "rosa-c", fullName: null, commonName: null }))).toBe("rosa-c");
+    expect(organismTitle(organism({ shortCode: "rosa-c", fullName: null, commonName: null }))).toBe("rosa-c");
   });
 
   it("appends variety in single quotes to commonName", () => {
-    expect(plantTitle(plant({ commonName: "Apple", variety: "Honeycrisp" }))).toBe("Apple 'Honeycrisp'");
+    expect(organismTitle(organism({ commonName: "Apple", variety: "Honeycrisp" }))).toBe("Apple 'Honeycrisp'");
   });
 
   it("appends variety to fullName fallback", () => {
-    expect(plantTitle(plant({ fullName: "Malus domestica", commonName: null, variety: "Gala" }))).toBe(
+    expect(organismTitle(organism({ fullName: "Malus domestica", commonName: null, variety: "Gala" }))).toBe(
       "Malus domestica 'Gala'"
     );
   });
 
   it("does not append variety when it is null", () => {
-    expect(plantTitle(plant({ commonName: "Apple", variety: null }))).toBe("Apple");
+    expect(organismTitle(organism({ commonName: "Apple", variety: null }))).toBe("Apple");
   });
 });

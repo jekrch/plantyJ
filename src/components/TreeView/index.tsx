@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { hierarchy, cluster, type HierarchyPointNode } from "d3-hierarchy";
 import { LoaderCircle, Maximize2, Search, X, ZoomIn, ZoomOut } from "lucide-react";
-import { plantTitle } from "../../utils/display";
+import { organismTitle } from "../../utils/display";
 import { buildTree, linkPath } from "./treeUtils";
 import { usePanZoom } from "./usePanZoom";
 import { useTreeSearch } from "./useTreeSearch";
 import { NodeDetail } from "./NodeDetail";
-import type { AIAnalysis } from "../PlantInfoDrawer";
+import type { AIAnalysis } from "../OrganismInfoDrawer";
 import { CtrlBtn } from "./CtrlBtn";
 import {
   RANKS,
@@ -22,13 +22,13 @@ import {
 import type { Props, RawNode } from "./types";
 
 export default function TreeView({
-  plants,
+  organisms,
   speciesByShortCode,
   taxa,
   zones,
   headerHeight,
-  onOpenPlantInList,
-  onSpotlightPlant,
+  onOpenOrganismInList,
+  onSpotlightOrganism,
   initialTreeNode,
   onNodeSelect,
   speciesLoaded,
@@ -46,8 +46,8 @@ export default function TreeView({
   const baseURL = import.meta.env.BASE_URL;
 
   const { root } = useMemo(
-    () => buildTree(plants, speciesByShortCode),
-    [plants, speciesByShortCode]
+    () => buildTree(organisms, speciesByShortCode),
+    [organisms, speciesByShortCode]
   );
 
   const layout = useMemo(() => {
@@ -289,7 +289,7 @@ export default function TreeView({
           >
             <NodeDetail
               node={renderedPinned}
-              plants={plants}
+              organisms={organisms}
               taxa={taxa}
               zones={zones}
               speciesByShortCode={speciesByShortCode}
@@ -298,8 +298,8 @@ export default function TreeView({
               isClosing={isClosing}
               onAnimationEnd={() => { if (isClosing) setRenderedPinned(null); }}
               onClose={() => setPinned(null)}
-              onOpenPlantInList={onOpenPlantInList}
-              onSpotlightPlant={onSpotlightPlant}
+              onOpenOrganismInList={onOpenOrganismInList}
+              onSpotlightOrganism={onSpotlightOrganism}
             />
           </div>
         </div>
@@ -375,7 +375,7 @@ function InternalLabels({
   return (
     <g className="tree-internal-labels" pointerEvents="none">
       {nodes
-        .filter((n) => n.depth > 0 && !n.data.plant)
+        .filter((n) => n.depth > 0 && !n.data.organism)
         .map((n) => {
           const isActive = n === activeNode || (activeNode && activeNode.ancestors().includes(n));
           return (
@@ -423,7 +423,7 @@ function TreeNodes({
   return (
     <g className="tree-nodes">
       {nodes.map((n) => {
-        const isLeaf = !!n.data.plant;
+        const isLeaf = !!n.data.organism;
         const isActive = n === activeNode;
         const isPinned = n === pinned;
         const isAncestorOfActive = !!(activeNode && activeNode.ancestors().includes(n));
@@ -431,7 +431,7 @@ function TreeNodes({
 
         return isLeaf ? (
           <LeafNode
-            key={`leaf-${n.data.plant!.id}`}
+            key={`leaf-${n.data.organism!.id}`}
             n={n}
             isActive={isActive}
             isPinned={isPinned}
@@ -470,9 +470,9 @@ function LeafNode({
   baseURL: string;
   handlers: { onPointerEnter: () => void; onPointerLeave: () => void; onClick: (e: React.MouseEvent) => void };
 }) {
-  const p = n.data.plant!;
+  const p = n.data.organism!;
   const r = LEAF_RADIUS;
-  const title = plantTitle(p);
+  const title = organismTitle(p);
   const isAnimal = p.kind === "animal";
   const nodeColor = isAnimal ? "var(--color-amber, #f59e0b)" : "var(--color-ink)";
 
