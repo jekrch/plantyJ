@@ -284,6 +284,24 @@
       "type": "predator-prey",
       "from": "p dom",
       "to": "C pen"
+    },
+    {
+      "id": 37,
+      "type": "predator-prey",
+      "from": "m gal",
+      "to": "T imm"
+    },
+    {
+      "id": 38,
+      "type": "predator-prey",
+      "from": "c card",
+      "to": "T imm"
+    },
+    {
+      "id": 39,
+      "type": "predator-prey",
+      "from": "p dom",
+      "to": "T imm"
     }
   ]
 }
