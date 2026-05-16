@@ -273,6 +273,19 @@
       "created": "2026-05-09T00:15:07.553Z"
     },
     {
+      "shortCode": "H mex",
+      "zoneCode": "mpg",
+      "verdict": "MIXED",
+      "analysis": "The House Finch (Haemorhous mexicanus) holds a complex ecological role in a native-focused Minnesota garden. Originally native to the western United States and Mexico, this species was introduced to the eastern states in the 1940s via the illegal pet trade and has since become abundantly naturalized in the Twin Cities. While they provide cheerful songs and actively consume weed seeds, House Finches compete with native species like the Purple Finch for food and nesting resources. In the maple zone and adjacent areas, these primarily vegetarian birds will actively forage on the seeds of native perennials such as big-leaved aster, calico aster, and zig zag goldenrod. Their diet also heavily features buds and small fruits, meaning they will likely target the property's edible shrubs like elderberry and gooseberry, as well as nearby orchard fruits. They share this zone with the invasive House Sparrow, increasing the competitive pressure on native birds.\n\nFor a property prioritizing native ecology and edibles, the presence of House Finches requires mindful management. Because they frequently congregate in flocks and are highly susceptible to Mycoplasma gallisepticum (House Finch eye disease)—which can spread to native bird populations—any supplemental bird feeders must be meticulously and regularly cleaned. The owners might instead choose to rely entirely on the garden's robust native plantings to feed local wildlife safely. While their presence demonstrates a productive, seed-bearing habitat, their non-native status, fruit-pecking habits, and disease vector potential make their impact mixed. They do, however, integrate into the broader urban food web, occasionally falling prey to local predators such as the neighborhood cat documented in the journal.",
+      "references": [
+        "https://mnbirdatlas.org/species/house-finch/",
+        "https://www.minnesotaseasons.com/Birds/House_Finch.html",
+        "https://wildbirdstore.com/textblox/house-finch/",
+        "https://www.allaboutbirds.org/guide/House_Finch/overview"
+      ],
+      "created": "2026-05-16T17:54:59.856Z"
+    },
+    {
       "shortCode": "h tel aut",
       "zoneCode": "bb",
       "verdict": "MIXED",
@@ -619,6 +632,20 @@
       "analysis": "Tiarella cordifolia (Foamflower) is a quintessential native woodland groundcover that excels in the shaded, loamy environment beneath mature maples. Its early spring blooms provide vital nectar and pollen for small native bees and syrphid flies just as they emerge. Its semi-evergreen foliage forms a beautiful, weed-suppressing mat that cools the soil and retains moisture, perfectly supporting the garden's ecological architecture.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "T imm",
+      "zoneCode": "mpg",
+      "verdict": "BAD",
+      "analysis": "The presence of the immigrant pavement ant (Tetramorium immigrans) poses a significant risk to the garden's carefully cultivated ecology and the owners' native-priority goals. Originally from Europe, this non-native, introduced species is a ubiquitous and highly competitive urban pest in the Twin Cities area. It thrives in disturbed human environments, often nesting under sidewalks, driveways, or at the base of plants. Pavement ants are aggressive generalists that recruit rapidly to a wide variety of food sources, including dead insects, sweet honeydew, and seeds. While they are relatively harmless to mature trees like the maples in this zone, their tendency to form massive, territorial colonies allows them to monopolize local resources and displace beneficial native ant species that are vital to local ecosystems.\n\nIn the maple (\"mpg\") zone, T. immigrans is a direct threat to the natural regeneration of the woodland garden. This zone is rich in native spring ephemerals—such as wild ginger, sharp-lobed hepatica, yellow trout lily, and violets—which rely entirely on native ants like the resident carpenter ant (Camponotus pennsylvanicus) for seed dispersal (myrmecochory). Native ants typically carry the seed to their nest, consume the lipid-rich elaiosome appendage, and discard the intact seed in nutrient-rich soil. Pavement ants, however, disrupt this mutualism by outcompeting native ants for the seeds, consuming the seeds outright, or failing to bury them effectively. To protect the local ecology, targeted management is recommended. Because broad-spectrum insecticides would harm native pollinators and essential native ants, the owners should use slow-acting, enclosed liquid bait stations placed directly on pavement ant trails to specifically suppress their colonies with minimal collateral damage.",
+      "references": [
+        "https://extension.umn.edu/insects-infest-homes/ants",
+        "https://ask.ifas.ufl.edu/publication/IN1047",
+        "https://extension.usu.edu/planthealth/research/pavement-ants.pdf",
+        "https://www.antwiki.org/wiki/Tetramorium_immigrans",
+        "https://myrmecologicalnews.org/cms/index.php?option=com_download&view=download&filename=volume32/mn32_75-92_printable.pdf&format=raw"
+      ],
+      "created": "2026-05-16T17:54:59.856Z"
     },
     {
       "shortCode": "u dio",
