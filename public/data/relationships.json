@@ -302,6 +302,18 @@
       "type": "predator-prey",
       "from": "p dom",
       "to": "T imm"
+    },
+    {
+      "id": 40,
+      "type": "pollinator",
+      "from": "V ata",
+      "to": "C sci"
+    },
+    {
+      "id": 41,
+      "type": "pollinator",
+      "from": "V virg",
+      "to": "C sci"
     }
   ]
 }
