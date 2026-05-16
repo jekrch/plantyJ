@@ -3745,6 +3745,59 @@
         "natureserve"
       ]
     },
+    "tetramorium-immigrans": {
+      "id": "tetramorium-immigrans",
+      "fullName": "Tetramorium immigrans",
+      "commonName": "Pavement Ant",
+      "description": "Tetramorium immigrans\u2014also known as the immigrant pavement ant, pavement ant, and the sugar ant in parts of North America\u2014is an ant native to Europe, which also occurs as an introduced pest in North America. Its common name comes from the fact that colonies in North America usually make their nests under pavement. This is one of the most commonly seen ants in North America, being well adapted to urban and suburban habitats. It is distinguished by a single pair of spines on the back, two nodes on the petiole, and grooves on the head and thorax.\nPavement ants have been studied on the International Space Station in 2014.",
+      "vernacularNames": [
+        "Immigrant Pavement Ant",
+        "North American Pavement Ant",
+        "Pavement Ant"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Tetramorium",
+        "species": "Tetramorium immigrans",
+        "canonicalName": "Tetramorium immigrans"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/10114596"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Tetramorium_immigrans"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/569552"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q107075296"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.1127733"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 19265
+    },
     "teucrium-canadense": {
       "id": "teucrium-canadense",
       "fullName": "Teucrium canadense",

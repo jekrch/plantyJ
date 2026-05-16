@@ -590,5 +590,9 @@
   "Haemorhous": {
     "description": "The American rosefinches that form the genus Haemorhous are a group of passerine birds in the finch family Fringillidae. As the name implies, various shades of red are characteristic plumage colors of this group. They are found throughout the North American continent.",
     "url": "https://en.wikipedia.org/wiki/American_rosefinch"
+  },
+  "Tetramorium": {
+    "description": "Tetramorium is a genus of ants in the subfamily Myrmicinae that includes more than 520 species. These ants are also known as pavement ants.",
+    "url": "https://en.wikipedia.org/wiki/Tetramorium"
   }
 }

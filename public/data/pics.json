@@ -11,7 +11,11 @@
       "postedBy": "Jacob",
       "addedAt": "2026-05-16T17:49:53.747Z",
       "width": 1280,
-      "height": 1050
+      "height": 1050,
+      "kind": "animal",
+      "bioclipSpeciesId": "Tetramorium immigrans",
+      "bioclipCommonName": "Pavement ant",
+      "bioclipScore": 0.6796
     },
     {
       "seq": 76,
@@ -78,7 +82,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
