@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "C sci",
+      "fullName": "Camassia scilloides",
+      "commonName": "Wild Hyacinth",
+      "variety": null
+    },
+    {
       "shortCode": "T imm",
       "fullName": "Tetramorium immigrans",
       "commonName": "Pavement Ant",
