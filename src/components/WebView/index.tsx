@@ -1,4 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  forceSimulation,
+  forceLink,
+  forceManyBody,
+  forceCollide,
+  forceX,
+  forceY,
+  type SimulationNodeDatum,
+} from "d3-force";
 import { LoaderCircle, Maximize2, Search, X, ZoomIn, ZoomOut, Filter } from "lucide-react";
 import type {
   AIAnalysis,
@@ -64,111 +73,76 @@ interface PositionedEdge {
   groupTotal: number;
 }
 
-// Organic force-directed layout without artificial bounding box constraints.
+interface SimNode extends SimulationNodeDatum {
+  id: string;
+}
+
+// Force-directed layout via d3-force. A persistent position cache (keyed by
+// node code, owned by the component) seeds the simulation so toggling a
+// relationship filter relaxes the existing layout instead of reshuffling it.
 function layoutGraph(
   nodes: string[],
-  edges: Array<[string, string]>
+  edges: Array<[string, string]>,
+  posCache: Map<string, { x: number; y: number }>
 ): { positions: Map<string, { x: number; y: number }>; width: number; height: number } {
   const positions = new Map<string, { x: number; y: number }>();
   if (nodes.length === 0) return { positions, width: 1600, height: 1000 };
 
-  // Initialize in a tight cluster near 0,0
-  nodes.forEach((n, i) => {
-    const angle = (i / nodes.length) * Math.PI * 2;
-    const r = 200 * Math.random();
-    positions.set(n, { x: Math.cos(angle) * r, y: Math.sin(angle) * r });
-  });
-
   if (nodes.length === 1) {
-    positions.get(nodes[0])!.x = 800;
-    positions.get(nodes[0])!.y = 500;
+    positions.set(nodes[0], { x: 800, y: 500 });
+    posCache.set(nodes[0], { x: 800, y: 500 });
     return { positions, width: 1600, height: 1000 };
   }
 
-  const iterations = 350;
-  const k = 240; // Fixed ideal distance between connected nodes (allows edge text breathing room)
-  let temp = k * 2;
+  const k = 240; // Ideal link distance (gives edge labels breathing room)
   const minDistance = LEAF_RADIUS * 4 + 60; // Strict anti-collision padding
-  const gravity = 0.35; // Gentle pull toward origin to keep separate clusters from flying away
 
-  for (let it = 0; it < iterations; it++) {
-    const disp = new Map<string, { x: number; y: number }>();
-    for (const n of nodes) disp.set(n, { x: 0, y: 0 });
-
-    for (let i = 0; i < nodes.length; i++) {
-      const a = positions.get(nodes[i])!;
-      const da = disp.get(nodes[i])!;
-
-      // Apply center gravity
-      da.x -= a.x * gravity;
-      da.y -= a.y * gravity;
-
-      for (let j = i + 1; j < nodes.length; j++) {
-        const b = positions.get(nodes[j])!;
-        const db = disp.get(nodes[j])!;
-        
-        let dx = a.x - b.x;
-        let dy = a.y - b.y;
-        let dist = Math.hypot(dx, dy);
-        
-        if (dist < 0.01) {
-          dx = Math.random() - 0.5;
-          dy = Math.random() - 0.5;
-          dist = Math.hypot(dx, dy);
-        }
-
-        let force = (k * k) / dist;
-        if (dist < minDistance) {
-           // Aggressive repulsion if nodes physically overlap
-           force += Math.pow(minDistance - dist, 2);
-        }
-
-        const ux = dx / dist;
-        const uy = dy / dist;
-        
-        da.x += ux * force;
-        da.y += uy * force;
-        db.x -= ux * force;
-        db.y -= uy * force;
-      }
+  // Seed from cache when we've placed this node before; otherwise a
+  // deterministic circle (no Math.random — layout stays reproducible).
+  let cachedCount = 0;
+  const simNodes: SimNode[] = nodes.map((id, i) => {
+    const cached = posCache.get(id);
+    if (cached) {
+      cachedCount++;
+      return { id, x: cached.x, y: cached.y };
     }
+    const angle = (i / nodes.length) * Math.PI * 2;
+    return { id, x: Math.cos(angle) * 200, y: Math.sin(angle) * 200 };
+  });
+  const hasNode = new Set(nodes);
+  const simLinks = edges
+    .filter(([a, b]) => hasNode.has(a) && hasNode.has(b))
+    .map(([source, target]) => ({ source, target }));
 
-    for (const [u, v] of edges) {
-      const a = positions.get(u);
-      const b = positions.get(v);
-      if (!a || !b) continue;
-      
-      let dx = a.x - b.x;
-      let dy = a.y - b.y;
-      let dist = Math.hypot(dx, dy);
-      
-      if (dist < 0.01) {
-        dx = Math.random() - 0.5;
-        dy = Math.random() - 0.5;
-        dist = Math.hypot(dx, dy);
-      }
+  const sim = forceSimulation(simNodes)
+    .force(
+      "link",
+      forceLink<SimNode, { source: string; target: string }>(simLinks)
+        .id((d) => d.id)
+        .distance(k * 1.3)
+        .strength(0.4)
+    )
+    .force("charge", forceManyBody().strength(-3800).distanceMax(1400))
+    .force("collide", forceCollide(minDistance).strength(1))
+    .force("x", forceX(0).strength(0.03))
+    .force("y", forceY(0).strength(0.03))
+    .stop();
 
-      const force = (dist * dist) / k;
-      const ux = dx / dist;
-      const uy = dy / dist;
-      
-      const da = disp.get(u)!;
-      const db = disp.get(v)!;
-      da.x -= ux * force;
-      da.y -= uy * force;
-      db.x += ux * force;
-      db.y += uy * force;
-    }
+  // Mostly-cached graph => a filter toggle: relax gently so existing nodes
+  // barely move. Fresh graph => full settle from the seed.
+  const mostlyCached = cachedCount >= nodes.length * 0.5;
+  if (mostlyCached) {
+    sim.alpha(0.3).alphaDecay(0.05);
+    for (let i = 0; i < 120; i++) sim.tick();
+  } else {
+    sim.alpha(1).alphaDecay(0.0228);
+    for (let i = 0; i < 300; i++) sim.tick();
+  }
 
-    // Apply displacement without artificial walls
-    for (const n of nodes) {
-      const d = disp.get(n)!;
-      const dlen = Math.max(0.01, Math.hypot(d.x, d.y));
-      const p = positions.get(n)!;
-      p.x += (d.x / dlen) * Math.min(dlen, temp);
-      p.y += (d.y / dlen) * Math.min(dlen, temp);
-    }
-    temp *= 0.98;
+  for (const n of simNodes) {
+    const p = { x: n.x ?? 0, y: n.y ?? 0 };
+    positions.set(n.id, p);
+    posCache.set(n.id, p);
   }
 
   // Measure the final organic size of the graph
@@ -299,10 +273,14 @@ export default function WebView({
     };
   }, [relationships.relationships, enabledTypes]);
 
+  // Stable across filter toggles so the graph relaxes instead of reshuffling.
+  const posCacheRef = useRef<Map<string, { x: number; y: number }>>(new Map());
+
   const layout = useMemo(() => {
     const { positions, width: layoutWidth, height: layoutHeight } = layoutGraph(
       nodeCodes,
-      filteredEdges.map((r) => [r.from, r.to] as [string, string])
+      filteredEdges.map((r) => [r.from, r.to] as [string, string]),
+      posCacheRef.current
     );
     
     const nodes: PositionedNode[] = nodeCodes.map((code) => {
