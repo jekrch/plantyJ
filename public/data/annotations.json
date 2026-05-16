@@ -509,6 +509,15 @@
         "neighbor"
       ],
       "description": null
+    },
+    {
+      "shortCode": "C sci",
+      "zoneCode": null,
+      "tags": [
+        "native",
+        "edible"
+      ],
+      "description": null
     }
   ]
 }
