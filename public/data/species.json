@@ -661,6 +661,56 @@
       ],
       "observationsCount": 66298
     },
+    "camponotus-pennsylvanicus": {
+      "id": "camponotus-pennsylvanicus",
+      "fullName": "Camponotus pennsylvanicus",
+      "commonName": "Carpenter Ant",
+      "description": "The black carpenter ant (Camponotus pennsylvanicus) is one of the largest and most common species of carpenter ant native to the central and eastern United States as well as eastern Canada.",
+      "vernacularNames": [
+        "(Eastern) black carpenter ant",
+        "Black Carpenter Ant",
+        "Eastern Black Carpenter Ant",
+        "carpenter ant"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Hymenoptera",
+        "family": "Formicidae",
+        "genus": "Camponotus",
+        "species": "Camponotus pennsylvanicus",
+        "canonicalName": "Camponotus pennsylvanicus"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5034116"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Camponotus_pennsylvanicus"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/129902"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.744997"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 53862
+    },
     "cardinalis-cardinalis": {
       "id": "cardinalis-cardinalis",
       "fullName": "Cardinalis cardinalis",
@@ -1300,6 +1350,59 @@
         "natureserve"
       ],
       "observationsCount": 74528
+    },
+    "haemorhous-mexicanus": {
+      "id": "haemorhous-mexicanus",
+      "fullName": "Haemorhous mexicanus",
+      "commonName": "House Finch",
+      "description": "The house finch (Haemorhous mexicanus) is a North American bird in the finch family. It is native to Mexico and southwestern United States, but has since been introduced to the eastern part of North America and Hawai\u02bbi; it is now found year-round in almost all parts of the United States and most of Mexico, with breeding grounds well into Canada as far north as northern Alberta. There are estimated to be 40 million house finches across North America, making it the second-most populous finch, just behind the American goldfinch. The house finch and the other two American rosefinches (Cassin's and purple finch) are placed in the genus Haemorhous.",
+      "vernacularNames": [
+        "Hollywood Finch",
+        "House Finch",
+        "House Finch (Common)",
+        "House/Purple Finch",
+        "Husfinke",
+        "Mexican rosefinch",
+        "Rose-Breasted Finch"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Chordata",
+        "class": "Aves",
+        "order": "Passeriformes",
+        "family": "Fringillidae",
+        "genus": "Haemorhous",
+        "species": "Haemorhous mexicanus",
+        "canonicalName": "Haemorhous mexicanus"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/8323485"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Haemorhous_mexicanus"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/199840"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.100731"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 318586
     },
     "hamamelis-virginiana": {
       "id": "hamamelis-virginiana",

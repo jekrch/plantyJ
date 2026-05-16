@@ -1,6 +1,40 @@
 {
   "pics": [
     {
+      "seq": 76,
+      "id": "H mex-1778774957",
+      "shortCode": "H mex",
+      "zoneCode": "mpg",
+      "tags": [],
+      "description": "++bird",
+      "image": "images/H mex/1778774957.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-05-14T16:09:19.390Z",
+      "width": 1280,
+      "height": 878,
+      "kind": "animal",
+      "bioclipSpeciesId": "Haemorhous mexicanus",
+      "bioclipCommonName": "House finch",
+      "bioclipScore": 0.9843
+    },
+    {
+      "seq": 75,
+      "id": "C pen-1778691566",
+      "shortCode": "C pen",
+      "zoneCode": "mpg",
+      "tags": [],
+      "description": null,
+      "image": "images/C pen/1778691566.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-05-13T16:59:28.123Z",
+      "width": 1112,
+      "height": 1280,
+      "kind": "animal",
+      "bioclipSpeciesId": "Camponotus pennsylvanicus",
+      "bioclipCommonName": "Black carpenter ant",
+      "bioclipScore": 0.4225
+    },
+    {
       "seq": 74,
       "id": "V sor pri-1778607048",
       "shortCode": "V sor pri",

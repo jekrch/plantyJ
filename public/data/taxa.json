@@ -574,5 +574,21 @@
   "Primulaceae": {
     "description": "The Primulaceae, commonly known as the primrose family, are a family of herbaceous and woody flowering plants including some favourite garden plants and wildflowers. Most are perennial though some species, such as scarlet pimpernel, are annuals.",
     "url": "https://en.wikipedia.org/wiki/Primulaceae"
+  },
+  "Camponotus": {
+    "description": "Carpenter ants are a genus of ants in the subfamily Formicinae found nearly worldwide except in Antarctica and a few islands. The genus is the most species-rich genus of ants in terms of described species, comprising over 1,500 described species as of 2025. Although they are commonly referred to as carpenter ants, only a few members, mostly in the subgenera Camponotus and Myrmentoma, nest in wood.",
+    "url": "https://en.wikipedia.org/wiki/Carpenter_ant"
+  },
+  "Formicidae": {
+    "description": "Ants are eusocial insects of the family Formicidae and, along with the related wasps and bees, belong to the order Hymenoptera. Ants evolved from vespoid wasp ancestors in the Cretaceous period. More than 13,800 of an estimated total of 22,000 species have been described. They are easily identified by their geniculate (elbowed) antennae and the distinctive node-like structure that forms their slender waists.",
+    "url": "https://en.wikipedia.org/wiki/Ant"
+  },
+  "Hymenoptera": {
+    "description": " Hymenoptera is a large order of insects, comprising the sawflies, wasps, bees, and ants. Over 150,000 living species of Hymenoptera have been described, in addition to over 2,000 extinct ones. Many of the species are parasitic. Females typically have a special ovipositor for inserting eggs into hosts or places that are otherwise inaccessible. This ovipositor is often modified into a stinger. The young develop through holometabolism \u2014that is, they have a wormlike larval stage and an inactive pupal stage before they reach adulthood.",
+    "url": "https://en.wikipedia.org/wiki/Hymenoptera"
+  },
+  "Haemorhous": {
+    "description": "The American rosefinches that form the genus Haemorhous are a group of passerine birds in the finch family Fringillidae. As the name implies, various shades of red are characteristic plumage colors of this group. They are found throughout the North American continent.",
+    "url": "https://en.wikipedia.org/wiki/American_rosefinch"
   }
 }

@@ -142,6 +142,18 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "C pen",
+      "zoneCode": "mpg",
+      "verdict": "MIXED",
+      "analysis": "The black carpenter ant (Camponotus pennsylvanicus) is a native species to the Twin Cities region and acts as a vital ecosystem engineer in forested and urban environments alike. Rather than eating wood, these ants excavate decaying timber to build their galleries, accelerating the decomposition process and returning nutrients to the heavy clay/loam soil. In the garden's maple zone, they are likely taking advantage of dead wood, perhaps finding cavities in the Norway maple or the nearby silver maple. Ecologically, their presence is highly beneficial; they prey on other insects, forage for plant saps, and gather honeydew from aphids that may reside on the elderberries, maples, or other herbaceous plants in the zone. Additionally, they serve as a critical food source for native insectivorous birds that frequent the yard's diverse habitats.\n\nDespite their ecological benefits, their presence in an urban residential lot presents a mixed scenario due to their potential impact on property and tree health. The owners' priorities of supporting local ecology are well-served by this native decomposer, but practical management is required. Carpenter ants favor damp, rotting wood, meaning their presence in a living tree often indicates preexisting heartwood rot, which can eventually make mature maples structurally hazardous. Furthermore, since the garden is situated on a residential city block, the owners must ensure that gutters are clear, moisture is directed away from the house, and any firewood or landscaping timbers are kept away from the home's foundation to prevent these ants from invading and damaging structural wood.",
+      "references": [
+        "https://apps.extension.umn.edu/garden/diagnose/insect/indoor/beetles/medium/camponotuspennsylvanicus.html",
+        "https://en.wikipedia.org/wiki/Black_carpenter_ant",
+        "https://www.umass.edu/agriculture-food-environment/landscape/publications-resources/insect-mite-guide/camponotus-pennsylvanicus"
+      ],
+      "created": "2026-05-14T05:00:04.138Z"
+    },
+    {
       "shortCode": "c ros",
       "zoneCode": "mpg",
       "verdict": "GOOD",
@@ -277,6 +289,18 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "I uni alb",
+      "zoneCode": "fy",
+      "verdict": "MIXED",
+      "analysis": "The ecological niche of Ipheion uniflorum Album (White Starflower) in the front yard is a mixed fit for a garden prioritizing native ecology and utility. Native to South America, this bulb does not serve as a host plant for local specialist insects, nor does it yield edible or medicinal crops for the owners. However, it is not invasive in the Upper Midwest and offers a modest ecological benefit by providing early spring nectar and pollen for generalist bees and emerging pollinators. While it shares the front yard with high-value native species like yarrow and red osier dogwood that support complex food webs, the starflower simply acts as an early supplemental nectar source. Additionally, its foliage belongs to the amaryllis family and emits an onion or garlic-like scent when crushed, making it highly resistant to urban browsing pressure from deer, rabbits, and rodents.\n\nFrom a practical standpoint, growing this specimen in Minneapolis presents several climatic and soil-based challenges. The species is generally rated for USDA zones 5 through 9, meaning the property's 4b/5a designation puts the bulb at the absolute northern edge of its survivability. While a front-yard microclimate near a foundation or sidewalk might offer some ambient shelter, the property's clay and loam soil is a significant drawback. These bulbs require excellent drainage and are highly susceptible to winter rot in heavy, wet clay during seasonal freeze-thaw cycles. To keep the plant viable, the local soil must be heavily amended for drainage, and a layer of winter mulch is strongly recommended to insulate the bulbs against arctic temperature spikes.",
+      "references": [
+        "https://www.johnscheepers.com/hipheion.html",
+        "https://gardenerspath.com/plants/flowers/grow-spring-starflowers/",
+        "https://www.rhs.org.uk/plants/trials-awards/ongoing-plant-trials/ipheion"
+      ],
+      "created": "2026-05-14T05:00:04.138Z"
+    },
+    {
       "shortCode": "L car",
       "zoneCode": "mpg",
       "verdict": "MIXED",
@@ -343,6 +367,19 @@
       "analysis": "Philadelphus coronarius (Mock Orange) is an old-fashioned, non-native shrub prized for its intensely fragrant white blooms, but it provides relatively little ecological value compared to native alternatives. While it attracts some generalist pollinators during its short bloom window, it does not serve as a host plant for native Lepidoptera and lacks edible berries for birds. Given the native-priority focus of the garden, native shrubs like Ninebark or native Philadelphus species would be ecologically superior.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "P cus",
+      "zoneCode": "sy",
+      "verdict": "GOOD",
+      "analysis": "Plagiomnium cuspidatum (commonly known as baby tooth moss) is a native, creeping moss that is exceptionally well-suited for the side yard's ecology. Thriving in USDA zones 2–9, it strongly prefers the partial to full shade and moist conditions that naturally occur in the understory of this zone's canopy, which includes fruit trees (apple, apricot, Asian pear) and shrubs like mock orange and meadowsweet. Its ability to adapt to clay and loam soils makes it a perfect fit for the property. By establishing itself alongside other shade-loving neighbors like wild ginger and ostrich fern, it acts as a highly effective, low-maintenance living mulch that protects the soil profile and retains moisture.\n\nFrom an ecological standpoint, this moss provides vital microhabitats for the garden's smaller inhabitants. Dense mats of moss reduce soil erosion and offer safe shelter for a diverse array of small invertebrates, insects, and soil microorganisms, which in turn support the diet of local wildlife. Birds frequently gather the soft, pliable foliage to use as nesting material. While ground-feeding birds may be drawn to the moss to forage for insects, the documented presence of a free-roaming cat in this specific zone does introduce a localized predation risk. Nonetheless, as a foundational groundcover, the moss successfully supports the owners' native ecology goals without competing for root space with the side yard's priority edible and medicinal plants.",
+      "references": [
+        "https://www.illinoiswildflowers.info/mosses/plants/bt_moss.html",
+        "https://www.terramatergardens.com/products/moss-baby-tooth",
+        "https://www.picturethisai.com/wiki/Plagiomnium_cuspidatum.html",
+        "https://www.chicagobotanic.org/plant-information/plant-finder/plagiomnium-cuspidatum-toothed-plagiomnium-moss"
+      ],
+      "created": "2026-05-14T05:00:04.138Z"
     },
     {
       "shortCode": "p dom",
@@ -606,6 +643,18 @@
       "analysis": "Viola sororia (Common Blue Violet) is an exceptionally resilient native groundcover that excels in shaded or dappled understory environments, making it an ideal fit for the challenging, dry root zones beneath maple trees. In a clay/loam soil profile, this plant forms a vigorous living mulch through rhizomatic growth and prolific self-seeding, effortlessly filling bare gaps where traditional plants or turf struggle to survive. Because the owners prioritize ecological value and edibles over perfectly manicured lawns, its reputation as an aggressive spreader is a distinct benefit here. Additionally, both the young heart-shaped leaves and spring flowers are edible, nutrient-dense, and rich in vitamins A and C, which strongly aligns with the owners' goals of cultivating foraging and medicinal plants.\n\nEcologically, this violet is a high-value anchor for the local food web. It provides critical early-spring nectar and pollen for emerging pollinators, including specialist mining bees such as Andrena violae. Most importantly, it serves as an obligatory larval host plant for a wide variety of fritillary butterflies, including the Great Spangled, Aphrodite, and Meadow Fritillaries. The plant also engages in myrmecochory; its seeds feature a lipid- and protein-rich elaiosome coating that attracts native ants, which naturally disperse the seeds after feeding the nutrient packets to their larvae. Furthermore, the dense, low-growing foliage provides excellent shelter for ground-dwelling insects, while the seeds provide a foraging source for urban wildlife such as mourning doves, wild turkeys, and small mammals.",
       "references": [],
       "created": "2026-05-06T03:02:38.232Z"
+    },
+    {
+      "shortCode": "V sor pri",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "The ecological niche for Viola sororia variety priceana, commonly known as the Confederate Violet, in the front yard is highly beneficial and aligns perfectly with the owners' goals for a native, edible, and ecologically active landscape. As a tough, low-growing herbaceous perennial, it acts as an excellent living groundcover that handles the property's clay/loam soil and Zone 4b/5a winters effortlessly. In the front yard setting, it seamlessly weaves beneath taller native perennials and shrubs like Cornus sericea and Veronicastrum virginicum, suppressing weeds without outcompeting its structural neighbors. The priceana variety is prized not only for its striking white and purple-veined flowers but also for its culinary value. Both the young leaves and the spring flowers are rich in vitamins A and C, making excellent additions to salads, teas, and garnishes, directly fulfilling the owners' desire for forageable urban edibles.\n\nFrom a wildlife perspective, this native violet is an absolute powerhouse. It blooms early in the spring, offering an essential nectar and pollen source for newly emerged native bees, including mason bees, mining bees, and specialist pollinators like the violet mining bee (Andrena violae). More importantly, Viola sororia is an obligate larval host plant for numerous species of Fritillary butterflies, such as the Great Spangled Fritillary and Meadow Fritillary. Providing these host plants is critical for urban ecology, as the caterpillars subsequently become a high-value food source for foraging songbirds raising their spring broods. Furthermore, the plant employs a fascinating ecological strategy called myrmecochory, producing seeds with nutrient-rich appendages that encourage local ants to disperse them, weaving the plant deeply into the micro-level food web of the garden.",
+      "references": [
+        "https://www.prairiemoon.com/viola-sororia-common-blue-violet",
+        "https://extension.umn.edu/weeds/wild-violet",
+        "https://xerces.org/blog/plants-for-pollinators-violets"
+      ],
+      "created": "2026-05-14T05:00:04.138Z"
     },
     {
       "shortCode": "V vir",
