@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "T imm",
+      "fullName": "Tetramorium immigrans",
+      "commonName": "Pavement Ant",
+      "variety": null
+    },
+    {
       "shortCode": "H mex",
       "fullName": "Haemorhous mexicanus",
       "commonName": "House Finch",
