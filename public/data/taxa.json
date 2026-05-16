@@ -594,5 +594,13 @@
   "Tetramorium": {
     "description": "Tetramorium is a genus of ants in the subfamily Myrmicinae that includes more than 520 species. These ants are also known as pavement ants.",
     "url": "https://en.wikipedia.org/wiki/Tetramorium"
+  },
+  "Asparagaceae": {
+    "description": "Asparagaceae, known as the asparagus family, is a family of flowering plants, placed in the order Asparagales of the monocots. The family name is based on the edible garden asparagus, Asparagus officinalis. This family includes both common garden plants as well as common houseplants. The garden plants include asparagus, yucca, bluebell, lily of the valley, and hosta, and the houseplants include snake plant, corn cane, spider plant, and plumosus fern.",
+    "url": "https://en.wikipedia.org/wiki/Asparagaceae"
+  },
+  "Camassia": {
+    "description": "Camassia is a genus of plants in the asparagus family native to North America. Common names include camas, quamash, Indian hyacinth, camash, and wild hyacinth.",
+    "url": "https://en.wikipedia.org/wiki/Camassia"
   }
 }

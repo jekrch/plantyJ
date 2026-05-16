@@ -11,7 +11,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-16T18:31:31.315Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "bioclipSpeciesId": "Camassia scilloides",
+      "bioclipCommonName": "Wild hyacinth",
+      "bioclipScore": 0.6471
     },
     {
       "seq": 77,
@@ -95,7 +98,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,

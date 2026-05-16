@@ -661,6 +661,64 @@
       ],
       "observationsCount": 66298
     },
+    "camassia-scilloides": {
+      "id": "camassia-scilloides",
+      "fullName": "Camassia scilloides",
+      "commonName": "Wild Hyacinth",
+      "description": "Camassia scilloides is a perennial herb known commonly as Atlantic camas, wild hyacinth, and eastern camas. It is native to the eastern half of North America, including Ontario and the eastern United States.",
+      "vernacularNames": [
+        "Atlantic camas",
+        "eastern camas",
+        "eastern hyacinth",
+        "wild hyacinth"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Liliopsida",
+        "order": "Asparagales",
+        "family": "Asparagaceae",
+        "genus": "Camassia",
+        "species": "Camassia scilloides",
+        "canonicalName": "Camassia scilloides"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2769112"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:43771-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Camassia_scilloides"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/67793"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q5025007"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.139874"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 9946
+    },
     "camponotus-pennsylvanicus": {
       "id": "camponotus-pennsylvanicus",
       "fullName": "Camponotus pennsylvanicus",
