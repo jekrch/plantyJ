@@ -65,6 +65,14 @@ export function RelationsSubgraph({
   const baseURL = import.meta.env.BASE_URL;
   const [hovered, setHovered] = useState<string | null>(null);
 
+  // Unique per-instance ids: RelationsSubgraph renders in both the info
+  // drawer and TreeView's NodeDetail, so a hardcoded id collides. When the
+  // first element with that id sits in a hidden subtree, Chrome/WebKit drop
+  // the clip-path and the square image bleeds past the circular frame.
+  // Must be called before the early return below so the hook order stays
+  // stable across organisms with and without relationships.
+  const uid = useId();
+
   const colorByType = useMemo(() => {
     const m = new Map<string, string>();
     let i = 0;
@@ -221,11 +229,6 @@ export function RelationsSubgraph({
   const r = LEAF_RADIUS;
   const stop = (e: React.SyntheticEvent) => e.stopPropagation();
 
-  // Unique per-instance ids: RelationsSubgraph renders in both the info
-  // drawer and TreeView's NodeDetail, so a hardcoded id collides. When the
-  // first element with that id sits in a hidden subtree, Chrome/WebKit drop
-  // the clip-path and the square image bleeds past the circular frame.
-  const uid = useId();
   const clipId = `rs-leaf-clip-${uid}`;
   const glowId = `rs-leaf-glow-${uid}`;
   const arrId = (type: number | string) => `rs-arr-${uid}-${type}`;
