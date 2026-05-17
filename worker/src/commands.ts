@@ -139,7 +139,7 @@ const TAG_USAGE = (verb: string) =>
 // ─── individual handlers ───────────────────────────────────────────────────
 
 async function handleAskStyle(text: string, message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
-  const styleText = text.match(/^\/askstyle(?:\s+([\s\S]+))?$/i)![1]?.trim();
+  const styleText = text.match(/^\/askstyle(?:\s+(\S[\s\S]*))?$/i)![1]?.trim();
   if (!message.from || !env.ASK_CACHE) {
     await reply("Style preferences require user context.");
     return;
@@ -208,7 +208,7 @@ async function handleConfirm(text: string, message: TelegramMessage, env: Env, r
 }
 
 async function handleAsk(text: string, message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
-  const m = text.match(/^\/ask([123])?\s+([\s\S]+)$/i)!;
+  const m = text.match(/^\/ask([123])?\s+(\S[\s\S]*)$/i)!;
   const alias = m[1] ?? "3";
   const question = m[2].trim();
   const model = MODEL_ALIASES[alias];
@@ -239,7 +239,7 @@ async function handleAsk(text: string, message: TelegramMessage, env: Env, reply
 }
 
 async function handleResp(text: string, message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
-  const m = text.match(/^\/resp([123])?\s+([\s\S]+)$/i)!;
+  const m = text.match(/^\/resp([123])?\s+(\S[\s\S]*)$/i)!;
   const aliasOverride = m[1];
   const question = m[2].trim();
   if (!message.from || !env.ASK_CACHE) {
@@ -325,7 +325,7 @@ async function handleZonesList(env: Env, reply: Replier): Promise<void> {
 }
 
 async function handleAddZone(text: string, env: Env, reply: Replier): Promise<void> {
-  const m = text.match(/^\/addzone\s+(\S+)(?:\s+([\s\S]+))?$/)!;
+  const m = text.match(/^\/addzone\s+(\S+)(?:\s+(\S[\s\S]*))?$/)!;
   const code = m[1];
   assertValidCode("zoneCode", code);
   const name = m[2]?.trim() || null;
@@ -334,7 +334,7 @@ async function handleAddZone(text: string, env: Env, reply: Replier): Promise<vo
 }
 
 async function handleRenameZone(text: string, env: Env, reply: Replier): Promise<void> {
-  const m = text.match(/^\/renamezone\s+(\S+)\s+([\s\S]+)$/)!;
+  const m = text.match(/^\/renamezone\s+(\S+)\s+(\S[\s\S]*)$/)!;
   const code = m[1];
   assertValidCode("zoneCode", code);
   const name = m[2].trim();
@@ -397,7 +397,7 @@ async function handleAccept(text: string, env: Env, reply: Replier): Promise<voi
 }
 
 async function handleUpdate(text: string, env: Env, reply: Replier): Promise<void> {
-  const m = text.match(/^\/update\s+(\d+)\s+(\S+)\s+([\s\S]+)$/)!;
+  const m = text.match(/^\/update\s+(\d+)\s+(\S+)\s+(\S[\s\S]*)$/)!;
   const seq = parseInt(m[1], 10);
   const field = m[2];
   const value = m[3].trim();

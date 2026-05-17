@@ -64,7 +64,7 @@ export function isUnidentifiedShortCode(shortCode: string): boolean {
 
 function extractVariety(raw: string | null): { fullName: string | null; variety: string | null } {
   if (!raw) return { fullName: null, variety: null };
-  const m = raw.match(/^(.*?)\s*'([^']+)'\s*$/);
+  const m = raw.match(/^(.*?)'([^']+)'\s*$/);
   if (m) return { fullName: m[1].trim() || null, variety: m[2].trim() };
   return { fullName: raw, variety: null };
 }
@@ -76,7 +76,7 @@ function parseZoneRef(segment: string): ParsedZoneRef {
     );
   }
   const trimmed = segment.trim();
-  const m = trimmed.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+  const m = trimmed.match(/^(.*?)\(([^)]+)\)\s*$/);
   if (m) {
     const name = m[1].trim();
     const code = m[2].trim();

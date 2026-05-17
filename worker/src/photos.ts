@@ -196,7 +196,7 @@ export async function handlePhotoMessage(
 
   try {
     const caption = message.caption.trim();
-    const zonePicMatch = caption.match(/^\/zonepic\s+(\S+)(?:\s*\/\/\s*([\s\S]+))?$/);
+    const zonePicMatch = caption.match(/^\/zonepic\s+(\S+)(?:\s*\/\/\s*(\S[\s\S]*))?$/);
     if (zonePicMatch) {
       assertValidCode("zoneCode", zonePicMatch[1]);
       await handleZonePic(zonePicMatch[1], zonePicMatch[2]?.trim() || null, message, env, reply);
