@@ -200,6 +200,86 @@ function layoutGraph(
   return { positions, width, height };
 }
 
+// Geometry for one rendered edge: the curved path plus where/how its type
+// label sits. Pulled out of the render so the edge layer and the on-top
+// label layer compute identical positions.
+function edgeGeometry(e: PositionedEdge) {
+  const reverse = e.dir === "bwd";
+  const x1 = reverse ? e.toX : e.fromX;
+  const y1 = reverse ? e.toY : e.fromY;
+  const x2 = reverse ? e.fromX : e.toX;
+  const y2 = reverse ? e.fromY : e.toY;
+  const directed = e.dir !== "u";
+
+  const midX = (x1 + x2) / 2;
+  const midY = (y1 + y2) / 2;
+
+  const isFromSmaller = e.rel.from < e.rel.to;
+  const normX1 = isFromSmaller ? e.fromX : e.toX;
+  const normY1 = isFromSmaller ? e.fromY : e.toY;
+  const normX2 = isFromSmaller ? e.toX : e.fromX;
+  const normY2 = isFromSmaller ? e.toY : e.fromY;
+
+  const baseDx = normX2 - normX1;
+  const baseDy = normY2 - normY1;
+  const baseLen = Math.max(0.01, Math.hypot(baseDx, baseDy));
+  const nx = -baseDy / baseLen;
+  const ny = baseDx / baseLen;
+
+  const spread = 60;
+  const offset = (e.groupIndex - (e.groupTotal - 1) / 2) * spread;
+
+  const cx = midX + nx * (offset * 2);
+  const cy = midY + ny * (offset * 2);
+
+  const pathD = `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
+
+  const textMidX = midX + nx * offset;
+  const textMidY = midY + ny * offset;
+
+  let angle = (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI;
+  if (angle > 90) angle -= 180;
+  else if (angle < -90) angle += 180;
+
+  return { pathD, directed, textMidX, textMidY, angle };
+}
+
+function EdgeLabel({
+  text,
+  x,
+  y,
+  angle,
+  isActive,
+  dim,
+}: {
+  text: string;
+  x: number;
+  y: number;
+  angle: number;
+  isActive: boolean;
+  dim: boolean;
+}) {
+  return (
+    <g transform={`translate(${x},${y}) rotate(${angle})`} pointerEvents="none">
+      <text
+        textAnchor="middle"
+        dy={-5}
+        fontFamily="'Space Mono', monospace"
+        fontSize={9}
+        letterSpacing="0.06em"
+        fill={isActive ? "var(--color-ink)" : "var(--color-ink-muted)"}
+        fillOpacity={dim ? 0.2 : isActive ? 1 : 0.85}
+        stroke="var(--color-surface)"
+        strokeWidth={4}
+        strokeOpacity={0.9}
+        paintOrder="stroke fill"
+      >
+        {text}
+      </text>
+    </g>
+  );
+}
+
 export default function WebView({
   organisms,
   organismRecords,
@@ -348,6 +428,7 @@ export default function WebView({
   const {
     containerRef,
     panRef,
+    gestureMovedRef,
     transform,
     ready,
     fitToView,
@@ -563,7 +644,7 @@ export default function WebView({
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         onClick={() => {
-          if (panRef.current?.moved) return;
+          if (gestureMovedRef.current) return;
           setSelectedCode(null);
           setDetailCode(null);
           if (searchOpen) closeSearch();
@@ -617,77 +698,36 @@ export default function WebView({
 
             <g>
               {layout.edges.map((e, i) => {
-                const reverse = e.dir === "bwd";
-                const x1 = reverse ? e.toX : e.fromX;
-                const y1 = reverse ? e.toY : e.fromY;
-                const x2 = reverse ? e.fromX : e.toX;
-                const y2 = reverse ? e.fromY : e.toY;
-                const directed = e.dir !== "u";
                 const isActive = highlightedEdges.has(e.rel.id);
                 const dim = activeCode != null && !isActive;
                 const opacity = dim ? 0.15 : isActive ? 0.95 : 0.55;
                 const width = isActive ? 1.8 : 1.2;
+                const g = edgeGeometry(e);
 
-                const midX = (x1 + x2) / 2;
-                const midY = (y1 + y2) / 2;
-
-                const isFromSmaller = e.rel.from < e.rel.to;
-                const normX1 = isFromSmaller ? e.fromX : e.toX;
-                const normY1 = isFromSmaller ? e.fromY : e.toY;
-                const normX2 = isFromSmaller ? e.toX : e.fromX;
-                const normY2 = isFromSmaller ? e.toY : e.fromY;
-
-                const baseDx = normX2 - normX1;
-                const baseDy = normY2 - normY1;
-                const baseLen = Math.max(0.01, Math.hypot(baseDx, baseDy));
-                const nx = -baseDy / baseLen;
-                const ny = baseDx / baseLen;
-
-                const spread = 60; 
-                const offset = (e.groupIndex - (e.groupTotal - 1) / 2) * spread;
-
-                const cx = midX + nx * (offset * 2);
-                const cy = midY + ny * (offset * 2);
-
-                const pathD = `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
-
-                const textMidX = midX + nx * offset;
-                const textMidY = midY + ny * offset;
-
-                let angle = (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI;
-                if (angle > 90) angle -= 180;
-                else if (angle < -90) angle += 180;
+                // When a node is active, highlighted-edge labels are drawn in
+                // the top layer (after nodes) so nothing can cover them.
+                const labelOnTop = activeCode != null && isActive;
 
                 return (
                   <g key={`edge-${e.rel.id}-${i}`}>
                     <path
-                      d={pathD}
+                      d={g.pathD}
                       fill="none"
                       stroke={e.color}
                       strokeOpacity={opacity}
                       strokeWidth={width}
-                      markerEnd={directed ? `url(#web-arr-${e.rel.type})` : undefined}
+                      markerEnd={g.directed ? `url(#web-arr-${e.rel.type})` : undefined}
                     />
-                    <g
-                      transform={`translate(${textMidX},${textMidY}) rotate(${angle})`}
-                      pointerEvents="none"
-                    >
-                      <text
-                        textAnchor="middle"
-                        dy={-5}
-                        fontFamily="'Space Mono', monospace"
-                        fontSize={9}
-                        letterSpacing="0.06em"
-                        fill={isActive ? "var(--color-ink)" : "var(--color-ink-muted)"}
-                        fillOpacity={dim ? 0.2 : isActive ? 1 : 0.85}
-                        stroke="var(--color-surface)"
-                        strokeWidth={4} 
-                        strokeOpacity={0.9}
-                        paintOrder="stroke fill"
-                      >
-                        {e.typeName}
-                      </text>
-                    </g>
+                    {!labelOnTop && (
+                      <EdgeLabel
+                        text={e.typeName}
+                        x={g.textMidX}
+                        y={g.textMidY}
+                        angle={g.angle}
+                        isActive={isActive}
+                        dim={dim}
+                      />
+                    )}
                   </g>
                 );
               })}
@@ -727,7 +767,7 @@ export default function WebView({
                     }
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (panRef.current?.moved) return;
+                      if (gestureMovedRef.current) return;
                       
                       if (selectedCode === n.code) {
                         setDetailCode((cur) => (cur === n.code ? null : n.code));
@@ -827,6 +867,28 @@ export default function WebView({
                 );
               })}
             </g>
+
+            {/* Top layer: labels of edges touching the active node, drawn
+                after the nodes so they're never covered by a node or edge. */}
+            {activeCode != null && (
+              <g>
+                {layout.edges.map((e, i) => {
+                  if (!highlightedEdges.has(e.rel.id)) return null;
+                  const g = edgeGeometry(e);
+                  return (
+                    <EdgeLabel
+                      key={`top-label-${e.rel.id}-${i}`}
+                      text={e.typeName}
+                      x={g.textMidX}
+                      y={g.textMidY}
+                      angle={g.angle}
+                      isActive
+                      dim={false}
+                    />
+                  );
+                })}
+              </g>
+            )}
           </svg>
         )}
 

@@ -40,6 +40,13 @@ interface ZoneEntry {
   count: number;
 }
 
+// Entrance uses a soft "ease-out expo" for a settling, spring-like feel;
+// exit accelerates away faster so dismissal feels responsive.
+const ENTER_MS = 320;
+const EXIT_MS = 200;
+const EASE_OUT = "cubic-bezier(0.16, 1, 0.3, 1)";
+const EASE_IN = "cubic-bezier(0.4, 0, 1, 1)";
+
 const TABS: { id: Tab; label: string }[] = [
   { id: "about", label: "About" },
   { id: "stats", label: "Stats" },
@@ -55,10 +62,20 @@ export default function InfoModal(props: Props) {
   useEffect(() => {
     if (open) {
       setMounted(true);
-      requestAnimationFrame(() => setVisible(true));
+      // Two rAFs: the first lets the browser paint the initial hidden
+      // state, the second flips to visible so the entrance transition
+      // actually has a "from" frame to animate from.
+      let raf2 = 0;
+      const raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(() => setVisible(true));
+      });
+      return () => {
+        cancelAnimationFrame(raf1);
+        cancelAnimationFrame(raf2);
+      };
     } else if (mounted) {
       setVisible(false);
-      const t = setTimeout(() => setMounted(false), 200);
+      const t = setTimeout(() => setMounted(false), EXIT_MS);
       return () => clearTimeout(t);
     }
   }, [open, mounted]);
@@ -165,8 +182,13 @@ function InfoModalContent({
       aria-label="Site information"
     >
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-200 ease-out"
-        style={{ opacity: visible ? 1 : 0 }}
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        style={{
+          opacity: visible ? 1 : 0,
+          transition: `opacity ${visible ? ENTER_MS : EXIT_MS}ms ${
+            visible ? EASE_OUT : EASE_IN
+          }`,
+        }}
         onClick={handleClose}
         aria-hidden="true"
       />
@@ -175,9 +197,18 @@ function InfoModalContent({
         className="relative z-10 w-full max-w-2xl h-[min(640px,85vh)] flex flex-col rounded-lg border border-ink-faint/25 bg-surface-raised shadow-2xl shadow-black/50 overflow-hidden origin-center"
         style={{
           opacity: visible ? 1 : 0,
-          transform: visible ? "scale(1) translateY(0)" : "scale(0.96) translateY(4px)",
-          transition:
-            "opacity 200ms cubic-bezier(0.16, 1, 0.3, 1), transform 200ms cubic-bezier(0.16, 1, 0.3, 1)",
+          transform: visible
+            ? "scale(1) translateY(0)"
+            : "scale(0.94) translateY(12px)",
+          transition: [
+            `opacity ${visible ? ENTER_MS : EXIT_MS}ms ${
+              visible ? EASE_OUT : EASE_IN
+            }`,
+            `transform ${visible ? ENTER_MS : EXIT_MS}ms ${
+              visible ? EASE_OUT : EASE_IN
+            }`,
+          ].join(", "),
+          willChange: "opacity, transform",
         }}
       >
         <div

@@ -85,6 +85,9 @@ export function usePanZoom({
     startTx: number;
     startTy: number;
   } | null>(null);
+  // Survives pointerup (panRef is nulled there) so the post-gesture `click`
+  // event can tell a pan/pinch apart from a real click. Reset on pointerdown.
+  const gestureMovedRef = useRef(false);
   const lastTouchTapRef = useRef<{ time: number; cx: number; cy: number } | null>(null);
 
   const clientToContainer = useCallback((clientX: number, clientY: number) => {
@@ -203,6 +206,7 @@ export function usePanZoom({
 
       if (pointersRef.current.size === 1) {
         pinchRef.current = null;
+        gestureMovedRef.current = false;
         panRef.current = {
           pointerId: e.pointerId,
           startCX: cx,
@@ -254,6 +258,7 @@ export function usePanZoom({
         const ratio = k / pinch.startK;
         const x = midCX - (pinch.startMidCX - pinch.startTx) * ratio;
         const y = midCY - (pinch.startMidCY - pinch.startTy) * ratio;
+        gestureMovedRef.current = true;
         setTransform({ x, y, k });
         return;
       }
@@ -264,6 +269,7 @@ export function usePanZoom({
       const dy = cy - p.startCY;
       if (!p.moved && Math.hypot(dx, dy) > 4) {
         p.moved = true;
+        gestureMovedRef.current = true;
         try {
           (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
         } catch {}
@@ -333,6 +339,7 @@ export function usePanZoom({
   return {
     containerRef,
     panRef,
+    gestureMovedRef,
     transform,
     ready,
     fitToView,
