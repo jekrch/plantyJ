@@ -14,6 +14,7 @@ interface InitialState {
   view: ViewMode;
   subject: string | null;
   treeNode: string | null;
+  webNode: string | null;
   infoTab: string | null;
 }
 
@@ -40,9 +41,10 @@ function parseFiltersFromURL(): InitialState {
   const subject =
     view === "plant" || view === "zone" ? params.get("subject") : null;
   const treeNode = view === "tree" ? params.get("treeNode") : null;
+  const webNode = view === "web" ? params.get("webNode") : null;
   const infoTab = params.get("info");
 
-  return { filters, sort, view, subject, treeNode, infoTab };
+  return { filters, sort, view, subject, treeNode, webNode, infoTab };
 }
 
 const KEY_TO_PARAM: Record<SetFilterKey, string> = {
@@ -59,7 +61,8 @@ export function buildParams(
   sort: SortMode,
   view: ViewMode,
   subject: string | null,
-  treeNode: string | null = null
+  treeNode: string | null = null,
+  webNode: string | null = null
 ): string {
   const params = new URLSearchParams();
   for (const key of SET_FILTER_KEYS) {
@@ -75,6 +78,9 @@ export function buildParams(
     }
     if (treeNode && view === "tree") {
       params.set("treeNode", treeNode);
+    }
+    if (webNode && view === "web") {
+      params.set("webNode", webNode);
     }
   }
   return params.toString();
@@ -94,15 +100,15 @@ export function useFilterParams() {
   const initial = useMemo(() => parseFiltersFromURL(), []);
 
   const syncToURL = useCallback(
-    (filters: Filters, sort: SortMode, view: ViewMode, subject: string | null, treeNode: string | null = null) => {
-      replaceURL(buildParams(filters, sort, view, subject, treeNode));
+    (filters: Filters, sort: SortMode, view: ViewMode, subject: string | null, treeNode: string | null = null, webNode: string | null = null) => {
+      replaceURL(buildParams(filters, sort, view, subject, treeNode, webNode));
     },
     []
   );
 
   const pushToURL = useCallback(
-    (filters: Filters, sort: SortMode, view: ViewMode, subject: string | null, treeNode: string | null = null) => {
-      pushURL(buildParams(filters, sort, view, subject, treeNode));
+    (filters: Filters, sort: SortMode, view: ViewMode, subject: string | null, treeNode: string | null = null, webNode: string | null = null) => {
+      pushURL(buildParams(filters, sort, view, subject, treeNode, webNode));
     },
     []
   );
@@ -113,6 +119,7 @@ export function useFilterParams() {
     initialView: initial.view,
     initialSubject: initial.subject,
     initialTreeNode: initial.treeNode,
+    initialWebNode: initial.webNode,
     initialInfoTab: initial.infoTab,
     syncToURL,
     pushToURL,

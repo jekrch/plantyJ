@@ -54,6 +54,7 @@ export default function App() {
     initialView,
     initialSubject,
     initialTreeNode,
+    initialWebNode,
     initialInfoTab,
     syncToURL,
     pushToURL,
@@ -82,6 +83,9 @@ export default function App() {
   const [viewMode, setViewMode] = useState<ViewMode>(initialView);
   const [spotlightCode, setSpotlightCode] = useState<string | null>(initialSubject);
   const [treeFocusNode, setTreeFocusNode] = useState<string | null>(initialTreeNode);
+  // Captured once from the URL on load; WebView owns selection state thereafter
+  // and reports changes back via onNodeSelect.
+  const [webFocusNode] = useState<string | null>(initialWebNode);
   const headerRef = useRef<HTMLElement>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
 
@@ -359,6 +363,13 @@ export default function App() {
     [filters, sortMode, syncToURL]
   );
 
+  const handleWebNodeSelect = useCallback(
+    (code: string | null) => {
+      syncToURL(filters, sortMode, "web", null, null, code);
+    },
+    [filters, sortMode, syncToURL]
+  );
+
   const handleSpotlightOrganism = useCallback(
     (shortCode: string) => {
       setViewMode("plant");
@@ -566,6 +577,8 @@ export default function App() {
           headerHeight={headerHeight}
           onSpotlightOrganism={handleSpotlightOrganism}
           onOpenOrganismInList={handleOpenInList}
+          initialWebNode={webFocusNode}
+          onNodeSelect={handleWebNodeSelect}
         />
       )}
 

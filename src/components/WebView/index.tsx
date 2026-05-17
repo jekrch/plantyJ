@@ -38,6 +38,10 @@ interface Props {
   headerHeight: number;
   onSpotlightOrganism: (shortCode: string) => void;
   onOpenOrganismInList: (organism: Organism, list: Organism[]) => void;
+  /** Node code to focus on initial load (decoded from the URL). */
+  initialWebNode?: string | null;
+  /** Reports the selected node code (or null) so it can be encoded in the URL. */
+  onNodeSelect?: (code: string | null) => void;
 }
 
 const TYPE_COLORS = [
@@ -291,6 +295,8 @@ export default function WebView({
   headerHeight,
   onSpotlightOrganism,
   onOpenOrganismInList,
+  initialWebNode,
+  onNodeSelect,
 }: Props) {
   const baseURL = import.meta.env.BASE_URL;
 
@@ -478,6 +484,31 @@ export default function WebView({
       setDetailCode(null);
     }
   }, [selectedCode, nodeCodes]);
+
+  // Report selection changes upward so they can be encoded in the URL. Skip
+  // the mount no-op (null→null) and only fire on an actual change.
+  const prevSelected = useRef<string | null>(selectedCode);
+  useEffect(() => {
+    const prev = prevSelected.current;
+    prevSelected.current = selectedCode;
+    if (prev === selectedCode) return;
+    onNodeSelect?.(selectedCode);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCode]);
+
+  // On initial load, focus + select the node named in the URL — the same
+  // outcome as picking it from search (centerOn + select, no detail panel).
+  const lastFocusedCode = useRef<string | null>(null);
+  useEffect(() => {
+    if (!ready || !initialWebNode) return;
+    if (lastFocusedCode.current === initialWebNode) return;
+    const node = layout.nodes.find((n) => n.code === initialWebNode);
+    if (!node) return;
+    lastFocusedCode.current = initialWebNode;
+    centerOn(node.x, node.y);
+    setSelectedCode(node.code);
+    setDetailCode(null);
+  }, [ready, layout.nodes, initialWebNode, centerOn]);
 
   const renderedDetailNode = useMemo(() => {
     if (!renderedDetailCode) return null;
