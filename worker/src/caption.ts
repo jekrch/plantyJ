@@ -64,8 +64,18 @@ export function isUnidentifiedShortCode(shortCode: string): boolean {
 
 function extractVariety(raw: string | null): { fullName: string | null; variety: string | null } {
   if (!raw) return { fullName: null, variety: null };
-  const m = raw.match(/^(.*?)'([^']+)'\s*$/);
-  if (m) return { fullName: m[1].trim() || null, variety: m[2].trim() };
+  // Variety is a trailing 'quoted' token: "Acer palmatum 'Bloodgood'".
+  // Parsed by index (no backtracking regex) to stay linear on hostile input.
+  const s = raw.trimEnd();
+  if (s.endsWith("'")) {
+    const open = s.lastIndexOf("'", s.length - 2);
+    if (open >= 0) {
+      const variety = s.slice(open + 1, -1).trim();
+      if (variety.length > 0) {
+        return { fullName: s.slice(0, open).trim() || null, variety };
+      }
+    }
+  }
   return { fullName: raw, variety: null };
 }
 
@@ -76,12 +86,18 @@ function parseZoneRef(segment: string): ParsedZoneRef {
     );
   }
   const trimmed = segment.trim();
-  const m = trimmed.match(/^(.*?)\(([^)]+)\)\s*$/);
-  if (m) {
-    const name = m[1].trim();
-    const code = m[2].trim();
-    assertValidCode("zoneCode", code);
-    return { code, name: name || null };
+  // Zone code is a trailing "(code)" token: "Front Bed (fb1)". Parsed by
+  // index (no backtracking regex) to stay linear on hostile input.
+  if (trimmed.endsWith(")")) {
+    const open = trimmed.lastIndexOf("(");
+    if (open >= 0) {
+      const code = trimmed.slice(open + 1, -1).trim();
+      if (code.length > 0 && !code.includes(")")) {
+        const name = trimmed.slice(0, open).trim();
+        assertValidCode("zoneCode", code);
+        return { code, name: name || null };
+      }
+    }
   }
   assertValidCode("zoneCode", trimmed);
   return { code: trimmed, name: null };
