@@ -1,16 +1,7 @@
 import type { Env, AnnotationEntry, PlantRecord, Zone } from "./types";
-import {
-  loadBatchState,
-  commitBatchState,
-  isUpdatableField,
-  type BatchState,
-} from "./github";
+import { loadBatchState, commitBatchState, isUpdatableField, type BatchState } from "./github";
 import { assertValidCode } from "./validation";
-import {
-  applyRelate,
-  applyRelType,
-  applyUnrelate,
-} from "./relationships";
+import { applyRelate, applyRelType, applyUnrelate } from "./relationships";
 
 // In-memory mirror of executeCommand. Each mutator operates on a shared
 // BatchState (loaded once per chunk) and marks which JSON files got dirty.
@@ -39,10 +30,10 @@ function parseList(value: string): string[] {
 function findOrCreateAnnotation(
   state: BatchState,
   shortCode: string,
-  zoneCode: string | null
+  zoneCode: string | null,
 ): { entry: AnnotationEntry; created: boolean } {
   const idx = state.annotations.findIndex(
-    (a) => a.shortCode === shortCode && a.zoneCode === zoneCode
+    (a) => a.shortCode === shortCode && a.zoneCode === zoneCode,
   );
   if (idx === -1) {
     const entry: AnnotationEntry = { shortCode, zoneCode, tags: [], description: null };
@@ -134,8 +125,7 @@ function applyCommand(state: BatchState, text: string): ExecResult {
 
     const speciesId = pic.bioclipSpeciesId?.trim() || null;
     const commonName = pic.bioclipCommonName?.trim() || null;
-    if (!speciesId && !commonName)
-      return fail(`Pic #${seq} has no BioCLIP prediction yet.`);
+    if (!speciesId && !commonName) return fail(`Pic #${seq} has no BioCLIP prediction yet.`);
 
     const newCode = targetShortCode?.trim() || null;
     const oldCode = pic.shortCode;
@@ -170,10 +160,7 @@ function applyCommand(state: BatchState, text: string): ExecResult {
         fullName: existing.fullName ?? speciesId,
         commonName: existing.commonName ?? commonName,
       };
-      if (
-        merged.fullName !== existing.fullName ||
-        merged.commonName !== existing.commonName
-      ) {
+      if (merged.fullName !== existing.fullName || merged.commonName !== existing.commonName) {
         state.gallery.plants[existingIdx] = merged;
         state.dirty.add("plants");
       }
@@ -199,7 +186,7 @@ function applyCommand(state: BatchState, text: string): ExecResult {
 
     if (!isUpdatableField(field)) {
       return fail(
-        `Invalid field "${field}". Updatable: shortCode, fullName, commonName, zoneCode, tags, description`
+        `Invalid field "${field}". Updatable: shortCode, fullName, commonName, zoneCode, tags, description`,
       );
     }
     if (field === "shortCode" || field === "zoneCode") {
@@ -241,9 +228,7 @@ function applyCommand(state: BatchState, text: string): ExecResult {
     // Plant-level field
     const plantIdx = state.gallery.plants.findIndex((p) => p.shortCode === pic.shortCode);
     if (plantIdx === -1) {
-      return fail(
-        `Plant "${pic.shortCode}" not found in plants.json — cannot update ${field}.`
-      );
+      return fail(`Plant "${pic.shortCode}" not found in plants.json — cannot update ${field}.`);
     }
     const plant = state.gallery.plants[plantIdx];
 
@@ -282,9 +267,11 @@ function applyCommand(state: BatchState, text: string): ExecResult {
 
   // /annotate shortCode // [zoneCode //] field // value
   if (trimmed.startsWith("/annotate ")) {
-    const parts = trimmed.slice("/annotate ".length).split("//").map((s) => s.trim());
-    const isField = (s: string): s is "tags" | "description" =>
-      s === "tags" || s === "description";
+    const parts = trimmed
+      .slice("/annotate ".length)
+      .split("//")
+      .map((s) => s.trim());
+    const isField = (s: string): s is "tags" | "description" => s === "tags" || s === "description";
 
     let shortCode: string, zoneCode: string | null, field: "tags" | "description", value: string;
     if (parts.length >= 3 && isField(parts[1])) {
@@ -299,7 +286,7 @@ function applyCommand(state: BatchState, text: string): ExecResult {
       value = parts.slice(3).join("//");
     } else {
       return fail(
-        `Invalid /annotate format. Use:\n  /annotate shortCode // tags // value\n  /annotate shortCode // zoneCode // tags // value`
+        `Invalid /annotate format. Use:\n  /annotate shortCode // tags // value\n  /annotate shortCode // zoneCode // tags // value`,
       );
     }
     assertValidCode("shortCode", shortCode);
@@ -323,7 +310,10 @@ function applyCommand(state: BatchState, text: string): ExecResult {
 
   // /addtag — three forms
   if (trimmed.startsWith("/addtag ")) {
-    const parts = trimmed.slice("/addtag ".length).split("//").map((s) => s.trim());
+    const parts = trimmed
+      .slice("/addtag ".length)
+      .split("//")
+      .map((s) => s.trim());
 
     if (parts.length === 1) {
       const spaceIdx = parts[0].indexOf(" ");
@@ -335,11 +325,15 @@ function applyCommand(state: BatchState, text: string): ExecResult {
         const pic = state.gallery.pics.find((p) => p.seq === seq);
         if (!pic) return fail(`No pic found with ID ${seq}.`);
         if (pic.tags.includes(tag)) {
-          return ok(`Added tag "${tag}" to pic #${seq} (${pic.shortCode}). Tags: ${pic.tags.join(", ")}`);
+          return ok(
+            `Added tag "${tag}" to pic #${seq} (${pic.shortCode}). Tags: ${pic.tags.join(", ")}`,
+          );
         }
         pic.tags = [...pic.tags, tag];
         state.dirty.add("pics");
-        return ok(`Added tag "${tag}" to pic #${seq} (${pic.shortCode}). Tags: ${pic.tags.join(", ")}`);
+        return ok(
+          `Added tag "${tag}" to pic #${seq} (${pic.shortCode}). Tags: ${pic.tags.join(", ")}`,
+        );
       }
       // plant-level annotation tag
       assertValidCode("shortCode", first);
@@ -382,18 +376,21 @@ function applyCommand(state: BatchState, text: string): ExecResult {
 
   // /removetag — three forms (mirrors /addtag)
   if (trimmed.startsWith("/removetag ")) {
-    const parts = trimmed.slice("/removetag ".length).split("//").map((s) => s.trim());
+    const parts = trimmed
+      .slice("/removetag ".length)
+      .split("//")
+      .map((s) => s.trim());
 
     const removeFromAnnotation = (
       shortCode: string,
       zoneCode: string | null,
-      tag: string
+      tag: string,
     ): ExecResult => {
       assertValidCode("shortCode", shortCode);
       if (zoneCode) assertValidCode("zoneCode", zoneCode);
       const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
       const idx = state.annotations.findIndex(
-        (a) => a.shortCode === shortCode && a.zoneCode === zoneCode
+        (a) => a.shortCode === shortCode && a.zoneCode === zoneCode,
       );
       if (idx === -1) return ok(`Tag "${tag}" not present on ${scope}.`);
       const existing = state.annotations[idx];
@@ -443,12 +440,21 @@ function applyCommand(state: BatchState, text: string): ExecResult {
   // Uses // delimiters so that multi-word short codes (e.g. "V virg", "I uni alb")
   // are unambiguous.
   if (trimmed.startsWith("/relate ")) {
-    const parts = trimmed.slice("/relate".length).trim().split("//").map((s) => s.trim());
+    const parts = trimmed
+      .slice("/relate".length)
+      .trim()
+      .split("//")
+      .map((s) => s.trim());
     if (parts.length < 3 || !parts[0] || !parts[1] || !parts[2]) {
       return fail("Usage: /relate <typeId> // <fromCode> // <toCode> [// f|b|u]");
     }
     const [typeId, from, to, direction] = parts;
-    const r = applyRelate(state.relationships, { typeId, from, to, direction: direction || undefined });
+    const r = applyRelate(state.relationships, {
+      typeId,
+      from,
+      to,
+      direction: direction || undefined,
+    });
     if (r.changed) state.dirty.add("relationships");
     return r.ok ? ok(r.reply) : fail(r.reply);
   }
@@ -463,11 +469,12 @@ function applyCommand(state: BatchState, text: string): ExecResult {
 
   // /reltype <id> // <name> // <description> // [directional|undirected]
   if (trimmed.startsWith("/reltype ")) {
-    const parts = trimmed.slice("/reltype ".length).split("//").map((s) => s.trim());
+    const parts = trimmed
+      .slice("/reltype ".length)
+      .split("//")
+      .map((s) => s.trim());
     if (parts.length < 3) {
-      return fail(
-        "Usage: /reltype <id> // <name> // <description> // [directional|undirected]"
-      );
+      return fail("Usage: /reltype <id> // <name> // <description> // [directional|undirected]");
     }
     const [id, name, description, dirToken] = parts;
     const directional = (dirToken ?? "").toLowerCase() === "directional";
@@ -478,13 +485,16 @@ function applyCommand(state: BatchState, text: string): ExecResult {
 
   // /deleteannotation shortCode [// zoneCode]
   if (trimmed.startsWith("/deleteannotation ")) {
-    const parts = trimmed.slice("/deleteannotation ".length).split("//").map((s) => s.trim());
+    const parts = trimmed
+      .slice("/deleteannotation ".length)
+      .split("//")
+      .map((s) => s.trim());
     const shortCode = parts[0];
     const zoneCode = parts[1] || null;
     assertValidCode("shortCode", shortCode);
     if (zoneCode) assertValidCode("zoneCode", zoneCode);
     const idx = state.annotations.findIndex(
-      (a) => a.shortCode === shortCode && a.zoneCode === zoneCode
+      (a) => a.shortCode === shortCode && a.zoneCode === zoneCode,
     );
     const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
     if (idx === -1) return fail(`No annotation found for ${scope}.`);
@@ -506,7 +516,7 @@ export interface BatchRunResult {
 export async function runBatch(
   env: Env,
   commands: string[],
-  commitMessage: string
+  commitMessage: string,
 ): Promise<BatchRunResult> {
   const state = await loadBatchState(env);
   const results: ExecResult[] = [];

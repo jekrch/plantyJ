@@ -40,8 +40,7 @@ const NO_ZONES: Zone[] = [];
 const NO_AI: AIAnalysis[] = [];
 const emptySpecies = new Map<string, Species>();
 
-const daysAgo = (n: number) =>
-  new Date(Date.now() - n * 86400000).toISOString();
+const daysAgo = (n: number) => new Date(Date.now() - n * 86400000).toISOString();
 
 describe("computeStats — basics", () => {
   it("reports zero-ish stats for empty input", () => {
@@ -55,11 +54,7 @@ describe("computeStats — basics", () => {
 
   it("counts total pics and the zone/total split", () => {
     const s = computeStats(
-      [
-        organism({ zoneCode: "Z1" }),
-        organism({ zoneCode: "Z1" }),
-        organism({ zoneCode: "Z2" }),
-      ],
+      [organism({ zoneCode: "Z1" }), organism({ zoneCode: "Z1" }), organism({ zoneCode: "Z2" })],
       [
         { code: "Z1", name: "Front" },
         { code: "Z2", name: "Back" },
@@ -83,12 +78,7 @@ describe("computeStats — basics", () => {
     expect(withSeqOne.daysSinceFirst).toBeGreaterThanOrEqual(1);
     expect(typeof withSeqOne.firstDate).toBe("string");
 
-    const noSeqOne = computeStats(
-      [organism({ seq: 5 })],
-      NO_ZONES,
-      emptySpecies,
-      NO_AI,
-    );
+    const noSeqOne = computeStats([organism({ seq: 5 })], NO_ZONES, emptySpecies, NO_AI);
     expect(noSeqOne.daysSinceFirst).toBe(0);
     expect(noSeqOne.firstDate).toBeNull();
   });
@@ -170,9 +160,7 @@ describe("computeStats — taxa rollup", () => {
     );
     expect(s.taxa.countsByRank.family).toBe(2);
     expect(s.taxa.countsByRank.genus).toBe(3);
-    const fam = Object.fromEntries(
-      s.taxa.slicesByRank.family.map((x) => [x.name, x.value]),
-    );
+    const fam = Object.fromEntries(s.taxa.slicesByRank.family.map((x) => [x.name, x.value]));
     expect(fam).toEqual({ Rosaceae: 3, Fagaceae: 1 });
   });
 
@@ -253,8 +241,22 @@ describe("computeStats — bioclip", () => {
 describe("computeStats — eco fit", () => {
   it("maps each pic to its (shortCode, zoneCode) verdict and tallies the rest as unrated", () => {
     const ai: AIAnalysis[] = [
-      { shortCode: "rose", zoneCode: "Z1", verdict: "GOOD", analysis: "", references: [], created: "" },
-      { shortCode: "oak", zoneCode: "Z2", verdict: "BAD", analysis: "", references: [], created: "" },
+      {
+        shortCode: "rose",
+        zoneCode: "Z1",
+        verdict: "GOOD",
+        analysis: "",
+        references: [],
+        created: "",
+      },
+      {
+        shortCode: "oak",
+        zoneCode: "Z2",
+        verdict: "BAD",
+        analysis: "",
+        references: [],
+        created: "",
+      },
     ];
     const s = computeStats(
       [

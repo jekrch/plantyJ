@@ -89,9 +89,7 @@ describe("resolveNeighbors", () => {
 
   it("returns an empty map when there are no fillers", () => {
     const p = organism({ id: "p1" });
-    const items: AnyItem[] = [
-      { kind: "panel", x: 0, y: 0, w: 100, h: 0, panel: p },
-    ];
+    const items: AnyItem[] = [{ kind: "panel", x: 0, y: 0, w: 100, h: 0, panel: p }];
     const result = resolveNeighbors(items, getHeight);
     expect(result.size).toBe(0);
   });

@@ -21,7 +21,13 @@ const ai = new GoogleGenAI({ apiKey });
 const [, , mode, arg] = process.argv;
 
 async function listAll() {
-  const out: Array<{ name?: string; model?: string; expireTime?: string; displayName?: string; usageMetadata?: { totalTokenCount?: number } }> = [];
+  const out: Array<{
+    name?: string;
+    model?: string;
+    expireTime?: string;
+    displayName?: string;
+    usageMetadata?: { totalTokenCount?: number };
+  }> = [];
   const pager = await ai.caches.list();
   for await (const c of pager) out.push(c);
   return out;

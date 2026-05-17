@@ -17,13 +17,15 @@ self.addEventListener("install", () => {
 self.addEventListener("activate", (event) => {
   // Purge old cache versions on activation.
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys
-          .filter((k) => k.startsWith("panel-images-") && k !== CACHE_NAME)
-          .map((k) => caches.delete(k))
-      )
-    )
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys
+            .filter((k) => k.startsWith("panel-images-") && k !== CACHE_NAME)
+            .map((k) => caches.delete(k)),
+        ),
+      ),
   );
   self.clients.claim();
 });
@@ -49,6 +51,6 @@ self.addEventListener("fetch", (event) => {
         cache.put(request, response.clone());
       }
       return response;
-    })
+    }),
   );
 });

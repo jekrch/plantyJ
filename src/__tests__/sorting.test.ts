@@ -1,5 +1,10 @@
 import { describe, it, expect } from "bun:test";
-import { cosineDistance, hammingDistanceHex, paletteDistance, sortOrganisms } from "../utils/sorting";
+import {
+  cosineDistance,
+  hammingDistanceHex,
+  paletteDistance,
+  sortOrganisms,
+} from "../utils/sorting";
 import { organism } from "./helpers";
 
 describe("cosineDistance", () => {
@@ -69,13 +74,19 @@ describe("paletteDistance", () => {
   });
 
   it("returns 0 for identical multi-color palettes", () => {
-    const p = [[0, 0, 0], [100, 50, 25]];
+    const p = [
+      [0, 0, 0],
+      [100, 50, 25],
+    ];
     expect(paletteDistance(p, p)).toBe(0);
   });
 
   it("averages CIELAB distances across the shorter palette", () => {
     // Only first entry compared; lab distance = sqrt(0²+3²+4²) = 5
-    const a = [[0, 3, 4], [100, 0, 0]];
+    const a = [
+      [0, 3, 4],
+      [100, 0, 0],
+    ];
     const b = [[0, 0, 0]];
     expect(paletteDistance(a, b)).toBeCloseTo(5);
   });

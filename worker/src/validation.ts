@@ -11,7 +11,7 @@ export function isValidCode(s: string): boolean {
 export function assertValidCode(label: string, s: string): void {
   if (!CODE_RE.test(s)) {
     throw new Error(
-      `Invalid ${label} "${s}" — must start with a letter or digit and contain only letters, digits, spaces, hyphens, and underscores (max 64 chars).`
+      `Invalid ${label} "${s}" — must start with a letter or digit and contain only letters, digits, spaces, hyphens, and underscores (max 64 chars).`,
     );
   }
 }

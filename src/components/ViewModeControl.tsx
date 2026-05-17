@@ -1,10 +1,4 @@
-import {
-  useMemo,
-  useState,
-  useRef,
-  useEffect,
-  useLayoutEffect,
-} from "react";
+import { useMemo, useState, useRef, useEffect, useLayoutEffect } from "react";
 import type { Organism, OrganismRecord, Zone } from "../types";
 import {
   ChevronDown,
@@ -97,34 +91,26 @@ export default function ViewModeControl({
     const keep =
       subjectCode && options.some((o) => o.code === subjectCode)
         ? subjectCode
-        : options[0]?.code ?? null;
+        : (options[0]?.code ?? null);
     onChange(next, keep);
   };
 
   const hasSubject = mode === "plant" || mode === "zone";
-  const activeOptions =
-    mode === "plant" ? plantOptions : mode === "zone" ? zoneOptions : [];
+  const activeOptions = mode === "plant" ? plantOptions : mode === "zone" ? zoneOptions : [];
   const activeOption =
-    hasSubject && subjectCode
-      ? activeOptions.find((o) => o.code === subjectCode)
-      : null;
+    hasSubject && subjectCode ? activeOptions.find((o) => o.code === subjectCode) : null;
 
-  const segments: { key: ViewMode; label: string; Icon: typeof LayoutGrid }[] =
-    [
-      { key: "gallery", label: "Wall", Icon: LayoutGrid },
-      { key: "tree", label: "Tree", Icon: TreeDeciduous },
-      { key: "web", label: "Web", Icon: Share2 },
-      { key: "zone", label: "Zone", Icon: MapIcon },
-      { key: "plant", label: "Plant", Icon: Sprout },
-    ];
+  const segments: { key: ViewMode; label: string; Icon: typeof LayoutGrid }[] = [
+    { key: "gallery", label: "Wall", Icon: LayoutGrid },
+    { key: "tree", label: "Tree", Icon: TreeDeciduous },
+    { key: "web", label: "Web", Icon: Share2 },
+    { key: "zone", label: "Zone", Icon: MapIcon },
+    { key: "plant", label: "Plant", Icon: Sprout },
+  ];
 
   return (
     <div className="view-mode-control flex flex-col items-center px-1">
-      <SegmentedControl
-        segments={segments}
-        active={mode}
-        onSelect={(next) => setMode(next)}
-      />
+      <SegmentedControl segments={segments} active={mode} onSelect={(next) => setMode(next)} />
 
       {hasSubject && (
         <div className="mt-4 self-center -mb-3">
@@ -157,9 +143,7 @@ function SubjectPicker({
   capitalize: boolean;
   onChange: (code: string) => void;
 }) {
-  const currentIndex = value
-    ? options.findIndex((o) => o.code === value)
-    : -1;
+  const currentIndex = value ? options.findIndex((o) => o.code === value) : -1;
   const canStep = options.length > 1;
 
   const step = (delta: number) => {
@@ -171,11 +155,7 @@ function SubjectPicker({
 
   return (
     <div className="flex items-center gap-1.5">
-      <ArrowBtn
-        direction="prev"
-        enabled={canStep}
-        onClick={() => step(-1)}
-      />
+      <ArrowBtn direction="prev" enabled={canStep} onClick={() => step(-1)} />
       <SubjectDropdown
         mode={mode}
         options={options}
@@ -184,11 +164,7 @@ function SubjectPicker({
         capitalize={capitalize}
         onChange={onChange}
       />
-      <ArrowBtn
-        direction="next"
-        enabled={canStep}
-        onClick={() => step(1)}
-      />
+      <ArrowBtn direction="next" enabled={canStep} onClick={() => step(1)} />
     </div>
   );
 }
@@ -341,18 +317,14 @@ function SegmentedControl({
                 type="button"
                 onClick={() => onSelect(key)}
                 className={`group relative flex items-center gap-2 px-4 py-2.5 font-display text-[11px] tracking-[0.18em] uppercase transition-colors duration-200 ${
-                  isActive
-                    ? "text-accent"
-                    : "text-ink-muted/70 hover:text-ink"
+                  isActive ? "text-accent" : "text-ink-muted/70 hover:text-ink"
                 }`}
               >
                 <Icon
                   size={13}
                   strokeWidth={1.5}
                   className={`transition-all duration-300 ${
-                    isActive
-                      ? "scale-105"
-                      : "opacity-70 group-hover:opacity-100"
+                    isActive ? "scale-105" : "opacity-70 group-hover:opacity-100"
                   }`}
                 />
                 <span>{label}</span>
@@ -424,29 +396,19 @@ function SubjectDropdown({
         className="flex items-center justify-between gap-2 px-3 h-9 rounded-md bg-surface-raised ring-1 ring-inset ring-white/5 hover:ring-accent/40 transition-all text-xs font-display tracking-wide text-ink min-w-56 sm:min-w-64"
       >
         <span className="flex items-center gap-2 min-w-0">
-          <ModeIcon
-            size={13}
-            strokeWidth={1.5}
-            className="text-accent shrink-0"
-          />
-          <span className={`truncate ${capitalize ? "capitalize" : ""}`}>
-            {activeLabel}
-          </span>
+          <ModeIcon size={13} strokeWidth={1.5} className="text-accent shrink-0" />
+          <span className={`truncate ${capitalize ? "capitalize" : ""}`}>{activeLabel}</span>
         </span>
         <ChevronDown
           size={14}
-          className={`text-ink-faint transition-transform shrink-0 ${
-            open ? "rotate-180" : ""
-          }`}
+          className={`text-ink-faint transition-transform shrink-0 ${open ? "rotate-180" : ""}`}
         />
       </button>
 
       {open && (
         <div className="absolute z-30 mt-1.5 left-0 right-0 sm:right-auto sm:min-w-full max-h-[60vh] overflow-y-auto thin-scroll rounded-md bg-surface-raised ring-1 ring-inset ring-white/10 shadow-lg shadow-black/40 py-1">
           {options.length === 0 && (
-            <div className="px-3 py-2 text-[11px] text-ink-faint">
-              No options
-            </div>
+            <div className="px-3 py-2 text-[11px] text-ink-faint">No options</div>
           )}
           {options.map((opt) => {
             const active = opt.code === value;
@@ -468,20 +430,12 @@ function SubjectDropdown({
                   {active && (
                     <span className="inline-block w-1 h-1 rounded-full bg-accent shrink-0" />
                   )}
-                  <span
-                    className={`truncate font-display ${
-                      capitalize ? "capitalize" : ""
-                    }`}
-                  >
+                  <span className={`truncate font-display ${capitalize ? "capitalize" : ""}`}>
                     {opt.label}
                   </span>
-                  <span className="text-accent/70 text-[10px] font-mono shrink-0">
-                    {opt.code}
-                  </span>
+                  <span className="text-accent/70 text-[10px] font-mono shrink-0">{opt.code}</span>
                 </span>
-                <span className="text-[10px] font-mono text-ink-faint shrink-0">
-                  {opt.count}
-                </span>
+                <span className="text-[10px] font-mono text-ink-faint shrink-0">{opt.count}</span>
               </button>
             );
           })}

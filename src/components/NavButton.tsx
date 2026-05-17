@@ -21,11 +21,16 @@ function NavButton({ direction, enabled, onClick }: NavButtonProps) {
       `}
       aria-label={direction === "prev" ? "Previous panel" : "Next panel"}
     >
-      <Icon size={38} strokeWidth={1.5} 
-            className={`${enabled
-          ? "stroke-white/40 hover:stroke-white/60 active:stroke-white/80"
-          : "stroke-white/10 cursor-default"}
-       `}/>
+      <Icon
+        size={38}
+        strokeWidth={1.5}
+        className={`${
+          enabled
+            ? "stroke-white/40 hover:stroke-white/60 active:stroke-white/80"
+            : "stroke-white/10 cursor-default"
+        }
+       `}
+      />
     </button>
   );
 }

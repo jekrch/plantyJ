@@ -95,18 +95,32 @@ export function RelationsSubgraph({
 
     const n = l1Codes.length;
     const minChord = 2 * NODE_R + MIN_GAP;
-    const ringR = n <= 1
-      ? MIN_RING_R
-      : Math.max(MIN_RING_R, minChord / (2 * Math.sin(Math.PI / n)));
+    const ringR =
+      n <= 1 ? MIN_RING_R : Math.max(MIN_RING_R, minChord / (2 * Math.sin(Math.PI / n)));
     const vb = Math.round(2 * (ringR + NODE_R + LABEL_PAD));
     const center = vb / 2;
 
     const positioned: PositionedNode[] = [];
 
-    const makeNode = (code: string, label: string, isCenter: boolean, x: number, y: number): PositionedNode => {
+    const makeNode = (
+      code: string,
+      label: string,
+      isCenter: boolean,
+      x: number,
+      y: number,
+    ): PositionedNode => {
       const organism = organismsByCode.get(code);
       const sub = organism?.fullName && organism.fullName !== label ? organism.fullName : null;
-      return { code, label, subLabel: sub, isCenter, x, y, organism, isAnimal: organism?.kind === "animal" };
+      return {
+        code,
+        label,
+        subLabel: sub,
+        isCenter,
+        x,
+        y,
+        organism,
+        isAnimal: organism?.kind === "animal",
+      };
     };
 
     positioned.push(makeNode(centerCode, centerLabel, true, center, center));
@@ -115,7 +129,15 @@ export function RelationsSubgraph({
     l1Codes.forEach((code, i) => {
       const angle = baseAngle + (i / Math.max(1, n)) * Math.PI * 2;
       const label = organismLabel(organismsByCode.get(code), code);
-      positioned.push(makeNode(code, label, false, center + Math.cos(angle) * ringR, center + Math.sin(angle) * ringR));
+      positioned.push(
+        makeNode(
+          code,
+          label,
+          false,
+          center + Math.cos(angle) * ringR,
+          center + Math.sin(angle) * ringR,
+        ),
+      );
     });
 
     const codeSet = new Set(positioned.map((n) => n.code));
@@ -157,7 +179,10 @@ export function RelationsSubgraph({
   // When the relations tab is not active the container has display:none (zero size).
   // Detect the transition from hidden → visible and apply the initial fit transform.
   const onContainerResize = useCallback(
-    (prev: { w: number; h: number }, next: { w: number; h: number }): Partial<Transform> | null | void => {
+    (
+      prev: { w: number; h: number },
+      next: { w: number; h: number },
+    ): Partial<Transform> | null | void => {
       if (prev.w === 0 && next.w > 0) {
         const k = Math.min(next.w / viewboxSize, next.h / viewboxSize, 1);
         return {
@@ -168,7 +193,7 @@ export function RelationsSubgraph({
       }
       return null;
     },
-    [viewboxSize]
+    [viewboxSize],
   );
 
   const {
@@ -312,10 +337,7 @@ export function RelationsSubgraph({
                     strokeWidth={isActive ? 1.8 : 1.2}
                     markerEnd={directed ? `url(#${arrId(e.rel.type)})` : undefined}
                   />
-                  <g
-                    transform={`translate(${midX},${midY}) rotate(${angle})`}
-                    pointerEvents="none"
-                  >
+                  <g transform={`translate(${midX},${midY}) rotate(${angle})`} pointerEvents="none">
                     <text
                       textAnchor="middle"
                       dy={-5}
@@ -343,9 +365,7 @@ export function RelationsSubgraph({
               const isActive = n.code === activeCode;
               const isNeighbor = highlightedNodes.has(n.code) && !isActive;
               const dim = !isActive && !isNeighbor;
-              const nodeColor = n.isAnimal
-                ? "var(--color-amber, #f59e0b)"
-                : "var(--color-ink)";
+              const nodeColor = n.isAnimal ? "var(--color-amber, #f59e0b)" : "var(--color-ink)";
               const strokeColor = isActive
                 ? nodeColor
                 : n.isAnimal
@@ -468,9 +488,7 @@ export function RelationsSubgraph({
                 style={{ background: colorByType.get(t.id), height: "2px" }}
               />
               {t.name}
-              {t.directional ? (
-                <span className="text-ink-faint">→</span>
-              ) : null}
+              {t.directional ? <span className="text-ink-faint">→</span> : null}
             </span>
           ))}
         </div>

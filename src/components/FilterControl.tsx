@@ -34,20 +34,20 @@ export default function FilterControl({
 
   const { tagItems, zoneItems, postedByItems, shortCodeItems, verdictItems } = useMemo(
     () => computeFacets(organisms, filters, zones, annotations, aiAnalyses),
-    [organisms, filters, zones, annotations, aiAnalyses]
+    [organisms, filters, zones, annotations, aiAnalyses],
   );
 
   const toggleInSet = useCallback(
     (
       key: "tags" | "zoneCodes" | "postedBy" | "shortCodes" | "misc" | "aiVerdicts",
-      value: string
+      value: string,
     ) => {
       const next = new Set(filters[key]);
       if (next.has(value)) next.delete(value);
       else next.add(value);
       onFiltersChange({ ...filters, [key]: next });
     },
-    [filters, onFiltersChange]
+    [filters, onFiltersChange],
   );
 
   const clearAll = useCallback(() => {
@@ -121,9 +121,7 @@ export default function FilterControl({
                   inputMode="search"
                   placeholder="name, taxa, tags…"
                   value={filters.searchQuery}
-                  onChange={(e) =>
-                    onFiltersChange({ ...filters, searchQuery: e.target.value })
-                  }
+                  onChange={(e) => onFiltersChange({ ...filters, searchQuery: e.target.value })}
                   className="flex-1 min-w-0 bg-transparent text-[12px] text-ink placeholder:text-ink-faint outline-none"
                   autoComplete="off"
                   autoCorrect="off"

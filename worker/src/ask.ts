@@ -15,9 +15,9 @@ export const MODEL_ALIASES: Record<string, string> = {
 
 // $/1M tokens: uncached input, cached input, output (approximate — verify at ai.google.dev/pricing)
 const MODEL_PRICING: Record<string, { i: number; c: number; o: number }> = {
-  "gemini-3.1-flash-lite-preview": { i: 0.10,  c: 0.025, o: 0.40  },
-  "gemini-2.5-pro":                { i: 1.25,  c: 0.315, o: 10.00 },
-  "gemini-3.1-pro-preview":        { i: 1.25,  c: 0.315, o: 10.00 },
+  "gemini-3.1-flash-lite-preview": { i: 0.1, c: 0.025, o: 0.4 },
+  "gemini-2.5-pro": { i: 1.25, c: 0.315, o: 10.0 },
+  "gemini-3.1-pro-preview": { i: 1.25, c: 0.315, o: 10.0 },
 };
 
 export interface Thread {
@@ -84,7 +84,10 @@ async function loadRollup(env: Env): Promise<string> {
 
 async function getSpecies(fullName: string, env: Env): Promise<string> {
   const base = env.DATA_BASE_URL ?? "https://plantyj.com/data";
-  const slug = fullName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const slug = fullName
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
   const res = await fetch(`${base}/species.json`, {
     cf: { cacheTtl: 60, cacheEverything: true } as RequestInitCfProperties,
   });
@@ -243,7 +246,7 @@ async function getOrCreateCache(
   model: string,
   systemPrompt: string,
   rollupJson: string,
-  env: Env
+  env: Env,
 ): Promise<{ cacheName: string | undefined; cacheCreationTokens: number }> {
   if (!env.ASK_CACHE) return { cacheName: undefined, cacheCreationTokens: 0 };
   try {
@@ -288,7 +291,8 @@ async function getOrCreateCache(
       expirationTtl: CACHE_TTL_SECONDS,
     });
 
-    const creationTokens = (cache.usageMetadata as { totalTokenCount?: number } | undefined)?.totalTokenCount ?? 0;
+    const creationTokens =
+      (cache.usageMetadata as { totalTokenCount?: number } | undefined)?.totalTokenCount ?? 0;
     return { cacheName: cache.name!, cacheCreationTokens: creationTokens };
   } catch {
     // Caching is best-effort; any failure falls back to uncached.
@@ -301,14 +305,20 @@ export async function answerQuestion(
   env: Env,
   modelOverride?: string,
   priorHistory?: Content[],
-  style?: string
+  style?: string,
 ): Promise<AnswerResult> {
   const rollupJson = await loadRollup(env);
   const model = modelOverride ?? env.LLM_MODEL ?? MODEL_ALIASES["2"];
   const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
   const systemPrompt = buildSystemPrompt(rollupJson);
 
-  const { cacheName, cacheCreationTokens } = await getOrCreateCache(client, model, systemPrompt, rollupJson, env);
+  const { cacheName, cacheCreationTokens } = await getOrCreateCache(
+    client,
+    model,
+    systemPrompt,
+    rollupJson,
+    env,
+  );
 
   // When using a cache the system instruction and tools are already stored server-side.
   const baseConfig = cacheName
@@ -317,7 +327,10 @@ export async function answerQuestion(
 
   // Style is injected per-turn so it doesn't affect the shared model cache.
   const questionText = style ? `[Respond in this style: ${style}]\n\n${question}` : question;
-  const contents: Content[] = [...(priorHistory ?? []), { role: "user", parts: [{ text: questionText }] }];
+  const contents: Content[] = [
+    ...(priorHistory ?? []),
+    { role: "user", parts: [{ text: questionText }] },
+  ];
 
   const totalUsage: Usage = { prompt: 0, cached: 0, output: 0, cacheCreation: cacheCreationTokens };
   let proposals: ProposedCommand[] = [];
@@ -334,7 +347,10 @@ export async function answerQuestion(
         response = await client.models.generateContent({
           model,
           contents,
-          config: { systemInstruction: systemPrompt, tools: [{ functionDeclarations: TOOL_DECLARATIONS }] },
+          config: {
+            systemInstruction: systemPrompt,
+            tools: [{ functionDeclarations: TOOL_DECLARATIONS }],
+          },
         });
       } else {
         throw err;
@@ -391,7 +407,7 @@ export async function answerQuestion(
           result = `Unknown tool: ${name}`;
         }
         return { functionResponse: { name, response: { result } } };
-      })
+      }),
     );
 
     contents.push({ role: "user", parts: results });

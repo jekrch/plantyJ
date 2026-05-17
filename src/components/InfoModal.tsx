@@ -1,6 +1,27 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { X, ExternalLink, Sprout, Github, BugIcon, Building, Flower, Cpu, Globe, BookOpen, Database, Leaf } from "lucide-react";
-import type { AIAnalysis, AIVerdict, Organism, OrganismRecord, Species, Zone, ZonePic } from "../types";
+import {
+  X,
+  ExternalLink,
+  Sprout,
+  Github,
+  BugIcon,
+  Building,
+  Flower,
+  Cpu,
+  Globe,
+  BookOpen,
+  Database,
+  Leaf,
+} from "lucide-react";
+import type {
+  AIAnalysis,
+  AIVerdict,
+  Organism,
+  OrganismRecord,
+  Species,
+  Zone,
+  ZonePic,
+} from "../types";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import StatsPanel from "./StatsPanel";
 
@@ -168,9 +189,7 @@ function InfoModalContent({
         image: picByZone.get(z.code) ?? fallback.get(z.code) ?? null,
         count: countByZone.get(z.code) ?? 0,
       }))
-      .sort((a, b) =>
-        (a.zone.name ?? a.zone.code).localeCompare(b.zone.name ?? b.zone.code)
-      );
+      .sort((a, b) => (a.zone.name ?? a.zone.code).localeCompare(b.zone.name ?? b.zone.code));
   }, [zones, zonePics, organisms]);
 
   return (
@@ -185,9 +204,7 @@ function InfoModalContent({
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         style={{
           opacity: visible ? 1 : 0,
-          transition: `opacity ${visible ? ENTER_MS : EXIT_MS}ms ${
-            visible ? EASE_OUT : EASE_IN
-          }`,
+          transition: `opacity ${visible ? ENTER_MS : EXIT_MS}ms ${visible ? EASE_OUT : EASE_IN}`,
         }}
         onClick={handleClose}
         aria-hidden="true"
@@ -197,16 +214,10 @@ function InfoModalContent({
         className="relative z-10 w-full max-w-2xl h-[min(640px,85vh)] flex flex-col rounded-lg border border-ink-faint/25 bg-surface-raised shadow-2xl shadow-black/50 overflow-hidden origin-center"
         style={{
           opacity: visible ? 1 : 0,
-          transform: visible
-            ? "scale(1) translateY(0)"
-            : "scale(0.94) translateY(12px)",
+          transform: visible ? "scale(1) translateY(0)" : "scale(0.94) translateY(12px)",
           transition: [
-            `opacity ${visible ? ENTER_MS : EXIT_MS}ms ${
-              visible ? EASE_OUT : EASE_IN
-            }`,
-            `transform ${visible ? ENTER_MS : EXIT_MS}ms ${
-              visible ? EASE_OUT : EASE_IN
-            }`,
+            `opacity ${visible ? ENTER_MS : EXIT_MS}ms ${visible ? EASE_OUT : EASE_IN}`,
+            `transform ${visible ? ENTER_MS : EXIT_MS}ms ${visible ? EASE_OUT : EASE_IN}`,
           ].join(", "),
           willChange: "opacity, transform",
         }}
@@ -228,9 +239,7 @@ function InfoModalContent({
         <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-ink-faint/20">
           <div className="flex items-center gap-2">
             <Sprout size={16} strokeWidth={1.5} className="stroke-accent" />
-            <h2 className="font-display text-sm tracking-tight text-ink">
-              PlantyJ
-            </h2>
+            <h2 className="font-display text-sm tracking-tight text-ink">PlantyJ</h2>
           </div>
           <button
             onClick={handleClose}
@@ -255,13 +264,15 @@ function InfoModalContent({
                 role="tab"
                 aria-selected={active}
                 onClick={() => onTabChange(t.id)}
-                className={`relative px-3 py-2 text-xs font-display tracking-wide transition-colors ${active ? "text-ink" : "text-ink-muted hover:text-ink"
-                  }`}
+                className={`relative px-3 py-2 text-xs font-display tracking-wide transition-colors ${
+                  active ? "text-ink" : "text-ink-muted hover:text-ink"
+                }`}
               >
                 {t.label}
                 <span
-                  className={`absolute left-2 right-2 -bottom-px h-px transition-all duration-200 ease-out ${active ? "bg-accent opacity-100" : "bg-transparent opacity-0"
-                    }`}
+                  className={`absolute left-2 right-2 -bottom-px h-px transition-all duration-200 ease-out ${
+                    active ? "bg-accent opacity-100" : "bg-transparent opacity-0"
+                  }`}
                 />
               </button>
             );
@@ -285,9 +296,7 @@ function InfoModalContent({
           {tab === "plants" && (
             <OrganismsPanel entries={organismEntries} onFilter={onSpotlightOrganism} />
           )}
-          {tab === "zones" && (
-            <ZonesPanel entries={zoneEntries} onFilter={onSpotlightZone} />
-          )}
+          {tab === "zones" && <ZonesPanel entries={zoneEntries} onFilter={onSpotlightZone} />}
         </div>
       </div>
     </div>
@@ -298,18 +307,15 @@ function AboutPanel() {
   return (
     <div className="px-6 py-6 space-y-5">
       <p className="text-sm text-ink leading-relaxed">
-        PlantyJ is a visual catalog of the plants growing around our
-        house. It includes pictures, identifications, and the zones where they live.
-        Tap any image for taxonomy, species information, related
-        photos, and other plants from the same zone.
+        PlantyJ is a visual catalog of the plants growing around our house. It includes pictures,
+        identifications, and the zones where they live. Tap any image for taxonomy, species
+        information, related photos, and other plants from the same zone.
       </p>
 
       <div className="border-t border-ink-faint/20" />
 
       <div>
-        <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-2">
-          Links
-        </p>
+        <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-2">Links</p>
         <div className="flex flex-wrap gap-2">
           <a
             href="https://jacobkrch.com"
@@ -330,10 +336,8 @@ function AboutPanel() {
             github.com/jekrch/plantyJ
           </a>
         </div>
-        
-        <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-2 mt-4">
-          Resources
-        </p>
+
+        <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-2 mt-4">Resources</p>
         <div className="flex flex-wrap gap-2">
           <a
             href="https://homegrownnationalpark.org"
@@ -368,11 +372,10 @@ function AboutPanel() {
       <div className="border-t border-ink-faint/20" />
 
       <div>
-        <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-2">
-          Data Sources
-        </p>
+        <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-2">Data Sources</p>
         <p className="text-sm text-ink leading-relaxed mb-4">
-          Where do I get all of my data? I use automation to pull it from these excellent, free, public data sources whenever a new image is added:
+          Where do I get all of my data? I use automation to pull it from these excellent, free,
+          public data sources whenever a new image is added:
         </p>
         <div className="flex flex-wrap gap-2">
           <a
@@ -537,19 +540,20 @@ function EntryCard({
   const Tag = interactive ? "button" : "div";
   const tagProps = interactive
     ? {
-      type: "button" as const,
-      onClick,
-      title: `Show ${count} photo${count === 1 ? "" : "s"}`,
-    }
+        type: "button" as const,
+        onClick,
+        title: `Show ${count} photo${count === 1 ? "" : "s"}`,
+      }
     : { "aria-disabled": true };
 
   return (
     <Tag
       {...tagProps}
-      className={`group flex flex-col rounded-md overflow-hidden bg-white/3 ring-1 ring-inset ring-white/5 text-left ${interactive
+      className={`group flex flex-col rounded-md overflow-hidden bg-white/3 ring-1 ring-inset ring-white/5 text-left ${
+        interactive
           ? "hover:ring-accent/40 hover:bg-white/5 transition-colors cursor-pointer"
           : "opacity-60"
-        }`}
+      }`}
     >
       <div className="relative aspect-square overflow-hidden bg-surface">
         {image ? (
@@ -558,8 +562,9 @@ function EntryCard({
             alt={altLabel}
             loading="lazy"
             decoding="async"
-            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-in-out will-change-transform ${interactive ? "group-hover:scale-[1.02]" : ""
-              }`}
+            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-in-out will-change-transform ${
+              interactive ? "group-hover:scale-[1.02]" : ""
+            }`}
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-ink-faint text-[10px] font-mono">
@@ -581,9 +586,7 @@ function EntryCard({
             '{variety}'
           </p>
         )}
-        <p className="text-[10px] text-accent mt-0.5 font-mono tracking-wide">
-          {code}
-        </p>
+        <p className="text-[10px] text-accent mt-0.5 font-mono tracking-wide">{code}</p>
       </div>
     </Tag>
   );

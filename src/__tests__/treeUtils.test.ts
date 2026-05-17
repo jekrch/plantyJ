@@ -55,10 +55,7 @@ describe("speciesPicsFor", () => {
   });
 
   it("returns all entries when every plant has the same shortCode", () => {
-    const same = [
-      organism({ id: "x", shortCode: "oak" }),
-      organism({ id: "y", shortCode: "oak" }),
-    ];
+    const same = [organism({ id: "x", shortCode: "oak" }), organism({ id: "y", shortCode: "oak" })];
     expect(speciesPicsFor(same, "oak")).toHaveLength(2);
   });
 });
@@ -71,15 +68,25 @@ describe("buildTree", () => {
   const speciesMap = new Map<string, Species>([
     makeSpecies("rosa", {
       taxonomy: {
-        kingdom: "Plantae", phylum: "Tracheophyta", class: "Magnoliopsida",
-        order: "Rosales", family: "Rosaceae", genus: "Rosa", species: "Rosa canina",
+        kingdom: "Plantae",
+        phylum: "Tracheophyta",
+        class: "Magnoliopsida",
+        order: "Rosales",
+        family: "Rosaceae",
+        genus: "Rosa",
+        species: "Rosa canina",
         canonicalName: "Rosa canina",
       },
     }),
     makeSpecies("iris", {
       taxonomy: {
-        kingdom: "Plantae", phylum: "Tracheophyta", class: "Liliopsida",
-        order: "Asparagales", family: "Iridaceae", genus: "Iris", species: "Iris versicolor",
+        kingdom: "Plantae",
+        phylum: "Tracheophyta",
+        class: "Liliopsida",
+        order: "Asparagales",
+        family: "Iridaceae",
+        genus: "Iris",
+        species: "Iris versicolor",
         canonicalName: "Iris versicolor",
       },
     }),

@@ -1,15 +1,7 @@
 import type { Organism, Species, TaxaInfo, Zone } from "../../types";
 import type { RelationshipsData } from "../../hooks/useRelationships";
 
-export const RANKS = [
-  "kingdom",
-  "phylum",
-  "class",
-  "order",
-  "family",
-  "genus",
-  "species",
-] as const;
+export const RANKS = ["kingdom", "phylum", "class", "order", "family", "genus", "species"] as const;
 
 export type Rank = (typeof RANKS)[number] | "root" | "variety";
 

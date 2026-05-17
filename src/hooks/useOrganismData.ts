@@ -23,10 +23,7 @@ export function slugifyName(name: string): string {
  * Merges raw pic records with their plant metadata (looked up by shortCode).
  * Pics with no matching plant record keep null name fields.
  */
-export function mergeOrganisms(
-  pics: PicRecord[],
-  plantRecords: OrganismRecord[]
-): Organism[] {
+export function mergeOrganisms(pics: PicRecord[], plantRecords: OrganismRecord[]): Organism[] {
   const byCode = new Map<string, OrganismRecord>();
   for (const p of plantRecords) byCode.set(p.shortCode, p);
   return pics.map((pic) => {
@@ -47,7 +44,7 @@ export function mergeOrganisms(
  */
 export function buildSpeciesMap(
   plantRecords: OrganismRecord[],
-  speciesBySlug: Record<string, Species>
+  speciesBySlug: Record<string, Species>,
 ): Map<string, Species> {
   const m = new Map<string, Species>();
   for (const p of plantRecords) {
@@ -85,9 +82,7 @@ export function useOrganismData(): OrganismData {
   const [zones, setZones] = useState<Zone[]>([]);
   const [zonePics, setZonePics] = useState<ZonePic[]>([]);
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
-  const [speciesByShortCode, setSpeciesByShortCode] = useState<
-    Map<string, Species>
-  >(new Map());
+  const [speciesByShortCode, setSpeciesByShortCode] = useState<Map<string, Species>>(new Map());
   const [speciesLoaded, setSpeciesLoaded] = useState(false);
   const [taxa, setTaxa] = useState<Record<string, TaxaInfo>>({});
   const [aiAnalyses, setAiAnalyses] = useState<AIAnalysis[]>([]);
@@ -96,7 +91,7 @@ export function useOrganismData(): OrganismData {
 
   useEffect(() => {
     const base = import.meta.env.BASE_URL;
-    const fetchJson = <T,>(path: string) =>
+    const fetchJson = <T>(path: string) =>
       fetch(`${base}${path}`).then((res) => {
         if (!res.ok) throw new Error(`${path}: ${res.status}`);
         return res.json() as Promise<T>;
@@ -106,49 +101,38 @@ export function useOrganismData(): OrganismData {
       fetchJson<{ pics?: PicRecord[] }>("data/pics.json"),
       fetchJson<{ plants?: OrganismRecord[] }>("data/plants.json"),
       fetchJson<{ zones?: Zone[] }>("data/zones.json"),
-      fetchJson<{ zonePics?: ZonePic[] }>("data/zone_pics.json").catch(
-        () => ({ zonePics: [] as ZonePic[] })
-      ),
-      fetchJson<{ annotations?: Annotation[] }>("data/annotations.json").catch(
-        () => ({ annotations: [] as Annotation[] })
-      ),
+      fetchJson<{ zonePics?: ZonePic[] }>("data/zone_pics.json").catch(() => ({
+        zonePics: [] as ZonePic[],
+      })),
+      fetchJson<{ annotations?: Annotation[] }>("data/annotations.json").catch(() => ({
+        annotations: [] as Annotation[],
+      })),
       fetchJson<Record<string, TaxaInfo>>("data/taxa.json").catch(
-        () => ({} as Record<string, TaxaInfo>)
+        () => ({}) as Record<string, TaxaInfo>,
       ),
     ])
-      .then(
-        ([
-          picsData,
-          organismsData,
-          zonesData,
-          zonePicsData,
-          annotationsData,
-          taxaData,
-        ]) => {
-          const records = organismsData.plants ?? [];
-          setOrganisms(mergeOrganisms(picsData.pics ?? [], records));
-          setOrganismRecords(records);
-          setZones(zonesData.zones ?? []);
-          setZonePics(zonePicsData.zonePics ?? []);
-          setAnnotations(annotationsData.annotations ?? []);
-          setTaxa(taxaData ?? {});
-          setStatus("ready");
+      .then(([picsData, organismsData, zonesData, zonePicsData, annotationsData, taxaData]) => {
+        const records = organismsData.plants ?? [];
+        setOrganisms(mergeOrganisms(picsData.pics ?? [], records));
+        setOrganismRecords(records);
+        setZones(zonesData.zones ?? []);
+        setZonePics(zonePicsData.zonePics ?? []);
+        setAnnotations(annotationsData.annotations ?? []);
+        setTaxa(taxaData ?? {});
+        setStatus("ready");
 
-          // Load combined species bundle — non-blocking; fills in once available.
-          fetchJson<{ species?: Record<string, Species> }>("data/species.json")
-            .then((bundle) => {
-              setSpeciesByShortCode(
-                buildSpeciesMap(records, bundle.species ?? {})
-              );
-            })
-            .catch(() => {
-              setSpeciesByShortCode(new Map());
-            })
-            .finally(() => {
-              setSpeciesLoaded(true);
-            });
-        }
-      )
+        // Load combined species bundle — non-blocking; fills in once available.
+        fetchJson<{ species?: Record<string, Species> }>("data/species.json")
+          .then((bundle) => {
+            setSpeciesByShortCode(buildSpeciesMap(records, bundle.species ?? {}));
+          })
+          .catch(() => {
+            setSpeciesByShortCode(new Map());
+          })
+          .finally(() => {
+            setSpeciesLoaded(true);
+          });
+      })
       .catch(() => setStatus("error"));
   }, []);
 

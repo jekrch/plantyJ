@@ -13,17 +13,14 @@ interface PanZoomOptions {
 export function usePanZoom({ layoutWidth, layoutHeight, dataReady }: PanZoomOptions) {
   // Tree-specific initial view: right-align species column and top-align rank headers,
   // then zoom past fit-to-view by INITIAL_ZOOM_FACTOR.
-  const initialTransform = useCallback(
-    (cw: number, ch: number, lw: number, _lh: number) => {
-      const fitK = Math.min(cw / lw, ch / _lh, 1);
-      const k = Math.min(4, Math.max(0.2, fitK * INITIAL_ZOOM_FACTOR));
-      const scaledW = lw * k;
-      const x = scaledW <= cw ? (cw - scaledW) / 2 : cw - scaledW + 60;
-      const y = 0;
-      return { x, y, k };
-    },
-    []
-  );
+  const initialTransform = useCallback((cw: number, ch: number, lw: number, _lh: number) => {
+    const fitK = Math.min(cw / lw, ch / _lh, 1);
+    const k = Math.min(4, Math.max(0.2, fitK * INITIAL_ZOOM_FACTOR));
+    const scaledW = lw * k;
+    const x = scaledW <= cw ? (cw - scaledW) / 2 : cw - scaledW + 60;
+    const y = 0;
+    return { x, y, k };
+  }, []);
 
   // Keep the right edge anchored when the container resizes.
   const onContainerResize = useCallback(
@@ -32,7 +29,7 @@ export function usePanZoom({ layoutWidth, layoutHeight, dataReady }: PanZoomOpti
       if (delta === 0) return null;
       return { x: current.x + delta };
     },
-    []
+    [],
   );
 
   const base = useGenericPanZoom({
@@ -64,7 +61,7 @@ export function usePanZoom({ layoutWidth, layoutHeight, dataReady }: PanZoomOpti
         return { k: t.k, x, y };
       });
     },
-    [base, layoutWidth]
+    [base, layoutWidth],
   );
 
   return {

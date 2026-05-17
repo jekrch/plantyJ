@@ -73,8 +73,7 @@ export async function executeCommand(text: string, env: Env): Promise<ExecResult
     const targetShortCode = acceptMatch[2] || null;
     const result = await acceptBioclip(env, seq, targetShortCode);
     if (result === "no-pic") return fail(`No pic found with ID ${seq}.`);
-    if (result === "no-prediction")
-      return fail(`Pic #${seq} has no BioCLIP prediction yet.`);
+    if (result === "no-prediction") return fail(`Pic #${seq} has no BioCLIP prediction yet.`);
     const lines = [
       result.renamedFrom
         ? `Accepted #${seq}: ${result.renamedFrom} → ${result.plant.shortCode}`
@@ -92,7 +91,7 @@ export async function executeCommand(text: string, env: Env): Promise<ExecResult
     const value = updateMatch[3].trim();
     if (!isUpdatableField(field)) {
       return fail(
-        `Invalid field "${field}". Updatable: shortCode, fullName, commonName, zoneCode, tags, description`
+        `Invalid field "${field}". Updatable: shortCode, fullName, commonName, zoneCode, tags, description`,
       );
     }
     const updated = await updateBySeq(env, seq, field, value);
@@ -102,9 +101,11 @@ export async function executeCommand(text: string, env: Env): Promise<ExecResult
   }
 
   if (trimmed.startsWith("/annotate ")) {
-    const parts = trimmed.slice("/annotate ".length).split("//").map((s) => s.trim());
-    const isField = (s: string): s is "tags" | "description" =>
-      s === "tags" || s === "description";
+    const parts = trimmed
+      .slice("/annotate ".length)
+      .split("//")
+      .map((s) => s.trim());
+    const isField = (s: string): s is "tags" | "description" => s === "tags" || s === "description";
 
     let shortCode: string, zoneCode: string | null, field: "tags" | "description", value: string;
     if (parts.length >= 3 && isField(parts[1])) {
@@ -119,7 +120,7 @@ export async function executeCommand(text: string, env: Env): Promise<ExecResult
       value = parts.slice(3).join("//");
     } else {
       return fail(
-        `Invalid /annotate format. Use:\n  /annotate shortCode // tags // value\n  /annotate shortCode // zoneCode // tags // value`
+        `Invalid /annotate format. Use:\n  /annotate shortCode // tags // value\n  /annotate shortCode // zoneCode // tags // value`,
       );
     }
     const entry = await upsertAnnotation(
@@ -127,7 +128,7 @@ export async function executeCommand(text: string, env: Env): Promise<ExecResult
       shortCode,
       zoneCode,
       field,
-      value.trim() === "-" ? "" : value
+      value.trim() === "-" ? "" : value,
     );
     const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
     const lines = [
@@ -139,7 +140,10 @@ export async function executeCommand(text: string, env: Env): Promise<ExecResult
   }
 
   if (trimmed.startsWith("/addtag ")) {
-    const parts = trimmed.slice("/addtag ".length).split("//").map((s) => s.trim());
+    const parts = trimmed
+      .slice("/addtag ".length)
+      .split("//")
+      .map((s) => s.trim());
     if (parts.length === 1) {
       const spaceIdx = parts[0].indexOf(" ");
       if (spaceIdx === -1) {
@@ -174,7 +178,10 @@ export async function executeCommand(text: string, env: Env): Promise<ExecResult
   }
 
   if (trimmed.startsWith("/removetag ")) {
-    const parts = trimmed.slice("/removetag ".length).split("//").map((s) => s.trim());
+    const parts = trimmed
+      .slice("/removetag ".length)
+      .split("//")
+      .map((s) => s.trim());
     if (parts.length === 1) {
       const spaceIdx = parts[0].indexOf(" ");
       if (spaceIdx === -1) {
@@ -186,7 +193,8 @@ export async function executeCommand(text: string, env: Env): Promise<ExecResult
       if (!isNaN(seq) && String(seq) === first) {
         const result = await removePicTag(env, seq, tag);
         if (!result) return fail(`No pic found with ID ${seq}.`);
-        if (!result.removed) return ok(`Tag "${tag}" not present on pic #${seq} (${result.pic.shortCode}).`);
+        if (!result.removed)
+          return ok(`Tag "${tag}" not present on pic #${seq} (${result.pic.shortCode}).`);
         const tags = result.pic.tags.length > 0 ? result.pic.tags.join(", ") : "(none)";
         return ok(`Removed tag "${tag}" from pic #${seq} (${result.pic.shortCode}). Tags: ${tags}`);
       }
@@ -210,7 +218,10 @@ export async function executeCommand(text: string, env: Env): Promise<ExecResult
   }
 
   if (trimmed.startsWith("/deleteannotation ")) {
-    const parts = trimmed.slice("/deleteannotation ".length).split("//").map((s) => s.trim());
+    const parts = trimmed
+      .slice("/deleteannotation ".length)
+      .split("//")
+      .map((s) => s.trim());
     const shortCode = parts[0];
     const zoneCode = parts[1] || null;
     const removed = await deleteAnnotation(env, shortCode, zoneCode);

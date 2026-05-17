@@ -87,7 +87,7 @@ interface SimNode extends SimulationNodeDatum {
 function layoutGraph(
   nodes: string[],
   edges: Array<[string, string]>,
-  posCache: Map<string, { x: number; y: number }>
+  posCache: Map<string, { x: number; y: number }>,
 ): { positions: Map<string, { x: number; y: number }>; width: number; height: number } {
   const positions = new Map<string, { x: number; y: number }>();
   if (nodes.length === 0) return { positions, width: 1600, height: 1000 };
@@ -124,7 +124,7 @@ function layoutGraph(
       forceLink<SimNode, { source: string; target: string }>(simLinks)
         .id((d) => d.id)
         .distance(k * 1.3)
-        .strength(0.4)
+        .strength(0.4),
     )
     .force("charge", forceManyBody().strength(-3800).distanceMax(1400))
     .force("collide", forceCollide(minDistance).strength(1))
@@ -150,9 +150,11 @@ function layoutGraph(
   }
 
   // Measure the final organic size of the graph
-  let minX = Infinity, minY = Infinity;
-  let maxX = -Infinity, maxY = -Infinity;
-  positions.forEach(p => {
+  let minX = Infinity,
+    minY = Infinity;
+  let maxX = -Infinity,
+    maxY = -Infinity;
+  positions.forEach((p) => {
     if (p.x < minX) minX = p.x;
     if (p.y < minY) minY = p.y;
     if (p.x > maxX) maxX = p.x;
@@ -179,24 +181,26 @@ function layoutGraph(
     }
   });
 
-  // Create a fixed virtual canvas size. By making this smaller than the 
-  // graph's maximum bounding box, the pan/zoom hook will start in a naturally 
+  // Create a fixed virtual canvas size. By making this smaller than the
+  // graph's maximum bounding box, the pan/zoom hook will start in a naturally
   // zoomed-in state.
   const width = 1600;
   const height = 1000;
 
   // Center the densest cluster in the middle of our view
-  const cx = densestNode && positions.has(densestNode) ? positions.get(densestNode)!.x : (minX + maxX) / 2;
-  const cy = densestNode && positions.has(densestNode) ? positions.get(densestNode)!.y : (minY + maxY) / 2;
-  
+  const cx =
+    densestNode && positions.has(densestNode) ? positions.get(densestNode)!.x : (minX + maxX) / 2;
+  const cy =
+    densestNode && positions.has(densestNode) ? positions.get(densestNode)!.y : (minY + maxY) / 2;
+
   const targetCx = width / 2;
   const targetCy = height / 2;
-  
+
   // Shift the graph cluster so our focal point centers in our viewport
   const offsetX = targetCx - cx;
   const offsetY = targetCy - cy;
 
-  positions.forEach(p => {
+  positions.forEach((p) => {
     p.x += offsetX;
     p.y += offsetY;
   });
@@ -301,7 +305,7 @@ export default function WebView({
   const baseURL = import.meta.env.BASE_URL;
 
   const [enabledTypes, setEnabledTypes] = useState<Set<string>>(
-    () => new Set(relationships.types.map((t) => t.id))
+    () => new Set(relationships.types.map((t) => t.id)),
   );
   const [filtersExpanded, setFiltersExpanded] = useState(false);
 
@@ -345,9 +349,7 @@ export default function WebView({
   }, [relationships.types]);
 
   const { nodeCodes, filteredEdges } = useMemo(() => {
-    const edges = relationships.relationships.filter((r) =>
-      enabledTypes.has(r.type)
-    );
+    const edges = relationships.relationships.filter((r) => enabledTypes.has(r.type));
     const codes = new Set<string>();
     for (const r of edges) {
       codes.add(r.from);
@@ -363,12 +365,16 @@ export default function WebView({
   const posCacheRef = useRef<Map<string, { x: number; y: number }>>(new Map());
 
   const layout = useMemo(() => {
-    const { positions, width: layoutWidth, height: layoutHeight } = layoutGraph(
+    const {
+      positions,
+      width: layoutWidth,
+      height: layoutHeight,
+    } = layoutGraph(
       nodeCodes,
       filteredEdges.map((r) => [r.from, r.to] as [string, string]),
-      posCacheRef.current
+      posCacheRef.current,
     );
-    
+
     const nodes: PositionedNode[] = nodeCodes.map((code) => {
       const p = positions.get(code)!;
       const lbl = labelByCode.get(code);
@@ -422,14 +428,7 @@ export default function WebView({
     }
 
     return { nodes, edges, layoutWidth, layoutHeight };
-  }, [
-    nodeCodes,
-    filteredEdges,
-    labelByCode,
-    organismByCode,
-    colorByType,
-    relationships.typeById,
-  ]);
+  }, [nodeCodes, filteredEdges, labelByCode, organismByCode, colorByType, relationships.typeById]);
 
   const {
     containerRef,
@@ -454,7 +453,7 @@ export default function WebView({
   });
 
   const [hovered, setHovered] = useState<string | null>(null);
-  
+
   // Selection vs Detail States
   const [selectedCode, setSelectedCode] = useState<string | null>(null);
   const [detailCode, setDetailCode] = useState<string | null>(null);
@@ -493,7 +492,7 @@ export default function WebView({
     prevSelected.current = selectedCode;
     if (prev === selectedCode) return;
     onNodeSelect?.(selectedCode);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCode]);
 
   // On initial load, focus + select the node named in the URL — the same
@@ -574,9 +573,20 @@ export default function WebView({
 
   const searchIndex = useMemo(() => {
     return layout.nodes.map((n) => {
-      const fields = [n.label, n.subLabel, n.code, n.organism?.commonName, n.organism?.fullName, n.organism?.variety]
-        .filter(Boolean) as string[];
-      return { node: n, label: n.label, sublabel: n.subLabel ?? n.code, haystack: fields.join(" \n ").toLowerCase() };
+      const fields = [
+        n.label,
+        n.subLabel,
+        n.code,
+        n.organism?.commonName,
+        n.organism?.fullName,
+        n.organism?.variety,
+      ].filter(Boolean) as string[];
+      return {
+        node: n,
+        label: n.label,
+        sublabel: n.subLabel ?? n.code,
+        haystack: fields.join(" \n ").toLowerCase(),
+      };
     });
   }, [layout.nodes]);
 
@@ -593,7 +603,9 @@ export default function WebView({
     return hits.slice(0, 12).map((h) => h.item);
   }, [searchQuery, searchIndex]);
 
-  useEffect(() => { setSearchHi(0); }, [searchMatches]);
+  useEffect(() => {
+    setSearchHi(0);
+  }, [searchMatches]);
 
   useEffect(() => {
     if (searchOpen) {
@@ -627,21 +639,27 @@ export default function WebView({
       setSelectedCode(node.code);
       setDetailCode(null);
     },
-    [closeSearch, centerOn]
+    [closeSearch, centerOn],
   );
 
   const onSearchKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Escape") { e.preventDefault(); closeSearch(); }
-      else if (e.key === "ArrowDown") { e.preventDefault(); setSearchHi((i) => Math.min(searchMatches.length - 1, i + 1)); }
-      else if (e.key === "ArrowUp") { e.preventDefault(); setSearchHi((i) => Math.max(0, i - 1)); }
-      else if (e.key === "Enter") {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeSearch();
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSearchHi((i) => Math.min(searchMatches.length - 1, i + 1));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSearchHi((i) => Math.max(0, i - 1));
+      } else if (e.key === "Enter") {
         e.preventDefault();
         const pick = searchMatches[searchHi] ?? searchMatches[0];
         if (pick) selectSearchNode(pick.node);
       }
     },
-    [searchMatches, searchHi, closeSearch, selectSearchNode]
+    [searchMatches, searchHi, closeSearch, selectSearchNode],
   );
 
   if (!relationships.loaded) {
@@ -656,10 +674,7 @@ export default function WebView({
   }
 
   return (
-    <div
-      className="fixed left-0 right-0 bottom-0 z-10 flex flex-col"
-      style={{ top: headerHeight }}
-    >
+    <div className="fixed left-0 right-0 bottom-0 z-10 flex flex-col" style={{ top: headerHeight }}>
       <div
         ref={containerRef}
         className="relative w-full flex-1 min-h-0 bg-surface-raised/30 overflow-hidden"
@@ -687,7 +702,8 @@ export default function WebView({
               NO RELATIONSHIPS YET
             </p>
             <p className="text-[11px] text-ink-faint max-w-md">
-              Use /relate &lt;type&gt; &lt;fromCode&gt; &lt;toCode&gt; in Telegram to register a relationship between two organisms.
+              Use /relate &lt;type&gt; &lt;fromCode&gt; &lt;toCode&gt; in Telegram to register a
+              relationship between two organisms.
             </p>
           </div>
         ) : (
@@ -768,14 +784,10 @@ export default function WebView({
               {layout.nodes.map((n) => {
                 const isSelected = n.code === selectedCode;
                 const isActive = n.code === activeCode;
-                const isNeighbor =
-                  activeCode != null && highlightedNodes.has(n.code) && !isActive;
-                const dim =
-                  activeCode != null && !isActive && !isNeighbor;
+                const isNeighbor = activeCode != null && highlightedNodes.has(n.code) && !isActive;
+                const dim = activeCode != null && !isActive && !isNeighbor;
                 const r = LEAF_RADIUS;
-                const nodeColor = n.isAnimal
-                  ? "var(--color-amber, #f59e0b)"
-                  : "var(--color-ink)";
+                const nodeColor = n.isAnimal ? "var(--color-amber, #f59e0b)" : "var(--color-ink)";
                 const strokeColor = isActive
                   ? nodeColor
                   : n.isAnimal
@@ -793,13 +805,11 @@ export default function WebView({
                       transition: "opacity 160ms ease-out",
                     }}
                     onPointerEnter={() => setHovered(n.code)}
-                    onPointerLeave={() =>
-                      setHovered((h) => (h === n.code ? null : h))
-                    }
+                    onPointerLeave={() => setHovered((h) => (h === n.code ? null : h))}
                     onClick={(e) => {
                       e.stopPropagation();
                       if (gestureMovedRef.current) return;
-                      
+
                       if (selectedCode === n.code) {
                         setDetailCode((cur) => (cur === n.code ? null : n.code));
                       } else {
@@ -808,11 +818,7 @@ export default function WebView({
                       }
                     }}
                   >
-                    <circle
-                      r={r + 14}
-                      fill="transparent"
-                      stroke="none"
-                    />
+                    <circle r={r + 14} fill="transparent" stroke="none" />
                     {isSelected && (
                       <circle
                         key={`burst-${selectBurstKey}-${n.code}`}
@@ -830,9 +836,7 @@ export default function WebView({
                         className="node-halo-persist"
                       />
                     )}
-                    {isActive && !isSelected && (
-                      <circle r={r + 12} fill="url(#web-leaf-glow)" />
-                    )}
+                    {isActive && !isSelected && <circle r={r + 12} fill="url(#web-leaf-glow)" />}
                     <circle
                       r={r + 2}
                       fill="var(--color-surface)"
@@ -1015,7 +1019,7 @@ export default function WebView({
                     </button>
                   );
                 })}
-                
+
                 {enabledTypes.size !== relationships.types.length && (
                   <button
                     onClick={() => setEnabledTypes(new Set(relationships.types.map((t) => t.id)))}

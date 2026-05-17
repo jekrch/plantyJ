@@ -22,7 +22,7 @@ export interface PanZoomOptions {
   onContainerResize?: (
     prev: { w: number; h: number },
     next: { w: number; h: number },
-    current: Transform
+    current: Transform,
   ) => Partial<Transform> | null | void;
 }
 
@@ -31,17 +31,17 @@ function clamp(v: number, lo: number, hi: number): number {
 }
 
 const defaultInitial = (
-  cw: number, 
-  ch: number, 
-  lw: number, 
-  lh: number, 
-  initialZoom?: number
+  cw: number,
+  ch: number,
+  lw: number,
+  lh: number,
+  initialZoom?: number,
 ): Transform => {
   if (!cw || !ch) return { x: 0, y: 0, k: 1 };
-  
+
   // Use the provided initialZoom, otherwise default to a fit-to-view scale
   const k = initialZoom !== undefined ? initialZoom : Math.min(cw / lw, ch / lh, 1);
-  
+
   return {
     x: (cw - lw * k) / 2,
     y: (ch - lh * k) / 2,
@@ -160,7 +160,7 @@ export function usePanZoom({
         };
       });
     },
-    [minK, maxK]
+    [minK, maxK],
   );
 
   // Center the viewport on a point in layout coordinates, preserving zoom.
@@ -195,7 +195,7 @@ export function usePanZoom({
         return { k, x: mx - (mx - t.x) * ratio, y: my - (my - t.y) * ratio };
       });
     },
-    [minK, maxK]
+    [minK, maxK],
   );
 
   const onPointerDown = useCallback(
@@ -236,7 +236,7 @@ export function usePanZoom({
         };
       }
     },
-    [transform.x, transform.y, transform.k, clientToContainer]
+    [transform.x, transform.y, transform.k, clientToContainer],
   );
 
   const onPointerMove = useCallback(
@@ -277,7 +277,7 @@ export function usePanZoom({
       if (!p.moved) return;
       setTransform((t) => ({ ...t, x: p.origX + dx, y: p.origY + dy }));
     },
-    [clientToContainer, minK, maxK]
+    [clientToContainer, minK, maxK],
   );
 
   const onPointerUp = useCallback(
@@ -321,7 +321,12 @@ export function usePanZoom({
         const { cx, cy } = clientToContainer(e.clientX, e.clientY);
         const isNode = (e.target as Element).closest?.("[data-node]");
 
-        if (!isNode && last && now - last.time < 300 && Math.hypot(cx - last.cx, cy - last.cy) < 40) {
+        if (
+          !isNode &&
+          last &&
+          now - last.time < 300 &&
+          Math.hypot(cx - last.cx, cy - last.cy) < 40
+        ) {
           setTransform((t) => {
             const k = clamp(t.k * 1.25, minK, maxK);
             const ratio = k / t.k;
@@ -333,7 +338,7 @@ export function usePanZoom({
         }
       }
     },
-    [transform.x, transform.y, clientToContainer, minK, maxK]
+    [transform.x, transform.y, clientToContainer, minK, maxK],
   );
 
   return {

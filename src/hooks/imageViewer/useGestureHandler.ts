@@ -42,7 +42,7 @@ export function useGestureHandler(
   zoomPan: ImageZoomPanState,
   slide: SlideNavigationState,
   hasPrev: boolean,
-  hasNext: boolean
+  hasNext: boolean,
 ): GestureHandlers {
   const { transformRef, clampTranslate, setTransform, applyTransform, resetTransform } = zoomPan;
   const { applySlideOffset, resolveSlide, snapBack, setSlideActive, swipeOffsetRef } = slide;
@@ -86,7 +86,7 @@ export function useGestureHandler(
       sg.locked = false;
       sg.rejected = false;
     },
-    [setSlideActive]
+    [setSlideActive],
   );
 
   const updateSlide = useCallback(
@@ -114,7 +114,7 @@ export function useGestureHandler(
       }
       applySlideOffset(offset);
     },
-    [hasPrev, hasNext, applySlideOffset]
+    [hasPrev, hasNext, applySlideOffset],
   );
 
   const endSlide = useCallback(
@@ -129,10 +129,10 @@ export function useGestureHandler(
         if (swipeOffsetRef.current === 0) setSlideActive(false);
       }
     },
-    [resolveSlide, setSlideActive, swipeOffsetRef]
+    [resolveSlide, setSlideActive, swipeOffsetRef],
   );
 
-  // Pointer (mouse) handlers 
+  // Pointer (mouse) handlers
 
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
@@ -148,7 +148,7 @@ export function useGestureHandler(
         beginSlide(e.clientX, e.clientY);
       }
     },
-    [transformRef, beginSlide]
+    [transformRef, beginSlide],
   );
 
   const handlePointerMove = useCallback(
@@ -168,7 +168,7 @@ export function useGestureHandler(
       // Mouse slide: lockThreshold=4, angleBias=1 (45° cutoff)
       updateSlide(e.clientX, e.clientY, 4, 1);
     },
-    [transformRef, clampTranslate, setTransform, updateSlide]
+    [transformRef, clampTranslate, setTransform, updateSlide],
   );
 
   const handlePointerUp = useCallback(
@@ -177,7 +177,7 @@ export function useGestureHandler(
       panRef.current.isDragging = false;
       endSlide(true);
     },
-    [endSlide]
+    [endSlide],
   );
 
   // Touch handlers
@@ -214,7 +214,7 @@ export function useGestureHandler(
         }
       }
     },
-    [transformRef, snapBack, beginSlide]
+    [transformRef, snapBack, beginSlide],
   );
 
   const handleTouchMove = useCallback(
@@ -255,7 +255,7 @@ export function useGestureHandler(
         updateSlide(touch.clientX, touch.clientY, 6, 0.8);
       }
     },
-    [transformRef, clampTranslate, applyTransform, updateSlide]
+    [transformRef, clampTranslate, applyTransform, updateSlide],
   );
 
   const handleTouchEnd = useCallback(
@@ -316,7 +316,7 @@ export function useGestureHandler(
         if (swipeOffsetRef.current === 0) setSlideActive(false);
       }
     },
-    [transformRef, resetTransform, setTransform, resolveSlide, setSlideActive, swipeOffsetRef]
+    [transformRef, resetTransform, setTransform, resolveSlide, setSlideActive, swipeOffsetRef],
   );
 
   return {

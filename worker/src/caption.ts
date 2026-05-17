@@ -1,4 +1,11 @@
-import type { ParsedCaption, ParsedTags, ParsedZoneRef, PicEntry, PlantRecord, Zone } from "./types";
+import type {
+  ParsedCaption,
+  ParsedTags,
+  ParsedZoneRef,
+  PicEntry,
+  PlantRecord,
+  Zone,
+} from "./types";
 import { assertValidCode } from "./validation";
 
 export const UNIDENTIFIED_CODE = "id";
@@ -81,9 +88,7 @@ function extractVariety(raw: string | null): { fullName: string | null; variety:
 
 function parseZoneRef(segment: string): ParsedZoneRef {
   if (segment.includes("+")) {
-    throw new Error(
-      "A picture can only belong to one zone. Post a separate photo for each zone."
-    );
+    throw new Error("A picture can only belong to one zone. Post a separate photo for each zone.");
   }
   const trimmed = segment.trim();
   // Zone code is a trailing "(code)" token: "Front Bed (fb1)". Parsed by
@@ -107,7 +112,10 @@ function parseTags(raw: string): ParsedTags {
   const picTags: string[] = [];
   const zoneTags: string[] = [];
   const plantTags: string[] = [];
-  for (const t of raw.split(",").map((s) => s.trim()).filter((s) => s.length > 0)) {
+  for (const t of raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0)) {
     if (t.startsWith("++")) {
       plantTags.push(t.slice(2).trim());
     } else if (t.startsWith("+")) {
@@ -171,7 +179,7 @@ export function resolveFields(
   parsed: ParsedCaption,
   existingPics: PicEntry[],
   plants: PlantRecord[],
-  zones: Zone[]
+  zones: Zone[],
 ): ResolveResult {
   const isUnidentified = parsed.shortCode === UNIDENTIFIED_CODE;
   const priorPic = isUnidentified
@@ -195,12 +203,10 @@ export function resolveFields(
   } else if (priorPic) {
     zoneCode = priorPic.zoneCode;
   } else if (isUnidentified) {
-    throw new Error(
-      `Unidentified pics need a zone. Use: id // zoneCode [// description]`
-    );
+    throw new Error(`Unidentified pics need a zone. Use: id // zoneCode [// description]`);
   } else {
     throw new Error(
-      `New plant "${parsed.shortCode}" needs a zone. Use: shortCode // fullName // commonName // Zone Name (zoneCode)`
+      `New plant "${parsed.shortCode}" needs a zone. Use: shortCode // fullName // commonName // Zone Name (zoneCode)`,
     );
   }
 
@@ -230,7 +236,7 @@ export function resolveFields(
 
   if (!existingPlant && !parsed.fullName) {
     throw new Error(
-      `New shortCode "${parsed.shortCode}" needs a fullName. Use: shortCode // Genus species 'Variety' // Common Name // Zone (code)`
+      `New shortCode "${parsed.shortCode}" needs a fullName. Use: shortCode // Genus species 'Variety' // Common Name // Zone (code)`,
     );
   }
 

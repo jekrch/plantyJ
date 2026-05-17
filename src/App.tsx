@@ -1,11 +1,4 @@
-import {
-  useEffect,
-  useLayoutEffect,
-  useState,
-  useMemo,
-  useCallback,
-  useRef,
-} from "react";
+import { useEffect, useLayoutEffect, useState, useMemo, useCallback, useRef } from "react";
 import { Sprout, House } from "lucide-react";
 import { sortOrganismsAsync } from "./utils/sorting.ts";
 import { applyFilters, hasActiveFilters } from "./utils/filtering.ts";
@@ -34,15 +27,9 @@ export default function App() {
         view.filters,
         data.annotations,
         data.speciesByShortCode,
-        data.aiAnalyses
+        data.aiAnalyses,
       ),
-    [
-      data.organisms,
-      view.filters,
-      data.annotations,
-      data.speciesByShortCode,
-      data.aiAnalyses,
-    ]
+    [data.organisms, view.filters, data.annotations, data.speciesByShortCode, data.aiAnalyses],
   );
 
   const [sortedOrganisms, setSortedOrganisms] = useState<Organism[]>([]);
@@ -62,9 +49,7 @@ export default function App() {
       view.viewMode === "plant"
         ? data.organisms.filter((p) => p.shortCode === view.spotlightCode)
         : data.organisms.filter((p) => p.zoneCode === view.spotlightCode);
-    return [...list].sort(
-      (a, b) => new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime()
-    );
+    return [...list].sort((a, b) => new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime());
   }, [data.organisms, view.viewMode, view.spotlightCode]);
 
   const viewer = useOrganismViewer({
@@ -80,7 +65,7 @@ export default function App() {
       view.selectTaxon(name);
       viewer.resetViewer();
     },
-    [view.selectTaxon, viewer.resetViewer]
+    [view.selectTaxon, viewer.resetViewer],
   );
 
   const [imagesLoaded, setImagesLoaded] = useState(false);
@@ -114,9 +99,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-surface relative">
-      {viewMode === "gallery" && (
-        <BackgroundEchoes organismPositions={organismPositions} />
-      )}
+      {viewMode === "gallery" && <BackgroundEchoes organismPositions={organismPositions} />}
       <header
         ref={headerRef}
         className="sticky top-0 z-40 bg-surface/90 backdrop-blur-sm border-b border-ink-faint/30"
@@ -200,34 +183,30 @@ export default function App() {
                   onOrganismPositions={setOrganismPositions}
                   onOpenOrganism={viewer.openOrganism}
                 />
-                {hasActiveFilters(view.filters) &&
-                  sortedOrganisms.length === 0 && (
-                    <div className="flex flex-col items-center justify-center py-20 text-center">
-                      <p className="text-ink-muted text-sm font-display tracking-wide">
-                        NO MATCHES
-                      </p>
-                      <button
-                        onClick={view.clearFilters}
-                        className="mt-3 text-xs text-accent hover:text-accent-dim transition-colors font-display tracking-wider uppercase cursor-pointer"
-                      >
-                        CLEAR FILTERS
-                      </button>
-                    </div>
-                  )}
+                {hasActiveFilters(view.filters) && sortedOrganisms.length === 0 && (
+                  <div className="flex flex-col items-center justify-center py-20 text-center">
+                    <p className="text-ink-muted text-sm font-display tracking-wide">NO MATCHES</p>
+                    <button
+                      onClick={view.clearFilters}
+                      className="mt-3 text-xs text-accent hover:text-accent-dim transition-colors font-display tracking-wider uppercase cursor-pointer"
+                    >
+                      CLEAR FILTERS
+                    </button>
+                  </div>
+                )}
               </>
             )}
 
-            {(viewMode === "plant" || viewMode === "zone") &&
-              view.spotlightCode && (
-                <SpotlightView
-                  kind={viewMode}
-                  subjectCode={view.spotlightCode}
-                  allOrganisms={organisms}
-                  zonePics={data.zonePics}
-                  zones={data.zones}
-                  onOpenViewer={viewer.openFromSpotlight}
-                />
-              )}
+            {(viewMode === "plant" || viewMode === "zone") && view.spotlightCode && (
+              <SpotlightView
+                kind={viewMode}
+                subjectCode={view.spotlightCode}
+                allOrganisms={organisms}
+                zonePics={data.zonePics}
+                zones={data.zones}
+                onOpenViewer={viewer.openFromSpotlight}
+              />
+            )}
           </div>
         )}
       </main>

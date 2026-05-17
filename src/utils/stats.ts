@@ -1,19 +1,6 @@
-import type {
-  AIAnalysis,
-  AIVerdict,
-  Organism,
-  Species,
-  SpeciesTaxonomy,
-  Zone,
-} from "../types";
+import type { AIAnalysis, AIVerdict, Organism, Species, SpeciesTaxonomy, Zone } from "../types";
 
-export type TaxonRank =
-  | "kingdom"
-  | "phylum"
-  | "class"
-  | "order"
-  | "family"
-  | "genus";
+export type TaxonRank = "kingdom" | "phylum" | "class" | "order" | "family" | "genus";
 
 export const RANKS: { id: TaxonRank; label: string; plural: string }[] = [
   { id: "kingdom", label: "Kingdom", plural: "Kingdoms" },
@@ -115,7 +102,11 @@ export function computeStats(
     : null;
   const sortedByDiversity = [...zoneCounts].sort((a, b) => b.diversity - a.diversity);
   const topZoneByDiversity = sortedByDiversity[0]
-    ? { code: sortedByDiversity[0].code, name: sortedByDiversity[0].name, count: sortedByDiversity[0].diversity }
+    ? {
+        code: sortedByDiversity[0].code,
+        name: sortedByDiversity[0].name,
+        count: sortedByDiversity[0].diversity,
+      }
     : null;
 
   // Higher taxa — pull from speciesByShortCode lookups, accumulating
@@ -165,9 +156,10 @@ export function computeStats(
   const scored = organisms.filter(
     (p) => typeof p.bioclipScore === "number" && !Number.isNaN(p.bioclipScore),
   );
-  const avgConfidence = scored.length > 0
-    ? scored.reduce((acc, p) => acc + (p.bioclipScore ?? 0), 0) / scored.length
-    : null;
+  const avgConfidence =
+    scored.length > 0
+      ? scored.reduce((acc, p) => acc + (p.bioclipScore ?? 0), 0) / scored.length
+      : null;
   // Genus-only matches count as half-credit — the model got the lineage
   // right even if the species ended up wrong, so they add 0.5 to both
   // agreements and disagreements.
@@ -277,11 +269,12 @@ export function buildTimeline(
     if (idx >= 0) buckets[idx].count += 1;
   }
 
-  const caption = granularity === "day"
-    ? "Photos per day"
-    : granularity === "week"
-      ? "Photos per week"
-      : "Photos per month";
+  const caption =
+    granularity === "day"
+      ? "Photos per day"
+      : granularity === "week"
+        ? "Photos per week"
+        : "Photos per month";
   return { buckets, caption };
 }
 

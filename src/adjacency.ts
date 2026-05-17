@@ -1,6 +1,5 @@
 import type { Organism } from "./types";
 
-
 // Neighbor map — which panels border a filler on each edge
 
 export interface NeighborMap {
@@ -9,7 +8,6 @@ export interface NeighborMap {
   left?: Organism;
   right?: Organism;
 }
-
 
 // Placed-item shapes (mirrors MasonryGrid's types for the resolver)
 
@@ -32,26 +30,17 @@ interface PlacedFillerLike extends Rect {
 
 type PlacedItemLike = PlacedOrganismLike | PlacedFillerLike;
 
-
 // Edge overlap helpers
 
 const EDGE_TOLERANCE = 6; // px — how close edges must be to count as adjacent
 
 /** Do two ranges [a0,a1] and [b0,b1] overlap by at least `min` px? */
-function rangeOverlap(
-  a0: number,
-  a1: number,
-  b0: number,
-  b1: number,
-  min = 4
-): boolean {
+function rangeOverlap(a0: number, a1: number, b0: number, b1: number, min = 4): boolean {
   const overlap = Math.min(a1, b1) - Math.max(a0, b0);
   return overlap >= min;
 }
 
-
 // Public resolver
-
 
 /**
  * Given the full list of placed items and a function to compute panel
@@ -63,7 +52,7 @@ function rangeOverlap(
  */
 export function resolveNeighbors(
   items: PlacedItemLike[],
-  getOrganismHeight: (panel: Organism, width: number) => number
+  getOrganismHeight: (panel: Organism, width: number) => number,
 ): Map<string, NeighborMap> {
   // Build bounding rects for every item
   interface BoundedItem {

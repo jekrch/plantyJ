@@ -8,7 +8,7 @@ import { RANKS } from "../TreeView/types";
 // Positions are zeroed since we don't lay it out — the detail panel ignores them.
 export function buildWebNode(
   organism: Organism,
-  species: Species | undefined
+  species: Species | undefined,
 ): HierarchyPointNode<RawNode> {
   const root: RawNode = { name: "Tree of Life", rank: "root", children: [] };
   let cur = root;

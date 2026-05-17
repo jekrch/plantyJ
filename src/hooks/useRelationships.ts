@@ -58,7 +58,7 @@ export function useRelationships(): RelationshipsData {
 // against the type's default. Returns "fwd" (from→to), "bwd" (to→from), or "u" (undirected).
 export function effectiveDirection(
   rel: Relationship,
-  type: RelationshipType | undefined
+  type: RelationshipType | undefined,
 ): "fwd" | "bwd" | "u" {
   if (rel.direction === "b") return "bwd";
   if (rel.direction === "u") return "u";

@@ -75,7 +75,7 @@ function computeLayout(
   organisms: Organism[],
   colCount: number,
   containerWidth: number,
-  initialHeights: number[]
+  initialHeights: number[],
 ): { items: PlacedItem[]; totalHeight: number } {
   const colWidth = (containerWidth - GAP * (colCount - 1)) / colCount;
   const colX = (col: number) => col * (colWidth + GAP);
@@ -221,7 +221,7 @@ function computeLayout(
         h: item.h,
       };
     }),
-    getOrganismHeight
+    getOrganismHeight,
   );
 
   for (const filler of fillers) {
@@ -269,9 +269,7 @@ export default function MasonryGrid({
   const [colCount, setColCount] = useState(getColumnCount);
   const [colWidth, setColWidth] = useState(0);
 
-  const stampCacheRef = useRef<
-    Map<string, { stamp: StampDef; fillerIndex: number }>
-  >(new Map());
+  const stampCacheRef = useRef<Map<string, { stamp: StampDef; fillerIndex: number }>>(new Map());
 
   const zoneNameByCode = useMemo(() => {
     const m = new Map<string, string>();
@@ -298,9 +296,7 @@ export default function MasonryGrid({
 
     const result = computeLayout(organisms, cc, containerWidth, initialHeights);
 
-    const fillers = result.items.filter(
-      (i): i is PlacedFiller => i.kind === "filler"
-    );
+    const fillers = result.items.filter((i): i is PlacedFiller => i.kind === "filler");
     for (const f of fillers) {
       const cached = stampCacheRef.current.get(f.key);
       if (cached) {
@@ -352,9 +348,7 @@ export default function MasonryGrid({
       requestAnimationFrame(() => {
         if (hasCalledLayoutReady.current) return;
 
-        const allImgs = Array.from(
-          document.querySelectorAll<HTMLImageElement>(".panel-item img")
-        );
+        const allImgs = Array.from(document.querySelectorAll<HTMLImageElement>(".panel-item img"));
 
         const visiblePending = allImgs.filter((img) => {
           if (!img.src || img.src === window.location.href) return false;
@@ -416,11 +410,7 @@ export default function MasonryGrid({
 
   return (
     <>
-      <div
-        ref={containerRef}
-        className="relative"
-        style={{ height: `${totalHeight}px` }}
-      >
+      <div ref={containerRef} className="relative" style={{ height: `${totalHeight}px` }}>
         <div
           ref={filterRef}
           className="absolute top-0 left-0"

@@ -1,5 +1,5 @@
 import { useId, useRef, useState, useEffect } from "react";
-import { Leaf, Sprout, LeafyGreen} from "lucide-react";
+import { Leaf, Sprout, LeafyGreen } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { createRoot } from "react-dom/client";
 import type { NeighborMap } from "../adjacency";
@@ -7,11 +7,7 @@ import FillerLabels from "./FillerLabels";
 
 export const WORDS = ["PLANTYJ"];
 
-export const LUCIDE_ICONS: LucideIcon[] = [
-  Leaf,
-  LeafyGreen,
-  Sprout,
-];
+export const LUCIDE_ICONS: LucideIcon[] = [Leaf, LeafyGreen, Sprout];
 
 const ROTATIONS = [45, 135];
 const COLORS = ["#7fb069", "#5a8c4a"];
@@ -19,15 +15,12 @@ const COLORS = ["#7fb069", "#5a8c4a"];
 const TEXT_FILL_COLOR = "var(--color-ink-muted)";
 const ICON_FILL_COLOR = "var(--color-ink-faint)";
 
-
 const STYLIZE_PLACEMENT = true;
 
-// Higher = denser vines. 
+// Higher = denser vines.
 const VINE_DENSITY = 1.75;
 
-export type StampDef =
-  | { type: "word"; value: string }
-  | { type: "icon"; value: LucideIcon };
+export type StampDef = { type: "word"; value: string } | { type: "icon"; value: LucideIcon };
 
 /** Build the full pool of possible stamps for external sequencing. */
 export function buildStampPool(): StampDef[] {
@@ -63,7 +56,7 @@ function deterministicHash(index: number): number {
 /** Map an index deterministically into the [min, max) range. */
 function deterministicBetween(index: number, salt: number, min: number, max: number): number {
   const h = deterministicHash(index * 7 + salt);
-  return min + (h % 10000) / 10000 * (max - min);
+  return min + ((h % 10000) / 10000) * (max - min);
 }
 
 function generateDeterministicPlacement(index: number): PlacementStyle {
@@ -86,7 +79,11 @@ interface StableStyle {
   iconInnerY: number;
 }
 
-function generateStableStyle(stamp: StampDef | null, empty: boolean, fillerIndex: number): StableStyle {
+function generateStableStyle(
+  stamp: StampDef | null,
+  empty: boolean,
+  fillerIndex: number,
+): StableStyle {
   if (empty || !stamp) {
     return {
       rotation: ROTATIONS[fillerIndex % ROTATIONS.length],
@@ -156,9 +153,7 @@ function extractLucideSvgContent(IconComponent: LucideIcon): Promise<string> {
 
     observer.observe(container, { childList: true, subtree: true });
 
-    root.render(
-      <IconComponent size={24} strokeWidth={2} color="black" fill="none" />
-    );
+    root.render(<IconComponent size={24} strokeWidth={2} color="black" fill="none" />);
 
     setTimeout(() => {
       observer.disconnect();
@@ -181,7 +176,9 @@ function useLucideExtract(IconComponent: LucideIcon | null): string | null {
     extractLucideSvgContent(IconComponent).then((content) => {
       if (!cancelled) setSvgContent(content);
     });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [IconComponent]);
 
   return svgContent;
@@ -246,9 +243,7 @@ export default function HatchFiller({
   }
   const { rotation, color, twist, placement, iconInnerX, iconInnerY } = styleRef.current;
 
-  const iconSvgContent = useLucideExtract(
-    stamp?.type === "icon" ? stamp.value : null
-  );
+  const iconSvgContent = useLucideExtract(stamp?.type === "icon" ? stamp.value : null);
 
   const patternContent = (
     <pattern
@@ -268,53 +263,31 @@ export default function HatchFiller({
         strokeLinecap="round"
       />
       {/* leaf branching from the right-curve apex */}
-      <path
-        d="M 12 6 Q 14.5 3 15.5 6 Q 14 8 12 6 Z"
-        fill={color}
-        fillOpacity="0.7"
-      />
-      <path
-        d="M 12 6 L 14 5"
-        stroke={color}
-        strokeWidth="0.6"
-        strokeOpacity="0.7"
-        fill="none"
-      />
+      <path d="M 12 6 Q 14.5 3 15.5 6 Q 14 8 12 6 Z" fill={color} fillOpacity="0.7" />
+      <path d="M 12 6 L 14 5" stroke={color} strokeWidth="0.6" strokeOpacity="0.7" fill="none" />
       {/* leaf branching from the left-curve apex */}
-      <path
-        d="M 4 22 Q 1.5 19 0.5 22 Q 2 24 4 22 Z"
-        fill={color}
-        fillOpacity="0.7"
-      />
-      <path
-        d="M 4 22 L 2 21"
-        stroke={color}
-        strokeWidth="0.6"
-        strokeOpacity="0.7"
-        fill="none"
-      />
+      <path d="M 4 22 Q 1.5 19 0.5 22 Q 2 24 4 22 Z" fill={color} fillOpacity="0.7" />
+      <path d="M 4 22 L 2 21" stroke={color} strokeWidth="0.6" strokeOpacity="0.7" fill="none" />
       {/* tendril buds */}
       <circle cx="8" cy="16" r="1" fill={color} fillOpacity="0.55" />
     </pattern>
   );
 
-
   const isSmall = Math.min(size.width, size.height) < 300;
 
   const baseIconSize = Math.min(size.width, size.height) * 0.7;
   const effectiveScale = isSmall
-    ? Math.min(placement.scale, 1)   // cap scale on mobile
+    ? Math.min(placement.scale, 1) // cap scale on mobile
     : placement.scale;
   const iconSize = Math.min(
     baseIconSize * effectiveScale,
-    Math.min(size.width, size.height) * 0.95
+    Math.min(size.width, size.height) * 0.95,
   );
 
   // Tighten offset influence on small screens
   const offsetDamping = isSmall ? 0.3 : 1.0;
   const rawCx = size.width / 2 + (placement.offsetX / 100) * size.width * offsetDamping;
   const rawCy = size.height / 2 + (placement.offsetY / 100) * size.height * offsetDamping;
-
 
   const half = iconSize / 2;
 
@@ -327,15 +300,15 @@ export default function HatchFiller({
 
   if (!empty && stamp?.type === "word") {
     // 1. Define character aspect ratio for Space Mono (width is ~60% of height)
-    const charWidthRatio = 0.7; 
-    
+    const charWidthRatio = 0.7;
+
     // 2. Define how much of the container the text is allowed to take up (e.g., 85% to leave padding)
     const maxAllowedWidth = size.width * 0.85;
     const maxAllowedHeight = size.height * 0.85;
-    
+
     // 3. Calculate the maximum font size based on width
     const maxFontSizeByWidth = maxAllowedWidth / (stamp.value.length * charWidthRatio);
-    
+
     // 4. Calculate the final font size (cap it at your original 80px so it doesn't get massive on large screens)
     const dynamicFontSize = Math.min(80, maxFontSizeByWidth, maxAllowedHeight);
 
@@ -356,16 +329,10 @@ export default function HatchFiller({
       </text>
     );
   } else if (!empty && stamp?.type === "icon" && iconSvgContent) {
-    const patchedContent = iconSvgContent.replace(
-      /stroke="currentColor"/g,
-      'stroke="black"'
-    );
+    const patchedContent = iconSvgContent.replace(/stroke="currentColor"/g, 'stroke="black"');
 
     stampContent = (
-      <g
-        className="hatch-text"
-        transform={`translate(${cx - half}, ${cy - half})`}
-      >
+      <g className="hatch-text" transform={`translate(${cx - half}, ${cy - half})`}>
         <svg
           x={iconInnerX}
           y={iconInnerY}
@@ -385,7 +352,10 @@ export default function HatchFiller({
   }
 
   return (
-    <div ref={containerRef} className="hatch-root relative w-full h-full rounded-sm overflow-hidden">
+    <div
+      ref={containerRef}
+      className="hatch-root relative w-full h-full rounded-sm overflow-hidden"
+    >
       <style>{`
         .hatch-text {
           transform: ${twist};
@@ -414,29 +384,13 @@ export default function HatchFiller({
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
       >
-        <defs>
-          {patternContent}
-        </defs>
-        <rect
-          width="100%"
-          height="100%"
-          fill="var(--color-surface-raised, #1a1a1a)"
-        />
-        <rect
-          width="100%"
-          height="100%"
-          fill={`url(#${patternId})`}
-        />
+        <defs>{patternContent}</defs>
+        <rect width="100%" height="100%" fill="var(--color-surface-raised, #1a1a1a)" />
+        <rect width="100%" height="100%" fill={`url(#${patternId})`} />
         {stampContent}
       </svg>
 
-      {neighbors && (
-        <FillerLabels
-          neighbors={neighbors}
-          width={size.width}
-          height={size.height}
-        />
-      )}
+      {neighbors && <FillerLabels neighbors={neighbors} width={size.width} height={size.height} />}
     </div>
   );
 }

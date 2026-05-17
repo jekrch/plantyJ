@@ -19,16 +19,14 @@ const GAP_EM = 1;
 const PILLAR_EM = 3;
 const PARALLAX = 0;
 
-export default function BackgroundEchoes({
-  organismPositions,
-}: BackgroundEchoesProps) {
+export default function BackgroundEchoes({ organismPositions }: BackgroundEchoesProps) {
   const [contentRect, setContentRect] = useState<{
     left: number;
     right: number;
     top: number;
   } | null>(null);
   const [viewportWidth, setViewportWidth] = useState(
-    typeof window !== "undefined" ? window.innerWidth : 0
+    typeof window !== "undefined" ? window.innerWidth : 0,
   );
   const [scrollY, setScrollY] = useState(0);
   const rafRef = useRef(0);
@@ -88,9 +86,7 @@ export default function BackgroundEchoes({
 
   // Compute the gallery extent so echoes stay within bounds
   const galleryHeight =
-    organismPositions.length > 0
-      ? Math.max(...organismPositions.map((p) => p.y + p.h))
-      : 0;
+    organismPositions.length > 0 ? Math.max(...organismPositions.map((p) => p.y + p.h)) : 0;
 
   const echoes: EchoDef[] = [];
   for (let i = 0; i < organismPositions.length; i++) {

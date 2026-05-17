@@ -1,4 +1,12 @@
-import type { Env, PicEntry, PlantRecord, TelegramMessage, TelegramPhotoSize, Zone, ZonePicEntry } from "./types";
+import type {
+  Env,
+  PicEntry,
+  PlantRecord,
+  TelegramMessage,
+  TelegramPhotoSize,
+  Zone,
+  ZonePicEntry,
+} from "./types";
 import { downloadFile, type Replier } from "./telegram";
 import { parseCaption, resolveFields, UNIDENTIFIED_CODE, UNIDENTIFIED_PREFIX } from "./caption";
 import { assertValidCode } from "./validation";
@@ -28,7 +36,7 @@ async function uploadImage(
   photo: TelegramPhotoSize,
   repoSubpath: string,
   idPrefix: string,
-  commitMessage: string
+  commitMessage: string,
 ): Promise<UploadedImage> {
   const imageBytes = await downloadFile(photo.file_id, env.TELEGRAM_BOT_TOKEN);
   const timestamp = Math.floor(Date.now() / 1000);
@@ -53,7 +61,7 @@ async function handleZonePic(
   description: string | null,
   message: TelegramMessage,
   env: Env,
-  reply: Replier
+  reply: Replier,
 ): Promise<void> {
   const { gallery } = await readGallery(env);
   const existingZone = gallery.zones.find((z) => z.code === zoneCode);
@@ -65,7 +73,7 @@ async function handleZonePic(
     photo,
     `images/zones/${zoneCode}`,
     zoneCode,
-    `Add zone photo: ${zoneCode}`
+    `Add zone photo: ${zoneCode}`,
   );
 
   const entry: ZonePicEntry = {
@@ -85,19 +93,19 @@ async function handleZonePic(
       `  id: ${id}`,
       description ? `  Note: ${description}` : null,
       `  → ${browserPath}`,
-    ])
+    ]),
   );
 }
 
 async function handlePlantPic(message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
   const parsed = parseCaption(message.caption!);
   const { gallery } = await readGallery(env);
-  const { pic: resolvedPic, plantUpsert, zoneUpserts, annotationTags } = resolveFields(
-    parsed,
-    gallery.pics,
-    gallery.plants,
-    gallery.zones
-  );
+  const {
+    pic: resolvedPic,
+    plantUpsert,
+    zoneUpserts,
+    annotationTags,
+  } = resolveFields(parsed, gallery.pics, gallery.plants, gallery.zones);
 
   const seq = nextSeq(gallery);
   const isUnidentified = resolvedPic.shortCode === UNIDENTIFIED_CODE;
@@ -109,7 +117,7 @@ async function handlePlantPic(message: TelegramMessage, env: Env, reply: Replier
     photo,
     `images/${finalShortCode}`,
     finalShortCode,
-    `Add photo: ${finalShortCode} [skip-deploy]`
+    `Add photo: ${finalShortCode} [skip-deploy]`,
   );
 
   const entry: PicEntry = {
@@ -141,7 +149,13 @@ async function handlePlantPic(message: TelegramMessage, env: Env, reply: Replier
     await upsertAnnotation(env, finalShortCode, null, "tags", annotationTags.plantTags.join(","));
   }
   if (annotationTags.zoneTags.length > 0) {
-    await upsertAnnotation(env, finalShortCode, resolvedPic.zoneCode, "tags", annotationTags.zoneTags.join(","));
+    await upsertAnnotation(
+      env,
+      finalShortCode,
+      resolvedPic.zoneCode,
+      "tags",
+      annotationTags.zoneTags.join(","),
+    );
   }
 
   // Resolve final zone label using merged upserts so newly-declared zones display correctly.
@@ -170,11 +184,15 @@ async function handlePlantPic(message: TelegramMessage, env: Env, reply: Replier
       plantForReply?.fullName ? `  Full: ${plantForReply.fullName}` : null,
       `  Zone: ${zoneLabel}`,
       resolvedPic.tags.length > 0 ? `  Tags: ${resolvedPic.tags.join(", ")}` : null,
-      annotationTags.zoneTags.length > 0 ? `  Zone tags: ${annotationTags.zoneTags.join(", ")}` : null,
-      annotationTags.plantTags.length > 0 ? `  Plant tags: ${annotationTags.plantTags.join(", ")}` : null,
+      annotationTags.zoneTags.length > 0
+        ? `  Zone tags: ${annotationTags.zoneTags.join(", ")}`
+        : null,
+      annotationTags.plantTags.length > 0
+        ? `  Plant tags: ${annotationTags.plantTags.join(", ")}`
+        : null,
       resolvedPic.description ? `  Note: ${resolvedPic.description}` : null,
       `  → ${browserPath}`,
-    ])
+    ]),
   );
 }
 
@@ -185,7 +203,7 @@ async function handlePlantPic(message: TelegramMessage, env: Env, reply: Replier
 export async function handlePhotoMessage(
   message: TelegramMessage,
   env: Env,
-  reply: Replier
+  reply: Replier,
 ): Promise<boolean> {
   if (!message.photo) return false;
 

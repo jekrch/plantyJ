@@ -28,13 +28,9 @@ export interface ViewerLists {
  * Precedence mirrors how the viewer was opened: an explicit custom list wins,
  * then a non-empty spotlight, then the full set, otherwise the gallery list.
  */
-export function resolveViewerOrganisms(
-  scope: ViewerScope,
-  lists: ViewerLists
-): Organism[] {
+export function resolveViewerOrganisms(scope: ViewerScope, lists: ViewerLists): Organism[] {
   if (scope === "custom" && lists.custom) return lists.custom;
-  if (scope === "spotlight" && lists.spotlight.length > 0)
-    return lists.spotlight;
+  if (scope === "spotlight" && lists.spotlight.length > 0) return lists.spotlight;
   if (scope === "all") return lists.all;
   return lists.sorted;
 }
@@ -50,13 +46,11 @@ export function useOrganismViewer({
   sortedOrganisms,
   spotlightOrganisms,
 }: ViewerInputs) {
-  const [openOrganismId, setOpenOrganismId] = useState<string | null>(
-    () => new URLSearchParams(window.location.search).get("plant")
+  const [openOrganismId, setOpenOrganismId] = useState<string | null>(() =>
+    new URLSearchParams(window.location.search).get("plant"),
   );
   const [viewerScope, setViewerScope] = useState<ViewerScope>("filtered");
-  const [customViewerOrganisms, setCustomViewerOrganisms] = useState<
-    Organism[] | null
-  >(null);
+  const [customViewerOrganisms, setCustomViewerOrganisms] = useState<Organism[] | null>(null);
 
   const viewerOrganisms = resolveViewerOrganisms(viewerScope, {
     custom: customViewerOrganisms,
@@ -98,7 +92,7 @@ export function useOrganismViewer({
       setViewerScope(inFiltered ? "filtered" : "all");
       setOpenOrganismId(organism.id);
     },
-    [sortedOrganisms]
+    [sortedOrganisms],
   );
 
   const navigateViewer = useCallback(
@@ -106,7 +100,7 @@ export function useOrganismViewer({
       const target = viewerOrganisms[idx];
       if (target) setOpenOrganismId(target.id);
     },
-    [viewerOrganisms]
+    [viewerOrganisms],
   );
 
   return {

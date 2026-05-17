@@ -16,9 +16,7 @@ export function CtrlBtn({
       aria-pressed={active}
       onClick={onClick}
       className={`flex items-center justify-center h-7 w-7 rounded transition-colors ${
-        active
-          ? "text-accent bg-white/5"
-          : "text-ink-muted hover:text-accent hover:bg-white/5"
+        active ? "text-accent bg-white/5" : "text-ink-muted hover:text-accent hover:bg-white/5"
       }`}
     >
       {children}

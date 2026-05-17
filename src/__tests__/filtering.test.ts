@@ -52,15 +52,11 @@ describe("activeFilterCount", () => {
   });
 
   it("counts a non-empty searchQuery", () => {
-    expect(
-      activeFilterCount({ ...EMPTY_FILTERS, searchQuery: "rosa" })
-    ).toBe(1);
+    expect(activeFilterCount({ ...EMPTY_FILTERS, searchQuery: "rosa" })).toBe(1);
   });
 
   it("ignores whitespace-only searchQuery", () => {
-    expect(
-      activeFilterCount({ ...EMPTY_FILTERS, searchQuery: "   " })
-    ).toBe(0);
+    expect(activeFilterCount({ ...EMPTY_FILTERS, searchQuery: "   " })).toBe(0);
   });
 });
 
@@ -108,9 +104,30 @@ describe("getEffectiveTags", () => {
 
 describe("applyFilters", () => {
   const organisms = [
-    organism({ id: "p1", shortCode: "rosa", zoneCode: "Z1", tags: ["native"], postedBy: "alice", kind: "plant" }),
-    organism({ id: "p2", shortCode: "iris", zoneCode: "Z2", tags: ["perennial"], postedBy: "bob", kind: "plant" }),
-    organism({ id: "p3", shortCode: "oak", zoneCode: "Z1", tags: ["tree"], postedBy: "alice", kind: "plant" }),
+    organism({
+      id: "p1",
+      shortCode: "rosa",
+      zoneCode: "Z1",
+      tags: ["native"],
+      postedBy: "alice",
+      kind: "plant",
+    }),
+    organism({
+      id: "p2",
+      shortCode: "iris",
+      zoneCode: "Z2",
+      tags: ["perennial"],
+      postedBy: "bob",
+      kind: "plant",
+    }),
+    organism({
+      id: "p3",
+      shortCode: "oak",
+      zoneCode: "Z1",
+      tags: ["tree"],
+      postedBy: "alice",
+      kind: "plant",
+    }),
   ];
 
   it("returns all plants when filters are empty", () => {
@@ -152,19 +169,13 @@ describe("applyFilters", () => {
   });
 
   it("filters by kind=plant, excluding kind=animal", () => {
-    const mixed = [
-      organism({ id: "a", kind: "plant" }),
-      organism({ id: "b", kind: "animal" }),
-    ];
+    const mixed = [organism({ id: "a", kind: "plant" }), organism({ id: "b", kind: "animal" })];
     const result = applyFilters(mixed, { ...EMPTY_FILTERS, misc: new Set(["plant"]) });
     expect(result.map((p) => p.id)).toEqual(["a"]);
   });
 
   it("filters by kind=animal", () => {
-    const mixed = [
-      organism({ id: "a", kind: "plant" }),
-      organism({ id: "b", kind: "animal" }),
-    ];
+    const mixed = [organism({ id: "a", kind: "plant" }), organism({ id: "b", kind: "animal" })];
     const result = applyFilters(mixed, { ...EMPTY_FILTERS, misc: new Set(["animal"]) });
     expect(result.map((p) => p.id)).toEqual(["b"]);
   });
@@ -175,7 +186,10 @@ describe("applyFilters", () => {
       organism({ id: "c", fullName: "iris versicolor", bioclipSpeciesId: "other species" }),
       organism({ id: "n", fullName: null, bioclipSpeciesId: null }),
     ];
-    const result = applyFilters(withBioclip, { ...EMPTY_FILTERS, misc: new Set(["bioclip-match"]) });
+    const result = applyFilters(withBioclip, {
+      ...EMPTY_FILTERS,
+      misc: new Set(["bioclip-match"]),
+    });
     expect(result.map((p) => p.id)).toEqual(["m"]);
   });
 
@@ -184,7 +198,10 @@ describe("applyFilters", () => {
       organism({ id: "m", fullName: "rosa canina", bioclipSpeciesId: "rosa canina" }),
       organism({ id: "c", fullName: "iris versicolor", bioclipSpeciesId: "other species" }),
     ];
-    const result = applyFilters(withBioclip, { ...EMPTY_FILTERS, misc: new Set(["bioclip-conflict"]) });
+    const result = applyFilters(withBioclip, {
+      ...EMPTY_FILTERS,
+      misc: new Set(["bioclip-conflict"]),
+    });
     expect(result.map((p) => p.id)).toEqual(["c"]);
   });
 
@@ -199,27 +216,43 @@ describe("applyFilters", () => {
 
   it("searchQuery matches commonName, fullName, and tags (AND across tokens)", () => {
     const items = [
-      organism({ id: "s1", shortCode: "rosa", commonName: "Wild Rose", fullName: "Rosa canina", tags: ["native"] }),
-      organism({ id: "s2", shortCode: "iris", commonName: "Blue Flag", fullName: "Iris versicolor", tags: ["perennial"] }),
-      organism({ id: "s3", shortCode: "oak", commonName: "Bur Oak", fullName: "Quercus macrocarpa", tags: ["tree"] }),
+      organism({
+        id: "s1",
+        shortCode: "rosa",
+        commonName: "Wild Rose",
+        fullName: "Rosa canina",
+        tags: ["native"],
+      }),
+      organism({
+        id: "s2",
+        shortCode: "iris",
+        commonName: "Blue Flag",
+        fullName: "Iris versicolor",
+        tags: ["perennial"],
+      }),
+      organism({
+        id: "s3",
+        shortCode: "oak",
+        commonName: "Bur Oak",
+        fullName: "Quercus macrocarpa",
+        tags: ["tree"],
+      }),
     ];
+    expect(applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "rose" }).map((p) => p.id)).toEqual(
+      ["s1"],
+    );
     expect(
-      applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "rose" }).map((p) => p.id)
-    ).toEqual(["s1"]);
-    expect(
-      applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "quercus" }).map((p) => p.id)
+      applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "quercus" }).map((p) => p.id),
     ).toEqual(["s3"]);
     expect(
-      applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "perennial" }).map((p) => p.id)
+      applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "perennial" }).map((p) => p.id),
     ).toEqual(["s2"]);
     // Multi-token AND: "wild" AND "rosa" — both must appear in haystack.
     expect(
-      applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "wild rosa" }).map((p) => p.id)
+      applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "wild rosa" }).map((p) => p.id),
     ).toEqual(["s1"]);
     // No match
-    expect(
-      applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "xyz" })
-    ).toHaveLength(0);
+    expect(applyFilters(items, { ...EMPTY_FILTERS, searchQuery: "xyz" })).toHaveLength(0);
   });
 
   it("searchQuery matches species taxonomy (taxa)", () => {
@@ -256,7 +289,7 @@ describe("applyFilters", () => {
       items,
       { ...EMPTY_FILTERS, searchQuery: "rosaceae" },
       [],
-      speciesByShortCode
+      speciesByShortCode,
     );
     expect(result.map((p) => p.id)).toEqual(["t1"]);
   });
@@ -270,9 +303,30 @@ describe("applyFilters", () => {
 
 describe("computeFacets", () => {
   const organisms = [
-    organism({ id: "1", shortCode: "rosa", zoneCode: "Z1", tags: ["native"], postedBy: "alice", commonName: "Wild Rose" }),
-    organism({ id: "2", shortCode: "iris", zoneCode: "Z2", tags: ["perennial"], postedBy: "bob", commonName: "Blue Flag" }),
-    organism({ id: "3", shortCode: "rosa", zoneCode: "Z1", tags: ["native"], postedBy: "alice", commonName: "Wild Rose" }),
+    organism({
+      id: "1",
+      shortCode: "rosa",
+      zoneCode: "Z1",
+      tags: ["native"],
+      postedBy: "alice",
+      commonName: "Wild Rose",
+    }),
+    organism({
+      id: "2",
+      shortCode: "iris",
+      zoneCode: "Z2",
+      tags: ["perennial"],
+      postedBy: "bob",
+      commonName: "Blue Flag",
+    }),
+    organism({
+      id: "3",
+      shortCode: "rosa",
+      zoneCode: "Z1",
+      tags: ["native"],
+      postedBy: "alice",
+      commonName: "Wild Rose",
+    }),
   ];
   const zones: Zone[] = [
     { code: "Z1", name: "Front Yard" },

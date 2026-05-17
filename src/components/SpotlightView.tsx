@@ -80,10 +80,7 @@ export default function SpotlightView({
       const list: SpotlightItem[] = allOrganisms
         .filter((p) => p.shortCode === subjectCode)
         .map(toOrganismItem);
-      return list.sort(
-        (a, b) =>
-          new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime()
-      );
+      return list.sort((a, b) => new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime());
     }
     const byAddedDesc = (a: SpotlightItem, b: SpotlightItem) =>
       new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime();
@@ -98,9 +95,7 @@ export default function SpotlightView({
     return [...zoneItems, ...organismItems];
   }, [allOrganisms, zonePics, kind, subjectCode]);
 
-  const [selectedId, setSelectedId] = useState<string | null>(
-    items[0]?.id ?? null
-  );
+  const [selectedId, setSelectedId] = useState<string | null>(items[0]?.id ?? null);
 
   useEffect(() => {
     setSelectedId(items[0]?.id ?? null);
@@ -108,7 +103,7 @@ export default function SpotlightView({
 
   const hero = useMemo(
     () => items.find((p) => p.id === selectedId) ?? items[0] ?? null,
-    [items, selectedId]
+    [items, selectedId],
   );
 
   const headline = useMemo(() => {
@@ -135,9 +130,7 @@ export default function SpotlightView({
   if (items.length === 0 || !hero) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
-        <p className="text-ink-muted text-sm font-display tracking-wide">
-          NO IMAGES
-        </p>
+        <p className="text-ink-muted text-sm font-display tracking-wide">NO IMAGES</p>
       </div>
     );
   }
@@ -187,11 +180,7 @@ export default function SpotlightView({
                   {subjectCode}
                 </span>
               </h2>
-              {subline && (
-                <p className="text-xs text-ink-muted mt-0.5 leading-snug">
-                  {subline}
-                </p>
-              )}
+              {subline && <p className="text-xs text-ink-muted mt-0.5 leading-snug">{subline}</p>}
             </div>
             <p className="text-[10px] text-ink-faint whitespace-nowrap font-mono shrink-0">
               {formatDate(hero.addedAt)}
@@ -273,30 +262,21 @@ function Thumb({ item, active, label, onSingleClick, onDoubleClick }: ThumbProps
         }, DOUBLE_CLICK_DELAY);
       }
     },
-    [onSingleClick, onDoubleClick]
+    [onSingleClick, onDoubleClick],
   );
 
   const aspect =
-    item.kind === "plant" &&
-    item.width &&
-    item.height &&
-    item.width > 0 &&
-    item.height > 0
+    item.kind === "plant" && item.width && item.height && item.width > 0 && item.height > 0
       ? `${item.width} / ${item.height}`
       : "3 / 4";
 
-  const altText =
-    item.kind === "plant" ? organismTitle(item.organism) : "zone photo";
+  const altText = item.kind === "plant" ? organismTitle(item.organism) : "zone photo";
 
   return (
     <button
       type="button"
       onPointerUp={handlePointerUp}
-      title={
-        item.kind === "plant"
-          ? "Click to enlarge · double-click to open"
-          : "Click to enlarge"
-      }
+      title={item.kind === "plant" ? "Click to enlarge · double-click to open" : "Click to enlarge"}
       className={`panel-item relative overflow-hidden rounded-sm bg-surface-raised group ring-1 ring-inset transition-all break-inside-avoid mb-1.5 block w-full ${
         active ? "ring-accent/70" : "ring-white/5 hover:ring-accent/30"
       }`}

@@ -61,11 +61,7 @@ export default function SortControl({ activeSort, onSort }: SortControlProps) {
                     font-display text-[11px] tracking-wider uppercase
                     transition-colors duration-100
                     cursor-pointer
-                    ${
-                      isActive
-                        ? "text-accent"
-                        : "text-ink-muted hover:text-ink"
-                    }
+                    ${isActive ? "text-accent" : "text-ink-muted hover:text-ink"}
                   `}
                 >
                   <span className="flex items-center justify-end gap-2">

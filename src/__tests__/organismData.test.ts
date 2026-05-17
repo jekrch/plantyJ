@@ -1,9 +1,5 @@
 import { describe, it, expect } from "bun:test";
-import {
-  slugifyName,
-  mergeOrganisms,
-  buildSpeciesMap,
-} from "../hooks/useOrganismData";
+import { slugifyName, mergeOrganisms, buildSpeciesMap } from "../hooks/useOrganismData";
 import type { OrganismRecord, PicRecord, Species } from "../types";
 
 function pic(overrides: Partial<PicRecord> = {}): PicRecord {
@@ -54,9 +50,7 @@ describe("slugifyName", () => {
   });
 
   it("collapses runs of non-alphanumerics into a single hyphen", () => {
-    expect(slugifyName("Echeveria 'Black Prince'")).toBe(
-      "echeveria-black-prince"
-    );
+    expect(slugifyName("Echeveria 'Black Prince'")).toBe("echeveria-black-prince");
   });
 
   it("trims leading and trailing separators", () => {
@@ -72,7 +66,7 @@ describe("mergeOrganisms", () => {
   it("fills name fields from the matching plant record", () => {
     const [merged] = mergeOrganisms(
       [pic({ shortCode: "rose" })],
-      [record({ shortCode: "rose", fullName: "Rosa", commonName: "Rose", variety: "wild" })]
+      [record({ shortCode: "rose", fullName: "Rosa", commonName: "Rose", variety: "wild" })],
     );
     expect(merged.fullName).toBe("Rosa");
     expect(merged.commonName).toBe("Rose");
@@ -100,14 +94,11 @@ describe("mergeOrganisms", () => {
 
   it("matches each pic to its own record by shortCode", () => {
     const merged = mergeOrganisms(
-      [
-        pic({ id: "p1", shortCode: "a" }),
-        pic({ id: "p2", shortCode: "b" }),
-      ],
+      [pic({ id: "p1", shortCode: "a" }), pic({ id: "p2", shortCode: "b" })],
       [
         record({ shortCode: "a", commonName: "Alpha" }),
         record({ shortCode: "b", commonName: "Beta" }),
-      ]
+      ],
     );
     expect(merged.map((m) => m.commonName)).toEqual(["Alpha", "Beta"]);
   });
@@ -118,24 +109,22 @@ describe("buildSpeciesMap", () => {
     const bundle = { "rosa-rubiginosa": species() };
     const map = buildSpeciesMap(
       [record({ shortCode: "rose", fullName: "Rosa rubiginosa" })],
-      bundle
+      bundle,
     );
     expect(map.get("rose")).toBe(bundle["rosa-rubiginosa"]);
   });
 
   it("skips records without a full name", () => {
-    const map = buildSpeciesMap(
-      [record({ shortCode: "rose", fullName: null })],
-      { "rosa-rubiginosa": species() }
-    );
+    const map = buildSpeciesMap([record({ shortCode: "rose", fullName: null })], {
+      "rosa-rubiginosa": species(),
+    });
     expect(map.has("rose")).toBe(false);
   });
 
   it("skips records whose slug is absent from the bundle", () => {
-    const map = buildSpeciesMap(
-      [record({ shortCode: "rose", fullName: "Unknown plant" })],
-      { "rosa-rubiginosa": species() }
-    );
+    const map = buildSpeciesMap([record({ shortCode: "rose", fullName: "Unknown plant" })], {
+      "rosa-rubiginosa": species(),
+    });
     expect(map.size).toBe(0);
   });
 
@@ -147,7 +136,7 @@ describe("buildSpeciesMap", () => {
         record({ shortCode: "b", fullName: null }),
         record({ shortCode: "c", fullName: "No match" }),
       ],
-      { "rosa-rubiginosa": sp }
+      { "rosa-rubiginosa": sp },
     );
     expect([...map.keys()]).toEqual(["a"]);
   });

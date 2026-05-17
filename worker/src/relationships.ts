@@ -45,7 +45,7 @@ function base64ToBytes(b64: string): Uint8Array {
 }
 
 export async function readRelationshipsFile(
-  env: Env
+  env: Env,
 ): Promise<{ file: RelationshipsFile; sha: string | null }> {
   const [owner, repo] = env.GITHUB_REPO.split("/");
   const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${RELATIONSHIPS_PATH}`;
@@ -70,7 +70,7 @@ export async function writeRelationshipsFile(
   env: Env,
   file: RelationshipsFile,
   sha: string | null,
-  commitMessage: string
+  commitMessage: string,
 ): Promise<void> {
   const [owner, repo] = env.GITHUB_REPO.split("/");
   const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${RELATIONSHIPS_PATH}`;
@@ -162,8 +162,7 @@ export function applyRelate(file: RelationshipsFile, input: RelateInput): Mutate
       return r.from === input.from && r.to === input.to;
     }
     return (
-      (r.from === input.from && r.to === input.to) ||
-      (r.from === input.to && r.to === input.from)
+      (r.from === input.from && r.to === input.to) || (r.from === input.to && r.to === input.from)
     );
   });
   if (dup) {
@@ -198,7 +197,7 @@ export interface RelTypeInput {
 export function applyRelType(file: RelationshipsFile, input: RelTypeInput): MutateResult {
   if (!/^[a-z][a-z0-9-]{0,31}$/.test(input.id)) {
     return fail(
-      `Invalid type id "${input.id}" — lowercase letters, digits, and hyphens; must start with a letter; max 32 chars.`
+      `Invalid type id "${input.id}" — lowercase letters, digits, and hyphens; must start with a letter; max 32 chars.`,
     );
   }
   const existing = file.types.findIndex((t) => t.id === input.id);
@@ -210,7 +209,9 @@ export function applyRelType(file: RelationshipsFile, input: RelTypeInput): Muta
   };
   if (existing === -1) {
     file.types.push(entry);
-    return ok(`Added relationship type "${entry.id}" (${entry.directional ? "directional" : "undirected"}).`);
+    return ok(
+      `Added relationship type "${entry.id}" (${entry.directional ? "directional" : "undirected"}).`,
+    );
   }
   file.types[existing] = entry;
   return ok(`Updated relationship type "${entry.id}".`);
@@ -218,18 +219,13 @@ export function applyRelType(file: RelationshipsFile, input: RelTypeInput): Muta
 
 // ─── format helpers ────────────────────────────────────────────────────────
 
-export function formatRelationsFor(
-  file: RelationshipsFile,
-  shortCode: string
-): string {
+export function formatRelationsFor(file: RelationshipsFile, shortCode: string): string {
   const typeById = new Map(file.types.map((t) => [t.id, t]));
   const rows = file.relationships.filter((r) => r.from === shortCode || r.to === shortCode);
   if (rows.length === 0) return `No relationships for ${shortCode}.`;
   const lines = rows.map((r) => {
     const t = typeById.get(r.type);
-    const directional = r.direction
-      ? r.direction !== "u"
-      : (t?.directional ?? false);
+    const directional = r.direction ? r.direction !== "u" : (t?.directional ?? false);
     const arrow = directional ? (r.direction === "b" ? "←" : "→") : "↔";
     return `  #${r.id} ${r.from} ${arrow} ${r.to}  (${t?.name ?? r.type})`;
   });
@@ -241,7 +237,8 @@ export function formatTypes(file: RelationshipsFile): string {
     return "No relationship types defined. Add one with /reltype.";
   }
   const lines = file.types.map(
-    (t) => `  ${t.id} (${t.directional ? "directional" : "undirected"}) — ${t.name}: ${t.description}`
+    (t) =>
+      `  ${t.id} (${t.directional ? "directional" : "undirected"}) — ${t.name}: ${t.description}`,
   );
   return `Relationship types:\n${lines.join("\n")}`;
 }
@@ -249,17 +246,16 @@ export function formatTypes(file: RelationshipsFile): string {
 // ─── direct (single-command) handlers used by commands.ts ──────────────────
 
 function parseRelateCommand(rest: string): RelateInput | null {
-  const parts = rest.trim().split("//").map((s) => s.trim());
+  const parts = rest
+    .trim()
+    .split("//")
+    .map((s) => s.trim());
   if (parts.length < 3 || !parts[0] || !parts[1] || !parts[2]) return null;
   const [typeId, from, to, direction] = parts;
   return { typeId, from, to, direction: direction || undefined };
 }
 
-export async function handleRelate(
-  text: string,
-  env: Env,
-  reply: Replier
-): Promise<void> {
+export async function handleRelate(text: string, env: Env, reply: Replier): Promise<void> {
   const rest = text.slice("/relate".length).trim();
   const input = parseRelateCommand(rest);
   if (!input) {
@@ -272,15 +268,16 @@ export async function handleRelate(
     await reply(result.reply);
     return;
   }
-  await writeRelationshipsFile(env, file, sha, `Add relationship: ${input.from} ↔ ${input.to} (${input.typeId})`);
+  await writeRelationshipsFile(
+    env,
+    file,
+    sha,
+    `Add relationship: ${input.from} ↔ ${input.to} (${input.typeId})`,
+  );
   await reply(result.reply);
 }
 
-export async function handleUnrelate(
-  text: string,
-  env: Env,
-  reply: Replier
-): Promise<void> {
+export async function handleUnrelate(text: string, env: Env, reply: Replier): Promise<void> {
   const rest = text.slice("/unrelate".length).trim();
   const { file, sha } = await readRelationshipsFile(env);
   const result = applyUnrelate(file, rest);
@@ -292,11 +289,7 @@ export async function handleUnrelate(
   await reply(result.reply);
 }
 
-export async function handleRelations(
-  text: string,
-  env: Env,
-  reply: Replier
-): Promise<void> {
+export async function handleRelations(text: string, env: Env, reply: Replier): Promise<void> {
   const rest = text.slice("/relations".length).trim();
   if (!rest) {
     await reply("Usage: /relations <shortCode>");
@@ -313,16 +306,12 @@ export async function handleRelTypes(env: Env, reply: Replier): Promise<void> {
 }
 
 // /reltype <id> // <name> // <description> // [directional|undirected]
-export async function handleRelType(
-  text: string,
-  env: Env,
-  reply: Replier
-): Promise<void> {
+export async function handleRelType(text: string, env: Env, reply: Replier): Promise<void> {
   const rest = text.slice("/reltype".length).trim();
   const parts = rest.split("//").map((s) => s.trim());
   if (parts.length < 3) {
     await reply(
-      "Usage: /reltype <id> // <name> // <description> // [directional|undirected]\nDefault is undirected."
+      "Usage: /reltype <id> // <name> // <description> // [directional|undirected]\nDefault is undirected.",
     );
     return;
   }
@@ -342,7 +331,7 @@ export async function handleRelType(
 
 export function batchApplyRelate(
   state: { relationships: RelationshipsFile; dirty: Set<"relationships"> },
-  rest: string
+  rest: string,
 ): MutateResult {
   const input = parseRelateCommand(rest);
   if (!input) return fail("Usage: /relate <typeId> // <fromCode> // <toCode> [// f|b|u]");
@@ -353,7 +342,7 @@ export function batchApplyRelate(
 
 export function batchApplyUnrelate(
   state: { relationships: RelationshipsFile; dirty: Set<"relationships"> },
-  rest: string
+  rest: string,
 ): MutateResult {
   const r = applyUnrelate(state.relationships, rest.trim());
   if (r.changed) state.dirty.add("relationships");
@@ -362,7 +351,7 @@ export function batchApplyUnrelate(
 
 export function batchApplyRelType(
   state: { relationships: RelationshipsFile; dirty: Set<"relationships"> },
-  rest: string
+  rest: string,
 ): MutateResult {
   const parts = rest.split("//").map((s) => s.trim());
   if (parts.length < 3) {

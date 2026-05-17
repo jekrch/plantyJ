@@ -15,9 +15,7 @@ describe("resolveViewerOrganisms", () => {
   });
 
   it("falls back to the sorted list when custom scope has no list", () => {
-    expect(resolveViewerOrganisms("custom", { ...lists, custom: null })).toBe(
-      sorted
-    );
+    expect(resolveViewerOrganisms("custom", { ...lists, custom: null })).toBe(sorted);
   });
 
   it("returns the spotlight list for the spotlight scope", () => {
@@ -25,9 +23,7 @@ describe("resolveViewerOrganisms", () => {
   });
 
   it("falls back to the sorted list when the spotlight is empty", () => {
-    expect(
-      resolveViewerOrganisms("spotlight", { ...lists, spotlight: [] })
-    ).toBe(sorted);
+    expect(resolveViewerOrganisms("spotlight", { ...lists, spotlight: [] })).toBe(sorted);
   });
 
   it("returns every organism for the all scope", () => {

@@ -60,7 +60,7 @@ export interface Gallery {
 
 export interface Annotation {
   shortCode: string;
-  zoneCode: string | null;  // null = organism-level; string = organism+zone level
+  zoneCode: string | null; // null = organism-level; string = organism+zone level
   tags: string[];
   description: string | null;
 }

@@ -32,12 +32,8 @@ export function useViewState() {
   const [sortMode, setSortMode] = useState<SortMode>(initialSort);
   const [filters, setFilters] = useState<Filters>(initialFilters);
   const [viewMode, setViewMode] = useState<ViewMode>(initialView);
-  const [spotlightCode, setSpotlightCode] = useState<string | null>(
-    initialSubject
-  );
-  const [treeFocusNode, setTreeFocusNode] = useState<string | null>(
-    initialTreeNode
-  );
+  const [spotlightCode, setSpotlightCode] = useState<string | null>(initialSubject);
+  const [treeFocusNode, setTreeFocusNode] = useState<string | null>(initialTreeNode);
   // Captured once from the URL on load; WebView owns selection state thereafter
   // and reports changes back via onNodeSelect.
   const [webFocusNode] = useState<string | null>(initialWebNode);
@@ -46,18 +42,14 @@ export function useViewState() {
     t != null && INFO_TABS.includes(t as InfoTab);
   const [infoOpen, setInfoOpen] = useState(() => isInfoTab(initialInfoTab));
   const [infoTab, setInfoTab] = useState<InfoTab>(
-    isInfoTab(initialInfoTab) ? (initialInfoTab as InfoTab) : "about"
+    isInfoTab(initialInfoTab) ? (initialInfoTab as InfoTab) : "about",
   );
   const pushedInfoStateRef = useRef(!isInfoTab(initialInfoTab));
 
   const handleOpenInfo = useCallback(() => {
     const params = new URLSearchParams(window.location.search);
     params.set("info", infoTab);
-    window.history.pushState(
-      null,
-      "",
-      `${window.location.pathname}?${params}`
-    );
+    window.history.pushState(null, "", `${window.location.pathname}?${params}`);
     pushedInfoStateRef.current = true;
     setInfoOpen(true);
   }, [infoTab]);
@@ -73,7 +65,7 @@ export function useViewState() {
       window.history.replaceState(
         null,
         "",
-        qs ? `${window.location.pathname}?${qs}` : window.location.pathname
+        qs ? `${window.location.pathname}?${qs}` : window.location.pathname,
       );
       setInfoOpen(false);
     }
@@ -83,11 +75,7 @@ export function useViewState() {
     setInfoTab(tab);
     const params = new URLSearchParams(window.location.search);
     params.set("info", tab);
-    window.history.replaceState(
-      null,
-      "",
-      `${window.location.pathname}?${params}`
-    );
+    window.history.replaceState(null, "", `${window.location.pathname}?${params}`);
   }, []);
 
   useEffect(() => {
@@ -111,7 +99,7 @@ export function useViewState() {
       setFilters(next);
       syncToURL(next, sortMode, viewMode, spotlightCode);
     },
-    [sortMode, viewMode, spotlightCode, syncToURL]
+    [sortMode, viewMode, spotlightCode, syncToURL],
   );
 
   const handleSortChange = useCallback(
@@ -119,7 +107,7 @@ export function useViewState() {
       setSortMode(next);
       syncToURL(filters, next, viewMode, spotlightCode);
     },
-    [filters, viewMode, spotlightCode, syncToURL]
+    [filters, viewMode, spotlightCode, syncToURL],
   );
 
   const clearFilters = useCallback(() => {
@@ -132,7 +120,7 @@ export function useViewState() {
       setSpotlightCode(code);
       syncToURL(filters, sortMode, next, code);
     },
-    [filters, sortMode, syncToURL]
+    [filters, sortMode, syncToURL],
   );
 
   /**
@@ -152,7 +140,7 @@ export function useViewState() {
       }
       setInfoOpen(false);
     },
-    [filters, sortMode, syncToURL, pushToURL, infoOpen]
+    [filters, sortMode, syncToURL, pushToURL, infoOpen],
   );
 
   const handleShowBioclipConflicts = useCallback(() => {
@@ -191,21 +179,21 @@ export function useViewState() {
       setInfoOpen(false);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [sortMode, syncToURL, pushToURL, infoOpen]
+    [sortMode, syncToURL, pushToURL, infoOpen],
   );
 
   const handleTreeNodeSelect = useCallback(
     (name: string | null) => {
       syncToURL(filters, sortMode, "tree", null, name);
     },
-    [filters, sortMode, syncToURL]
+    [filters, sortMode, syncToURL],
   );
 
   const handleWebNodeSelect = useCallback(
     (code: string | null) => {
       syncToURL(filters, sortMode, "web", null, null, code);
     },
-    [filters, sortMode, syncToURL]
+    [filters, sortMode, syncToURL],
   );
 
   const handleSpotlightOrganism = useCallback(
@@ -220,7 +208,7 @@ export function useViewState() {
       setInfoOpen(false);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [filters, sortMode, syncToURL, pushToURL, infoOpen]
+    [filters, sortMode, syncToURL, pushToURL, infoOpen],
   );
 
   const handleSpotlightZone = useCallback(
@@ -235,7 +223,7 @@ export function useViewState() {
       setInfoOpen(false);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [filters, sortMode, syncToURL, pushToURL, infoOpen]
+    [filters, sortMode, syncToURL, pushToURL, infoOpen],
   );
 
   return {

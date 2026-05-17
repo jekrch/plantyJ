@@ -8,7 +8,7 @@ export function useBarMeasure(
   topBarRef: RefObject<HTMLDivElement | null>,
   bottomBarRef: RefObject<HTMLDivElement | null>,
   /** Re-measure whenever this key changes (e.g. currentIndex) */
-  measureKey: unknown
+  measureKey: unknown,
 ) {
   const [topBarH, setTopBarH] = useState(0);
   const [bottomBarH, setBottomBarH] = useState(0);

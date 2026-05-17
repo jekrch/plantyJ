@@ -11,9 +11,7 @@ export function HeroBanner({ days, firstDate }: { days: number; firstDate: strin
         </span>
       </div>
       {firstDate && (
-        <p className="text-[10px] text-ink-faint mt-1 font-mono tracking-wide">
-          since {firstDate}
-        </p>
+        <p className="text-[10px] text-ink-faint mt-1 font-mono tracking-wide">since {firstDate}</p>
       )}
     </div>
   );
@@ -39,9 +37,7 @@ export function StatTileRow({ tiles }: { tiles: Tile[] }) {
             <span className="text-[9px] uppercase tracking-widest">{t.label}</span>
           </div>
           <p className="font-display text-xl text-ink tabular-nums leading-none">{t.value}</p>
-          {t.hint && (
-            <p className="text-[10px] text-ink-faint mt-1 font-mono">{t.hint}</p>
-          )}
+          {t.hint && <p className="text-[10px] text-ink-faint mt-1 font-mono">{t.hint}</p>}
         </div>
       ))}
     </div>
@@ -64,9 +60,7 @@ export function Section({
       <div className="mb-3 px-1 flex items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="text-[10px] uppercase tracking-widest text-ink-muted">{title}</p>
-          {subtitle && (
-            <p className="text-[11px] text-ink-faint mt-0.5">{subtitle}</p>
-          )}
+          {subtitle && <p className="text-[11px] text-ink-faint mt-0.5">{subtitle}</p>}
         </div>
         {info && <div className="shrink-0 mt-0.5">{info}</div>}
       </div>
@@ -95,14 +89,20 @@ export function MiniStat({
   return (
     <Tag
       {...(interactive
-        ? { type: "button" as const, onClick: onClick as () => void, title: hint ? `${hint} ${label.toLowerCase()}` : label }
+        ? {
+            type: "button" as const,
+            onClick: onClick as () => void,
+            title: hint ? `${hint} ${label.toLowerCase()}` : label,
+          }
         : {})}
       className={`rounded-md bg-white/3 ring-1 ring-inset ring-white/5 px-2.5 py-2 text-left ${
         interactive ? "hover:ring-accent/40 hover:bg-white/5 transition-colors cursor-pointer" : ""
       }`}
     >
       <p className="text-[9px] uppercase tracking-widest text-ink-muted mb-0.5">{label}</p>
-      <p className={`font-display text-base tabular-nums leading-none ${accent ? "text-accent" : "text-ink"}`}>
+      <p
+        className={`font-display text-base tabular-nums leading-none ${accent ? "text-accent" : "text-ink"}`}
+      >
         {value}
       </p>
       {subline && (
@@ -134,16 +134,18 @@ export function HighlightCard({
         ? { type: "button" as const, onClick: onClick as () => void, title: `Open ${primary}` }
         : {})}
       className={`rounded-md bg-white/3 ring-1 ring-inset ring-white/5 px-3 py-2.5 text-left w-full ${
-        interactive ? "hover:ring-accent/40 hover:bg-white/5 transition-colors cursor-pointer group" : ""
+        interactive
+          ? "hover:ring-accent/40 hover:bg-white/5 transition-colors cursor-pointer group"
+          : ""
       }`}
     >
       <p className="text-[9px] uppercase tracking-widest text-ink-muted mb-1">{label}</p>
-      <p className={`text-sm leading-tight font-display capitalize truncate ${interactive ? "text-ink group-hover:text-accent transition-colors" : "text-ink"}`}>
+      <p
+        className={`text-sm leading-tight font-display capitalize truncate ${interactive ? "text-ink group-hover:text-accent transition-colors" : "text-ink"}`}
+      >
         {primary}
       </p>
-      {secondary && (
-        <p className="text-[10px] text-ink-faint mt-0.5 font-mono">{secondary}</p>
-      )}
+      {secondary && <p className="text-[10px] text-ink-faint mt-0.5 font-mono">{secondary}</p>}
     </Tag>
   );
 }

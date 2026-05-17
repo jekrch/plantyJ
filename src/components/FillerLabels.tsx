@@ -1,8 +1,6 @@
 import type { NeighborMap } from "../adjacency";
 
-
 // Configuration
-
 
 /** Minimum filler dimension (px) along an axis to show a label on that edge. */
 const MIN_LABEL_AXIS = 70;
@@ -31,17 +29,13 @@ const BADGE_H = FONT_SIZE + BADGE_PY * 2;
 /** Minimum gap between label bounding boxes (px). */
 const MIN_GAP = 4;
 
-
 // Name helpers
-
 
 function shortLabel(text: string): string {
   return text.length > 20 ? text.slice(0, 18) + "…" : text;
 }
 
-
 // Types
-
 
 type Edge = "top" | "bottom" | "left" | "right";
 
@@ -59,17 +53,13 @@ interface PositionedLabel {
   h: number;
 }
 
-
 // Badge width estimation
-
 
 function estimateBadgeWidth(text: string): number {
   return text.length * CHAR_W + BADGE_PX * 2;
 }
 
-
 // Overlap detection & resolution
-
 
 interface Rect {
   x: number;
@@ -96,7 +86,7 @@ function rectsOverlap(a: Rect, b: Rect): boolean {
 function resolveOverlaps(
   labels: PositionedLabel[],
   fillerW: number,
-  fillerH: number
+  fillerH: number,
 ): PositionedLabel[] {
   const placed: PositionedLabel[] = [];
 
@@ -109,8 +99,7 @@ function resolveOverlaps(
       const overlapping = placed.find((p) => rectsOverlap(candidate, p));
       if (!overlapping) break;
 
-      const isHorizontal =
-        candidate.edge === "top" || candidate.edge === "bottom";
+      const isHorizontal = candidate.edge === "top" || candidate.edge === "bottom";
 
       if (isHorizontal) {
         // Shift horizontally — move right past the overlapping label
@@ -153,15 +142,13 @@ function resolveOverlaps(
   return placed;
 }
 
-
 // Initial positioning (before overlap resolution)
-
 
 function computeInitialPosition(
   edge: Edge,
   displayName: string,
   fillerW: number,
-  fillerH: number
+  fillerH: number,
 ): PositionedLabel {
   const badgeW = estimateBadgeWidth(displayName);
   const isHorizontal = edge === "top" || edge === "bottom";
@@ -171,8 +158,7 @@ function computeInitialPosition(
     const totalH = BADGE_H + LEADER_LENGTH;
     const totalW = badgeW;
     const x = (fillerW - totalW) / 2;
-    const y =
-      edge === "top" ? EDGE_PAD : fillerH - EDGE_PAD - totalH;
+    const y = edge === "top" ? EDGE_PAD : fillerH - EDGE_PAD - totalH;
     return { edge, displayName, x, y, w: totalW, h: totalH };
   }
 
@@ -182,16 +168,11 @@ function computeInitialPosition(
   const totalW = Math.max(badgeW, elbowW);
   const totalH = BADGE_H + elbowH;
   const y = (fillerH - totalH) / 2;
-  const x =
-    edge === "left"
-      ? EDGE_PAD
-      : fillerW - EDGE_PAD - totalW;
+  const x = edge === "left" ? EDGE_PAD : fillerW - EDGE_PAD - totalW;
   return { edge, displayName, x, y, w: totalW, h: totalH };
 }
 
-
 // Badge style (shared)
-
 
 const BADGE_STYLE: React.CSSProperties = {
   fontSize: `${FONT_SIZE}px`,
@@ -203,9 +184,7 @@ const BADGE_STYLE: React.CSSProperties = {
   lineHeight: 1,
 };
 
-
 // Component
-
 
 interface FillerLabelsProps {
   neighbors: NeighborMap;
@@ -213,11 +192,7 @@ interface FillerLabelsProps {
   height: number;
 }
 
-export default function FillerLabels({
-  neighbors,
-  width,
-  height,
-}: FillerLabelsProps) {
+export default function FillerLabels({ neighbors, width, height }: FillerLabelsProps) {
   if (width <= 0 || height <= 0) return null;
 
   // Collect candidates with space gating and deduplication
@@ -279,9 +254,7 @@ export default function FillerLabels({
   );
 }
 
-
 // Label assembly — renders badge + leader within the allocated box
-
 
 interface LabelAssemblyProps {
   edge: Edge;
@@ -292,16 +265,12 @@ interface LabelAssemblyProps {
 
 function LabelAssembly({ edge, displayName, boxW }: LabelAssemblyProps) {
   if (edge === "top" || edge === "bottom") {
-    return (
-      <StraightAssembly edge={edge} displayName={displayName} boxW={boxW} />
-    );
+    return <StraightAssembly edge={edge} displayName={displayName} boxW={boxW} />;
   }
   return <ElbowAssembly edge={edge} displayName={displayName} boxW={boxW} />;
 }
 
-
 // Straight assembly — top / bottom
-
 
 function StraightAssembly({
   edge,
@@ -324,12 +293,7 @@ function StraightAssembly({
         height: "100%",
       }}
     >
-      <svg
-        width={2}
-        height={LEADER_LENGTH}
-        style={{ flexShrink: 0 }}
-        aria-hidden="true"
-      >
+      <svg width={2} height={LEADER_LENGTH} style={{ flexShrink: 0 }} aria-hidden="true">
         <line
           x1={1}
           y1={0}
@@ -339,20 +303,15 @@ function StraightAssembly({
           strokeWidth={STROKE_W}
         />
       </svg>
-      <span
-        className="font-display select-none whitespace-nowrap"
-        style={BADGE_STYLE}
-      >
+      <span className="font-display select-none whitespace-nowrap" style={BADGE_STYLE}>
         {displayName}
       </span>
     </div>
   );
 }
 
-
 // Elbow assembly — left / right
 // Badge on top, L-shaped leader below pointing toward the edge.
-
 
 function ElbowAssembly({
   edge,
@@ -384,18 +343,10 @@ function ElbowAssembly({
         height: "100%",
       }}
     >
-      <span
-        className="font-display select-none whitespace-nowrap"
-        style={BADGE_STYLE}
-      >
+      <span className="font-display select-none whitespace-nowrap" style={BADGE_STYLE}>
         {displayName}
       </span>
-      <svg
-        width={svgW}
-        height={svgH}
-        style={{ flexShrink: 0 }}
-        aria-hidden="true"
-      >
+      <svg width={svgW} height={svgH} style={{ flexShrink: 0 }} aria-hidden="true">
         <path
           d={pathD}
           fill="none"

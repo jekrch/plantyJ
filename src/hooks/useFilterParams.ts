@@ -3,8 +3,15 @@ import type { Filters } from "../utils/filtering";
 import type { SortMode } from "../utils/sorting";
 import type { ViewMode } from "../components/ViewModeControl";
 
-const SET_FILTER_KEYS = ["tags", "zoneCodes", "postedBy", "shortCodes", "misc", "aiVerdicts"] as const;
-type SetFilterKey = typeof SET_FILTER_KEYS[number];
+const SET_FILTER_KEYS = [
+  "tags",
+  "zoneCodes",
+  "postedBy",
+  "shortCodes",
+  "misc",
+  "aiVerdicts",
+] as const;
+type SetFilterKey = (typeof SET_FILTER_KEYS)[number];
 const DEFAULT_SORT: SortMode = "newest";
 const DEFAULT_VIEW: ViewMode = "gallery";
 
@@ -38,8 +45,7 @@ function parseFiltersFromURL(): InitialState {
     rawView === "plant" || rawView === "zone" || rawView === "tree" || rawView === "web"
       ? rawView
       : DEFAULT_VIEW;
-  const subject =
-    view === "plant" || view === "zone" ? params.get("subject") : null;
+  const subject = view === "plant" || view === "zone" ? params.get("subject") : null;
   const treeNode = view === "tree" ? params.get("treeNode") : null;
   const webNode = view === "web" ? params.get("webNode") : null;
   const infoTab = params.get("info");
@@ -62,7 +68,7 @@ export function buildParams(
   view: ViewMode,
   subject: string | null,
   treeNode: string | null = null,
-  webNode: string | null = null
+  webNode: string | null = null,
 ): string {
   const params = new URLSearchParams();
   for (const key of SET_FILTER_KEYS) {
@@ -100,17 +106,31 @@ export function useFilterParams() {
   const initial = useMemo(() => parseFiltersFromURL(), []);
 
   const syncToURL = useCallback(
-    (filters: Filters, sort: SortMode, view: ViewMode, subject: string | null, treeNode: string | null = null, webNode: string | null = null) => {
+    (
+      filters: Filters,
+      sort: SortMode,
+      view: ViewMode,
+      subject: string | null,
+      treeNode: string | null = null,
+      webNode: string | null = null,
+    ) => {
       replaceURL(buildParams(filters, sort, view, subject, treeNode, webNode));
     },
-    []
+    [],
   );
 
   const pushToURL = useCallback(
-    (filters: Filters, sort: SortMode, view: ViewMode, subject: string | null, treeNode: string | null = null, webNode: string | null = null) => {
+    (
+      filters: Filters,
+      sort: SortMode,
+      view: ViewMode,
+      subject: string | null,
+      treeNode: string | null = null,
+      webNode: string | null = null,
+    ) => {
       pushURL(buildParams(filters, sort, view, subject, treeNode, webNode));
     },
-    []
+    [],
   );
 
   return {

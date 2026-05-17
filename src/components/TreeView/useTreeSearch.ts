@@ -14,7 +14,7 @@ export interface SearchItem {
 export function useTreeSearch(
   nodes: HierarchyPointNode<RawNode>[],
   onSelect: (node: HierarchyPointNode<RawNode>) => void,
-  onCloseDetail?: () => void
+  onCloseDetail?: () => void,
 ) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -50,7 +50,7 @@ export function useTreeSearch(
         const label = organismTitle(p);
         const sublabel = p.fullName ?? RANK_LABEL[n.data.rank];
         const fields = [p.commonName, p.fullName, p.variety, p.shortCode, n.data.name].filter(
-          Boolean
+          Boolean,
         ) as string[];
         items.push({ node: n, label, sublabel, haystack: fields.join(" \n ").toLowerCase() });
       } else {
@@ -78,7 +78,9 @@ export function useTreeSearch(
     return hits.slice(0, 12).map((h) => h.item);
   }, [searchQuery, searchIndex]);
 
-  useEffect(() => { setSearchHi(0); }, [matches]);
+  useEffect(() => {
+    setSearchHi(0);
+  }, [matches]);
 
   const closeSearch = useCallback(() => {
     setSearchOpen(false);
@@ -91,7 +93,7 @@ export function useTreeSearch(
       closeSearch();
       onSelect(item.node);
     },
-    [closeSearch, onSelect]
+    [closeSearch, onSelect],
   );
 
   const onSearchKeyDown = useCallback(
@@ -111,7 +113,7 @@ export function useTreeSearch(
         if (pick) selectSearchItem(pick);
       }
     },
-    [matches, searchHi, closeSearch, selectSearchItem]
+    [matches, searchHi, closeSearch, selectSearchItem],
   );
 
   return {

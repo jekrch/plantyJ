@@ -59,7 +59,7 @@ export default function OrganismCard({ organism, zoneNameByCode, onOpen }: Props
         ref.current = { time: now, x: e.clientX, y: e.clientY };
       }
     },
-    [openViewer]
+    [openViewer],
   );
 
   const titleLine = organismTitle(organism);
@@ -83,9 +83,7 @@ export default function OrganismCard({ organism, zoneNameByCode, onOpen }: Props
           onError={(e) => {
             const el = e.currentTarget;
             el.style.display = "none";
-            el.parentElement!.querySelector<HTMLDivElement>(
-              ".fallback"
-            )!.style.display = "flex";
+            el.parentElement!.querySelector<HTMLDivElement>(".fallback")!.style.display = "flex";
           }}
         />
         <div
@@ -120,8 +118,7 @@ export default function OrganismCard({ organism, zoneNameByCode, onOpen }: Props
         </button>
 
         <p className="font-display text-sm text-white leading-tight">
-          {titleLine}{" "}
-          <span className="text-accent text-[10px]">{organism.shortCode}</span>
+          {titleLine} <span className="text-accent text-[10px]">{organism.shortCode}</span>
         </p>
         <p className="text-xs text-ink-muted mt-0.5">{subtitle}</p>
         {/* {organism.description && (

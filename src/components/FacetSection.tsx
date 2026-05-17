@@ -9,12 +9,7 @@ interface FacetSectionProps {
   onToggle: (value: string) => void;
 }
 
-export default function FacetSection({
-  title,
-  items,
-  selected,
-  onToggle,
-}: FacetSectionProps) {
+export default function FacetSection({ title, items, selected, onToggle }: FacetSectionProps) {
   const [expanded, setExpanded] = useState(false);
 
   if (items.length === 0) return null;

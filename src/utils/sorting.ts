@@ -75,7 +75,8 @@ export async function loadPicMetadata(): Promise<PicMetadataMap> {
     })
     .then((data: { picMetadata?: { id: string; phash: string; dominantColors: number[][] }[] }) => {
       const map: PicMetadataMap = {};
-      for (const m of data.picMetadata ?? []) map[m.id] = { phash: m.phash, dominantColors: m.dominantColors };
+      for (const m of data.picMetadata ?? [])
+        map[m.id] = { phash: m.phash, dominantColors: m.dominantColors };
       picMetadataCache.data = map;
       return map;
     })
@@ -116,10 +117,7 @@ export function cosineDistance(a: number[], b: number[]): number {
   return 1 - dot;
 }
 
-export function paletteDistance(
-  a: number[][] | null,
-  b: number[][] | null
-): number {
+export function paletteDistance(a: number[][] | null, b: number[][] | null): number {
   if (!a || !b || a.length === 0 || b.length === 0) return Infinity;
   const minLen = Math.min(a.length, b.length);
   let sum = 0;
@@ -142,10 +140,7 @@ function colorSortKey(colors: number[][] | undefined): number {
   return 2 * Math.PI * 1000 + colors[0][0];
 }
 
-function nearestNeighborChain<T>(
-  items: T[],
-  distanceFn: (a: T, b: T) => number
-): T[] {
+function nearestNeighborChain<T>(items: T[], distanceFn: (a: T, b: T) => number): T[] {
   if (items.length <= 1) return [...items];
   const result: T[] = [items[0]];
   const used = new Set<number>([0]);
@@ -177,12 +172,10 @@ function sortByEmbedding(organisms: Organism[], embeddings: EmbeddingMap): Organ
     if (embeddings[p.id]) withEmb.push(p);
     else withoutEmb.push(p);
   }
-  withoutEmb.sort(
-    (a, b) => new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime()
-  );
+  withoutEmb.sort((a, b) => new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime());
   if (withEmb.length <= 1) return [...withEmb, ...withoutEmb];
   const sorted = nearestNeighborChain(withEmb, (a, b) =>
-    cosineDistance(embeddings[a.id], embeddings[b.id])
+    cosineDistance(embeddings[a.id], embeddings[b.id]),
   );
   return [...sorted, ...withoutEmb];
 }
@@ -191,13 +184,9 @@ export function sortOrganisms(organisms: Organism[], mode: SortMode): Organism[]
   const sorted = [...organisms];
   switch (mode) {
     case "newest":
-      return sorted.sort(
-        (a, b) => new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime()
-      );
+      return sorted.sort((a, b) => new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime());
     case "oldest":
-      return sorted.sort(
-        (a, b) => new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime()
-      );
+      return sorted.sort((a, b) => new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime());
     default:
       return sorted;
   }
@@ -205,7 +194,7 @@ export function sortOrganisms(organisms: Organism[], mode: SortMode): Organism[]
 
 export async function sortOrganismsAsync(
   organisms: Organism[],
-  mode: SortMode
+  mode: SortMode,
 ): Promise<Organism[]> {
   if (mode === "similarity") {
     const embeddings = await loadEmbeddings();
@@ -222,12 +211,10 @@ export async function sortOrganismsAsync(
       if (meta[p.id]?.phash) withHash.push(p);
       else withoutHash.push(p);
     }
-    withoutHash.sort(
-      (a, b) => new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime()
-    );
+    withoutHash.sort((a, b) => new Date(a.addedAt).getTime() - new Date(b.addedAt).getTime());
     if (withHash.length <= 1) return [...withHash, ...withoutHash];
     const result = nearestNeighborChain(withHash, (a, b) =>
-      hammingDistanceHex(meta[a.id].phash, meta[b.id].phash)
+      hammingDistanceHex(meta[a.id].phash, meta[b.id].phash),
     );
     return [...result, ...withoutHash];
   }

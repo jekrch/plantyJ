@@ -23,11 +23,7 @@ export function RankSelector({
   onChange: (r: TaxonRank) => void;
 }) {
   return (
-    <div
-      role="tablist"
-      aria-label="Taxonomic rank"
-      className="flex flex-wrap gap-1 mb-3 px-1"
-    >
+    <div role="tablist" aria-label="Taxonomic rank" className="flex flex-wrap gap-1 mb-3 px-1">
       {RANKS.map((r) => {
         const active = r.id === value;
         return (
@@ -72,7 +68,9 @@ export function PieChart({
   const [hover, setHover] = useState<{ idx: number; x: number; y: number } | null>(null);
 
   const arcs = useMemo(() => {
-    const generator = d3Pie<Slice>().value((d) => d.value).sort(null);
+    const generator = d3Pie<Slice>()
+      .value((d) => d.value)
+      .sort(null);
     const arcGen = d3Arc<{ startAngle: number; endAngle: number }>()
       .innerRadius(inner)
       .outerRadius(radius)
@@ -159,12 +157,12 @@ export function PieChart({
                 style={{ backgroundColor: a.color }}
                 aria-hidden="true"
               />
-              <span className={`truncate flex-1 font-display ${interactive ? "text-ink group-hover:text-accent transition-colors" : "text-ink"}`}>
+              <span
+                className={`truncate flex-1 font-display ${interactive ? "text-ink group-hover:text-accent transition-colors" : "text-ink"}`}
+              >
                 {a.data.name}
               </span>
-              <span className="text-ink-faint font-mono tabular-nums">
-                {a.data.value}
-              </span>
+              <span className="text-ink-faint font-mono tabular-nums">{a.data.value}</span>
               <span className="text-ink-muted font-mono tabular-nums w-10 text-right">
                 {pct.toFixed(0)}%
               </span>
@@ -219,7 +217,8 @@ export function PieChart({
             <span className="text-[11px] font-display text-ink">{hovered.data.name}</span>
           </div>
           <p className="text-[10px] text-ink-muted font-mono tabular-nums">
-            {hovered.data.value} {hovered.data.value === 1 ? "photo" : "photos"} · {hoveredPct.toFixed(1)}%
+            {hovered.data.value} {hovered.data.value === 1 ? "photo" : "photos"} ·{" "}
+            {hoveredPct.toFixed(1)}%
           </p>
         </div>
       )}

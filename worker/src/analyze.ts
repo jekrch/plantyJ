@@ -71,7 +71,7 @@ async function loadRollupParsed(env: Env): Promise<{ raw: string; rollup: Rollup
 export function findMissingPairs(
   rollup: Rollup,
   existing: AiAnalysisEntry[],
-  zoneFilter: string | null
+  zoneFilter: string | null,
 ): Pair[] {
   const have = new Set(existing.map((e) => `${e.shortCode}|${e.zoneCode}`));
   const out: Pair[] = [];
@@ -85,11 +85,7 @@ export function findMissingPairs(
   return out;
 }
 
-function buildSinglePairPrompt(
-  rollupJson: string,
-  pair: Pair,
-  zoneFilter: string | null
-): string {
+function buildSinglePairPrompt(rollupJson: string, pair: Pair, zoneFilter: string | null): string {
   const filterNote = zoneFilter
     ? `\nThis run is scoped to zone "${zoneFilter}". Still consider neighboring zones and the property as a whole when judging ecological fit — don't restrict reasoning to that zone.`
     : "";
@@ -142,7 +138,7 @@ function stripJsonFences(text: string): string {
 // "did we already receive a complete object?" salvage check on a truncated
 // stream.
 function tryParseAnalysisJson(
-  text: string
+  text: string,
 ): { verdict?: unknown; analysis?: unknown; references?: unknown } | null {
   if (!text.trim()) return null;
   try {
@@ -240,7 +236,7 @@ async function analyzeOnePair(
   rollupJson: string,
   pair: Pair,
   zoneFilter: string | null,
-  now: string
+  now: string,
 ): Promise<PairResult> {
   const prompt = buildSinglePairPrompt(rollupJson, pair, zoneFilter);
 
@@ -330,7 +326,10 @@ async function analyzeOnePair(
     groundingSupportCount: lastGroundingMeta?.groundingSupports?.length ?? 0,
     webChunkCount: webChunks.length,
     hasUrlContextMetadata: !!lastUrlContextMeta,
-    sampleUris: webChunks.slice(0, 3).map((c) => c.web?.uri ?? "").filter(Boolean),
+    sampleUris: webChunks
+      .slice(0, 3)
+      .map((c) => c.web?.uri ?? "")
+      .filter(Boolean),
   };
 
   if (!text.trim()) {
@@ -415,7 +414,7 @@ export interface SubmitErr {
 export async function submitAnalyzeRun(
   env: Env,
   zoneFilter: string | null,
-  notify?: { chatId: number; messageId: number }
+  notify?: { chatId: number; messageId: number },
 ): Promise<SubmitOk | SubmitErr> {
   if (!env.ASK_CACHE) {
     return { ok: false, message: "KV not configured — analyze runs require ASK_CACHE." };
@@ -553,7 +552,7 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
     const now = new Date().toISOString();
 
     const results = await Promise.all(
-      batch.map((p) => analyzeOnePair(client, rollupJson, p, meta.zoneFilter, now))
+      batch.map((p) => analyzeOnePair(client, rollupJson, p, meta.zoneFilter, now)),
     );
 
     const newEntries: AiAnalysisEntry[] = [];
@@ -572,7 +571,7 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
       const merged = [...latest];
       for (const e of newEntries) {
         const idx = merged.findIndex(
-          (m) => m.shortCode === e.shortCode && m.zoneCode === e.zoneCode
+          (m) => m.shortCode === e.shortCode && m.zoneCode === e.zoneCode,
         );
         if (idx === -1) merged.push(e);
         else merged[idx] = e;
@@ -580,7 +579,7 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
       merged.sort((a, b) =>
         a.shortCode === b.shortCode
           ? a.zoneCode.localeCompare(b.zoneCode)
-          : a.shortCode.localeCompare(b.shortCode)
+          : a.shortCode.localeCompare(b.shortCode),
       );
       const scope = meta.zoneFilter ? ` (zone ${meta.zoneFilter})` : "";
       // ai_analysis.json isn't watched by compute-metadata.yml, so the
@@ -594,7 +593,7 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
         env,
         merged,
         latestSha,
-        `Add AI analyses${scope}: ${newEntries.length} pair(s)${skipDeploy}`
+        `Add AI analyses${scope}: ${newEntries.length} pair(s)${skipDeploy}`,
       );
     }
 
@@ -619,7 +618,7 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
         env.TELEGRAM_BOT_TOKEN,
         meta.chatId,
         meta.messageId,
-        `Analyze run complete${scope}: ${meta.succeeded}/${meta.total} succeeded, ${meta.failed} failed. Tokens: ${tokens}. Elapsed: ${elapsedSince(meta.startedAt)}.${meta.failed > 0 ? " Run /analyze-load for failure details." : ""}`
+        `Analyze run complete${scope}: ${meta.succeeded}/${meta.total} succeeded, ${meta.failed} failed. Tokens: ${tokens}. Elapsed: ${elapsedSince(meta.startedAt)}.${meta.failed > 0 ? " Run /analyze-load for failure details." : ""}`,
       ).catch((err) => {
         console.log(`[analyze.tick] completion notify failed: ${(err as Error).message}`);
       });
@@ -628,24 +627,24 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
     if (failures.length > 0) {
       console.log(
         `[analyze.tick] ${failures.length} failure(s):`,
-        failures.map((f) => `${f.pair.shortCode}|${f.pair.zoneCode}: ${f.error}`).join("; ")
+        failures.map((f) => `${f.pair.shortCode}|${f.pair.zoneCode}: ${f.error}`).join("; "),
       );
       await env.ASK_CACHE.put(
         FAILED_TEXT_KV_KEY,
         JSON.stringify(failures.map((f) => ({ ...f.pair, error: f.error }))),
-        { expirationTtl: QUEUE_KV_TTL }
+        { expirationTtl: QUEUE_KV_TTL },
       ).catch(() => {});
     }
 
     for (const r of results) {
       console.log(
-        `[analyze.tick.diag] ${r.pair.shortCode}|${r.pair.zoneCode} model=${r.diag.modelVersion} finish=${r.diag.finishReason} webQueries=${r.diag.webSearchQueries.length} chunks=${r.diag.groundingChunkCount} webChunks=${r.diag.webChunkCount} supports=${r.diag.groundingSupportCount}`
+        `[analyze.tick.diag] ${r.pair.shortCode}|${r.pair.zoneCode} model=${r.diag.modelVersion} finish=${r.diag.finishReason} webQueries=${r.diag.webSearchQueries.length} chunks=${r.diag.groundingChunkCount} webChunks=${r.diag.webChunkCount} supports=${r.diag.groundingSupportCount}`,
       );
     }
     await env.ASK_CACHE.put(
       "analyze:last-diag",
       JSON.stringify({ tickAt: new Date().toISOString(), diags: results.map((r) => r.diag) }),
-      { expirationTtl: QUEUE_KV_TTL }
+      { expirationTtl: QUEUE_KV_TTL },
     ).catch(() => {});
 
     return {

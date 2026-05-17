@@ -11,7 +11,7 @@ export function speciesPicsFor(organisms: Organism[], shortCode: string): Organi
 
 export function buildTree(
   organisms: Organism[],
-  speciesByShortCode: Map<string, Species>
+  speciesByShortCode: Map<string, Species>,
 ): { root: RawNode; missing: Organism[] } {
   const repByShortCode = new Map<string, Organism>();
   for (const p of organisms) {
@@ -59,12 +59,14 @@ export function buildTree(
           // internal node and give each organism its own variety leaf.
           if (child.organism) {
             const existing = child.organism;
-            child.children = [{
-              name: organismTitle(existing),
-              rank: "variety" as Rank,
-              shortCode: existing.shortCode,
-              organism: existing,
-            }];
+            child.children = [
+              {
+                name: organismTitle(existing),
+                rank: "variety" as Rank,
+                shortCode: existing.shortCode,
+                organism: existing,
+              },
+            ];
             child.shortCode = undefined;
             child.organism = undefined;
           }
@@ -90,10 +92,7 @@ export function buildTree(
   return { root, missing };
 }
 
-export function linkPath(
-  src: { x: number; y: number },
-  dst: { x: number; y: number }
-): string {
+export function linkPath(src: { x: number; y: number }, dst: { x: number; y: number }): string {
   const mx = (src.y + dst.y) / 2;
   return `M${src.y},${src.x} C${mx},${src.x} ${mx},${dst.x} ${dst.y},${dst.x}`;
 }

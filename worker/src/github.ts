@@ -66,7 +66,7 @@ export async function commitFile(
   env: Env,
   path: string,
   base64Content: string,
-  commitMessage: string
+  commitMessage: string,
 ): Promise<void> {
   const [owner, repo] = env.GITHUB_REPO.split("/");
   const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${path}`;
@@ -90,7 +90,7 @@ export async function commitFile(
 async function readJsonFile<T>(
   env: Env,
   path: string,
-  fallback: T
+  fallback: T,
 ): Promise<{ data: T; sha: string | null }> {
   const [owner, repo] = env.GITHUB_REPO.split("/");
   const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${path}`;
@@ -115,7 +115,7 @@ async function writeJsonFile(
   path: string,
   body: unknown,
   sha: string | null,
-  commitMessage: string
+  commitMessage: string,
 ): Promise<void> {
   const [owner, repo] = env.GITHUB_REPO.split("/");
   const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${path}`;
@@ -201,7 +201,7 @@ export async function appendPic(
   env: Env,
   newPic: PicEntry,
   plantUpsert: PlantRecord | null,
-  zoneUpserts: Zone[] = []
+  zoneUpserts: Zone[] = [],
 ): Promise<void> {
   const { gallery, picsSha, plantsSha, zonesSha } = await readGallery(env);
 
@@ -212,7 +212,7 @@ export async function appendPic(
       ZONES_PATH,
       { zones: nextZones },
       zonesSha,
-      `Add zone(s): ${zoneUpserts.map((z) => z.code).join(", ")}`
+      `Add zone(s): ${zoneUpserts.map((z) => z.code).join(", ")}`,
     );
   }
 
@@ -223,7 +223,7 @@ export async function appendPic(
       PLANTS_PATH,
       { plants: nextPlants },
       plantsSha,
-      `Add/update plant: ${plantUpsert.shortCode} [skip-deploy]`
+      `Add/update plant: ${plantUpsert.shortCode} [skip-deploy]`,
     );
   }
 
@@ -233,7 +233,7 @@ export async function appendPic(
     PICS_PATH,
     { pics: nextPics },
     picsSha,
-    `Add pic: ${newPic.shortCode} [skip-deploy]`
+    `Add pic: ${newPic.shortCode} [skip-deploy]`,
   );
 }
 
@@ -241,7 +241,7 @@ async function deleteFile(
   env: Env,
   path: string,
   sha: string,
-  commitMessage: string
+  commitMessage: string,
 ): Promise<void> {
   const [owner, repo] = env.GITHUB_REPO.split("/");
   const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${path}`;
@@ -274,7 +274,7 @@ export async function deletePic(env: Env, seq: number): Promise<PicEntry | null>
     PICS_PATH,
     { pics: gallery.pics },
     picsSha,
-    `Remove pic: ${removed.shortCode} (#${removed.seq})`
+    `Remove pic: ${removed.shortCode} (#${removed.seq})`,
   );
 
   const imagePath = `public/${removed.image}`;
@@ -289,7 +289,7 @@ export async function deletePic(env: Env, seq: number): Promise<PicEntry | null>
       env,
       imagePath,
       fileData.sha,
-      `Delete image: ${removed.shortCode} (#${removed.seq})`
+      `Delete image: ${removed.shortCode} (#${removed.seq})`,
     );
   }
 
@@ -333,12 +333,10 @@ export async function updateBySeq(
   env: Env,
   seq: number,
   field: string,
-  value: string
+  value: string,
 ): Promise<UpdateResult | null> {
   if (!isUpdatableField(field)) {
-    throw new Error(
-      `Cannot update "${field}". Updatable fields: ${UPDATABLE_FIELDS.join(", ")}`
-    );
+    throw new Error(`Cannot update "${field}". Updatable fields: ${UPDATABLE_FIELDS.join(", ")}`);
   }
 
   const { gallery, picsSha, plantsSha, zonesSha } = await readGallery(env);
@@ -355,13 +353,7 @@ export async function updateBySeq(
         }
         if (!gallery.zones.some((z) => z.code === code)) {
           const nextZones = [...gallery.zones, { code, name: null }];
-          await writeJsonFile(
-            env,
-            ZONES_PATH,
-            { zones: nextZones },
-            zonesSha,
-            `Add zone: ${code}`
-          );
+          await writeJsonFile(env, ZONES_PATH, { zones: nextZones }, zonesSha, `Add zone: ${code}`);
         }
         pic.zoneCode = code;
         break;
@@ -379,7 +371,7 @@ export async function updateBySeq(
       PICS_PATH,
       { pics: gallery.pics },
       picsSha,
-      `Update pic ${pic.shortCode} (#${pic.seq}): ${field}`
+      `Update pic ${pic.shortCode} (#${pic.seq}): ${field}`,
     );
 
     const plant = gallery.plants.find((p) => p.shortCode === pic.shortCode) ?? null;
@@ -389,9 +381,7 @@ export async function updateBySeq(
   // Plant-level field — operate on the plant record keyed by pic.shortCode.
   const plantIdx = gallery.plants.findIndex((p) => p.shortCode === pic.shortCode);
   if (plantIdx === -1) {
-    throw new Error(
-      `Plant "${pic.shortCode}" not found in plants.json — cannot update ${field}.`
-    );
+    throw new Error(`Plant "${pic.shortCode}" not found in plants.json — cannot update ${field}.`);
   }
   const plant = gallery.plants[plantIdx];
 
@@ -416,14 +406,14 @@ export async function updateBySeq(
         PLANTS_PATH,
         { plants: gallery.plants },
         plantsSha,
-        `Rename plant: ${oldCode} → ${newCode}`
+        `Rename plant: ${oldCode} → ${newCode}`,
       );
       await writeJsonFile(
         env,
         PICS_PATH,
         { pics: gallery.pics },
         picsSha,
-        `Re-point pics: ${oldCode} → ${newCode}`
+        `Re-point pics: ${oldCode} → ${newCode}`,
       );
       return { pic, plant };
     }
@@ -443,7 +433,7 @@ export async function updateBySeq(
     PLANTS_PATH,
     { plants: gallery.plants },
     plantsSha,
-    `Update plant ${plant.shortCode}: ${field}`
+    `Update plant ${plant.shortCode}: ${field}`,
   );
 
   return { pic, plant };
@@ -464,7 +454,7 @@ export interface AcceptResult {
 export async function acceptBioclip(
   env: Env,
   seq: number,
-  targetShortCode: string | null
+  targetShortCode: string | null,
 ): Promise<AcceptResult | "no-pic" | "no-prediction"> {
   const { gallery, picsSha, plantsSha } = await readGallery(env);
   const pic = gallery.pics.find((p) => p.seq === seq);
@@ -516,10 +506,7 @@ export async function acceptBioclip(
       fullName: existing.fullName ?? speciesId,
       commonName: existing.commonName ?? commonName,
     };
-    if (
-      merged.fullName !== existing.fullName ||
-      merged.commonName !== existing.commonName
-    ) {
+    if (merged.fullName !== existing.fullName || merged.commonName !== existing.commonName) {
       gallery.plants[existingIdx] = merged;
       plantsChanged = true;
     }
@@ -534,7 +521,7 @@ export async function acceptBioclip(
       plantsSha,
       renamedFrom
         ? `Accept BioCLIP: ${renamedFrom} → ${finalCode}`
-        : `Accept BioCLIP: ${finalCode}`
+        : `Accept BioCLIP: ${finalCode}`,
     );
   }
 
@@ -544,18 +531,14 @@ export async function acceptBioclip(
       PICS_PATH,
       { pics: gallery.pics },
       picsSha,
-      `Re-point pics: ${renamedFrom} → ${finalCode}`
+      `Re-point pics: ${renamedFrom} → ${finalCode}`,
     );
   }
 
   return { pic, plant, renamedFrom };
 }
 
-export async function upsertZone(
-  env: Env,
-  code: string,
-  name: string | null
-): Promise<Zone> {
+export async function upsertZone(env: Env, code: string, name: string | null): Promise<Zone> {
   const { gallery, zonesSha } = await readGallery(env);
   const idx = gallery.zones.findIndex((z) => z.code === code);
   let zone: Zone;
@@ -574,7 +557,7 @@ export async function upsertZone(
     ZONES_PATH,
     { zones: gallery.zones },
     zonesSha,
-    `${action} zone: ${code}`
+    `${action} zone: ${code}`,
   );
   return zone;
 }
@@ -582,7 +565,7 @@ export async function upsertZone(
 export async function appendZonePic(
   env: Env,
   newZonePic: ZonePicEntry,
-  zoneUpsert: Zone | null
+  zoneUpsert: Zone | null,
 ): Promise<void> {
   const { gallery, zonesSha, zonePicsSha } = await readGallery(env);
 
@@ -593,7 +576,7 @@ export async function appendZonePic(
       ZONES_PATH,
       { zones: nextZones },
       zonesSha,
-      `Add zone: ${zoneUpsert.code}`
+      `Add zone: ${zoneUpsert.code}`,
     );
   }
 
@@ -603,14 +586,11 @@ export async function appendZonePic(
     ZONE_PICS_PATH,
     { zonePics: nextZonePics },
     zonePicsSha,
-    `Add zone pic: ${newZonePic.zoneCode}`
+    `Add zone pic: ${newZonePic.zoneCode}`,
   );
 }
 
-export async function deleteZonePic(
-  env: Env,
-  id: string
-): Promise<ZonePicEntry | null> {
+export async function deleteZonePic(env: Env, id: string): Promise<ZonePicEntry | null> {
   const { gallery, zonePicsSha } = await readGallery(env);
   const idx = gallery.zonePics.findIndex((p) => p.id === id);
   if (idx === -1) return null;
@@ -622,7 +602,7 @@ export async function deleteZonePic(
     ZONE_PICS_PATH,
     { zonePics: gallery.zonePics },
     zonePicsSha,
-    `Remove zone pic: ${removed.zoneCode} (${removed.id})`
+    `Remove zone pic: ${removed.zoneCode} (${removed.id})`,
   );
 
   const imagePath = `public/${removed.image}`;
@@ -637,7 +617,7 @@ export async function deleteZonePic(
       env,
       imagePath,
       fileData.sha,
-      `Delete zone image: ${removed.zoneCode} (${removed.id})`
+      `Delete zone image: ${removed.zoneCode} (${removed.id})`,
     );
   }
 
@@ -654,9 +634,7 @@ export async function deleteZone(env: Env, code: string): Promise<DeleteZoneResu
   const idx = gallery.zones.findIndex((z) => z.code === code);
   if (idx === -1) return { zone: null, inUseBy: [] };
 
-  const inUseBy = gallery.pics
-    .filter((p) => p.zoneCode === code)
-    .map((p) => p.shortCode);
+  const inUseBy = gallery.pics.filter((p) => p.zoneCode === code).map((p) => p.shortCode);
   const zonePicsInUse = gallery.zonePics.filter((p) => p.zoneCode === code);
   if (zonePicsInUse.length > 0) {
     inUseBy.push(`${zonePicsInUse.length} zone pic(s)`);
@@ -666,13 +644,7 @@ export async function deleteZone(env: Env, code: string): Promise<DeleteZoneResu
   }
 
   const [removed] = gallery.zones.splice(idx, 1);
-  await writeJsonFile(
-    env,
-    ZONES_PATH,
-    { zones: gallery.zones },
-    zonesSha,
-    `Remove zone: ${code}`
-  );
+  await writeJsonFile(env, ZONES_PATH, { zones: gallery.zones }, zonesSha, `Remove zone: ${code}`);
   return { zone: removed, inUseBy: [] };
 }
 
@@ -681,18 +653,16 @@ export async function upsertAnnotation(
   shortCode: string,
   zoneCode: string | null,
   field: "tags" | "description",
-  value: string
+  value: string,
 ): Promise<AnnotationEntry> {
   const { data, sha } = await readJsonFile<{ annotations?: AnnotationEntry[] }>(
     env,
     ANNOTATIONS_PATH,
-    { annotations: [] }
+    { annotations: [] },
   );
   const annotations = data.annotations ?? [];
 
-  const idx = annotations.findIndex(
-    (a) => a.shortCode === shortCode && a.zoneCode === zoneCode
-  );
+  const idx = annotations.findIndex((a) => a.shortCode === shortCode && a.zoneCode === zoneCode);
 
   let entry: AnnotationEntry;
   if (idx === -1) {
@@ -711,9 +681,7 @@ export async function upsertAnnotation(
   if (idx !== -1) annotations[idx] = entry;
 
   // Drop entries that carry no information.
-  const cleaned = annotations.filter(
-    (a) => a.tags.length > 0 || a.description !== null
-  );
+  const cleaned = annotations.filter((a) => a.tags.length > 0 || a.description !== null);
 
   const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
   await writeJsonFile(
@@ -721,23 +689,25 @@ export async function upsertAnnotation(
     ANNOTATIONS_PATH,
     { annotations: cleaned },
     sha,
-    `Annotate ${scope}: ${field}`
+    `Annotate ${scope}: ${field}`,
   );
 
   return entry;
 }
 
-export async function addPicTag(
-  env: Env,
-  seq: number,
-  tag: string
-): Promise<PicEntry | null> {
+export async function addPicTag(env: Env, seq: number, tag: string): Promise<PicEntry | null> {
   const { gallery, picsSha } = await readGallery(env);
   const pic = gallery.pics.find((p) => p.seq === seq);
   if (!pic) return null;
   if (pic.tags.includes(tag)) return pic;
   pic.tags = [...pic.tags, tag];
-  await writeJsonFile(env, PICS_PATH, { pics: gallery.pics }, picsSha, `Add tag to pic #${seq}: ${tag}`);
+  await writeJsonFile(
+    env,
+    PICS_PATH,
+    { pics: gallery.pics },
+    picsSha,
+    `Add tag to pic #${seq}: ${tag}`,
+  );
   return pic;
 }
 
@@ -745,18 +715,16 @@ export async function addAnnotationTag(
   env: Env,
   shortCode: string,
   zoneCode: string | null,
-  tag: string
+  tag: string,
 ): Promise<{ entry: AnnotationEntry; added: boolean }> {
   const { data, sha } = await readJsonFile<{ annotations?: AnnotationEntry[] }>(
     env,
     ANNOTATIONS_PATH,
-    { annotations: [] }
+    { annotations: [] },
   );
   const annotations = data.annotations ?? [];
 
-  const idx = annotations.findIndex(
-    (a) => a.shortCode === shortCode && a.zoneCode === zoneCode
-  );
+  const idx = annotations.findIndex((a) => a.shortCode === shortCode && a.zoneCode === zoneCode);
 
   let entry: AnnotationEntry;
   if (idx === -1) {
@@ -777,14 +745,20 @@ export async function addAnnotationTag(
 export async function removePicTag(
   env: Env,
   seq: number,
-  tag: string
+  tag: string,
 ): Promise<{ pic: PicEntry; removed: boolean } | null> {
   const { gallery, picsSha } = await readGallery(env);
   const pic = gallery.pics.find((p) => p.seq === seq);
   if (!pic) return null;
   if (!pic.tags.includes(tag)) return { pic, removed: false };
   pic.tags = pic.tags.filter((t) => t !== tag);
-  await writeJsonFile(env, PICS_PATH, { pics: gallery.pics }, picsSha, `Remove tag from pic #${seq}: ${tag}`);
+  await writeJsonFile(
+    env,
+    PICS_PATH,
+    { pics: gallery.pics },
+    picsSha,
+    `Remove tag from pic #${seq}: ${tag}`,
+  );
   return { pic, removed: true };
 }
 
@@ -792,18 +766,16 @@ export async function removeAnnotationTag(
   env: Env,
   shortCode: string,
   zoneCode: string | null,
-  tag: string
+  tag: string,
 ): Promise<{ entry: AnnotationEntry | null; removed: boolean }> {
   const { data, sha } = await readJsonFile<{ annotations?: AnnotationEntry[] }>(
     env,
     ANNOTATIONS_PATH,
-    { annotations: [] }
+    { annotations: [] },
   );
   const annotations = data.annotations ?? [];
 
-  const idx = annotations.findIndex(
-    (a) => a.shortCode === shortCode && a.zoneCode === zoneCode
-  );
+  const idx = annotations.findIndex((a) => a.shortCode === shortCode && a.zoneCode === zoneCode);
   if (idx === -1) return { entry: null, removed: false };
 
   const existing = annotations[idx];
@@ -813,49 +785,43 @@ export async function removeAnnotationTag(
   annotations[idx] = updated;
 
   // Drop entries that carry no information.
-  const cleaned = annotations.filter(
-    (a) => a.tags.length > 0 || a.description !== null
-  );
+  const cleaned = annotations.filter((a) => a.tags.length > 0 || a.description !== null);
 
   const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
-  await writeJsonFile(env, ANNOTATIONS_PATH, { annotations: cleaned }, sha, `Remove tag from ${scope}: ${tag}`);
+  await writeJsonFile(
+    env,
+    ANNOTATIONS_PATH,
+    { annotations: cleaned },
+    sha,
+    `Remove tag from ${scope}: ${tag}`,
+  );
   return { entry: updated, removed: true };
 }
 
 export async function deleteAnnotation(
   env: Env,
   shortCode: string,
-  zoneCode: string | null
+  zoneCode: string | null,
 ): Promise<boolean> {
   const { data, sha } = await readJsonFile<{ annotations?: AnnotationEntry[] }>(
     env,
     ANNOTATIONS_PATH,
-    { annotations: [] }
+    { annotations: [] },
   );
   const annotations = data.annotations ?? [];
-  const idx = annotations.findIndex(
-    (a) => a.shortCode === shortCode && a.zoneCode === zoneCode
-  );
+  const idx = annotations.findIndex((a) => a.shortCode === shortCode && a.zoneCode === zoneCode);
   if (idx === -1) return false;
 
   annotations.splice(idx, 1);
   const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
-  await writeJsonFile(
-    env,
-    ANNOTATIONS_PATH,
-    { annotations },
-    sha,
-    `Delete annotation: ${scope}`
-  );
+  await writeJsonFile(env, ANNOTATIONS_PATH, { annotations }, sha, `Delete annotation: ${scope}`);
   return true;
 }
 
 export async function readAnnotations(env: Env): Promise<AnnotationEntry[]> {
-  const { data } = await readJsonFile<{ annotations?: AnnotationEntry[] }>(
-    env,
-    ANNOTATIONS_PATH,
-    { annotations: [] }
-  );
+  const { data } = await readJsonFile<{ annotations?: AnnotationEntry[] }>(env, ANNOTATIONS_PATH, {
+    annotations: [],
+  });
   return data.annotations ?? [];
 }
 
@@ -865,13 +831,7 @@ export async function readAnnotations(env: Env): Promise<AnnotationEntry[]> {
 // JSON files got dirty. commitBatchState then writes only the dirty ones,
 // turning O(N commands) GitHub round-trips into O(1) regardless of chunk size.
 
-export type DirtyFile =
-  | "pics"
-  | "plants"
-  | "zones"
-  | "zonePics"
-  | "annotations"
-  | "relationships";
+export type DirtyFile = "pics" | "plants" | "zones" | "zonePics" | "annotations" | "relationships";
 
 export interface BatchState {
   gallery: Gallery;
@@ -896,7 +856,10 @@ export async function loadBatchState(env: Env): Promise<BatchState> {
     readJsonFile<{ zones?: Zone[] }>(env, ZONES_PATH, { zones: [] }),
     readJsonFile<{ zonePics?: ZonePicEntry[] }>(env, ZONE_PICS_PATH, { zonePics: [] }),
     readJsonFile<{ annotations?: AnnotationEntry[] }>(env, ANNOTATIONS_PATH, { annotations: [] }),
-    readJsonFile<Partial<RelationshipsFile>>(env, RELATIONSHIPS_PATH, { types: [], relationships: [] }),
+    readJsonFile<Partial<RelationshipsFile>>(env, RELATIONSHIPS_PATH, {
+      types: [],
+      relationships: [],
+    }),
   ]);
   return {
     gallery: {
@@ -924,7 +887,7 @@ export async function loadBatchState(env: Env): Promise<BatchState> {
 export async function commitBatchState(
   env: Env,
   state: BatchState,
-  message: string
+  message: string,
 ): Promise<{ jsonWrites: number; imagesDeleted: number }> {
   // [skip-deploy] suppresses deploy-frontend's push trigger. That's only safe
   // when something else still deploys: compute-metadata.yml watches pics /
@@ -933,29 +896,64 @@ export async function commitBatchState(
   // doesn't watch — so a relationships-only commit must deploy directly via
   // public/**, otherwise the change never reaches the site.
   const willComputeMetadata =
-    [...state.dirty].some((d) => d !== "relationships") ||
-    state.imagesToDelete.length > 0;
+    [...state.dirty].some((d) => d !== "relationships") || state.imagesToDelete.length > 0;
   const commitMessage = willComputeMetadata ? `${message} [skip-deploy]` : message;
 
   const writes: Array<Promise<void>> = [];
   if (state.dirty.has("zones")) {
-    writes.push(writeJsonFile(env, ZONES_PATH, { zones: state.gallery.zones }, state.zonesSha, commitMessage));
+    writes.push(
+      writeJsonFile(env, ZONES_PATH, { zones: state.gallery.zones }, state.zonesSha, commitMessage),
+    );
   }
   if (state.dirty.has("plants")) {
-    writes.push(writeJsonFile(env, PLANTS_PATH, { plants: state.gallery.plants }, state.plantsSha, commitMessage));
+    writes.push(
+      writeJsonFile(
+        env,
+        PLANTS_PATH,
+        { plants: state.gallery.plants },
+        state.plantsSha,
+        commitMessage,
+      ),
+    );
   }
   if (state.dirty.has("pics")) {
-    writes.push(writeJsonFile(env, PICS_PATH, { pics: state.gallery.pics }, state.picsSha, commitMessage));
+    writes.push(
+      writeJsonFile(env, PICS_PATH, { pics: state.gallery.pics }, state.picsSha, commitMessage),
+    );
   }
   if (state.dirty.has("zonePics")) {
-    writes.push(writeJsonFile(env, ZONE_PICS_PATH, { zonePics: state.gallery.zonePics }, state.zonePicsSha, commitMessage));
+    writes.push(
+      writeJsonFile(
+        env,
+        ZONE_PICS_PATH,
+        { zonePics: state.gallery.zonePics },
+        state.zonePicsSha,
+        commitMessage,
+      ),
+    );
   }
   if (state.dirty.has("annotations")) {
     const cleaned = state.annotations.filter((a) => a.tags.length > 0 || a.description !== null);
-    writes.push(writeJsonFile(env, ANNOTATIONS_PATH, { annotations: cleaned }, state.annotationsSha, commitMessage));
+    writes.push(
+      writeJsonFile(
+        env,
+        ANNOTATIONS_PATH,
+        { annotations: cleaned },
+        state.annotationsSha,
+        commitMessage,
+      ),
+    );
   }
   if (state.dirty.has("relationships")) {
-    writes.push(writeJsonFile(env, RELATIONSHIPS_PATH, state.relationships, state.relationshipsSha, commitMessage));
+    writes.push(
+      writeJsonFile(
+        env,
+        RELATIONSHIPS_PATH,
+        state.relationships,
+        state.relationshipsSha,
+        commitMessage,
+      ),
+    );
   }
   await Promise.all(writes);
 
@@ -978,12 +976,12 @@ export async function commitBatchState(
 }
 
 export async function readAiAnalyses(
-  env: Env
+  env: Env,
 ): Promise<{ analyses: AiAnalysisEntry[]; sha: string | null }> {
   const { data, sha } = await readJsonFile<{ analyses?: AiAnalysisEntry[] }>(
     env,
     AI_ANALYSIS_PATH,
-    { analyses: [] }
+    { analyses: [] },
   );
   return { analyses: data.analyses ?? [], sha };
 }
@@ -992,7 +990,7 @@ export async function writeAiAnalyses(
   env: Env,
   analyses: AiAnalysisEntry[],
   sha: string | null,
-  commitMessage: string
+  commitMessage: string,
 ): Promise<void> {
   await writeJsonFile(env, AI_ANALYSIS_PATH, { analyses }, sha, commitMessage);
 }

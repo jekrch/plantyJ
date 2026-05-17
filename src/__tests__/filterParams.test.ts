@@ -26,8 +26,8 @@ describe("buildParams", () => {
         }),
         "newest",
         "gallery",
-        null
-      )
+        null,
+      ),
     );
     expect(p.get("tags")).toBe("a,b");
     expect(p.get("zones")).toBe("Z1");
@@ -36,26 +36,18 @@ describe("buildParams", () => {
   });
 
   it("includes a non-empty trimmed search query", () => {
-    const p = parse(
-      buildParams(filters({ searchQuery: "fern" }), "newest", "gallery", null)
-    );
+    const p = parse(buildParams(filters({ searchQuery: "fern" }), "newest", "gallery", null));
     expect(p.get("q")).toBe("fern");
   });
 
   it("omits the search query when it is only whitespace", () => {
-    const p = parse(
-      buildParams(filters({ searchQuery: "   " }), "newest", "gallery", null)
-    );
+    const p = parse(buildParams(filters({ searchQuery: "   " }), "newest", "gallery", null));
     expect(p.has("q")).toBe(false);
   });
 
   it("emits the sort param only when it differs from the default", () => {
-    expect(parse(buildParams(filters(), "newest", "gallery", null)).has("sort")).toBe(
-      false
-    );
-    expect(parse(buildParams(filters(), "oldest", "gallery", null)).get("sort")).toBe(
-      "oldest"
-    );
+    expect(parse(buildParams(filters(), "newest", "gallery", null)).has("sort")).toBe(false);
+    expect(parse(buildParams(filters(), "oldest", "gallery", null)).get("sort")).toBe("oldest");
   });
 
   it("emits the view and subject for a plant spotlight", () => {
@@ -71,28 +63,20 @@ describe("buildParams", () => {
   });
 
   it("includes treeNode only for the tree view", () => {
-    expect(
-      parse(buildParams(filters(), "newest", "tree", null, "Rosa")).get(
-        "treeNode"
-      )
-    ).toBe("Rosa");
-    expect(
-      parse(buildParams(filters(), "newest", "plant", "rose", "Rosa")).has(
-        "treeNode"
-      )
-    ).toBe(false);
+    expect(parse(buildParams(filters(), "newest", "tree", null, "Rosa")).get("treeNode")).toBe(
+      "Rosa",
+    );
+    expect(parse(buildParams(filters(), "newest", "plant", "rose", "Rosa")).has("treeNode")).toBe(
+      false,
+    );
   });
 
   it("includes webNode only for the web view", () => {
+    expect(parse(buildParams(filters(), "newest", "web", null, null, "rose")).get("webNode")).toBe(
+      "rose",
+    );
     expect(
-      parse(buildParams(filters(), "newest", "web", null, null, "rose")).get(
-        "webNode"
-      )
-    ).toBe("rose");
-    expect(
-      parse(
-        buildParams(filters(), "newest", "tree", null, "Rosa", "rose")
-      ).has("webNode")
+      parse(buildParams(filters(), "newest", "tree", null, "Rosa", "rose")).has("webNode"),
     ).toBe(false);
   });
 });

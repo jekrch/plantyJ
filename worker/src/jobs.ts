@@ -68,7 +68,7 @@ async function runJob(env: Env, job: JobRecord): Promise<RunStatus> {
       env,
       job.model,
       job.history,
-      job.style
+      job.style,
     );
 
     let body = reply;
@@ -82,9 +82,7 @@ async function runJob(env: Env, job: JobRecord): Promise<RunStatus> {
       const lines = [
         "",
         "Proposed commands:",
-        proposals
-          .map((x, i) => `  ${i + 1}. ${x.command}\n     ${x.rationale}`)
-          .join("\n"),
+        proposals.map((x, i) => `  ${i + 1}. ${x.command}\n     ${x.rationale}`).join("\n"),
         "",
         "Reply /confirm to run all, /confirm 1 3 to run a subset, or /cancel to drop.",
       ];
@@ -127,7 +125,7 @@ async function runJob(env: Env, job: JobRecord): Promise<RunStatus> {
     env.TELEGRAM_BOT_TOKEN,
     job.chatId,
     job.messageId,
-    `Ran ${commands.length} command(s):\n${results.join("\n")}`
+    `Ran ${commands.length} command(s):\n${results.join("\n")}`,
   );
   return "done";
 }
@@ -182,16 +180,14 @@ export async function processJobsTick(env: Env): Promise<JobsTickResult> {
         succeeded++;
       } catch (err) {
         const msg = err instanceof Error ? err.message : "unknown";
-        console.log(
-          `[jobs.tick] ${id} attempt ${job.attempts + 1}/${MAX_ATTEMPTS} failed: ${msg}`
-        );
+        console.log(`[jobs.tick] ${id} attempt ${job.attempts + 1}/${MAX_ATTEMPTS} failed: ${msg}`);
         job.attempts++;
         if (job.attempts >= MAX_ATTEMPTS) {
           await sendReply(
             env.TELEGRAM_BOT_TOKEN,
             job.chatId,
             job.messageId,
-            `Sorry — your /${job.kind} request failed after ${MAX_ATTEMPTS} attempts: ${msg}`
+            `Sorry — your /${job.kind} request failed after ${MAX_ATTEMPTS} attempts: ${msg}`,
           ).catch(() => {});
           removed.add(id);
           await env.ASK_CACHE.delete(`${JOB_PREFIX}${id}`).catch(() => {});

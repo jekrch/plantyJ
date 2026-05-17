@@ -56,9 +56,7 @@ function VerdictBadge({ verdict }: { verdict: AIVerdict }) {
           );
         })}
       </div>
-      <span className={`text-[9px] uppercase tracking-widest font-mono ${color}`}>
-        {verdict}
-      </span>
+      <span className={`text-[9px] uppercase tracking-widest font-mono ${color}`}>{verdict}</span>
     </div>
   );
 }
@@ -96,23 +94,22 @@ export function NodeDetail({
     return (relationships.neighbors.get(node.data.shortCode) ?? []).length;
   }, [isLeaf, node, relationships]);
 
-  const species = isLeaf && node.data.shortCode
-    ? speciesByShortCode.get(node.data.shortCode) ?? null
-    : null;
+  const species =
+    isLeaf && node.data.shortCode ? (speciesByShortCode.get(node.data.shortCode) ?? null) : null;
 
   const taxaInfo = taxa[node.data.name];
-  const description = isLeaf
-    ? species?.description ?? null
-    : taxaInfo?.description ?? null;
+  const description = isLeaf ? (species?.description ?? null) : (taxaInfo?.description ?? null);
   const references: { name: string; url: string }[] = isLeaf
-    ? species?.references ?? []
+    ? (species?.references ?? [])
     : taxaInfo?.url
       ? [{ name: "Wikipedia", url: taxaInfo.url }]
       : [];
 
   const [tab, setTab] = useState<"info" | "images" | "relations">("info");
 
-  useEffect(() => { setTab("info"); }, [node]);
+  useEffect(() => {
+    setTab("info");
+  }, [node]);
 
   const speciesAnalyses = useMemo(() => {
     if (!isLeaf || !node.data.shortCode) return [] as AIAnalysis[];
@@ -133,15 +130,14 @@ export function NodeDetail({
 
   const currentAnalysis = useMemo(() => {
     if (speciesAnalyses.length === 0) return null;
-    return (
-      speciesAnalyses.find((a) => a.zoneCode === selectedZone) ??
-      speciesAnalyses[0]
-    );
+    return speciesAnalyses.find((a) => a.zoneCode === selectedZone) ?? speciesAnalyses[0];
   }, [speciesAnalyses, selectedZone]);
 
   const shortCodes = useMemo(() => {
     const set = new Set<string>();
-    node.descendants().forEach((d) => { if (d.data.shortCode) set.add(d.data.shortCode); });
+    node.descendants().forEach((d) => {
+      if (d.data.shortCode) set.add(d.data.shortCode);
+    });
     return set;
   }, [node]);
 
@@ -159,10 +155,15 @@ export function NodeDetail({
         repByCode.set(p.shortCode, p);
       }
     }
-    return Array.from(repByCode.values()).sort((a, b) => organismTitle(a).localeCompare(organismTitle(b)));
+    return Array.from(repByCode.values()).sort((a, b) =>
+      organismTitle(a).localeCompare(organismTitle(b)),
+    );
   }, [isLeaf, node, organisms, shortCodes]);
 
-  const ancestry = node.ancestors().reverse().filter((n) => n.depth > 0);
+  const ancestry = node
+    .ancestors()
+    .reverse()
+    .filter((n) => n.depth > 0);
   const title = isLeaf ? organismTitle(node.data.organism!) : node.data.name;
   const subtitle = isLeaf ? node.data.organism?.fullName : RANK_LABEL[node.data.rank];
 
@@ -308,9 +309,7 @@ export function NodeDetail({
                         title={label}
                       >
                         {label}
-                        <span className="ml-1 text-[9px] font-mono opacity-60">
-                          {a.zoneCode}
-                        </span>
+                        <span className="ml-1 text-[9px] font-mono opacity-60">{a.zoneCode}</span>
                       </button>
                     );
                   })}
@@ -319,12 +318,9 @@ export function NodeDetail({
                 <div className="text-[10px] text-ink-faint mb-1.5">
                   Zone:{" "}
                   <span className="text-ink-muted">
-                    {zoneNameByCode.get(currentAnalysis.zoneCode) ??
-                      currentAnalysis.zoneCode}
+                    {zoneNameByCode.get(currentAnalysis.zoneCode) ?? currentAnalysis.zoneCode}
                   </span>{" "}
-                  <span className="font-mono opacity-60">
-                    {currentAnalysis.zoneCode}
-                  </span>
+                  <span className="font-mono opacity-60">{currentAnalysis.zoneCode}</span>
                 </div>
               )}
               <p className="text-[12px] leading-relaxed text-ink/85 whitespace-pre-line">

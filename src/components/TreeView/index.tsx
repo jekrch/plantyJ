@@ -47,7 +47,7 @@ export default function TreeView({
 
   const { root } = useMemo(
     () => buildTree(organisms, speciesByShortCode),
-    [organisms, speciesByShortCode]
+    [organisms, speciesByShortCode],
   );
 
   const layout = useMemo(() => {
@@ -56,7 +56,9 @@ export default function TreeView({
     const depth = Math.max(h.height, 1);
     const height = Math.max((leaves - 1) * ROW_HEIGHT, 200);
     const treeWidth = depth * COL_WIDTH;
-    cluster<RawNode>().size([height, treeWidth]).separation(() => 1)(h);
+    cluster<RawNode>()
+      .size([height, treeWidth])
+      .separation(() => 1)(h);
     const nodes = h.descendants() as HierarchyPointNode<RawNode>[];
     const links = h.links() as {
       source: HierarchyPointNode<RawNode>;
@@ -107,14 +109,18 @@ export default function TreeView({
     onPointerDown,
     onPointerMove,
     onPointerUp,
-  } = usePanZoom({ layoutWidth: layout.width, layoutHeight: layout.height, dataReady: speciesLoaded });
+  } = usePanZoom({
+    layoutWidth: layout.width,
+    layoutHeight: layout.height,
+    dataReady: speciesLoaded,
+  });
 
   const focusNode = useCallback(
     (n: HierarchyPointNode<RawNode>) => {
       focusOnPoint(n.x, n.y);
       setPinned(n);
     },
-    [focusOnPoint]
+    [focusOnPoint],
   );
 
   const prevPinned = useRef<typeof pinned>(pinned);
@@ -125,7 +131,7 @@ export default function TreeView({
     if (prev === pinned) return;
     if (prev === null && pinned === null) return;
     onNodeSelect?.(pinned?.data.name ?? null);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pinned]);
 
   const lastFocusedName = useRef<string | null>(null);
@@ -144,7 +150,7 @@ export default function TreeView({
     if (!pinned) return;
     const fresh = layout.nodes.find((n) => n.data.name === pinned.data.name);
     if (fresh && fresh !== pinned) setPinned(fresh);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [layout.nodes]);
 
   const {
@@ -173,7 +179,7 @@ export default function TreeView({
         setPinned((cur) => (cur === n ? null : n));
       },
     }),
-    [panRef]
+    [panRef],
   );
 
   return (
@@ -296,7 +302,9 @@ export default function TreeView({
               aiAnalyses={aiAnalyses}
               relationships={relationships}
               isClosing={isClosing}
-              onAnimationEnd={() => { if (isClosing) setRenderedPinned(null); }}
+              onAnimationEnd={() => {
+                if (isClosing) setRenderedPinned(null);
+              }}
               onClose={() => setPinned(null)}
               onOpenOrganismInList={onOpenOrganismInList}
               onSpotlightOrganism={onSpotlightOrganism}
@@ -310,11 +318,7 @@ export default function TreeView({
 
 // --- SVG sub-components ---
 
-function RankHeaders({
-  rankCols,
-}: {
-  rankCols: Map<(typeof RANKS)[number], number>;
-}) {
+function RankHeaders({ rankCols }: { rankCols: Map<(typeof RANKS)[number], number> }) {
   return (
     <g className="tree-column-headers" pointerEvents="none">
       {RANKS.map((rank) => {
@@ -468,7 +472,11 @@ function LeafNode({
   isPinned: boolean;
   pinnedKey: number;
   baseURL: string;
-  handlers: { onPointerEnter: () => void; onPointerLeave: () => void; onClick: (e: React.MouseEvent) => void };
+  handlers: {
+    onPointerEnter: () => void;
+    onPointerLeave: () => void;
+    onClick: (e: React.MouseEvent) => void;
+  };
 }) {
   const p = n.data.organism!;
   const r = LEAF_RADIUS;
@@ -483,12 +491,30 @@ function LeafNode({
       data-node="true"
       {...handlers}
     >
-      <rect x={-(r + 2)} y={-(r + 4)} width={r * 2 + 4 + LABEL_COL} height={r * 2 + 8} fill="transparent" stroke="none" />
+      <rect
+        x={-(r + 2)}
+        y={-(r + 4)}
+        width={r * 2 + 4 + LABEL_COL}
+        height={r * 2 + 8}
+        fill="transparent"
+        stroke="none"
+      />
       {isPinned && (
-        <circle key={`burst-${pinnedKey}`} r={r + 14} fill="url(#leaf-glow)" className="node-select-burst" />
+        <circle
+          key={`burst-${pinnedKey}`}
+          r={r + 14}
+          fill="url(#leaf-glow)"
+          className="node-select-burst"
+        />
       )}
       {isPinned && (
-        <circle r={r + 16} fill="none" stroke={nodeColor} strokeWidth={1.2} className="node-halo-persist" />
+        <circle
+          r={r + 16}
+          fill="none"
+          stroke={nodeColor}
+          strokeWidth={1.2}
+          className="node-halo-persist"
+        />
       )}
       {isActive && <circle r={r + 12} fill="url(#leaf-glow)" />}
       <circle
@@ -561,7 +587,11 @@ function InternalNode({
   isPinned: boolean;
   isAncestorOfActive: boolean;
   pinnedKey: number;
-  handlers: { onPointerEnter: () => void; onPointerLeave: () => void; onClick: (e: React.MouseEvent) => void };
+  handlers: {
+    onPointerEnter: () => void;
+    onPointerLeave: () => void;
+    onClick: (e: React.MouseEvent) => void;
+  };
 }) {
   const isRoot = n.depth === 0;
   const branching = (n.children?.length ?? 0) > 1;
@@ -576,10 +606,21 @@ function InternalNode({
     >
       <circle r={r + 14} fill="transparent" stroke="none" />
       {isPinned && (
-        <circle key={`burst-${pinnedKey}`} r={r + 10} fill="url(#leaf-glow)" className="node-select-burst" />
+        <circle
+          key={`burst-${pinnedKey}`}
+          r={r + 10}
+          fill="url(#leaf-glow)"
+          className="node-select-burst"
+        />
       )}
       {isPinned && (
-        <circle r={r + 9} fill="none" stroke="var(--color-ink)" strokeWidth={0.8} className="node-halo-persist" />
+        <circle
+          r={r + 9}
+          fill="none"
+          stroke="var(--color-ink)"
+          strokeWidth={0.8}
+          className="node-halo-persist"
+        />
       )}
       <circle
         r={r}

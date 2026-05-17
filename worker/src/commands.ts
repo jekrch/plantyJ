@@ -2,11 +2,7 @@ import type { AnnotationEntry, Env, PicEntry, PlantRecord, TelegramMessage, Zone
 import { type Replier } from "./telegram";
 import { HELP_HEADER } from "./help";
 import { MODEL_ALIASES, type ProposedCommand, type Thread } from "./ask";
-import {
-  submitAnalyzeRun,
-  analyzeStatus,
-  clearAnalyzeRun,
-} from "./analyze";
+import { submitAnalyzeRun, analyzeStatus, clearAnalyzeRun } from "./analyze";
 import { enqueueJob } from "./jobs";
 import { assertValidCode } from "./validation";
 import {
@@ -77,7 +73,10 @@ function buildTagsText(pics: PicEntry[], annotations: AnnotationEntry[]): string
   for (const p of pics) for (const t of p.tags) tags.add(t);
   for (const a of annotations) for (const t of a.tags) tags.add(t);
   if (tags.size === 0) return "No tags yet.";
-  return `Tags:\n${[...tags].sort().map((t) => `  ${t}`).join("\n")}`;
+  return `Tags:\n${[...tags]
+    .sort()
+    .map((t) => `  ${t}`)
+    .join("\n")}`;
 }
 
 function buildZonesText(zones: Zone[]): string {
@@ -138,7 +137,12 @@ const TAG_USAGE = (verb: string) =>
 
 // ─── individual handlers ───────────────────────────────────────────────────
 
-async function handleAskStyle(text: string, message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
+async function handleAskStyle(
+  text: string,
+  message: TelegramMessage,
+  env: Env,
+  reply: Replier,
+): Promise<void> {
   const styleText = text.match(/^\/askstyle(?:\s+(\S[\s\S]*))?$/i)![1]?.trim();
   if (!message.from || !env.ASK_CACHE) {
     await reply("Style preferences require user context.");
@@ -155,10 +159,10 @@ async function handleAskStyle(text: string, message: TelegramMessage, env: Env, 
 
 async function handleShowStyle(message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
   const style =
-    message.from && env.ASK_CACHE
-      ? await env.ASK_CACHE.get(STYLE_KEY(message.from.id))
-      : null;
-  await reply(style ? `Current style: ${style}` : "No style set. Use /askstyle {description} to set one.");
+    message.from && env.ASK_CACHE ? await env.ASK_CACHE.get(STYLE_KEY(message.from.id)) : null;
+  await reply(
+    style ? `Current style: ${style}` : "No style set. Use /askstyle {description} to set one.",
+  );
 }
 
 async function handleCancel(message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
@@ -168,7 +172,12 @@ async function handleCancel(message: TelegramMessage, env: Env, reply: Replier):
   await reply("Cancelled. No commands run.");
 }
 
-async function handleConfirm(text: string, message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
+async function handleConfirm(
+  text: string,
+  message: TelegramMessage,
+  env: Env,
+  reply: Replier,
+): Promise<void> {
   if (!message.from || !env.ASK_CACHE) {
     await reply("/confirm requires KV and a known user.");
     return;
@@ -182,7 +191,7 @@ async function handleConfirm(text: string, message: TelegramMessage, env: Env, r
   const sel = parseConfirmIndices(text, pending.proposals.length);
   if (sel === "invalid") {
     await reply(
-      `Invalid selection. Use /confirm (all) or /confirm N [N ...] with numbers 1..${pending.proposals.length}.`
+      `Invalid selection. Use /confirm (all) or /confirm N [N ...] with numbers 1..${pending.proposals.length}.`,
     );
     return;
   }
@@ -203,11 +212,16 @@ async function handleConfirm(text: string, message: TelegramMessage, env: Env, r
   await env.ASK_CACHE.delete(PENDING_DO_KEY(message.from.id)).catch(() => {});
   const etaMin = Math.ceil(commands.length / CONFIRM_BATCH_RATE_PER_MIN);
   await reply(
-    `Queued ${commands.length} command(s) — batched in chunks of ${CONFIRM_BATCH_RATE_PER_MIN}/min (~${etaMin} min). Summary will arrive when complete.`
+    `Queued ${commands.length} command(s) — batched in chunks of ${CONFIRM_BATCH_RATE_PER_MIN}/min (~${etaMin} min). Summary will arrive when complete.`,
   );
 }
 
-async function handleAsk(text: string, message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
+async function handleAsk(
+  text: string,
+  message: TelegramMessage,
+  env: Env,
+  reply: Replier,
+): Promise<void> {
   const m = text.match(/^\/ask([123])?\s+(\S[\s\S]*)$/i)!;
   const alias = m[1] ?? "3";
   const question = m[2].trim();
@@ -221,7 +235,7 @@ async function handleAsk(text: string, message: TelegramMessage, env: Env, reply
     return;
   }
   const style = message.from
-    ? (await env.ASK_CACHE.get(STYLE_KEY(message.from.id))) ?? undefined
+    ? ((await env.ASK_CACHE.get(STYLE_KEY(message.from.id))) ?? undefined)
     : undefined;
   await enqueueJob(env, {
     id: `ask-${message.from?.id ?? "anon"}-${message.message_id}`,
@@ -238,7 +252,12 @@ async function handleAsk(text: string, message: TelegramMessage, env: Env, reply
   await reply("Queued — reply will arrive shortly.");
 }
 
-async function handleResp(text: string, message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
+async function handleResp(
+  text: string,
+  message: TelegramMessage,
+  env: Env,
+  reply: Replier,
+): Promise<void> {
   const m = text.match(/^\/resp([123])?\s+(\S[\s\S]*)$/i)!;
   const aliasOverride = m[1];
   const question = m[2].trim();
@@ -287,7 +306,7 @@ async function handleAnalyzeLoad(env: Env, reply: Replier): Promise<void> {
       ? "Done"
       : `Running (${result.remaining} remaining, cron drains every minute)`;
   await reply(
-    `${status}${scope}: ${result.succeeded}/${result.total} succeeded, ${result.failed} failed. Tokens: ${tokens}. Elapsed: ${result.elapsed}.`
+    `${status}${scope}: ${result.succeeded}/${result.total} succeeded, ${result.failed} failed. Tokens: ${tokens}. Elapsed: ${result.elapsed}.`,
   );
 }
 
@@ -296,7 +315,12 @@ async function handleAnalyzeCancel(env: Env, reply: Replier): Promise<void> {
   await reply("Cleared analyze queue and run state.");
 }
 
-async function handleAnalyze(text: string, message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
+async function handleAnalyze(
+  text: string,
+  message: TelegramMessage,
+  env: Env,
+  reply: Replier,
+): Promise<void> {
   const zoneFilter = text.match(/^\/analyze(?:\s+(\S+))?$/i)![1]?.trim() || null;
   const result = await submitAnalyzeRun(env, zoneFilter, {
     chatId: message.chat.id,
@@ -305,7 +329,7 @@ async function handleAnalyze(text: string, message: TelegramMessage, env: Env, r
   await reply(
     result.ok
       ? `Queued ${result.enqueued} pair(s)${zoneFilter ? ` in zone ${zoneFilter}` : ""}. Cron drains the queue every minute — run /analyze-load to check progress, or wait for the completion summary.`
-      : result.message
+      : result.message,
   );
 }
 
@@ -345,7 +369,11 @@ async function handleRenameZone(text: string, env: Env, reply: Replier): Promise
 async function handleDeleteZonePic(text: string, env: Env, reply: Replier): Promise<void> {
   const id = text.match(/^\/deletezonepic\s+(\S+)$/)![1];
   const removed = await deleteZonePic(env, id);
-  await reply(removed ? `Deleted zone pic: ${removed.zoneCode} (${removed.id})` : `No zone pic found with id ${id}.`);
+  await reply(
+    removed
+      ? `Deleted zone pic: ${removed.zoneCode} (${removed.id})`
+      : `No zone pic found with id ${id}.`,
+  );
 }
 
 async function handleDeleteZone(text: string, env: Env, reply: Replier): Promise<void> {
@@ -365,7 +393,9 @@ async function handleDeleteZone(text: string, env: Env, reply: Replier): Promise
 async function handleDeletePic(text: string, env: Env, reply: Replier): Promise<void> {
   const seq = parseInt(text.match(/^\/delete\s+(\d+)$/)![1], 10);
   const removed = await deletePic(env, seq);
-  await reply(removed ? `Deleted pic #${seq}: ${removed.shortCode}` : `No pic found with ID ${seq}.`);
+  await reply(
+    removed ? `Deleted pic #${seq}: ${removed.shortCode}` : `No pic found with ID ${seq}.`,
+  );
 }
 
 async function handleAccept(text: string, env: Env, reply: Replier): Promise<void> {
@@ -381,7 +411,7 @@ async function handleAccept(text: string, env: Env, reply: Replier): Promise<voi
   }
   if (result === "no-prediction") {
     await reply(
-      `Pic #${seq} has no BioCLIP prediction yet. The metadata action runs after each commit — try again in a few minutes.`
+      `Pic #${seq} has no BioCLIP prediction yet. The metadata action runs after each commit — try again in a few minutes.`,
     );
     return;
   }
@@ -392,7 +422,7 @@ async function handleAccept(text: string, env: Env, reply: Replier): Promise<voi
         : `Accepted #${seq}: ${result.plant.shortCode}`,
       result.plant.fullName ? `  Full: ${result.plant.fullName}` : null,
       result.plant.commonName ? `  Common: ${result.plant.commonName}` : null,
-    ])
+    ]),
   );
 }
 
@@ -403,7 +433,9 @@ async function handleUpdate(text: string, env: Env, reply: Replier): Promise<voi
   const value = m[3].trim();
 
   if (!isUpdatableField(field)) {
-    await reply(`Invalid field "${field}". Updatable: shortCode, fullName, commonName, zoneCode, tags, description`);
+    await reply(
+      `Invalid field "${field}". Updatable: shortCode, fullName, commonName, zoneCode, tags, description`,
+    );
     return;
   }
   if (field === "shortCode" || field === "zoneCode") {
@@ -413,12 +445,15 @@ async function handleUpdate(text: string, env: Env, reply: Replier): Promise<voi
   await reply(
     updated
       ? `Updated pic #${seq}: ${field} → "${value}"\n→ ${updated.pic.shortCode}`
-      : `No pic found with ID ${seq}.`
+      : `No pic found with ID ${seq}.`,
   );
 }
 
 async function handleAnnotate(text: string, env: Env, reply: Replier): Promise<void> {
-  const parts = text.slice("/annotate ".length).split("//").map((s) => s.trim());
+  const parts = text
+    .slice("/annotate ".length)
+    .split("//")
+    .map((s) => s.trim());
   const isField = (s: string): s is "tags" | "description" => s === "tags" || s === "description";
 
   let shortCode: string, zoneCode: string | null, field: "tags" | "description", value: string;
@@ -435,7 +470,7 @@ async function handleAnnotate(text: string, env: Env, reply: Replier): Promise<v
     value = parts.slice(3).join("//");
   } else {
     await reply(
-      `Invalid format. Use:\n  /annotate shortCode // tags // value\n  /annotate shortCode // zoneCode // tags // value`
+      `Invalid format. Use:\n  /annotate shortCode // tags // value\n  /annotate shortCode // zoneCode // tags // value`,
     );
     return;
   }
@@ -443,7 +478,13 @@ async function handleAnnotate(text: string, env: Env, reply: Replier): Promise<v
   assertValidCode("shortCode", shortCode);
   if (zoneCode) assertValidCode("zoneCode", zoneCode);
 
-  const entry = await upsertAnnotation(env, shortCode, zoneCode, field, value.trim() === "-" ? "" : value);
+  const entry = await upsertAnnotation(
+    env,
+    shortCode,
+    zoneCode,
+    field,
+    value.trim() === "-" ? "" : value,
+  );
   const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
   const lines = joinLines([
     `Annotated ${scope}:`,
@@ -464,18 +505,23 @@ async function handleAddTag(text: string, env: Env, reply: Replier): Promise<voi
     await reply(
       pic
         ? `Added tag "${target.tag}" to pic #${target.seq} (${pic.shortCode}). Tags: ${pic.tags.join(", ")}`
-        : `No pic found with ID ${target.seq}.`
+        : `No pic found with ID ${target.seq}.`,
     );
     return;
   }
   assertValidCode("shortCode", target.shortCode);
   if (target.zoneCode) assertValidCode("zoneCode", target.zoneCode);
-  const { entry, added } = await addAnnotationTag(env, target.shortCode, target.zoneCode, target.tag);
+  const { entry, added } = await addAnnotationTag(
+    env,
+    target.shortCode,
+    target.zoneCode,
+    target.tag,
+  );
   const scope = target.zoneCode ? `${target.shortCode} / ${target.zoneCode}` : target.shortCode;
   await reply(
     added
       ? `Added tag "${target.tag}" to ${scope}. Tags: ${entry.tags.join(", ")}`
-      : `Tag "${target.tag}" already present on ${scope}.`
+      : `Tag "${target.tag}" already present on ${scope}.`,
   );
 }
 
@@ -490,16 +536,25 @@ async function handleRemoveTag(text: string, env: Env, reply: Replier): Promise<
     if (!result) {
       await reply(`No pic found with ID ${target.seq}.`);
     } else if (!result.removed) {
-      await reply(`Tag "${target.tag}" not present on pic #${target.seq} (${result.pic.shortCode}).`);
+      await reply(
+        `Tag "${target.tag}" not present on pic #${target.seq} (${result.pic.shortCode}).`,
+      );
     } else {
       const tags = result.pic.tags.length > 0 ? result.pic.tags.join(", ") : "(none)";
-      await reply(`Removed tag "${target.tag}" from pic #${target.seq} (${result.pic.shortCode}). Tags: ${tags}`);
+      await reply(
+        `Removed tag "${target.tag}" from pic #${target.seq} (${result.pic.shortCode}). Tags: ${tags}`,
+      );
     }
     return;
   }
   assertValidCode("shortCode", target.shortCode);
   if (target.zoneCode) assertValidCode("zoneCode", target.zoneCode);
-  const { entry, removed } = await removeAnnotationTag(env, target.shortCode, target.zoneCode, target.tag);
+  const { entry, removed } = await removeAnnotationTag(
+    env,
+    target.shortCode,
+    target.zoneCode,
+    target.tag,
+  );
   const scope = target.zoneCode ? `${target.shortCode} / ${target.zoneCode}` : target.shortCode;
   if (!removed) {
     await reply(`Tag "${target.tag}" not present on ${scope}.`);
@@ -510,7 +565,10 @@ async function handleRemoveTag(text: string, env: Env, reply: Replier): Promise<
 }
 
 async function handleDeleteAnnotation(text: string, env: Env, reply: Replier): Promise<void> {
-  const parts = text.slice("/deleteannotation ".length).split("//").map((s) => s.trim());
+  const parts = text
+    .slice("/deleteannotation ".length)
+    .split("//")
+    .map((s) => s.trim());
   const shortCode = parts[0];
   const zoneCode = parts[1] || null;
   assertValidCode("shortCode", shortCode);
@@ -531,7 +589,7 @@ export async function handleTextCommand(
   text: string,
   message: TelegramMessage,
   env: Env,
-  reply: Replier
+  reply: Replier,
 ): Promise<boolean> {
   const handlers: Array<[RegExp | string, () => Promise<void>]> = [
     [/^\/askstyle(\s|$)/i, () => handleAskStyle(text, message, env, reply)],
@@ -543,7 +601,12 @@ export async function handleTextCommand(
     ["/analyze-load", () => handleAnalyzeLoad(env, reply)],
     ["/analyze-cancel", () => handleAnalyzeCancel(env, reply)],
     [/^\/analyze(\s|$)/i, () => handleAnalyze(text, message, env, reply)],
-    [/^\/(help|start)$/, async () => { await reply(HELP_HEADER); }],
+    [
+      /^\/(help|start)$/,
+      async () => {
+        await reply(HELP_HEADER);
+      },
+    ],
     ["/plants", () => handlePlants(env, reply)],
     ["/tags", () => handleTagsList(env, reply)],
     ["/zones", () => handleZonesList(env, reply)],

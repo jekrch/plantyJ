@@ -50,9 +50,7 @@ export default function OrganismViewer({
   const [closing, setClosing] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [drawerSlideDir, setDrawerSlideDir] = useState<"left" | "right" | null>(
-    null
-  );
+  const [drawerSlideDir, setDrawerSlideDir] = useState<"left" | "right" | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const imgWrapperRef = useRef<HTMLDivElement>(null);
@@ -89,8 +87,8 @@ export default function OrganismViewer({
 
   useEffect(() => {
     fetch(`${import.meta.env.BASE_URL}data/ai_analysis.json`)
-      .then(res => res.json())
-      .then(data => setAiAnalyses(data.analyses)) 
+      .then((res) => res.json())
+      .then((data) => setAiAnalyses(data.analyses))
       .catch(console.error);
   }, []);
 
@@ -123,7 +121,7 @@ export default function OrganismViewer({
       }
       commitSlide(dir);
     },
-    [drawerOpen, commitSlide]
+    [drawerOpen, commitSlide],
   );
 
   useEffect(() => {
@@ -235,17 +233,13 @@ export default function OrganismViewer({
         <div className="min-w-0 flex-1 px-2!" style={{ pointerEvents: "none" }}>
           <div style={{ pointerEvents: "auto", width: "fit-content" }}>
             <p className="font-display text-sm text-white/90 leading-snug">
-              {titleLine}{" "}
-              <span className="text-accent text-xs">{organism.shortCode}</span>
+              {titleLine} <span className="text-accent text-xs">{organism.shortCode}</span>
             </p>
             <p className="text-xs text-white/60 mt-0.5 leading-snug">{subtitle}</p>
           </div>
         </div>
 
-        <div
-          className="flex flex-col items-end ml-3 shrink-0"
-          style={{ pointerEvents: "auto" }}
-        >
+        <div className="flex flex-col items-end ml-3 shrink-0" style={{ pointerEvents: "auto" }}>
           <div className="flex items-center gap-1">
             {!isTouchDevice && !drawerOpen && isZoomed && (
               <button
@@ -282,8 +276,7 @@ export default function OrganismViewer({
                   e.stopPropagation();
                   const t = transformRef.current;
                   const next = Math.max(MIN_SCALE, t.scale / 1.3);
-                  const clamped =
-                    next <= 1 ? { x: 0, y: 0 } : clampTranslate(t.x, t.y, next);
+                  const clamped = next <= 1 ? { x: 0, y: 0 } : clampTranslate(t.x, t.y, next);
                   setTransform({ scale: next, ...clamped }, true);
                 }}
                 className="viewer-btn"
@@ -407,10 +400,7 @@ export default function OrganismViewer({
         }}
       >
         {!isZoomed && (hasPrev || hasNext) && (
-          <div
-            className="w-full px-4 sm:px-6"
-            style={{ pointerEvents: "auto" }}
-          >
+          <div className="w-full px-4 sm:px-6" style={{ pointerEvents: "auto" }}>
             <div className="relative flex items-center justify-center max-w-2xl mx-auto">
               {/* Info Button - Positioned left within the centered max-width row */}
               <button
@@ -455,10 +445,7 @@ export default function OrganismViewer({
         )}
 
         {!isZoomed && (hasPrev || hasNext) && (
-          <div
-            className="text-center mt-0 mb-1 mx-auto w-fit"
-            style={{ pointerEvents: "auto" }}
-          >
+          <div className="text-center mt-0 mb-1 mx-auto w-fit" style={{ pointerEvents: "auto" }}>
             <span className="text-[11px] text-white/30 tracking-wide">
               {isTouchDevice
                 ? "swipe to navigate · pinch to zoom"
@@ -468,7 +455,7 @@ export default function OrganismViewer({
         )}
 
         {!isZoomed && !hasPrev && !hasNext && (
-          <div           
+          <div
             className="flex flex-col items-center justify-center gap-2 w-full px-4 sm:px-6"
             style={{ pointerEvents: "auto" }}
           >
@@ -478,15 +465,11 @@ export default function OrganismViewer({
                 e.stopPropagation();
                 setDrawerOpen((d) => !d);
               }}
-              className={`viewer-btn viewer-btn-accent gap-1.5 ${
-                drawerOpen ? "is-active" : ""
-              }`}
+              className={`viewer-btn viewer-btn-accent gap-1.5 ${drawerOpen ? "is-active" : ""}`}
               title="Show details"
             >
               <Info size={18} strokeWidth={2} />
-              <span className="text-[11px] font-medium tracking-wide">
-                Details
-              </span>
+              <span className="text-[11px] font-medium tracking-wide">Details</span>
             </button>
 
             {/* Helper Text - Stacked below the button */}

@@ -12,20 +12,15 @@ const TELEGRAM_API = "https://api.telegram.org";
 const TELEGRAM_MAX_MESSAGE = 4096;
 
 /** Download a photo from Telegram by file_id. */
-export async function downloadFile(
-  fileId: string,
-  botToken: string
-): Promise<ArrayBuffer> {
-  const fileResp = await fetch(
-    `${TELEGRAM_API}/bot${botToken}/getFile?file_id=${fileId}`
-  );
+export async function downloadFile(fileId: string, botToken: string): Promise<ArrayBuffer> {
+  const fileResp = await fetch(`${TELEGRAM_API}/bot${botToken}/getFile?file_id=${fileId}`);
   const fileData: TelegramFileResponse = await fileResp.json();
   if (!fileData.ok || !fileData.result) {
     throw new Error(`Telegram getFile failed: ${JSON.stringify(fileData)}`);
   }
 
   const downloadResp = await fetch(
-    `${TELEGRAM_API}/file/bot${botToken}/${fileData.result.file_path}`
+    `${TELEGRAM_API}/file/bot${botToken}/${fileData.result.file_path}`,
   );
   if (!downloadResp.ok) {
     throw new Error(`Image download failed (HTTP ${downloadResp.status})`);
@@ -52,7 +47,7 @@ export async function sendReply(
   botToken: string,
   chatId: number,
   replyToId: number,
-  text: string
+  text: string,
 ): Promise<void> {
   const chunks = chunkForTelegram(text);
   for (let i = 0; i < chunks.length; i++) {

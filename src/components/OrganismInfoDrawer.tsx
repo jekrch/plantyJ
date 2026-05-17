@@ -1,6 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, ExternalLink, Leaf } from "lucide-react";
-import type { AIAnalysis, AIVerdict, Annotation, Organism, Species, SpeciesTaxonomy, Zone, ZonePic } from "../types";
+import type {
+  AIAnalysis,
+  AIVerdict,
+  Annotation,
+  Organism,
+  Species,
+  SpeciesTaxonomy,
+  Zone,
+  ZonePic,
+} from "../types";
 import { organismTitle } from "../utils/display";
 import { ModelAttribution } from "./ModelAttribution";
 import { TabBtn } from "./TreeView/CtrlBtn";
@@ -40,9 +49,7 @@ function VerdictMeter({ verdict }: { verdict: AIVerdict }) {
           );
         })}
       </div>
-      <span className={`text-[9px] uppercase tracking-widest font-mono ${color}`}>
-        {verdict}
-      </span>
+      <span className={`text-[9px] uppercase tracking-widest font-mono ${color}`}>{verdict}</span>
     </div>
   );
 }
@@ -83,7 +90,7 @@ function firstSentenceOrTrim(text: string, max: number): string {
   const lastBoundary = Math.max(
     slice.lastIndexOf(". "),
     slice.lastIndexOf("! "),
-    slice.lastIndexOf("? ")
+    slice.lastIndexOf("? "),
   );
   if (lastBoundary > max * 0.5) return slice.slice(0, lastBoundary + 1);
   const lastSpace = slice.lastIndexOf(" ");
@@ -152,11 +159,7 @@ export default function OrganismInfoDrawer({
   }, [zonePics, organism.zoneCode, organism.addedAt]);
 
   const sharingZone = allOrganisms
-    .filter(
-      (p) =>
-        p.shortCode !== organism.shortCode &&
-        p.zoneCode === organism.zoneCode
-    )
+    .filter((p) => p.shortCode !== organism.shortCode && p.zoneCode === organism.zoneCode)
     .reduce<Organism[]>((acc, p) => {
       if (!acc.some((existing) => existing.shortCode === p.shortCode)) acc.push(p);
       return acc;
@@ -169,7 +172,7 @@ export default function OrganismInfoDrawer({
     const known = new Set(
       [organism.commonName, species.commonName]
         .filter((s): s is string => !!s)
-        .map((s) => s.toLowerCase())
+        .map((s) => s.toLowerCase()),
     );
     const seen = new Set<string>();
     return species.vernacularNames.filter((n) => {
@@ -209,10 +212,8 @@ export default function OrganismInfoDrawer({
   const bioclipSpeciesId = organism.bioclipSpeciesId?.trim() || null;
   const bioclipCommonName = organism.bioclipCommonName?.trim() || null;
   const bioclipWikiUrl = organism.bioclipWikiUrl?.trim() || null;
-  const bioclipScore =
-    typeof organism.bioclipScore === "number" ? organism.bioclipScore : null;
-  const recordedSpecies =
-    species?.fullName?.trim() || organism.fullName?.trim() || null;
+  const bioclipScore = typeof organism.bioclipScore === "number" ? organism.bioclipScore : null;
+  const recordedSpecies = species?.fullName?.trim() || organism.fullName?.trim() || null;
   const bioclipMatch: "match" | "genus" | "mismatch" | null = (() => {
     if (!bioclipSpeciesId || !recordedSpecies) return null;
     const a = bioclipSpeciesId.toLowerCase();
@@ -224,9 +225,8 @@ export default function OrganismInfoDrawer({
     return "mismatch";
   })();
 
-  const description = species?.description?.trim().replace(/(?<!\n)\n(?!\n)/g, '\n\n') || null;
-  const needsTruncation =
-    !!description && description.length > DESCRIPTION_PREVIEW_CHARS;
+  const description = species?.description?.trim().replace(/(?<!\n)\n(?!\n)/g, "\n\n") || null;
+  const needsTruncation = !!description && description.length > DESCRIPTION_PREVIEW_CHARS;
   const visibleDescription = description
     ? descExpanded || !needsTruncation
       ? description
@@ -240,14 +240,16 @@ export default function OrganismInfoDrawer({
     annotations.find((a) => a.shortCode === organism.shortCode && a.zoneCode === null) ?? null;
   const zoneAnnotation =
     annotations.find(
-      (a) => a.shortCode === organism.shortCode && a.zoneCode === organism.zoneCode
+      (a) => a.shortCode === organism.shortCode && a.zoneCode === organism.zoneCode,
     ) ?? null;
   const zoneName = zoneNameByCode.get(organism.zoneCode) ?? organism.zoneCode;
 
   const currentAnalysis = useMemo(() => {
-    return aiAnalyses.find(
-      (a) => a.shortCode === organism.shortCode && a.zoneCode === organism.zoneCode
-    ) ?? null;
+    return (
+      aiAnalyses.find(
+        (a) => a.shortCode === organism.shortCode && a.zoneCode === organism.zoneCode,
+      ) ?? null
+    );
   }, [aiAnalyses, organism.shortCode, organism.zoneCode]);
 
   const show = open && !closing;
@@ -307,497 +309,502 @@ export default function OrganismInfoDrawer({
           className={`flex-1 min-h-0 overflow-y-auto info-modal-scroll thin-scroll ${tab !== "info" ? "hidden" : ""}`}
         >
           <div className="px-6 py-6 sm:px-10 sm:py-8 space-y-5 max-w-lg lg:max-w-xl mx-auto w-full">
-
-        {/* Organism identity */}
-        <div
-          className="relative overflow-hidden rounded px-4 py-3"
-          style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
-        >
-          {organism.image && (
+            {/* Organism identity */}
             <div
-              className="absolute inset-y-0 right-0 w-2/3 sm:w-1/2 pointer-events-none z-0"
-              style={{
-                WebkitMaskImage: "linear-gradient(to right, transparent, black 80%)",
-                maskImage: "linear-gradient(to right, transparent, black 80%)",
-              }}
+              className="relative overflow-hidden rounded px-4 py-3"
+              style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
             >
-              <img
-                src={`${import.meta.env.BASE_URL}${organism.image}`}
-                alt=""
-                className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
-              />
-            </div>
-          )}
-          <div className="relative z-10 pointer-events-none">
-            <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">{organism.kind === "animal" ? "Animal" : "Plant"}</p>
-            <p className="font-display text-sm text-white/90 leading-snug">
-              {organismTitle(organism)}{" "}
-              <span className="text-accent text-xs">{organism.shortCode}</span>
-            </p>
-            {organism.fullName && organism.commonName && (
-              <p className="text-[11px] text-white/50 italic mt-0.5">{organism.fullName}{organism.variety && ` '${organism.variety}'`}</p>
-            )}
-            {!organism.commonName && organism.variety && (
-              <p className="text-[11px] text-white/40 mt-0.5">'{organism.variety}'</p>
-            )}
-          </div>
-        </div>
-
-        {/* Organism, zone, and photo annotations — all side by side if they fit */}
-        {(organismAnnotation || zoneAnnotation || note || tags.length > 0) && (
-          <>
-            <div className="border-t border-white/8" />
-            <div className="flex flex-wrap gap-x-6 gap-y-3 items-start">
-              {organismAnnotation && (organismAnnotation.description || organismAnnotation.tags.length > 0) && (
-                <AnnotationGroup
-                  noteLabel="Plant notes"
-                  tagsLabel="Plant tags"
-                  description={organismAnnotation.description}
-                  tags={organismAnnotation.tags}
-                />
-              )}
-              {zoneAnnotation && (zoneAnnotation.description || zoneAnnotation.tags.length > 0) && (
-                <AnnotationGroup
-                  noteLabel={`${zoneName} notes`}
-                  tagsLabel={`${zoneName} tags`}
-                  description={zoneAnnotation.description}
-                  tags={zoneAnnotation.tags}
-                />
-              )}
-              {(note || tags.length > 0) && (
-                <AnnotationGroup
-                  noteLabel="Photo notes"
-                  tagsLabel="Photo tags"
-                  description={note}
-                  tags={tags}
-                />
-              )}
-            </div>
-          </>
-        )}
-
-        {/* Same organism timeline */}
-        {sameOrganismTimeline.length > 0 && (
-          <>
-            <div className="border-t border-white/8" />
-            <div>
-              <div className="flex items-center gap-1.5 mb-2 text-[10px] uppercase tracking-widest text-white/50">
-                <span>More photos of this {organism.kind === "animal" ? "animal" : "plant"}</span>
-                <span className="text-white/20 normal-case tracking-normal">
-                  · {sameOrganismTimeline.length}
-                </span>
-              </div>
-              <div className="flex gap-2 overflow-x-auto pb-1 info-related-scroll">
-                {sameOrganismTimeline.map((p) => (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => onSelectOrganism(p)}
-                    className="relative shrink-0 h-24 rounded-sm overflow-hidden bg-white/5 ring-1 ring-inset ring-white/5 hover:ring-white/25 transition-colors"
-                    style={{ aspectRatio: `${p.width} / ${p.height}` }}
-                    title={new Date(p.addedAt).toLocaleDateString()}
-                  >
-                    <img
-                      src={`${import.meta.env.BASE_URL}${p.image}`}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                    <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[9px] text-white/80 bg-gradient-to-t from-black/80 to-transparent leading-tight">
-                      {new Date(p.addedAt).toLocaleDateString(undefined, {
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
-
-      {/* Zone */}
-        <div
-          className="relative overflow-hidden rounded px-4 py-14"
-          style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
-        >
-          {matchingZonePic && (
-            <div
-              className="absolute inset-y-0 right-0 w-4/5 sm:w-1/2 pointer-events-none z-0"
-              style={{
-                WebkitMaskImage: "linear-gradient(to right, transparent, black 20%)",
-                maskImage: "linear-gradient(to right, transparent, black 20%)",
-              }}
-            >
-              <img
-                src={`${import.meta.env.BASE_URL}${matchingZonePic.image}`}
-                alt=""
-                className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
-              />
-            </div>
-          )}
-
-          <div className="relative z-10 pointer-events-none">
-            <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Zone</p>
-            <p className="font-display text-sm text-white/90 leading-snug">
-              {zoneNameByCode.get(organism.zoneCode) ?? organism.zoneCode}{" "}
-              <span className="text-accent text-xs">{organism.zoneCode}</span>
-            </p>
-          </div>
-        </div>
-
-        {/* Other organisms sharing a zone */}
-        {sharingZone.length > 0 && (
-          <>
-            <div className="border-t border-white/8" />
-            <div>
-              <div className="flex items-center gap-1.5 mb-2 text-[10px] uppercase tracking-widest text-white/50">
-                <span>{sharingHeader}</span>
-                <span className="text-white/20 normal-case tracking-normal">· {sharingZone.length}</span>
-              </div>
-              <div className="flex gap-2 overflow-x-auto pb-1 info-related-scroll">
-                {sharingZone.map((p) => (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => onSelectOrganism(p)}
-                    className="relative shrink-0 h-24 rounded-sm overflow-hidden bg-white/5 ring-1 ring-inset ring-white/5 hover:ring-white/25 transition-colors"
-                    style={{ aspectRatio: `${p.width} / ${p.height}` }}
-                    title={p.commonName ?? p.shortCode}
-                  >
-                    <img
-                      src={`${import.meta.env.BASE_URL}${p.image}`}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                    <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[9px] text-white/80 bg-gradient-to-t from-black/80 to-transparent leading-tight">
-                      {p.commonName ?? p.shortCode}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* Species overview */}
-        {description && (
-          <div>
-            <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">
-              About this species
-            </p>
-            <p className="text-xs text-white/55 leading-relaxed whitespace-pre-line">
-              {visibleDescription}
-            </p>
-            {needsTruncation && (
-              <button
-                type="button"
-                onClick={() => setDescExpanded((v) => !v)}
-                className="mt-1.5 text-[10px] uppercase tracking-widest text-accent/80 hover:text-accent transition-colors cursor-pointer"
-              >
-                {descExpanded ? "Show less" : "Read more"}
-              </button>
-            )}
-          </div>
-        )}
-
-        {/* Vernacular names */}
-        {otherVernaculars.length > 0 && (
-          <div>
-            <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">
-              Also known as
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {otherVernaculars.map((name) => (
-                <span
-                  key={name}
-                  className="text-[11px] leading-none px-2 py-1 rounded-sm bg-white/5 text-white/55 italic"
+              {organism.image && (
+                <div
+                  className="absolute inset-y-0 right-0 w-2/3 sm:w-1/2 pointer-events-none z-0"
+                  style={{
+                    WebkitMaskImage: "linear-gradient(to right, transparent, black 80%)",
+                    maskImage: "linear-gradient(to right, transparent, black 80%)",
+                  }}
                 >
-                  {name}
-                </span>
-              ))}
+                  <img
+                    src={`${import.meta.env.BASE_URL}${organism.image}`}
+                    alt=""
+                    className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
+                  />
+                </div>
+              )}
+              <div className="relative z-10 pointer-events-none">
+                <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">
+                  {organism.kind === "animal" ? "Animal" : "Plant"}
+                </p>
+                <p className="font-display text-sm text-white/90 leading-snug">
+                  {organismTitle(organism)}{" "}
+                  <span className="text-accent text-xs">{organism.shortCode}</span>
+                </p>
+                {organism.fullName && organism.commonName && (
+                  <p className="text-[11px] text-white/50 italic mt-0.5">
+                    {organism.fullName}
+                    {organism.variety && ` '${organism.variety}'`}
+                  </p>
+                )}
+                {!organism.commonName && organism.variety && (
+                  <p className="text-[11px] text-white/40 mt-0.5">'{organism.variety}'</p>
+                )}
+              </div>
             </div>
-          </div>
-        )}
 
-        {/* Taxonomic lineage */}
-        {taxonomyRows.length > 0 && (
-          <div>
-            <div className="flex items-baseline justify-between mb-2">
-              <p className="text-[10px] uppercase tracking-widest text-white/50">
-                Classification
-              </p>
-              <p className="text-[9px] uppercase tracking-widest text-white/20">
-                tap to view in tree
-              </p>
-            </div>
-            <ol className="space-y-1">
-              {taxonomyRows.map((row, idx) => {
-                const isLast = idx === taxonomyRows.length - 1;
-                const siblingCodes = row.matchingShortCodes.filter(
-                  (c) => c !== organism.shortCode
-                );
-                const total = row.matchingShortCodes.length;
-                const isExpandable = siblingCodes.length > 0;
-                const isExpanded = expandedRank === row.rank;
-                return (
-                  <li key={row.rank} style={{ paddingLeft: `${idx * 10}px` }}>
-                    <div className="flex items-center gap-2 text-xs">
-                      <span className="text-[9px] uppercase tracking-widest text-white/35 w-14 shrink-0 font-mono">
-                        {row.rank}
-                      </span>
+            {/* Organism, zone, and photo annotations — all side by side if they fit */}
+            {(organismAnnotation || zoneAnnotation || note || tags.length > 0) && (
+              <>
+                <div className="border-t border-white/8" />
+                <div className="flex flex-wrap gap-x-6 gap-y-3 items-start">
+                  {organismAnnotation &&
+                    (organismAnnotation.description || organismAnnotation.tags.length > 0) && (
+                      <AnnotationGroup
+                        noteLabel="Plant notes"
+                        tagsLabel="Plant tags"
+                        description={organismAnnotation.description}
+                        tags={organismAnnotation.tags}
+                      />
+                    )}
+                  {zoneAnnotation &&
+                    (zoneAnnotation.description || zoneAnnotation.tags.length > 0) && (
+                      <AnnotationGroup
+                        noteLabel={`${zoneName} notes`}
+                        tagsLabel={`${zoneName} tags`}
+                        description={zoneAnnotation.description}
+                        tags={zoneAnnotation.tags}
+                      />
+                    )}
+                  {(note || tags.length > 0) && (
+                    <AnnotationGroup
+                      noteLabel="Photo notes"
+                      tagsLabel="Photo tags"
+                      description={note}
+                      tags={tags}
+                    />
+                  )}
+                </div>
+              </>
+            )}
+
+            {/* Same organism timeline */}
+            {sameOrganismTimeline.length > 0 && (
+              <>
+                <div className="border-t border-white/8" />
+                <div>
+                  <div className="flex items-center gap-1.5 mb-2 text-[10px] uppercase tracking-widest text-white/50">
+                    <span>
+                      More photos of this {organism.kind === "animal" ? "animal" : "plant"}
+                    </span>
+                    <span className="text-white/20 normal-case tracking-normal">
+                      · {sameOrganismTimeline.length}
+                    </span>
+                  </div>
+                  <div className="flex gap-2 overflow-x-auto pb-1 info-related-scroll">
+                    {sameOrganismTimeline.map((p) => (
                       <button
+                        key={p.id}
                         type="button"
-                        onClick={() => onSelectTaxon(row.value)}
-                        className={`text-left hover:text-accent transition-colors cursor-pointer ${
-                          isLast ? "text-accent italic" : "text-white/65"
-                        }`}
-                        title={`View ${row.value} in tree (${total} organism${total === 1 ? "" : "s"})`}
+                        onClick={() => onSelectOrganism(p)}
+                        className="relative shrink-0 h-24 rounded-sm overflow-hidden bg-white/5 ring-1 ring-inset ring-white/5 hover:ring-white/25 transition-colors"
+                        style={{ aspectRatio: `${p.width} / ${p.height}` }}
+                        title={new Date(p.addedAt).toLocaleDateString()}
                       >
-                        {row.value}
+                        <img
+                          src={`${import.meta.env.BASE_URL}${p.image}`}
+                          alt=""
+                          loading="lazy"
+                          decoding="async"
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                        <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[9px] text-white/80 bg-gradient-to-t from-black/80 to-transparent leading-tight">
+                          {new Date(p.addedAt).toLocaleDateString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </span>
                       </button>
-                      {isExpandable && (
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setExpandedRank(isExpanded ? null : row.rank)
-                          }
-                          className="ml-auto inline-flex items-center gap-0.5 text-[10px] text-white/35 hover:text-white/70 transition-colors cursor-pointer px-1.5 py-0.5 rounded-sm hover:bg-white/5"
-                          title={
-                            isExpanded
-                              ? "Hide siblings"
-                              : `Show ${siblingCodes.length} other${siblingCodes.length === 1 ? "" : "s"}`
-                          }
-                          aria-expanded={isExpanded}
-                        >
-                          <span className="tabular-nums">
-                            +{siblingCodes.length}
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Zone */}
+            <div
+              className="relative overflow-hidden rounded px-4 py-14"
+              style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
+            >
+              {matchingZonePic && (
+                <div
+                  className="absolute inset-y-0 right-0 w-4/5 sm:w-1/2 pointer-events-none z-0"
+                  style={{
+                    WebkitMaskImage: "linear-gradient(to right, transparent, black 20%)",
+                    maskImage: "linear-gradient(to right, transparent, black 20%)",
+                  }}
+                >
+                  <img
+                    src={`${import.meta.env.BASE_URL}${matchingZonePic.image}`}
+                    alt=""
+                    className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
+                  />
+                </div>
+              )}
+
+              <div className="relative z-10 pointer-events-none">
+                <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">Zone</p>
+                <p className="font-display text-sm text-white/90 leading-snug">
+                  {zoneNameByCode.get(organism.zoneCode) ?? organism.zoneCode}{" "}
+                  <span className="text-accent text-xs">{organism.zoneCode}</span>
+                </p>
+              </div>
+            </div>
+
+            {/* Other organisms sharing a zone */}
+            {sharingZone.length > 0 && (
+              <>
+                <div className="border-t border-white/8" />
+                <div>
+                  <div className="flex items-center gap-1.5 mb-2 text-[10px] uppercase tracking-widest text-white/50">
+                    <span>{sharingHeader}</span>
+                    <span className="text-white/20 normal-case tracking-normal">
+                      · {sharingZone.length}
+                    </span>
+                  </div>
+                  <div className="flex gap-2 overflow-x-auto pb-1 info-related-scroll">
+                    {sharingZone.map((p) => (
+                      <button
+                        key={p.id}
+                        type="button"
+                        onClick={() => onSelectOrganism(p)}
+                        className="relative shrink-0 h-24 rounded-sm overflow-hidden bg-white/5 ring-1 ring-inset ring-white/5 hover:ring-white/25 transition-colors"
+                        style={{ aspectRatio: `${p.width} / ${p.height}` }}
+                        title={p.commonName ?? p.shortCode}
+                      >
+                        <img
+                          src={`${import.meta.env.BASE_URL}${p.image}`}
+                          alt=""
+                          loading="lazy"
+                          decoding="async"
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                        <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[9px] text-white/80 bg-gradient-to-t from-black/80 to-transparent leading-tight">
+                          {p.commonName ?? p.shortCode}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Species overview */}
+            {description && (
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">
+                  About this species
+                </p>
+                <p className="text-xs text-white/55 leading-relaxed whitespace-pre-line">
+                  {visibleDescription}
+                </p>
+                {needsTruncation && (
+                  <button
+                    type="button"
+                    onClick={() => setDescExpanded((v) => !v)}
+                    className="mt-1.5 text-[10px] uppercase tracking-widest text-accent/80 hover:text-accent transition-colors cursor-pointer"
+                  >
+                    {descExpanded ? "Show less" : "Read more"}
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Vernacular names */}
+            {otherVernaculars.length > 0 && (
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">
+                  Also known as
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {otherVernaculars.map((name) => (
+                    <span
+                      key={name}
+                      className="text-[11px] leading-none px-2 py-1 rounded-sm bg-white/5 text-white/55 italic"
+                    >
+                      {name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Taxonomic lineage */}
+            {taxonomyRows.length > 0 && (
+              <div>
+                <div className="flex items-baseline justify-between mb-2">
+                  <p className="text-[10px] uppercase tracking-widest text-white/50">
+                    Classification
+                  </p>
+                  <p className="text-[9px] uppercase tracking-widest text-white/20">
+                    tap to view in tree
+                  </p>
+                </div>
+                <ol className="space-y-1">
+                  {taxonomyRows.map((row, idx) => {
+                    const isLast = idx === taxonomyRows.length - 1;
+                    const siblingCodes = row.matchingShortCodes.filter(
+                      (c) => c !== organism.shortCode,
+                    );
+                    const total = row.matchingShortCodes.length;
+                    const isExpandable = siblingCodes.length > 0;
+                    const isExpanded = expandedRank === row.rank;
+                    return (
+                      <li key={row.rank} style={{ paddingLeft: `${idx * 10}px` }}>
+                        <div className="flex items-center gap-2 text-xs">
+                          <span className="text-[9px] uppercase tracking-widest text-white/35 w-14 shrink-0 font-mono">
+                            {row.rank}
                           </span>
-                          <ChevronDown
-                            size={11}
+                          <button
+                            type="button"
+                            onClick={() => onSelectTaxon(row.value)}
+                            className={`text-left hover:text-accent transition-colors cursor-pointer ${
+                              isLast ? "text-accent italic" : "text-white/65"
+                            }`}
+                            title={`View ${row.value} in tree (${total} organism${total === 1 ? "" : "s"})`}
+                          >
+                            {row.value}
+                          </button>
+                          {isExpandable && (
+                            <button
+                              type="button"
+                              onClick={() => setExpandedRank(isExpanded ? null : row.rank)}
+                              className="ml-auto inline-flex items-center gap-0.5 text-[10px] text-white/35 hover:text-white/70 transition-colors cursor-pointer px-1.5 py-0.5 rounded-sm hover:bg-white/5"
+                              title={
+                                isExpanded
+                                  ? "Hide siblings"
+                                  : `Show ${siblingCodes.length} other${siblingCodes.length === 1 ? "" : "s"}`
+                              }
+                              aria-expanded={isExpanded}
+                            >
+                              <span className="tabular-nums">+{siblingCodes.length}</span>
+                              <ChevronDown
+                                size={11}
+                                strokeWidth={1.5}
+                                style={{
+                                  transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
+                                  transition: "transform 0.2s ease-out",
+                                }}
+                              />
+                            </button>
+                          )}
+                        </div>
+                        {isExpandable && isExpanded && (
+                          <div
+                            className="flex flex-wrap gap-1.5 mt-1.5 mb-1"
+                            style={{ paddingLeft: "calc(3.5rem + 0.5rem)" }}
+                          >
+                            {siblingCodes.map((code) => {
+                              const sibOrganism = organismByShortCode.get(code);
+                              const sibSpecies = speciesByShortCode.get(code);
+                              const label =
+                                sibOrganism?.commonName ??
+                                sibOrganism?.fullName ??
+                                sibSpecies?.commonName ??
+                                sibSpecies?.fullName ??
+                                code;
+                              const focusName = sibSpecies?.taxonomy?.species ?? null;
+                              return (
+                                <button
+                                  key={code}
+                                  type="button"
+                                  onClick={() => focusName && onSelectTaxon(focusName)}
+                                  disabled={!focusName}
+                                  className="text-[11px] leading-none px-2 py-1 rounded-sm bg-white/5 text-white/60 hover:bg-accent/15 hover:text-accent transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-default"
+                                  title={sibSpecies?.fullName ?? sibOrganism?.fullName ?? code}
+                                >
+                                  {label}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ol>
+              </div>
+            )}
+
+            {/* Native range */}
+            {species?.nativeRange && (
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">
+                  Native range
+                </p>
+                <p className="text-xs text-white/55 leading-relaxed">{species.nativeRange}</p>
+              </div>
+            )}
+
+            {/* BioCLIP prediction */}
+            {bioclipSpeciesId && (
+              <>
+                <div className="border-t border-white/8" />
+                <div>
+                  <div className="flex items-baseline justify-between mb-2">
+                    <p className="text-[10px] uppercase tracking-widest text-white/50">
+                      BioCLIP prediction
+                    </p>
+                    {bioclipScore !== null && (
+                      <p className="text-[9px] uppercase tracking-widest text-white/35 tabular-nums">
+                        {(bioclipScore * 100).toFixed(1)}% confidence
+                      </p>
+                    )}
+                  </div>
+                  <div
+                    className="rounded px-4 py-3 space-y-2"
+                    style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
+                  >
+                    <div>
+                      {bioclipMatch !== "match" ? (
+                        <a
+                          href={
+                            bioclipWikiUrl ||
+                            `https://www.google.com/search?q=${encodeURIComponent(bioclipSpeciesId ?? "")}`
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-display text-sm text-white/70 italic leading-snug hover:text-accent transition-colors inline-flex items-center gap-1"
+                        >
+                          {bioclipSpeciesId}
+                          <ExternalLink
+                            size={10}
                             strokeWidth={1.5}
-                            style={{
-                              transform: isExpanded
-                                ? "rotate(180deg)"
-                                : "rotate(0deg)",
-                              transition: "transform 0.2s ease-out",
-                            }}
+                            className="shrink-0 not-italic"
                           />
-                        </button>
+                        </a>
+                      ) : (
+                        <p className="font-display text-sm text-white/70 italic leading-snug">
+                          {bioclipSpeciesId}
+                        </p>
+                      )}
+                      {bioclipCommonName && (
+                        <p className="text-[11px] text-white/50 mt-0.5">{bioclipCommonName}</p>
                       )}
                     </div>
-                    {isExpandable && isExpanded && (
-                      <div
-                        className="flex flex-wrap gap-1.5 mt-1.5 mb-1"
-                        style={{ paddingLeft: "calc(3.5rem + 0.5rem)" }}
+                    {bioclipMatch && recordedSpecies && (
+                      <p
+                        className={`text-[11px] leading-snug ${
+                          bioclipMatch === "match"
+                            ? "text-accent/90"
+                            : bioclipMatch === "genus"
+                              ? "text-amber-300/80"
+                              : "text-rose-300/80"
+                        }`}
                       >
-                        {siblingCodes.map((code) => {
-                          const sibOrganism = organismByShortCode.get(code);
-                          const sibSpecies = speciesByShortCode.get(code);
-                          const label =
-                            sibOrganism?.commonName ??
-                            sibOrganism?.fullName ??
-                            sibSpecies?.commonName ??
-                            sibSpecies?.fullName ??
-                            code;
-                          const focusName =
-                            sibSpecies?.taxonomy?.species ?? null;
+                        {bioclipMatch === "match" &&
+                          `Agrees with the recorded species (${recordedSpecies}).`}
+                        {bioclipMatch === "genus" &&
+                          `Same genus as the recorded species (${recordedSpecies}), but a different species.`}
+                        {bioclipMatch === "mismatch" &&
+                          `Disagrees with the recorded species (${recordedSpecies}).`}
+                      </p>
+                    )}
+                  </div>
+                  <a
+                    href="https://imageomics.github.io/bioclip/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-white/55 hover:text-accent transition-colors mt-2 px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
+                  >
+                    About BioCLIP
+                    <ExternalLink size={10} strokeWidth={1.5} />
+                  </a>
+                </div>
+              </>
+            )}
+
+            {/* Sources */}
+            {((species?.references && species.references.length > 0) ||
+              (organism.kind === "animal" && organism.fullName)) && (
+              <>
+                <div className="border-t border-white/8" />
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-white/50 mb-2">
+                    Sources
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {species?.references?.map((ref) => (
+                      <a
+                        key={ref.url}
+                        href={ref.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] text-white/55 hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
+                      >
+                        {ref.name}
+                        <ExternalLink size={10} strokeWidth={1.5} />
+                      </a>
+                    ))}
+                    {organism.kind === "animal" && organism.fullName && (
+                      <a
+                        href={`https://www.inaturalist.org/taxa/search?q=${encodeURIComponent(organism.fullName)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] text-white/55 hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
+                      >
+                        iNaturalist
+                        <ExternalLink size={10} strokeWidth={1.5} />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* AI Ecological Fit Analysis */}
+            {currentAnalysis && (
+              <>
+                <div className="border-t border-white/8" />
+                <div>
+                  <div className="flex items-center justify-between mb-2 gap-2">
+                    <p className="text-[10px] uppercase tracking-widest text-white/50 inline-flex items-center gap-1.5">
+                      Ecological Fit Analysis (AI-generated)
+                      <ModelAttribution iconSize={11} />
+                    </p>
+                    <VerdictMeter verdict={currentAnalysis.verdict} />
+                  </div>
+                  <div
+                    className="rounded px-4 py-3"
+                    style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
+                  >
+                    <p className="text-xs text-white/60 leading-relaxed whitespace-pre-line">
+                      {currentAnalysis.analysis}
+                    </p>
+                    {currentAnalysis.references && currentAnalysis.references.length > 0 && (
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {currentAnalysis.references.map((url) => {
+                          let label = url;
+                          try {
+                            label = new URL(url).hostname.replace("www.", "");
+                          } catch (e) {
+                            // Keep raw URL or fallback if parsing fails
+                          }
                           return (
-                            <button
-                              key={code}
-                              type="button"
-                              onClick={() =>
-                                focusName && onSelectTaxon(focusName)
-                              }
-                              disabled={!focusName}
-                              className="text-[11px] leading-none px-2 py-1 rounded-sm bg-white/5 text-white/60 hover:bg-accent/15 hover:text-accent transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-default"
-                              title={sibSpecies?.fullName ?? sibOrganism?.fullName ?? code}
+                            <a
+                              key={url}
+                              href={url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-[10px] text-white/40 hover:text-accent transition-colors px-1.5 py-0.5 rounded-sm bg-white/5 hover:bg-white/8"
                             >
                               {label}
-                            </button>
+                              <ExternalLink size={8} strokeWidth={1.5} />
+                            </a>
                           );
                         })}
                       </div>
                     )}
-                  </li>
-                );
-              })}
-            </ol>
-          </div>
-        )}
-
-        {/* Native range */}
-        {species?.nativeRange && (
-          <div>
-            <p className="text-[10px] uppercase tracking-widest text-white/50 mb-1.5">
-              Native range
-            </p>
-            <p className="text-xs text-white/55 leading-relaxed">
-              {species.nativeRange}
-            </p>
-          </div>
-        )}   
-        
-        {/* BioCLIP prediction */}
-        {bioclipSpeciesId && (
-          <>
-            <div className="border-t border-white/8" />
-            <div>
-              <div className="flex items-baseline justify-between mb-2">
-                <p className="text-[10px] uppercase tracking-widest text-white/50">
-                  BioCLIP prediction
-                </p>
-                {bioclipScore !== null && (
-                  <p className="text-[9px] uppercase tracking-widest text-white/35 tabular-nums">
-                    {(bioclipScore * 100).toFixed(1)}% confidence
-                  </p>
-                )}
-              </div>
-              <div
-                className="rounded px-4 py-3 space-y-2"
-                style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
-              >
-                <div>
-                  {bioclipMatch !== "match" ? (
-                    <a
-                      href={bioclipWikiUrl || `https://www.google.com/search?q=${encodeURIComponent(bioclipSpeciesId ?? "")}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-display text-sm text-white/70 italic leading-snug hover:text-accent transition-colors inline-flex items-center gap-1"
-                    >
-                      {bioclipSpeciesId}
-                      <ExternalLink size={10} strokeWidth={1.5} className="shrink-0 not-italic" />
-                    </a>
-                  ) : (
-                    <p className="font-display text-sm text-white/70 italic leading-snug">
-                      {bioclipSpeciesId}
-                    </p>
-                  )}
-                  {bioclipCommonName && (
-                    <p className="text-[11px] text-white/50 mt-0.5">
-                      {bioclipCommonName}
-                    </p>
-                  )}
-                </div>
-                {bioclipMatch && recordedSpecies && (
-                  <p
-                    className={`text-[11px] leading-snug ${
-                      bioclipMatch === "match"
-                        ? "text-accent/90"
-                        : bioclipMatch === "genus"
-                          ? "text-amber-300/80"
-                          : "text-rose-300/80"
-                    }`}
-                  >
-                    {bioclipMatch === "match" &&
-                      `Agrees with the recorded species (${recordedSpecies}).`}
-                    {bioclipMatch === "genus" &&
-                      `Same genus as the recorded species (${recordedSpecies}), but a different species.`}
-                    {bioclipMatch === "mismatch" &&
-                      `Disagrees with the recorded species (${recordedSpecies}).`}
-                  </p>
-                )}
-              </div>
-              <a
-                href="https://imageomics.github.io/bioclip/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-[11px] text-white/55 hover:text-accent transition-colors mt-2 px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
-              >
-                About BioCLIP
-                <ExternalLink size={10} strokeWidth={1.5} />
-              </a>
-            </div>
-          </>
-        )}
-
-        {/* Sources */}
-        {((species?.references && species.references.length > 0) || (organism.kind === "animal" && organism.fullName)) && (
-          <>
-            <div className="border-t border-white/8" />
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/50 mb-2">
-                Sources
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {species?.references?.map((ref) => (
-                  <a
-                    key={ref.url}
-                    href={ref.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] text-white/55 hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
-                  >
-                    {ref.name}
-                    <ExternalLink size={10} strokeWidth={1.5} />
-                  </a>
-                ))}
-                {organism.kind === "animal" && organism.fullName && (
-                  <a
-                    href={`https://www.inaturalist.org/taxa/search?q=${encodeURIComponent(organism.fullName)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[11px] text-white/55 hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
-                  >
-                    iNaturalist
-                    <ExternalLink size={10} strokeWidth={1.5} />
-                  </a>
-                )}
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* AI Ecological Fit Analysis */}
-        {currentAnalysis && (
-          <>
-            <div className="border-t border-white/8" />
-            <div>
-              <div className="flex items-center justify-between mb-2 gap-2">
-                <p className="text-[10px] uppercase tracking-widest text-white/50 inline-flex items-center gap-1.5">
-                  Ecological Fit Analysis (AI-generated)
-                  <ModelAttribution iconSize={11} />
-                </p>
-                <VerdictMeter verdict={currentAnalysis.verdict} />
-              </div>
-              <div
-                className="rounded px-4 py-3"
-                style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
-              >
-                <p className="text-xs text-white/60 leading-relaxed whitespace-pre-line">
-                  {currentAnalysis.analysis}
-                </p>
-                {currentAnalysis.references && currentAnalysis.references.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {currentAnalysis.references.map((url) => {
-                      let label = url;
-                      try {
-                        label = new URL(url).hostname.replace('www.', '');
-                      } catch (e) {
-                        // Keep raw URL or fallback if parsing fails
-                      }
-                      return (
-                        <a
-                          key={url}
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-[10px] text-white/40 hover:text-accent transition-colors px-1.5 py-0.5 rounded-sm bg-white/5 hover:bg-white/8"
-                        >
-                          {label}
-                          <ExternalLink size={8} strokeWidth={1.5} />
-                        </a>
-                      );
-                    })}
                   </div>
-                )}
-              </div>
-            </div>
-          </>
-        )}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -851,7 +858,11 @@ function AnnotationGroup({
         <div>
           <p className={`${LABEL_CLS} mb-1.5`}>{tagsLabel}</p>
           <div className="flex flex-wrap gap-1.5">
-            {tags.map((t) => <span key={t} className={TAG_CHIP}>{t}</span>)}
+            {tags.map((t) => (
+              <span key={t} className={TAG_CHIP}>
+                {t}
+              </span>
+            ))}
           </div>
         </div>
       )}

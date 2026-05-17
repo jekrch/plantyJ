@@ -73,9 +73,7 @@ export function Timeline({ buckets }: { buckets: TimelineBucket[] }) {
       </div>
       <div className="flex justify-between text-[9px] font-mono text-ink-faint mt-1 px-0.5">
         <span>{buckets[0].label}</span>
-        {buckets.length > 2 && (
-          <span>{buckets[Math.floor(buckets.length / 2)].label}</span>
-        )}
+        {buckets.length > 2 && <span>{buckets[Math.floor(buckets.length / 2)].label}</span>}
         <span>{buckets[buckets.length - 1].label}</span>
       </div>
       {hover && hovered && (

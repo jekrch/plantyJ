@@ -2,11 +2,13 @@ import type { Organism } from "../types";
 
 const UNIDENTIFIED_PREFIX = "unid-";
 
-export function isUnidentified(organism: { shortCode: string; fullName: string | null; commonName: string | null }): boolean {
+export function isUnidentified(organism: {
+  shortCode: string;
+  fullName: string | null;
+  commonName: string | null;
+}): boolean {
   return (
-    organism.shortCode.startsWith(UNIDENTIFIED_PREFIX) &&
-    !organism.fullName &&
-    !organism.commonName
+    organism.shortCode.startsWith(UNIDENTIFIED_PREFIX) && !organism.fullName && !organism.commonName
   );
 }
 

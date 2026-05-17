@@ -40,7 +40,7 @@ export interface ImageZoomPanState {
  */
 export function useImageZoomPan(
   imgWrapperRef: RefObject<HTMLDivElement | null>,
-  currentIndex: number
+  currentIndex: number,
 ): ImageZoomPanState {
   const imgRef = useRef<HTMLImageElement>(null);
   const [displayScale, setDisplayScale] = useState(1);
@@ -49,31 +49,33 @@ export function useImageZoomPan(
 
   // Core helpers
 
-  const applyTransform = useCallback((t: ImageTransform, animate = false) => {
-    const wrapper = imgWrapperRef.current;
-    if (!wrapper) return;
-    wrapper.style.transition = animate ? "transform 0.2s ease-out" : "none";
+  const applyTransform = useCallback(
+    (t: ImageTransform, animate = false) => {
+      const wrapper = imgWrapperRef.current;
+      if (!wrapper) return;
+      wrapper.style.transition = animate ? "transform 0.2s ease-out" : "none";
 
-    if (t.scale <= 1) {
-      wrapper.style.transform = "none";
-      wrapper.style.position = "";
-      wrapper.style.inset = "";
-      wrapper.style.zIndex = "";
-      wrapper.style.backgroundColor = "";
-      wrapper.style.cursor = "";
-    } else {
-      wrapper.style.transform =
-        `scale(${t.scale}) translate(${t.x / t.scale}px, ${t.y / t.scale}px)`;
-      wrapper.style.position = "absolute";
-      wrapper.style.inset = "0";
-      wrapper.style.zIndex = "30";
-      wrapper.style.backgroundColor = "black";
-      wrapper.style.cursor = "grab";
-    }
+      if (t.scale <= 1) {
+        wrapper.style.transform = "none";
+        wrapper.style.position = "";
+        wrapper.style.inset = "";
+        wrapper.style.zIndex = "";
+        wrapper.style.backgroundColor = "";
+        wrapper.style.cursor = "";
+      } else {
+        wrapper.style.transform = `scale(${t.scale}) translate(${t.x / t.scale}px, ${t.y / t.scale}px)`;
+        wrapper.style.position = "absolute";
+        wrapper.style.inset = "0";
+        wrapper.style.zIndex = "30";
+        wrapper.style.backgroundColor = "black";
+        wrapper.style.cursor = "grab";
+      }
 
-    // Keep React state in sync so isZoomed reflects reality
-    setDisplayScale(t.scale);
-  }, [imgWrapperRef]);
+      // Keep React state in sync so isZoomed reflects reality
+      setDisplayScale(t.scale);
+    },
+    [imgWrapperRef],
+  );
 
   const setTransform = useCallback(
     (t: ImageTransform, animate = false) => {
@@ -81,7 +83,7 @@ export function useImageZoomPan(
       applyTransform(t, animate);
       setDisplayScale(t.scale);
     },
-    [applyTransform]
+    [applyTransform],
   );
 
   const resetTransform = useCallback(() => {
@@ -116,10 +118,10 @@ export function useImageZoomPan(
         y: Math.max(-maxY, Math.min(maxY, y)),
       };
     },
-    []
+    [],
   );
 
-  // Reset on navigation 
+  // Reset on navigation
 
   useLayoutEffect(() => {
     const wrapper = imgWrapperRef.current;
@@ -139,7 +141,7 @@ export function useImageZoomPan(
     setDisplayScale(1);
   }, [currentIndex]);
 
-  // Wheel zoom (desktop) 
+  // Wheel zoom (desktop)
 
   useEffect(() => {
     const wrapper = imgWrapperRef.current;
@@ -191,7 +193,7 @@ export function useImageZoomPan(
         setTransform({ scale: 1.8, x: 0, y: 0 }, true);
       }
     },
-    [resetTransform, setTransform]
+    [resetTransform, setTransform],
   );
 
   return {

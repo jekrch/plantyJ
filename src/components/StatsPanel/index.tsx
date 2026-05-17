@@ -50,12 +50,29 @@ export default function StatsPanel({
     <div className="px-4 py-5 sm:px-5 space-y-6">
       <HeroBanner days={stats.daysSinceFirst} firstDate={stats.firstDate} />
 
-      <StatTileRow tiles={[
-        { icon: ImageIcon, label: "Photos", value: stats.totalPics },
-        { icon: Leaf, label: "Plants", value: stats.uniqueOrganismSpecies, hint: `${stats.organismPicCount} photos` },
-        { icon: PawPrint, label: "Animals", value: stats.uniqueAnimalSpecies, hint: `${stats.animalPicCount} photos` },
-        { icon: MapPin, label: "Zones", value: stats.zonesWithPics, hint: `of ${stats.totalZones}` },
-      ]} />
+      <StatTileRow
+        tiles={[
+          { icon: ImageIcon, label: "Photos", value: stats.totalPics },
+          {
+            icon: Leaf,
+            label: "Plants",
+            value: stats.uniqueOrganismSpecies,
+            hint: `${stats.organismPicCount} photos`,
+          },
+          {
+            icon: PawPrint,
+            label: "Animals",
+            value: stats.uniqueAnimalSpecies,
+            hint: `${stats.animalPicCount} photos`,
+          },
+          {
+            icon: MapPin,
+            label: "Zones",
+            value: stats.zonesWithPics,
+            hint: `of ${stats.totalZones}`,
+          },
+        ]}
+      />
 
       <Section title="Biodiversity" subtitle="Photos grouped by taxonomic rank">
         <RankSelector value={rank} onChange={setRank} />
@@ -68,7 +85,9 @@ export default function StatsPanel({
             onSelect={onSelectTaxon}
           />
         ) : (
-          <p className="text-xs text-ink-faint italic px-1">No {rankInfo.label.toLowerCase()} data available yet.</p>
+          <p className="text-xs text-ink-faint italic px-1">
+            No {rankInfo.label.toLowerCase()} data available yet.
+          </p>
         )}
       </Section>
 
@@ -82,11 +101,7 @@ export default function StatsPanel({
             label="Most photographed"
             primary={stats.topZoneByPics?.name ?? "—"}
             secondary={stats.topZoneByPics ? `${stats.topZoneByPics.count} photos` : ""}
-            onClick={
-              stats.topZoneByPics
-                ? () => onSpotlightZone(stats.topZoneByPics!.code)
-                : null
-            }
+            onClick={stats.topZoneByPics ? () => onSpotlightZone(stats.topZoneByPics!.code) : null}
           />
           <HighlightCard
             label="Most diverse"
@@ -113,9 +128,7 @@ export default function StatsPanel({
             onSelect={onShowEcoFit}
           />
         ) : (
-          <p className="text-xs text-ink-faint italic px-1">
-            No AI analyses yet.
-          </p>
+          <p className="text-xs text-ink-faint italic px-1">No AI analyses yet.</p>
         )}
       </Section>
 
@@ -123,7 +136,11 @@ export default function StatsPanel({
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
           <MiniStat
             label="Avg confidence"
-            value={stats.bioclip.avgConfidence === null ? "—" : `${Math.round(stats.bioclip.avgConfidence * 100)}%`}
+            value={
+              stats.bioclip.avgConfidence === null
+                ? "—"
+                : `${Math.round(stats.bioclip.avgConfidence * 100)}%`
+            }
           />
           <MiniStat
             label="Agreements"
@@ -136,9 +153,15 @@ export default function StatsPanel({
             accent={stats.bioclip.disagreements > 0}
             onClick={stats.bioclip.disagreements > 0 ? onShowBioclipConflicts : null}
             hint="View"
-            subline={stats.bioclip.genusOnly > 0 ? `incl. ${stats.bioclip.genusOnly} genus` : undefined}
+            subline={
+              stats.bioclip.genusOnly > 0 ? `incl. ${stats.bioclip.genusOnly} genus` : undefined
+            }
           />
-          <MiniStat label="Unidentified" value={stats.unidentifiedPics} accent={stats.unidentifiedPics > 0} />
+          <MiniStat
+            label="Unidentified"
+            value={stats.unidentifiedPics}
+            accent={stats.unidentifiedPics > 0}
+          />
         </div>
         <p className="text-[11px] text-ink-faint leading-relaxed flex gap-2 items-start">
           <Cpu size={11} strokeWidth={1.5} className="mt-0.5 stroke-ink-faint flex-shrink-0" />
@@ -151,9 +174,8 @@ export default function StatsPanel({
             >
               BioCLIP
             </a>{" "}
-            is a foundation model trained on the Tree of Life. It guesses each
-            uploaded photo's species — disagreements flag photos that may need a
-            second look.
+            is a foundation model trained on the Tree of Life. It guesses each uploaded photo's
+            species — disagreements flag photos that may need a second look.
           </span>
         </p>
       </Section>
