@@ -314,6 +314,18 @@
       "type": "pollinator",
       "from": "V virg",
       "to": "C sci"
+    },
+    {
+      "id": 42,
+      "type": "pollinator",
+      "from": "V ata",
+      "to": "Z aur"
+    },
+    {
+      "id": 43,
+      "type": "pollinator",
+      "from": "V virg",
+      "to": "G mac"
     }
   ]
 }
