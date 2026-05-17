@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useId, useMemo, useState } from "react";
 import { Maximize2, ZoomIn, ZoomOut } from "lucide-react";
 import type { Organism, Relationship, RelationshipType } from "../../types";
 import { effectiveDirection } from "../../hooks/useRelationships";
@@ -189,24 +189,26 @@ export function RelationsSubgraph({
       .filter((t): t is RelationshipType => !!t);
   }, [edges, typeById]);
 
+  // Default to the center node so the subgraph rests in the same state it
+  // would show if you were hovering the center; a real hover overrides it.
+  const activeCode = hovered ?? centerCode;
+
   const highlightedEdges = useMemo(() => {
-    if (!hovered) return new Set<number>();
     const s = new Set<number>();
     for (const e of edges) {
-      if (e.rel.from === hovered || e.rel.to === hovered) s.add(e.rel.id);
+      if (e.rel.from === activeCode || e.rel.to === activeCode) s.add(e.rel.id);
     }
     return s;
-  }, [edges, hovered]);
+  }, [edges, activeCode]);
 
   const highlightedNodes = useMemo(() => {
-    if (!hovered) return new Set<string>();
-    const s = new Set<string>([hovered]);
+    const s = new Set<string>([activeCode]);
     for (const e of edges) {
-      if (e.rel.from === hovered) s.add(e.rel.to);
-      else if (e.rel.to === hovered) s.add(e.rel.from);
+      if (e.rel.from === activeCode) s.add(e.rel.to);
+      else if (e.rel.to === activeCode) s.add(e.rel.from);
     }
     return s;
-  }, [edges, hovered]);
+  }, [edges, activeCode]);
 
   if (nodes.length === 1) {
     return (
@@ -218,6 +220,15 @@ export function RelationsSubgraph({
 
   const r = LEAF_RADIUS;
   const stop = (e: React.SyntheticEvent) => e.stopPropagation();
+
+  // Unique per-instance ids: RelationsSubgraph renders in both the info
+  // drawer and TreeView's NodeDetail, so a hardcoded id collides. When the
+  // first element with that id sits in a hidden subtree, Chrome/WebKit drop
+  // the clip-path and the square image bleeds past the circular frame.
+  const uid = useId();
+  const clipId = `rs-leaf-clip-${uid}`;
+  const glowId = `rs-leaf-glow-${uid}`;
+  const arrId = (type: number | string) => `rs-arr-${uid}-${type}`;
 
   return (
     <div className={outerClassName}>
@@ -247,17 +258,17 @@ export function RelationsSubgraph({
           }}
         >
           <defs>
-            <clipPath id="rs-leaf-clip">
+            <clipPath id={clipId}>
               <circle r={r} />
             </clipPath>
-            <radialGradient id="rs-leaf-glow" cx="50%" cy="50%" r="50%">
+            <radialGradient id={glowId} cx="50%" cy="50%" r="50%">
               <stop offset="0%" stopColor="var(--color-ink)" stopOpacity="0.45" />
               <stop offset="100%" stopColor="var(--color-ink)" stopOpacity="0" />
             </radialGradient>
             {Array.from(colorByType.entries()).map(([id, color]) => (
               <marker
                 key={id}
-                id={`rs-arr-${id}`}
+                id={arrId(id)}
                 viewBox="0 0 10 10"
                 refX="9"
                 refY="5"
@@ -296,7 +307,7 @@ export function RelationsSubgraph({
                     stroke={e.color}
                     strokeOpacity={dim ? 0.1 : isActive ? 0.95 : 0.55}
                     strokeWidth={isActive ? 1.8 : 1.2}
-                    markerEnd={directed ? `url(#rs-arr-${e.rel.type})` : undefined}
+                    markerEnd={directed ? `url(#${arrId(e.rel.type)})` : undefined}
                   />
                   <g
                     transform={`translate(${midX},${midY}) rotate(${angle})`}
@@ -326,9 +337,9 @@ export function RelationsSubgraph({
           <g>
             {nodes.map((n) => {
               const isCenter = n.isCenter;
-              const isActive = n.code === hovered;
-              const isNeighbor = hovered != null && highlightedNodes.has(n.code) && !isActive;
-              const dim = hovered != null && !isActive && !isNeighbor;
+              const isActive = n.code === activeCode;
+              const isNeighbor = highlightedNodes.has(n.code) && !isActive;
+              const dim = !isActive && !isNeighbor;
               const nodeColor = n.isAnimal
                 ? "var(--color-amber, #f59e0b)"
                 : "var(--color-ink)";
@@ -354,16 +365,16 @@ export function RelationsSubgraph({
                   }}
                 >
                   <circle r={r + 14} fill="transparent" stroke="none" />
-                  {isActive && <circle r={r + 12} fill="url(#rs-leaf-glow)" />}
+                  {isActive && <circle r={r + 12} fill={`url(#${glowId})`} />}
                   <circle
                     r={r + 2}
                     fill="var(--color-surface)"
                     stroke={strokeColor}
                     strokeOpacity={isActive ? 0.95 : 0.7}
-                    strokeWidth={isActive ? 1.8 : isCenter ? 1.8 : 1.2}
+                    strokeWidth={isActive ? 1.8 : 1.2}
                   />
                   {n.organism ? (
-                    <g clipPath="url(#rs-leaf-clip)">
+                    <g clipPath={`url(#${clipId})`}>
                       <image
                         href={`${baseURL}${n.organism.image}`}
                         x={-r}
@@ -383,15 +394,6 @@ export function RelationsSubgraph({
                     >
                       {n.code}
                     </text>
-                  )}
-                  {isCenter && (
-                    <circle
-                      r={r + 2}
-                      fill="none"
-                      stroke={nodeColor}
-                      strokeWidth={1.8}
-                      strokeOpacity={0.9}
-                    />
                   )}
                   <g pointerEvents="none">
                     <text
