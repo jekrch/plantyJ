@@ -1,6 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import type { AiAnalysisEntry, AiVerdict, Env } from "./types";
 import { readAiAnalyses, writeAiAnalyses } from "./github";
+import { sendReply } from "./telegram";
 
 const ANALYSIS_MODEL = "gemini-3.1-pro-preview";
 // Queue + run-state KV keys.
@@ -51,6 +52,10 @@ interface RunMeta {
   startedAt: string;
   lastTickAt?: string;
   finishedAt?: string;
+  // Telegram coordinates of the originating /analyze message, so the cron
+  // tick that drains the last pair can report completion back to the group.
+  chatId?: number;
+  messageId?: number;
 }
 
 async function loadRollupParsed(env: Env): Promise<{ raw: string; rollup: Rollup }> {
@@ -130,6 +135,21 @@ function stripJsonFences(text: string): string {
   const last = t.lastIndexOf("}");
   if (first >= 0 && last > first) t = t.slice(first, last + 1);
   return t;
+}
+
+// Best-effort parse of the model's JSON envelope. Returns null instead of
+// throwing so callers can use it both as the real parse and as a cheap
+// "did we already receive a complete object?" salvage check on a truncated
+// stream.
+function tryParseAnalysisJson(
+  text: string
+): { verdict?: unknown; analysis?: unknown; references?: unknown } | null {
+  if (!text.trim()) return null;
+  try {
+    return JSON.parse(stripJsonFences(text));
+  } catch {
+    return null;
+  }
 }
 
 function stripInlineCitations(text: string): string {
@@ -228,6 +248,14 @@ async function analyzeOnePair(
   // gateway timer, so a slow grounded call doesn't 524. We accumulate text
   // deltas and snapshot the latest groundingMetadata / usageMetadata seen
   // (the final chunk normally carries the complete versions).
+  //
+  // The Gemini streaming endpoint with googleSearch grounding intermittently
+  // drops the connection before cleanly closing the SSE stream, which makes
+  // the SDK throw "Incomplete JSON segment at the end". Two mitigations:
+  //   1. If the model already streamed a complete JSON object, the truncation
+  //      hit only a trailing grounding/usage frame — salvage what we have.
+  //   2. Otherwise the stream died early; retry the call once before failing.
+  const MAX_ATTEMPTS = 2;
   let textAcc = "";
   let lastGroundingMeta: import("@google/genai").GroundingMetadata | undefined;
   let lastFinishReason: string | undefined;
@@ -236,35 +264,57 @@ async function analyzeOnePair(
   let outputTokens = 0;
   let lastUrlContextMeta: unknown;
 
-  try {
-    const stream = await client.models.generateContentStream({
-      model: ANALYSIS_MODEL,
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
-      config: { tools: [{ googleSearch: {} }] },
-    });
-    for await (const chunk of stream) {
-      const cand = chunk.candidates?.[0];
-      const parts = cand?.content?.parts ?? [];
-      for (const p of parts) {
-        const t = (p as { text?: string }).text;
-        if (typeof t === "string") textAcc += t;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    // Reset per-attempt accumulators so a salvaged retry never mixes frames
+    // from a previous, aborted attempt.
+    textAcc = "";
+    lastGroundingMeta = undefined;
+    lastFinishReason = undefined;
+    lastModelVersion = undefined;
+    lastUrlContextMeta = undefined;
+    promptTokens = 0;
+    outputTokens = 0;
+
+    try {
+      const stream = await client.models.generateContentStream({
+        model: ANALYSIS_MODEL,
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        config: { tools: [{ googleSearch: {} }] },
+      });
+      for await (const chunk of stream) {
+        const cand = chunk.candidates?.[0];
+        const parts = cand?.content?.parts ?? [];
+        for (const p of parts) {
+          const t = (p as { text?: string }).text;
+          if (typeof t === "string") textAcc += t;
+        }
+        if (cand?.groundingMetadata) lastGroundingMeta = cand.groundingMetadata;
+        if (cand?.finishReason) lastFinishReason = cand.finishReason;
+        if (cand?.urlContextMetadata) lastUrlContextMeta = cand.urlContextMetadata;
+        if (chunk.modelVersion) lastModelVersion = chunk.modelVersion;
+        const usage = chunk.usageMetadata;
+        if (usage?.promptTokenCount != null) promptTokens = usage.promptTokenCount;
+        if (usage?.candidatesTokenCount != null) outputTokens = usage.candidatesTokenCount;
       }
-      if (cand?.groundingMetadata) lastGroundingMeta = cand.groundingMetadata;
-      if (cand?.finishReason) lastFinishReason = cand.finishReason;
-      if (cand?.urlContextMetadata) lastUrlContextMeta = cand.urlContextMetadata;
-      if (chunk.modelVersion) lastModelVersion = chunk.modelVersion;
-      const usage = chunk.usageMetadata;
-      if (usage?.promptTokenCount != null) promptTokens = usage.promptTokenCount;
-      if (usage?.candidatesTokenCount != null) outputTokens = usage.candidatesTokenCount;
+      break; // stream closed cleanly
+    } catch (err) {
+      const message = `generateContentStream failed: ${(err as Error).message}`;
+      // The model may have emitted the full JSON object before the stream was
+      // cut — if it parses, the truncation was cosmetic. Keep it, stop here.
+      if (tryParseAnalysisJson(textAcc)) break;
+      // Nothing usable. Retry unless this was the last attempt.
+      if (attempt < MAX_ATTEMPTS) {
+        await new Promise((r) => setTimeout(r, 800));
+        continue;
+      }
+      return {
+        pair,
+        error: message,
+        promptTokens,
+        outputTokens,
+        diag: emptyDiag(pair),
+      };
     }
-  } catch (err) {
-    return {
-      pair,
-      error: `generateContentStream failed: ${(err as Error).message}`,
-      promptTokens,
-      outputTokens,
-      diag: emptyDiag(pair),
-    };
   }
 
   const text = textAcc;
@@ -364,7 +414,8 @@ export interface SubmitErr {
 
 export async function submitAnalyzeRun(
   env: Env,
-  zoneFilter: string | null
+  zoneFilter: string | null,
+  notify?: { chatId: number; messageId: number }
 ): Promise<SubmitOk | SubmitErr> {
   if (!env.ASK_CACHE) {
     return { ok: false, message: "KV not configured — analyze runs require ASK_CACHE." };
@@ -405,6 +456,8 @@ export async function submitAnalyzeRun(
     promptTokens: 0,
     outputTokens: 0,
     startedAt: new Date().toISOString(),
+    chatId: notify?.chatId,
+    messageId: notify?.messageId,
   };
   await env.ASK_CACHE.put(QUEUE_KV_KEY, JSON.stringify(pairs), { expirationTtl: QUEUE_KV_TTL });
   await env.ASK_CACHE.put(META_KV_KEY, JSON.stringify(meta), { expirationTtl: QUEUE_KV_TTL });
@@ -530,11 +583,18 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
           : a.shortCode.localeCompare(b.shortCode)
       );
       const scope = meta.zoneFilter ? ` (zone ${meta.zoneFilter})` : "";
+      // ai_analysis.json isn't watched by compute-metadata.yml, so the
+      // metadata→deploy chain that justifies [skip-deploy] elsewhere never
+      // fires for it. Skip the deploy on intermediate ticks (a run drains
+      // PAIRS_PER_TICK at a time across many cron ticks) and let the final
+      // tick's commit trigger deploy-frontend directly via the public/**
+      // push path, so the whole run publishes in a single deploy.
+      const skipDeploy = remainingAfter.length > 0 ? " [skip-deploy]" : "";
       await writeAiAnalyses(
         env,
         merged,
         latestSha,
-        `Add AI analyses${scope}: ${newEntries.length} pair(s) [skip-deploy]`
+        `Add AI analyses${scope}: ${newEntries.length} pair(s)${skipDeploy}`
       );
     }
 
@@ -543,10 +603,27 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
     meta.promptTokens += promptTokens;
     meta.outputTokens += outputTokens;
     meta.lastTickAt = new Date().toISOString();
-    if (remainingAfter.length === 0) meta.finishedAt = meta.lastTickAt;
+    const justFinished = remainingAfter.length === 0;
+    if (justFinished) meta.finishedAt = meta.lastTickAt;
     await env.ASK_CACHE.put(META_KV_KEY, JSON.stringify(meta), {
       expirationTtl: QUEUE_KV_TTL,
     });
+
+    // The queue is now empty, so subsequent cron ticks bail at the
+    // "queue empty" guard — this is the only tick that observes the
+    // transition, making it safe to notify exactly once here.
+    if (justFinished && meta.chatId != null && meta.messageId != null) {
+      const scope = meta.zoneFilter ? ` (zone ${meta.zoneFilter})` : "";
+      const tokens = `${meta.promptTokens.toLocaleString()} in / ${meta.outputTokens.toLocaleString()} out`;
+      await sendReply(
+        env.TELEGRAM_BOT_TOKEN,
+        meta.chatId,
+        meta.messageId,
+        `Analyze run complete${scope}: ${meta.succeeded}/${meta.total} succeeded, ${meta.failed} failed. Tokens: ${tokens}. Elapsed: ${elapsedSince(meta.startedAt)}.${meta.failed > 0 ? " Run /analyze-load for failure details." : ""}`
+      ).catch((err) => {
+        console.log(`[analyze.tick] completion notify failed: ${(err as Error).message}`);
+      });
+    }
 
     if (failures.length > 0) {
       console.log(

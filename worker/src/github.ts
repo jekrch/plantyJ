@@ -926,25 +926,36 @@ export async function commitBatchState(
   state: BatchState,
   message: string
 ): Promise<{ jsonWrites: number; imagesDeleted: number }> {
+  // [skip-deploy] suppresses deploy-frontend's push trigger. That's only safe
+  // when something else still deploys: compute-metadata.yml watches pics /
+  // plants / zones / zone_pics / annotations + images, recomputes, and chains
+  // a deploy via workflow_run. relationships.json is the one manifest it
+  // doesn't watch — so a relationships-only commit must deploy directly via
+  // public/**, otherwise the change never reaches the site.
+  const willComputeMetadata =
+    [...state.dirty].some((d) => d !== "relationships") ||
+    state.imagesToDelete.length > 0;
+  const commitMessage = willComputeMetadata ? `${message} [skip-deploy]` : message;
+
   const writes: Array<Promise<void>> = [];
   if (state.dirty.has("zones")) {
-    writes.push(writeJsonFile(env, ZONES_PATH, { zones: state.gallery.zones }, state.zonesSha, message));
+    writes.push(writeJsonFile(env, ZONES_PATH, { zones: state.gallery.zones }, state.zonesSha, commitMessage));
   }
   if (state.dirty.has("plants")) {
-    writes.push(writeJsonFile(env, PLANTS_PATH, { plants: state.gallery.plants }, state.plantsSha, message));
+    writes.push(writeJsonFile(env, PLANTS_PATH, { plants: state.gallery.plants }, state.plantsSha, commitMessage));
   }
   if (state.dirty.has("pics")) {
-    writes.push(writeJsonFile(env, PICS_PATH, { pics: state.gallery.pics }, state.picsSha, message));
+    writes.push(writeJsonFile(env, PICS_PATH, { pics: state.gallery.pics }, state.picsSha, commitMessage));
   }
   if (state.dirty.has("zonePics")) {
-    writes.push(writeJsonFile(env, ZONE_PICS_PATH, { zonePics: state.gallery.zonePics }, state.zonePicsSha, message));
+    writes.push(writeJsonFile(env, ZONE_PICS_PATH, { zonePics: state.gallery.zonePics }, state.zonePicsSha, commitMessage));
   }
   if (state.dirty.has("annotations")) {
     const cleaned = state.annotations.filter((a) => a.tags.length > 0 || a.description !== null);
-    writes.push(writeJsonFile(env, ANNOTATIONS_PATH, { annotations: cleaned }, state.annotationsSha, message));
+    writes.push(writeJsonFile(env, ANNOTATIONS_PATH, { annotations: cleaned }, state.annotationsSha, commitMessage));
   }
   if (state.dirty.has("relationships")) {
-    writes.push(writeJsonFile(env, RELATIONSHIPS_PATH, state.relationships, state.relationshipsSha, message));
+    writes.push(writeJsonFile(env, RELATIONSHIPS_PATH, state.relationships, state.relationshipsSha, commitMessage));
   }
   await Promise.all(writes);
 

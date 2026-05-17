@@ -106,7 +106,10 @@ async function runJob(env: Env, job: JobRecord): Promise<RunStatus> {
   const end = Math.min(start + CONFIRM_CHUNK_SIZE, commands.length);
   const chunk = commands.slice(start, end);
 
-  const message = `Batch /confirm: ${chunk.length} command(s) (${start + 1}-${end} of ${commands.length}) [skip-deploy]`;
+  // commitBatchState appends [skip-deploy] itself when the dirty manifests go
+  // through the compute-metadata→deploy chain; a relationships-only batch is
+  // left without it so it deploys directly.
+  const message = `Batch /confirm: ${chunk.length} command(s) (${start + 1}-${end} of ${commands.length})`;
   const { results: chunkResults } = await runBatch(env, chunk, message);
   for (let i = 0; i < chunk.length; i++) {
     const r = chunkResults[i];

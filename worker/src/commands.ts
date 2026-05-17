@@ -296,12 +296,15 @@ async function handleAnalyzeCancel(env: Env, reply: Replier): Promise<void> {
   await reply("Cleared analyze queue and run state.");
 }
 
-async function handleAnalyze(text: string, env: Env, reply: Replier): Promise<void> {
+async function handleAnalyze(text: string, message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
   const zoneFilter = text.match(/^\/analyze(?:\s+(\S+))?$/i)![1]?.trim() || null;
-  const result = await submitAnalyzeRun(env, zoneFilter);
+  const result = await submitAnalyzeRun(env, zoneFilter, {
+    chatId: message.chat.id,
+    messageId: message.message_id,
+  });
   await reply(
     result.ok
-      ? `Queued ${result.enqueued} pair(s)${zoneFilter ? ` in zone ${zoneFilter}` : ""}. Cron drains the queue every minute — run /analyze-load to check progress.`
+      ? `Queued ${result.enqueued} pair(s)${zoneFilter ? ` in zone ${zoneFilter}` : ""}. Cron drains the queue every minute — run /analyze-load to check progress, or wait for the completion summary.`
       : result.message
   );
 }
@@ -539,7 +542,7 @@ export async function handleTextCommand(
     [/^\/resp([123])?\s/i, () => handleResp(text, message, env, reply)],
     ["/analyze-load", () => handleAnalyzeLoad(env, reply)],
     ["/analyze-cancel", () => handleAnalyzeCancel(env, reply)],
-    [/^\/analyze(\s|$)/i, () => handleAnalyze(text, env, reply)],
+    [/^\/analyze(\s|$)/i, () => handleAnalyze(text, message, env, reply)],
     [/^\/(help|start)$/, async () => { await reply(HELP_HEADER); }],
     ["/plants", () => handlePlants(env, reply)],
     ["/tags", () => handleTagsList(env, reply)],
