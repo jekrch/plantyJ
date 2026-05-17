@@ -30,5 +30,8 @@ jobs:
       - name: Install dependencies
         run: bun install
 
+      - name: Lint & format check (Biome)
+        run: bunx biome ci .
+
       - name: Run tests
         run: bun run test
