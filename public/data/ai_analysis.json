@@ -720,6 +720,18 @@
     },
     {
       "shortCode": "Z aur",
+      "zoneCode": "nb",
+      "verdict": "GOOD",
+      "analysis": "Zizia aurea (Golden Alexanders) is an exceptional choice for this Minneapolis boulevard planting. As an early spring bloomer native to Minnesota, it fills a crucial early-season gap for pollinators, providing accessible nectar to short-tongued bees—including specialist mining bees like Andrena ziziae—as well as small butterflies, flies, and wasps. Most importantly, it serves as a vital native larval host plant for the Black Swallowtail butterfly (Papilio polyxenes). Situated in the North Boulevard zone alongside native plants like Asclepias tuberosa (Butterfly Weed), it helps establish a robust, multi-season pollinator and caterpillar habitat that perfectly aligns with the owners' local ecology priorities.\n\nPractically, Golden Alexanders are highly adaptable and well-suited to the property's zone 4b/5a climate and clay/loam soils. Because it tolerates moderate road salt and general urban disturbances, it is an ideal resilient perennial for street-side boulevard plantings. It possesses fibrous, soil-stabilizing roots and establishes easily by self-seeding. While wild turkeys and other urban wildlife are known to traverse the boulevard, Zizia aurea is moderately herbivore-resistant, ensuring its golden umbels persist to support the neighborhood's insect populations.",
+      "references": [
+        "https://www.wildflower.org/plants/result.php?id_plant=ZIAU",
+        "https://bluethumb.org/plantfinder/zizia-aurea/",
+        "https://squid-pear-j5tc.squarespace.com/blog/salt-tolerant-native-plants"
+      ],
+      "created": "2026-05-17T16:35:47.633Z"
+    },
+    {
+      "shortCode": "Z aur",
       "zoneCode": "nbv",
       "verdict": "GOOD",
       "analysis": "Zizia aurea (Golden Alexanders) is an invaluable native perennial that blooms early in the spring, bridging the \"nectar gap\" for short-tongued bees, wasps, and early butterflies. Crucially, it belongs to the carrot family (Apiaceae) and serves as a vital larval host plant for the Black Swallowtail butterfly. Its tolerance for various soils and moisture levels makes it a resilient, ecologically dense addition to the boulevard.",
