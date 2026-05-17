@@ -10,6 +10,7 @@ Outputs:
 - public/data/pics.json (updated with species IDs)
 """
 import json
+import os
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -78,14 +79,24 @@ def load_model(spec: ModelSpec):
     return model, preprocess
 
 
-def embed_image(image_path: Path, model, preprocess) -> list[float]:
-    img = Image.open(image_path).convert("RGB")
-    tensor = preprocess(img).unsqueeze(0)
-    with torch.no_grad():
-        features = model.encode_image(tensor)
+BATCH_SIZE = 16
+
+
+def embed_batch(tensors: list[torch.Tensor], model) -> list[list[float]]:
+    """Encode a stack of preprocessed image tensors in one forward pass.
+
+    The BioCLIP ViT encoder is per-sample independent (LayerNorm, no
+    BatchNorm, no cross-sample ops), so a batched forward yields the same
+    per-image vectors as encoding one at a time.
+    """
+    batch = torch.stack(tensors)
+    with torch.inference_mode():
+        features = model.encode_image(batch)
         features = features / features.norm(dim=-1, keepdim=True)
-    vec = features.squeeze(0).cpu().numpy()
-    return [round(float(v), 5) for v in vec]
+    return [
+        [round(float(v), 5) for v in row]
+        for row in features.cpu().numpy()
+    ]
 
 
 def main():
@@ -134,35 +145,71 @@ def main():
         # device='cpu' is explicitly set to ensure stability on standard GH Action runners
         classifier = TreeOfLifeClassifier(device='cpu') 
 
+    if needs_embedding:
+        torch.set_num_threads(os.cpu_count() or 1)
+
     updated = dict(pruned)
     errors = 0
-    
+    embed_failed: set[str] = set()
+
+    # Phase 1: embeddings, batched. Images are decoded/preprocessed one at a
+    # time so a single corrupt file errors in isolation (same as before);
+    # only the model forward is batched.
+    if needs_embedding:
+        pending: list[tuple[dict, torch.Tensor]] = []
+
+        def flush() -> None:
+            if not pending:
+                return
+            vecs = embed_batch([t for _, t in pending], model)
+            for (p, _), vec in zip(pending, vecs):
+                updated[p["id"]] = vec
+                print(f"  EMB OK: {p['image']}")
+            pending.clear()
+
+        for pic in to_compute:
+            if pic["id"] in pruned:
+                continue  # embedding already present and kept
+            image_path = IMAGE_ROOT / pic["image"]
+            if not image_path.exists():
+                continue  # reported in phase 2
+            try:
+                img = Image.open(image_path).convert("RGB")
+                pending.append((pic, preprocess(img)))
+            except Exception as e:
+                print(f"  ERROR: {pic['image']} → {e}", file=sys.stderr)
+                errors += 1
+                embed_failed.add(pic["id"])
+                continue
+            if len(pending) >= BATCH_SIZE:
+                flush()
+        flush()
+
+    # Phase 2: per-image species classification (pybioclip has no batch API).
     for i, pic in enumerate(to_compute, start=1):
         image_path = IMAGE_ROOT / pic["image"]
         if not image_path.exists():
             print(f"  SKIP (file not found): {pic['image']}", file=sys.stderr)
             errors += 1
             continue
-            
+        if pic["id"] in embed_failed:
+            continue  # embedding failed for this pic; skip classify (as before)
+
         try:
-            # 1. Generate Embeddings (only if missing)
-            if pic["id"] not in pruned:
-                updated[pic["id"]] = embed_image(image_path, model, preprocess)
-            
-            # 2. Extract Species Identification (only if missing)
+            # Extract Species Identification (only if missing)
             if "bioclipSpeciesId" not in pic:
                 # predict() returns a list of dictionaries sorted by confidence
                 preds = classifier.predict(str(image_path), Rank.SPECIES)
                 if preds:
                     top_pred = preds[0]
                     pic["bioclipSpeciesId"] = top_pred.get("species", "")
-                    
+
                     # Optional but highly recommended context:
                     pic["bioclipCommonName"] = top_pred.get("common_name", "")
                     pic["bioclipScore"] = round(top_pred.get("score", 0.0), 4)
 
             print(f"  [{i}/{len(to_compute)}] OK: {pic['image']} -> {pic.get('bioclipSpeciesId')}")
-            
+
         except Exception as e:
             print(f"  ERROR: {pic['image']} → {e}", file=sys.stderr)
             errors += 1
