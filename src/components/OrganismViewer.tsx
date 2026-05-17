@@ -2,10 +2,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { X, ZoomIn, ZoomOut, Info } from "lucide-react";
 import type { Annotation, Organism, Species, Zone, ZonePic } from "../types";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
-import { MAX_SCALE, MIN_SCALE, useZoomPan } from "../hooks/useZoomPan";
+import {
+  MAX_SCALE,
+  MIN_SCALE,
+  useImageZoomPan,
+  useGestureHandler,
+  useSlideNavigation,
+} from "../hooks/imageViewer";
 import { useBarMeasure } from "../hooks/useBarMeasure";
-import { useGestureHandler } from "../hooks/useGestureHandler";
-import { useSlideNavigation } from "../hooks/useSlideNavigation";
 import NavButton from "./NavButton";
 import OrganismInfoDrawer, { AIAnalysis } from "./OrganismInfoDrawer";
 import type { RelationshipsData } from "../hooks/useRelationships";
@@ -63,7 +67,7 @@ export default function OrganismViewer({
   useBodyScrollLock(containerRef);
   const { topBarH, bottomBarH } = useBarMeasure(topBarRef, bottomBarRef, currentIndex);
 
-  const zoomPan = useZoomPan(imgWrapperRef, currentIndex);
+  const zoomPan = useImageZoomPan(imgWrapperRef, currentIndex);
   const {
     imgRef,
     displayScale,

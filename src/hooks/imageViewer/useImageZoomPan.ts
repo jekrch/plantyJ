@@ -3,24 +3,24 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState, type RefObje
 const MIN_SCALE = 1;
 const MAX_SCALE = 5;
 
-export interface Transform {
+export interface ImageTransform {
   scale: number;
   x: number;
   y: number;
 }
 
-export interface ZoomPanState {
+export interface ImageZoomPanState {
   imgRef: RefObject<HTMLImageElement | null>;
   displayScale: number;
   isZoomed: boolean;
-  transformRef: React.MutableRefObject<Transform>;
+  transformRef: React.MutableRefObject<ImageTransform>;
 
   /** Base (unscaled) image dimensions for clamp calculations */
   baseDimsRef: React.MutableRefObject<{ width: number; height: number }>;
 
   resetTransform: () => void;
-  setTransform: (t: Transform, animate?: boolean) => void;
-  applyTransform: (t: Transform, animate?: boolean) => void;
+  setTransform: (t: ImageTransform, animate?: boolean) => void;
+  applyTransform: (t: ImageTransform, animate?: boolean) => void;
   clampTranslate: (x: number, y: number, scale: number) => { x: number; y: number };
   measureBaseDims: () => void;
   handleDoubleClick: (e: React.MouseEvent) => void;
@@ -38,18 +38,18 @@ export interface ZoomPanState {
  * so its layout bounds already match the viewport and scaling it won't clip.
  * The image stays at its natural constrained size, centered via flexbox.
  */
-export function useZoomPan(
+export function useImageZoomPan(
   imgWrapperRef: RefObject<HTMLDivElement | null>,
   currentIndex: number
-): ZoomPanState {
+): ImageZoomPanState {
   const imgRef = useRef<HTMLImageElement>(null);
   const [displayScale, setDisplayScale] = useState(1);
-  const transformRef = useRef<Transform>({ scale: 1, x: 0, y: 0 });
+  const transformRef = useRef<ImageTransform>({ scale: 1, x: 0, y: 0 });
   const baseDimsRef = useRef<{ width: number; height: number }>({ width: 0, height: 0 });
 
   // Core helpers
 
-  const applyTransform = useCallback((t: Transform, animate = false) => {
+  const applyTransform = useCallback((t: ImageTransform, animate = false) => {
     const wrapper = imgWrapperRef.current;
     if (!wrapper) return;
     wrapper.style.transition = animate ? "transform 0.2s ease-out" : "none";
@@ -76,7 +76,7 @@ export function useZoomPan(
   }, [imgWrapperRef]);
 
   const setTransform = useCallback(
-    (t: Transform, animate = false) => {
+    (t: ImageTransform, animate = false) => {
       transformRef.current = t;
       applyTransform(t, animate);
       setDisplayScale(t.scale);

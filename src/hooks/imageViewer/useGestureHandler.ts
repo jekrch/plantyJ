@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "react";
-import type { ZoomPanState } from "./useZoomPan";
+import type { ImageZoomPanState } from "./useImageZoomPan";
 import type { SlideNavigationState } from "./useSlideNavigation";
 
 interface GestureHandlers {
@@ -39,7 +39,7 @@ interface SlideGesture {
  * Two-finger touch is always a pinch-zoom.
  */
 export function useGestureHandler(
-  zoomPan: ZoomPanState,
+  zoomPan: ImageZoomPanState,
   slide: SlideNavigationState,
   hasPrev: boolean,
   hasNext: boolean

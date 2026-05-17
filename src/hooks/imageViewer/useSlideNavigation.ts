@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import type { Organism } from "../types";
+import type { Organism } from "../../types";
 
 export interface SlideNavigationState {
     slideTrackRef: React.RefObject<HTMLDivElement | null>;
