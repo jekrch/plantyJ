@@ -13,7 +13,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-17T16:26:14.446Z",
       "width": 800,
-      "height": 600
+      "height": 600,
+      "bioclipSpeciesId": "Geranium maculatum",
+      "bioclipCommonName": "Spotted geranium",
+      "bioclipScore": 0.9743
     },
     {
       "seq": 78,
@@ -113,7 +116,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
