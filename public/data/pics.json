@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 80,
+      "id": "Z aur-1779035353",
+      "shortCode": "Z aur",
+      "zoneCode": "nb",
+      "tags": [
+        "flower"
+      ],
+      "description": null,
+      "image": "images/Z aur/1779035353.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-05-17T16:29:15.415Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 79,
       "id": "G mac-1779035173",
       "shortCode": "G mac",
@@ -116,7 +131,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
