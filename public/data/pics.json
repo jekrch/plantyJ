@@ -13,7 +13,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-17T16:29:15.415Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "bioclipSpeciesId": "Zizia aurea",
+      "bioclipCommonName": "Golden Zizia",
+      "bioclipScore": 0.9206
     },
     {
       "seq": 79,
@@ -131,7 +134,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
