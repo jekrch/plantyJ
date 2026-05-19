@@ -799,6 +799,18 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "V ped",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "The Prairie Violet (Viola pedatifida) is an exceptional fit for the front yard, directly advancing the owners' goals of cultivating a native, edible, and ecologically supportive landscape. As a Minnesota native well-adapted to USDA zones 4b/5a, it is highly resilient and tolerates the property's loam and clay-loam soils, provided they do not remain persistently waterlogged. Within the front yard, its low stature makes it an ideal, non-aggressive companion to other groundcovers like Phlox and Creeping Thyme, and it mingles beautifully with fellow spring bloomers like Columbine and Golden Alexanders. Furthermore, fitting the owners' edible gardening priorities, its deeply lobed leaves and delicate spring flowers are fully edible and rich in vitamins A and C, offering a practical and attractive harvest for culinary use.\n\nEcologically, this species is a foundational asset for native insects. Native violets serve as the obligate larval host plants for fritillary butterflies, including the Great Spangled, Aphrodite, and the threatened Regal Fritillary. Given that the front yard is already an active nursery for Black Swallowtails, the addition of the Prairie Violet further cements the property as a vital urban butterfly haven. Its early spring blooms also provide crucial nectar to emerging native bees. Finally, like other violets in the garden, the Prairie Violet relies on myrmecochory for reproduction; its seeds feature nutrient-rich elaiosomes that attract local ant species. Resident ants, such as the Carpenter Ants already known to distribute seeds on this property, will naturally assist in dispersing this violet, weaving it seamlessly into the garden's natural soil ecology.",
+      "references": [
+        "https://www.minnesotawildflowers.info/flower/prairie-violet",
+        "https://www.prairiemoon.com/viola-pedatifida-prairie-violet",
+        "https://mdc.mo.gov/discover-nature/field-guide/violets"
+      ],
+      "created": "2026-05-19T00:58:58.036Z"
+    },
+    {
       "shortCode": "v sor",
       "zoneCode": "mpg",
       "verdict": "GOOD",
@@ -840,6 +852,19 @@
         "https://www.morningskygreenery.com/product/anaphalis-margaritacea/"
       ],
       "created": "2026-05-13T00:45:26.434Z"
+    },
+    {
+      "shortCode": "Z aur",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "The ecological niche for Zizia aurea (Golden Alexanders) in the front yard is highly beneficial and aligns perfectly with the owners' native-priority goals. As a Minnesota native hardy to USDA zones 3-8, it is robustly adapted to the property's zone 4b/5a climate and its clay/loam soil, where it easily tolerates varying moisture levels. It sits well among other early-season natives in the front yard zone, such as Columbine (Aquilegia canadensis) and Phlox (Phlox subulata), helping to form a cohesive, low-maintenance native border that provides early spring color before summer perennials emerge.\n\nCrucially, Zizia aurea is a primary native larval host plant for the Black Swallowtail butterfly (Papilio polyxenes). The garden journal explicitly notes the presence of several early-instar caterpillars on this plant, confirming its immense ecological value as a reproductive habitat. It serves as a superior, historically accurate native alternative to introduced carrot-family herbs like dill or parsley. Additionally, its shallow, flat-topped yellow umbels provide easily accessible nectar for short-tongued bees, wasps, and adult butterflies, including the Red Admiral (Vanessa atalanta) which is documented pollinating it in the garden. The plant's ability to reliably self-seed and resist deer browsing further cements it as an outstanding, resilient anchor for the local food web.",
+      "references": [
+        "https://www.wildflower.org/plants/result.php?id_plant=ziau",
+        "https://theplantnative.com/plant/golden-alexander/",
+        "https://www.prairiemoon.com/zizia-aurea-golden-alexanders",
+        "https://pollinator.org/pollinator.org/assets/globals/Pollinator-Partnership-Spotlight_Plant-profile-for-Golden-Alexanders.pdf"
+      ],
+      "created": "2026-05-19T00:58:58.036Z"
     },
     {
       "shortCode": "Z aur",
