@@ -10,27 +10,27 @@
     },
     {
       "code": "bb",
-      "name": "berry border"
+      "name": "Berry Border"
     },
     {
       "code": "mpg",
-      "name": "maple"
+      "name": "Maple"
     },
     {
       "code": "hbd",
-      "name": "hydrangea border"
+      "name": "Hydrangea Border"
     },
     {
       "code": "fy",
-      "name": "front yard"
+      "name": "Front Yard"
     },
     {
       "code": "by",
-      "name": "back yard"
+      "name": "Back Yard"
     },
     {
       "code": "sy",
-      "name": "side yard"
+      "name": "Side Yard"
     }
   ]
 }
