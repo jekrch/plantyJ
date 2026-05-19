@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A vir",
+      "fullName": "Anemone virginiana",
+      "commonName": "Tall Thimbleweed",
+      "variety": null
+    },
+    {
       "shortCode": "A mel",
       "fullName": "Aronia melanocarpa",
       "commonName": "Black Chokeberry",
