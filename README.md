@@ -92,6 +92,29 @@ The agent only proposes existing verbs (`/addtag`, `/removetag`, `/update`, `/de
 
 Pending proposals expire after an hour and are replaced when a follow-up `/resp` (or a fresh `/ask`) emits a new set. Confirmed commands are queued and run in chunks (~25/min) to stay inside Cloudflare and GitHub API limits; a summary is posted when the batch finishes.
 
+### Photo identification (`/identify`, `/pick`)
+
+Don't know what you photographed? Send the photo with the caption `/identify` and an optional hint:
+
+```
+/identify
+/identify shrub in fb1, maybe a viburnum
+```
+
+The image goes to Gemini 3.1 Pro vision on the cron path (like `/ask`, so the Telegram webhook never blocks). The prompt is grounded against the live rollup of every existing plant and zone, plus the property context — Minneapolis, MN, USDA zone 4b/5a — and the current date, so seasonality informs plausibility. Any hint you give is treated as a strong signal about the species and which zone the photo belongs to.
+
+The bot replies with up to three candidates, ordered most→least likely. Each carries a common + scientific name, a `high` / `medium` / `low` confidence, a one-line note (distinguishing features seen, how to confirm, any guessed zone), and a **ready-to-ingest caption**:
+
+- If the photo is clearly an already-registered plant, the caption reuses its `shortCode` so the photo attaches to that plant.
+- Otherwise it drafts a new-plant caption; the `shortCode` is auto-generated from the species name on commit.
+
+Pick one to commit it exactly like a normal photo upload:
+
+- `/pick 2` — save this photo with option 2's identification
+- `/cancel` — discard the options
+
+Options expire after an hour. If nothing can be identified, the bot says why and suggests retrying with a clearer photo/hint or posting it as unidentified (`id // {zoneCode}`). Each reply includes an approximate token count and cost.
+
 ## Image metadata
 
 A GitHub Action (`compute-metadata.yml`) runs whenever `plants.json` changes. It backfills missing per-image metadata:
