@@ -2,6 +2,19 @@
   "analyses": [
     {
       "shortCode": "A can",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "Wild ginger (Asarum canadense) is an outstanding shade-tolerant native groundcover for a Minneapolis front yard. Easily hardy to USDA Zone 4b and highly adaptable, the plant prefers moist, humus-rich woodland environments but reliably tolerates the heavy clay and loam soils common to the area. By spreading via underground rhizomes, it forms a dense, weed-suppressing carpet of striking, heart-shaped leaves that can effectively blanket exposed soil and outcompete invasive weeds. This makes it a highly practical choice for the owners' native-focused urban property. Furthermore, the fuzzy foliage and pungent root scent make the plant highly resistant to browsing by deer and rabbits, minimizing urban wildlife damage.\n\nEcologically, Asarum canadense provides fascinating and highly specialized local benefits. Its inconspicuous, maroon spring flowers remain hidden under the foliage at ground level, where they provide shelter and warmth to small, early-season ground-dwelling beetles, flies, and gnats. After seed production, the plant relies heavily on local ant populations for seed dispersal (myrmecochory)—a relationship already documented in the garden journal with resident carpenter ants harvesting its elaiosome-rich seeds. While it is also a larval host plant for the Pipevine Swallowtail butterfly, this species is a rare stray in Minnesota, so its primary wildlife value remains with ground-layer invertebrates. It is worth noting that despite the \"ginger\" moniker and its historical folk uses, the roots contain toxic aristolochic acids and should not be consumed as an edible crop, but its profound benefits to the ground-level ecosystem make it a perfect fit for a native ecology garden.",
+      "references": [
+        "https://hort.extension.wisc.edu/articles/wild-ginger-asarum-spp/",
+        "https://www.prairienursery.com/wild-ginger-asarum-canadense.html",
+        "https://northerngardener.org/plant-spotlight-wild-ginger/",
+        "https://ohiodnr.gov/discover-and-learn/plants-trees/flowering-plants/wild-ginger"
+      ],
+      "created": "2026-05-19T00:56:58.121Z"
+    },
+    {
+      "shortCode": "A can",
       "zoneCode": "sy",
       "verdict": "GOOD",
       "analysis": "As a native shade-loving groundcover, Asarum canadense (Wild Ginger) occupies an excellent ecological niche in the side yard. Nestled under the canopy of the nearby fruit trees (apple, apricot, and Asian pear) and mingling with Ostrich Fern, it thrives in the partial-to-full shade and handles the property's clay/loam soil perfectly in USDA zone 4b/5a. Its dense rhizomatous growth forms a thick carpet that naturally suppresses weeds and helps prevent erosion while retaining soil moisture for neighboring shrubs and trees. Because the owners prioritize local ecology, Wild Ginger is a superb addition—it requires little maintenance once established and is vigorous enough to outcompete invasive species like garlic mustard.\n\nThe plant provides highly specialized support for local insects and wildlife. Its unique, ground-hugging maroon flowers bloom in early spring and are specifically adapted for pollination by low-crawling insects like beetles, flies, and ants. It also relies on ants for seed dispersal, a fascinating mutualistic process known as myrmecochory, where ants carry seeds back to their nests to consume the attached, nutrient-rich elaiosomes. Additionally, Wild Ginger serves as a larval host plant for the Pipevine Swallowtail butterfly. For urban wildlife management, its foliage contains compounds that make it highly resistant to browsing by deer and rabbits, ensuring it remains an undisturbed, protective cover for ground-dwelling insects and amphibians. Though historically used as a medicinal and culinary substitute for true ginger, it is primarily valued here for its outstanding ecological services and adaptability.",
@@ -14,12 +27,49 @@
       "created": "2026-05-10T20:05:10.452Z"
     },
     {
+      "shortCode": "A cana",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "Eastern Red Columbine (Aquilegia canadensis) is an exceptional native addition to the front yard. Highly adaptable to the property's zone 4b/5a climate and clay/loam soils, it brings critical early-season ecological value. Its intricate, red-and-yellow tubular flowers bloom in spring, coinciding perfectly with the return of migrating Ruby-throated Hummingbirds, which are specifically adapted to reach its deep nectar. It also feeds long-tongued native bumblebees, hawk moths, and butterflies, seamlessly augmenting the spring pollinator network already established in this zone by Golden Alexanders, Wild Hyacinth, and native violets.\n\nBeyond nectar, A. canadensis acts as a larval host plant for specialist insects like the Columbine Duskywing butterfly and various leafminers. Later in the season, its mature seed pods naturally attract foraging songbirds, offering a local food source for the yard's visiting finches and sparrows. Practically, the plant is deer- and rabbit-resistant due to unpalatable compounds in its foliage, minimizing urban herbivory damage. It self-seeds gently to form naturalized woodland drifts without becoming aggressively invasive, making it an ideal, low-maintenance fit for the owners' native-focused, wildlife-supporting landscape.",
+      "references": [
+        "https://www.gardenia.net/plant/aquilegia-canadensis-canadian-columbine",
+        "https://plants.ces.ncsu.edu/plants/aquilegia-canadensis/",
+        "https://plantfinder.nativeplanttrust.org/plant/Aquilegia-canadensis"
+      ],
+      "created": "2026-05-19T00:56:58.121Z"
+    },
+    {
       "shortCode": "A fla",
       "zoneCode": "nbv",
       "verdict": "GOOD",
       "analysis": "Aesculus flava (Yellow Buckeye) is an excellent, large-growing tree native to the Ohio Valley and Appalachian regions, but adaptable to zone 4b/5a Minnesota soils. It produces robust spring flowers that act as a rich nectar source for native hummingbirds, bees, and butterflies, and later yields large seeds that feed squirrels and other urban wildlife. While somewhat coarse for a small boulevard, its deep taproot and preference for loamy soils make it a sturdy and ecologically beneficial shade tree alternative to invasive maples.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "A mar",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "The ecological niche for Pearly Everlasting (Anaphalis margaritacea) in the front yard is an exceptional fit. As a Minnesota native, it perfectly aligns with the owners' priorities for cultivating local ecology. While it naturally favors dry, sandy, or gravelly sites, Pearly Everlasting is adaptable and can successfully tolerate the property's clay/loam soil as long as there is adequate drainage, particularly during winter thaws. Fully hardy in zone 4b/5a, it is highly drought-tolerant once established and thrives in open front yard conditions. It integrates beautifully with neighboring drought-tolerant natives in the zone, such as Yarrow (Achillea millefolium) and Rattlesnake Master (Eryngium yuccifolium).\n\nCrucially, this species serves an indispensable specialized role as a primary larval host plant for the American Lady butterfly (Vanessa virginiensis). This represents an incredibly strong synergistic match, as the American Lady butterfly has already been actively documented in the exact same front yard zone. The caterpillars rely entirely on its silvery, woolly foliage, frequently tying the leaves together with silk to create protective feeding nests. While this grazing can temporarily tatter the plant, it recovers vigorously to offer late-summer blooms that provide nectar to a host of short-tongued bees, wasps, and flies. Additionally, its aromatic, fuzzy leaves are highly resistant to urban herbivores like deer and rabbits, ensuring it remains a durable, undisturbed cornerstone for lepidopteran reproduction.",
+      "references": [
+        "https://www.minnesotawildflowers.info/flower/pearly-everlasting",
+        "https://xerces.org/blog/plants-for-pollinators-pearly-everlasting",
+        "https://plantlust.com/plants/36197/anaphalis-margaritacea/"
+      ],
+      "created": "2026-05-19T00:56:58.121Z"
+    },
+    {
+      "shortCode": "A mel",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "Aronia melanocarpa (Black Chokeberry) occupies a highly beneficial ecological niche in this garden. As a Minnesota native exceptionally cold-hardy down to Zone 3, it will effortlessly thrive in the Minneapolis Zone 4b/5a climate and easily tolerate the property's clay/loam soil. In the front yard, it adds valuable mid-level structural diversity and nesting habitat alongside other native shrubs like Cornus sericea and Rosa blanda. Because the owners prioritize edibles and medicinals, this shrub is a perfect fit; although the berries are astringent when raw, they are packed with antioxidants and make excellent health-supporting jams, syrups, and tinctures.\n\nFrom an ecological standpoint, the shrub provides outstanding multi-season support for local wildlife. Its white spring flowers offer abundant nectar for native bees and adult butterflies, such as the Red Admirals and American Painted Ladies already active in the front yard. Furthermore, Black Chokeberry serves as a crucial larval host plant for over two dozen species of native moths and butterflies. In late summer and fall, it produces dense clusters of dark berries. Because of their natural astringency, these berries often persist on the branches well into the colder months, serving as a critical emergency winter food source for overwintering urban songbirds and small mammals when other forage is entirely depleted.",
+      "references": [
+        "https://www.minnesotawildflowers.info/shrub/black-chokeberry",
+        "https://bwsr.state.mn.us/sites/default/files/2018-12/May%202016%20Featured%20Plant%20Black%20Chokeberry.pdf",
+        "https://knoxbirds.org/2020/04/10/get-to-know-your-larval-hosts/",
+        "https://trees.umn.edu/black-chokeberry-aronia-melanocarpa"
+      ],
+      "created": "2026-05-19T00:56:58.121Z"
     },
     {
       "shortCode": "A mil",
@@ -112,6 +162,19 @@
       "analysis": "Asclepias tuberosa (Butterfly Weed) is an essential native perennial that serves as a vital host plant for Monarch butterfly caterpillars and provides high-quality nectar for diverse pollinators. Its deep taproot allows it to thrive in the challenging, dry conditions of a boulevard strip, and it adapts well to well-drained loam or clay-loam in zone 4b/5a. Planting this in the boulevard directly supports the owners' priority of enhancing local ecology and pollinator pathways.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "A vir",
+      "zoneCode": "sy",
+      "verdict": "GOOD",
+      "analysis": "Tall Thimbleweed (Anemone virginiana) is an excellent fit for the side yard's ecological niche. Native to Minnesota and extremely cold hardy (USDA Zones 2–8), this perennial thrives in the exact conditions present on the property: clay/loam soils and the dappled sunlight or partial shade cast by the zone's apple, apricot, and pear trees. In the wild, it naturally occupies woodland edges, clearings, and savannas, making the orchard-like structure of the side yard a perfect microclimate. It will easily co-exist with the sturdy native companions already established there, such as Ostrich Fern, Black-eyed Susan, and Foxglove Beardtongue.\n\nEcologically, Tall Thimbleweed provides a unique and valuable food source. While its blossoms lack true petals and nectar, they offer an abundant, nutrient-dense supply of pollen that attracts a flurry of native pollinators, including bumble bees, sweat bees, and syrphid flies. As the seasons progress, the flowers mature into distinctive, thimble-shaped seed heads that persist into the cooler months, eventually bursting into fluffy tufts that offer winter visual interest and minor foraging material for native birds. From a practical standpoint, the foliage contains protoanemonin—a compound that repels mammalian browsing, making it highly resistant to urban rabbits and deer. This ensures it remains a low-maintenance, resilient contributor to the garden's native ecosystem.",
+      "references": [
+        "https://www.wildflower.org/plants/result.php?id_plant=anvi3",
+        "https://chestnutherbs.com/anemone-medicine-poison-pollen-and-melodrama/",
+        "https://growitbuildit.com/tall-thimbleweed-anemone-virginiana/",
+        "https://www.prairieresto.com/plant/anemone-virginiana/"
+      ],
+      "created": "2026-05-19T00:56:58.121Z"
     },
     {
       "shortCode": "C ame",
