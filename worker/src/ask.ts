@@ -58,11 +58,26 @@ const ALLOWED_VERBS = [
   "/reltype",
 ] as const;
 
-interface Usage {
+export interface Usage {
   prompt: number;
   cached: number;
   output: number;
   cacheCreation: number;
+}
+
+// Estimated USD cost for a usage breakdown, or null if the model is unpriced.
+export function estimateCost(model: string, usage: Usage): number | null {
+  const p = MODEL_PRICING[model];
+  if (!p) return null;
+  const uncached = usage.prompt - usage.cached;
+  return (
+    (uncached * p.i + usage.cached * p.c + usage.output * p.o + usage.cacheCreation * p.i) /
+    1_000_000
+  );
+}
+
+export function formatUsd(cost: number): string {
+  return cost < 0.0001 ? "<$0.0001" : `$${cost.toFixed(4)}`;
 }
 
 async function computeChecksum(text: string): Promise<string> {
@@ -157,13 +172,9 @@ function truncateForTelegram(text: string): string {
 }
 
 function formatCost(model: string, usage: Usage): string {
-  const p = MODEL_PRICING[model];
-  if (!p) return "";
-  const uncached = usage.prompt - usage.cached;
-  const cost =
-    (uncached * p.i + usage.cached * p.c + usage.output * p.o + usage.cacheCreation * p.i) /
-    1_000_000;
-  const costStr = cost < 0.0001 ? "<$0.0001" : `$${cost.toFixed(4)}`;
+  const cost = estimateCost(model, usage);
+  if (cost === null) return "";
+  const costStr = formatUsd(cost);
   const cacheNote = usage.cached > 0 ? ` ${usage.cached.toLocaleString()} cached,` : "";
   const createNote =
     usage.cacheCreation > 0 ? ` +${usage.cacheCreation.toLocaleString()} cache-create,` : "";

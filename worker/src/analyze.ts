@@ -2,8 +2,26 @@ import { GoogleGenAI } from "@google/genai";
 import type { AiAnalysisEntry, AiVerdict, Env } from "./types";
 import { readAiAnalyses, writeAiAnalyses } from "./github";
 import { sendReply } from "./telegram";
+import { estimateCost, formatUsd } from "./ask";
 
 const ANALYSIS_MODEL = "gemini-3.1-pro-preview";
+
+// Analyze never uses context caching, so cost is just uncached in + out.
+function analyzeCost(promptTokens: number, outputTokens: number): number | null {
+  return estimateCost(ANALYSIS_MODEL, {
+    prompt: promptTokens,
+    cached: 0,
+    output: outputTokens,
+    cacheCreation: 0,
+  });
+}
+
+// "12,345 in / 6,789 out (~$0.1234)" — cost suffix omitted if model unpriced.
+export function formatAnalyzeUsage(promptTokens: number, outputTokens: number): string {
+  const tokens = `${promptTokens.toLocaleString()} in / ${outputTokens.toLocaleString()} out`;
+  const cost = analyzeCost(promptTokens, outputTokens);
+  return cost === null ? tokens : `${tokens} (~${formatUsd(cost)})`;
+}
 // Queue + run-state KV keys.
 const QUEUE_KV_KEY = "analyze:queue";
 const META_KV_KEY = "analyze:meta";
@@ -613,7 +631,7 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
     // transition, making it safe to notify exactly once here.
     if (justFinished && meta.chatId != null && meta.messageId != null) {
       const scope = meta.zoneFilter ? ` (zone ${meta.zoneFilter})` : "";
-      const tokens = `${meta.promptTokens.toLocaleString()} in / ${meta.outputTokens.toLocaleString()} out`;
+      const tokens = formatAnalyzeUsage(meta.promptTokens, meta.outputTokens);
       await sendReply(
         env.TELEGRAM_BOT_TOKEN,
         meta.chatId,

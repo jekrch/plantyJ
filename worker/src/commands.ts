@@ -2,7 +2,7 @@ import type { AnnotationEntry, Env, PicEntry, PlantRecord, TelegramMessage, Zone
 import { type Replier } from "./telegram";
 import { HELP_HEADER } from "./help";
 import { MODEL_ALIASES, type ProposedCommand, type Thread } from "./ask";
-import { submitAnalyzeRun, analyzeStatus, clearAnalyzeRun } from "./analyze";
+import { submitAnalyzeRun, analyzeStatus, clearAnalyzeRun, formatAnalyzeUsage } from "./analyze";
 import { enqueueJob } from "./jobs";
 import { assertValidCode } from "./validation";
 import {
@@ -301,7 +301,7 @@ async function handleAnalyzeLoad(env: Env, reply: Replier): Promise<void> {
     return;
   }
   const scope = result.zoneFilter ? ` (zone ${result.zoneFilter})` : "";
-  const tokens = `${result.promptTokens.toLocaleString()} in / ${result.outputTokens.toLocaleString()} out`;
+  const tokens = formatAnalyzeUsage(result.promptTokens, result.outputTokens);
   const status =
     result.kind === "done"
       ? "Done"
