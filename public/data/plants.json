@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "V ped",
+      "fullName": "Viola pedatifida",
+      "commonName": "Prairie Violet",
+      "variety": null
+    },
+    {
       "shortCode": "P dig",
       "fullName": "Penstemon digitalis",
       "commonName": "Foxglove Beardtongue",
