@@ -10,6 +10,7 @@ import type {
 import { downloadFile, type Replier } from "./telegram";
 import { parseCaption, resolveFields, UNIDENTIFIED_CODE, UNIDENTIFIED_PREFIX } from "./caption";
 import { assertValidCode } from "./validation";
+import { enqueueJob } from "./jobs";
 import {
   appendPic,
   appendZonePic,
@@ -99,8 +100,19 @@ async function handleZonePic(
   );
 }
 
-async function handlePlantPic(message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
-  const parsed = parseCaption(message.caption!);
+/**
+ * Commit a plant photo from a caption + photo descriptor and return the
+ * reply text. Shared by direct photo uploads and by /pick (which replays a
+ * stored photo with an AI-suggested caption), so an identified pic is
+ * committed by exactly the same path as a normal submission.
+ */
+export async function ingestPlantPhoto(
+  env: Env,
+  caption: string,
+  photo: TelegramPhotoSize,
+  postedBy: string,
+): Promise<string> {
+  const parsed = parseCaption(caption);
   const { gallery } = await readGallery(env);
   const {
     pic: resolvedPic,
@@ -113,7 +125,6 @@ async function handlePlantPic(message: TelegramMessage, env: Env, reply: Replier
   const isUnidentified = resolvedPic.shortCode === UNIDENTIFIED_CODE;
   const finalShortCode = isUnidentified ? `${UNIDENTIFIED_PREFIX}${seq}` : resolvedPic.shortCode;
 
-  const photo = message.photo![message.photo!.length - 1];
   const { browserPath, id } = await uploadImage(
     env,
     photo,
@@ -130,7 +141,7 @@ async function handlePlantPic(message: TelegramMessage, env: Env, reply: Replier
     tags: resolvedPic.tags,
     description: resolvedPic.description,
     image: browserPath,
-    postedBy: postedByOf(message),
+    postedBy,
     addedAt: new Date().toISOString(),
     width: photo.width,
     height: photo.height,
@@ -175,27 +186,65 @@ async function handlePlantPic(message: TelegramMessage, env: Env, reply: Replier
   const plantForReply =
     plantUpsertRecord ?? gallery.plants.find((p) => p.shortCode === finalShortCode) ?? null;
 
-  await reply(
-    joinLines([
-      `Added pic #${seq}: ${finalShortCode}`,
-      isUnidentified
-        ? `  Unidentified — /accept ${seq} once BioCLIP runs, or /update to set fields manually`
-        : null,
-      plantForReply?.commonName ? `  Common: ${plantForReply.commonName}` : null,
-      plantForReply?.variety ? `  Variety: '${plantForReply.variety}'` : null,
-      plantForReply?.fullName ? `  Full: ${plantForReply.fullName}` : null,
-      `  Zone: ${zoneLabel}`,
-      resolvedPic.tags.length > 0 ? `  Tags: ${resolvedPic.tags.join(", ")}` : null,
-      annotationTags.zoneTags.length > 0
-        ? `  Zone tags: ${annotationTags.zoneTags.join(", ")}`
-        : null,
-      annotationTags.plantTags.length > 0
-        ? `  Plant tags: ${annotationTags.plantTags.join(", ")}`
-        : null,
-      resolvedPic.description ? `  Note: ${resolvedPic.description}` : null,
-      `  → ${browserPath}`,
-    ]),
-  );
+  return joinLines([
+    `Added pic #${seq}: ${finalShortCode}`,
+    isUnidentified
+      ? `  Unidentified — /accept ${seq} once BioCLIP runs, or /update to set fields manually`
+      : null,
+    plantForReply?.commonName ? `  Common: ${plantForReply.commonName}` : null,
+    plantForReply?.variety ? `  Variety: '${plantForReply.variety}'` : null,
+    plantForReply?.fullName ? `  Full: ${plantForReply.fullName}` : null,
+    `  Zone: ${zoneLabel}`,
+    resolvedPic.tags.length > 0 ? `  Tags: ${resolvedPic.tags.join(", ")}` : null,
+    annotationTags.zoneTags.length > 0
+      ? `  Zone tags: ${annotationTags.zoneTags.join(", ")}`
+      : null,
+    annotationTags.plantTags.length > 0
+      ? `  Plant tags: ${annotationTags.plantTags.join(", ")}`
+      : null,
+    resolvedPic.description ? `  Note: ${resolvedPic.description}` : null,
+    `  → ${browserPath}`,
+  ]);
+}
+
+async function handlePlantPic(message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
+  const photo = message.photo![message.photo!.length - 1];
+  const text = await ingestPlantPhoto(env, message.caption!, photo, postedByOf(message));
+  await reply(text);
+}
+
+/**
+ * /identify {optional hint} sent with a photo. The Gemini vision call must
+ * run on the cron path (never the webhook), so this only enqueues a job
+ * carrying the Telegram file_id; the cron tick downloads the image, asks
+ * Gemini, and replies with /pick options.
+ */
+async function handleIdentify(
+  prompt: string | null,
+  message: TelegramMessage,
+  env: Env,
+  reply: Replier,
+): Promise<void> {
+  if (!message.from || !env.ASK_CACHE) {
+    await reply("/identify requires KV (ASK_CACHE) and a known user.");
+    return;
+  }
+  const photo = message.photo![message.photo!.length - 1];
+  await enqueueJob(env, {
+    id: `identify-${message.from.id}-${message.message_id}`,
+    kind: "identify",
+    chatId: message.chat.id,
+    messageId: message.message_id,
+    userId: message.from.id,
+    fileId: photo.file_id,
+    imgWidth: photo.width,
+    imgHeight: photo.height,
+    prompt: prompt ?? undefined,
+    postedBy: postedByOf(message),
+    createdAt: new Date().toISOString(),
+    attempts: 0,
+  });
+  await reply("Identifying — options will arrive shortly.");
 }
 
 /**
@@ -217,9 +266,12 @@ export async function handlePhotoMessage(
   try {
     const caption = message.caption.trim();
     const zonePicMatch = caption.match(/^\/zonepic\s+(\S+)(?:\s*\/\/\s*(\S[\s\S]*))?$/);
+    const identifyMatch = caption.match(/^\/identify(?:\s+(\S[\s\S]*))?$/i);
     if (zonePicMatch) {
       assertValidCode("zoneCode", zonePicMatch[1]);
       await handleZonePic(zonePicMatch[1], zonePicMatch[2]?.trim() || null, message, env, reply);
+    } else if (identifyMatch) {
+      await handleIdentify(identifyMatch[1]?.trim() || null, message, env, reply);
     } else {
       await handlePlantPic(message, env, reply);
     }

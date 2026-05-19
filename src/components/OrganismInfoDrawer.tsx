@@ -142,6 +142,12 @@ export default function OrganismInfoDrawer({
     return m;
   }, [zones]);
 
+  const zoneDescByCode = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const z of zones) if (z.description) m.set(z.code, z.description);
+    return m;
+  }, [zones]);
+
   const matchingZonePic = useMemo(() => {
     const candidates = zonePics.filter((z) => z.zoneCode === organism.zoneCode);
     if (candidates.length === 0) return null;
@@ -460,7 +466,7 @@ export default function OrganismInfoDrawer({
 
             {/* Zone */}
             <div
-              className="relative overflow-hidden rounded px-4 py-14"
+              className="relative overflow-hidden rounded px-4 py-5"
               style={{ backgroundColor: "rgba(255,255,255,0.04)" }}
             >
               {matchingZonePic && (
@@ -485,6 +491,11 @@ export default function OrganismInfoDrawer({
                   {zoneNameByCode.get(organism.zoneCode) ?? organism.zoneCode}{" "}
                   <span className="text-accent text-xs">{organism.zoneCode}</span>
                 </p>
+                {zoneDescByCode.get(organism.zoneCode) && (
+                  <p className="text-xs text-white/60 leading-snug mt-1 w-3/5 sm:w-1/2">
+                    {zoneDescByCode.get(organism.zoneCode)}
+                  </p>
+                )}
               </div>
             </div>
 

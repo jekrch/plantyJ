@@ -35,6 +35,18 @@ Unidentified plants:
   action runs, accept its prediction with /accept, or fill it in manually
   with /update.
 
+Identify from a photo:
+  Send a photo with the caption:
+  /identify [hint]
+  e.g. /identify   or   /identify shrub in fb1, maybe a viburnum
+  Gemini suggests up to 3 IDs (with region/season + your existing
+  plants/zones in mind). Each comes with a /pick N command:
+  /pick 2 — saves THIS photo with option 2's identification, committed
+    exactly like a normal upload (existing plants are reused; new ones
+    are registered with an auto-generated shortCode).
+  /cancel — discard the identify options.
+  Options expire after 1 hour.
+
 Pic commands:
   /delete {seq} — Remove a pic by its sequential ID
   /update {seq} {field} {value} — Update a field on a pic or its plant

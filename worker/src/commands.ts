@@ -1,7 +1,17 @@
-import type { AnnotationEntry, Env, PicEntry, PlantRecord, TelegramMessage, Zone } from "./types";
+import type {
+  AnnotationEntry,
+  Env,
+  PicEntry,
+  PlantRecord,
+  TelegramMessage,
+  TelegramPhotoSize,
+  Zone,
+} from "./types";
 import { type Replier } from "./telegram";
 import { HELP_HEADER } from "./help";
 import { MODEL_ALIASES, type ProposedCommand, type Thread } from "./ask";
+import { ingestPlantPhoto } from "./photos";
+import { PENDING_IDENTIFY_KEY, type PendingIdentify } from "./identify";
 import { submitAnalyzeRun, analyzeStatus, clearAnalyzeRun, formatAnalyzeUsage } from "./analyze";
 import { enqueueJob } from "./jobs";
 import { assertValidCode } from "./validation";
@@ -168,9 +178,49 @@ async function handleShowStyle(message: TelegramMessage, env: Env, reply: Replie
 
 async function handleCancel(message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
   if (message.from && env.ASK_CACHE) {
-    await env.ASK_CACHE.delete(PENDING_DO_KEY(message.from.id)).catch(() => {});
+    await Promise.all([
+      env.ASK_CACHE.delete(PENDING_DO_KEY(message.from.id)).catch(() => {}),
+      env.ASK_CACHE.delete(PENDING_IDENTIFY_KEY(message.from.id)).catch(() => {}),
+    ]);
   }
-  await reply("Cancelled. No commands run.");
+  await reply("Cancelled. Nothing run; any pending proposals or identify options dropped.");
+}
+
+async function handlePick(
+  text: string,
+  message: TelegramMessage,
+  env: Env,
+  reply: Replier,
+): Promise<void> {
+  if (!message.from || !env.ASK_CACHE) {
+    await reply("/pick requires KV and a known user.");
+    return;
+  }
+  const raw = await env.ASK_CACHE.get(PENDING_IDENTIFY_KEY(message.from.id));
+  if (!raw) {
+    await reply("Nothing to pick. Post a photo with /identify first.");
+    return;
+  }
+  const pending: PendingIdentify = JSON.parse(raw);
+  const n = parseInt(text.match(/^\/pick\s+(\d+)$/)![1], 10);
+  if (n < 1 || n > pending.candidates.length) {
+    await reply(`Invalid option. Use /pick 1..${pending.candidates.length}, or /cancel.`);
+    return;
+  }
+  const candidate = pending.candidates[n - 1];
+  // Replay the stored photo through the exact normal-upload path. file_id is
+  // stable for the bot, so re-downloading it later still works.
+  const photo: TelegramPhotoSize = {
+    file_id: pending.fileId,
+    file_unique_id: "",
+    width: pending.width ?? 0,
+    height: pending.height ?? 0,
+  };
+  const result = await ingestPlantPhoto(env, candidate.caption, photo, pending.postedBy);
+  // Drop the pending options only after a successful commit so a failure
+  // (bad zone, GitHub conflict) leaves the other options pickable.
+  await env.ASK_CACHE.delete(PENDING_IDENTIFY_KEY(message.from.id)).catch(() => {});
+  await reply(`Picked option ${n}: ${candidate.label}\n\n${result}`);
 }
 
 async function handleConfirm(
@@ -617,6 +667,7 @@ export async function handleTextCommand(
     ["/showstyle", () => handleShowStyle(message, env, reply)],
     ["/cancel", () => handleCancel(message, env, reply)],
     [/^\/confirm(\s|\t|$)/, () => handleConfirm(text, message, env, reply)],
+    [/^\/pick\s+\d+$/, () => handlePick(text, message, env, reply)],
     [/^\/ask([123])?\s/i, () => handleAsk(text, message, env, reply)],
     [/^\/resp([123])?\s/i, () => handleResp(text, message, env, reply)],
     ["/analyze-load", () => handleAnalyzeLoad(env, reply)],

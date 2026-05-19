@@ -1,7 +1,14 @@
 import type { Env } from "./types";
-import { sendReply } from "./telegram";
+import { sendReply, downloadFile } from "./telegram";
 import { answerQuestion, type Thread } from "./ask";
 import { runBatch } from "./batch";
+import { arrayBufferToBase64 } from "./github";
+import {
+  identifyPhoto,
+  PENDING_IDENTIFY_KEY,
+  PENDING_IDENTIFY_TTL,
+  type PendingIdentify,
+} from "./identify";
 
 // /ask and /confirm calls can exceed Cloudflare's per-invocation limits
 // (waitUntil wall-time for LLM calls; subrequest count for batch /confirm).
@@ -25,7 +32,7 @@ const PENDING_DO_TTL_SECONDS = 3600;
 // 50-subrequest cap and finishes 54-command runs in 3 ticks.
 const CONFIRM_CHUNK_SIZE = 25;
 
-type JobKind = "ask" | "confirm";
+type JobKind = "ask" | "confirm" | "identify";
 
 export interface JobRecord {
   id: string;
@@ -42,6 +49,12 @@ export interface JobRecord {
   commands?: string[];
   nextIndex?: number;
   results?: string[];
+  // identify
+  fileId?: string;
+  imgWidth?: number;
+  imgHeight?: number;
+  prompt?: string;
+  postedBy?: string;
   createdAt: string;
   attempts: number;
 }
@@ -93,6 +106,33 @@ async function runJob(env: Env, job: JobRecord): Promise<RunStatus> {
     if (job.userId !== null && env.ASK_CACHE) {
       await env.ASK_CACHE.put(`thread:${job.userId}`, JSON.stringify(thread));
     }
+    return "done";
+  }
+
+  if (job.kind === "identify") {
+    const bytes = await downloadFile(job.fileId ?? "", env.TELEGRAM_BOT_TOKEN);
+    const { body, candidates } = await identifyPhoto(
+      env,
+      arrayBufferToBase64(bytes),
+      job.prompt ?? null,
+    );
+    // Persist the candidates + file_id so /pick can replay the chosen one
+    // through the normal ingest path. Only store when there's something to
+    // pick; an empty result is informational only.
+    if (candidates.length > 0 && job.userId !== null && env.ASK_CACHE) {
+      const pending: PendingIdentify = {
+        createdAt: new Date().toISOString(),
+        fileId: job.fileId ?? "",
+        width: job.imgWidth,
+        height: job.imgHeight,
+        postedBy: job.postedBy ?? "unknown",
+        candidates,
+      };
+      await env.ASK_CACHE.put(PENDING_IDENTIFY_KEY(job.userId), JSON.stringify(pending), {
+        expirationTtl: PENDING_IDENTIFY_TTL,
+      });
+    }
+    await sendReply(env.TELEGRAM_BOT_TOKEN, job.chatId, job.messageId, body);
     return "done";
   }
 
