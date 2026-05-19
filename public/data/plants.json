@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P pol",
+      "fullName": "Papilio polyxenes",
+      "commonName": "Black Swallowtail",
+      "variety": null
+    },
+    {
       "shortCode": "C sci",
       "fullName": "Camassia scilloides",
       "commonName": "Wild Hyacinth",
