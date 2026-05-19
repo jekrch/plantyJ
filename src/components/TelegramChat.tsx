@@ -80,7 +80,7 @@ Added pic #93: H ric
   {
     from: "bot",
     time: "9:14 PM",
-    text: `I've proposed a few new ecological relationships for your recent additions, avoiding the companion type as requested.
+    text: `I've proposed a few new ecological relationships for your recent additions.
 
 Specifically, I linked the Black Swallowtail to the Golden Alexanders as a host plant (since you found caterpillars on them), added Pearly Everlasting as a host plant for the American Painted Lady, connected the new Prairie Violet to your Carpenter Ants for seed dispersal, and noted Cardinals as frugivores for the Black Chokeberry.
 
