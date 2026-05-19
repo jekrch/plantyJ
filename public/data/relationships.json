@@ -326,6 +326,30 @@
       "type": "pollinator",
       "from": "V virg",
       "to": "G mac"
+    },
+    {
+      "id": 44,
+      "type": "host-plant",
+      "from": "P pol",
+      "to": "Z aur"
+    },
+    {
+      "id": 45,
+      "type": "host-plant",
+      "from": "V virg",
+      "to": "A mar"
+    },
+    {
+      "id": 46,
+      "type": "seed-disperser",
+      "from": "C pen",
+      "to": "V ped"
+    },
+    {
+      "id": 47,
+      "type": "frugivore",
+      "from": "c card",
+      "to": "A mel"
     }
   ]
 }
