@@ -13,7 +13,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-19T00:31:16.925Z",
       "width": 768,
-      "height": 1024
+      "height": 1024,
+      "bioclipSpeciesId": "Aquilegia canadensis",
+      "bioclipCommonName": "columbine",
+      "bioclipScore": 0.4235
     },
     {
       "seq": 86,
