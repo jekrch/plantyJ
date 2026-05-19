@@ -2266,6 +2266,67 @@
       ],
       "observationsCount": 3933
     },
+    "papilio-polyxenes": {
+      "id": "papilio-polyxenes",
+      "fullName": "Papilio polyxenes",
+      "commonName": "Black Swallowtail",
+      "description": "Papilio polyxenes, the (eastern) black swallowtail, American swallowtail or parsnip swallowtail, is a butterfly found throughout much of North America. An extremely similar-appearing species, Papilio joanae, occurs in the Ozark Mountains region, but it appears to be closely related to Papilio machaon, rather than P. polyxenes. The species is named after the figure in Greek mythology, Polyxena (pron.: /p\u0259\u02c8l\u026aks\u0268n\u0259/; Greek: \u03a0\u03bf\u03bb\u03c5\u03be\u03ad\u03bd\u03b7), who was the youngest daughter of King Priam of Troy. Its caterpillar is often called the \"parsleyworm\" because the caterpillar feeds on parsley. \n\nThe Papilio polyxenes demonstrates polyandry and a lek mating system, showing no male parental care and display sites. Females are therefore able to choose males based on these sites and males are the only resource the females find at these sites.",
+      "vernacularNames": [
+        "American Black Swallowtail",
+        "American Swallowtail",
+        "Black Swallowtail",
+        "Eastern Black Swallowtail",
+        "Parsleyworm",
+        "Parsnip Swallowtail"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Lepidoptera",
+        "family": "Papilionidae",
+        "genus": "Papilio",
+        "species": "Papilio polyxenes",
+        "canonicalName": "Papilio polyxenes"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/1937816"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:841063-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Papilio_polyxenes"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/58523"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q134744"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.111861"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 128356,
+      "edible": true
+    },
     "passer-domesticus": {
       "id": "passer-domesticus",
       "fullName": "Passer domesticus",

@@ -13,7 +13,11 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-19T00:11:10.841Z",
       "width": 800,
-      "height": 600
+      "height": 600,
+      "kind": "animal",
+      "bioclipSpeciesId": "Papilio polyxenes",
+      "bioclipCommonName": "Black Swallowtail",
+      "bioclipScore": 0.5371
     },
     {
       "seq": 80,
@@ -149,7 +153,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,

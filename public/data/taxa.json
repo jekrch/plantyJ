@@ -602,5 +602,13 @@
   "Camassia": {
     "description": "Camassia is a genus of plants in the asparagus family native to North America. Common names include camas, quamash, Indian hyacinth, camash, and wild hyacinth.",
     "url": "https://en.wikipedia.org/wiki/Camassia"
+  },
+  "Papilio": {
+    "description": "Papilio is a genus in the swallowtail butterfly family, Papilionidae, as well as the only representative of the tribe Papilionini. The word papilio is Latin for butterfly.",
+    "url": "https://en.wikipedia.org/wiki/Papilio"
+  },
+  "Papilionidae": {
+    "description": "Swallowtail butterflies are large, colorful butterflies in the family Papilionidae, and include over 550 species. Though the majority are tropical, members of the family inhabit every continent except Antarctica. The family includes the largest butterflies in the world, the birdwing butterflies of the genus Ornithoptera.",
+    "url": "https://en.wikipedia.org/wiki/Swallowtail_butterfly"
   }
 }
