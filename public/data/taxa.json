@@ -610,5 +610,17 @@
   "Papilionidae": {
     "description": "Swallowtail butterflies are large, colorful butterflies in the family Papilionidae, and include over 550 species. Though the majority are tropical, members of the family inhabit every continent except Antarctica. The family includes the largest butterflies in the world, the birdwing butterflies of the genus Ornithoptera.",
     "url": "https://en.wikipedia.org/wiki/Swallowtail_butterfly"
+  },
+  "Caryophyllaceae": {
+    "description": "Caryophyllaceae, commonly called the pink family or carnation family, is a family of flowering plants. It is included in the eudicot order Caryophyllales in the APG III system, alongside 33 other families, including Amaranthaceae, Cactaceae, and Polygonaceae. It is a large family, with 105 genera and about 2,625 known species.",
+    "url": "https://en.wikipedia.org/wiki/Caryophyllaceae"
+  },
+  "Caryophyllales": {
+    "description": "Caryophyllales is a diverse and heterogeneous order of flowering plants which includes well-known species such as cacti, carnations, beets, quinoa, spinach, amaranths, pigfaces and ice plants, oraches and saltbushes, goosefoots, sundews, Venus flytrap, tropical pitcher plants, Malabar spinach, bougainvilleas, four o'clock flowers, buckwheat, knotweeds, rhubarb, sorrels, purslanes, jojoba, and tamarisks. Many members are succulent, having fleshy stems or leaves.",
+    "url": "https://en.wikipedia.org/wiki/Caryophyllales"
+  },
+  "Cerastium": {
+    "description": "Cerastium is a genus of annual, winter annual, or perennial flowering plants belonging to the family Caryophyllaceae. They are commonly called mouse-ears or mouse-ear chickweeds. There are 214 accepted species, found nearly worldwide but with the greatest concentration in the northern temperate regions. A number of the species are common weeds in fields and on disturbed ground.",
+    "url": "https://en.wikipedia.org/wiki/Cerastium"
   }
 }

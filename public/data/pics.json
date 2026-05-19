@@ -28,7 +28,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-19T00:22:26.278Z",
       "width": 768,
-      "height": 1024
+      "height": 1024,
+      "bioclipSpeciesId": "Cerastium velutinum",
+      "bioclipCommonName": "Barren chickweed",
+      "bioclipScore": 0.3794
     },
     {
       "seq": 81,
@@ -183,7 +186,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,

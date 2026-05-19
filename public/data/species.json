@@ -878,6 +878,67 @@
       ],
       "observationsCount": 9488
     },
+    "cerastium-arvense": {
+      "id": "cerastium-arvense",
+      "fullName": "Cerastium arvense",
+      "commonName": "Field Chickweed",
+      "description": "Cerastium arvense is a species of flowering plant in the pink family known by the common names field mouse-ear and field chickweed. It is a widespread species, occurring throughout Europe and North America, as well as parts of South America. It is a variable species. There are several subspecies, but the number and defining characteristics are disputed.",
+      "vernacularNames": [
+        "Field Chickweed",
+        "Field Mouse-Ear",
+        "Field Mouse-ear Chickweed",
+        "Meadow Chickweed",
+        "Prairie Mouse-ear Chickweed",
+        "Starry Chickweed",
+        "Starry Grasswort"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Caryophyllales",
+        "family": "Caryophyllaceae",
+        "genus": "Cerastium",
+        "species": "Cerastium arvense",
+        "canonicalName": "Cerastium arvense"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3085433"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:152483-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Cerastium_arvense"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/50851"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q1370878"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.961026"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 32457
+    },
     "clematis-virginiana": {
       "id": "clematis-virginiana",
       "fullName": "Clematis virginiana",
