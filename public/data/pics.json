@@ -13,7 +13,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-19T00:23:51.685Z",
       "width": 768,
-      "height": 1024
+      "height": 1024,
+      "bioclipSpeciesId": "Zizia aurea",
+      "bioclipCommonName": "Golden Zizia",
+      "bioclipScore": 0.9671
     },
     {
       "seq": 82,
