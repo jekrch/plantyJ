@@ -3,7 +3,7 @@ import { hierarchy, cluster, type HierarchyPointNode } from "d3-hierarchy";
 import { LoaderCircle, Maximize2, Search, X, ZoomIn, ZoomOut } from "lucide-react";
 import { organismTitle } from "../../utils/display";
 import { buildTree, linkPath } from "./treeUtils";
-import { usePanZoom } from "./usePanZoom";
+import { usePanZoom, type Transform } from "./usePanZoom";
 import { useTreeSearch } from "./useTreeSearch";
 import { NodeDetail } from "./NodeDetail";
 import type { AIAnalysis } from "../OrganismInfoDrawer";
@@ -225,7 +225,6 @@ export default function TreeView({
           </defs>
 
           <g transform={`translate(${PAD_X},${PAD_Y})`}>
-            <RankHeaders rankCols={layout.rankCols} />
             <TreeLinks links={layout.links} activeNode={activeNode} />
             <InternalLabels nodes={layout.nodes} activeNode={activeNode} />
             <TreeNodes
@@ -238,6 +237,8 @@ export default function TreeView({
             />
           </g>
         </svg>
+
+        <FloatingRankHeaders rankCols={layout.rankCols} transform={transform} ready={ready} />
 
         {!ready && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -318,28 +319,45 @@ export default function TreeView({
 
 // --- SVG sub-components ---
 
-function RankHeaders({ rankCols }: { rankCols: Map<(typeof RANKS)[number], number> }) {
+function FloatingRankHeaders({
+  rankCols,
+  transform,
+  ready,
+}: {
+  rankCols: Map<(typeof RANKS)[number], number>;
+  transform: Transform;
+  ready: boolean;
+}) {
   return (
-    <g className="tree-column-headers" pointerEvents="none">
+    <div
+      className="absolute inset-0 pointer-events-none overflow-hidden"
+      style={{ opacity: ready ? 1 : 0, transition: "opacity 220ms ease-out" }}
+      aria-hidden
+    >
       {RANKS.map((rank) => {
         const x = rankCols.get(rank);
         if (x === undefined) return null;
+        // Screen x of the column center: the SVG content sits at PAD_X + x,
+        // then the whole canvas is translated by transform.x and scaled by k.
+        const left = transform.x + (PAD_X + x) * transform.k;
         return (
-          <text
+          <div
             key={`hdr-${rank}`}
-            x={x}
-            y={-PAD_Y / 2 - 6}
-            textAnchor="middle"
-            fontFamily="'Space Mono', monospace"
-            fontSize={10}
-            letterSpacing="0.18em"
-            fill="var(--color-ink-muted)"
+            className="absolute top-2 -translate-x-1/2 whitespace-nowrap rounded bg-surface/80 backdrop-blur-sm text-ink-muted"
+            style={{
+              left,
+              fontFamily: "'Space Mono', monospace",
+              // Match the in-SVG text, which is base 10px scaled by the canvas zoom.
+              fontSize: 10 * transform.k,
+              letterSpacing: "0.18em",
+              padding: "0.25em 0.6em",
+            }}
           >
             {RANK_LABEL[rank].toUpperCase()}
-          </text>
+          </div>
         );
       })}
-    </g>
+    </div>
   );
 }
 

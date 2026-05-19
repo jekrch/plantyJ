@@ -1,6 +1,12 @@
 import { useCallback } from "react";
 import { usePanZoom as useGenericPanZoom, type Transform } from "../../hooks/usePanZoom";
-import { PAD_X, PAD_Y, INITIAL_ZOOM_FACTOR } from "./types";
+import {
+  PAD_X,
+  PAD_Y,
+  INITIAL_ZOOM_FACTOR_NARROW,
+  INITIAL_ZOOM_FACTOR_WIDE,
+  NARROW_SCREEN_WIDTH,
+} from "./types";
 
 export type { Transform };
 
@@ -15,7 +21,9 @@ export function usePanZoom({ layoutWidth, layoutHeight, dataReady }: PanZoomOpti
   // then zoom past fit-to-view by INITIAL_ZOOM_FACTOR.
   const initialTransform = useCallback((cw: number, ch: number, lw: number, _lh: number) => {
     const fitK = Math.min(cw / lw, ch / _lh, 1);
-    const k = Math.min(4, Math.max(0.2, fitK * INITIAL_ZOOM_FACTOR));
+    const zoomFactor =
+      cw <= NARROW_SCREEN_WIDTH ? INITIAL_ZOOM_FACTOR_NARROW : INITIAL_ZOOM_FACTOR_WIDE;
+    const k = Math.min(4, Math.max(0.2, fitK * zoomFactor));
     const scaledW = lw * k;
     const x = scaledW <= cw ? (cw - scaledW) / 2 : cw - scaledW + 60;
     const y = 0;

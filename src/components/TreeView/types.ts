@@ -38,7 +38,11 @@ export const PAD_Y = 56;
 // Multiplier applied to the fit-to-view zoom on first load. >1 zooms in past
 // the "everything visible" baseline; the initial viewport is then anchored so
 // the species column (right edge of tree) and rank headers (top) stay in view.
-export const INITIAL_ZOOM_FACTOR = 3.5;
+// Narrow/mobile screens get a smaller factor so more of the tree stays visible.
+export const INITIAL_ZOOM_FACTOR_NARROW = 5.5;
+export const INITIAL_ZOOM_FACTOR_WIDE = 6.5;
+// Container widths at or below this are treated as mobile/narrow.
+export const NARROW_SCREEN_WIDTH = 640;
 
 export const RANK_LABEL: Record<Rank, string> = {
   root: "Life",
