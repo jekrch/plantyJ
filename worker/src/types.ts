@@ -115,6 +115,7 @@ export interface PlantRecord {
 export interface Zone {
   code: string;
   name: string | null;
+  description?: string | null;
 }
 
 export interface ZonePicEntry {

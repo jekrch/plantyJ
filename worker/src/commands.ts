@@ -18,6 +18,7 @@ import {
   isUpdatableField,
   readAnnotations,
   readGallery,
+  setZoneDescription,
   updateBySeq,
   upsertAnnotation,
   upsertZone,
@@ -366,6 +367,26 @@ async function handleRenameZone(text: string, env: Env, reply: Replier): Promise
   await reply(`Zone ${zone.code} renamed to "${zone.name}"`);
 }
 
+async function handleDescribeZone(text: string, env: Env, reply: Replier): Promise<void> {
+  const m = text.match(/^\/describezone\s+(\S+)\s*\/\/\s*([\s\S]*)$/);
+  if (!m) {
+    await reply(
+      `Invalid format. Use:\n  /describezone {code} // {description}\n  /describezone {code} // -   (to clear)`,
+    );
+    return;
+  }
+  const code = m[1];
+  assertValidCode("zoneCode", code);
+  const raw = m[2].trim();
+  const description = raw === "" || raw === "-" ? null : raw;
+  const zone = await setZoneDescription(env, code, description);
+  await reply(
+    description
+      ? `Zone ${zone.code} description set:\n${zone.description}`
+      : `Cleared description for zone ${zone.code}.`,
+  );
+}
+
 async function handleDeleteZonePic(text: string, env: Env, reply: Replier): Promise<void> {
   const id = text.match(/^\/deletezonepic\s+(\S+)$/)![1];
   const removed = await deleteZonePic(env, id);
@@ -612,6 +633,7 @@ export async function handleTextCommand(
     ["/zones", () => handleZonesList(env, reply)],
     [/^\/addzone\s/, () => handleAddZone(text, env, reply)],
     [/^\/renamezone\s/, () => handleRenameZone(text, env, reply)],
+    [/^\/describezone\s/, () => handleDescribeZone(text, env, reply)],
     [/^\/deletezonepic\s/, () => handleDeleteZonePic(text, env, reply)],
     [/^\/deletezone\s/, () => handleDeleteZone(text, env, reply)],
     [/^\/delete\s+\d+$/, () => handleDeletePic(text, env, reply)],

@@ -21,15 +21,15 @@ const PAIRS_PER_TICK = 5;
 
 interface RollupPlant {
   shortCode: string;
-  fullName: string | null;
-  commonName: string | null;
+  fullName?: string;
+  commonName?: string;
   zonesSeen: string[];
   kind?: string;
 }
 
 interface RollupZone {
   code: string;
-  name: string | null;
+  name?: string;
 }
 
 interface Rollup {
@@ -93,7 +93,7 @@ function buildSinglePairPrompt(rollupJson: string, pair: Pair, zoneFilter: strin
   return `You are analyzing the ecological niche of a single specimen (plant or animal) observed in a Minneapolis, MN garden journal. The property is on the NW corner of a city block, USDA hardiness zone 4b/5a, clay/loam soil. Owners prioritize native plants, edibles, medicinals, and supporting local ecology.${filterNote}
 
 # Garden context (full rollup)
-# Schema: zones[]: {code, name}; plants[]: {shortCode, fullName, commonName, tags, byZone, pics, zonesSeen, kind?, ...}
+# Schema: zones[]: {code, name?, description?}; plants[]: {shortCode, fullName?, commonName?, tags?, byZone?, pics, zonesSeen, kind?, ...}; "?" fields omitted when null/empty; dates are YYYY-MM-DD
 # "kind" may be "plant" or "animal"; if absent, treat as plant.
 ${rollupJson}
 

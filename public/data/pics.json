@@ -56,25 +56,6 @@
       "bioclipWikiUrl": null
     },
     {
-      "seq": 89,
-      "id": "C ame-1779151177",
-      "shortCode": "C ame",
-      "zoneCode": "hdb",
-      "tags": [
-        "foliage"
-      ],
-      "description": null,
-      "image": "images/C ame/1779151177.jpg",
-      "postedBy": "Jenny",
-      "addedAt": "2026-05-19T00:39:38.655Z",
-      "width": 768,
-      "height": 1024,
-      "bioclipSpeciesId": "Corylus avellana",
-      "bioclipCommonName": "Hazel",
-      "bioclipScore": 0.4181,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Corylus_avellana"
-    },
-    {
       "seq": 88,
       "id": "V ped-1779150932",
       "shortCode": "V ped",

@@ -21,6 +21,31 @@ def load_optional(name, default):
         return json.load(f)
 
 
+def day(ts):
+    """Truncate an ISO-8601 timestamp to its calendar date (YYYY-MM-DD).
+
+    ISO dates sort lexicographically, so min/max over these still works.
+    """
+    if not ts:
+        return None
+    return ts[:10]
+
+
+def compact_pic(pic):
+    """Build a space-minimal pic record, omitting null/empty fields."""
+    rec = {"seq": pic["seq"]}
+    if pic.get("zoneCode"):
+        rec["zone"] = pic["zoneCode"]
+    if pic.get("tags"):
+        rec["tags"] = pic["tags"]
+    if pic.get("description"):
+        rec["description"] = pic["description"]
+    at = day(pic.get("addedAt"))
+    if at:
+        rec["at"] = at
+    return rec
+
+
 def main():
     plants_raw = load("plants.json")["plants"]
     pics_raw = load("pics.json")["pics"]
@@ -36,8 +61,9 @@ def main():
         [
             {
                 "code": z["code"],
-                "name": z.get("name"),
-                "hasZonePic": z["code"] in zones_with_pics,
+                **({"name": z["name"]} if z.get("name") else {}),
+                **({"hasZonePic": True} if z["code"] in zones_with_pics else {}),
+                **({"description": z["description"]} if z.get("description") else {}),
             }
             for z in zones_raw
         ],
@@ -62,17 +88,7 @@ def main():
     for pic in pics_raw:
         sc = pic["shortCode"]
         if sc not in plant_codes:
-            orphan_pics.append(
-                {
-                    "seq": pic["seq"],
-                    "shortCode": sc,
-                    "zone": pic.get("zoneCode"),
-                    "tags": pic.get("tags", []),
-                    "description": pic.get("description"),
-                    "by": pic.get("postedBy"),
-                    "at": pic.get("addedAt"),
-                }
-            )
+            orphan_pics.append({"shortCode": sc, **compact_pic(pic)})
         else:
             pics_by_plant.setdefault(sc, []).append(pic)
 
@@ -94,59 +110,52 @@ def main():
             entry = {}
             if za.get("tags"):
                 entry["tags"] = za["tags"]
-            else:
-                entry["tags"] = []
-            entry["description"] = za.get("description")
+            if za.get("description"):
+                entry["description"] = za["description"]
             by_zone[zc] = entry
 
-        compact_pics = [
-            {
-                "seq": pic["seq"],
-                "zone": pic.get("zoneCode"),
-                "tags": pic.get("tags", []),
-                "description": pic.get("description"),
-                "by": pic.get("postedBy"),
-                "at": pic.get("addedAt"),
-            }
-            for pic in raw_pics
-        ]
+        compact_pics = [compact_pic(pic) for pic in raw_pics]
 
-        zones_seen = sorted({pic["zone"] for pic in compact_pics if pic["zone"]})
-        dates = [pic["at"] for pic in compact_pics if pic["at"]]
+        zones_seen = sorted({pic["zone"] for pic in compact_pics if pic.get("zone")})
+        dates = [pic["at"] for pic in compact_pics if pic.get("at")]
         last_seen = max(dates) if dates else None
         first_seen = min(dates) if dates else None
 
         is_animal = any(pic.get("kind") == "animal" for pic in raw_pics)
 
-        record = {
-            "shortCode": sc,
-            "fullName": p.get("fullName"),
-            "commonName": p.get("commonName"),
-        }
+        record = {"shortCode": sc}
+        if p.get("fullName"):
+            record["fullName"] = p["fullName"]
+        if p.get("commonName"):
+            record["commonName"] = p["commonName"]
         if p.get("variety"):
             record["variety"] = p["variety"]
         if is_animal:
             record["kind"] = "animal"
-        record["tags"] = plant_ann.get("tags", [])
-        record["description"] = plant_ann.get("description")
-        record["byZone"] = by_zone
+        if plant_ann.get("tags"):
+            record["tags"] = plant_ann["tags"]
+        if plant_ann.get("description"):
+            record["description"] = plant_ann["description"]
+        if by_zone:
+            record["byZone"] = by_zone
         record["pics"] = compact_pics
         record["picCount"] = len(compact_pics)
         record["zonesSeen"] = zones_seen
-        record["lastSeenAt"] = last_seen
-        record["firstSeenAt"] = first_seen
+        if last_seen:
+            record["lastSeenAt"] = last_seen
+        if first_seen:
+            record["firstSeenAt"] = first_seen
 
         plants.append(record)
 
-    rel_types = [
-        {
-            "id": t["id"],
-            "name": t.get("name", t["id"]),
-            "description": t.get("description", ""),
-            "directional": bool(t.get("directional", False)),
-        }
-        for t in relationships_raw.get("types", [])
-    ]
+    rel_types = []
+    for t in relationships_raw.get("types", []):
+        t_rec = {"id": t["id"], "name": t.get("name", t["id"])}
+        if t.get("description"):
+            t_rec["description"] = t["description"]
+        if t.get("directional"):
+            t_rec["directional"] = True
+        rel_types.append(t_rec)
     rel_edges = [
         [
             r["id"],
@@ -159,7 +168,7 @@ def main():
     ]
 
     rollup = {
-        "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
         "zones": zones,
         "plants": plants,
         "orphanPics": orphan_pics,

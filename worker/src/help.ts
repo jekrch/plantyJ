@@ -67,6 +67,7 @@ Annotation commands (persistent across all pics):
 Zone commands:
   /addzone {code} {name} — Create or rename a zone (name optional)
   /renamezone {code} {name} — Set/replace a zone's display name
+  /describezone {code} // {description} — Set a zone's description ("-" to clear)
   /deletezone {code} — Remove a zone (only if no pics reference it)
   /zones — List all known zones
   /plants — List all known plants

@@ -562,6 +562,33 @@ export async function upsertZone(env: Env, code: string, name: string | null): P
   return zone;
 }
 
+export async function setZoneDescription(
+  env: Env,
+  code: string,
+  description: string | null,
+): Promise<Zone> {
+  const { gallery, zonesSha } = await readGallery(env);
+  const idx = gallery.zones.findIndex((z) => z.code === code);
+  let zone: Zone;
+  if (idx === -1) {
+    zone = { code, name: null };
+  } else {
+    zone = { ...gallery.zones[idx] };
+  }
+  if (description) zone.description = description;
+  else delete zone.description;
+  if (idx === -1) gallery.zones.push(zone);
+  else gallery.zones[idx] = zone;
+  await writeJsonFile(
+    env,
+    ZONES_PATH,
+    { zones: gallery.zones },
+    zonesSha,
+    `${description ? "Set" : "Clear"} zone description: ${code}`,
+  );
+  return zone;
+}
+
 export async function appendZonePic(
   env: Env,
   newZonePic: ZonePicEntry,

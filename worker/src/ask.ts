@@ -107,18 +107,19 @@ ${HELP_HEADER}
 
 # Garden rollup (precomputed, plant-centric)
 # Schema:
-#   zones[]:  { code, name, hasZonePic }
-#   plants[]: { shortCode, fullName, commonName, variety?, kind?,
-#               tags[], description,
-#               byZone: { <zoneCode>: { tags[], description } },
-#               pics[]: { seq, zone, tags[], description, by, at },
-#               picCount, zonesSeen[], lastSeenAt, firstSeenAt }
+#   zones[]:  { code, name?, hasZonePic?, description? }
+#   plants[]: { shortCode, fullName?, commonName?, variety?, kind?,
+#               tags?, description?,
+#               byZone?: { <zoneCode>: { tags?, description? } },
+#               pics[]: { seq, zone?, tags?, description?, at? },
+#               picCount, zonesSeen[], lastSeenAt?, firstSeenAt? }
 #   orphanPics[]: pics whose shortCode no longer maps to a plant
 #   relationships:
 #     types[]: { id, name, description, directional }
 #     edges[]: [id, typeId, fromCode, toCode, direction] where direction is
 #       "f" (forward), "b" (backward), "u" (undirected), or null = type default.
-# pics[] is newest-first. "kind" is omitted when "plant".
+# pics[] is newest-first. Fields marked "?" are omitted when null/empty.
+# All dates are day-precision (YYYY-MM-DD). "kind" is omitted when "plant".
 ${rollupJson}
 
 # Calling get_species
