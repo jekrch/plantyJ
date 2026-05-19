@@ -189,6 +189,29 @@
       "created": "2026-05-10T20:05:10.452Z"
     },
     {
+      "shortCode": "C ame",
+      "zoneCode": "hdb",
+      "verdict": "GOOD",
+      "analysis": "Corylus americana (American Hazelnut) is an outstanding addition that perfectly aligns with the property's focus on native, edible, and ecologically supportive plantings. Highly adaptable to the Twin Cities' Zone 4b/5a climate and clay/loam soils, it establishes easily and provides invaluable ecological services. In early spring, its male catkins offer a crucial pollen source for newly emerged native bees when few other resources are available. Throughout the growing season, its foliage serves as a larval host for spectacular native Saturniid moths, including the Luna, Polyphemus, Io, and Cecropia moths.\n\nFor urban wildlife, the shrub's dense, multi-stemmed habit creates essential nesting habitat and cover for songbirds. As an edible, the high-fat, high-protein nuts are prized by both humans and wildlife; garden records already note it as an active food source for resident Gray Squirrels and visiting Wild Turkeys. From a practical garden management standpoint, the owners should be prepared to monitor its rhizomatous, suckering root system, pruning early shoots if they wish to confine it within a formal border. Furthermore, because American Hazelnut relies heavily on wind-driven cross-pollination, maintaining a few distinct plants in the garden will ensure the most robust nut harvest for both the kitchen and the local ecology.",
+      "references": [
+        "https://extension.umn.edu/planting-and-growing-guides/trees-and-shrubs-pollinators",
+        "https://www.prairiemoon.com/corylus-americana-american-hazelnut",
+        "https://www.prairienursery.com/hazelnut-corylus-americana.html"
+      ],
+      "created": "2026-05-19T00:57:57.900Z"
+    },
+    {
+      "shortCode": "C arv",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "*Cerastium arvense* (Field Chickweed) is an excellent native perennial groundcover that integrates perfectly into the front yard's ecology. Blooming early in the spring, it provides critical nectar and pollen resources for early-emerging syrphid flies, small native bees, and occasionally butterflies. While its tiny seeds are only a minor food source for urban birds, the dense, mat-forming foliage provides valuable micro-habitat for beneficial ground-dwelling invertebrates. As a true North American native, it is a highly beneficial ecological alternative to the aggressive Eurasian chickweeds (*Cerastium fontanum* or *Stellaria media*) frequently found in urban environments. It helps sustain a resilient baseline of local insect activity while acting as a living companion layer beneath taller front-yard natives like *Agastache scrophulariifolia* and *Eryngium yuccifolium*.\n\nIn a Minneapolis garden (Zone 4b/5a), *C. arvense* is exceptionally cold-hardy and well-suited to the local climate. Although it is frequently found on well-drained rock outcrops and sandy prairies in the wild, it is adaptable and tolerates the property’s clay/loam soils, provided the area avoids standing water. Its shallow, rhizomatous spread creates an attractive carpet of white blooms that pairs beautifully with the front yard's existing early bloomers, such as *Phlox subulata* and *Zizia aurea*. Given the owners' priority for native ecology and low-maintenance habitat building, this species serves as a resilient, weed-suppressing \"green mulch\" that fulfills both ecological and practical landscape goals without demanding extra inputs.",
+      "references": [
+        "https://pfaf.org/user/Plant.aspx?LatinName=Cerastium+arvense",
+        "https://www.fsl.orst.edu/rna/Documents/publications/Pollination%20ecology%20of%20an%20alpine%20fell-field%20community%20in%20the%20North%20cascades.PDF"
+      ],
+      "created": "2026-05-19T00:57:57.900Z"
+    },
+    {
       "shortCode": "c card",
       "zoneCode": "mpg",
       "verdict": "GOOD",
@@ -470,12 +493,37 @@
       "created": "2026-05-14T05:00:04.138Z"
     },
     {
+      "shortCode": "P dig",
+      "zoneCode": "sy",
+      "verdict": "GOOD",
+      "analysis": "Penstemon digitalis (Foxglove Beardtongue) is a superb addition to the garden and easily handles the region's zone 4b/5a climate. While many Penstemon species require dry, sandy soils and are prone to rot in heavy earth, P. digitalis is a notably adaptable Midwestern native that actively thrives in clay and loam. Situated in the side yard, it serves as an excellent ecological companion to the nearby fruit trees (apple, apricot, and Asian pear) and other native perennials. By blooming in late spring to early summer, it bridges a crucial nectar gap that occurs just after early-spring orchard blossoms fade, ensuring that a robust local population of pollinators remains on the property to service both the native ecosystem and the edible harvest.\n\nEcologically, the plant's deep, tubular flowers are perfectly engineered for long-tongued pollinators. It is a magnet for ruby-throated hummingbirds, the federally endangered rusty patched bumblebee, and specialized native insects like the Osmia distincta mason bee. Beyond providing high-value nectar, Foxglove Beardtongue functions as a larval host plant for several Lepidoptera species, including the common buckeye butterfly, Baltimore checkerspot, and various moths. If the stalks are left standing through the autumn and winter, the dried seed pods provide valuable forage for urban songbirds like goldfinches and cardinals. It operates as a multi-season ecological anchor that flawlessly aligns with the owners' priorities for native landscaping and wildlife support.",
+      "references": [
+        "https://bwsr.state.mn.us/sites/default/files/2020-06/Featured%20Plant%20July%202020%20Foxglove%20beardtongue%20KM.pdf",
+        "https://www.morningskygreenery.com/product/penstemon-digitalis/",
+        "https://www.prairienursery.com/smooth-penstemon-penstemon-digitalis.html"
+      ],
+      "created": "2026-05-19T00:57:57.900Z"
+    },
+    {
       "shortCode": "p dom",
       "zoneCode": "mpg",
       "verdict": "BAD",
       "analysis": "Passer domesticus (House Sparrow) is a highly aggressive, non-native invasive bird that wreaks havoc on local avian ecology. They actively hunt down, evict, and kill native cavity-nesting birds—such as Eastern Bluebirds, Tree Swallows, and Chickadees—to steal their nesting sites and compete for seeds. Because they adapt so well to urban environments, managing their population (by removing their nests or using sparrow-resistant birdhouses) is a sad but necessary step to protect native bird species in the garden.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "P pol",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "The presence of the Black Swallowtail butterfly in the front yard is a resounding success for a garden prioritizing native ecology. Native to the Twin Cities region, this species relies on plants in the carrot family (Apiaceae) for its larval stage. The front yard provides an ideal nursery, featuring multiple native host plants perfectly suited to the site's clay-loam soils and Zone 4b/5a climate. Caterpillars were directly observed feeding on Golden Alexanders, and the zone also contains Rattlesnake Master, another documented host for this species. While the caterpillars consume foliage, these native perennials have evolved to withstand this temporary grazing and will recover naturally without intervention.\n\nIn the broader garden food web, these caterpillars play a vital ecological role. Though they sequester noxious chemicals from their host plants and can evert a foul-smelling gland called an osmeterium to deter attackers, they are still part of the natural food chain and may be preyed upon by foraging birds like the Northern Cardinals or House Sparrows seen nearby. As they mature into adult butterflies, Black Swallowtails become valuable pollinators that will nectar on native blooms throughout the garden, such as the Yarrow and Purple Giant Hyssop in the front yard, or the Butterfly Weed and Purple Coneflower in neighboring zones. Management is simple: owners should avoid pesticide use entirely, tolerate the cosmetic damage to the host foliage, and celebrate the caterpillars as a sign of a thriving, functional habitat.",
+      "references": [
+        "https://www.minnesotaseasons.com/Insects/black_swallowtail.html",
+        "https://www.carleton.edu/arboretum/about/species/fauna/butterflies/common/",
+        "https://www.flawildflowers.org/know-your-native-pollinators-black-swallowtail/",
+        "https://myemail-api.constantcontact.com/June-2017--What-will-that-Caterpillar-Turn-Into-.html?soid=1103305117988&aid=SkYXfj3dDmg"
+      ],
+      "created": "2026-05-19T00:57:57.900Z"
     },
     {
       "shortCode": "P pyr Peg",
@@ -721,6 +769,18 @@
         "https://myrmecologicalnews.org/cms/index.php?option=com_download&view=download&filename=volume32/mn32_75-92_printable.pdf&format=raw"
       ],
       "created": "2026-05-16T17:54:59.856Z"
+    },
+    {
+      "shortCode": "T ser",
+      "zoneCode": "fy",
+      "verdict": "MIXED",
+      "analysis": "The ecological niche of creeping thyme (Thymus serpyllum) in the front yard is mixed. On the positive side, it is an exceptionally rich nectar and pollen source that attracts a wide variety of native insects, particularly foraging bees, butterflies, and moths. By providing a dense, low-growing floral carpet, it acts as a valuable \"bee lawn\" component that supports generalist pollinators in urban environments. In this zone, its summer blooms draw insects that can also service nearby native pollinator staples like golden alexanders (Zizia aurea), purple giant hyssop (Agastache scrophulariifolia), and Culver's root (Veronicastrum virginicum). While it offers excellent evergreen groundcover that shelters small beneficial insects, it is native to Europe and North Africa and does not act as a host plant for native North American caterpillars. Its value to urban mammals and birds is also negligible, as it is highly deer- and rabbit-resistant and does not produce seeds or berries sought by avian foragers.\n\nFrom a practical standpoint, creeping thyme aligns marginally with the owners' interests in edibles and medicinals, though its mild flavor makes it more ornamental than strictly culinary. While its exceptional cold tolerance is perfectly suited for Minneapolis (USDA zones 4b/5a), its soil preferences present a significant challenge. The species demands excellent drainage and naturally thrives in sandy, gravelly, or rocky environments. In the property's clay/loam soil, creeping thyme is highly susceptible to root rot and fungal dieback if the ground remains waterlogged, particularly during wet Midwest springs or winter thaws. For it to survive long-term alongside taller front-yard natives, it must be sited in a well-drained microclimate where it will not be outcompeted or overshadowed, serving as a functional but non-native compromise in this ecologically focused garden.",
+      "references": [
+        "https://www.gardenia.net/plant/thymus-serpyllum-creeping-thyme",
+        "https://pfaf.org/user/plant.aspx?latinname=Thymus+serpyllum",
+        "https://www.canr.msu.edu/news/consider-a-flowering-bee-lawn-to-help-pollinators"
+      ],
+      "created": "2026-05-19T00:57:57.900Z"
     },
     {
       "shortCode": "u dio",
