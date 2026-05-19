@@ -24,6 +24,7 @@ import type {
 } from "../types";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import StatsPanel from "./StatsPanel";
+import TelegramChat from "./TelegramChat";
 
 export type Tab = "about" | "stats" | "plants" | "zones";
 
@@ -211,7 +212,7 @@ function InfoModalContent({
       />
 
       <div
-        className="relative z-10 w-full max-w-2xl h-[min(640px,85vh)] flex flex-col rounded-lg border border-ink-faint/25 bg-surface-raised shadow-2xl shadow-black/50 overflow-hidden origin-center"
+        className="relative z-10 w-full max-w-3xl h-[min(640px,85vh)] flex flex-col rounded-lg border border-ink-faint/25 bg-surface-raised shadow-2xl shadow-black/50 overflow-hidden origin-center"
         style={{
           opacity: visible ? 1 : 0,
           transform: visible ? "scale(1) translateY(0)" : "scale(0.94) translateY(12px)",
@@ -449,6 +450,34 @@ function AboutPanel() {
             BioCLIP
           </a>
         </div>
+      </div>
+
+      <div className="border-t border-ink-faint/20" />
+
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_320px] gap-5 items-start">
+        <div>
+          <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-3">
+            Agentic Journal
+          </p>
+          <div className="space-y-3">
+            <p className="text-sm text-ink leading-relaxed">
+              PlantyJ is an agentic garden journal we tend almost entirely from
+              our phones by sending photos and short prompts to a Telegram bot.
+              The bot routes each message through a small set of slash commands
+              for identifying species, picking from suggestions, relating
+              organisms ecologically, and asking open questions. An LLM agent
+              does the research, drafts the changes, and waits for us to confirm.
+            </p>
+            <p className="text-sm text-ink leading-relaxed">
+              Once we confirm, the agent commits the updated data and images
+              back to the repo, which automatically rebuilds and redeploys this
+              site. The transcript on the right is a real evening's session: an
+              identification followed by a batch of proposed relationships, all
+              driven by photos and a few short replies.
+            </p>
+          </div>
+        </div>
+        <TelegramChat className="w-full" />
       </div>
     </div>
   );
