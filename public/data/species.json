@@ -4218,6 +4218,67 @@
       ],
       "observationsCount": 29973
     },
+    "thymus-serpyllum": {
+      "id": "thymus-serpyllum",
+      "fullName": "Thymus serpyllum",
+      "commonName": "Creeping Thyme",
+      "description": "Thymus serpyllum, known by the common names of Breckland thyme, Breckland wild thyme, wild thyme, creeping thyme, or elfin thyme, is a species of flowering plant in the mint family, Lamiaceae. It is a low, usually prostrate subshrub forming creeping stems up to 10 cm (4 in) tall. The oval evergreen leaves are up to 8 mm. The strongly scented flowers are either lilac, pink-purple, magenta, up to 6 mm long and produced in clusters.\nThe species is native to most of Europe and North Africa. The hardy plant tolerates some pedestrian traffic and produces odors ranging from heavily herbal to lightly lemon, depending on the variety.",
+      "vernacularNames": [
+        "Breckland Garden",
+        "Breckland Thyme",
+        "Breckland Wild Thyme",
+        "Breckland-garden",
+        "Creeping Thyme",
+        "Hillwort",
+        "Lemon Thyme",
+        "Mother Of Thyme",
+        "Penny Mountain",
+        "Wild Thyme",
+        "wild thyme"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Lamiales",
+        "family": "Lamiaceae",
+        "genus": "Thymus",
+        "species": "Thymus serpyllum",
+        "canonicalName": "Thymus serpyllum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/6409622"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:30066276-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Thymus_serpyllum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/322051"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q147251"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 5419
+    },
     "tiarella-cordifolia": {
       "id": "tiarella-cordifolia",
       "fullName": "Tiarella cordifolia",

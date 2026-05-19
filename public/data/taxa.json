@@ -634,5 +634,9 @@
   "Penstemon": {
     "description": "Penstemon, the beardtongues, is a large genus of roughly 280 species of flowering plants native to North America from northern Canada to Central America. It is the largest genus of flowering plants endemic to North America. As well as being the scientific name, penstemon is also widely used as a common name for all Penstemon species alongside beardtongues.",
     "url": "https://en.wikipedia.org/wiki/Penstemon"
+  },
+  "Thymus": {
+    "description": "The thymus is a specialized primary lymphoid organ of the immune system. Within the thymus, T cells mature. T cells are critical to the adaptive immune system, where the body adapts to specific foreign invaders. The thymus is located in the upper front part of the chest, in the anterior superior mediastinum, behind the sternum, and in front of the heart. It is made up of two lobes, each consisting of a central medulla and an outer cortex, surrounded by a capsule.",
+    "url": "https://en.wikipedia.org/wiki/Thymus"
   }
 }
