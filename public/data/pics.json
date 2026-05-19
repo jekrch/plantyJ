@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 90,
+      "id": "T ser-1779151427",
+      "shortCode": "T ser",
+      "zoneCode": "fy",
+      "tags": [
+        "foliage"
+      ],
+      "description": null,
+      "image": "images/T ser/1779151427.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-05-19T00:43:48.710Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 89,
       "id": "C ame-1779151177",
       "shortCode": "C ame",
@@ -105,7 +120,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -299,7 +314,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
