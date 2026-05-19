@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 81,
+      "id": "P pol-1779149469",
+      "shortCode": "P pol",
+      "zoneCode": "fy",
+      "tags": [
+        "first instar"
+      ],
+      "description": "several caterpillars on Z aur",
+      "image": "images/P pol/1779149469.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-05-19T00:11:10.841Z",
+      "width": 800,
+      "height": 600
+    },
+    {
       "seq": 80,
       "id": "Z aur-1779035353",
       "shortCode": "Z aur",
@@ -134,7 +149,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
