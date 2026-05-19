@@ -4498,6 +4498,65 @@
       ],
       "observationsCount": 13391
     },
+    "viola-pedatifida": {
+      "id": "viola-pedatifida",
+      "fullName": "Viola pedatifida",
+      "commonName": "Prairie Violet",
+      "description": "Viola pedatifida, known variously as prairie violet, crow-foot violet, larkspur violet, purple prairie violet, and coastal violet, is a perennial herbaceous plant in the Violet family (Violaceae). It is native to Canada and the United States.",
+      "vernacularNames": [
+        "Prairie violet",
+        "crow-foot violet",
+        "crowfoot violet",
+        "larkspur violet",
+        "purple prairie violet"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Malpighiales",
+        "family": "Violaceae",
+        "genus": "Viola",
+        "species": "Viola pedatifida",
+        "canonicalName": "Viola pedatifida"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5331262"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:317477-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Viola_pedatifida"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/170255"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q7933079"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.134405"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 2964
+    },
     "viola-sororia": {
       "id": "viola-sororia",
       "fullName": "Viola sororia",

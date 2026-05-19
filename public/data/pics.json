@@ -13,7 +13,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-19T00:35:33.431Z",
       "width": 768,
-      "height": 1024
+      "height": 1024,
+      "bioclipSpeciesId": "Viola pedatifida",
+      "bioclipCommonName": "Prairie violet",
+      "bioclipScore": 0.6671
     },
     {
       "seq": 87,
@@ -31,7 +34,8 @@
       "height": 1024,
       "bioclipSpeciesId": "Aquilegia canadensis",
       "bioclipCommonName": "columbine",
-      "bioclipScore": 0.4235
+      "bioclipScore": 0.4235,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Aquilegia_canadensis"
     },
     {
       "seq": 86,
@@ -83,7 +87,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -277,7 +281,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
