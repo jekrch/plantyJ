@@ -630,5 +630,9 @@
   "Anemone": {
     "description": "Anemone is a genus of flowering plants in the buttercup family Ranunculaceae. Plants of the genus are commonly called windflowers. They are native to the temperate and subtropical regions of all regions except Australia, New Zealand, and Antarctica. The genus is closely related to several other genera including Anemonoides, Anemonastrum, Hepatica, and Pulsatilla. Some botanists include these genera within Anemone.",
     "url": "https://en.wikipedia.org/wiki/Anemone"
+  },
+  "Penstemon": {
+    "description": "Penstemon, the beardtongues, is a large genus of roughly 280 species of flowering plants native to North America from northern Canada to Central America. It is the largest genus of flowering plants endemic to North America. As well as being the scientific name, penstemon is also widely used as a common name for all Penstemon species alongside beardtongues.",
+    "url": "https://en.wikipedia.org/wiki/Penstemon"
   }
 }
