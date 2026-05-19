@@ -638,5 +638,9 @@
   "Thymus": {
     "description": "The thymus is a specialized primary lymphoid organ of the immune system. Within the thymus, T cells mature. T cells are critical to the adaptive immune system, where the body adapts to specific foreign invaders. The thymus is located in the upper front part of the chest, in the anterior superior mediastinum, behind the sternum, and in front of the heart. It is made up of two lobes, each consisting of a central medulla and an outer cortex, surrounded by a capsule.",
     "url": "https://en.wikipedia.org/wiki/Thymus"
+  },
+  "Anaphalis": {
+    "description": "Anaphalis is a genus of herbaceous and woody flowering plants within the family Asteraceae, whose members are commonly known by the name pearl or pearly everlasting. There are around 110 species with the vast majority being native to central and southern Asia. There is one species native to North America that is fairly well known and popular in cultivation, namely the western pearly everlasting.",
+    "url": "https://en.wikipedia.org/wiki/Anaphalis"
   }
 }

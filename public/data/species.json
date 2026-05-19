@@ -483,6 +483,68 @@
       ],
       "observationsCount": 30319
     },
+    "anaphalis-margaritacea": {
+      "id": "anaphalis-margaritacea",
+      "fullName": "Anaphalis margaritacea",
+      "commonName": "Pearly Everlasting",
+      "description": "Anaphalis margaritacea, commonly known as the western pearly everlasting or pearly everlasting, is an Asian and North American species of flowering perennial plant in the family Asteraceae.",
+      "vernacularNames": [
+        "Common Pearlyeverlasting",
+        "Gro\u00dfbl\u00fctiges Perlpf\u00f6tchen (DE)",
+        "Marguerite",
+        "Pearl Everlasting",
+        "Pearly Everlasting",
+        "Pearly Everlasting (EN)",
+        "Western Pearly Everlasting",
+        "Western Pearlyeverlasting"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Asterales",
+        "family": "Asteraceae",
+        "genus": "Anaphalis",
+        "species": "Anaphalis margaritacea",
+        "canonicalName": "Anaphalis margaritacea"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/4926336"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:30173179-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Anaphalis_margaritacea"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/52833"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q2365610"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.159279"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 49035
+    },
     "anemone-virginiana": {
       "id": "anemone-virginiana",
       "fullName": "Anemone virginiana",
