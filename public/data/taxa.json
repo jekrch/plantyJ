@@ -626,5 +626,9 @@
   "Aronia": {
     "description": "Aronia is a genus of deciduous shrubs, the chokeberries, in the family Rosaceae native to eastern North America and most commonly found in wet woods and swamps. The genus Aronia is considered to have 3 species.\u00a0The most common and widely used is Aronia melanocarpa which emerged from Eastern North America. The lesser known Aronia arbutifolia and the hybrid form of the above mentioned species called Aronia prunifolia were first cultivated in Central and Eastern North America. In the eighteenth century, the first shrubs of the best-known species Aronia melanocarpa reached Europe where they were first cultivated in Scandinavia and Russia.",
     "url": "https://en.wikipedia.org/wiki/Aronia"
+  },
+  "Anemone": {
+    "description": "Anemone is a genus of flowering plants in the buttercup family Ranunculaceae. Plants of the genus are commonly called windflowers. They are native to the temperate and subtropical regions of all regions except Australia, New Zealand, and Antarctica. The genus is closely related to several other genera including Anemonoides, Anemonastrum, Hepatica, and Pulsatilla. Some botanists include these genera within Anemone.",
+    "url": "https://en.wikipedia.org/wiki/Anemone"
   }
 }

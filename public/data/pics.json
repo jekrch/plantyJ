@@ -13,7 +13,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-05-19T00:28:07.822Z",
       "width": 768,
-      "height": 1024
+      "height": 1024,
+      "bioclipSpeciesId": "Geranium sibiricum",
+      "bioclipCommonName": "Siberian crane's-bill",
+      "bioclipScore": 0.2016
     },
     {
       "seq": 84,
@@ -28,8 +31,9 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
-      "bioclipScore": 0.9081
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipScore": 0.9081,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 83,
@@ -221,7 +225,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,

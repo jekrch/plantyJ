@@ -483,6 +483,67 @@
       ],
       "observationsCount": 30319
     },
+    "anemone-virginiana": {
+      "id": "anemone-virginiana",
+      "fullName": "Anemone virginiana",
+      "commonName": "Tall Thimbleweed",
+      "description": "Anemone virginiana is an upright growing herbaceous species of flowering plant in the buttercup family Ranunculaceae. It is a perennial that grows 30\u201380 centimetres (12\u201331 in) tall, flowering from May until July. The flowers are white or greenish-white. After flowering, the fruits are produced in dense rounded thimble-shaped spikes 15\u201335 millimetres (0.59\u20131.38 in) long and 12 millimetres (0.47 in) wide. When the fruits, called achenes, are ripe they have gray-white colored, densely woolly styles, that allow them to blow away in the wind. The leaf structure is whorled halfway up the stem and each individual leaf appears to be deeply cut. It is native from eastern North America, where it is found growing in dry or open woods. This plant can be found in 38 out of the 50 states in the United States and is located anywhere from Maine to Minnesota going west, and found as far south as Georgia and Louisiana. \nCommon names include tall anemone, thimble-weed and tumble-weed. Note that several other plant species are known as \"thimbleweed\".\n\nAlthough this plant sometimes is called a \"tumbleweed\", it lacks the characteristic tumbleweed habit. The fruit resembles a tumbleweed in that it is wind-dispersed and tumbles, an unusual mechanism of seed dispersal (see Diaspore (botany)).\nAnemone virginiana was also given the common name \"Thimbleweed\" due to its pistil resembling the shape of a thimble. This plant is very durable in different weather conditions, ranging from part shade to sun and being drought and cold tolerant. It prefers acidic soils but will tolerate liming, making it great for gardens.",
+      "vernacularNames": [
+        "River Anemone",
+        "Tall Anemone",
+        "Tall Thimbleweed",
+        "Tall thimbleweed (EN)",
+        "Thimbleweed",
+        "Virginia anemone",
+        "riverbank anemone"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Ranunculales",
+        "family": "Ranunculaceae",
+        "genus": "Anemone",
+        "species": "Anemone virginiana",
+        "canonicalName": "Anemone virginiana"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3033255"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:708711-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Anemone_virginiana"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/126369"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q4117342"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.134655"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 21637
+    },
     "armoracia-rusticana": {
       "id": "armoracia-rusticana",
       "fullName": "Armoracia rusticana",
