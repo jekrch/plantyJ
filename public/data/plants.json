@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P dig",
+      "fullName": "Penstemon digitalis",
+      "commonName": "Foxglove Beardtongue",
+      "variety": null
+    },
+    {
       "shortCode": "A vir",
       "fullName": "Anemone virginiana",
       "commonName": "Tall Thimbleweed",
