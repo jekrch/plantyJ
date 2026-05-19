@@ -539,6 +539,64 @@
       ],
       "observationsCount": 13893
     },
+    "aronia-melanocarpa": {
+      "id": "aronia-melanocarpa",
+      "fullName": "Aronia melanocarpa",
+      "commonName": "Black Chokeberry",
+      "description": "Aronia melanocarpa, called the black chokeberry, is a species of shrubs in the rose family native to eastern North America, ranging from Canada to the central United States, from Newfoundland west to Ontario and Minnesota, south as far as Arkansas, Alabama, and Georgia. This plant has been introduced and is cultivated in Europe.\nIt is a branching shrub with glossy dark green leaves that take on a red color in the autumn; it grows well in the sun and part-shade, often to heights of six feet (1.8 m) or more, forming clumps by means of stems rising from the roots. Its flowers are white or pink, appearing at the end of spring and producing black fruits in September. The plants are relatively easy to clone and root, with summer being the optimal time to take cuttings. Some birds eat the berries.\nWhen raw, the fruits are astringent, but the flavor improves when used in recipes with added sugar.",
+      "vernacularNames": [
+        "Black Chokeberry",
+        "Black chokeberry (EN)",
+        "Kahle Apfelbeere (DE)",
+        "black chokecherry"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Rosales",
+        "family": "Rosaceae",
+        "genus": "Aronia",
+        "species": "Aronia melanocarpa",
+        "canonicalName": "Aronia melanocarpa"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5363627"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1109609-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Aronia_melanocarpa"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/128798"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q162774"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.156650"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 20072
+    },
     "asarum-canadense": {
       "id": "asarum-canadense",
       "fullName": "Asarum canadense",
