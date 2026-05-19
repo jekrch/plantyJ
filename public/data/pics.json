@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 83,
+      "id": "Z aur-1779150230",
+      "shortCode": "Z aur",
+      "zoneCode": "fy",
+      "tags": [
+        "flower"
+      ],
+      "description": null,
+      "image": "images/Z aur/1779150230.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-05-19T00:23:51.685Z",
+      "width": 768,
+      "height": 1024
+    },
+    {
       "seq": 82,
       "id": "C arv-1779150144",
       "shortCode": "C arv",
