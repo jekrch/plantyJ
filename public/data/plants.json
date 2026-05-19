@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "T ser",
+      "fullName": "Thymus serpyllum",
+      "commonName": "Creeping Thyme",
+      "variety": null
+    },
+    {
       "shortCode": "V ped",
       "fullName": "Viola pedatifida",
       "commonName": "Prairie Violet",
