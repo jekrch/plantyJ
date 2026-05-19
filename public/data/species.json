@@ -2560,6 +2560,64 @@
       ],
       "observationsCount": 518357
     },
+    "penstemon-digitalis": {
+      "id": "penstemon-digitalis",
+      "fullName": "Penstemon digitalis",
+      "commonName": "Foxglove Beardtongue",
+      "description": "Penstemon digitalis (known by the common names foxglove beard-tongue, foxglove beardtongue, talus slope penstemon, and white beardtongue) is a species of flowering plant in the plantain family, Plantaginaceae. The flowers are white and are borne in summer. According to Francis W. Pennell it is a native of the Mississippi basin and its occurrences in Canada and the eastern United States are introductions. Because of this Penstemon digitalis is the most widespread species of Penstemon east of the Mississippi River.",
+      "vernacularNames": [
+        "Tall White Beardtongue",
+        "Tall white beardtongue (EN)",
+        "digitalis penstemon",
+        "foxglove beardtongue"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Lamiales",
+        "family": "Plantaginaceae",
+        "genus": "Penstemon",
+        "species": "Penstemon digitalis",
+        "canonicalName": "Penstemon digitalis"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/8251158"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:808077-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Penstemon_digitalis"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/81942"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q2174621"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.145814"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 32096
+    },
     "philadelphus-coronarius": {
       "id": "philadelphus-coronarius",
       "fullName": "Philadelphus coronarius",
