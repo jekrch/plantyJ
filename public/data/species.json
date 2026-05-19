@@ -1898,6 +1898,55 @@
       ],
       "observationsCount": 34053
     },
+    "heuchera-richardsonii": {
+      "id": "heuchera-richardsonii",
+      "fullName": "Heuchera richardsonii",
+      "commonName": "Prairie Alumroot",
+      "description": "",
+      "vernacularNames": [
+        "Richardson's alumroot",
+        "alumroot",
+        "prairie alumroot"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Saxifragales",
+        "family": "Saxifragaceae",
+        "genus": "Heuchera",
+        "species": "Heuchera richardsonii",
+        "canonicalName": "Heuchera richardsonii"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3032681"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:791398-1"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/127946"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.132189"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 5348
+    },
     "humulus-lupulus": {
       "id": "humulus-lupulus",
       "fullName": "Humulus lupulus",
