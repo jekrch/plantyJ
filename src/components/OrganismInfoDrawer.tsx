@@ -244,6 +244,41 @@ export default function OrganismInfoDrawer({
     ) ?? null;
   const zoneName = zoneNameByCode.get(organism.zoneCode) ?? organism.zoneCode;
 
+  const annotationSections: Array<
+    { key: string; label: string } & (
+      | { kind: "note"; text: string }
+      | { kind: "tags"; tags: string[] }
+    )
+  > = [];
+  const addAnnotation = (
+    keyBase: string,
+    labelPrefix: string,
+    description: string | null | undefined,
+    tagList: string[] | undefined,
+  ) => {
+    if (description) {
+      annotationSections.push({
+        key: `${keyBase}-note`,
+        label: `${labelPrefix} notes`,
+        kind: "note",
+        text: description,
+      });
+    }
+    if (tagList && tagList.length > 0) {
+      annotationSections.push({
+        key: `${keyBase}-tags`,
+        label: `${labelPrefix} tags`,
+        kind: "tags",
+        tags: tagList,
+      });
+    }
+  };
+  addAnnotation("plant", "Plant", organismAnnotation?.description, organismAnnotation?.tags);
+  addAnnotation("zone", zoneName, zoneAnnotation?.description, zoneAnnotation?.tags);
+  addAnnotation("photo", "Photo", note, tags);
+  // Tags first (compact chips), notes after — stable within each group.
+  annotationSections.sort((a, b) => (a.kind === b.kind ? 0 : a.kind === "tags" ? -1 : 1));
+
   const currentAnalysis = useMemo(() => {
     return (
       aiAnalyses.find(
@@ -349,36 +384,32 @@ export default function OrganismInfoDrawer({
               </div>
             </div>
 
-            {/* Organism, zone, and photo annotations — all side by side if they fit */}
-            {(organismAnnotation || zoneAnnotation || note || tags.length > 0) && (
+            {/* Organism, zone, and photo annotations — each note/tags section
+                flows side by side, wrapping only when it runs out of room */}
+            {annotationSections.length > 0 && (
               <>
                 <div className="border-t border-white/8" />
-                <div className="flex flex-wrap gap-x-6 gap-y-3 items-start">
-                  {organismAnnotation &&
-                    (organismAnnotation.description || organismAnnotation.tags.length > 0) && (
-                      <AnnotationGroup
-                        noteLabel="Plant notes"
-                        tagsLabel="Plant tags"
-                        description={organismAnnotation.description}
-                        tags={organismAnnotation.tags}
-                      />
-                    )}
-                  {zoneAnnotation &&
-                    (zoneAnnotation.description || zoneAnnotation.tags.length > 0) && (
-                      <AnnotationGroup
-                        noteLabel={`${zoneName} notes`}
-                        tagsLabel={`${zoneName} tags`}
-                        description={zoneAnnotation.description}
-                        tags={zoneAnnotation.tags}
-                      />
-                    )}
-                  {(note || tags.length > 0) && (
-                    <AnnotationGroup
-                      noteLabel="Photo notes"
-                      tagsLabel="Photo tags"
-                      description={note}
-                      tags={tags}
-                    />
+                <div className="flex flex-wrap gap-x-4 gap-y-3 items-start">
+                  {annotationSections.map((s) =>
+                    s.kind === "note" ? (
+                      <div key={s.key} className="grow basis-40 min-w-40">
+                        <p className={`${LABEL_CLS} mb-1.5`}>{s.label}</p>
+                        <p className="text-xs text-white/55 leading-relaxed whitespace-pre-line">
+                          {s.text}
+                        </p>
+                      </div>
+                    ) : (
+                      <div key={s.key} className="shrink-0 max-w-56">
+                        <p className={`${LABEL_CLS} mb-1.5`}>{s.label}</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {s.tags.map((t) => (
+                            <span key={t} className={TAG_CHIP}>
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ),
                   )}
                 </div>
               </>
@@ -831,41 +862,3 @@ export default function OrganismInfoDrawer({
 
 const TAG_CHIP = "text-[10px] leading-none px-1.5 py-[3.9px] rounded-sm bg-white/8 text-white/35";
 const LABEL_CLS = "text-[10px] uppercase tracking-widest text-white/50";
-
-function AnnotationGroup({
-  noteLabel,
-  tagsLabel,
-  description,
-  tags,
-}: {
-  noteLabel: string;
-  tagsLabel: string;
-  description: string | null;
-  tags: string[];
-}) {
-  const hasNote = !!description;
-  const hasTags = tags.length > 0;
-
-  return (
-    <div className="space-y-2">
-      {hasNote && (
-        <div>
-          <p className={`${LABEL_CLS} mb-1.5`}>{noteLabel}</p>
-          <p className="text-xs text-white/55 leading-relaxed whitespace-pre-line">{description}</p>
-        </div>
-      )}
-      {hasTags && (
-        <div>
-          <p className={`${LABEL_CLS} mb-1.5`}>{tagsLabel}</p>
-          <div className="flex flex-wrap gap-1.5">
-            {tags.map((t) => (
-              <span key={t} className={TAG_CHIP}>
-                {t}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}

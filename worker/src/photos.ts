@@ -23,6 +23,8 @@ import {
 const NO_CAPTION_HELP =
   "Photo received but no caption.\n\n" +
   "Format:\nshortCode // fullName // commonName // zones // tags // description\n\n" +
+  "Leave shortCode blank to auto-generate it from the species name:\n" +
+  "// fullName // commonName // zone\n\n" +
   "Or for a zone photo:\n/zonepic {zoneCode} [// description]";
 
 interface UploadedImage {

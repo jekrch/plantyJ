@@ -15,6 +15,9 @@ Add a plant photo:
   First time registering a plant + zone:
   tmt-c // Solanum lycopersicum 'Cherokee Purple' // Cherokee Purple Tomato // Front Bed 1 (fb1) // edible,heirloom // first ripe fruit
 
+  Leave the code blank to auto-generate one from the species name:
+  // Thymus serpyllum // Creeping Thyme // Front Bed 1 (fb1)   →  registers "T ser"
+
   Same plant photographed in a different zone (just supply the new zone):
   mint-1 // // // sb // // spreading into the side bed
 

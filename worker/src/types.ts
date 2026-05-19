@@ -76,6 +76,9 @@ export interface ParsedTags {
 
 export interface ParsedCaption {
   shortCode: string;
+  /** True when the caption omitted the shortCode (empty leading segment) and
+   *  one must be generated from the species name. `shortCode` is "" then. */
+  autoCode: boolean;
   fullName: string | null;
   commonName: string | null;
   variety: string | null;

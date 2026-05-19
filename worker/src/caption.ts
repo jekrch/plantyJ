@@ -32,17 +32,20 @@ export function parseCaption(caption: string): ParsedCaption {
   const text = caption.trim();
   const parts = text.split("//").map((s) => s.trim());
   const shortCode = parts[0];
-  if (!shortCode) {
-    throw new Error("Caption must start with a shortCode.");
+  // Empty leading segment ("// fullName // ...") = omit the shortCode; one is
+  // generated from the species name in resolveFields.
+  const autoCode = shortCode === "";
+  if (!autoCode) {
+    assertValidCode("shortCode", shortCode);
   }
-  assertValidCode("shortCode", shortCode);
 
-  if (shortCode.toLowerCase() === UNIDENTIFIED_CODE) {
+  if (!autoCode && shortCode.toLowerCase() === UNIDENTIFIED_CODE) {
     const zoneRaw = parts[1] || null;
     const zone = zoneRaw ? parseZoneRef(zoneRaw) : null;
     const description = parts[2] ? parts[2] : null;
     return {
       shortCode: UNIDENTIFIED_CODE,
+      autoCode: false,
       fullName: null,
       commonName: null,
       variety: null,
@@ -62,11 +65,20 @@ export function parseCaption(caption: string): ParsedCaption {
   const tags = parts[4] ? parseTags(parts[4]) : null;
   const description = parts[5] ? parts[5] : null;
 
-  return { shortCode, fullName, commonName, variety, zone, tags, description };
+  return { shortCode, autoCode, fullName, commonName, variety, zone, tags, description };
 }
 
 export function isUnidentifiedShortCode(shortCode: string): boolean {
   return shortCode.startsWith(UNIDENTIFIED_PREFIX);
+}
+
+// Loose comparison for detecting "is the caption describing the same plant?":
+// case-insensitive, whitespace-collapsed. Used to flag an accidental shortCode
+// collision, not to enforce exact formatting.
+function sameName(a: string | null | undefined, b: string | null | undefined): boolean {
+  const norm = (s: string | null | undefined) =>
+    (s ?? "").trim().toLowerCase().replace(/\s+/g, " ");
+  return norm(a) === norm(b);
 }
 
 function extractVariety(raw: string | null): { fullName: string | null; variety: string | null } {
@@ -127,6 +139,45 @@ function parseTags(raw: string): ParsedTags {
   return { picTags, zoneTags, plantTags };
 }
 
+/**
+ * Generate a shortCode from a species name, following the garden's convention:
+ * uppercase genus initial + space + first 3 letters of the species epithet,
+ * plus a space + first 3 letters of the variety when present
+ * (e.g. "Thymus serpyllum" → "T ser", "Viola sororia 'priceana'" → "V sor pri").
+ *
+ * On collision with an already-taken code, one more letter of the species
+ * epithet is added until the code is unique ("V vir" → "V virg" → "V virgi").
+ * If the epithet is exhausted, a numeric suffix is appended as a safety net.
+ */
+export function generateShortCode(
+  fullName: string,
+  variety: string | null,
+  taken: ReadonlySet<string>,
+): string {
+  const words = fullName
+    .trim()
+    .split(/\s+/)
+    .map((w) => w.replace(/[^A-Za-z]/g, ""))
+    .filter((w) => w.length > 0);
+  const genus = words[0] ?? slugify(fullName).replace(/[^a-z]/g, "");
+  const epithet = (words[1] ?? words[0] ?? "x").toLowerCase();
+  const genusInitial = (genus[0] ?? "x").toUpperCase();
+  const varAbbr = (variety ?? "").toLowerCase().replace(/[^a-z]/g, "").slice(0, 3);
+  const vSuffix = varAbbr ? ` ${varAbbr}` : "";
+
+  const minLen = Math.min(3, epithet.length) || 1;
+  for (let n = minLen; n <= epithet.length; n++) {
+    const code = `${genusInitial} ${epithet.slice(0, n)}${vSuffix}`;
+    if (!taken.has(code)) return code;
+  }
+  // Epithet exhausted (or absurdly short) — fall back to a numeric suffix.
+  const base = `${genusInitial} ${epithet}${vSuffix}`;
+  for (let i = 2; ; i++) {
+    const code = `${base}-${i}`;
+    if (!taken.has(code)) return code;
+  }
+}
+
 export function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -181,6 +232,21 @@ export function resolveFields(
   plants: PlantRecord[],
   zones: Zone[],
 ): ResolveResult {
+  if (parsed.autoCode) {
+    if (!parsed.fullName) {
+      throw new Error(
+        "Can't generate a shortCode without a species name. " +
+          "Use: // Genus species 'Variety' // Common Name // Zone (code)",
+      );
+    }
+    const taken = new Set<string>([
+      ...plants.map((p) => p.shortCode),
+      ...existingPics.map((p) => p.shortCode),
+    ]);
+    const generated = generateShortCode(parsed.fullName, parsed.variety, taken);
+    parsed = { ...parsed, shortCode: generated, autoCode: false };
+  }
+
   const isUnidentified = parsed.shortCode === UNIDENTIFIED_CODE;
   const priorPic = isUnidentified
     ? null
@@ -238,6 +304,38 @@ export function resolveFields(
     throw new Error(
       `New shortCode "${parsed.shortCode}" needs a fullName. Use: shortCode // Genus species 'Variety' // Common Name // Zone (code)`,
     );
+  }
+
+  // Accidental shortCode collision: the caption asserts a botanical identity
+  // (fullName / variety) that contradicts the plant already registered under
+  // this shortCode. Without this guard the backfill logic below would silently
+  // ignore the caption's name and attach the photo to the wrong plant.
+  if (existingPlant) {
+    if (
+      parsed.fullName &&
+      existingPlant.fullName &&
+      !sameName(parsed.fullName, existingPlant.fullName)
+    ) {
+      throw new Error(
+        `shortCode "${parsed.shortCode}" is already taken by "${existingPlant.fullName}"` +
+          `${existingPlant.commonName ? ` (${existingPlant.commonName})` : ""}. ` +
+          `You wrote "${parsed.fullName}". Pick a different shortCode for the new plant, ` +
+          `or, to add this photo to the existing plant, drop the fullName from the caption. ` +
+          `(To rename the existing plant, use /update.)`,
+      );
+    }
+    if (
+      parsed.variety &&
+      existingPlant.variety &&
+      !sameName(parsed.variety, existingPlant.variety)
+    ) {
+      throw new Error(
+        `shortCode "${parsed.shortCode}" is already taken by variety ` +
+          `'${existingPlant.variety}'. You wrote '${parsed.variety}'. ` +
+          `Pick a different shortCode for the new plant, or drop the variety from the ` +
+          `caption to add this photo to the existing one.`,
+      );
+    }
   }
 
   let plantUpsert: ResolvedPlantUpsert | null = null;
