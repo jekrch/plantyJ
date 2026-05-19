@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A mel",
+      "fullName": "Aronia melanocarpa",
+      "commonName": "Black Chokeberry",
+      "variety": null
+    },
+    {
       "shortCode": "C arv",
       "fullName": "Cerastium arvense",
       "commonName": "Field Chickweed",
