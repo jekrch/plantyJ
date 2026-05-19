@@ -568,6 +568,14 @@
         "edible"
       ],
       "description": null
+    },
+    {
+      "shortCode": "T ser",
+      "zoneCode": null,
+      "tags": [
+        "edible"
+      ],
+      "description": null
     }
   ]
 }
