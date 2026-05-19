@@ -606,6 +606,74 @@
       ],
       "observationsCount": 21637
     },
+    "aquilegia-canadensis": {
+      "id": "aquilegia-canadensis",
+      "fullName": "Aquilegia canadensis",
+      "commonName": "Columbine",
+      "description": "Aquilegia canadensis, the Canadian columbine, Canada columbine, eastern red columbine, or wild columbine, is a species of flowering plant in the buttercup family. It is a perennial plant that is native to the woodlands and rocky areas in eastern North America in both the United States and southern Canada. It readily hybridizes with other plants in the columbine genus and is a common garden plant.",
+      "vernacularNames": [
+        "American columbine",
+        "Canada columbine",
+        "Colorado columbine",
+        "Honeysuckle",
+        "Meeting-houses",
+        "Red Columbine",
+        "Red-bell",
+        "Wild Columbine",
+        "shan yang qi",
+        "wild red columbine",
+        "Canadian Columbine",
+        "Common Columbine",
+        "Rock-bells",
+        "red columbine"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Ranunculales",
+        "family": "Ranunculaceae",
+        "genus": "Aquilegia",
+        "species": "Aquilegia canadensis",
+        "canonicalName": "Aquilegia canadensis"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3033197"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:30028287-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Aquilegia_canadensis"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/49868"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q2846008"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.135388"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 58087
+    },
     "armoracia-rusticana": {
       "id": "armoracia-rusticana",
       "fullName": "Armoracia rusticana",

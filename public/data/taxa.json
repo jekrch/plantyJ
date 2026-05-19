@@ -642,5 +642,9 @@
   "Anaphalis": {
     "description": "Anaphalis is a genus of herbaceous and woody flowering plants within the family Asteraceae, whose members are commonly known by the name pearl or pearly everlasting. There are around 110 species with the vast majority being native to central and southern Asia. There is one species native to North America that is fairly well known and popular in cultivation, namely the western pearly everlasting.",
     "url": "https://en.wikipedia.org/wiki/Anaphalis"
+  },
+  "Aquilegia": {
+    "description": "Aquilegia, commonly known as columbines, is a genus of perennial flowering plants in the family Ranunculaceae (buttercups). The genus includes between 70 and 400 taxa with natural ranges across the Northern Hemisphere. Natural and introduced populations of Aquilegia exist on all continents but Antarctica. Known for their high physical variability and ease of hybridization, columbines are popular garden plants and have created many cultivated varieties.",
+    "url": "https://en.wikipedia.org/wiki/Aquilegia"
   }
 }
