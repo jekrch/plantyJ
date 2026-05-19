@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A mar",
+      "fullName": "Anaphalis margaritacea",
+      "commonName": "Pearly Everlasting",
+      "variety": null
+    },
+    {
       "shortCode": "T ser",
       "fullName": "Thymus serpyllum",
       "commonName": "Creeping Thyme",
