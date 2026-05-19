@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 82,
+      "id": "C arv-1779150144",
+      "shortCode": "C arv",
+      "zoneCode": "fy",
+      "tags": [
+        "flower"
+      ],
+      "description": null,
+      "image": "images/C arv/1779150144.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-05-19T00:22:26.278Z",
+      "width": 768,
+      "height": 1024
+    },
+    {
       "seq": 81,
       "id": "P pol-1779149469",
       "shortCode": "P pol",
@@ -153,7 +168,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
