@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "H ric",
+      "fullName": "Heuchera richardsonii",
+      "commonName": "Prairie Alumroot",
+      "variety": null
+    },
+    {
       "shortCode": "A cana",
       "fullName": "Aquilegia canadensis",
       "commonName": "Columbine",
