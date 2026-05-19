@@ -10,7 +10,8 @@
     },
     {
       "code": "bb",
-      "name": "Berry Border"
+      "name": "Berry Border",
+      "description": "Mostly sunny. Soil is lighter, drier, and looser relative to the other zones."
     },
     {
       "code": "mpg",
