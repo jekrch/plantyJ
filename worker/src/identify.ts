@@ -1,6 +1,7 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import type { Env } from "./types";
 import { estimateCost, formatUsd, type Usage } from "./ask";
+import { recordCost } from "./cost";
 
 // Vision identification runs on the cron path (like /ask and /analyze) so the
 // Gemini call never blocks the Telegram webhook. Pro has the strongest vision.
@@ -288,7 +289,11 @@ export async function identifyPhoto(
     cached: 0,
     output: meta?.candidatesTokenCount ?? 0,
     cacheCreation: 0,
+    cacheStorageTokenHours: 0,
   };
+  await recordCost(env, IDENTIFY_MODEL, usage).catch((err) =>
+    console.log(`[identify] recordCost failed: ${(err as Error).message}`),
+  );
   const cost = estimateCost(IDENTIFY_MODEL, usage);
   const costLine =
     cost === null

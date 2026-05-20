@@ -3,6 +3,7 @@ import type { AiAnalysisEntry, AiVerdict, Env } from "./types";
 import { readAiAnalyses, writeAiAnalyses } from "./github";
 import { sendReply } from "./telegram";
 import { estimateCost, formatUsd } from "./ask";
+import { recordCost } from "./cost";
 
 const ANALYSIS_MODEL = "gemini-3.1-pro-preview";
 
@@ -13,6 +14,7 @@ function analyzeCost(promptTokens: number, outputTokens: number): number | null 
     cached: 0,
     output: outputTokens,
     cacheCreation: 0,
+    cacheStorageTokenHours: 0,
   });
 }
 
@@ -619,6 +621,17 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
     meta.failed += failures.length;
     meta.promptTokens += promptTokens;
     meta.outputTokens += outputTokens;
+    if (promptTokens > 0 || outputTokens > 0) {
+      await recordCost(env, ANALYSIS_MODEL, {
+        prompt: promptTokens,
+        cached: 0,
+        output: outputTokens,
+        cacheCreation: 0,
+        cacheStorageTokenHours: 0,
+      }).catch((err) =>
+        console.log(`[analyze.tick] recordCost failed: ${(err as Error).message}`),
+      );
+    }
     meta.lastTickAt = new Date().toISOString();
     const justFinished = remainingAfter.length === 0;
     if (justFinished) meta.finishedAt = meta.lastTickAt;

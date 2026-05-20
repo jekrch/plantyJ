@@ -14,6 +14,7 @@ import { ingestPlantPhoto } from "./photos";
 import { PENDING_IDENTIFY_KEY, type PendingIdentify } from "./identify";
 import { submitAnalyzeRun, analyzeStatus, clearAnalyzeRun, formatAnalyzeUsage } from "./analyze";
 import { enqueueJob } from "./jobs";
+import { readCostTotals, formatCostReport } from "./cost";
 import { assertValidCode } from "./validation";
 import {
   acceptBioclip,
@@ -416,6 +417,11 @@ async function handleAnalyze(
   );
 }
 
+async function handleCost(env: Env, reply: Replier): Promise<void> {
+  const totals = await readCostTotals(env);
+  await reply(formatCostReport(totals));
+}
+
 async function handlePlants(env: Env, reply: Replier): Promise<void> {
   const { gallery } = await readGallery(env);
   await reply(buildPlantsText(gallery.plants));
@@ -711,6 +717,7 @@ export async function handleTextCommand(
         await reply(HELP_HEADER);
       },
     ],
+    ["/cost", () => handleCost(env, reply)],
     ["/plants", () => handlePlants(env, reply)],
     ["/tags", () => handleTagsList(env, reply)],
     ["/zones", () => handleZonesList(env, reply)],

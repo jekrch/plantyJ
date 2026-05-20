@@ -2,6 +2,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 import type { Content, Part } from "@google/genai";
 import type { Env } from "./types";
 import { HELP_HEADER } from "./help";
+import { recordCost } from "./cost";
 
 const MAX_TOOL_ITERATIONS = 3;
 const TELEGRAM_MAX_LEN = 4096;
@@ -13,12 +14,27 @@ export const MODEL_ALIASES: Record<string, string> = {
   "3": "gemini-3.1-pro-preview",
 };
 
-// $/1M tokens: uncached input, cached input, output (approximate — verify at ai.google.dev/pricing)
-const MODEL_PRICING: Record<string, { i: number; c: number; o: number }> = {
-  "gemini-3.1-flash-lite-preview": { i: 0.1, c: 0.025, o: 0.4 },
-  "gemini-2.5-pro": { i: 1.25, c: 0.315, o: 10.0 },
-  "gemini-3.1-pro-preview": { i: 1.25, c: 0.315, o: 10.0 },
+// Per-1M-token rates (verify at ai.google.dev/pricing).
+// Tiers are [≤200k prompt tokens, >200k prompt tokens]; flat-rate models
+// repeat the same value in both slots.
+//   i = uncached input, c = cached input read, o = output (incl. thinking),
+//   s = cache storage per hour (single rate, not tier-split)
+interface Pricing {
+  i: [number, number];
+  c: [number, number];
+  o: [number, number];
+  s: number;
+}
+const MODEL_PRICING: Record<string, Pricing> = {
+  // Confirmed against the user's pricing table (Gemini 3 Pro Preview).
+  "gemini-3.1-pro-preview": { i: [2.0, 4.0], c: [0.2, 0.4], o: [12.0, 18.0], s: 4.5 },
+  // Gemini 2.5 Pro public rates — same two-tier structure.
+  "gemini-2.5-pro": { i: [1.25, 2.5], c: [0.31, 0.625], o: [10.0, 15.0], s: 4.5 },
+  // Flash-lite is flat-rate across prompt size (approximate — verify).
+  "gemini-3.1-flash-lite-preview": { i: [0.1, 0.1], c: [0.025, 0.025], o: [0.4, 0.4], s: 1.0 },
 };
+
+const LARGE_PROMPT_TOKENS = 200_000;
 
 export interface Thread {
   model: string;
@@ -63,15 +79,26 @@ export interface Usage {
   cached: number;
   output: number;
   cacheCreation: number;
+  /** Token-hours the context cache is kept alive (cacheCreationTokens × TTL_hours).
+   *  Priced separately from the per-call cache-creation input charge. */
+  cacheStorageTokenHours: number;
 }
 
 // Estimated USD cost for a usage breakdown, or null if the model is unpriced.
+// Tier is chosen by prompt size: prompts >200k tokens hit the higher rate for
+// input, cached input, and output. Cache storage and cache creation are
+// billed at the lower-tier input rate (cache creation is metered as input).
 export function estimateCost(model: string, usage: Usage): number | null {
   const p = MODEL_PRICING[model];
   if (!p) return null;
+  const tier = usage.prompt > LARGE_PROMPT_TOKENS ? 1 : 0;
   const uncached = usage.prompt - usage.cached;
   return (
-    (uncached * p.i + usage.cached * p.c + usage.output * p.o + usage.cacheCreation * p.i) /
+    (uncached * p.i[tier] +
+      usage.cached * p.c[tier] +
+      usage.output * p.o[tier] +
+      usage.cacheCreation * p.i[tier] +
+      usage.cacheStorageTokenHours * p.s) /
     1_000_000
   );
 }
@@ -259,8 +286,13 @@ async function getOrCreateCache(
   systemPrompt: string,
   rollupJson: string,
   env: Env,
-): Promise<{ cacheName: string | undefined; cacheCreationTokens: number }> {
-  if (!env.ASK_CACHE) return { cacheName: undefined, cacheCreationTokens: 0 };
+): Promise<{
+  cacheName: string | undefined;
+  cacheCreationTokens: number;
+  cacheStorageTokenHours: number;
+}> {
+  if (!env.ASK_CACHE)
+    return { cacheName: undefined, cacheCreationTokens: 0, cacheStorageTokenHours: 0 };
   try {
     const checksum = await computeChecksum(rollupJson);
     // v2: cache contents include propose_commands tool — old v1 caches lack it.
@@ -271,7 +303,8 @@ async function getOrCreateCache(
     if (raw) {
       const state: CacheState = JSON.parse(raw);
       if (state.checksum === checksum && state.expiresAt > Date.now()) {
-        return { cacheName: state.cacheName, cacheCreationTokens: 0 };
+        // Cache hit — no new tokens stored, so no storage charge for this call.
+        return { cacheName: state.cacheName, cacheCreationTokens: 0, cacheStorageTokenHours: 0 };
       }
       staleCacheName = state.cacheName;
     }
@@ -305,10 +338,14 @@ async function getOrCreateCache(
 
     const creationTokens =
       (cache.usageMetadata as { totalTokenCount?: number } | undefined)?.totalTokenCount ?? 0;
-    return { cacheName: cache.name!, cacheCreationTokens: creationTokens };
+    // Charge full TTL up front. Early eviction (404 retry path) or replacement
+    // before TTL would reduce this; accepting a slight over-estimate keeps the
+    // ledger simple — no need to track per-cache lifetime.
+    const cacheStorageTokenHours = creationTokens * (CACHE_TTL_SECONDS / 3600);
+    return { cacheName: cache.name!, cacheCreationTokens: creationTokens, cacheStorageTokenHours };
   } catch {
     // Caching is best-effort; any failure falls back to uncached.
-    return { cacheName: undefined, cacheCreationTokens: 0 };
+    return { cacheName: undefined, cacheCreationTokens: 0, cacheStorageTokenHours: 0 };
   }
 }
 
@@ -324,7 +361,7 @@ export async function answerQuestion(
   const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
   const systemPrompt = buildSystemPrompt(rollupJson);
 
-  const { cacheName, cacheCreationTokens } = await getOrCreateCache(
+  const { cacheName, cacheCreationTokens, cacheStorageTokenHours } = await getOrCreateCache(
     client,
     model,
     systemPrompt,
@@ -344,7 +381,13 @@ export async function answerQuestion(
     { role: "user", parts: [{ text: questionText }] },
   ];
 
-  const totalUsage: Usage = { prompt: 0, cached: 0, output: 0, cacheCreation: cacheCreationTokens };
+  const totalUsage: Usage = {
+    prompt: 0,
+    cached: 0,
+    output: 0,
+    cacheCreation: cacheCreationTokens,
+    cacheStorageTokenHours,
+  };
   let proposals: ProposedCommand[] = [];
 
   for (let i = 0; i <= MAX_TOOL_ITERATIONS; i++) {
@@ -396,6 +439,9 @@ export async function answerQuestion(
         .join("\n")
         .trim();
       const costLine = formatCost(model, totalUsage);
+      await recordCost(env, model, totalUsage).catch((err) =>
+        console.log(`[ask] recordCost failed: ${(err as Error).message}`),
+      );
       const body = truncateForTelegram(text || "No response.");
       const reply = costLine ? `${body}\n${costLine}` : body;
       return { reply, thread: { model, history: contents }, proposals };

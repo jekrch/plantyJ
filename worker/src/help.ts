@@ -149,4 +149,10 @@ Ecological analysis:
   /analyze-load — Report queue progress: succeeded / failed / remaining,
     tokens used, elapsed time. Run repeatedly to watch the cron drain.
   /analyze-cancel — Clear the queue and run state (use if a run is
-    stuck or you want to abandon it).`;
+    stuck or you want to abandon it).
+
+Cost:
+  /cost — Estimated Gemini spend today and this month, with token totals
+    (uncached in, cache reads, cache writes, cache storage token-hours).
+    Estimate from this worker's pricing table; the GCP invoice is the
+    authoritative number.`;
