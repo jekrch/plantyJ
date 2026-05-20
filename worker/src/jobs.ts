@@ -7,6 +7,7 @@ import {
   identifyPhoto,
   PENDING_IDENTIFY_KEY,
   PENDING_IDENTIFY_TTL,
+  type IdentifyCandidate,
   type PendingIdentify,
 } from "./identify";
 
@@ -55,6 +56,11 @@ export interface JobRecord {
   imgHeight?: number;
   prompt?: string;
   postedBy?: string;
+  /** When set, runs identify as a refine turn against these prior candidates. */
+  priorCandidates?: IdentifyCandidate[];
+  /** Prompt history from earlier turns in this identify session (excluding the
+   *  current `prompt`). */
+  priorPrompts?: string[];
   createdAt: string;
   attempts: number;
 }
@@ -111,15 +117,21 @@ async function runJob(env: Env, job: JobRecord): Promise<RunStatus> {
 
   if (job.kind === "identify") {
     const bytes = await downloadFile(job.fileId ?? "", env.TELEGRAM_BOT_TOKEN);
+    const prior =
+      job.priorCandidates && job.priorCandidates.length >= 0 && job.priorPrompts
+        ? { candidates: job.priorCandidates, prompts: job.priorPrompts }
+        : null;
     const { body, candidates } = await identifyPhoto(
       env,
       arrayBufferToBase64(bytes),
       job.prompt ?? null,
+      prior,
     );
     // Persist the candidates + file_id so /pick can replay the chosen one
     // through the normal ingest path. Only store when there's something to
     // pick; an empty result is informational only.
     if (candidates.length > 0 && job.userId !== null && env.ASK_CACHE) {
+      const promptHistory = [...(job.priorPrompts ?? []), job.prompt ?? ""];
       const pending: PendingIdentify = {
         createdAt: new Date().toISOString(),
         fileId: job.fileId ?? "",
@@ -127,6 +139,7 @@ async function runJob(env: Env, job: JobRecord): Promise<RunStatus> {
         height: job.imgHeight,
         postedBy: job.postedBy ?? "unknown",
         candidates,
+        userPrompts: promptHistory,
       };
       await env.ASK_CACHE.put(PENDING_IDENTIFY_KEY(job.userId), JSON.stringify(pending), {
         expirationTtl: PENDING_IDENTIFY_TTL,

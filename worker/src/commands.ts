@@ -313,12 +313,44 @@ async function handleResp(
   const aliasOverride = m[1];
   const question = m[2].trim();
   if (!message.from || !env.ASK_CACHE) {
-    await reply("No active /ask thread.");
+    await reply("No active /ask thread or /identify session.");
     return;
   }
+
+  // Prefer a pending /identify session over the /ask thread: it's narrower in
+  // scope and shorter-lived (1h TTL), so a follow-up here is almost certainly
+  // about the photo just identified.
+  const identifyRaw = await env.ASK_CACHE.get(PENDING_IDENTIFY_KEY(message.from.id));
+  if (identifyRaw) {
+    if (aliasOverride) {
+      await reply(
+        "Model override (/resp1, /resp2, /resp3) doesn't apply to /identify refinement — using the identify model. Use /cancel first if you wanted /resp on an /ask thread.",
+      );
+    }
+    const pending: PendingIdentify = JSON.parse(identifyRaw);
+    await enqueueJob(env, {
+      id: `identify-resp-${message.from.id}-${message.message_id}`,
+      kind: "identify",
+      chatId: message.chat.id,
+      messageId: message.message_id,
+      userId: message.from.id,
+      fileId: pending.fileId,
+      imgWidth: pending.width,
+      imgHeight: pending.height,
+      prompt: question,
+      postedBy: pending.postedBy,
+      priorCandidates: pending.candidates,
+      priorPrompts: pending.userPrompts ?? [],
+      createdAt: new Date().toISOString(),
+      attempts: 0,
+    });
+    await reply("Refining identification — updated options will arrive shortly.");
+    return;
+  }
+
   const raw = await env.ASK_CACHE.get(THREAD_KEY(message.from.id));
   if (!raw) {
-    await reply("No active /ask thread. Start one with /ask.");
+    await reply("No active /ask thread or /identify session. Start one with /ask or /identify.");
     return;
   }
   const thread: Thread = JSON.parse(raw);

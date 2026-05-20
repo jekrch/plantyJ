@@ -454,30 +454,43 @@ function AboutPanel() {
 
       <div className="border-t border-ink-faint/20" />
 
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_320px] gap-5 items-start">
-        <div>
-          <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-3">
-            Agentic Journal
+      <div>
+        <TelegramChat className="hidden md:block w-[320px] md:float-right md:ml-5 mb-5" />
+        <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-3">
+          Agentic Journal
+        </p>
+        <div className="space-y-3">
+          <p className="text-sm text-ink leading-relaxed">
+            PlantyJ is an agentic garden journal we tend almost entirely from
+            our phones by sending photos and short prompts to a Telegram bot.
+            The bot routes each message through a small set of slash commands
+            for identifying species, picking from suggestions, relating
+            organisms ecologically, and asking open questions. An LLM agent
+            does the research, drafts the changes, and waits for us to confirm.
           </p>
-          <div className="space-y-3">
-            <p className="text-sm text-ink leading-relaxed">
-              PlantyJ is an agentic garden journal we tend almost entirely from
-              our phones by sending photos and short prompts to a Telegram bot.
-              The bot routes each message through a small set of slash commands
-              for identifying species, picking from suggestions, relating
-              organisms ecologically, and asking open questions. An LLM agent
-              does the research, drafts the changes, and waits for us to confirm.
-            </p>
-            <p className="text-sm text-ink leading-relaxed">
-              Once we confirm, the agent commits the updated data and images
-              back to the repo, which automatically rebuilds and redeploys this
-              site. The transcript on the right is a real evening's session: an
-              identification followed by a batch of proposed relationships, all
-              driven by photos and a few short replies.
-            </p>
-          </div>
+          <TelegramChat className="md:hidden w-full" />
+          <p className="text-sm text-ink leading-relaxed">
+            Once we confirm, the agent commits the updated data and images
+            back to the repo, which automatically rebuilds and redeploys this
+            site. The transcript on the right is a real evening's session: an
+            identification followed by a batch of proposed relationships, all
+            driven by photos and a few short replies.
+          </p>
+          <p className="text-sm text-ink leading-relaxed">
+            When we already know what something is, we can skip the research
+            step and enter species directly through simple commands, which
+            saves on token cost. The agent can also draft those commands for
+            us when it helps, like bulk tagging a group of species we want to
+            update together, and we still approve before anything is written.
+          </p>
+          <p className="text-sm text-ink leading-relaxed">
+            For the research itself we use Gemini 3.1 Pro with grounding to
+            improve accuracy, but every change still waits on our
+            confirmation, so we can verify anything we aren't sure of for
+            ourselves before it lands in the journal.
+          </p>
         </div>
-        <TelegramChat className="w-full" />
+        <div className="clear-both" />
       </div>
     </div>
   );

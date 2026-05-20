@@ -44,6 +44,15 @@ Identify from a photo:
   /pick 2 — saves THIS photo with option 2's identification, committed
     exactly like a normal upload (existing plants are reused; new ones
     are registered with an auto-generated shortCode).
+  /resp {follow-up} — refine the pending identification. Add tags,
+    change the zone, suggest a different species, or just ask a question
+    about a candidate. Examples:
+      /resp add tag native and ++medicinal to option 2
+      /resp could this actually be Allium tricoccum?
+      /resp move them all to fb2
+      /resp is option 1 edible?
+    The reply replaces the pending options (so /pick still works on the
+    updated list). Keeps using the photo from the original /identify.
   /cancel — discard the identify options.
   Options expire after 1 hour.
 
@@ -99,6 +108,9 @@ Q&A and actions (propose-then-confirm):
     starts a fresh one). Follow-ups can also produce a new set of
     proposals to /confirm. /ask, and /resp accept a model suffix
     (1/2/3) to override the model for that turn.
+    If a /identify session is currently pending, /resp refines that
+    instead (see the Identify section). /cancel an identify session
+    first to fall through to the /ask thread.
   /confirm — Run all proposed commands from the most recent turn.
   /confirm 1 3 — Run only the listed proposals (space- or comma-separated).
   /cancel — Drop the pending proposals without running anything.
