@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A sp",
+      "fullName": "Aphis sp.",
+      "commonName": "Aphid",
+      "variety": null
+    },
+    {
       "shortCode": "H ric",
       "fullName": "Heuchera richardsonii",
       "commonName": "Prairie Alumroot",
