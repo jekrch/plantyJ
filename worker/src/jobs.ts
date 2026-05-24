@@ -28,9 +28,11 @@ const JOBS_PER_TICK = 2;
 const MAX_ATTEMPTS = 2;
 const PENDING_DO_TTL_SECONDS = 3600;
 // runOrEnqueue: how long to let an LLM call run on the webhook path before
-// falling back to the queue. Tight so users see "queued" quickly when Gemini
-// is slow; Flash 3.5 typically returns well under this for /ask and /identify.
-const INLINE_TIMEOUT_MS = 3000;
+// falling back to the queue. Sized against the Workers Free ~30s invocation
+// lifetime (incl. ctx.waitUntil): 10s for the LLM leaves clear room to
+// enqueue and reply if we time out. Subrequest count (50/invocation) isn't
+// the bottleneck — /ask uses ~3–8, /identify ~3.
+const INLINE_TIMEOUT_MS = 10000;
 // Batched commits: a chunk of any size costs ~5 GETs + ~5 PUTs (only the
 // dirty manifests) regardless of command count. Image deletions add 2 each.
 // 25 leaves headroom for analyze-tick on the same invocation under Free's
