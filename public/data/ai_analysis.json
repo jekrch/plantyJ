@@ -148,6 +148,18 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "A sp",
+      "zoneCode": "bb",
+      "verdict": "MIXED",
+      "analysis": "The presence of aphids in the Berry Border represents a classic ecological balancing act for a garden that prioritizes both edible production and local ecology. On one hand, aphids are sap-sucking pests that feed on phloem tissue, directly threatening the health of neighboring crop plants in this sun-drenched zone. Specifically, they can cause leaf curling and cone browning on hops, leaf distortion and reduced vigor on red and pink currants, and transmit stunting viruses to raspberries that crumble their fruit. Their sticky honeydew excretions can also lead to unsightly black sooty mold, compromising photosynthesis on host leaves. On the other hand, aphids are a fundamental cornerstone of a healthy garden food web. They serve as essential prey that attracts and sustains critical beneficial insects, including ladybug larvae, lacewings, hoverflies, and parasitoid wasps. Sustaining a baseline aphid population in this border ensures these natural predators are present to patrol the rest of the yard, while also providing a valuable foraging resource for insectivorous birds nesting in the adjacent Maple zone.\n\nIn the Twin Cities area, the massive genus Aphis includes both native specialists and introduced agricultural pests. Because the owners prioritize supporting local ecology, eradication should never be the goal; instead, they should employ Integrated Pest Management (IPM). This involves monitoring colonies with tolerance, allowing beneficial predatory insect populations time to establish and naturally regulate the aphids. If localized control becomes necessary to protect the raspberry or hop harvest, the owners should rely on physical methods, such as a strong stream of water from a garden hose to dislodge the insects, or selective pruning of heavily infested stems. Broad-spectrum or systemic chemical pesticides must be avoided entirely, as they would disrupt the garden's natural biological controls and harm local pollinators visiting neighboring flowers.",
+      "references": [
+        "https://animaldiversity.org/accounts/Aphis_pomi/",
+        "https://extension.psu.edu/aphids-on-raspberries-in-home-gardens",
+        "https://www.canr.msu.edu/news/aphids_on_hops_reported_in_significant_numbers"
+      ],
+      "created": "2026-05-24T23:27:40.645Z"
+    },
+    {
       "shortCode": "a tri",
       "zoneCode": "mpg",
       "verdict": "GOOD",
