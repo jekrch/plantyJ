@@ -606,6 +606,46 @@
       ],
       "observationsCount": 21637
     },
+    "aphis-sp": {
+      "id": "aphis-sp",
+      "fullName": "Aphis sp.",
+      "commonName": "Aphid",
+      "description": "",
+      "vernacularNames": [
+        "Fire Millipedes",
+        "Spiraea Aphid"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Hemiptera",
+        "family": "Aphididae",
+        "genus": "Aphis",
+        "species": null,
+        "canonicalName": "Aphis"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2049562"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/330185"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 1818
+    },
     "aquilegia-canadensis": {
       "id": "aquilegia-canadensis",
       "fullName": "Aquilegia canadensis",

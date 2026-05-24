@@ -650,5 +650,17 @@
   "Heuchera": {
     "description": "Heuchera is a genus of largely evergreen perennial plants in the family Saxifragaceae. All species are native to North America except for Heuchera sichotensis, native to the Russian Far East. Common names include alumroot and coral bells.",
     "url": "https://en.wikipedia.org/wiki/Heuchera"
+  },
+  "Aphididae": {
+    "description": "The Aphididae are a very large insect family in the aphid superfamily (Aphidoidea), of the order Hemiptera. These insects suck the sap from plant leaves. Several thousand species are placed in this family, many of which are considered plant/crop pests. They are the family of insects containing most plant virus vectors with the green peach aphid being one of the most prevalent and indiscriminate carriers.",
+    "url": "https://en.wikipedia.org/wiki/Aphididae"
+  },
+  "Aphis": {
+    "description": "Aphis is a genus of insects in the family Aphididae containing at least 600 species of aphids. It includes many notorious agricultural pests, such as the soybean aphid Aphis glycines. Many species of Aphis, such as A. coreopsidis and A. fabae, are myrmecophiles, forming close associations with ants.",
+    "url": "https://en.wikipedia.org/wiki/Aphis"
+  },
+  "Hemiptera": {
+    "description": "Hemiptera is an order of insects, commonly called true bugs, comprising more than 80,000 species within groups such as the cicadas, aphids, planthoppers, leafhoppers, assassin bugs, bed bugs, and shield bugs. They range in size from 1\u00a0mm (0.04\u00a0in) to around 15\u00a0cm (6\u00a0in), and share a common arrangement of piercing-sucking mouthparts. The name \"true bugs\" is sometimes limited to the suborder Heteroptera.",
+    "url": "https://en.wikipedia.org/wiki/Hemiptera"
   }
 }
