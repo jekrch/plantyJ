@@ -372,6 +372,26 @@
       "created": "2026-05-16T17:54:59.856Z"
     },
     {
+      "shortCode": "H ric",
+      "zoneCode": "fy",
+      "verdict": "MIXED",
+      "analysis": "Prairie Alumroot (Heuchera richardsonii) offers exceptional ecological value to this Minneapolis garden but faces physical challenges in the front yard (fy) zone, resulting in a mixed verdict. Ecologically, it is a powerhouse, serving as the obligate pollen host for Andrews' cellophane bee (Colletes andrewsi), a rare, remnant-dependent solitary bee in Minnesota whose females rely entirely on Heuchera richardsonii to provision their nests. It also hosts the closely related, rare alumroot cellophane bee (Colletes aestivalis), alongside generalist pollinators like green sweat bees, and provides nectar for hummingbirds. Its high tannin content naturally deters urban herbivores like rabbits and deer, making it a reliable, pest-resistant ground cover choice for city gardens.\n\nHowever, the compacted clay loam in this zone is a significant concern. Prairie Alumroot natively thrives in dry-to-mesic, rocky, sandy, or well-drained soils, and it is highly vulnerable to crown or root rot when subjected to soggy, compacted clay in wet springs. While the dappled afternoon sun of the front yard provides an ideal light profile to prevent foliage scorch in Minnesota's Zone 4b/5a climate, the physical soil conditions require active management. To help this species survive alongside clay-tolerant neighbors like Wild Ginger and Golden Alexanders, the owners should aerate the soil, amend it with organic compost to improve drainage, or plant the specimen on a slight mound to protect its sensitive root crown.",
+      "references": [
+        "https://www.dnr.state.mn.us/pollinators/colletes-andrewsi-andrews-cellophane-bee.html",
+        "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHOjMUS3zdzvkP22PkPZM1Sopic1i7hpGit5X2hql51OpqT50YeWrIbVS_qnaz7dzyVuSqUctofX5eqx7NJYg6WNUx3s_q381T654RfsyPoqcU_ZWzWV9QC3AqZw_tUNxuSwyuImUrqWXTF1ie5FKeQa-BALA=",
+        "https://gardenworld.app/en/blog/planten/heuchera-richardsonii",
+        "https://www.minnesotawildflowers.info/flower/prairie-alumroot",
+        "https://conservancy.umn.edu/items/6cd95f19-fd4e-4481-a34c-f9ec3ab27671",
+        "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGZ-_0x4oB-0CmLav8DIxPpYwI7cw5eEqzVIvZXbP5yakIkARCV73vDVS9mHFLdZcEQZQEhKW4dGU7QNPL-fdLloroaQTxCqxyHOJW4U6uy7goubzCOIMqdzEpW7j4lw8I3ab-NMM06-1t5bV6J0UXACJguOZIUFtnYJJ6nZK-hXOL5q-L6MFk6swJOjnYbTF4nsw=",
+        "https://plants.ces.ncsu.edu/plants/heuchera-villosa/",
+        "https://www.illinoiswildflowers.info/prairie/plantx/pr_alumrootx.htm",
+        "https://outdoor.wildlifeillinois.org/articles/protecting-insects-preserves-prairie-ecosystems",
+        "https://kb.jniplants.com/prairie-alumroot-heuchera-richardsonii",
+        "https://www.morningskygreenery.com/product/heuchera-richardsonii/"
+      ],
+      "created": "2026-05-24T21:11:40.656Z"
+    },
+    {
       "shortCode": "h tel aut",
       "zoneCode": "bb",
       "verdict": "MIXED",
