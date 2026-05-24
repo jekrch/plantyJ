@@ -27,6 +27,10 @@ const JOBS_PER_TICK = 2;
 // Initial attempt + 1 retry. After two failures we give up and notify the user.
 const MAX_ATTEMPTS = 2;
 const PENDING_DO_TTL_SECONDS = 3600;
+// runOrEnqueue: how long to let an LLM call run on the webhook path before
+// falling back to the queue. Tight so users see "queued" quickly when Gemini
+// is slow; Flash 3.5 typically returns well under this for /ask and /identify.
+const INLINE_TIMEOUT_MS = 3000;
 // Batched commits: a chunk of any size costs ~5 GETs + ~5 PUTs (only the
 // dirty manifests) regardless of command count. Image deletions add 2 each.
 // 25 leaves headroom for analyze-tick on the same invocation under Free's
@@ -76,6 +80,43 @@ export async function enqueueJob(env: Env, job: JobRecord): Promise<void> {
   await env.ASK_CACHE.put(QUEUE_KV_KEY, JSON.stringify(ids), {
     expirationTtl: QUEUE_TTL,
   });
+}
+
+// Try to run a job inline on the webhook path; if it doesn't finish within
+// INLINE_TIMEOUT_MS, enqueue it for the cron drain instead. On inline success
+// the reply has already been sent by runJob, so callers should only respond
+// when the result is "queued". An inline error also falls back to the queue,
+// where MAX_ATTEMPTS retries kick in.
+//
+// On timeout the in-flight call is abandoned (not awaited): the Worker
+// invocation ends when handleUpdate's waitUntil resolves, which terminates the
+// outbound fetch. Tokens consumed before that are billed by Gemini — accepted
+// cost for keeping this path simple.
+export async function runOrEnqueue(env: Env, job: JobRecord): Promise<"inline" | "queued"> {
+  const TIMEOUT = Symbol("timeout");
+  const work = runJob(env, job).then(
+    () => ({ ok: true as const }),
+    (err: unknown) => ({ ok: false as const, err }),
+  );
+  let timerHandle: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<typeof TIMEOUT>((resolve) => {
+    timerHandle = setTimeout(() => resolve(TIMEOUT), INLINE_TIMEOUT_MS);
+  });
+
+  const winner = await Promise.race([work, timeout]);
+  if (timerHandle) clearTimeout(timerHandle);
+
+  if (winner === TIMEOUT) {
+    work.catch(() => {}); // suppress unhandled rejection from the abandoned call
+    await enqueueJob(env, job);
+    return "queued";
+  }
+  if (!winner.ok) {
+    console.log(`[runOrEnqueue] inline failed, falling back to queue: ${String(winner.err)}`);
+    await enqueueJob(env, job);
+    return "queued";
+  }
+  return "inline";
 }
 
 type RunStatus = "done" | "partial";

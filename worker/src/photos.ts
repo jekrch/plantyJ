@@ -10,7 +10,7 @@ import type {
 import { downloadFile, type Replier } from "./telegram";
 import { parseCaption, resolveFields, UNIDENTIFIED_CODE, UNIDENTIFIED_PREFIX } from "./caption";
 import { assertValidCode } from "./validation";
-import { enqueueJob } from "./jobs";
+import { runOrEnqueue } from "./jobs";
 import {
   appendPic,
   appendZonePic,
@@ -214,10 +214,11 @@ async function handlePlantPic(message: TelegramMessage, env: Env, reply: Replier
 }
 
 /**
- * /identify {optional hint} sent with a photo. The Gemini vision call must
- * run on the cron path (never the webhook), so this only enqueues a job
- * carrying the Telegram file_id; the cron tick downloads the image, asks
- * Gemini, and replies with /pick options.
+ * /identify {optional hint} sent with a photo. Tries the Gemini vision call
+ * inline on the webhook (runOrEnqueue); falls back to a queued job carrying
+ * the Telegram file_id if the call doesn't finish in the inline budget. The
+ * cron path then downloads the image, asks Gemini, and replies with /pick
+ * options.
  */
 async function handleIdentify(
   prompt: string | null,
@@ -230,7 +231,7 @@ async function handleIdentify(
     return;
   }
   const photo = message.photo![message.photo!.length - 1];
-  await enqueueJob(env, {
+  const status = await runOrEnqueue(env, {
     id: `identify-${message.from.id}-${message.message_id}`,
     kind: "identify",
     chatId: message.chat.id,
@@ -244,7 +245,9 @@ async function handleIdentify(
     createdAt: new Date().toISOString(),
     attempts: 0,
   });
-  await reply("Identifying — options will arrive shortly.");
+  if (status === "queued") {
+    await reply("Identifying — options will arrive shortly.");
+  }
 }
 
 /**

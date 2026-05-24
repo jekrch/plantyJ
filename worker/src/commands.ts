@@ -13,7 +13,7 @@ import { MODEL_ALIASES, type ProposedCommand, type Thread } from "./ask";
 import { ingestPlantPhoto } from "./photos";
 import { PENDING_IDENTIFY_KEY, type PendingIdentify } from "./identify";
 import { submitAnalyzeRun, analyzeStatus, clearAnalyzeRun, formatAnalyzeUsage } from "./analyze";
-import { enqueueJob } from "./jobs";
+import { enqueueJob, runOrEnqueue } from "./jobs";
 import { readCostTotals, formatCostReport } from "./cost";
 import { assertValidCode } from "./validation";
 import {
@@ -289,7 +289,7 @@ async function handleAsk(
   const style = message.from
     ? ((await env.ASK_CACHE.get(STYLE_KEY(message.from.id))) ?? undefined)
     : undefined;
-  await enqueueJob(env, {
+  const status = await runOrEnqueue(env, {
     id: `ask-${message.from?.id ?? "anon"}-${message.message_id}`,
     kind: "ask",
     chatId: message.chat.id,
@@ -301,7 +301,9 @@ async function handleAsk(
     createdAt: new Date().toISOString(),
     attempts: 0,
   });
-  await reply("Queued — reply will arrive shortly.");
+  if (status === "queued") {
+    await reply("Taking a moment — queued, reply will arrive shortly.");
+  }
 }
 
 async function handleResp(
@@ -329,7 +331,7 @@ async function handleResp(
       );
     }
     const pending: PendingIdentify = JSON.parse(identifyRaw);
-    await enqueueJob(env, {
+    const status = await runOrEnqueue(env, {
       id: `identify-resp-${message.from.id}-${message.message_id}`,
       kind: "identify",
       chatId: message.chat.id,
@@ -345,7 +347,9 @@ async function handleResp(
       createdAt: new Date().toISOString(),
       attempts: 0,
     });
-    await reply("Refining identification — updated options will arrive shortly.");
+    if (status === "queued") {
+      await reply("Refining identification — updated options will arrive shortly.");
+    }
     return;
   }
 
@@ -361,7 +365,7 @@ async function handleResp(
     return;
   }
   const style = (await env.ASK_CACHE.get(STYLE_KEY(message.from.id))) ?? undefined;
-  await enqueueJob(env, {
+  const status = await runOrEnqueue(env, {
     id: `resp-${message.from.id}-${message.message_id}`,
     kind: "ask",
     chatId: message.chat.id,
@@ -374,7 +378,9 @@ async function handleResp(
     createdAt: new Date().toISOString(),
     attempts: 0,
   });
-  await reply("Queued — reply will arrive shortly.");
+  if (status === "queued") {
+    await reply("Taking a moment — queued, reply will arrive shortly.");
+  }
 }
 
 async function handleAnalyzeLoad(env: Env, reply: Replier): Promise<void> {

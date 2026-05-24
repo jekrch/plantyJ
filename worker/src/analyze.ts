@@ -5,7 +5,7 @@ import { sendReply } from "./telegram";
 import { estimateCost, formatUsd } from "./ask";
 import { recordCost } from "./cost";
 
-const ANALYSIS_MODEL = "gemini-3.1-pro-preview";
+const ANALYSIS_MODEL = "gemini-3.5-flash";
 
 // Analyze never uses context caching, so cost is just uncached in + out.
 function analyzeCost(promptTokens: number, outputTokens: number): number | null {

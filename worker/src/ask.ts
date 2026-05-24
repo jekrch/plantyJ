@@ -7,10 +7,11 @@ import { recordCost } from "./cost";
 const MAX_TOOL_ITERATIONS = 3;
 const TELEGRAM_MAX_LEN = 4096;
 const CACHE_TTL_SECONDS = 3600; // 1 hour; recreated only when rollup checksum changes
-// /ask  = /ask3, /ask1 = lite (cheap), /ask3 = pro preview (best)
+// Bare /ask  = /ask2 (flash, default), /ask1 = lite (cheap),
+// /ask2 = flash 3.5 (balanced), /ask3 = pro preview (best).
 export const MODEL_ALIASES: Record<string, string> = {
   "1": "gemini-3.1-flash-lite-preview",
-  "2": "gemini-2.5-pro",
+  "2": "gemini-3.5-flash",
   "3": "gemini-3.1-pro-preview",
 };
 
@@ -32,6 +33,10 @@ const MODEL_PRICING: Record<string, Pricing> = {
   "gemini-2.5-pro": { i: [1.25, 2.5], c: [0.31, 0.625], o: [10.0, 15.0], s: 4.5 },
   // Flash-lite is flat-rate across prompt size (approximate — verify).
   "gemini-3.1-flash-lite-preview": { i: [0.1, 0.1], c: [0.025, 0.025], o: [0.4, 0.4], s: 1.0 },
+  // Gemini 3.5 Flash paid-tier rates (single tier; input $1.50/M, output $9/M,
+  // cached read $0.15/M, storage $1/M-tok-hr). Verify the model string against
+  // Google's docs before deploying — naming hasn't been confirmed publicly.
+  "gemini-3.5-flash": { i: [1.5, 1.5], c: [0.15, 0.15], o: [9.0, 9.0], s: 1.0 },
 };
 
 const LARGE_PROMPT_TOKENS = 200_000;

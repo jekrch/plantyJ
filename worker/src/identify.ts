@@ -3,9 +3,10 @@ import type { Env } from "./types";
 import { estimateCost, formatUsd, type Usage } from "./ask";
 import { recordCost } from "./cost";
 
-// Vision identification runs on the cron path (like /ask and /analyze) so the
-// Gemini call never blocks the Telegram webhook. Pro has the strongest vision.
-const IDENTIFY_MODEL = "gemini-3.1-pro-preview";
+// Vision identification: tried inline on the webhook with a short timeout and
+// queued if it doesn't return in time (see runOrEnqueue in jobs.ts). Flash 3.5
+// is fast enough that most calls finish within the inline budget.
+const IDENTIFY_MODEL = "gemini-3.5-flash";
 const MAX_CANDIDATES = 3;
 
 export const PENDING_IDENTIFY_KEY = (userId: number) => `pending:identify:${userId}`;
