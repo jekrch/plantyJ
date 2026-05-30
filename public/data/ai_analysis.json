@@ -358,6 +358,18 @@
       "created": "2026-05-09T00:42:07.417Z"
     },
     {
+      "shortCode": "H hum",
+      "zoneCode": "bb",
+      "verdict": "MIXED",
+      "analysis": "The hop looper (Hypena humuli), also known as the hop vine snout moth, is a native noctuid moth widely distributed across North America, including Minnesota and the Twin Cities area. In the berry border zone, its caterpillar stage acts as a specialized herbivore that feeds on hops (Humulus lupulus 'Willamette'), which the homeowners cultivate for edible and medicinal purposes. These caterpillars are also known to feed on stinging nettle (Urtica dioica), a host plant present in the neighboring maple zone. While their feeding can cause noticeable leaf defoliation and potentially damage the prized hop cones, they are a natural part of the local ecosystem. As a native insect, they do not pose an invasive threat and instead serve as a valuable food source for local wildlife, including native insectivorous birds like the northern cardinal (Cardinalis cardinalis) and generalist predatory insects.\n\nGiven the owners' dual priorities of harvesting home-grown medicinal crops and supporting local ecology, the hop looper's presence is mixed. To protect the hops harvest while maintaining an ecologically friendly garden, chemical pesticides should be avoided. The homeowners can manage the caterpillar population through low-impact cultural methods like manual handpicking. If defoliation becomes severe, spot-treating with organic biological controls such as Bacillus thuringiensis (Bt) or spinosad is highly effective, as these treatments specifically target foliar-feeding caterpillars without harming pollinators, birds, or other beneficial garden visitors.",
+      "references": [
+        "https://wpcdn.web.wsu.edu/wp-ecommerce/uploads/sites/2/product-3377-sku-EB2037E.pdf",
+        "https://academic.oup.com/jee/article-pdf/111/5/2499/25840667/toy229.pdf",
+        "https://pnwmoths.biol.wwu.edu/browse/family-erebidae/subfamily-hypeninae/hypena/hypena-humuli/"
+      ],
+      "created": "2026-05-30T17:54:41.782Z"
+    },
+    {
       "shortCode": "H lup Wil",
       "zoneCode": "bb",
       "verdict": "MIXED",
