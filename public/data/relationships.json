@@ -380,6 +380,30 @@
       "type": "herbivore",
       "from": "T amo",
       "to": "S vul"
+    },
+    {
+      "id": 52,
+      "type": "host-plant",
+      "from": "H hum",
+      "to": "H lup Wil"
+    },
+    {
+      "id": 53,
+      "type": "predator-prey",
+      "from": "c card",
+      "to": "H hum"
+    },
+    {
+      "id": 54,
+      "type": "predator-prey",
+      "from": "p dom",
+      "to": "H hum"
+    },
+    {
+      "id": 55,
+      "type": "predator-prey",
+      "from": "H mex",
+      "to": "H hum"
     }
   ]
 }
