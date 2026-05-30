@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 95,
+      "id": "T amo-1780158345",
+      "shortCode": "T amo",
+      "zoneCode": "mpg",
+      "tags": [
+        "pest"
+      ],
+      "description": "Cluster of plant bugs on suspended silk",
+      "image": "images/T amo/1780158345.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-05-30T16:25:47.283Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 94,
       "id": "A sp-1779656931",
       "shortCode": "A sp",
@@ -176,7 +191,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -370,7 +385,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
