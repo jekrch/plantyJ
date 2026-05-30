@@ -1,6 +1,22 @@
 {
   "pics": [
     {
+      "seq": 96,
+      "id": "H hum-1780163265",
+      "shortCode": "H hum",
+      "zoneCode": "bb",
+      "tags": [
+        "larva",
+        "pest"
+      ],
+      "description": "Hop looper caterpillar feeding on hop foliage",
+      "image": "images/H hum/1780163265.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-05-30T17:47:47.080Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 95,
       "id": "T amo-1780158345",
       "shortCode": "T amo",
@@ -196,7 +212,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -390,7 +406,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
