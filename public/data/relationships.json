@@ -350,6 +350,24 @@
       "type": "frugivore",
       "from": "c card",
       "to": "A mel"
+    },
+    {
+      "id": 48,
+      "type": "predator-prey",
+      "from": "c card",
+      "to": "T amo"
+    },
+    {
+      "id": 49,
+      "type": "predator-prey",
+      "from": "p dom",
+      "to": "T amo"
+    },
+    {
+      "id": 50,
+      "type": "predator-prey",
+      "from": "H mex",
+      "to": "T amo"
     }
   ]
 }
