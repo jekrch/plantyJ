@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "H hum",
+      "fullName": "Hypena humuli",
+      "commonName": "Hop Looper",
+      "variety": null
+    },
+    {
       "shortCode": "T amo",
       "fullName": "Tropidosteptes amoenus",
       "commonName": "Ash Plant Bug",
