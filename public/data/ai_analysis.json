@@ -761,6 +761,19 @@
       "created": "2026-05-10T20:07:09.084Z"
     },
     {
+      "shortCode": "T amo",
+      "zoneCode": "mpg",
+      "verdict": "MIXED",
+      "analysis": "The ash plant bug is a native true bug in the Twin Cities area and throughout Minnesota. While its primary hosts are native ash trees, which are absent from this garden, it can feed on other members of the olive family. In the Maple zone, this includes the common lilacs. The bugs use their needle-like mouthparts to pierce leaf tissue and suck sap, which can cause minor, cosmetic yellowish-white stippling or leaf distortion but does not threaten the overall health or survival of established woody hosts. The recorded observation of a cluster on suspended silk likely indicates they were caught in a spider's web or were utilizing silk lines spun by canopy caterpillars, representing active interactions with the local micro-ecology.\n\nFor owners prioritizing local ecology, the presence of this native insect represents a balanced ecological relationship rather than a destructive invasion. It serves as a valuable seasonal food source for local insectivores and urban wildlife, including native birds found in the same zone such as the Northern Cardinal, as well as foraging ants. Because any feeding damage to the garden's non-native lilacs is purely aesthetic, the most appropriate management strategy is tolerance. Chemical treatments are highly discouraged as they would disrupt the beneficial predatory insects and bird species that naturally keep the plant bug population in check, aligning with the owners' ecological gardening philosophy.",
+      "references": [
+        "https://extension.umn.edu/tree-and-shrub-insects/ash-plant-bugs",
+        "http://www.treesquad.com/ash-plant-bug",
+        "https://www.umass.edu/agriculture-food-environment/landscape/publications-resources/insect-mite-guide/tropidosteptes-amoenus",
+        "https://www.canr.msu.edu/resources/ash_plant_bug"
+      ],
+      "created": "2026-05-30T16:30:33.706Z"
+    },
+    {
       "shortCode": "T can",
       "zoneCode": "mpg",
       "verdict": "MIXED",
