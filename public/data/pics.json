@@ -13,7 +13,11 @@
       "postedBy": "Jacob",
       "addedAt": "2026-05-30T16:25:47.283Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "kind": "animal",
+      "bioclipSpeciesId": "Cantharis melaspoides",
+      "bioclipCommonName": "",
+      "bioclipScore": 0.3178
     },
     {
       "seq": 94,
@@ -30,7 +34,8 @@
       "kind": "animal",
       "bioclipSpeciesId": "Nysius irroratus",
       "bioclipCommonName": "",
-      "bioclipScore": 0.0459
+      "bioclipScore": 0.0459,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 93,
@@ -191,7 +196,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -385,7 +390,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,

@@ -662,5 +662,13 @@
   "Hemiptera": {
     "description": "Hemiptera is an order of insects, commonly called true bugs, comprising more than 80,000 species within groups such as the cicadas, aphids, planthoppers, leafhoppers, assassin bugs, bed bugs, and shield bugs. They range in size from 1\u00a0mm (0.04\u00a0in) to around 15\u00a0cm (6\u00a0in), and share a common arrangement of piercing-sucking mouthparts. The name \"true bugs\" is sometimes limited to the suborder Heteroptera.",
     "url": "https://en.wikipedia.org/wiki/Hemiptera"
+  },
+  "Miridae": {
+    "description": "The Miridae are a large and diverse insect family at one time known by the taxonomic synonym Capsidae. Species in the family may be referred to as capsid bugs or \"mirid bugs\". Common names include plant bugs, leaf bugs, and grass bugs. It is the largest family of true bugs ; it includes over 10,000 known species, and new ones are being described constantly. Most widely known mirids are species that are notorious agricultural pests that pierce plant tissues, feed on the sap, and sometimes transmit viral plant diseases. Some species however, are predatory.",
+    "url": "https://en.wikipedia.org/wiki/Miridae"
+  },
+  "Tropidosteptes": {
+    "description": "Tropidosteptes is a genus of plant bugs in the family Miridae. There are at least 30 described species in Tropidosteptes.",
+    "url": "https://en.wikipedia.org/wiki/Tropidosteptes"
   }
 }

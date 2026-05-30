@@ -4558,6 +4558,57 @@
       ],
       "observationsCount": 21285
     },
+    "tropidosteptes-amoenus": {
+      "id": "tropidosteptes-amoenus",
+      "fullName": "Tropidosteptes amoenus",
+      "commonName": "Ash Plant Bug",
+      "description": "Tropidosteptes amoenus, the ash plant bug, is a species of plant bug in the family Miridae. It is found in North America.",
+      "vernacularNames": [
+        "Ash Plant Bug"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Hemiptera",
+        "family": "Miridae",
+        "genus": "Tropidosteptes",
+        "species": "Tropidosteptes amoenus",
+        "canonicalName": "Tropidosteptes amoenus"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2010855"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Tropidosteptes_amoenus"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/454150"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q10705100"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.908203"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 18
+    },
     "urtica-dioica": {
       "id": "urtica-dioica",
       "fullName": "Urtica dioica",
