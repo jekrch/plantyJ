@@ -41,6 +41,12 @@
       "name": "Seed Disperser",
       "description": "The animal disperses the plant's seeds, often by consuming an attached elaiosome (myrmecochory).",
       "directional": true
+    },
+    {
+      "id": "herbivore",
+      "name": "Herbivore / Sap Feeder",
+      "description": "An animal that feeds on the leaves, sap, or other vegetative tissues of the plant.",
+      "directional": true
     }
   ],
   "relationships": [
@@ -368,6 +374,12 @@
       "type": "predator-prey",
       "from": "H mex",
       "to": "T amo"
+    },
+    {
+      "id": 51,
+      "type": "herbivore",
+      "from": "T amo",
+      "to": "S vul"
     }
   ]
 }
