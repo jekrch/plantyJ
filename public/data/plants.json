@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "T amo",
+      "fullName": "Tropidosteptes amoenus",
+      "commonName": "Ash Plant Bug",
+      "variety": null
+    },
+    {
       "shortCode": "A sp",
       "fullName": "Aphis sp.",
       "commonName": "Aphid",
