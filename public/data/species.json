@@ -2177,6 +2177,59 @@
       ],
       "observationsCount": 32525
     },
+    "hypena-humuli": {
+      "id": "hypena-humuli",
+      "fullName": "Hypena humuli",
+      "commonName": "Hop Looper",
+      "description": "Hypena humuli, the hop looper or hop vine moth, is a moth of the family Erebidae. The species was first described by Thaddeus William Harris in 1841. It is found from coast to coast in Canada south in the east to Florida and Arkansas in the west to California. It is apparently absent from the south-central states. In Canada it is only absent from Newfoundland and Labrador, Prince Edward Island and the far north.\nThe wingspan is 25\u201332 mm. The moth flies all year round in the south and west and from April to November in the northeast. There are two generations per year northward over most of the east.\nThe larva, or hop worm, is about an inch long when full grown, of a greenish-white color, watery looking or semi transparent, and slightly striped and dotted, having fourteen legs. The mouth is yellowish, and the tips of the jaws black. The larvae appear early in June, and continue until late in August. They feed on Laportea species, hop, nettle and wood nettle.",
+      "vernacularNames": [
+        "Hop Vine Moth",
+        "Hop Vine Snout"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Lepidoptera",
+        "family": "Erebidae",
+        "genus": "Hypena",
+        "species": "Hypena humuli",
+        "canonicalName": "Hypena humuli"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/9358521"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Hypena_humuli"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/143126"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q22965008"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.113562"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 1987,
+      "edible": true
+    },
     "ipheion-uniflorum-album": {
       "id": "ipheion-uniflorum-album",
       "fullName": "Ipheion uniflorum Album",

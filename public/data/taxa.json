@@ -670,5 +670,13 @@
   "Tropidosteptes": {
     "description": "Tropidosteptes is a genus of plant bugs in the family Miridae. There are at least 30 described species in Tropidosteptes.",
     "url": "https://en.wikipedia.org/wiki/Tropidosteptes"
+  },
+  "Erebidae": {
+    "description": "The Erebidae are a family of moths in the superfamily Noctuoidea. The family is among the largest families of moths by species count and contains a wide variety of well-known macromoth groups. The family includes the underwings (Catocala); litter moths (Herminiinae); tiger, lichen, footman and wasp moths (Arctiinae); tussock moths (Lymantriinae), including the arctic woolly bear moth ; fruit-piercing moths ; micronoctuoid moths (Micronoctuini); snout moths (Hypeninae); and zales, though many of these common names can also refer to moths outside the Erebidae. Some of the erebid moths are called owlets.",
+    "url": "https://en.wikipedia.org/wiki/Erebidae"
+  },
+  "Hypena": {
+    "description": "Hypena is a genus of moths in the family Erebidae. It was first described by Franz von Paula Schrank in 1802. These non-migratory moths overwinter as pupae and almost never estivate as adults.",
+    "url": "https://en.wikipedia.org/wiki/Hypena"
   }
 }

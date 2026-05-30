@@ -14,7 +14,11 @@
       "postedBy": "Jacob",
       "addedAt": "2026-05-30T17:47:47.080Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "kind": "animal",
+      "bioclipSpeciesId": "Cucullia florea",
+      "bioclipCommonName": "Gray hooded owlet",
+      "bioclipScore": 0.0924
     },
     {
       "seq": 95,
@@ -33,7 +37,8 @@
       "kind": "animal",
       "bioclipSpeciesId": "Cantharis melaspoides",
       "bioclipCommonName": "",
-      "bioclipScore": 0.3178
+      "bioclipScore": 0.3178,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 94,
@@ -212,7 +217,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -406,7 +411,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
