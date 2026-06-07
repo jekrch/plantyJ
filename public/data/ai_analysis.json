@@ -570,6 +570,18 @@
       "created": "2026-05-19T00:57:57.900Z"
     },
     {
+      "shortCode": "P poly",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "The presence of the native Black Swallowtail caterpillar (Papilio polyxenes) in the front yard is highly beneficial, directly aligning with the owners' goals of supporting local ecology and native species. The caterpillar's primary host plant in this zone is Golden Alexanders (Zizia aurea), a rugged native perennial that easily tolerates the compacted clay loam and partial shade of the front yard. While the larvae consume the foliage of Golden Alexanders, this native host plant is adapted to herbivory and readily rebounds, meaning the caterpillar's feeding poses no threat to the garden's long-term health. Once they transition into adult butterflies, Black Swallowtails serve as valuable pollinators for several other front yard natives, such as Phlox, Columbine, and Purple Giant Hyssop, while also integrating into the local food web as a food source for insectivorous backyard birds like Northern Cardinals.",
+      "references": [
+        "https://extension.umn.edu/landscape-design/creating-butterfly-garden",
+        "https://hort.extension.wisc.edu/articles/black-swallowtail-papilio-polyxenes/",
+        "https://www.minnesotaseasons.com/Insects/black_swallowtail.html"
+      ],
+      "created": "2026-06-07T20:15:11.700Z"
+    },
+    {
       "shortCode": "P pyr Peg",
       "zoneCode": "sy",
       "verdict": "MIXED",
@@ -909,6 +921,18 @@
         "https://www.morningskygreenery.com/product/anaphalis-margaritacea/"
       ],
       "created": "2026-05-13T00:45:26.434Z"
+    },
+    {
+      "shortCode": "V virgi",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "The presence of the native American Lady butterfly (Vanessa virginiensis) in the Front Yard is highly beneficial, directly aligning with the owners' priorities of supporting local ecology and establishing native plant relationships. Observed as a first-instar caterpillar on Pearly Everlasting (Anaphalis margaritacea), it relies on this specific native Asteraceae host to complete its larval stage. The caterpillar constructs a characteristic silken \"nest\" at the leaf tips to shelter itself from predators while feeding on the foliage. Although this feeding can cause minor, temporary aesthetic damage, the resilient Pearly Everlasting has co-evolved with this herbivore and will fully recover to bloom by late summer. As adults, American Ladies act as beneficial generalist pollinators, feeding on nectar from various other Front Yard plants such as Columbine (Aquilegia canadensis), Yarrow (Achillea millefolium), and Golden Alexanders (Zizia aurea).\n\nThe American Lady is a native migratory species in the Twin Cities, unable to survive the harsh Minnesota winters (USDA zone 4b/5a) and recolonizing the region each spring through northward migration from southern climates. This migratory behavior makes pesticide-free native host gardens especially critical for their reproductive success. Ecologically, the caterpillars also serve as an essential, nutrient-dense food source for local birds nested in the adjacent Maple zone, such as Cardinals and House Finches. No active management or chemical intervention is needed for the caterpillar's feeding; the minor foliage webbing and feeding damage should be celebrated as a clear sign of a functioning, biodiverse urban habitat.",
+      "references": [
+        "https://www.butterfliesandmoths.org/species/Vanessa-virginiensis",
+        "https://xerces.org/blog/plants-for-pollinators-pearly-everlasting",
+        "https://gardenlady.com/when-you-intend-a-plant-to-be-destroyed/"
+      ],
+      "created": "2026-06-07T20:15:11.700Z"
     },
     {
       "shortCode": "Z aur",
