@@ -606,6 +606,54 @@
       ],
       "observationsCount": 21637
     },
+    "angelica-atropupurea": {
+      "id": "angelica-atropupurea",
+      "fullName": "Angelica atropupurea",
+      "commonName": "Great Angelica",
+      "description": "",
+      "vernacularNames": [
+        "Alexanders",
+        "American Angelica",
+        "Great Angelica",
+        "Masterwort",
+        "Purple Angelica",
+        "Purplestem Angelica",
+        "angelica",
+        "dark-purple alexanders",
+        "purple alexanders",
+        "purple-stemmed angelica",
+        "Wild Masterwort"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Apiales",
+        "family": "Apiaceae",
+        "genus": "Angelica",
+        "species": "Angelica atropurpurea",
+        "canonicalName": "Angelica atropurpurea"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5371822"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.147636"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ]
+    },
     "aphis-sp": {
       "id": "aphis-sp",
       "fullName": "Aphis sp.",
