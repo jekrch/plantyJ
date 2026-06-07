@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "bun build src/sw.ts --outdir public --target browser && tsc -b && vite build",
+    "build": "bun build src/sw.ts --outdir public --target browser && tsc -b && vite build && bun scripts/prerender.mjs",
     "preview": "vite preview",
     "test": "bun test"
   },
