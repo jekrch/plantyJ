@@ -199,6 +199,11 @@ interface HatchFillerProps {
   textColor?: string;
   /** Multiplier applied to the computed word-stamp font size. */
   textScale?: number;
+  /**
+   * When true, a word stamp gets an inner frame with a blurred backdrop so the
+   * label (e.g. a month/year marker) stays legible over the vine pattern.
+   */
+  framed?: boolean;
 }
 
 export default function HatchFiller({
@@ -208,8 +213,13 @@ export default function HatchFiller({
   neighbors = null,
   textColor = TEXT_FILL_COLOR,
   textScale = 1,
+  framed = false,
 }: HatchFillerProps) {
   const patternId = useId();
+  const blurId = `${patternId}-blur`;
+  const clipId = `${patternId}-clip`;
+  const fadeId = `${patternId}-fade`;
+  const maskId = `${patternId}-mask`;
   const containerRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 900, height: 600 });
 
@@ -307,6 +317,7 @@ export default function HatchFiller({
   const cy = Math.max(margin, Math.min(size.height - margin, rawCy));
 
   let stampContent: React.ReactNode = null;
+  let frameRect: { x: number; y: number; width: number; height: number; rx: number } | null = null;
 
   if (!empty && !isTooShortForStamp && stamp?.type === "word") {
     // 1. Define character aspect ratio for Space Mono (width is ~60% of height)
@@ -321,6 +332,21 @@ export default function HatchFiller({
 
     // 4. Calculate the final font size (cap it at your original 80px so it doesn't get massive on large screens)
     const dynamicFontSize = Math.min(80, maxFontSizeByWidth, maxAllowedHeight) * textScale;
+
+    if (framed) {
+      // Size the backdrop to the rendered glyph width plus breathing room; it
+      // spans the full tile height so the blurred band runs edge to edge.
+      const textWidth = stamp.value.length * dynamicFontSize * charWidthRatio;
+      const padX = dynamicFontSize * 0.6;
+      const frameW = Math.min(size.width * 0.96, textWidth + padX * 2);
+      frameRect = {
+        x: (size.width - frameW) / 2,
+        y: 0,
+        width: frameW,
+        height: size.height,
+        rx: 0,
+      };
+    }
 
     stampContent = (
       <text
@@ -394,9 +420,74 @@ export default function HatchFiller({
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
       >
-        <defs>{patternContent}</defs>
+        <defs>
+          {patternContent}
+          {frameRect && (
+            <>
+              <filter id={blurId} x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="17.5" />
+              </filter>
+              <clipPath id={clipId}>
+                <rect
+                  x={frameRect.x}
+                  y={frameRect.y}
+                  width={frameRect.width}
+                  height={frameRect.height}
+                  rx={frameRect.rx}
+                />
+              </clipPath>
+              {/* Horizontal fade so the band dissolves into the sharp pattern
+                  at its left/right edges instead of ending abruptly. */}
+              <linearGradient
+                id={fadeId}
+                gradientUnits="userSpaceOnUse"
+                x1={frameRect.x}
+                y1="0"
+                x2={frameRect.x + frameRect.width}
+                y2="0"
+              >
+                <stop offset="0" stopColor="black" />
+                <stop offset="0.22" stopColor="white" />
+                <stop offset="0.78" stopColor="white" />
+                <stop offset="1" stopColor="black" />
+              </linearGradient>
+              <mask id={maskId}>
+                <rect
+                  x={frameRect.x}
+                  y={frameRect.y}
+                  width={frameRect.width}
+                  height={frameRect.height}
+                  fill={`url(#${fadeId})`}
+                />
+              </mask>
+            </>
+          )}
+        </defs>
         <rect width="100%" height="100%" fill="var(--color-surface-raised, #1a1a1a)" />
         <rect width="100%" height="100%" fill={`url(#${patternId})`} />
+        {frameRect && (
+          <g mask={`url(#${maskId})`}>
+            {/* Blurred copy of the backdrop, clipped to the band and faded at
+                the left/right edges so the vine lines behind the label soften
+                and the date reads clearly. */}
+            <g clipPath={`url(#${clipId})`}>
+              <g filter={`url(#${blurId})`}>
+                <rect width="100%" height="100%" fill="var(--color-surface-raised, #1a1a1a)" />
+                <rect width="100%" height="100%" fill={`url(#${patternId})`} />
+              </g>
+            </g>
+            {/* Gentle scrim to lift contrast around the text. */}
+            <rect
+              x={frameRect.x}
+              y={frameRect.y}
+              width={frameRect.width}
+              height={frameRect.height}
+              rx={frameRect.rx}
+              fill="var(--color-surface-raised, #1a1a1a)"
+              fillOpacity="0.35"
+            />
+          </g>
+        )}
         {stampContent}
       </svg>
 
