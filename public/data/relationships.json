@@ -404,6 +404,30 @@
       "type": "predator-prey",
       "from": "H mex",
       "to": "H hum"
+    },
+    {
+      "id": 56,
+      "type": "host-plant",
+      "from": "P com",
+      "to": "H lup Wil"
+    },
+    {
+      "id": 57,
+      "type": "host-plant",
+      "from": "P com",
+      "to": "u dio"
+    },
+    {
+      "id": 58,
+      "type": "predator-prey",
+      "from": "c card",
+      "to": "P com"
+    },
+    {
+      "id": 59,
+      "type": "predator-prey",
+      "from": "p dom",
+      "to": "P com"
     }
   ]
 }
