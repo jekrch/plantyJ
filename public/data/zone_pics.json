@@ -1,6 +1,14 @@
 {
   "zonePics": [
     {
+      "id": "hbd-1780862484",
+      "zoneCode": "hbd",
+      "image": "images/zones/hbd/1780862484.jpg",
+      "addedAt": "2026-06-07T20:01:25.824Z",
+      "postedBy": "Jenny",
+      "description": null
+    },
+    {
       "id": "sy-1780862460",
       "zoneCode": "sy",
       "image": "images/zones/sy/1780862460.jpg",
