@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P com",
+      "fullName": "Polygonia comma",
+      "commonName": "Eastern Comma",
+      "variety": null
+    },
+    {
       "shortCode": "H hum",
       "fullName": "Hypena humuli",
       "commonName": "Hop Looper",
