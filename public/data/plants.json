@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A atr",
+      "fullName": "Angelica atropupurea",
+      "commonName": "Great Angelica",
+      "variety": null
+    },
+    {
       "shortCode": "P poly",
       "fullName": "Papilio polyxenes",
       "commonName": "Black Swallowtail",
