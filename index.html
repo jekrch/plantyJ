@@ -4,7 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 
-    <title>PlantyJ: a Minnesotan garden journal</title>
+    <!-- Hide the SEO prerender fallback before first paint so it never flashes
+         for JS-enabled visitors (React replaces it on mount). It stays in the
+         HTML source for crawlers; no-JS visitors get it back via <noscript>. -->
+    <style>
+      .seo-prerender {
+        display: none;
+      }
+    </style>
+    <noscript>
+      <style>
+        .seo-prerender {
+          display: block;
+        }
+      </style>
+    </noscript>
+
+    <title>PlantyJ: A Minnesotan garden journal</title>
     <meta
       name="description"
       content="PlantyJ is a Minnesotan garden journal: a photo gallery of plants, pollinators, and zones, updated from our green spaces. Browse by species, zone, or tag and watch the ecology grow over time."
@@ -16,7 +32,7 @@
     <!-- Open Graph (Facebook, Slack, iMessage, LinkedIn, …) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="PlantyJ" />
-    <meta property="og:title" content="PlantyJ: a Minnesotan garden journal" />
+    <meta property="og:title" content="PlantyJ: A Minnesotan garden journal" />
     <meta
       property="og:description"
       content="A Minnesotan garden journal: a photo gallery of plants, pollinators, and zones, updated from our green spaces. Browse by species, zone, or tag and watch the ecology grow over time."
