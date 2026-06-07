@@ -1,6 +1,27 @@
 {
   "analyses": [
     {
+      "shortCode": "A atr",
+      "zoneCode": "sy",
+      "verdict": "MIXED",
+      "analysis": "Great Angelica (Angelica atropurpurea) is a spectacular native biennial or short-lived perennial that perfectly aligns with the owners' ecological priorities. As a member of the carrot family (Apiaceae), it serves as a critical larval host for the Eastern Black Swallowtail butterfly (Papilio polyxenes), which has already been observed on Golden Alexanders in the front yard. Additionally, it acts as a host for specialists like the umbellifer borer moth (Papaipema birdi). Its massive, spherical umbels of greenish-white flowers provide an accessible pollen and nectar source for a diverse array of native pollinators, including Andrenid bees, bee flies, and beneficial predatory insects. Songbirds feed on its late-season seeds, while its hollow, thick stalks offer valuable nesting material. Furthermore, its rich history of traditional medicinal uses satisfies the owners' focus on ethnobotanical garden elements.\n\nDespite its outstanding ecological value, placing Great Angelica in the side yard presents a mixed scenario due to strict cultural and spatial constraints. This species is a wetland giant that naturally thrives in consistently moist to wet, rich, calcareous soils, and it can tower up to nine feet tall. The side yard is a narrow corridor with a steep slope and compacted clay/loam. While clay is tolerated, the rapid drainage on a steep slope means the soil—especially towards the sunny bottom—will likely be far too dry, leading to stunting or premature death. If kept in this zone, it must be strategically positioned at the damp, shady top of the slope where moisture is better retained near shade-tolerant neighbors like Ostrich Fern and Wild Ginger. Even then, its gargantuan stature and large basal leaves could easily overwhelm the narrow space and crowd out neighboring dwarf fruit trees.",
+      "references": [
+        "https://www.minnesotawildflowers.info/flower/angelica",
+        "https://www.prairiemoon.com/angelica-atropurpurea-angelica",
+        "https://en.wikipedia.org/wiki/Angelica_atropurpurea",
+        "https://bwsr.state.mn.us/sites/default/files/2018-12/Plant-of-Month-December-2018-Angelica.pdf",
+        "https://nativefloraseeds.org/products/great-angelica",
+        "https://bwsr.state.mn.us/december-2018-featured-plant",
+        "https://www.toadshade.com/Angelica-atropurpurea.html",
+        "https://sagmoraine.org/native-plant/great-angelica/",
+        "https://en.wikipedia.org/wiki/Angelica_atropurpurea",
+        "https://www.wilsonbrosgardens.com/angelica-atropurpurea-purple-stem-2g.html",
+        "https://www.nutsfornatives.com/post/native-angelica",
+        "https://www.wildridgeplants.com/product/angelica-atropurpurea-purplestem-angelica/74"
+      ],
+      "created": "2026-06-07T22:30:11.863Z"
+    },
+    {
       "shortCode": "A can",
       "zoneCode": "fy",
       "verdict": "GOOD",
