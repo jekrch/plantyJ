@@ -38,6 +38,10 @@
       "code": "sy",
       "name": "Side Yard",
       "description": "Sun exposure varies from heavy shade to mostly sunny. Yard is narrow and steeply sloped from the house down to the sidewalk. Soil is generally compacted and varies in moisture from damp at the shady top of the slope to dry at the sunny bottom."
+    },
+    {
+      "code": "kg",
+      "name": "Kitchen garden"
     }
   ]
 }
