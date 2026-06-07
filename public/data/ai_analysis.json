@@ -504,6 +504,18 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "P com",
+      "zoneCode": "bb",
+      "verdict": "GOOD",
+      "analysis": "The presence of the Eastern Comma (Polygonia comma) in the Berry Border is a highly positive indicator for the garden's ecology, aligning closely with the owners' priorities of supporting native wildlife. This butterfly is native to the Twin Cities area and Minnesota, where it is a secure resident species. In its larval stage, it relies on host plants in the Cannabaceae and Urticaceae families. Its presence on the 'Willamette' hops (Humulus lupulus) in this zone is a classic host relationship; indeed, the caterpillar is colloquially known as the 'hop merchant.' The garden also features stinging nettle (Urtica dioica) in the nearby Maple zone, providing an abundance of larval resources across the property. While the caterpillars feed on hop foliage, they are historically considered minor, non-economic pests that do not threaten overall plant health or harvest yields in a home garden setting, meaning no active management or chemical control is necessary.\n\nAs adults, Eastern Commas rarely visit flowers for nectar, preferring instead to feed on tree sap, minerals from damp soil, and rotting or overripe fruit. The adjacent raspberries and currants in the Berry Border, alongside the organic mulch and moist clay-loam soils of neighboring zones, offer ideal adult foraging and mud-puddling opportunities. Furthermore, both the larvae and adults serve as valuable components of the local food web, providing sustenance for native insectivorous birds. By serving as both a harmless consumer of edible hops and a contributor to native insect biodiversity, the Eastern Comma beautifully demonstrates how productive garden spaces can harmoniously support local conservation goals.",
+      "references": [
+        "https://www.minnesotaseasons.com/Insects/eastern_comma.html",
+        "https://en.wikipedia.org/wiki/Polygonia_comma",
+        "https://www.uvm.edu/d10-files/documents/2024-06/Eastern_Comma_Factsheet.pdf"
+      ],
+      "created": "2026-06-07T19:37:11.484Z"
+    },
+    {
       "shortCode": "P cor",
       "zoneCode": "sy",
       "verdict": "MIXED",
