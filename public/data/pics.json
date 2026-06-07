@@ -11,7 +11,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-06-07T19:54:08.672Z",
       "width": 800,
-      "height": 600
+      "height": 600,
+      "bioclipSpeciesId": "Papilio polyxenes",
+      "bioclipCommonName": "Black Swallowtail",
+      "bioclipScore": 0.9873
     },
     {
       "seq": 98,
@@ -27,7 +30,8 @@
       "height": 600,
       "bioclipSpeciesId": "Xerochrysum bicolor",
       "bioclipCommonName": "",
-      "bioclipScore": 0.3178
+      "bioclipScore": 0.3178,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Xerochrysum_bicolor"
     },
     {
       "seq": 97,
@@ -267,7 +271,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -461,7 +465,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
