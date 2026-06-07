@@ -678,5 +678,9 @@
   "Hypena": {
     "description": "Hypena is a genus of moths in the family Erebidae. It was first described by Franz von Paula Schrank in 1802. These non-migratory moths overwinter as pupae and almost never estivate as adults.",
     "url": "https://en.wikipedia.org/wiki/Hypena"
+  },
+  "Polygonia": {
+    "description": "Polygonia is a genus of butterflies with a conspicuous white mark on the underside of each hindwing, hence the common name comma. They also have conspicuous angular notches on the outer edges of their forewings, hence the other common name anglewing butterflies. The related genus Nymphalis also includes some anglewing species; Polygonia is sometimes classified as a subgenus of Nymphalis.",
+    "url": "https://en.wikipedia.org/wiki/Polygonia"
   }
 }

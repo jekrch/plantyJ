@@ -3066,6 +3066,59 @@
       ],
       "observationsCount": 20426
     },
+    "polygonia-comma": {
+      "id": "polygonia-comma",
+      "fullName": "Polygonia comma",
+      "commonName": "Eastern Comma",
+      "description": "Polygonia comma, the eastern comma, is a North American butterfly in the family Nymphalidae, subfamily Nymphalinae.",
+      "vernacularNames": [
+        "Common Anglewing",
+        "Eastern Comma"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Lepidoptera",
+        "family": "Nymphalidae",
+        "genus": "Polygonia",
+        "species": "Polygonia comma",
+        "canonicalName": "Polygonia comma"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5129430"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Polygonia_comma"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/54064"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q2148192"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.120325"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 35753,
+      "edible": true
+    },
     "primula-veris": {
       "id": "primula-veris",
       "fullName": "Primula veris",
