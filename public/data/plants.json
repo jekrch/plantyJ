@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P poly",
+      "fullName": "Papilio polyxenes",
+      "commonName": "Black Swallowtail",
+      "variety": null
+    },
+    {
       "shortCode": "V virgi",
       "fullName": "Vanessa virginiensis",
       "commonName": "American Lady Butterfly",
