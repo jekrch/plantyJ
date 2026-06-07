@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "V virgi",
+      "fullName": "Vanessa virginiensis",
+      "commonName": "American Lady Butterfly",
+      "variety": null
+    },
+    {
       "shortCode": "P com",
       "fullName": "Polygonia comma",
       "commonName": "Eastern Comma",
