@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 97,
+      "id": "P com-1780860797",
+      "shortCode": "P com",
+      "zoneCode": "bb",
+      "tags": [
+        "butterfly"
+      ],
+      "description": "Eastern Comma butterfly resting on hops leaves in the berry border.",
+      "image": "images/P com/1780860797.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-06-07T19:33:19.305Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 96,
       "id": "H hum-1780163265",
       "shortCode": "H hum",
@@ -217,7 +232,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -411,7 +426,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
