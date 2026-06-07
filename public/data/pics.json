@@ -203,25 +203,6 @@
       "bioclipScore": 0.6671
     },
     {
-      "seq": 87,
-      "id": "A can-1779150675",
-      "shortCode": "A can",
-      "zoneCode": "fy",
-      "tags": [
-        "foliage"
-      ],
-      "description": null,
-      "image": "images/A can/1779150675.jpg",
-      "postedBy": "Jenny",
-      "addedAt": "2026-05-19T00:31:16.925Z",
-      "width": 768,
-      "height": 1024,
-      "bioclipSpeciesId": "Aquilegia canadensis",
-      "bioclipCommonName": "columbine",
-      "bioclipScore": 0.4235,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Aquilegia_canadensis"
-    },
-    {
       "seq": 86,
       "id": "P dig-1779150591",
       "shortCode": "P dig",
