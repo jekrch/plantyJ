@@ -216,8 +216,6 @@ export default function HatchFiller({
   framed = false,
 }: HatchFillerProps) {
   const patternId = useId();
-  const blurId = `${patternId}-blur`;
-  const clipId = `${patternId}-clip`;
   const fadeId = `${patternId}-fade`;
   const maskId = `${patternId}-mask`;
   const containerRef = useRef<HTMLDivElement>(null);
@@ -424,20 +422,10 @@ export default function HatchFiller({
           {patternContent}
           {frameRect && (
             <>
-              <filter id={blurId} x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="17.5" />
-              </filter>
-              <clipPath id={clipId}>
-                <rect
-                  x={frameRect.x}
-                  y={frameRect.y}
-                  width={frameRect.width}
-                  height={frameRect.height}
-                  rx={frameRect.rx}
-                />
-              </clipPath>
-              {/* Horizontal fade so the band dissolves into the sharp pattern
-                  at its left/right edges instead of ending abruptly. */}
+              {/* Luminance gradient: white = full-opacity lines, the mid gray
+                  fades the vine lines down in the central band so the label
+                  reads clearly. Edges return to white so the band dissolves
+                  into the sharp pattern instead of ending abruptly. */}
               <linearGradient
                 id={fadeId}
                 gradientUnits="userSpaceOnUse"
@@ -446,12 +434,16 @@ export default function HatchFiller({
                 x2={frameRect.x + frameRect.width}
                 y2="0"
               >
-                <stop offset="0" stopColor="black" />
-                <stop offset="0.22" stopColor="white" />
-                <stop offset="0.78" stopColor="white" />
-                <stop offset="1" stopColor="black" />
+                <stop offset="0" stopColor="white" />
+                <stop offset="0.28" stopColor="#3a3a3a" />
+                <stop offset="0.72" stopColor="#3a3a3a" />
+                <stop offset="1" stopColor="white" />
               </linearGradient>
+              {/* Mask applied to the vine pattern only: opaque everywhere,
+                  dimmed across the band. The background fill stays untouched,
+                  so no second background tone appears in the center. */}
               <mask id={maskId}>
+                <rect width="100%" height="100%" fill="white" />
                 <rect
                   x={frameRect.x}
                   y={frameRect.y}
@@ -464,30 +456,12 @@ export default function HatchFiller({
           )}
         </defs>
         <rect width="100%" height="100%" fill="var(--color-surface-raised, #1a1a1a)" />
-        <rect width="100%" height="100%" fill={`url(#${patternId})`} />
-        {frameRect && (
-          <g mask={`url(#${maskId})`}>
-            {/* Blurred copy of the backdrop, clipped to the band and faded at
-                the left/right edges so the vine lines behind the label soften
-                and the date reads clearly. */}
-            <g clipPath={`url(#${clipId})`}>
-              <g filter={`url(#${blurId})`}>
-                <rect width="100%" height="100%" fill="var(--color-surface-raised, #1a1a1a)" />
-                <rect width="100%" height="100%" fill={`url(#${patternId})`} />
-              </g>
-            </g>
-            {/* Gentle scrim to lift contrast around the text. */}
-            <rect
-              x={frameRect.x}
-              y={frameRect.y}
-              width={frameRect.width}
-              height={frameRect.height}
-              rx={frameRect.rx}
-              fill="var(--color-surface-raised, #1a1a1a)"
-              fillOpacity="0.35"
-            />
-          </g>
-        )}
+        <rect
+          width="100%"
+          height="100%"
+          fill={`url(#${patternId})`}
+          mask={frameRect ? `url(#${maskId})` : undefined}
+        />
         {stampContent}
       </svg>
 
