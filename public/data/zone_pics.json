@@ -1,6 +1,14 @@
 {
   "zonePics": [
     {
+      "id": "kg-1780864101",
+      "zoneCode": "kg",
+      "image": "images/zones/kg/1780864101.jpg",
+      "addedAt": "2026-06-07T20:28:22.994Z",
+      "postedBy": "Jenny",
+      "description": "four caged raised beds primarily for annual vegetables and herbs"
+    },
+    {
       "id": "bb-1780862530",
       "zoneCode": "bb",
       "image": "images/zones/bb/1780862530.jpg",
