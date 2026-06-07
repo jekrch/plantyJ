@@ -1,6 +1,7 @@
 import { useRef, useState, useCallback, useEffect, useMemo } from "react";
 import type { AIAnalysis, Annotation, Organism, Zone } from "../types";
 import type { SortMode } from "../utils/sorting";
+import { computeMonthMarkers } from "../utils/sorting";
 import type { Filters } from "../utils/filtering";
 import OrganismCard from "./OrganismCard";
 import FilterControl from "./FilterControl";
@@ -15,6 +16,9 @@ import type { NeighborMap } from "../adjacency";
 const GAP = 4;
 const DEFAULT_ASPECT = 3 / 4;
 const WIDE_THRESHOLD = 1.4;
+// Aspect ratio (w / h) of a month-section header tile in newest/oldest sort.
+// Higher = shorter/smaller banner.
+const MONTH_HEADER_ASPECT = 6.5;
 
 function getColumnCount() {
   if (typeof window === "undefined") return 3;
@@ -55,7 +59,17 @@ interface PlacedFiller {
   neighbors: NeighborMap;
 }
 
-type PlacedItem = PlacedOrganism | PlacedFiller;
+interface PlacedMonth {
+  kind: "month";
+  key: string;
+  label: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+type PlacedItem = PlacedOrganism | PlacedFiller | PlacedMonth;
 
 function assignStampsToFillers(fillers: PlacedFiller[]): void {
   const pool = buildStampPool();
@@ -76,6 +90,7 @@ function computeLayout(
   colCount: number,
   containerWidth: number,
   initialHeights: number[],
+  monthMarkers: Map<string, string>,
 ): { items: PlacedItem[]; totalHeight: number } {
   const colWidth = (containerWidth - GAP * (colCount - 1)) / colCount;
   const colX = (col: number) => col * (colWidth + GAP);
@@ -85,8 +100,33 @@ function computeLayout(
   const placeholder: StampDef = { type: "word", value: "" };
   const emptyNeighbors: NeighborMap = {};
 
+  const shortestCol = () => {
+    let target = 0;
+    for (let i = 1; i < colCount; i++) {
+      if (heights[i] < heights[target]) target = i;
+    }
+    return target;
+  };
+
   for (let idx = 0; idx < organisms.length; idx++) {
     const organism = organisms[idx];
+
+    const monthLabel = monthMarkers.get(organism.id);
+    if (monthLabel) {
+      const col = shortestCol();
+      const headerH = colWidth / MONTH_HEADER_ASPECT;
+      items.push({
+        kind: "month",
+        key: `month-${organism.id}`,
+        label: monthLabel,
+        x: colX(col),
+        y: heights[col],
+        w: colWidth,
+        h: headerH,
+      });
+      heights[col] += headerH + GAP;
+    }
+
     const aspect = getAspect(organism);
     const wide = isWide(organism) && colCount >= 2;
 
@@ -294,7 +334,8 @@ export default function MasonryGrid({
       initialHeights[lastCol] = sortRef.current.offsetHeight + GAP;
     }
 
-    const result = computeLayout(organisms, cc, containerWidth, initialHeights);
+    const monthMarkers = computeMonthMarkers(organisms, sortMode);
+    const result = computeLayout(organisms, cc, containerWidth, initialHeights, monthMarkers);
 
     const fillers = result.items.filter((i): i is PlacedFiller => i.kind === "filler");
     for (const f of fillers) {
@@ -316,7 +357,7 @@ export default function MasonryGrid({
     requestAnimationFrame(() => {
       window.dispatchEvent(new CustomEvent("masonry-layout"));
     });
-  }, [organisms]);
+  }, [organisms, sortMode]);
 
   const prevOrganismIdsRef = useRef<string>("");
   useEffect(() => {
@@ -440,6 +481,27 @@ export default function MasonryGrid({
         )}
 
         {placed.map((item) => {
+          if (item.kind === "month") {
+            return (
+              <div
+                key={item.key}
+                className="absolute"
+                style={{
+                  left: `${item.x}px`,
+                  top: `${item.y}px`,
+                  width: `${item.w}px`,
+                  height: `${item.h}px`,
+                }}
+              >
+                <HatchFiller
+                  assignedStamp={{ type: "word", value: item.label }}
+                  fillerIndex={0}
+                  textColor="#b1c3ab"
+                  textScale={0.65}
+                />
+              </div>
+            );
+          }
           if (item.kind === "filler") {
             return (
               <div

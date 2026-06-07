@@ -2,6 +2,16 @@ import { useRef, useCallback } from "react";
 import type { Organism } from "../types";
 import { Expand } from "lucide-react";
 import { organismTitle } from "../utils/display";
+import { imageTime } from "../utils/sorting";
+
+function formatPicTime(organism: Organism): string {
+  const d = new Date(imageTime(organism));
+  if (Number.isNaN(d.getTime())) return "";
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  const yy = String(d.getFullYear()).slice(-2);
+  return `${mm}/${dd}/${yy}`;
+}
 
 const DOUBLE_CLICK_DELAY = 400;
 const MOUSE_TOLERANCE = 20;
@@ -64,6 +74,7 @@ export default function OrganismCard({ organism, zoneNameByCode, onOpen }: Props
 
   const titleLine = organismTitle(organism);
   const subtitle = zoneNameByCode.get(organism.zoneCode) ?? organism.zoneCode;
+  const picTime = formatPicTime(organism);
 
   return (
     <div
@@ -126,6 +137,11 @@ export default function OrganismCard({ organism, zoneNameByCode, onOpen }: Props
             {organism.description}
           </p>
         )} */}
+        {picTime && (
+          <span className="absolute bottom-2 right-2 text-[10px] leading-none text-ink-muted/80 tabular-nums">
+            {picTime}
+          </span>
+        )}
         {organism.tags?.length > 0 && (
           <div className="flex flex-wrap gap-1 mt-1.5">
             {organism.tags.map((tag) => (

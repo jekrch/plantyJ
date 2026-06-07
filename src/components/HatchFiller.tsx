@@ -195,6 +195,10 @@ interface HatchFillerProps {
   fillerIndex?: number;
   /** Adjacent organism info for rendering edge labels. */
   neighbors?: NeighborMap | null;
+  /** Override fill color for word stamps (defaults to the muted ink token). */
+  textColor?: string;
+  /** Multiplier applied to the computed word-stamp font size. */
+  textScale?: number;
 }
 
 export default function HatchFiller({
@@ -202,6 +206,8 @@ export default function HatchFiller({
   assignedStamp = null,
   fillerIndex = 0,
   neighbors = null,
+  textColor = TEXT_FILL_COLOR,
+  textScale = 1,
 }: HatchFillerProps) {
   const patternId = useId();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -275,6 +281,10 @@ export default function HatchFiller({
 
   const isSmall = Math.min(size.width, size.height) < 300;
 
+  // When the filler is very short, a stamp (word/icon) looks awkward crammed
+  // into the sliver, so we render only the vine pattern.
+  const isTooShortForStamp = size.height < 20;
+
   const baseIconSize = Math.min(size.width, size.height) * 0.7;
   const effectiveScale = isSmall
     ? Math.min(placement.scale, 1) // cap scale on mobile
@@ -298,7 +308,7 @@ export default function HatchFiller({
 
   let stampContent: React.ReactNode = null;
 
-  if (!empty && stamp?.type === "word") {
+  if (!empty && !isTooShortForStamp && stamp?.type === "word") {
     // 1. Define character aspect ratio for Space Mono (width is ~60% of height)
     const charWidthRatio = 0.7;
 
@@ -310,7 +320,7 @@ export default function HatchFiller({
     const maxFontSizeByWidth = maxAllowedWidth / (stamp.value.length * charWidthRatio);
 
     // 4. Calculate the final font size (cap it at your original 80px so it doesn't get massive on large screens)
-    const dynamicFontSize = Math.min(80, maxFontSizeByWidth, maxAllowedHeight);
+    const dynamicFontSize = Math.min(80, maxFontSizeByWidth, maxAllowedHeight) * textScale;
 
     stampContent = (
       <text
@@ -323,12 +333,12 @@ export default function HatchFiller({
         fontWeight="900"
         fontSize={dynamicFontSize}
         letterSpacing="0em"
-        fill={TEXT_FILL_COLOR}
+        fill={textColor}
       >
         {stamp.value}
       </text>
     );
-  } else if (!empty && stamp?.type === "icon" && iconSvgContent) {
+  } else if (!empty && !isTooShortForStamp && stamp?.type === "icon" && iconSvgContent) {
     const patchedContent = iconSvgContent.replace(/stroke="currentColor"/g, 'stroke="black"');
 
     stampContent = (

@@ -1,5 +1,6 @@
 import { describe, it, expect } from "bun:test";
 import {
+  computeMonthMarkers,
   cosineDistance,
   hammingDistanceHex,
   paletteDistance,
@@ -120,5 +121,66 @@ describe("sortOrganisms", () => {
 
   it("handles an empty array", () => {
     expect(sortOrganisms([], "newest")).toEqual([]);
+  });
+});
+
+describe("computeMonthMarkers", () => {
+  // Mid-month dates avoid timezone month-boundary flakiness.
+  const inMonth = (id: string, iso: string) => organism({ id, addedAt: iso });
+
+  it("returns no markers for non-newest/oldest modes", () => {
+    const list = [
+      inMonth("a", "2026-06-15T12:00:00Z"),
+      inMonth("b", "2026-05-15T12:00:00Z"),
+    ];
+    expect(computeMonthMarkers(list, "color").size).toBe(0);
+    expect(computeMonthMarkers(list, "similarity").size).toBe(0);
+  });
+
+  it("always marks the newest month even with a single pic", () => {
+    const list = [
+      inMonth("new", "2026-06-15T12:00:00Z"), // newest, 1 pic
+      inMonth("old1", "2026-03-15T12:00:00Z"),
+      inMonth("old2", "2026-03-16T12:00:00Z"),
+    ];
+    const markers = computeMonthMarkers(list, "newest");
+    expect(markers.get("new")).toBe("June 2026");
+    // March has only 2 pics and isn't newest → no header
+    expect(markers.has("old1")).toBe(false);
+  });
+
+  it("marks an older month once it has at least three pics", () => {
+    const list = [
+      inMonth("new", "2026-06-15T12:00:00Z"),
+      inMonth("m1", "2026-03-15T12:00:00Z"),
+      inMonth("m2", "2026-03-16T12:00:00Z"),
+      inMonth("m3", "2026-03-17T12:00:00Z"),
+    ];
+    const markers = computeMonthMarkers(list, "newest");
+    expect(markers.get("new")).toBe("June 2026");
+    expect(markers.get("m1")).toBe("March 2026"); // first of the qualifying run
+    expect(markers.has("m2")).toBe(false);
+    expect(markers.has("m3")).toBe(false);
+  });
+
+  it("places the marker on the first organism of the month in the given order", () => {
+    // oldest-sort order: March group first, then June
+    const list = [
+      inMonth("m1", "2026-03-15T12:00:00Z"),
+      inMonth("m2", "2026-03-16T12:00:00Z"),
+      inMonth("m3", "2026-03-17T12:00:00Z"),
+      inMonth("new", "2026-06-15T12:00:00Z"),
+    ];
+    const markers = computeMonthMarkers(list, "oldest");
+    expect(markers.get("m1")).toBe("March 2026");
+    expect(markers.get("new")).toBe("June 2026");
+  });
+
+  it("derives the month from the image timestamp in the id, not addedAt", () => {
+    // id ts = 2026-06-15 ~ UTC; addedAt is a different month
+    const ts = Math.floor(Date.UTC(2026, 5, 15, 12) / 1000);
+    const o = organism({ id: `A atr-${ts}`, addedAt: "2026-01-01T00:00:00Z" });
+    const markers = computeMonthMarkers([o], "newest");
+    expect(markers.get(o.id)).toBe("June 2026");
   });
 });

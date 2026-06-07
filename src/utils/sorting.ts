@@ -192,6 +192,84 @@ export function sortOrganisms(organisms: Organism[], mode: SortMode): Organism[]
   }
 }
 
+const MONTH_NAMES = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+/**
+ * The image's own timestamp (Unix seconds embedded in its id / filename),
+ * falling back to `addedAt` when no timestamp can be parsed.
+ */
+export function imageTime(organism: Organism): number {
+  const fromId = /-(\d{9,})$/.exec(organism.id);
+  if (fromId) return Number(fromId[1]) * 1000;
+  const fromImage = /\/(\d{9,})\.[a-z0-9]+$/i.exec(organism.image);
+  if (fromImage) return Number(fromImage[1]) * 1000;
+  return new Date(organism.addedAt).getTime();
+}
+
+function monthKey(ms: number): { key: string; rank: number; label: string } {
+  const d = new Date(ms);
+  const year = d.getFullYear();
+  const month = d.getMonth();
+  return {
+    key: `${year}-${month}`,
+    rank: year * 12 + month,
+    label: `${MONTH_NAMES[month]} ${year}`,
+  };
+}
+
+/**
+ * For the newest/oldest sort modes, decide which organisms start a new
+ * month/year section and should be preceded by a labeled month header.
+ *
+ * A month/year qualifies for a header when it is the newest month present
+ * (which by definition has ≥1 pic) or when it contains at least three pics.
+ * Time is taken from the image itself (see `imageTime`), not `addedAt`.
+ *
+ * `organisms` must already be in the order they will be laid out. Returns a
+ * map from the leading organism's id to the header label to render before it.
+ */
+export function computeMonthMarkers(organisms: Organism[], mode: SortMode): Map<string, string> {
+  const markers = new Map<string, string>();
+  if (mode !== "newest" && mode !== "oldest") return markers;
+
+  const counts = new Map<string, number>();
+  let newestKey = "";
+  let newestRank = -Infinity;
+  for (const o of organisms) {
+    const { key, rank } = monthKey(imageTime(o));
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+    if (rank > newestRank) {
+      newestRank = rank;
+      newestKey = key;
+    }
+  }
+
+  const qualifies = (key: string) => key === newestKey || (counts.get(key) ?? 0) >= 3;
+
+  let prevKey: string | null = null;
+  for (const o of organisms) {
+    const { key, label } = monthKey(imageTime(o));
+    if (key !== prevKey) {
+      prevKey = key;
+      if (qualifies(key)) markers.set(o.id, label);
+    }
+  }
+  return markers;
+}
+
 export async function sortOrganismsAsync(
   organisms: Organism[],
   mode: SortMode,
