@@ -956,6 +956,19 @@
       "created": "2026-06-07T20:15:11.700Z"
     },
     {
+      "shortCode": "X spe",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "Ground crab spiders of the genus Xysticus are highly beneficial, native generalist predators in the Twin Cities area and are a welcome addition to an ecologically focused garden. As ambush hunters that do not spin prey-capturing webs, they blend seamlessly into soil, leaf litter, and low vegetation to surprise passing insects. In the Front Yard zone, this nesting female guarding an egg cluster on the stucco wall will soon release spiderlings that provide valuable biological pest control. They feed on a wide variety of garden pests including aphids, thrips, flies, and plant bugs, and are one of the few spider groups that will readily predate ants. While they may occasionally take beneficial pollinators or larvae—such as the Black Swallowtail or American Lady caterpillars residing on nearby host plants like Golden Alexanders and Pearly Everlasting—their overall contribution to ecological balance outweighs these minor losses. Furthermore, they serve as a vital protein source for local insectivorous birds like cardinals and finches.\n\nBecause the owners prioritize local ecology, no active management or chemical intervention is needed; indeed, avoiding broad-spectrum pesticides is essential to support these natural pest controllers. Leaving natural leaf litter and retaining winter stems in the Front Yard will sustain their population by providing excellent hunting grounds and overwintering shelter.",
+      "references": [
+        "https://www.minnesotaseasons.com/Arachnids/ground_crab_spiders_Xysticus.html",
+        "https://ohioline.osu.edu/factsheet/ent-70",
+        "https://www.uky.edu/Ag/CritterFiles/casefile/spiders/crab/crab.htm",
+        "https://grokipedia.com/page/Xysticus"
+      ],
+      "created": "2026-06-10T23:35:38.027Z"
+    },
+    {
       "shortCode": "Z aur",
       "zoneCode": "fy",
       "verdict": "GOOD",
