@@ -702,5 +702,13 @@
   "Xysticus": {
     "description": "Xysticus is a genus of around 300 ground crab spider species described by C. L. Koch in 1835, belonging to the order Araneae, family Thomisidae.",
     "url": "https://en.wikipedia.org/wiki/Xysticus"
+  },
+  "Apidae": {
+    "description": "Apidae is the largest family within the superfamily Apoidea, containing at least 5700 species of bees. The family includes some of the most commonly seen bees, including bumblebees and honey bees, but also includes stingless bees, carpenter bees, orchid bees, cuckoo bees, and a number of other less widely known groups. Many are valuable pollinators in natural habitats and for agricultural crops.",
+    "url": "https://en.wikipedia.org/wiki/Apidae"
+  },
+  "Bombus": {
+    "description": "A bumblebee is any of over 250 species in the genus Bombus, part of Apidae, one of the bee families. This genus is the only extant group in the tribe Bombini, though a few extinct related genera are known from fossils. They are found primarily in the Northern Hemisphere, although they are also found in South America, where a few lowland tropical species have been identified. European bumblebees have also been introduced to New Zealand and Tasmania. Female bumblebees can sting repeatedly, but generally ignore humans and other animals.",
+    "url": "https://en.wikipedia.org/wiki/Bumblebee"
   }
 }

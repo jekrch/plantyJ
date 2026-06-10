@@ -998,6 +998,58 @@
       ],
       "observationsCount": 66298
     },
+    "bombus-impatiens": {
+      "id": "bombus-impatiens",
+      "fullName": "Bombus impatiens",
+      "commonName": "Common Eastern Bumble Bee",
+      "description": "Bombus impatiens, the common eastern bumblebee, is the most commonly encountered bumblebee across much of eastern North America. They can be found in the Eastern temperate forest region of the eastern United States, southern Canada, and the eastern Great Plains. Because of their great adaptability, they can live in country, suburbs, and even urban cities. This adaptability makes them a great pollinator species, leading to an increase in their commercial use by the greenhouse industry. This increase consequently led to their farther spread outside their previous distribution range. They are considered one of the most important species of pollinator bees in North America.",
+      "vernacularNames": [
+        "Common Eastern Bumble Bee",
+        "Common Eastern Bumblebee"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Hymenoptera",
+        "family": "Apidae",
+        "genus": "Bombus",
+        "species": "Bombus impatiens",
+        "canonicalName": "Bombus impatiens"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/1340350"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Bombus_impatiens"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/118970"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q2367709"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.744950"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 284812
+    },
     "camassia-scilloides": {
       "id": "camassia-scilloides",
       "fullName": "Camassia scilloides",
