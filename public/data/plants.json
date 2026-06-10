@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "B imp",
+      "fullName": "Bombus impatiens",
+      "commonName": "Common Eastern Bumble Bee",
+      "variety": null
+    },
+    {
       "shortCode": "X spe",
       "fullName": "Xysticus species",
       "commonName": "Ground Crab Spider",
