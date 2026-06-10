@@ -428,6 +428,36 @@
       "type": "predator-prey",
       "from": "p dom",
       "to": "P com"
+    },
+    {
+      "id": 60,
+      "type": "predator-prey",
+      "from": "X spe",
+      "to": "A sp"
+    },
+    {
+      "id": 61,
+      "type": "predator-prey",
+      "from": "X spe",
+      "to": "T imm"
+    },
+    {
+      "id": 62,
+      "type": "predator-prey",
+      "from": "X spe",
+      "to": "T amo"
+    },
+    {
+      "id": 63,
+      "type": "predator-prey",
+      "from": "c card",
+      "to": "X spe"
+    },
+    {
+      "id": 64,
+      "type": "predator-prey",
+      "from": "p dom",
+      "to": "X spe"
     }
   ]
 }
