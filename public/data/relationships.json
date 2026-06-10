@@ -458,6 +458,30 @@
       "type": "predator-prey",
       "from": "p dom",
       "to": "X spe"
+    },
+    {
+      "id": 65,
+      "type": "pollinator",
+      "from": "B imp",
+      "to": "L car"
+    },
+    {
+      "id": 66,
+      "type": "pollinator",
+      "from": "B imp",
+      "to": "E pur"
+    },
+    {
+      "id": 67,
+      "type": "pollinator",
+      "from": "B imp",
+      "to": "A scr"
+    },
+    {
+      "id": 68,
+      "type": "pollinator",
+      "from": "B imp",
+      "to": "G mac"
     }
   ]
 }
