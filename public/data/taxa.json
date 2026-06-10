@@ -686,5 +686,21 @@
   "Angelica": {
     "description": "Angelica is a genus of about 90 species of tall biennial and perennial herbs in the family Apiaceae, native to temperate and subarctic regions of the Northern Hemisphere, reaching as far north as Iceland, S\u00e1pmi, and Greenland. They grow to 1\u20133\u00a0m tall, with large bipinnate leaves and large compound umbels of white or greenish-white flowers. It shows variations in fruit anatomy, leaf morphology, and subterranean structures. The genes are extremely polymorphic.",
     "url": "https://en.wikipedia.org/wiki/Angelica"
+  },
+  "Arachnida": {
+    "description": "Arachnids are arthropods in the class Arachnida of the subphylum Chelicerata. Arachnida includes, among others, spiders, scorpions, ticks, mites, pseudoscorpions, harvestmen, camel spiders, whip spiders and vinegaroons.",
+    "url": "https://en.wikipedia.org/wiki/Arachnid"
+  },
+  "Araneae": {
+    "description": "Spiders are air-breathing arthropods that have eight limbs, chelicerae with fangs generally able to inject venom, and spinnerets that extrude silk. They are the largest order of arachnids and rank seventh in total species diversity among all orders of organisms. Spiders are found worldwide on every continent except Antarctica, and have become established in nearly every land habitat. As of January\u00a02026, 53,680 spider species in 139 families have been recorded by taxonomists. However, there has been debate among scientists about how families should be classified, with over 20 different classifications proposed since 1900.",
+    "url": "https://en.wikipedia.org/wiki/Spider"
+  },
+  "Thomisidae": {
+    "description": "The Thomisidae are a family of spiders, including about 170 genera and over 2,100 species. The common name crab spider is often linked to species in this family, but may also be used for spiders from other families. Many members of this family are also known as flower spiders or flower crab spiders.",
+    "url": "https://en.wikipedia.org/wiki/Thomisidae"
+  },
+  "Xysticus": {
+    "description": "Xysticus is a genus of around 300 ground crab spider species described by C. L. Koch in 1835, belonging to the order Araneae, family Thomisidae.",
+    "url": "https://en.wikipedia.org/wiki/Xysticus"
   }
 }

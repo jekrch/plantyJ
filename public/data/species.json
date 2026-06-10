@@ -5147,6 +5147,40 @@
         "natureserve"
       ]
     },
+    "xysticus-species": {
+      "id": "xysticus-species",
+      "fullName": "Xysticus species",
+      "commonName": "Ground Crab Spider",
+      "description": "",
+      "vernacularNames": [
+        "Ground Crab Spiders"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Arachnida",
+        "order": "Araneae",
+        "family": "Thomisidae",
+        "genus": "Xysticus",
+        "species": null,
+        "canonicalName": "Xysticus"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2164999"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ]
+    },
     "zizia-aurea": {
       "id": "zizia-aurea",
       "fullName": "Zizia aurea",
