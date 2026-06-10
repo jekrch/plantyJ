@@ -210,6 +210,19 @@
       "created": "2026-05-19T00:56:58.121Z"
     },
     {
+      "shortCode": "B imp",
+      "zoneCode": "mpg",
+      "verdict": "GOOD",
+      "analysis": "The presence of the Common Eastern Bumble Bee (Bombus impatiens) in the Maple (mpg) zone is highly beneficial for the garden’s ecology, perfectly aligning with the owners' goals of promoting native biodiversity and supporting local wildlife. As an incredibly adaptable and robust native generalist pollinator in Minnesota, this bumblebee is critical to the reproductive success of both wild and cultivated plants. In the shaded, heavily mulched 'mpg' zone—which is dominated by an invasive Norway Maple (Acer platanoides)—this bee was observed foraging on Motherwort (Leonurus cardiaca), a non-native medicinal plant. It also serves as a vital pollinator for many of the zone's native understory species, such as Wild Geranium (Geranium maculatum), Virginia Bluebells (Mertensia virginica), and Zigzag Goldenrod (Solidago flexicaulis), as well as valuable native edibles like Elderberry (Sambucus canadensis).\n\nSince Bombus impatiens is native and thriving in the Twin Cities area, no negative management is needed. Instead, the owners can support this species by maintaining natural leaf litter and loose soils within the 'mpg' zone, which provide ideal nesting sites for queens establishing underground nests. Heavy wood chip mulching should be managed to leave some bare or lightly leaf-covered soil exposed to allow ground-nesting access. To safeguard these key pollinators, systemic insecticides and chemical treatments—frequently applied to manage pests on urban trees like maples or nearby lilacs—must be strictly avoided.",
+      "references": [
+        "https://www.beesmn.org/bombusimpatiens",
+        "https://en.wikipedia.org/wiki/Bombus_impatiens",
+        "https://extension.umn.edu/pollination/minnesota-pollinators",
+        "https://www.fs.usda.gov/wildflowers/pollinators/documents/ConsMgmtNABumbleBees.pdf"
+      ],
+      "created": "2026-06-10T23:53:38.312Z"
+    },
+    {
       "shortCode": "C ame",
       "zoneCode": "hbd",
       "verdict": "GOOD",
