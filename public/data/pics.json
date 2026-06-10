@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 101,
+      "id": "X spe-1781133873",
+      "shortCode": "X spe",
+      "zoneCode": "fy",
+      "tags": [
+        "nesting"
+      ],
+      "description": "Guarding egg cluster on stucco wall",
+      "image": "images/X spe/1781133873.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-06-10T23:24:35.016Z",
+      "width": 919,
+      "height": 1280
+    },
+    {
       "seq": 100,
       "id": "A atr-1780864237",
       "shortCode": "A atr",
@@ -268,7 +283,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -462,7 +477,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
