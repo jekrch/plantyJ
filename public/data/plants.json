@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "X spe",
+      "fullName": "Xysticus species",
+      "commonName": "Ground Crab Spider",
+      "variety": null
+    },
+    {
       "shortCode": "A atr",
       "fullName": "Angelica atropupurea",
       "commonName": "Great Angelica",
