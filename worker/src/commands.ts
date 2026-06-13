@@ -14,6 +14,7 @@ import { ingestPlantPhoto } from "./photos";
 import { PENDING_IDENTIFY_KEY, type PendingIdentify } from "./identify";
 import { submitAnalyzeRun, analyzeStatus, clearAnalyzeRun, formatAnalyzeUsage } from "./analyze";
 import { enqueueJob, runOrEnqueue } from "./jobs";
+import { runBatch } from "./batch";
 import { readCostTotals, formatCostReport } from "./cost";
 import { assertValidCode } from "./validation";
 import {
@@ -26,11 +27,9 @@ import {
   deletePic,
   deleteZone,
   deleteZonePic,
-  isUpdatableField,
   readAnnotations,
   readGallery,
   setZoneDescription,
-  updateBySeq,
   upsertAnnotation,
   upsertZone,
 } from "./github";
@@ -545,23 +544,26 @@ async function handleUpdate(text: string, env: Env, reply: Replier): Promise<voi
   const m = text.match(/^\/update\s+(\d+)\s+(\S+)\s+(\S[\s\S]*)$/)!;
   const seq = parseInt(m[1], 10);
   const field = m[2];
-  const value = m[3].trim();
+  // Route through the shared batch path so a single direct /update applies the
+  // exact same logic as a /confirm'd one — including the shortCode rename that
+  // also repoints annotations and relationships. (loadBatchState + a single
+  // dirty-file commit; well under the subrequest budget for one command.)
+  const { results } = await runBatch(env, [text], `Update pic #${seq}: ${field}`);
+  await reply(results[0].reply);
+}
 
-  if (!isUpdatableField(field)) {
-    await reply(
-      `Invalid field "${field}". Updatable: shortCode, fullName, commonName, zoneCode, tags, description`,
-    );
+async function handleMerge(text: string, env: Env, reply: Replier): Promise<void> {
+  const parts = text
+    .slice("/merge".length)
+    .trim()
+    .split("//")
+    .map((s) => s.trim());
+  if (parts.length < 2 || !parts[0] || !parts[1]) {
+    await reply("Usage: /merge <fromCode> // <toCode>");
     return;
   }
-  if (field === "shortCode" || field === "zoneCode") {
-    assertValidCode(field, value);
-  }
-  const updated = await updateBySeq(env, seq, field, value);
-  await reply(
-    updated
-      ? `Updated pic #${seq}: ${field} → "${value}"\n→ ${updated.pic.shortCode}`
-      : `No pic found with ID ${seq}.`,
-  );
+  const { results } = await runBatch(env, [text], `Merge ${parts[0]} → ${parts[1]}`);
+  await reply(results[0].reply);
 }
 
 async function handleAnnotate(text: string, env: Env, reply: Replier): Promise<void> {
@@ -735,6 +737,7 @@ export async function handleTextCommand(
     [/^\/delete\s+\d+$/, () => handleDeletePic(text, env, reply)],
     [/^\/accept\s/, () => handleAccept(text, env, reply)],
     [/^\/update\s/, () => handleUpdate(text, env, reply)],
+    [/^\/merge\s/, () => handleMerge(text, env, reply)],
     [/^\/annotate\s/, () => handleAnnotate(text, env, reply)],
     [/^\/addtag\s/, () => handleAddTag(text, env, reply)],
     [/^\/removetag\s/, () => handleRemoveTag(text, env, reply)],

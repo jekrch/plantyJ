@@ -926,14 +926,25 @@ export async function commitBatchState(
     [...state.dirty].some((d) => d !== "relationships") || state.imagesToDelete.length > 0;
   const commitMessage = willComputeMetadata ? `${message} [skip-deploy]` : message;
 
-  const writes: Array<Promise<void>> = [];
+  // Each PUT to the Contents API creates a commit on `main`, and GitHub updates
+  // the branch ref with a compare-and-swap. Firing these in parallel
+  // (Promise.all) races that CAS against itself: the first write advances HEAD,
+  // and every sibling write then 409s ("is at <newHead> but expected <oldHead>")
+  // even though each file's blob sha is still valid. Those 409s bubble up as a
+  // job failure and the retry hits the exact same race, so the batch never
+  // converges. Running the writes sequentially lets each PUT build on the HEAD
+  // the previous one produced — no self-collision. The cost is a few extra
+  // serialized round-trips per chunk, which stays well under the subrequest
+  // budget. (Different files never collide on blob sha, so the only hazard was
+  // the shared branch ref.)
+  const writes: Array<() => Promise<void>> = [];
   if (state.dirty.has("zones")) {
-    writes.push(
+    writes.push(() =>
       writeJsonFile(env, ZONES_PATH, { zones: state.gallery.zones }, state.zonesSha, commitMessage),
     );
   }
   if (state.dirty.has("plants")) {
-    writes.push(
+    writes.push(() =>
       writeJsonFile(
         env,
         PLANTS_PATH,
@@ -944,12 +955,12 @@ export async function commitBatchState(
     );
   }
   if (state.dirty.has("pics")) {
-    writes.push(
+    writes.push(() =>
       writeJsonFile(env, PICS_PATH, { pics: state.gallery.pics }, state.picsSha, commitMessage),
     );
   }
   if (state.dirty.has("zonePics")) {
-    writes.push(
+    writes.push(() =>
       writeJsonFile(
         env,
         ZONE_PICS_PATH,
@@ -961,7 +972,7 @@ export async function commitBatchState(
   }
   if (state.dirty.has("annotations")) {
     const cleaned = state.annotations.filter((a) => a.tags.length > 0 || a.description !== null);
-    writes.push(
+    writes.push(() =>
       writeJsonFile(
         env,
         ANNOTATIONS_PATH,
@@ -972,7 +983,7 @@ export async function commitBatchState(
     );
   }
   if (state.dirty.has("relationships")) {
-    writes.push(
+    writes.push(() =>
       writeJsonFile(
         env,
         RELATIONSHIPS_PATH,
@@ -982,7 +993,9 @@ export async function commitBatchState(
       ),
     );
   }
-  await Promise.all(writes);
+  for (const write of writes) {
+    await write();
+  }
 
   let imagesDeleted = 0;
   for (const img of state.imagesToDelete) {

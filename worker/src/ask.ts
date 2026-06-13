@@ -67,6 +67,7 @@ const ALLOWED_VERBS = [
   "/addtag",
   "/removetag",
   "/update",
+  "/merge",
   "/accept",
   "/annotate",
   "/addzone",

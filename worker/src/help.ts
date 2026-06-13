@@ -59,6 +59,11 @@ Identify from a photo:
 Pic commands:
   /delete {seq} — Remove a pic by its sequential ID
   /update {seq} {field} {value} — Update a field on a pic or its plant
+  /merge {fromCode} // {toCode} — Merge a duplicate plant into another.
+    Moves all pics, tags, and relationships from {fromCode} onto {toCode},
+    fills any blank fields on {toCode} from {fromCode}, and removes the
+    {fromCode} record. Use this when two shortCodes are the same plant —
+    /update shortCode refuses to rename onto an existing code.
   /accept {seq} [shortCode] — Apply BioCLIP prediction to an unidentified
     pic. With a shortCode, also rename (e.g. /accept 12 r-rub merges into
     an existing 'r-rub' plant or creates one).

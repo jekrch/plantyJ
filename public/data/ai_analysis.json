@@ -949,22 +949,13 @@
       "shortCode": "V virg",
       "zoneCode": "fy",
       "verdict": "GOOD",
-      "analysis": "The American Painted Lady butterfly (Vanessa virginiensis) is a native species to the Twin Cities area, and its presence in the front yard strongly indicates a thriving, functional ecosystem. Highly aligned with the owners' goals of prioritizing local ecology, this beneficial insect relies on several native nectar sources distributed across the property. Through its daily foraging, it actively pollinates key native perennials, including butterfly weed in the North Boulevard, purple coneflower in the berry border, black-eyed Susan in the side yard, and calico aster in the maple zone. This cross-zone mobility makes it an invaluable asset for maintaining robust seed sets and sustaining the plant communities throughout the garden.\n\nBeyond pollination, the American Painted Lady serves as a vital component of the urban food web by providing high-quality forage for native songbirds; notably, it is actively hunted by the property's resident Northern Cardinal. While its role as an adult pollinator is well supported by the current floral abundance, the garden currently lacks the specific native host plants required for its caterpillar stage. To encourage the butterfly to complete its full life cycle on the property, the owners could consider introducing native Asteraceae hosts such as pearly everlasting (Anaphalis margaritacea) or field pussytoes (Antennaria neglecta). These additions adapt well to zone 4b/5a clay and loam soils, perfectly complementing the native-focused management plan with no negative ecological drawbacks.",
-      "references": [
-        "https://www.minnesotaseasons.com/Insects/American_lady.html",
-        "https://www.morningskygreenery.com/product/anaphalis-margaritacea/"
-      ],
-      "created": "2026-05-13T00:45:26.434Z"
-    },
-    {
-      "shortCode": "V virgi",
-      "zoneCode": "fy",
-      "verdict": "GOOD",
       "analysis": "The presence of the native American Lady butterfly (Vanessa virginiensis) in the Front Yard is highly beneficial, directly aligning with the owners' priorities of supporting local ecology and establishing native plant relationships. Observed as a first-instar caterpillar on Pearly Everlasting (Anaphalis margaritacea), it relies on this specific native Asteraceae host to complete its larval stage. The caterpillar constructs a characteristic silken \"nest\" at the leaf tips to shelter itself from predators while feeding on the foliage. Although this feeding can cause minor, temporary aesthetic damage, the resilient Pearly Everlasting has co-evolved with this herbivore and will fully recover to bloom by late summer. As adults, American Ladies act as beneficial generalist pollinators, feeding on nectar from various other Front Yard plants such as Columbine (Aquilegia canadensis), Yarrow (Achillea millefolium), and Golden Alexanders (Zizia aurea).\n\nThe American Lady is a native migratory species in the Twin Cities, unable to survive the harsh Minnesota winters (USDA zone 4b/5a) and recolonizing the region each spring through northward migration from southern climates. This migratory behavior makes pesticide-free native host gardens especially critical for their reproductive success. Ecologically, the caterpillars also serve as an essential, nutrient-dense food source for local birds nested in the adjacent Maple zone, such as Cardinals and House Finches. No active management or chemical intervention is needed for the caterpillar's feeding; the minor foliage webbing and feeding damage should be celebrated as a clear sign of a functioning, biodiverse urban habitat.",
       "references": [
         "https://www.butterfliesandmoths.org/species/Vanessa-virginiensis",
         "https://xerces.org/blog/plants-for-pollinators-pearly-everlasting",
-        "https://gardenlady.com/when-you-intend-a-plant-to-be-destroyed/"
+        "https://gardenlady.com/when-you-intend-a-plant-to-be-destroyed/",
+        "https://www.minnesotaseasons.com/Insects/American_lady.html",
+        "https://www.morningskygreenery.com/product/anaphalis-margaritacea/"
       ],
       "created": "2026-06-07T20:15:11.700Z"
     },
