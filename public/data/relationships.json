@@ -482,6 +482,30 @@
       "type": "pollinator",
       "from": "B imp",
       "to": "G mac"
+    },
+    {
+      "id": 69,
+      "type": "pollinator",
+      "from": "V virg",
+      "to": "A scr"
+    },
+    {
+      "id": 70,
+      "type": "pollinator",
+      "from": "V virg",
+      "to": "E yuc"
+    },
+    {
+      "id": 71,
+      "type": "pollinator",
+      "from": "V virg",
+      "to": "A mil"
+    },
+    {
+      "id": 72,
+      "type": "predator-prey",
+      "from": "p dom",
+      "to": "V virg"
     }
   ]
 }
