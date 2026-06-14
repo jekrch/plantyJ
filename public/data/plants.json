@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "D pic",
+      "fullName": "Delphinia picta",
+      "commonName": "Picture-winged Fly",
+      "variety": null
+    },
+    {
       "shortCode": "B imp",
       "fullName": "Bombus impatiens",
       "commonName": "Common Eastern Bumble Bee",
