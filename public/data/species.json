@@ -1508,6 +1508,58 @@
       ],
       "observationsCount": 16914
     },
+    "delphinia-picta": {
+      "id": "delphinia-picta",
+      "fullName": "Delphinia picta",
+      "commonName": "Picture-winged Fly",
+      "description": "Delphinia picta is a species of picture-winged fly in the family Ulidiidae. The specific name picta is from Latin and means \"painted\". It is the only species in the monospecific genus Delphinia. It is found in the United States on the East Coast and in the Midwest from Florida to Maine across to Kansas through Minnesota but also can be found in Mexico and El Salvador. It is sometimes mistaken for a species of fruit fly, but D. picta do not feed on living plant matter, as they are detritivores and eat decaying plant matter. They also have been observed eating fermenting frass from Megacyllene robiniae on black locust trees. They can be found almost anywhere there is decaying vegetation: landfills, temperate deciduous forests, swamps, and even shaded fields.",
+      "vernacularNames": [
+        "Common Picture-winged Fly",
+        "Painted Compost Fly"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Diptera",
+        "family": "Ulidiidae",
+        "genus": "Delphinia",
+        "species": "Delphinia picta",
+        "canonicalName": "Delphinia picta"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/1523573"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Delphinia_picta"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/126848"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q14421462"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.1207542"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 19735
+    },
     "echinacea-purpurea": {
       "id": "echinacea-purpurea",
       "fullName": "Echinacea purpurea",

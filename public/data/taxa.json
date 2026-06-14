@@ -710,5 +710,17 @@
   "Bombus": {
     "description": "A bumblebee is any of over 250 species in the genus Bombus, part of Apidae, one of the bee families. This genus is the only extant group in the tribe Bombini, though a few extinct related genera are known from fossils. They are found primarily in the Northern Hemisphere, although they are also found in South America, where a few lowland tropical species have been identified. European bumblebees have also been introduced to New Zealand and Tasmania. Female bumblebees can sting repeatedly, but generally ignore humans and other animals.",
     "url": "https://en.wikipedia.org/wiki/Bumblebee"
+  },
+  "Delphinia": {
+    "description": "The Delphinia was a festival of Apollo Delphinius held annually on the 6th of the month Mounuchi\u014dn (April/May) in ancient Athens.",
+    "url": "https://en.wikipedia.org/wiki/Delphinia"
+  },
+  "Diptera": {
+    "description": "A fly is an insect of the order Diptera, named for the single pair of wings. The hindwings have evolved into halteres, organs that sense rotation, giving flies precise control of their flight. Diptera is a large order containing more than 150,000 species, including horse-flies, crane flies, hoverflies, mosquitoes and others.",
+    "url": "https://en.wikipedia.org/wiki/Fly"
+  },
+  "Ulidiidae": {
+    "description": "The Ulidiidae or picture-winged flies are a large and diverse cosmopolitan family of flies (Diptera), and as in related families, most species are herbivorous or detritivorous. They are often known as picture-winged flies, along with members of other families in the superfamily Tephritoidea that have patterns of bands or spots on the wings. Some species share with the Tephritidae an unusual elongated posteroapical projection of the anal cell in the wing, but can be differentiated by the smoothly curving subcostal vein. Two species, Tetanops myopaeformis and Euxesta stigmatias, are agricultural pests.",
+    "url": "https://en.wikipedia.org/wiki/Ulidiidae"
   }
 }
