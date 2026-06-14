@@ -506,6 +506,24 @@
       "type": "predator-prey",
       "from": "p dom",
       "to": "V virg"
+    },
+    {
+      "id": 73,
+      "type": "predator-prey",
+      "from": "X spe",
+      "to": "D pic"
+    },
+    {
+      "id": 74,
+      "type": "predator-prey",
+      "from": "c card",
+      "to": "D pic"
+    },
+    {
+      "id": 75,
+      "type": "predator-prey",
+      "from": "p dom",
+      "to": "D pic"
     }
   ]
 }
