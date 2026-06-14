@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 103,
+      "id": "T amo-1781469528",
+      "shortCode": "T amo",
+      "zoneCode": "bb",
+      "tags": [
+        "pest"
+      ],
+      "description": null,
+      "image": "images/T amo/1781469528.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-06-14T20:38:50.014Z",
+      "width": 1280,
+      "height": 1075
+    },
+    {
       "seq": 102,
       "id": "B imp-1781135221",
       "shortCode": "B imp",
@@ -308,7 +323,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -502,7 +517,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
