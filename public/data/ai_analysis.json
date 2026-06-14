@@ -310,6 +310,18 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "D pic",
+      "zoneCode": "bb",
+      "verdict": "GOOD",
+      "analysis": "Delphinia picta, the common picture-winged fly, is a native insect in the Twin Cities and throughout eastern North America. Its presence in the Berry Border is highly beneficial. Often mistaken for a crop-damaging pest of the family Tephritidae due to its patterned wings, D. picta is actually a harmless detritivore. Both the adults and larvae feed on decaying vegetation, compost, and rotting organic material rather than living plant tissues. Within this specific zone, which contains raspberries, red currants, and pink currants, these flies perform a vital ecological service by decomposing fallen leaves and overripe, dropped fruit, returning nutrients to the soil and preventing fungal build-up without posing any threat to the fresh, harvestable crops.\n\nAs adults, these flies may also feed on flower nectar, pollen, or plant exudates, offering minor pollination support to flowering plants like the purple coneflower in this zone. They do not compete with beneficial garden wildlife, nor do they pose a threat to the hops or other structural plants in the border. Since they are native decomposers that integrate seamlessly into the local food web—providing a food source for native garden predators—no pest management or control measures are necessary. Their presence is a sign of a healthy, functioning decomposer tier within the garden's ecosystem, aligning perfectly with the owners' ecological priorities.",
+      "references": [
+        "https://grokipedia.com/page/Delphinia_picta",
+        "https://en.wikipedia.org/wiki/Delphinia_picta",
+        "https://www.minnesotaseasons.com/Insects/common_picture-winged_fly.html"
+      ],
+      "created": "2026-06-14T20:50:53.641Z"
+    },
+    {
       "shortCode": "e ame",
       "zoneCode": "mpg",
       "verdict": "GOOD",
@@ -829,6 +841,17 @@
         "https://www.ecolandscaping.org/04/designing-ecological-landscapes/native-plants/notable-natives-large-shrubs-and-small-trees/"
       ],
       "created": "2026-05-10T20:07:09.084Z"
+    },
+    {
+      "shortCode": "T amo",
+      "zoneCode": "bb",
+      "verdict": "MIXED",
+      "analysis": "The presence of the ash plant bug in the Berry Border is ecologically mixed, though largely harmless to this specific zone's targets. This insect is a native sap-feeder in the Twin Cities region that typically feeds on green, white, and black ash trees, as well as other plants in the olive family (Oleaceae) like the common lilac. Because the Berry Border contains no ash trees or lilacs—focusing instead on edible crops like raspberries and currants—the ash plant bug will not feed on or damage any plants in this zone. Instead, its presence here is transient, likely migrating from the common lilacs located in the neighboring Maple zone, where it feeds on the undersides of leaves, causing minor, cosmetic stippling and leaf distortion that does not threaten overall plant health.\n\nFrom a food web perspective, the ash plant bug serves as a highly beneficial native prey source for local wildlife, aligning closely with the owners' ecological priorities. It is actively hunted by native songbirds such as the Northern Cardinal and House Finch, as well as beneficial predators like the Ground Crab Spider. Because the damage it causes to the neighboring non-native lilacs is strictly aesthetic, no chemical management is required or recommended. The best course of action is to tolerate its presence, allowing natural predators to regulate its population while supporting local avian insectivores with a pesticide-free habitat.",
+      "references": [
+        "https://extension.umn.edu/tree-and-shrub-insects/ash-plant-bugs",
+        "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQF2oRh5Wd778hdn-Eepy7ZIPP-TSKmpV67YABR4bSybJpTQdU-XBddNBt1NQaSrDkc4STUL0fep_UMfKNKOv8yFpgS16RX9ISB-sUMDQBSSiyhpmyNSb8nrl_Y28a2w7kWZey87QHqoaIZkrtzbFbXp7NL2QbuSZ-_QLog=="
+      ],
+      "created": "2026-06-14T20:50:53.641Z"
     },
     {
       "shortCode": "T amo",
