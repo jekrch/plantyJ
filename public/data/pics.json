@@ -13,7 +13,11 @@
       "postedBy": "Jacob",
       "addedAt": "2026-06-14T20:38:50.014Z",
       "width": 1280,
-      "height": 1075
+      "height": 1075,
+      "kind": "animal",
+      "bioclipSpeciesId": "Deraeocoris flavilinea",
+      "bioclipCommonName": "",
+      "bioclipScore": 0.1501
     },
     {
       "seq": 102,
@@ -32,7 +36,8 @@
       "kind": "animal",
       "bioclipSpeciesId": "Bombus bimaculatus",
       "bioclipCommonName": "Two-spotted bumble bee",
-      "bioclipScore": 0.6284
+      "bioclipScore": 0.6284,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Two-spotted_bumble_bee"
     },
     {
       "seq": 101,
@@ -102,7 +107,8 @@
       "bioclipSpeciesId": "Xerochrysum bicolor",
       "bioclipCommonName": "",
       "bioclipScore": 0.3178,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Xerochrysum_bicolor"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Xerochrysum_bicolor",
+      "kind": "animal"
     },
     {
       "seq": 97,
@@ -323,7 +329,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -517,7 +523,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
