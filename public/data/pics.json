@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 104,
+      "id": "D pic-1781470020",
+      "shortCode": "D pic",
+      "zoneCode": "bb",
+      "tags": [],
+      "description": "Picture-winged fly resting on a fabric surface near the berry border.",
+      "image": "images/D pic/1781470020.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-06-14T20:47:02.020Z",
+      "width": 1280,
+      "height": 1243
+    },
+    {
       "seq": 103,
       "id": "T amo-1781469528",
       "shortCode": "T amo",
@@ -329,7 +342,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -523,7 +536,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
