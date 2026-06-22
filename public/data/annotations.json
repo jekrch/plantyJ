@@ -609,6 +609,14 @@
         "medicinal"
       ],
       "description": null
+    },
+    {
+      "shortCode": "H jub",
+      "zoneCode": null,
+      "tags": [
+        "native"
+      ],
+      "description": null
     }
   ]
 }
