@@ -498,6 +498,31 @@
       "created": "2026-05-08T04:21:00.298Z"
     },
     {
+      "shortCode": "L lib",
+      "zoneCode": "bb",
+      "verdict": "GOOD",
+      "analysis": "The presence of a skimmer dragonfly (Libellulidae) in the sunny Berry Border (zone \"bb\") is highly beneficial for the garden's ecology. As native, voracious aerial predators, adult skimmers are exceptional biological control agents that hunt a wide variety of flying insects. In the \"bb\" zone, they actively predate on key pests and their adult forms, such as the picture-winged fly (Delphinia picta) and the flying adult moths of the destructive hop looper (Hypena humuli), which feeds on the neighboring hops (Humulus lupulus). They also target other flying nuisances like mosquitoes, midges, and the ash plant bug (Tropidosteptes amoenus) from nearby zones. While they are generalist predators that may occasionally consume beneficial pollinators or native butterflies like the Eastern comma (Polygonia comma), their overall impact as a natural pest suppressant is highly positive and aligns perfectly with the owners' ecological priorities.\n\nSkimmer dragonflies are native to the Twin Cities area and Minnesota, which is home to dozens of species within this family, including the common whitetail and blue dasher. Because their larvae (nymphs) are fully aquatic, the adult's presence in the dry, sunny berry border indicates it has dispersed from a nearby body of water to use the garden as a terrestrial foraging ground. To support these beneficial insects, no negative management is required. The owners' pesticide-free gardening practices are already ideal, as dragonflies are highly sensitive to chemical runoff and insecticides. The owners could further support their local life cycle by incorporating a small, chemical-free garden pond or water feature with emergent native vegetation, providing a safe habitat for the predatory larval stage to mature and control aquatic pests like mosquito larvae.",
+      "references": [
+        "https://www.mndragonfly.info/html/anisoptera.html",
+        "https://www.dnr.state.mn.us/eco/nongame/projects/dragonflies.html",
+        "https://gardeningsolutions.ifas.ufl.edu/design/gardening-with-wildlife/dragonflies/",
+        "https://www.researchgate.net/publication/266565872_Dragonflies_and_Pest_Management",
+        "https://petehillmansnaturephotography.wordpress.com/family-libellulidae-the-chaser-skimmer-darter-dragonflies/"
+      ],
+      "created": "2026-06-22T17:43:14.632Z"
+    },
+    {
+      "shortCode": "L vul",
+      "zoneCode": "nbv",
+      "verdict": "BAD",
+      "analysis": "Leucanthemum vulgare is an invasive perennial herb native to Europe and Asia that presents a severe ecological threat to the North Boulevard zone and the broader garden ecosystem. The compacted clay-loam soil, sunny exposure, and edge-effects of the boulevard represent the ideal disturbed, open habitat where this weed thrives and outcompetes neighboring vegetation. It reproduces aggressively, producing thousands of seeds that can remain viable in the soil for decades, while also expanding vegetatively through creeping, shallow rhizomes. If left unchecked, this aggressive habit will quickly allow it to crowd out and displace valuable native neighbors in the same zone, such as Butterfly Weed and Golden Alexanders. Because the owners prioritize native plant preservation, local ecology, and biodiversity, the presence of this non-native, highly competitive species directly conflicts with their land stewardship goals.\n\nWhile the daisy-like flowers of Leucanthemum vulgare offer some generalist pollen and nectar to small native bees, beetles, and flies during the summer, they do not support specialist native insects or serve as host plants for local butterflies and moths. Furthermore, urban wildlife and birds actively avoid consuming the foliage or seeds; the plant is unpalatable and contains compounds that can irritate the mouths and digestive tracts of animals. This lack of pressure from herbivores creates an ecological imbalance, giving the oxeye daisy a major competitive advantage over palatable native species. In Minnesota, the Department of Natural Resources lists the oxeye daisy as an invasive terrestrial plant. To protect the integrity of the boulevard's native plantings and prevent it from spreading into other areas of the garden, the isolated patch of oxeye daisy should be immediately hand-pulled or dug out, ensuring all underground rhizomes are removed before it can set seed.",
+      "references": [
+        "https://www.dnr.state.mn.us/invasives/terrestrialplants/herbaceous/oxeyedaisy.html",
+        "https://extension.umn.edu/identify-invasive-species/oxeye-daisy"
+      ],
+      "created": "2026-06-22T17:43:14.632Z"
+    },
+    {
       "shortCode": "M dom 'red'",
       "zoneCode": "sy",
       "verdict": "MIXED",
