@@ -322,12 +322,37 @@
       "created": "2026-06-14T20:50:53.641Z"
     },
     {
+      "shortCode": "D vil",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "Dioscorea villosa (Wild Yam) occupies an exceptionally beneficial ecological niche in the front yard zone. The site's compacted clay loam soil, which fluctuates between wet spring conditions and dry summers, alongside its mostly shady exposure, mimics the species' natural woodland edge and thicket habitats in Minnesota. As a native, cold-hardy vine, its behavior of climbing up the arbor provides valuable vertical structure in a narrow urban garden without becoming aggressively invasive like its non-native counterparts.\n\nIn terms of local ecology and the owners' priorities, Wild Yam is highly valuable. While it does not produce edible yams, it is a renowned traditional medicinal plant rich in saponins like diosgenin, which naturally protects it from mammalian herbivores like deer and rabbits. On an insect level, its small greenish flowers attract small native bees, flies, and beetles, while the vine acts as a host for larval specialists, including certain native owlet moths. Furthermore, the dense, leafy foliage provides excellent nesting habitat and protective cover for urban songbirds, who also forage on the wind-dispersed winged seed capsules in autumn.",
+      "references": [
+        "https://www.minnesotawildflowers.info/flower/wild-yam",
+        "https://www.minnesotaseasons.com/Plants/wild_yam.html",
+        "https://www.prairiemoon.com/dioscorea-villosa-wild-yam",
+        "https://www.illinoiswildflowers.info/savanna/plants/wild_yam.html"
+      ],
+      "created": "2026-06-22T18:54:14.616Z"
+    },
+    {
       "shortCode": "e ame",
       "zoneCode": "mpg",
       "verdict": "GOOD",
       "analysis": "Erythronium americanum (Yellow Trout Lily) is a quintessential native spring ephemeral that blankets the woodland floor before the trees leaf out. Its early blooms are incredibly important for early-emerging native bees (including specialized Andrena bees) seeking pollen and nectar. Over time, it forms dense colonies in loamy soils, functioning as an essential ecological anchor for the spring woodland garden.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "E ann",
+      "zoneCode": "nbv",
+      "verdict": "GOOD",
+      "analysis": "Erigeron annuus is a highly beneficial native annual or biennial that is perfectly suited for the challenging, compacted clay-loam soil of the North Boulevard zone. Its deep adaptability allows it to thrive in conditions that range from very dry to damp, acting as a rugged pioneer species that can outcompete aggressive non-native weeds like the Oxeye Daisy present in the same zone. Ecologically, it is a powerhouse, offering a long-lasting bloom from early summer through fall. Its small, yellow-centered white flowers supply abundant nectar and pollen to a diverse suite of native pollinators, including sweat bees, little carpenter bees, masked bees, syrphid flies, and small butterflies. Additionally, it serves as an essential host plant for specialists like the Lynx Flower Moth, whose caterpillars feed on its flowers and seeds, while the plant's seeds provide forage for local birds and visiting wildlife like the Wild Turkey observed in this zone.\n\nFor native-priority garden owners in Minneapolis, this plant is an excellent low-maintenance choice that excels at naturalizing disturbed soils. While its prolific self-seeding habit means it can spread rapidly and may require occasional thinning to maintain structure, this trait is actually advantageous in a boulevard setting where dense coverage is desired to suppress weeds. Co-occurring beautifully with other sun-loving natives in the zone like Golden Alexanders and Butterfly Weed, it contributes to a robust, continuous bloom sequence that supports local urban wildlife throughout the growing season.",
+      "references": [
+        "https://www.minnesotawildflowers.info/flower/annual-fleabane",
+        "https://en.wikipedia.org/wiki/Erigeron_annuus",
+        "https://www.accentnatural.com/fleabane-the-misunderstood-native/"
+      ],
+      "created": "2026-06-22T18:54:14.616Z"
     },
     {
       "shortCode": "E mac",
@@ -414,6 +439,27 @@
         "https://pnwmoths.biol.wwu.edu/browse/family-erebidae/subfamily-hypeninae/hypena/hypena-humuli/"
       ],
       "created": "2026-05-30T17:54:41.782Z"
+    },
+    {
+      "shortCode": "H jub",
+      "zoneCode": "nbv",
+      "verdict": "MIXED",
+      "analysis": "The ecological niche of Hordeum jubatum (Foxtail Barley) in the North Boulevard (nbv) zone represents a mixed scenario. Physically, this native perennial grass is exceptionally well-suited to the harsh conditions of a street-side boulevard. It is highly salt-tolerant, making it resilient to winter road-salting, and thrives in compacted clay/loam soils, handling both dry periods and wet low areas. Ecologically, it provides food and shelter for wildlife, acting as a larval host for native butterflies like the Sandhill Skipper and the Eufala Skipper, as well as moth larvae such as the glassy cutworm. Small songbirds and rodents also feed on its seeds, contributing to local food webs.\n\nHowever, the plant poses serious practical hazards for this specific property. The mature seed heads produce long, brittle awns covered in backward-pointing microscopic barbs. When dry, these seed heads disintegrate easily and cling to passing animals. For the owners' cat, Dolly, who wanders the garden, these sharp barbs represent a severe veterinary danger; they can easily penetrate ears, eyes, paws, and nostrils, burrowing deep into soft tissues to cause painful abscesses that require surgical removal. Additionally, foxtail barley is a prolific self-seeder that colonizes bare soil aggressively. If left unchecked, it can quickly become weedy and outcompete neighboring boulevard native plantings like Zizia aurea and Erigeron annuus. To safely enjoy its ornamental and ecological benefits, the owners must diligently deadhead the seed spikes in mid-summer before they dry out.",
+      "references": [
+        "https://www.minnesotawildflowers.info/grass-sedge-rush/foxtail-barley",
+        "https://www.fs.usda.gov/database/feis/plants/graminoid/horjub/all.html",
+        "https://www.wildflower.org/plants/result.php?id_plant=hoju",
+        "https://ecclectica.brandonu.ca/issues/2004/1/smith.html",
+        "https://en.wikipedia.org/wiki/Hordeum_jubatum",
+        "https://peecnature.org/butterflies-of-new-mexico/butterflies-of-new-mexico-the-skippers-vi-a-folded-wing-skippers-branded-grass-skippers/",
+        "https://www.tnvalleynaba.org/butterflies-of-tennessee/skipper-hesperiidae/eufala-skipper-lerodea-eufala/",
+        "https://www.wikidata.org/wiki/Q9091162",
+        "https://accs.uaa.alaska.edu/wp-content/uploads/Hordeum_jubatum_BIO_HOJU.pdf",
+        "https://gilroydispatch.com/keep-your-pet-safe-from-foxtails/",
+        "https://schertzanimalhospital.com/blog/foxtails/",
+        "https://www.gardenersworld.com/plants/hordeum-jubatum/"
+      ],
+      "created": "2026-06-22T18:54:14.616Z"
     },
     {
       "shortCode": "H lup Wil",
