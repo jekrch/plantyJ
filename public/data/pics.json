@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 108,
+      "id": "D vil-1782154015",
+      "shortCode": "D vil",
+      "zoneCode": "fy",
+      "tags": [],
+      "description": "Climbing up the arbor in the front yard.",
+      "image": "images/D vil/1782154015.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-06-22T18:46:56.700Z",
+      "width": 960,
+      "height": 1280
+    },
+    {
       "seq": 107,
       "id": "H jub-1782149956",
       "shortCode": "H jub",
@@ -399,7 +412,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -593,7 +606,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
