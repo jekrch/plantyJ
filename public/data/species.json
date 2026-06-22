@@ -1683,6 +1683,71 @@
       ],
       "observationsCount": 46280
     },
+    "erigeron-annuus": {
+      "id": "erigeron-annuus",
+      "fullName": "Erigeron annuus",
+      "commonName": "Annual Fleabane",
+      "description": "Erigeron annuus (formerly Aster annuus), the annual fleabane, daisy fleabane, or eastern daisy fleabane, is a species of herbaceous flowering plant, annual or biennial, in the family Asteraceae.",
+      "vernacularNames": [
+        "Annual Fleabane",
+        "Annual fleabane\u00e7",
+        "Daisy Fleabane",
+        "Eastern Daisy Fleabane",
+        "Eastern daisy fleabane (EN)",
+        "Einj\u00e4hriger Feinstrahl (DE)",
+        "Feinstrahl-Berufkraut",
+        "Strigose Fleabane",
+        "Sweet-scabious",
+        "Tall Fleabane",
+        "Whitetop"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Asterales",
+        "family": "Asteraceae",
+        "genus": "Erigeron",
+        "species": "Erigeron annuus",
+        "canonicalName": "Erigeron annuus"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3117449"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:203539-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Erigeron_annuus"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/76897"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q849411"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.147645"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 92766
+    },
     "eryngium-yuccifolium": {
       "id": "eryngium-yuccifolium",
       "fullName": "Eryngium yuccifolium",

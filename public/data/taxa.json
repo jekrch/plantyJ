@@ -754,5 +754,9 @@
   "Dioscoreales": {
     "description": "The Dioscoreales are an order of monocotyledonous flowering plants, organized under modern classification systems, such as the Angiosperm Phylogeny Group or the Angiosperm Phylogeny Web. Among monocot plants, Dioscoreales are grouped with the lilioid monocots, wherein they are a sister group to the Pandanales. In total, the order Dioscoreales comprises three families, 22 genera and about 850 species.",
     "url": "https://en.wikipedia.org/wiki/Dioscoreales"
+  },
+  "Erigeron": {
+    "description": "Erigeron is a large genus of plants in the composite family (Asteraceae). It is placed in the tribe Astereae and is closely related to the Old World asters (Aster) and the true daisies (Bellis). The genus has a cosmopolitan distribution, and the highest diversity occurs in North America.",
+    "url": "https://en.wikipedia.org/wiki/Erigeron"
   }
 }
