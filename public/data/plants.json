@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "H jub",
+      "fullName": "Hordeum jubatum",
+      "commonName": "Foxtail Barley",
+      "variety": null
+    },
+    {
       "shortCode": "L vul",
       "fullName": "Leucanthemum vulgare",
       "commonName": "Oxeye Daisy",
