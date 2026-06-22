@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 106,
+      "id": "L vul-1782149656",
+      "shortCode": "L vul",
+      "zoneCode": "nbv",
+      "tags": [],
+      "description": "Isolated patch in the north boulevard.",
+      "image": "images/L vul/1782149656.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-06-22T17:34:18.498Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 105,
       "id": "L lib-1782144252",
       "shortCode": "L lib",
@@ -366,7 +379,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -560,7 +573,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
