@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "E ann",
+      "fullName": "Erigeron annuus",
+      "commonName": "Annual Fleabane",
+      "variety": null
+    },
+    {
       "shortCode": "D vil",
       "fullName": "Dioscorea villosa",
       "commonName": "Wild Yam",
