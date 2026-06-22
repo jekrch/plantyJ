@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "L vul",
+      "fullName": "Leucanthemum vulgare",
+      "commonName": "Oxeye Daisy",
+      "variety": null
+    },
+    {
       "shortCode": "L lib",
       "fullName": "Libellulidae",
       "commonName": "Skimmer Dragonfly",
