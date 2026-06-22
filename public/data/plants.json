@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "D vil",
+      "fullName": "Dioscorea villosa",
+      "commonName": "Wild Yam",
+      "variety": null
+    },
+    {
       "shortCode": "H jub",
       "fullName": "Hordeum jubatum",
       "commonName": "Foxtail Barley",
