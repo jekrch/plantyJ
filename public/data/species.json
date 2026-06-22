@@ -2139,6 +2139,63 @@
       ],
       "observationsCount": 5348
     },
+    "hordeum-jubatum": {
+      "id": "hordeum-jubatum",
+      "fullName": "Hordeum jubatum",
+      "commonName": "Foxtail Barley",
+      "description": "Hordeum jubatum, with common names foxtail barley, bobtail barley, squirreltail barley, and intermediate barley, is a perennial plant species in the grass family Poaceae. It occurs wild mainly in northern North America and adjacent northeastern Siberia. However, as it escaped often from gardens it can be found worldwide in areas with temperate to warm climates, and is considered a weed in many countries. The species is a polyploid and originated via hybridization of an East Asian Hordeum species with a close but extinct relative of Californian H. brachyantherum. It is grown as an ornamental plant for its attractive inflorescences and when done flowering for its inflorescence.",
+      "vernacularNames": [
+        "Foxtail Barley",
+        "cevada-de-jardim",
+        "cevada-rabo-de-raposa"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Liliopsida",
+        "order": "Poales",
+        "family": "Poaceae",
+        "genus": "Hordeum",
+        "species": "Hordeum jubatum",
+        "canonicalName": "Hordeum jubatum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2706052"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:405267-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Hordeum_jubatum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/60287"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q161883"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.152314"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 20462
+    },
     "humulus-lupulus": {
       "id": "humulus-lupulus",
       "fullName": "Humulus lupulus",
