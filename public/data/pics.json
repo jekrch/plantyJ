@@ -11,7 +11,10 @@
       "postedBy": "Jacob",
       "addedAt": "2026-06-22T17:39:17.796Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "bioclipSpeciesId": "Hordeum jubatum",
+      "bioclipCommonName": "Foxtail Barley",
+      "bioclipScore": 0.972
     },
     {
       "seq": 106,
