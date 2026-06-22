@@ -30,7 +30,8 @@
       "kind": "animal",
       "bioclipSpeciesId": "Libellula quadrimaculata",
       "bioclipCommonName": "Four-spotted chaser",
-      "bioclipScore": 0.8407
+      "bioclipScore": 0.8407,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Four-spotted_chaser"
     },
     {
       "seq": 104,

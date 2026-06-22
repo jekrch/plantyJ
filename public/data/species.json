@@ -2475,6 +2475,63 @@
       ],
       "observationsCount": 36678
     },
+    "leucanthemum-vulgare": {
+      "id": "leucanthemum-vulgare",
+      "fullName": "Leucanthemum vulgare",
+      "commonName": "Oxeye Daisy",
+      "description": "Leucanthemum vulgare, commonly known as the ox-eye daisy, oxeye daisy, dog daisy, marguerite (French: Marguerite commune, \"common marguerite\") and other common names, is a widespread flowering plant native to Europe and the temperate regions of Asia, and an introduced plant to North America, Australia and New Zealand.",
+      "vernacularNames": [
+        "Dog Daisy",
+        "Dog Daisy, White Weed, Moon Daisy",
+        "Garden Chrysanthemum"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Asterales",
+        "family": "Asteraceae",
+        "genus": "Leucanthemum",
+        "species": "Leucanthemum vulgare",
+        "canonicalName": "Leucanthemum vulgare"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/8848598"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:30296198-2"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Leucanthemum_vulgare"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/1404861"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q27164"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.150433"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 164655
+    },
     "libellulidae": {
       "id": "libellulidae",
       "fullName": "Libellulidae",

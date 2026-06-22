@@ -730,5 +730,9 @@
   "Odonata": {
     "description": "Odonata is an order of predatory flying insects that includes the dragonflies and damselflies. The two major groups are distinguished with dragonflies (Anisoptera) usually being bulkier with large compound eyes together and wings spread up or out at rest, while damselflies are usually more slender with eyes placed apart and wings folded together along body at rest. Adult odonates can land and perch, but rarely walk.",
     "url": "https://en.wikipedia.org/wiki/Odonata"
+  },
+  "Leucanthemum": {
+    "description": "Leucanthemum is a genus of flowering plants in the aster family, Asteraceae. Species range naturally from Europe through the Caucasus, Turkey, Iran, Central Asia, and Siberia to the Russian Far East. Some species are known on other continents as introduced species, and some are cultivated as ornamental plants. The name Leucanthemum derives from the Greek words \u03bb\u03b5\u03c5\u03ba\u03cc\u03c2 \u2013 leukos (\"white\") and \u1f04\u03bd\u03b8\u03b5\u03bc\u03bf\u03bd \u2013 anthemon (\"flower\"). Common names for Leucanthemum species usually include the name daisy, but \"daisy\" can also refer to numerous other genera in the Asteraceae family.",
+    "url": "https://en.wikipedia.org/wiki/Leucanthemum"
   }
 }
