@@ -524,6 +524,24 @@
       "type": "predator-prey",
       "from": "p dom",
       "to": "D pic"
+    },
+    {
+      "id": 76,
+      "type": "predator-prey",
+      "from": "L lib",
+      "to": "D pic"
+    },
+    {
+      "id": 77,
+      "type": "predator-prey",
+      "from": "c card",
+      "to": "L lib"
+    },
+    {
+      "id": 78,
+      "type": "predator-prey",
+      "from": "p dom",
+      "to": "L lib"
     }
   ]
 }
