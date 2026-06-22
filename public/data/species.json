@@ -2475,6 +2475,59 @@
       ],
       "observationsCount": 36678
     },
+    "libellulidae": {
+      "id": "libellulidae",
+      "fullName": "Libellulidae",
+      "commonName": "Skimmer Dragonfly",
+      "description": "The chasers, darters, skimmers, and perchers and their relatives form the Libellulidae, the largest family of dragonflies. It is sometimes considered to contain the Corduliidae as the subfamily Corduliinae and the Macromiidae as the subfamily Macromiinae. Even if these are excluded (as Silsby does), there remains a family of over 1000 species. With nearly worldwide distribution, these are the most commonly encountered dragonflies.\nThe genus Libellula is mostly New World but also has one of the few endangered odonates from Japan: Libellula angelina. Many of the members of this genus are brightly colored or have banded wings. The related genus Plathemis includes the whitetails. The genus Celithemis contains several brightly marked species in the southern United States. Members of the genus Sympetrum are called darters (or meadowhawks in North America) and are found throughout most of the world, except Australia. Several tropical species in the genera Trithemis and Zenithoptera are considered to be especially beautiful. Other common genera include Tramea and Pantala.\nLibellulids have stout-bodied larvae with the lower lip or labium developed into a mask over the lower part of the face.\nThe earliest record of the family is the fossil genus \u2020Palaeolibellula Fleck, Nel & Martinez-Delclos, 1999 from the Turonian of Kazakhstan, which appears to represent a stem-member of the family.",
+      "vernacularNames": [
+        "Common Skimmer",
+        "Common Skimmers",
+        "Libellulid\u00e9s",
+        "Perchers",
+        "Skimmer",
+        "Skimmers",
+        "Skimmers or Perchers"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Odonata",
+        "family": "Libellulidae",
+        "genus": null,
+        "species": null,
+        "canonicalName": "Libellulidae"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5936"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Libellulidae"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/47819"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q507694"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 2392599
+    },
     "malus-domestica": {
       "id": "malus-domestica",
       "fullName": "Malus domestica",

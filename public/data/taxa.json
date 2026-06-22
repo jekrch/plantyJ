@@ -722,5 +722,13 @@
   "Ulidiidae": {
     "description": "The Ulidiidae or picture-winged flies are a large and diverse cosmopolitan family of flies (Diptera), and as in related families, most species are herbivorous or detritivorous. They are often known as picture-winged flies, along with members of other families in the superfamily Tephritoidea that have patterns of bands or spots on the wings. Some species share with the Tephritidae an unusual elongated posteroapical projection of the anal cell in the wing, but can be differentiated by the smoothly curving subcostal vein. Two species, Tetanops myopaeformis and Euxesta stigmatias, are agricultural pests.",
     "url": "https://en.wikipedia.org/wiki/Ulidiidae"
+  },
+  "Libellulidae": {
+    "description": "The chasers, darters, skimmers, and perchers and their relatives form the Libellulidae, the largest family of dragonflies. It is sometimes considered to contain the Corduliidae as the subfamily Corduliinae and the Macromiidae as the subfamily Macromiinae. Even if these are excluded, there remains a family of over 1000 species. With nearly worldwide distribution, these are the most commonly encountered dragonflies.",
+    "url": "https://en.wikipedia.org/wiki/Libellulidae"
+  },
+  "Odonata": {
+    "description": "Odonata is an order of predatory flying insects that includes the dragonflies and damselflies. The two major groups are distinguished with dragonflies (Anisoptera) usually being bulkier with large compound eyes together and wings spread up or out at rest, while damselflies are usually more slender with eyes placed apart and wings folded together along body at rest. Adult odonates can land and perch, but rarely walk.",
+    "url": "https://en.wikipedia.org/wiki/Odonata"
   }
 }
