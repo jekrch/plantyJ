@@ -742,5 +742,17 @@
   "Poaceae": {
     "description": "Poaceae, also called Gramineae, is a large and nearly ubiquitous family of monocotyledonous flowering plants commonly known as true grasses. It includes the cereal grasses, bamboos, the grasses of natural grassland and species cultivated in lawns and pasture. Poaceae is the most well-known family within the informal group known as grass.",
     "url": "https://en.wikipedia.org/wiki/Poaceae"
+  },
+  "Dioscorea": {
+    "description": "Dioscorea is a genus of over 600 species of flowering plants in the family Dioscoreaceae, native throughout the tropical and warm temperate regions of the world. The vast majority of the species are tropical, with only a few species extending into temperate climates. It was named by the monk Charles Plumier after the ancient Greek physician and botanist Dioscorides.",
+    "url": "https://en.wikipedia.org/wiki/Dioscorea"
+  },
+  "Dioscoreaceae": {
+    "description": "Dioscoreaceae is a family of monocotyledonous flowering plants, with about 715 known species in nine genera. The best-known member of the family is the yam.",
+    "url": "https://en.wikipedia.org/wiki/Dioscoreaceae"
+  },
+  "Dioscoreales": {
+    "description": "The Dioscoreales are an order of monocotyledonous flowering plants, organized under modern classification systems, such as the Angiosperm Phylogeny Group or the Angiosperm Phylogeny Web. Among monocot plants, Dioscoreales are grouped with the lilioid monocots, wherein they are a sister group to the Pandanales. In total, the order Dioscoreales comprises three families, 22 genera and about 850 species.",
+    "url": "https://en.wikipedia.org/wiki/Dioscoreales"
   }
 }

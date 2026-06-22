@@ -1560,6 +1560,67 @@
       ],
       "observationsCount": 19735
     },
+    "dioscorea-villosa": {
+      "id": "dioscorea-villosa",
+      "fullName": "Dioscorea villosa",
+      "commonName": "Wild Yam",
+      "description": "Dioscorea villosa is a species of twining tuberous vine which is native to eastern North America. It is commonly known as wild yam, colic root, rheumatism root, devil's bones, and fourleaf yam. It is common and widespread in a range stretching from Texas and Florida north to Minnesota, Ontario and Massachusetts.",
+      "vernacularNames": [
+        "Chinaroot",
+        "Wild Yam",
+        "Yellow Yam",
+        "colic root",
+        "four-leaved yam",
+        "wild yam root",
+        "yam root"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Liliopsida",
+        "order": "Dioscoreales",
+        "family": "Dioscoreaceae",
+        "genus": "Dioscorea",
+        "species": "Dioscorea villosa",
+        "canonicalName": "Dioscorea villosa"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2754553"
+        },
+        {
+          "name": "POWO",
+          "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:318778-1"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Dioscorea_villosa"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/129324"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q309632"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.153733"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 21406
+    },
     "echinacea-purpurea": {
       "id": "echinacea-purpurea",
       "fullName": "Echinacea purpurea",
