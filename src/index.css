@@ -58,14 +58,20 @@ button,
   opacity: 1;
 }
 
-/* Subtle image scale on hover */
-.panel-item img {
-  transition: transform 0.3s ease-in-out;
-  will-change: transform;
-}
+/* Subtle image scale on hover — pointer devices only.
+   Wrapping in @media (hover: hover) keeps `will-change`/transform off touch
+   devices (iOS Safari), so every grid image is NOT permanently promoted to its
+   own GPU layer. Permanent per-item layers blow iOS's compositing-tile budget,
+   which evicts/re-rasterizes tiles mid-scroll and shows up as black blinking. */
+@media (hover: hover) {
+  .panel-item img {
+    transition: transform 0.3s ease-in-out;
+  }
 
-.panel-item:hover img {
-  transform: scale(1.02);
+  .panel-item:hover img {
+    transform: scale(1.02);
+    will-change: transform;
+  }
 }
 
 /* Placeholder shimmer for loading */

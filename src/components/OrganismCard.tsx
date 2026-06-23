@@ -79,7 +79,6 @@ export default function OrganismCard({ organism, zoneNameByCode, onOpen }: Props
   return (
     <div
       className="panel-item group relative cursor-pointer overflow-hidden rounded-sm bg-surface-raised"
-      style={{ WebkitMaskImage: "radial-gradient(white, white)" }}
       onPointerUp={handlePointerUp}
     >
       <div style={{ aspectRatio, width: "100%" }}>

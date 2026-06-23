@@ -102,7 +102,7 @@ export default function App() {
       {viewMode === "gallery" && <BackgroundEchoes organismPositions={organismPositions} />}
       <header
         ref={headerRef}
-        className="sticky top-0 z-40 bg-surface/90 backdrop-blur-sm border-b border-ink-faint/30"
+        className="sticky top-0 z-40 bg-surface/95 border-b border-ink-faint/30"
       >
         <div className="content-container px-1 py-0 flex items-center justify-between">
           <div className="flex items-center gap-2 px-2 py-2">
