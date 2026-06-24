@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 110,
+      "id": "A atr-1782275483",
+      "shortCode": "A atr",
+      "zoneCode": "sy",
+      "tags": [
+        "flowering"
+      ],
+      "description": "about 8 feet tall and flowering",
+      "image": "images/A atr/1782275483.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-06-24T04:31:25.479Z",
+      "width": 832,
+      "height": 1280
+    },
+    {
       "seq": 109,
       "id": "E ann-1782154171",
       "shortCode": "E ann",
@@ -431,7 +446,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -625,7 +640,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
