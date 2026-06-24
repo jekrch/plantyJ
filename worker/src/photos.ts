@@ -10,7 +10,7 @@ import type {
 import { downloadFile, type Replier } from "./telegram";
 import { parseCaption, resolveFields, UNIDENTIFIED_CODE, UNIDENTIFIED_PREFIX } from "./caption";
 import { assertValidCode } from "./validation";
-import { runOrEnqueue } from "./jobs";
+import { runOrEnqueue, checkAskRateLimit } from "./jobs";
 import {
   appendPic,
   appendZonePic,
@@ -251,6 +251,54 @@ async function handleIdentify(
 }
 
 /**
+ * /ask {description} sent with a photo. The user is telling the bot what the
+ * plant is and where — Gemini normalizes it into one canonical caption proposal
+ * the user /confirms (or /resp to revise). Like /identify, the vision call is
+ * tried inline (runOrEnqueue) and falls back to the queue if it runs long.
+ */
+async function handleAskPhoto(
+  prompt: string | null,
+  message: TelegramMessage,
+  env: Env,
+  reply: Replier,
+): Promise<void> {
+  if (!message.from || !env.ASK_CACHE) {
+    await reply("/ask on a photo requires KV (ASK_CACHE) and a known user.");
+    return;
+  }
+  if (!prompt) {
+    await reply(
+      "Describe the plant after /ask — what it is and which zone, plus any tags or notes.\n" +
+        'e.g. /ask cherry tomato in fb1, first ripe fruit, tag edible\n\n' +
+        "Don't know what it is? Post it with /identify and the bot will guess.",
+    );
+    return;
+  }
+  if (!(await checkAskRateLimit(message.from.id, env))) {
+    await reply("Rate limit reached: max 100 LLM queries per day.");
+    return;
+  }
+  const photo = message.photo![message.photo!.length - 1];
+  const status = await runOrEnqueue(env, {
+    id: `describe-${message.from.id}-${message.message_id}`,
+    kind: "describe",
+    chatId: message.chat.id,
+    messageId: message.message_id,
+    userId: message.from.id,
+    fileId: photo.file_id,
+    imgWidth: photo.width,
+    imgHeight: photo.height,
+    prompt,
+    postedBy: postedByOf(message),
+    createdAt: new Date().toISOString(),
+    attempts: 0,
+  });
+  if (status === "queued") {
+    await reply("Working out the details — proposal will arrive shortly.");
+  }
+}
+
+/**
  * Handle any photo message. Returns true if the message was a photo (handled
  * or rejected with help text), false if it had no photo at all.
  */
@@ -270,11 +318,14 @@ export async function handlePhotoMessage(
     const caption = message.caption.trim();
     const zonePicMatch = caption.match(/^\/zonepic\s+(\S+)(?:\s*\/\/\s*(\S[\s\S]*))?$/);
     const identifyMatch = caption.match(/^\/identify(?:\s+(\S[\s\S]*))?$/i);
+    const askMatch = caption.match(/^\/ask(?:\s+(\S[\s\S]*))?$/i);
     if (zonePicMatch) {
       assertValidCode("zoneCode", zonePicMatch[1]);
       await handleZonePic(zonePicMatch[1], zonePicMatch[2]?.trim() || null, message, env, reply);
     } else if (identifyMatch) {
       await handleIdentify(identifyMatch[1]?.trim() || null, message, env, reply);
+    } else if (askMatch) {
+      await handleAskPhoto(askMatch[1]?.trim() || null, message, env, reply);
     } else {
       await handlePlantPic(message, env, reply);
     }

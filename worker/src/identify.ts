@@ -12,6 +12,11 @@ const MAX_CANDIDATES = 3;
 export const PENDING_IDENTIFY_KEY = (userId: number) => `pending:identify:${userId}`;
 export const PENDING_IDENTIFY_TTL = 3600; // 1h, same as /ask pending proposals
 
+// Describe-a-specimen (/ask on a photo): the user asserts what the plant is and
+// where; Gemini normalizes it into one canonical caption the user /confirms.
+export const PENDING_SPECIMEN_KEY = (userId: number) => `pending:specimen:${userId}`;
+export const PENDING_SPECIMEN_TTL = 3600; // 1h, same as identify
+
 export interface IdentifyCandidate {
   /** Human-readable one-liner shown in the numbered list. */
   label: string;
@@ -43,6 +48,31 @@ export interface IdentifyResult {
 export interface IdentifyPriorContext {
   candidates: IdentifyCandidate[];
   prompts: string[];
+}
+
+/** A single proposed specimen entry awaiting /confirm (from /ask on a photo). */
+export interface SpecimenProposal {
+  /** Canonical photo caption, ready to ingest exactly like a normal upload. */
+  caption: string;
+  /** Human-readable one-liner shown to the user. */
+  label: string;
+  notes: string;
+}
+
+export interface PendingSpecimen extends SpecimenProposal {
+  createdAt: string;
+  fileId: string;
+  width?: number;
+  height?: number;
+  postedBy: string;
+  /** History of user prompts this session (initial /ask first, then each /resp). */
+  userPrompts: string[];
+}
+
+export interface DescribeResult {
+  /** Full Telegram message body (proposal + confirm/resp/cancel instructions). */
+  body: string;
+  proposal: SpecimenProposal | null;
 }
 
 interface RollupZone {
@@ -368,4 +398,165 @@ export async function identifyPhoto(
   if (costLine) lines.push("", costLine);
 
   return { body: lines.join("\n"), candidates };
+}
+
+// ─── /ask on a photo: describe-a-specimen ──────────────────────────────────
+
+export function buildDescribePrompt(
+  rollup: Rollup,
+  userPrompt: string,
+  priorPrompts: string[] | null,
+): string {
+  const today = new Date().toISOString().slice(0, 10);
+  const zoneList =
+    rollup.zones.length > 0
+      ? rollup.zones.map((z) => `  ${z.code}${z.name ? ` — ${z.name}` : ""}`).join("\n")
+      : "  (none defined yet)";
+  const plantList =
+    rollup.plants.length > 0
+      ? rollup.plants
+          .map(
+            (p) =>
+              `  ${p.shortCode} | ${p.commonName ?? "?"}${p.fullName ? ` | ${p.fullName}` : ""}`,
+          )
+          .join("\n")
+      : "  (none registered yet)";
+
+  const isRefine = priorPrompts !== null && priorPrompts.length > 0;
+  const intro = isRefine
+    ? `You are the PlantyJ garden-journal assistant. The user is recording a plant photo and previously described it; they have now sent a correction. The same photo is attached again.`
+    : `You are the PlantyJ garden-journal assistant. The user is recording a plant photo and is telling you in plain English what it is and where it lives. The photo is attached for reference.`;
+
+  const context = `Context: a private garden journal for a property in Minneapolis, MN (USDA hardiness zone 4b/5a), NW corner of a city block, clay/loam soil. Today is ${today}.`;
+
+  const priorBlock = isRefine
+    ? `\n# Earlier in this session\n${priorPrompts
+        .map((p, i) => `  ${i === 0 ? "initial /ask" : `/resp #${i}`}: ${p || "(no text)"}`)
+        .join("\n")}\n`
+    : "";
+
+  return `${intro}
+
+${context}
+
+The user says: "${userPrompt}"
+
+# Your job
+TRUST the user's identification and location — they are telling you, not asking you to guess. Do NOT second-guess a plausible ID. Normalize their description into ONE canonical specimen entry:
+- Fill the scientific name (binomial 'Genus species') if they gave only a common name, and the common name if they gave only a scientific name. Put any cultivar/variety in "variety".
+- Map the location they stated to the single closest exact zoneCode from the list below. If they didn't state a location, pick the most plausible existing zone and flag that assumption in "notes".
+- If their plant is clearly one already registered below, set matchedShortCode to its exact shortCode (copy verbatim, spaces included) so a new plant record isn't created. Otherwise leave matchedShortCode "".
+- Pull any tags or free-text notes they mention into "tags" / "description". Tags: bare = pic-level (edible, fruiting), "+tag" = plant+zone-level (+native), "++tag" = plant-level (++medicinal).
+- Only override the user's ID if it is botanically impossible for this region/season or contradicts the photo; if so, say why in "notes" and use the corrected ID.
+${priorBlock}
+# Known zones (use an exact code for zoneCode)
+${zoneList}
+
+# Existing plants (set matchedShortCode to one of these ONLY if it is clearly that same plant)
+${plantList}
+
+# Output
+Return exactly ONE candidate in the candidates array (the canonical entry). Use "message" only for a brief note if you changed or assumed something. If you cannot resolve a zone at all, still return the candidate with your best zone guess and explain in "notes".`;
+}
+
+/**
+ * /ask on a photo: the user describes a specimen; turn it into one ready-to-ingest
+ * caption proposal. Caller persists the proposal + fileId so /confirm can commit it
+ * through the normal upload path, and /resp can revise it.
+ */
+export async function describeSpecimen(
+  env: Env,
+  imageBase64: string,
+  userPrompt: string,
+  priorPrompts: string[] | null = null,
+): Promise<DescribeResult> {
+  const rollup = await loadRollup(env);
+  const knownShortCodes = new Set(rollup.plants.map((p) => p.shortCode));
+  const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
+
+  const response = await client.models.generateContent({
+    model: IDENTIFY_MODEL,
+    contents: [
+      {
+        role: "user",
+        parts: [
+          { text: buildDescribePrompt(rollup, userPrompt, priorPrompts) },
+          { inlineData: { mimeType: "image/jpeg", data: imageBase64 } },
+        ],
+      },
+    ],
+    config: { responseMimeType: "application/json", responseSchema: RESPONSE_SCHEMA },
+  });
+
+  const meta = response.usageMetadata;
+  const usage: Usage = {
+    prompt: meta?.promptTokenCount ?? 0,
+    cached: 0,
+    output: meta?.candidatesTokenCount ?? 0,
+    cacheCreation: 0,
+    cacheStorageTokenHours: 0,
+  };
+  await recordCost(env, IDENTIFY_MODEL, usage).catch((err) =>
+    console.log(`[describe] recordCost failed: ${(err as Error).message}`),
+  );
+  const cost = estimateCost(IDENTIFY_MODEL, usage);
+  const costLine =
+    cost === null
+      ? ""
+      : `[${formatUsd(cost)} | ${usage.prompt.toLocaleString()} in / ${usage.output.toLocaleString()} out]`;
+
+  let parsed: { candidates?: unknown; message?: unknown };
+  try {
+    parsed = JSON.parse(response.text ?? "{}");
+  } catch {
+    parsed = {};
+  }
+  const overview =
+    typeof parsed.message === "string" ? parsed.message.replace(/\r/g, "").trim() : "";
+  const rawList = Array.isArray(parsed.candidates) ? parsed.candidates : [];
+  const raw = rawList.length > 0 && rawList[0] && typeof rawList[0] === "object" ? rawList[0] : null;
+
+  const proposal = raw ? buildProposal(raw as RawCandidate, knownShortCodes) : null;
+
+  if (!proposal) {
+    const why =
+      overview ||
+      "Couldn't turn that into a specimen entry — make sure you name the plant and a zone.";
+    const body =
+      `${why}\n\nReply /ask {description} with a clearer photo/description (include a zone), or /cancel.` +
+      (costLine ? `\n${costLine}` : "");
+    return { body, proposal: null };
+  }
+
+  const lines: string[] = [];
+  if (overview) lines.push(overview, "");
+  lines.push(
+    "Proposed specimen:",
+    `  ${proposal.label}`,
+    `  ${proposal.notes}`,
+    `  caption: ${proposal.caption}`,
+    "",
+    "Reply /confirm to save this photo with that entry, /resp {correction} to revise (change zone, fix the species, add tags), or /cancel to discard.",
+  );
+  if (costLine) lines.push("", costLine);
+
+  return { body: lines.join("\n"), proposal };
+}
+
+function buildProposal(c: RawCandidate, knownShortCodes: Set<string>): SpecimenProposal | null {
+  const caption = buildCaption(c, knownShortCodes);
+  if (!caption) return null;
+  const common = typeof c.commonName === "string" ? sanitizeLine(c.commonName) : "";
+  const sci = typeof c.scientificName === "string" ? sanitizeLine(c.scientificName) : "";
+  const variety = typeof c.variety === "string" ? sanitizeLine(c.variety) : "";
+  const matched = typeof c.matchedShortCode === "string" ? sanitizeLine(c.matchedShortCode) : "";
+  const notes = typeof c.notes === "string" ? sanitizeLine(c.notes) : "";
+  const isExisting = !!matched && knownShortCodes.has(matched);
+  const label =
+    `${common || sci || "Unknown"}${sci && common ? ` (${sci}${variety ? ` '${variety}'` : ""})` : ""}`;
+  return {
+    caption,
+    label,
+    notes: (isExisting ? `existing plant "${matched}". ` : "new plant. ") + (notes || "(no notes)"),
+  };
 }

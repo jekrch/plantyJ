@@ -11,11 +11,17 @@ import { type Replier } from "./telegram";
 import { HELP_HEADER } from "./help";
 import { MODEL_ALIASES, type ProposedCommand, type Thread } from "./ask";
 import { ingestPlantPhoto } from "./photos";
-import { PENDING_IDENTIFY_KEY, type PendingIdentify } from "./identify";
+import {
+  PENDING_IDENTIFY_KEY,
+  PENDING_SPECIMEN_KEY,
+  type PendingIdentify,
+  type PendingSpecimen,
+} from "./identify";
 import { submitAnalyzeRun, analyzeStatus, clearAnalyzeRun, formatAnalyzeUsage } from "./analyze";
 import {
   enqueueJob,
   runOrEnqueue,
+  checkAskRateLimit,
   PENDING_REASSESS_KEY,
   type PendingReassess,
 } from "./jobs";
@@ -54,21 +60,9 @@ interface PendingDo {
 const PENDING_DO_KEY = (userId: number) => `pending:do:${userId}`;
 const STYLE_KEY = (userId: number) => `style:${userId}`;
 const THREAD_KEY = (userId: number) => `thread:${userId}`;
-const ASK_DAILY_LIMIT = 100;
 const CONFIRM_BATCH_RATE_PER_MIN = 25;
 
 // ─── shared helpers ────────────────────────────────────────────────────────
-
-async function checkAskRateLimit(userId: number, env: Env): Promise<boolean> {
-  if (!env.ASK_CACHE) return true;
-  const today = new Date().toISOString().slice(0, 10);
-  const key = `ratelimit:ask:${userId}:${today}`;
-  const raw = await env.ASK_CACHE.get(key);
-  const count = raw ? parseInt(raw, 10) : 0;
-  if (count >= ASK_DAILY_LIMIT) return false;
-  await env.ASK_CACHE.put(key, String(count + 1), { expirationTtl: 86400 });
-  return true;
-}
 
 function joinLines(lines: (string | null | false | undefined)[]): string {
   return lines.filter(Boolean).join("\n");
@@ -186,11 +180,12 @@ async function handleCancel(message: TelegramMessage, env: Env, reply: Replier):
     await Promise.all([
       env.ASK_CACHE.delete(PENDING_DO_KEY(message.from.id)).catch(() => {}),
       env.ASK_CACHE.delete(PENDING_IDENTIFY_KEY(message.from.id)).catch(() => {}),
+      env.ASK_CACHE.delete(PENDING_SPECIMEN_KEY(message.from.id)).catch(() => {}),
       env.ASK_CACHE.delete(PENDING_REASSESS_KEY(message.from.id)).catch(() => {}),
     ]);
   }
   await reply(
-    "Cancelled. Nothing run; any pending proposals, identify options, or reassessment dropped.",
+    "Cancelled. Nothing run; any pending proposals, identify options, specimen, or reassessment dropped.",
   );
 }
 
@@ -239,6 +234,25 @@ async function handleConfirm(
 ): Promise<void> {
   if (!message.from || !env.ASK_CACHE) {
     await reply("/confirm requires KV and a known user.");
+    return;
+  }
+  // A pending specimen (from /ask on a photo) is the most recent deliberate
+  // action, so it takes precedence over an older proposal list or reassessment.
+  const specimenRaw = await env.ASK_CACHE.get(PENDING_SPECIMEN_KEY(message.from.id));
+  if (specimenRaw) {
+    const pending: PendingSpecimen = JSON.parse(specimenRaw);
+    // Replay the stored photo through the exact normal-upload path, just like /pick.
+    const photo: TelegramPhotoSize = {
+      file_id: pending.fileId,
+      file_unique_id: "",
+      width: pending.width ?? 0,
+      height: pending.height ?? 0,
+    };
+    const result = await ingestPlantPhoto(env, pending.caption, photo, pending.postedBy);
+    // Drop the pending entry only after a successful commit so a failure (bad
+    // zone, GitHub conflict) leaves it intact to retry or /resp.
+    await env.ASK_CACHE.delete(PENDING_SPECIMEN_KEY(message.from.id)).catch(() => {});
+    await reply(result);
     return;
   }
   const raw = await env.ASK_CACHE.get(PENDING_DO_KEY(message.from.id));
@@ -384,6 +398,41 @@ async function handleResp(
   const question = m[2].trim();
   if (!message.from || !env.ASK_CACHE) {
     await reply("No active /ask thread or /identify session.");
+    return;
+  }
+
+  // Prefer a pending specimen (from /ask on a photo) over everything else: it's
+  // the narrowest, most recent context, and a correction here is about that photo.
+  const specimenRaw = await env.ASK_CACHE.get(PENDING_SPECIMEN_KEY(message.from.id));
+  if (specimenRaw) {
+    if (aliasOverride) {
+      await reply(
+        "Model override (/resp1, /resp2, /resp3) doesn't apply to a photo /ask — using the vision model. /cancel the specimen first to fall through to an /ask thread.",
+      );
+    }
+    const pending: PendingSpecimen = JSON.parse(specimenRaw);
+    if (!(await checkAskRateLimit(message.from.id, env))) {
+      await reply("Rate limit reached: max 100 LLM queries per day.");
+      return;
+    }
+    const status = await runOrEnqueue(env, {
+      id: `describe-resp-${message.from.id}-${message.message_id}`,
+      kind: "describe",
+      chatId: message.chat.id,
+      messageId: message.message_id,
+      userId: message.from.id,
+      fileId: pending.fileId,
+      imgWidth: pending.width,
+      imgHeight: pending.height,
+      prompt: question,
+      postedBy: pending.postedBy,
+      priorPrompts: pending.userPrompts ?? [],
+      createdAt: new Date().toISOString(),
+      attempts: 0,
+    });
+    if (status === "queued") {
+      await reply("Revising — updated proposal will arrive shortly.");
+    }
     return;
   }
 

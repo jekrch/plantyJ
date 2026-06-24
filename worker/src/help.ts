@@ -56,6 +56,23 @@ Identify from a photo:
   /cancel — discard the identify options.
   Options expire after 1 hour.
 
+Add a plant by describing it (when you already know what it is):
+  Send a photo with the caption:
+  /ask {plain-English description}
+  e.g. /ask cherry tomato in fb1, first ripe fruit, tag it edible
+  Unlike /identify (where the bot guesses), here you tell it what the plant
+  is and which zone — it just fills in the canonical caption (scientific +
+  common name, zone code, tags, note) and proposes ONE entry:
+  /confirm — save THIS photo with the proposed entry, committed exactly like
+    a normal upload (existing plants are reused; new ones get an auto code).
+  /resp {correction} — revise the proposal (fix the species, change the
+    zone, add tags) against the same photo. Examples:
+      /resp it's actually in fb2
+      /resp add tag ++medicinal
+      /resp the variety is 'Sungold'
+  /cancel — discard the pending specimen.
+  The proposal expires after 1 hour.
+
 Pic commands:
   /delete {seq} — Remove a pic by its sequential ID
   /update {seq} {field} {value} — Update a field on a pic or its plant
@@ -113,10 +130,11 @@ Q&A and actions (propose-then-confirm):
     starts a fresh one). Follow-ups can also produce a new set of
     proposals to /confirm. /ask, and /resp accept a model suffix
     (1/2/3) to override the model for that turn.
-    If a /identify session is currently pending, /resp refines that
-    instead (see the Identify section). /cancel an identify session
-    first to fall through to the /ask thread.
-  /confirm — Run all proposed commands from the most recent turn.
+    If a pending photo specimen (from /ask on a photo) or a /identify
+    session is active, /resp refines that instead. /cancel it first to
+    fall through to the /ask thread.
+  /confirm — Save a pending photo specimen, or run all proposed commands
+    from the most recent turn.
   /confirm 1 3 — Run only the listed proposals (space- or comma-separated).
   /cancel — Drop the pending proposals without running anything.
   Pending proposals expire after 1 hour and are replaced when a new turn

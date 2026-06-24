@@ -6,10 +6,14 @@ import { runBatch } from "./batch";
 import { arrayBufferToBase64 } from "./github";
 import {
   identifyPhoto,
+  describeSpecimen,
   PENDING_IDENTIFY_KEY,
   PENDING_IDENTIFY_TTL,
+  PENDING_SPECIMEN_KEY,
+  PENDING_SPECIMEN_TTL,
   type IdentifyCandidate,
   type PendingIdentify,
+  type PendingSpecimen,
 } from "./identify";
 
 // /ask and /confirm calls can exceed Cloudflare's per-invocation limits
@@ -40,10 +44,26 @@ const INLINE_TIMEOUT_MS = 10000;
 // 50-subrequest cap and finishes 54-command runs in 3 ticks.
 const CONFIRM_CHUNK_SIZE = 25;
 
-type JobKind = "ask" | "confirm" | "identify" | "reassess" | "reassess-gen";
+type JobKind = "ask" | "confirm" | "identify" | "describe" | "reassess" | "reassess-gen";
 
 export const PENDING_REASSESS_KEY = (userId: number) => `pending:reassess:${userId}`;
 const PENDING_REASSESS_TTL_SECONDS = 3600;
+
+const ASK_DAILY_LIMIT = 100;
+
+// Per-user daily cap shared by every LLM-bound entry point (/ask text, /ask on a
+// photo, /resp, /reassess). Returns false once the user is over the cap for the
+// day. Best-effort: missing KV disables the limit.
+export async function checkAskRateLimit(userId: number, env: Env): Promise<boolean> {
+  if (!env.ASK_CACHE) return true;
+  const today = new Date().toISOString().slice(0, 10);
+  const key = `ratelimit:ask:${userId}:${today}`;
+  const raw = await env.ASK_CACHE.get(key);
+  const count = raw ? parseInt(raw, 10) : 0;
+  if (count >= ASK_DAILY_LIMIT) return false;
+  await env.ASK_CACHE.put(key, String(count + 1), { expirationTtl: 86400 });
+  return true;
+}
 
 /** Resolved /reassess target awaiting /confirm. */
 export interface PendingReassess {
@@ -203,6 +223,35 @@ async function runJob(env: Env, job: JobRecord): Promise<RunStatus> {
       };
       await env.ASK_CACHE.put(PENDING_IDENTIFY_KEY(job.userId), JSON.stringify(pending), {
         expirationTtl: PENDING_IDENTIFY_TTL,
+      });
+    }
+    await sendReply(env.TELEGRAM_BOT_TOKEN, job.chatId, job.messageId, body);
+    return "done";
+  }
+
+  if (job.kind === "describe") {
+    const bytes = await downloadFile(job.fileId ?? "", env.TELEGRAM_BOT_TOKEN);
+    const { body, proposal } = await describeSpecimen(
+      env,
+      arrayBufferToBase64(bytes),
+      job.prompt ?? "",
+      job.priorPrompts ?? null,
+    );
+    // Persist the proposal + file_id so /confirm can replay the photo through the
+    // normal ingest path and /resp can revise it. Only store on a real proposal.
+    if (proposal && job.userId !== null && env.ASK_CACHE) {
+      const promptHistory = [...(job.priorPrompts ?? []), job.prompt ?? ""];
+      const pending: PendingSpecimen = {
+        ...proposal,
+        createdAt: new Date().toISOString(),
+        fileId: job.fileId ?? "",
+        width: job.imgWidth,
+        height: job.imgHeight,
+        postedBy: job.postedBy ?? "unknown",
+        userPrompts: promptHistory,
+      };
+      await env.ASK_CACHE.put(PENDING_SPECIMEN_KEY(job.userId), JSON.stringify(pending), {
+        expirationTtl: PENDING_SPECIMEN_TTL,
       });
     }
     await sendReply(env.TELEGRAM_BOT_TOKEN, job.chatId, job.messageId, body);
