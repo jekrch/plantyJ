@@ -542,6 +542,42 @@
       "type": "predator-prey",
       "from": "p dom",
       "to": "L lib"
+    },
+    {
+      "id": 79,
+      "type": "predator-prey",
+      "from": "L lib",
+      "to": "B imp"
+    },
+    {
+      "id": 80,
+      "type": "predator-prey",
+      "from": "L lib",
+      "to": "V ata"
+    },
+    {
+      "id": 81,
+      "type": "predator-prey",
+      "from": "L lib",
+      "to": "V virg"
+    },
+    {
+      "id": 82,
+      "type": "predator-prey",
+      "from": "L lib",
+      "to": "P com"
+    },
+    {
+      "id": 83,
+      "type": "predator-prey",
+      "from": "L lib",
+      "to": "H hum"
+    },
+    {
+      "id": 84,
+      "type": "predator-prey",
+      "from": "L lib",
+      "to": "T amo"
     }
   ]
 }
