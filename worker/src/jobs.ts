@@ -1,6 +1,7 @@
 import type { Env } from "./types";
 import { sendReply, downloadFile } from "./telegram";
 import { answerQuestion, type Thread } from "./ask";
+import { resolveReassessTarget, generateReassessment } from "./analyze";
 import { runBatch } from "./batch";
 import { arrayBufferToBase64 } from "./github";
 import {
@@ -39,7 +40,19 @@ const INLINE_TIMEOUT_MS = 10000;
 // 50-subrequest cap and finishes 54-command runs in 3 ticks.
 const CONFIRM_CHUNK_SIZE = 25;
 
-type JobKind = "ask" | "confirm" | "identify";
+type JobKind = "ask" | "confirm" | "identify" | "reassess" | "reassess-gen";
+
+export const PENDING_REASSESS_KEY = (userId: number) => `pending:reassess:${userId}`;
+const PENDING_REASSESS_TTL_SECONDS = 3600;
+
+/** Resolved /reassess target awaiting /confirm. */
+export interface PendingReassess {
+  shortCode: string;
+  zoneCode: string;
+  displayName: string;
+  note: string;
+  createdAt: string;
+}
 
 export interface JobRecord {
   id: string;
@@ -67,6 +80,10 @@ export interface JobRecord {
   /** Prompt history from earlier turns in this identify session (excluding the
    *  current `prompt`). */
   priorPrompts?: string[];
+  // reassess-gen
+  targetShortCode?: string;
+  targetZoneCode?: string;
+  note?: string;
   createdAt: string;
   attempts: number;
 }
@@ -189,6 +206,56 @@ async function runJob(env: Env, job: JobRecord): Promise<RunStatus> {
       });
     }
     await sendReply(env.TELEGRAM_BOT_TOKEN, job.chatId, job.messageId, body);
+    return "done";
+  }
+
+  if (job.kind === "reassess") {
+    // Phase 1: resolve the free-text request to a single specimen+zone + note.
+    const resolution = await resolveReassessTarget(env, job.request ?? "");
+    if (!resolution.ok) {
+      await sendReply(env.TELEGRAM_BOT_TOKEN, job.chatId, job.messageId, resolution.message);
+      return "done";
+    }
+    if (job.userId !== null && env.ASK_CACHE) {
+      const pending: PendingReassess = {
+        shortCode: resolution.shortCode,
+        zoneCode: resolution.zoneCode,
+        displayName: resolution.displayName,
+        note: resolution.note,
+        createdAt: new Date().toISOString(),
+      };
+      await env.ASK_CACHE.put(PENDING_REASSESS_KEY(job.userId), JSON.stringify(pending), {
+        expirationTtl: PENDING_REASSESS_TTL_SECONDS,
+      });
+    }
+    await sendReply(
+      env.TELEGRAM_BOT_TOKEN,
+      job.chatId,
+      job.messageId,
+      `Will reassess ${resolution.displayName} (${resolution.shortCode}) in zone ${resolution.zoneCode}.\n\nNote to save:\n${resolution.note}\n\nReply /confirm to regenerate the analysis with this note, or /cancel to drop it.`,
+    );
+    return "done";
+  }
+
+  if (job.kind === "reassess-gen") {
+    // Phase 2: grounded regeneration with the saved note.
+    const result = await generateReassessment(
+      env,
+      job.targetShortCode ?? "",
+      job.targetZoneCode ?? "",
+      job.note ?? "",
+    );
+    if (job.userId !== null && env.ASK_CACHE) {
+      await env.ASK_CACHE.delete(PENDING_REASSESS_KEY(job.userId)).catch(() => {});
+    }
+    await sendReply(
+      env.TELEGRAM_BOT_TOKEN,
+      job.chatId,
+      job.messageId,
+      result.ok
+        ? `Reassessed ${job.targetShortCode} in zone ${job.targetZoneCode}: verdict ${result.verdict}. Saved note and updated ai_analysis.json.`
+        : `Reassessment failed: ${result.message}`,
+    );
     return "done";
   }
 

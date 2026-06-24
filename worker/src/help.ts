@@ -155,6 +155,13 @@ Ecological analysis:
     tokens used, elapsed time. Run repeatedly to watch the cron drain.
   /analyze-cancel — Clear the queue and run state (use if a run is
     stuck or you want to abandon it).
+  /reassess {plain-English description} — Regenerate one specimen's
+    analysis in light of new first-hand info you provide. Describe the
+    plant/zone loosely and what changed (e.g. "the milkweed by the back
+    fence — monarchs aren't visiting and it's covered in aphids"). The
+    bot resolves which plant+zone you mean, summarizes your new info as a
+    concise internal note, and replies for /confirm before regenerating
+    the grounded analysis with that note saved on the entry.
 
 Cost:
   /cost — Estimated Gemini spend today and this month, with token totals

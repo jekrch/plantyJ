@@ -143,6 +143,10 @@ export interface AiAnalysisEntry {
   analysis: string;
   references: string[];
   created: string;
+  /** Internal-only: a concise summary of user-provided observations from
+   *  /reassess. Weighed into regenerations; never rendered on the public site
+   *  (the frontend AIAnalysis type intentionally omits it). */
+  note?: string;
 }
 
 export interface Gallery {

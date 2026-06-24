@@ -105,9 +105,20 @@ export function findMissingPairs(
   return out;
 }
 
-function buildSinglePairPrompt(rollupJson: string, pair: Pair, zoneFilter: string | null): string {
+function buildSinglePairPrompt(
+  rollupJson: string,
+  pair: Pair,
+  zoneFilter: string | null,
+  note?: string,
+): string {
   const filterNote = zoneFilter
     ? `\nThis run is scoped to zone "${zoneFilter}". Still consider neighboring zones and the property as a whole when judging ecological fit — don't restrict reasoning to that zone.`
+    : "";
+
+  const noteSection = note
+    ? `\n\n# Gardener's first-hand observation (NOT in the rollup)
+The gardener submitted this note about this specimen in this zone. Treat it as reliable first-hand observation and weigh it heavily — it may override generic expectations from the rollup or from web sources. Reflect it in your verdict and reasoning:
+"${note}"`
     : "";
 
   return `You are analyzing the ecological niche of a single specimen (plant or animal) observed in a Minneapolis, MN garden journal. The property is on the NW corner of a city block, USDA hardiness zone 4b/5a, clay/loam soil. Owners prioritize native plants, edibles, medicinals, and supporting local ecology.${filterNote}
@@ -115,7 +126,7 @@ function buildSinglePairPrompt(rollupJson: string, pair: Pair, zoneFilter: strin
 # Garden context (full rollup)
 # Schema: zones[]: {code, name?, description?}; plants[]: {shortCode, fullName?, commonName?, tags?, byZone?, pics, zonesSeen, kind?, ...}; "?" fields omitted when null/empty; dates are YYYY-MM-DD
 # "kind" may be "plant" or "animal"; if absent, treat as plant.
-${rollupJson}
+${rollupJson}${noteSection}
 
 # Task
 Decide a verdict (GOOD / BAD / MIXED) and write a 1–2 paragraph analysis for the specimen "${pair.shortCode}" in zone "${pair.zoneCode}". The verdict goes in its own "verdict" field — do NOT repeat it as a prefix in the analysis prose.
@@ -257,8 +268,9 @@ async function analyzeOnePair(
   pair: Pair,
   zoneFilter: string | null,
   now: string,
+  note?: string,
 ): Promise<PairResult> {
-  const prompt = buildSinglePairPrompt(rollupJson, pair, zoneFilter);
+  const prompt = buildSinglePairPrompt(rollupJson, pair, zoneFilter, note);
 
   // Stream the response: each chunk arriving resets Cloudflare's ~100s
   // gateway timer, so a slow grounded call doesn't 524. We accumulate text
@@ -408,6 +420,7 @@ async function analyzeOnePair(
       analysis,
       references,
       created: now,
+      ...(note ? { note } : {}),
     },
     promptTokens,
     outputTokens,
@@ -587,20 +600,6 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
     }
 
     if (newEntries.length > 0) {
-      const { analyses: latest, sha: latestSha } = await readAiAnalyses(env);
-      const merged = [...latest];
-      for (const e of newEntries) {
-        const idx = merged.findIndex(
-          (m) => m.shortCode === e.shortCode && m.zoneCode === e.zoneCode,
-        );
-        if (idx === -1) merged.push(e);
-        else merged[idx] = e;
-      }
-      merged.sort((a, b) =>
-        a.shortCode === b.shortCode
-          ? a.zoneCode.localeCompare(b.zoneCode)
-          : a.shortCode.localeCompare(b.shortCode),
-      );
       const scope = meta.zoneFilter ? ` (zone ${meta.zoneFilter})` : "";
       // ai_analysis.json isn't watched by compute-metadata.yml, so the
       // metadata→deploy chain that justifies [skip-deploy] elsewhere never
@@ -609,10 +608,9 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
       // tick's commit trigger deploy-frontend directly via the public/**
       // push path, so the whole run publishes in a single deploy.
       const skipDeploy = remainingAfter.length > 0 ? " [skip-deploy]" : "";
-      await writeAiAnalyses(
+      await commitAnalyses(
         env,
-        merged,
-        latestSha,
+        newEntries,
         `Add AI analyses${scope}: ${newEntries.length} pair(s)${skipDeploy}`,
       );
     }
@@ -688,6 +686,173 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
   } finally {
     await env.ASK_CACHE.delete(LOCK_KV_KEY).catch(() => {});
   }
+}
+
+// Upsert entries into ai_analysis.json by shortCode|zoneCode, keeping the file
+// sorted. Shared by the bulk analyze tick and single-pair /reassess.
+async function commitAnalyses(
+  env: Env,
+  newEntries: AiAnalysisEntry[],
+  commitMessage: string,
+): Promise<void> {
+  const { analyses: latest, sha: latestSha } = await readAiAnalyses(env);
+  const merged = [...latest];
+  for (const e of newEntries) {
+    const idx = merged.findIndex((m) => m.shortCode === e.shortCode && m.zoneCode === e.zoneCode);
+    if (idx === -1) merged.push(e);
+    else merged[idx] = e;
+  }
+  merged.sort((a, b) =>
+    a.shortCode === b.shortCode
+      ? a.zoneCode.localeCompare(b.zoneCode)
+      : a.shortCode.localeCompare(b.shortCode),
+  );
+  await writeAiAnalyses(env, merged, latestSha, commitMessage);
+}
+
+async function recordAnalyzeCost(env: Env, promptTokens: number, outputTokens: number): Promise<void> {
+  if (promptTokens <= 0 && outputTokens <= 0) return;
+  await recordCost(env, ANALYSIS_MODEL, {
+    prompt: promptTokens,
+    cached: 0,
+    output: outputTokens,
+    cacheCreation: 0,
+    cacheStorageTokenHours: 0,
+  }).catch((err) => console.log(`[reassess] recordCost failed: ${(err as Error).message}`));
+}
+
+function buildReassessResolvePrompt(
+  rollupJson: string,
+  validPairs: string[],
+  request: string,
+): string {
+  return `You are helping the owner of a Minneapolis, MN garden journal reassess ONE specimen's ecological analysis in light of a new first-hand observation they just described.
+
+# Garden rollup (full)
+# Schema: zones[]: {code, name?, description?}; plants[]: {shortCode, fullName?, commonName?, variety?, tags?, byZone?, pics, zonesSeen, kind?, ...}
+${rollupJson}
+
+# Valid specimen|zone pairs — you MUST choose exactly one of these, copied verbatim
+${validPairs.join("\n")}
+
+# Gardener's request (plain English — may name the plant loosely and describe new info)
+"${request}"
+
+# Task
+1. Identify the single specimen+zone pair the gardener means. Match on common/scientific name, variety, zone name/location hints, tags, or descriptions. Choose the best-fitting entry from the valid pairs list above — never invent a shortCode or zoneCode.
+2. Distill the gardener's NEW information into "note": 1-2 concise sentences capturing only the new first-hand observation (omit anything already obvious from the rollup). Plain text, no markdown, no leading verdict.
+
+# Output
+Return ONLY a JSON object — no prose, no fences. Exactly:
+{ "shortCode": string, "zoneCode": string, "note": string }
+If you cannot confidently match a single pair, return { "shortCode": "", "zoneCode": "", "note": "" }.
+Begin your response with { and end it with }.`;
+}
+
+export type ReassessResolution =
+  | { ok: true; shortCode: string; zoneCode: string; displayName: string; note: string }
+  | { ok: false; message: string };
+
+// Phase 1 of /reassess: a cheap, non-grounded call that maps the gardener's
+// free text to a single specimen+zone pair and a concise note. Validates the
+// resolved pair against the rollup so the generate phase always has a real target.
+export async function resolveReassessTarget(env: Env, request: string): Promise<ReassessResolution> {
+  const { raw: rollupJson, rollup } = await loadRollupParsed(env);
+  const validPairs = rollup.plants.flatMap((p) => p.zonesSeen.map((z) => `${p.shortCode}|${z}`));
+  if (validPairs.length === 0) {
+    return { ok: false, message: "No specimens in the journal to reassess yet." };
+  }
+
+  const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
+  const prompt = buildReassessResolvePrompt(rollupJson, validPairs, request);
+
+  let text = "";
+  let promptTokens = 0;
+  let outputTokens = 0;
+  try {
+    const res = await client.models.generateContent({
+      model: ANALYSIS_MODEL,
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+    });
+    const parts = res.candidates?.[0]?.content?.parts ?? [];
+    text = parts
+      .map((p) => (p as { text?: string }).text ?? "")
+      .join("")
+      .trim();
+    promptTokens = res.usageMetadata?.promptTokenCount ?? 0;
+    outputTokens = res.usageMetadata?.candidatesTokenCount ?? 0;
+  } catch (err) {
+    return { ok: false, message: `Could not resolve the request: ${(err as Error).message}` };
+  } finally {
+    await recordAnalyzeCost(env, promptTokens, outputTokens);
+  }
+
+  const parsed = tryParseAnalysisJson(text) as
+    | { shortCode?: unknown; zoneCode?: unknown; note?: unknown }
+    | null;
+  const shortCode = typeof parsed?.shortCode === "string" ? parsed.shortCode.trim() : "";
+  const zoneCode = typeof parsed?.zoneCode === "string" ? parsed.zoneCode.trim() : "";
+  const note = typeof parsed?.note === "string" ? parsed.note.trim() : "";
+
+  if (!shortCode || !zoneCode) {
+    return {
+      ok: false,
+      message:
+        "Couldn't pin that to a single plant and zone. Try naming the plant and where it is more specifically.",
+    };
+  }
+  const plant = rollup.plants.find((p) => p.shortCode === shortCode);
+  if (!plant || !plant.zonesSeen.includes(zoneCode)) {
+    return {
+      ok: false,
+      message: `Resolved to "${shortCode}" in zone "${zoneCode}", but that pair isn't in the journal. Try rephrasing.`,
+    };
+  }
+  if (!note) {
+    return {
+      ok: false,
+      message: "I matched the plant but couldn't find any new information in your message to record.",
+    };
+  }
+  const displayName = plant.commonName || plant.fullName || plant.shortCode;
+  return { ok: true, shortCode, zoneCode, displayName, note };
+}
+
+export type ReassessGenResult =
+  | { ok: true; verdict: AiVerdict }
+  | { ok: false; message: string };
+
+// Phase 2 of /reassess: a grounded regeneration of one pair's analysis with the
+// gardener's note woven into the prompt and persisted on the entry.
+export async function generateReassessment(
+  env: Env,
+  shortCode: string,
+  zoneCode: string,
+  note: string,
+): Promise<ReassessGenResult> {
+  const { raw: rollupJson, rollup } = await loadRollupParsed(env);
+  const plant = rollup.plants.find((p) => p.shortCode === shortCode);
+  if (!plant || !plant.zonesSeen.includes(zoneCode)) {
+    return { ok: false, message: `"${shortCode}" is no longer recorded in zone "${zoneCode}".` };
+  }
+
+  const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
+  const now = new Date().toISOString();
+  const result = await analyzeOnePair(
+    client,
+    rollupJson,
+    { shortCode, zoneCode },
+    null,
+    now,
+    note,
+  );
+  await recordAnalyzeCost(env, result.promptTokens, result.outputTokens);
+
+  if (!result.entry) {
+    return { ok: false, message: result.error ?? "analysis generation failed" };
+  }
+  await commitAnalyses(env, [result.entry], `Reassess ${shortCode}@${zoneCode}`);
+  return { ok: true, verdict: result.entry.verdict };
 }
 
 export async function clearAnalyzeRun(env: Env): Promise<void> {

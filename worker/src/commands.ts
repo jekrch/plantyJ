@@ -13,7 +13,12 @@ import { MODEL_ALIASES, type ProposedCommand, type Thread } from "./ask";
 import { ingestPlantPhoto } from "./photos";
 import { PENDING_IDENTIFY_KEY, type PendingIdentify } from "./identify";
 import { submitAnalyzeRun, analyzeStatus, clearAnalyzeRun, formatAnalyzeUsage } from "./analyze";
-import { enqueueJob, runOrEnqueue } from "./jobs";
+import {
+  enqueueJob,
+  runOrEnqueue,
+  PENDING_REASSESS_KEY,
+  type PendingReassess,
+} from "./jobs";
 import { runBatch } from "./batch";
 import { readCostTotals, formatCostReport } from "./cost";
 import { assertValidCode } from "./validation";
@@ -181,9 +186,12 @@ async function handleCancel(message: TelegramMessage, env: Env, reply: Replier):
     await Promise.all([
       env.ASK_CACHE.delete(PENDING_DO_KEY(message.from.id)).catch(() => {}),
       env.ASK_CACHE.delete(PENDING_IDENTIFY_KEY(message.from.id)).catch(() => {}),
+      env.ASK_CACHE.delete(PENDING_REASSESS_KEY(message.from.id)).catch(() => {}),
     ]);
   }
-  await reply("Cancelled. Nothing run; any pending proposals or identify options dropped.");
+  await reply(
+    "Cancelled. Nothing run; any pending proposals, identify options, or reassessment dropped.",
+  );
 }
 
 async function handlePick(
@@ -235,7 +243,31 @@ async function handleConfirm(
   }
   const raw = await env.ASK_CACHE.get(PENDING_DO_KEY(message.from.id));
   if (!raw) {
-    await reply("Nothing to confirm. Start with /ask {request}.");
+    // No pending proposals — a bare /confirm may instead be confirming a
+    // resolved /reassess target.
+    const reassessRaw = await env.ASK_CACHE.get(PENDING_REASSESS_KEY(message.from.id));
+    if (reassessRaw) {
+      const pendingReassess: PendingReassess = JSON.parse(reassessRaw);
+      const status = await runOrEnqueue(env, {
+        id: `reassess-gen-${message.from.id}-${message.message_id}`,
+        kind: "reassess-gen",
+        chatId: message.chat.id,
+        messageId: message.message_id,
+        userId: message.from.id,
+        targetShortCode: pendingReassess.shortCode,
+        targetZoneCode: pendingReassess.zoneCode,
+        note: pendingReassess.note,
+        createdAt: new Date().toISOString(),
+        attempts: 0,
+      });
+      if (status === "queued") {
+        await reply(
+          `Regenerating the analysis for ${pendingReassess.displayName} (${pendingReassess.shortCode}) in zone ${pendingReassess.zoneCode} — queued, reply will arrive shortly.`,
+        );
+      }
+      return;
+    }
+    await reply("Nothing to confirm. Start with /ask {request} or /reassess {description}.");
     return;
   }
   const pending: PendingDo = JSON.parse(raw);
@@ -302,6 +334,42 @@ async function handleAsk(
   });
   if (status === "queued") {
     await reply("Taking a moment — queued, reply will arrive shortly.");
+  }
+}
+
+async function handleReassess(
+  text: string,
+  message: TelegramMessage,
+  env: Env,
+  reply: Replier,
+): Promise<void> {
+  const request = text.replace(/^\/reassess\b/i, "").trim();
+  if (!request) {
+    await reply(
+      "Describe in plain English which plant/zone to reassess and what's new, e.g. /reassess the milkweed by the back fence — monarchs aren't visiting and it's covered in aphids.",
+    );
+    return;
+  }
+  if (!env.ASK_CACHE) {
+    await reply("/reassess requires KV (ASK_CACHE).");
+    return;
+  }
+  if (message.from && !(await checkAskRateLimit(message.from.id, env))) {
+    await reply("Rate limit reached: max 100 LLM queries per day.");
+    return;
+  }
+  const status = await runOrEnqueue(env, {
+    id: `reassess-${message.from?.id ?? "anon"}-${message.message_id}`,
+    kind: "reassess",
+    chatId: message.chat.id,
+    messageId: message.message_id,
+    userId: message.from?.id ?? null,
+    request,
+    createdAt: new Date().toISOString(),
+    attempts: 0,
+  });
+  if (status === "queued") {
+    await reply("Working out which plant you mean — queued, reply will arrive shortly.");
   }
 }
 
@@ -719,6 +787,7 @@ export async function handleTextCommand(
     ["/analyze-load", () => handleAnalyzeLoad(env, reply)],
     ["/analyze-cancel", () => handleAnalyzeCancel(env, reply)],
     [/^\/analyze(\s|$)/i, () => handleAnalyze(text, message, env, reply)],
+    [/^\/reassess(\s|$)/i, () => handleReassess(text, message, env, reply)],
     [
       /^\/(help|start)$/,
       async () => {
