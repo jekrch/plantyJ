@@ -634,6 +634,13 @@
         "native"
       ],
       "description": null
+    },
+    {
+      "shortCode": "L vul",
+      "zoneCode": "nbv",
+      "tags": [],
+      "description": null,
+      "removed": true
     }
   ]
 }
