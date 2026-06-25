@@ -1,6 +1,6 @@
 import { useRef, useCallback } from "react";
 import type { Organism } from "../types";
-import { Expand } from "lucide-react";
+import { Expand, Trash2 } from "lucide-react";
 import { organismTitle } from "../utils/display";
 import { imageTime } from "../utils/sorting";
 
@@ -20,10 +20,12 @@ const TOUCH_TOLERANCE = 30;
 interface Props {
   organism: Organism;
   zoneNameByCode: Map<string, string>;
+  /** This pic's plant+zone combo has been removed from the garden. */
+  removed?: boolean;
   onOpen: (organism: Organism) => void;
 }
 
-export default function OrganismCard({ organism, zoneNameByCode, onOpen }: Props) {
+export default function OrganismCard({ organism, zoneNameByCode, removed = false, onOpen }: Props) {
   const lastTap = useRef<{ time: number; x: number; y: number } | null>(null);
   const lastClick = useRef<{ time: number; x: number; y: number } | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -78,7 +80,9 @@ export default function OrganismCard({ organism, zoneNameByCode, onOpen }: Props
 
   return (
     <div
-      className="panel-item group relative cursor-pointer overflow-hidden rounded-sm bg-surface-raised"
+      className={`panel-item group relative cursor-pointer overflow-hidden rounded-sm bg-surface-raised ${
+        removed ? "ring-1 ring-inset ring-amber-500/50" : ""
+      }`}
       onPointerUp={handlePointerUp}
     >
       <div style={{ aspectRatio, width: "100%" }}>
@@ -88,7 +92,7 @@ export default function OrganismCard({ organism, zoneNameByCode, onOpen }: Props
           alt={titleLine}
           decoding="async"
           loading="lazy"
-          className="block w-full"
+          className={`block w-full ${removed ? "grayscale opacity-60" : ""}`}
           style={{ aspectRatio }}
           onError={(e) => {
             const el = e.currentTarget;
@@ -102,6 +106,12 @@ export default function OrganismCard({ organism, zoneNameByCode, onOpen }: Props
         >
           {titleLine}
         </div>
+        {removed && (
+          <span className="absolute top-2 left-2 z-10 flex items-center gap-1 rounded-sm bg-amber-900/80 px-1.5 py-0.5 text-[10px] font-display uppercase tracking-wider text-amber-100 backdrop-blur-sm pointer-events-none">
+            <Trash2 size={11} strokeWidth={1.75} />
+            Removed
+          </span>
+        )}
       </div>
 
       <div

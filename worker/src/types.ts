@@ -132,6 +132,10 @@ export interface AnnotationEntry {
   zoneCode: string | null;
   tags: string[];
   description: string | null;
+  /** When true, this plant+zone combo has been removed from the garden. The
+   *  pic still shows in the gallery (flagged) but is filtered out of the food
+   *  web, tree, and zone/plant views. Only meaningful when zoneCode is set. */
+  removed?: boolean;
 }
 
 export type AiVerdict = "GOOD" | "BAD" | "MIXED";

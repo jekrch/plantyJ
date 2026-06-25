@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useState, useMemo, useCallback, useRef } fr
 import { Sprout, House } from "lucide-react";
 import { sortOrganismsAsync } from "./utils/sorting.ts";
 import { applyFilters, hasActiveFilters } from "./utils/filtering.ts";
+import { activeOrganisms, buildRemovedSet, fullyRemovedShortCodes } from "./utils/removed.ts";
 import MasonryGrid from "./components/MasonryGrid";
 import BackgroundEchoes from "./components/BackgroundEchoes";
 import { SpinnerState, ErrorState, EmptyState } from "./components/StatusStates";
@@ -32,6 +33,18 @@ export default function App() {
     [data.organisms, view.filters, data.annotations, data.speciesByShortCode, data.aiAnalyses],
   );
 
+  // A plant+zone combo flagged `removed` stays in the gallery/roll but is
+  // filtered out of the tree, food web, and zone/plant views.
+  const removedSet = useMemo(() => buildRemovedSet(data.annotations), [data.annotations]);
+  const activeOrgs = useMemo(
+    () => activeOrganisms(data.organisms, removedSet),
+    [data.organisms, removedSet],
+  );
+  const removedShortCodes = useMemo(
+    () => fullyRemovedShortCodes(data.organisms, removedSet),
+    [data.organisms, removedSet],
+  );
+
   const [sortedOrganisms, setSortedOrganisms] = useState<Organism[]>([]);
   useEffect(() => {
     let cancelled = false;
@@ -47,10 +60,10 @@ export default function App() {
     if (view.viewMode === "gallery" || !view.spotlightCode) return [];
     const list =
       view.viewMode === "plant"
-        ? data.organisms.filter((p) => p.shortCode === view.spotlightCode)
-        : data.organisms.filter((p) => p.zoneCode === view.spotlightCode);
+        ? activeOrgs.filter((p) => p.shortCode === view.spotlightCode)
+        : activeOrgs.filter((p) => p.zoneCode === view.spotlightCode);
     return [...list].sort((a, b) => new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime());
-  }, [data.organisms, view.viewMode, view.spotlightCode]);
+  }, [activeOrgs, view.viewMode, view.spotlightCode]);
 
   const viewer = useOrganismViewer({
     organisms: data.organisms,
@@ -173,6 +186,7 @@ export default function App() {
                   organisms={sortedOrganisms}
                   allOrganisms={organisms}
                   zones={data.zones}
+                  removedSet={removedSet}
                   annotations={data.annotations}
                   aiAnalyses={data.aiAnalyses}
                   sortMode={view.sortMode}
@@ -201,7 +215,7 @@ export default function App() {
               <SpotlightView
                 kind={viewMode}
                 subjectCode={view.spotlightCode}
-                allOrganisms={organisms}
+                allOrganisms={activeOrgs}
                 zonePics={data.zonePics}
                 zones={data.zones}
                 onOpenViewer={viewer.openFromSpotlight}
@@ -213,7 +227,7 @@ export default function App() {
 
       {status === "ready" && organisms.length > 0 && viewMode === "tree" && (
         <TreeView
-          organisms={organisms}
+          organisms={activeOrgs}
           speciesByShortCode={data.speciesByShortCode}
           taxa={data.taxa}
           zones={data.zones}
@@ -229,8 +243,9 @@ export default function App() {
 
       {status === "ready" && organisms.length > 0 && viewMode === "web" && (
         <WebView
-          organisms={organisms}
+          organisms={activeOrgs}
           organismRecords={data.organismRecords}
+          removedShortCodes={removedShortCodes}
           speciesByShortCode={data.speciesByShortCode}
           taxa={data.taxa}
           zones={data.zones}

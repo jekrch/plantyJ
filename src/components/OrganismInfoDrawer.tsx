@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, ExternalLink, Leaf } from "lucide-react";
+import { ChevronDown, ExternalLink, Leaf, Trash2 } from "lucide-react";
 import type {
   AIAnalysis,
   AIVerdict,
@@ -386,6 +386,12 @@ export default function OrganismInfoDrawer({
                 )}
                 {!organism.commonName && organism.variety && (
                   <p className="text-[11px] text-white/40 mt-0.5">'{organism.variety}'</p>
+                )}
+                {zoneAnnotation?.removed && (
+                  <span className="mt-2 inline-flex items-center gap-1.5 rounded-sm bg-amber-900/60 px-2 py-1 text-[10px] font-display uppercase tracking-wider text-amber-100">
+                    <Trash2 size={11} strokeWidth={1.75} />
+                    Removed from {zoneName}
+                  </span>
                 )}
               </div>
             </div>

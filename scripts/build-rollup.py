@@ -112,6 +112,8 @@ def main():
                 entry["tags"] = za["tags"]
             if za.get("description"):
                 entry["description"] = za["description"]
+            if za.get("removed"):
+                entry["removed"] = True
             by_zone[zc] = entry
 
         compact_pics = [compact_pic(pic) for pic in raw_pics]

@@ -30,6 +30,8 @@ import { buildWebNode } from "./buildWebNode";
 interface Props {
   organisms: Organism[];
   organismRecords: OrganismRecord[];
+  /** shortCodes fully removed from the garden — excluded as web nodes/edges. */
+  removedShortCodes?: Set<string>;
   speciesByShortCode: Map<string, Species>;
   taxa: Record<string, TaxaInfo>;
   zones: Zone[];
@@ -291,6 +293,7 @@ function EdgeLabel({
 export default function WebView({
   organisms,
   organismRecords,
+  removedShortCodes,
   speciesByShortCode,
   taxa,
   zones,
@@ -349,7 +352,14 @@ export default function WebView({
   }, [relationships.types]);
 
   const { nodeCodes, filteredEdges } = useMemo(() => {
-    const edges = relationships.relationships.filter((r) => enabledTypes.has(r.type));
+    // Drop edges touching a fully-removed plant, then build the node set from
+    // the survivors so removed organisms leave no dangling nodes or edges.
+    const edges = relationships.relationships.filter(
+      (r) =>
+        enabledTypes.has(r.type) &&
+        !removedShortCodes?.has(r.from) &&
+        !removedShortCodes?.has(r.to),
+    );
     const codes = new Set<string>();
     for (const r of edges) {
       codes.add(r.from);
@@ -359,7 +369,7 @@ export default function WebView({
       nodeCodes: Array.from(codes).sort(),
       filteredEdges: edges,
     };
-  }, [relationships.relationships, enabledTypes]);
+  }, [relationships.relationships, enabledTypes, removedShortCodes]);
 
   // Stable across filter toggles so the graph relaxes instead of reshuffling.
   const posCacheRef = useRef<Map<string, { x: number; y: number }>>(new Map());

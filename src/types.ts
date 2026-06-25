@@ -64,6 +64,11 @@ export interface Annotation {
   zoneCode: string | null; // null = organism-level; string = organism+zone level
   tags: string[];
   description: string | null;
+  // When true, this plant+zone combo has been removed from the garden. The pic
+  // still appears in the gallery/roll (flagged), but the combo is filtered out
+  // of the food web, tree, and zone/plant views. Only meaningful when zoneCode
+  // is non-null (a specific plant+zone pairing).
+  removed?: boolean;
 }
 
 export interface SpeciesTaxonomy {

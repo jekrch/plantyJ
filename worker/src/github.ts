@@ -320,6 +320,13 @@ function parseList(value: string): string[] {
     .filter((t) => t.length > 0);
 }
 
+// An annotation row carries information — and is worth persisting — if it has
+// tags, a description, or a `removed` flag. Rows that hold none of these are
+// pruned on write. Exported so the batch path applies the identical rule.
+export function annotationHasContent(a: AnnotationEntry): boolean {
+  return a.tags.length > 0 || a.description !== null || a.removed === true;
+}
+
 export interface UpdateResult {
   pic: PicEntry;
   plant: PlantRecord | null;
@@ -708,7 +715,7 @@ export async function upsertAnnotation(
   if (idx !== -1) annotations[idx] = entry;
 
   // Drop entries that carry no information.
-  const cleaned = annotations.filter((a) => a.tags.length > 0 || a.description !== null);
+  const cleaned = annotations.filter(annotationHasContent);
 
   const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
   await writeJsonFile(
@@ -812,7 +819,7 @@ export async function removeAnnotationTag(
   annotations[idx] = updated;
 
   // Drop entries that carry no information.
-  const cleaned = annotations.filter((a) => a.tags.length > 0 || a.description !== null);
+  const cleaned = annotations.filter(annotationHasContent);
 
   const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
   await writeJsonFile(
@@ -843,6 +850,52 @@ export async function deleteAnnotation(
   const scope = zoneCode ? `${shortCode} / ${zoneCode}` : shortCode;
   await writeJsonFile(env, ANNOTATIONS_PATH, { annotations }, sha, `Delete annotation: ${scope}`);
   return true;
+}
+
+// Flags (or clears) the `removed` state on a plant+zone annotation. Removed
+// combos still show in the gallery but drop out of the food web, tree, and
+// zone/plant views. Returns the updated entry plus whether the flag actually
+// changed (so callers can report a no-op).
+export async function setAnnotationRemoved(
+  env: Env,
+  shortCode: string,
+  zoneCode: string,
+  removed: boolean,
+): Promise<{ entry: AnnotationEntry; changed: boolean }> {
+  const { data, sha } = await readJsonFile<{ annotations?: AnnotationEntry[] }>(
+    env,
+    ANNOTATIONS_PATH,
+    { annotations: [] },
+  );
+  const annotations = data.annotations ?? [];
+
+  const idx = annotations.findIndex((a) => a.shortCode === shortCode && a.zoneCode === zoneCode);
+  let entry: AnnotationEntry;
+  if (idx === -1) {
+    entry = { shortCode, zoneCode, tags: [], description: null, removed };
+    annotations.push(entry);
+  } else {
+    entry = annotations[idx];
+  }
+
+  const changed = (entry.removed ?? false) !== removed;
+  if (removed) entry.removed = true;
+  else delete entry.removed;
+  if (idx !== -1) annotations[idx] = entry;
+
+  // Drop rows that no longer carry any information (e.g. restoring a combo that
+  // had no tags or note left only an empty shell).
+  const cleaned = annotations.filter(annotationHasContent);
+
+  const scope = `${shortCode} / ${zoneCode}`;
+  await writeJsonFile(
+    env,
+    ANNOTATIONS_PATH,
+    { annotations: cleaned },
+    sha,
+    removed ? `Mark removed: ${scope}` : `Restore: ${scope}`,
+  );
+  return { entry, changed };
 }
 
 export async function readAnnotations(env: Env): Promise<AnnotationEntry[]> {
@@ -971,7 +1024,7 @@ export async function commitBatchState(
     );
   }
   if (state.dirty.has("annotations")) {
-    const cleaned = state.annotations.filter((a) => a.tags.length > 0 || a.description !== null);
+    const cleaned = state.annotations.filter(annotationHasContent);
     writes.push(() =>
       writeJsonFile(
         env,

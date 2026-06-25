@@ -3,6 +3,7 @@ import type { AIAnalysis, Annotation, Organism, Zone } from "../types";
 import type { SortMode } from "../utils/sorting";
 import { computeMonthMarkers } from "../utils/sorting";
 import type { Filters } from "../utils/filtering";
+import { removedComboKey } from "../utils/removed";
 import OrganismCard from "./OrganismCard";
 import FilterControl from "./FilterControl";
 import SortControl from "./SortControl";
@@ -276,6 +277,8 @@ interface MasonryGridProps {
   organisms: Organism[];
   allOrganisms: Organism[];
   zones: Zone[];
+  /** `shortCode zoneCode` keys flagged removed — their cards get a removed badge. */
+  removedSet?: Set<string>;
   annotations: Annotation[];
   aiAnalyses?: AIAnalysis[];
   sortMode: SortMode;
@@ -291,6 +294,7 @@ export default function MasonryGrid({
   organisms,
   allOrganisms,
   zones,
+  removedSet,
   annotations,
   aiAnalyses,
   sortMode,
@@ -536,6 +540,11 @@ export default function MasonryGrid({
               <OrganismCard
                 organism={item.organism}
                 zoneNameByCode={zoneNameByCode}
+                removed={
+                  removedSet?.has(
+                    removedComboKey(item.organism.shortCode, item.organism.zoneCode),
+                  ) ?? false
+                }
                 onOpen={onOpenOrganism}
               />
             </div>

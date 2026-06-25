@@ -107,6 +107,10 @@ Annotation commands (persistent across all pics):
   /removetag {shortCode} // {tag} — remove a tag from a plant annotation
   /removetag {shortCode} // {zoneCode} // {tag} — remove a tag from a plant+zone annotation
 
+Removal commands (plant+zone combo no longer in the garden):
+  /remove {shortCode} // {zoneCode} — mark a plant+zone combo as removed. Photos stay in the gallery (flagged) but the combo drops out of the web, tree, and zone/plant views.
+  /restore {shortCode} // {zoneCode} — undo a removal
+
 Zone commands:
   /addzone {code} {name} — Create or rename a zone (name optional)
   /renamezone {code} {name} — Set/replace a zone's display name

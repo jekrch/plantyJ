@@ -40,6 +40,7 @@ import {
   deleteZonePic,
   readAnnotations,
   readGallery,
+  setAnnotationRemoved,
   setZoneDescription,
   upsertAnnotation,
   upsertZone,
@@ -812,6 +813,52 @@ async function handleDeleteAnnotation(text: string, env: Env, reply: Replier): P
   await reply(removed ? `Deleted annotation for ${scope}.` : `No annotation found for ${scope}.`);
 }
 
+// /remove and /restore toggle the `removed` flag on a plant+zone combo. Both
+// take the same `{shortCode} // {zoneCode}` form — zoneCode is required because
+// removal is always scoped to a specific plant+zone pairing.
+function parseComboCommand(rest: string): { shortCode: string; zoneCode: string } | null {
+  const parts = rest
+    .split("//")
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+  if (parts.length !== 2) return null;
+  return { shortCode: parts[0], zoneCode: parts[1] };
+}
+
+const COMBO_USAGE = (verb: string) =>
+  `Invalid format. Use:\n  /${verb} {shortCode} // {zoneCode}`;
+
+async function handleRemoveCombo(
+  text: string,
+  env: Env,
+  reply: Replier,
+  removed: boolean,
+): Promise<void> {
+  const verb = removed ? "remove" : "restore";
+  const combo = parseComboCommand(text.slice(`/${verb} `.length));
+  if (!combo) {
+    await reply(COMBO_USAGE(verb));
+    return;
+  }
+  assertValidCode("shortCode", combo.shortCode);
+  assertValidCode("zoneCode", combo.zoneCode);
+  const { changed } = await setAnnotationRemoved(env, combo.shortCode, combo.zoneCode, removed);
+  const scope = `${combo.shortCode} / ${combo.zoneCode}`;
+  if (removed) {
+    await reply(
+      changed
+        ? `Marked ${scope} as removed. Its photos still appear in the gallery (flagged) but it's filtered out of the web, tree, and zone/plant views.`
+        : `${scope} is already marked removed.`,
+    );
+  } else {
+    await reply(
+      changed
+        ? `Restored ${scope}. It's back in the web, tree, and zone/plant views.`
+        : `${scope} was not marked removed.`,
+    );
+  }
+}
+
 // ─── dispatcher ────────────────────────────────────────────────────────────
 
 /**
@@ -860,6 +907,8 @@ export async function handleTextCommand(
     [/^\/addtag\s/, () => handleAddTag(text, env, reply)],
     [/^\/removetag\s/, () => handleRemoveTag(text, env, reply)],
     [/^\/deleteannotation\s/, () => handleDeleteAnnotation(text, env, reply)],
+    [/^\/remove\s/, () => handleRemoveCombo(text, env, reply, true)],
+    [/^\/restore\s/, () => handleRemoveCombo(text, env, reply, false)],
     [/^\/relate\s/, () => handleRelate(text, env, reply)],
     [/^\/unrelate\s/, () => handleUnrelate(text, env, reply)],
     [/^\/relations\s/, () => handleRelations(text, env, reply)],
