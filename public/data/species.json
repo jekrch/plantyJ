@@ -1328,6 +1328,67 @@
       ],
       "observationsCount": 32457
     },
+    "chamaecrista-fasciculata": {
+      "id": "chamaecrista-fasciculata",
+      "fullName": "Chamaecrista fasciculata",
+      "commonName": "Partridge Pea",
+      "description": "Chamaecrista fasciculata, the partridge pea, is a species of legume native to most of the eastern United States. It is an annual which grows to approximately 0.5 meters (1 ft 8 in) tall. It has bright yellow flowers from early summer until first frost, with flowers through the entire flowering season if rainfall is sufficient.\nThe flowers are hermaphroditic, although a fraction of plants, less than 5%, do not produce sufficient pollen to reproduce as males. This phenomenon has been studied in a variety of plants as a possible evolutionary step towards dioecy, in which male and female flowers occur on separate plants. C. fasciculata is pollinated only by bees.\nThe flowers have yellow anthers that produce reproductive pollen, and purple anthers that produce food pollen, but no nectar. Long-tongued bees such as bumblebees, honey bees, long-horned bees, and leafcutting bees pollinate the flowers. There are extrafloral nectaries on the leaf stems, which attract a different set of insects: sweat bees, flies, wasps, and ants.\nIt thrives in areas that have been burned recently before declining in number in the following years. It is a pioneer species, growing densely in depleted sites that cannot support other plants. It is considered an excellent choice for planting in disturbed areas, as it will quickly cover an area, preventing erosion, while still allowing other plants to become established. It is also grown as an ornamental or for honey production.",
+      "vernacularNames": [
+        "Golden Cassia",
+        "Koww\u00e0ykinchastoki",
+        "Partridge Pea",
+        "Prairie-senna",
+        "Sensitive-pea",
+        "Showy Partridge-pea",
+        "Showy Partridgepea",
+        "Sleepingplant",
+        "large-flowered sensitive pea",
+        "partridge-pea",
+        "showy partridge pea"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Fabales",
+        "family": "Fabaceae",
+        "genus": "Chamaecrista",
+        "species": "Chamaecrista fasciculata",
+        "canonicalName": "Chamaecrista fasciculata"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2949728"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Chamaecrista_fasciculata"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/127907"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q5069341"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.155052"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 44352
+    },
     "clematis-virginiana": {
       "id": "clematis-virginiana",
       "fullName": "Clematis virginiana",

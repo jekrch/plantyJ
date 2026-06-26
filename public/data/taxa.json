@@ -758,5 +758,9 @@
   "Erigeron": {
     "description": "Erigeron is a large genus of plants in the composite family (Asteraceae). It is placed in the tribe Astereae and is closely related to the Old World asters (Aster) and the true daisies (Bellis). The genus has a cosmopolitan distribution, and the highest diversity occurs in North America.",
     "url": "https://en.wikipedia.org/wiki/Erigeron"
+  },
+  "Chamaecrista": {
+    "description": null,
+    "url": null
   }
 }
