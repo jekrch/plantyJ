@@ -58,6 +58,10 @@ export function computeStats(
   zones: Zone[],
   speciesByShortCode: Map<string, Species>,
   aiAnalyses: AIAnalysis[],
+  // The Machine ID (BioCLIP) section reflects every upload BioCLIP cross-checked,
+  // so it counts removed plants too. Everything else uses `organisms`, which the
+  // caller passes as the active (non-removed) set. Defaults to `organisms`.
+  machineIdOrganisms: Organism[] = organisms,
 ): ComputedStats {
   const totalPics = organisms.length;
 
@@ -153,7 +157,7 @@ export function computeStats(
   const timeline = buildTimeline(organisms, earliest);
 
   // BioCLIP
-  const scored = organisms.filter(
+  const scored = machineIdOrganisms.filter(
     (p) => typeof p.bioclipScore === "number" && !Number.isNaN(p.bioclipScore),
   );
   const avgConfidence =
@@ -166,7 +170,7 @@ export function computeStats(
   let fullMatches = 0;
   let genusOnly = 0;
   let mismatches = 0;
-  for (const p of organisms) {
+  for (const p of machineIdOrganisms) {
     if (!p.bioclipSpeciesId || !p.fullName) continue;
     const a = p.bioclipSpeciesId.trim().toLowerCase();
     const b = p.fullName.trim().toLowerCase();
@@ -183,7 +187,7 @@ export function computeStats(
   const disagreements = mismatches + 0.5 * genusOnly;
 
   // Unidentified — pics without a species fullName attached
-  const unidentifiedPics = organisms.filter((p) => !p.fullName).length;
+  const unidentifiedPics = machineIdOrganisms.filter((p) => !p.fullName).length;
 
   // Eco fit (AI) — verdict is keyed by (shortCode, zoneCode), so each organism
   // pic inherits the verdict of its (species, zone) pairing.

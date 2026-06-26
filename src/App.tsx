@@ -56,14 +56,17 @@ export default function App() {
     };
   }, [filteredOrganisms, view.sortMode]);
 
+  // The plant view shows every pic of the plant — including removed plant+zone
+  // combos (flagged with a Removed badge) — so removed plants like the oxeye
+  // daisy remain visible there. The zone view keeps removed combos hidden.
   const spotlightOrganisms = useMemo(() => {
     if (view.viewMode === "gallery" || !view.spotlightCode) return [];
     const list =
       view.viewMode === "plant"
-        ? activeOrgs.filter((p) => p.shortCode === view.spotlightCode)
+        ? data.organisms.filter((p) => p.shortCode === view.spotlightCode)
         : activeOrgs.filter((p) => p.zoneCode === view.spotlightCode);
     return [...list].sort((a, b) => new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime());
-  }, [activeOrgs, view.viewMode, view.spotlightCode]);
+  }, [data.organisms, activeOrgs, view.viewMode, view.spotlightCode]);
 
   const viewer = useOrganismViewer({
     organisms: data.organisms,
@@ -215,7 +218,8 @@ export default function App() {
               <SpotlightView
                 kind={viewMode}
                 subjectCode={view.spotlightCode}
-                allOrganisms={activeOrgs}
+                allOrganisms={viewMode === "plant" ? data.organisms : activeOrgs}
+                removedSet={removedSet}
                 zonePics={data.zonePics}
                 zones={data.zones}
                 onOpenViewer={viewer.openFromSpotlight}
@@ -265,6 +269,8 @@ export default function App() {
         activeTab={view.infoTab}
         onTabChange={view.handleInfoTabChange}
         organisms={organisms}
+        activeOrganisms={activeOrgs}
+        removedShortCodes={removedShortCodes}
         organismRecords={data.organismRecords}
         zones={data.zones}
         zonePics={data.zonePics}

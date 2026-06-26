@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { X, ZoomIn, ZoomOut, Info } from "lucide-react";
+import { X, ZoomIn, ZoomOut, Info, Trash2 } from "lucide-react";
 import type { Annotation, Organism, Species, Zone, ZonePic } from "../types";
+import { buildRemovedSet, isOrganismRemoved } from "../utils/removed";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import {
   MAX_SCALE,
@@ -194,6 +195,9 @@ export default function OrganismViewer({
   }, [zones]);
   const subtitle = zoneNameByCode.get(organism.zoneCode) ?? organism.zoneCode;
 
+  const removedSet = useMemo(() => buildRemovedSet(annotations), [annotations]);
+  const isRemoved = isOrganismRemoved(organism, removedSet);
+
   return (
     <div
       ref={containerRef}
@@ -365,6 +369,12 @@ export default function OrganismViewer({
               draggable={false}
               onLoad={measureBaseDims}
             />
+            {isRemoved && !isZoomed && (
+              <span className="absolute top-2 left-2 z-10 flex items-center gap-1 rounded-sm bg-amber-900/80 px-1.5 py-0.5 text-[10px] font-display uppercase tracking-wider text-amber-100 backdrop-blur-sm pointer-events-none">
+                <Trash2 size={11} strokeWidth={1.75} />
+                Removed
+              </span>
+            )}
           </div>
 
           {showNext && nextOrganism && (

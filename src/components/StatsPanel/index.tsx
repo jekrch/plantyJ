@@ -9,7 +9,10 @@ import { Timeline } from "./Timeline";
 import { EcoFit } from "./EcoFit";
 
 interface Props {
+  /** Active (non-removed) organisms — drives every section except Machine ID. */
   organisms: Organism[];
+  /** All organisms incl. removed — the Machine ID section counts these. */
+  allOrganisms: Organism[];
   zones: Zone[];
   speciesByShortCode: Map<string, Species>;
   aiAnalyses: AIAnalysis[];
@@ -21,6 +24,7 @@ interface Props {
 
 export default function StatsPanel({
   organisms,
+  allOrganisms,
   zones,
   speciesByShortCode,
   aiAnalyses,
@@ -30,8 +34,8 @@ export default function StatsPanel({
   onShowEcoFit,
 }: Props) {
   const stats = useMemo(
-    () => computeStats(organisms, zones, speciesByShortCode, aiAnalyses),
-    [organisms, zones, speciesByShortCode, aiAnalyses],
+    () => computeStats(organisms, zones, speciesByShortCode, aiAnalyses, allOrganisms),
+    [organisms, allOrganisms, zones, speciesByShortCode, aiAnalyses],
   );
   const [rank, setRank] = useState<TaxonRank>("family");
   const rankInfo = RANKS.find((r) => r.id === rank) ?? RANKS[4];

@@ -12,6 +12,7 @@ import {
   BookOpen,
   Database,
   Leaf,
+  Trash2,
 } from "lucide-react";
 import type {
   AIAnalysis,
@@ -34,6 +35,10 @@ interface Props {
   activeTab: Tab;
   onTabChange: (tab: Tab) => void;
   organisms: Organism[];
+  /** Active (non-removed) organisms — the Stats tab excludes removed plants. */
+  activeOrganisms: Organism[];
+  /** shortCodes fully removed from the garden — flagged with a Removed tag in the Plants tab. */
+  removedShortCodes?: Set<string>;
   organismRecords: OrganismRecord[];
   zones: Zone[];
   zonePics: ZonePic[];
@@ -54,6 +59,7 @@ interface OrganismEntry {
   fullName: string | null;
   image: string | null;
   count: number;
+  removed: boolean;
 }
 
 interface ZoneEntry {
@@ -111,6 +117,8 @@ function InfoModalContent({
   activeTab,
   onTabChange,
   organisms,
+  activeOrganisms,
+  removedShortCodes,
   organismRecords,
   zones,
   zonePics,
@@ -166,12 +174,13 @@ function InfoModalContent({
         fullName: rec?.fullName ?? null,
         image: imageByCode.get(code) ?? null,
         count: countByCode.get(code) ?? 0,
+        removed: removedShortCodes?.has(code) ?? false,
       };
     });
     return entries
       .filter((e) => e.image !== null)
       .sort((a, b) => a.label.toLowerCase().localeCompare(b.label.toLowerCase()));
-  }, [organisms, organismRecords]);
+  }, [organisms, organismRecords, removedShortCodes]);
 
   const zoneEntries: ZoneEntry[] = useMemo(() => {
     const picByZone = new Map<string, string>();
@@ -284,7 +293,8 @@ function InfoModalContent({
           {tab === "about" && <AboutPanel />}
           {tab === "stats" && (
             <StatsPanel
-              organisms={organisms}
+              organisms={activeOrganisms}
+              allOrganisms={organisms}
               zones={zones}
               speciesByShortCode={speciesByShortCode}
               aiAnalyses={aiAnalyses}
@@ -518,6 +528,7 @@ function OrganismsPanel({
             altLabel={entry.fullName ?? entry.baseLabel}
             code={entry.shortCode}
             count={entry.count}
+            removed={entry.removed}
             onClick={entry.count > 0 ? () => onFilter(entry.shortCode) : null}
           />
         ))}
@@ -563,6 +574,7 @@ interface EntryCardProps {
   altLabel: string;
   code: string;
   count: number;
+  removed?: boolean;
   capitalizeLabel?: boolean;
   onClick: (() => void) | null;
 }
@@ -574,6 +586,7 @@ function EntryCard({
   altLabel,
   code,
   count,
+  removed,
   capitalizeLabel,
   onClick,
 }: EntryCardProps) {
@@ -606,12 +619,18 @@ function EntryCard({
             decoding="async"
             className={`absolute inset-0 w-full h-full object-cover transition-transform duration-300 ease-in-out will-change-transform ${
               interactive ? "group-hover:scale-[1.02]" : ""
-            }`}
+            } ${removed ? "grayscale opacity-60" : ""}`}
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-ink-faint text-[10px] font-mono">
             no image
           </div>
+        )}
+        {removed && (
+          <span className="absolute top-1.5 left-1.5 flex items-center gap-0.5 rounded-sm bg-amber-900/80 px-1 py-0.5 text-[9px] font-display uppercase tracking-wider text-amber-100 backdrop-blur-sm">
+            <Trash2 size={9} strokeWidth={1.75} />
+            Removed
+          </span>
         )}
         <span className="absolute top-1.5 right-1.5 text-[9px] font-mono tabular-nums px-1.5 py-0.5 rounded bg-black/55 text-white/75 backdrop-blur-sm">
           {count}

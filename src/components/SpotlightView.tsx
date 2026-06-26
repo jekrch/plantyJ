@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import { Trash2 } from "lucide-react";
 import type { Organism, Zone, ZonePic } from "../types";
 import { organismTitle } from "../utils/display";
+import { isOrganismRemoved } from "../utils/removed";
 
 const DOUBLE_CLICK_DELAY = 400;
 const MOUSE_TOLERANCE = 20;
@@ -12,6 +14,8 @@ interface Props {
   kind: SpotlightKind;
   subjectCode: string;
   allOrganisms: Organism[];
+  /** Removed plant+zone combos; flagged with a Removed badge in the plant view. */
+  removedSet?: Set<string>;
   zonePics: ZonePic[];
   zones: Zone[];
   onOpenViewer: (organism: Organism) => void;
@@ -71,10 +75,16 @@ export default function SpotlightView({
   kind,
   subjectCode,
   allOrganisms,
+  removedSet,
   zonePics,
   zones,
   onOpenViewer,
 }: Props) {
+  const itemRemoved = useCallback(
+    (it: SpotlightItem) =>
+      it.kind === "plant" && !!removedSet && isOrganismRemoved(it.organism, removedSet),
+    [removedSet],
+  );
   const items = useMemo<SpotlightItem[]>(() => {
     if (kind === "plant") {
       const list: SpotlightItem[] = allOrganisms
@@ -166,6 +176,12 @@ export default function SpotlightView({
               className="relative z-10 block w-full h-full object-contain"
               draggable={false}
             />
+            {itemRemoved(hero) && (
+              <span className="absolute top-2 left-2 z-20 flex items-center gap-1 rounded-sm bg-amber-900/80 px-1.5 py-0.5 text-[10px] font-display uppercase tracking-wider text-amber-100 backdrop-blur-sm pointer-events-none">
+                <Trash2 size={11} strokeWidth={1.75} />
+                Removed
+              </span>
+            )}
           </div>
 
           <div className="mt-3 px-1 flex items-baseline justify-between gap-3">
@@ -208,6 +224,7 @@ export default function SpotlightView({
                   key={it.id}
                   item={it}
                   active={it.id === hero.id}
+                  removed={itemRemoved(it)}
                   label={thumbLabel}
                   onSingleClick={() => setSelectedId(it.id)}
                   onDoubleClick={() => {
@@ -227,12 +244,13 @@ export default function SpotlightView({
 interface ThumbProps {
   item: SpotlightItem;
   active: boolean;
+  removed?: boolean;
   label?: string;
   onSingleClick: () => void;
   onDoubleClick: () => void;
 }
 
-function Thumb({ item, active, label, onSingleClick, onDoubleClick }: ThumbProps) {
+function Thumb({ item, active, removed, label, onSingleClick, onDoubleClick }: ThumbProps) {
   const lastTap = useRef<{ time: number; x: number; y: number } | null>(null);
   const lastClick = useRef<{ time: number; x: number; y: number } | null>(null);
 
@@ -287,9 +305,15 @@ function Thumb({ item, active, label, onSingleClick, onDoubleClick }: ThumbProps
         alt={altText}
         loading="lazy"
         decoding="async"
-        className="block w-full h-full object-cover"
+        className={`block w-full h-full object-cover ${removed ? "grayscale opacity-60" : ""}`}
         draggable={false}
       />
+      {removed && (
+        <span className="absolute top-1 left-1 z-10 flex items-center gap-0.5 rounded-sm bg-amber-900/80 px-1 py-0.5 text-[9px] font-display uppercase tracking-wider text-amber-100 backdrop-blur-sm pointer-events-none">
+          <Trash2 size={9} strokeWidth={1.75} />
+          Removed
+        </span>
+      )}
       {label && (
         <span className="absolute bottom-0 inset-x-0 px-1.5 py-0.5 text-[12px] text-white/80 bg-linear-to-t from-black/80 to-black/20 leading-tight truncate pointer-events-none">
           {label}
