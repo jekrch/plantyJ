@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "C fas",
+      "fullName": "Chamaecrista fasciculata",
+      "commonName": "Partridge Pea",
+      "variety": null
+    },
+    {
       "shortCode": "E ann",
       "fullName": "Erigeron annuus",
       "commonName": "Annual Fleabane",
