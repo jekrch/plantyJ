@@ -1,6 +1,22 @@
 {
   "pics": [
     {
+      "seq": 122,
+      "id": "F x sea-1782575075",
+      "shortCode": "F x sea",
+      "zoneCode": "fy",
+      "tags": [
+        "fruiting",
+        "edible"
+      ],
+      "description": "Seascape strawberries ripening in a caged raised bed in front yard bed 1.",
+      "image": "images/F x sea/1782575075.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-06-27T15:44:36.667Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 121,
       "id": "A fla-1782574715",
       "shortCode": "A fla",
@@ -639,7 +655,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -833,7 +849,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
