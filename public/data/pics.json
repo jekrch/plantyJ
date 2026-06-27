@@ -13,7 +13,10 @@
       "postedBy": "Jacob",
       "addedAt": "2026-06-27T00:02:43.573Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "bioclipSpeciesId": "Saponaria officinalis",
+      "bioclipCommonName": "soapweed",
+      "bioclipScore": 0.7211
     },
     {
       "seq": 111,
@@ -29,7 +32,8 @@
       "height": 960,
       "bioclipSpeciesId": "Albizia kalkora",
       "bioclipCommonName": "",
-      "bioclipScore": 0.2178
+      "bioclipScore": 0.2178,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 110,
@@ -482,7 +486,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -676,7 +680,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,

@@ -4321,6 +4321,70 @@
       ],
       "observationsCount": 70902
     },
+    "saponaria-officinalis": {
+      "id": "saponaria-officinalis",
+      "fullName": "Saponaria officinalis",
+      "commonName": "Soapwort",
+      "description": "Saponaria officinalis is a common perennial plant from the family Caryophyllaceae. This plant has many common names, including common soapwort, bouncing-bet, crow soap, and soapweed. There are about 20 species of soapworts altogether.\nThe scientific name Saponaria is derived from the Latin sapo (stem sapon-) meaning \"soap\", which, like its common name, refers to its utility in cleaning. From this same Latin root is derived the name of the toxic substances saponins found in many plants, including a specific saporin saponarin contained in the roots at levels up to 20 percent when the plant is flowering (Indian soapnuts contain only 15 percent). The flowers colouring likely reflects the chemical environment of saponarin. Saponins produce a lather when in contact with water. The epithet officinalis indicates its medicinal functions. It is a common host plant for some moth species, including the white-lined sphinx.\nSaponaria officinalis' native range extends throughout Europe, and in Asia to western Siberia. It grows in cool places at low or moderate elevations under hedgerows and along the shoulders of roadways. It can be found as a horticultural escape and noxious invasive in much of North America.",
+      "vernacularNames": [
+        "Bladder Soapwort",
+        "Bouncing Bet",
+        "Bouncingbet",
+        "Bouncingbet Soapweed",
+        "China Cockle",
+        "Common Soapwort",
+        "Cow Basil",
+        "Cow Foot",
+        "Cow Herb",
+        "Cow Soapwort",
+        "Gapi\u00e9 m\u00ebd\u0142o",
+        "Gew\u00f6hnliches Seifenkraut (DE); Soapwort (EN)",
+        "Glond",
+        "common soapwort"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Caryophyllales",
+        "family": "Caryophyllaceae",
+        "genus": "Saponaria",
+        "species": "Saponaria officinalis",
+        "canonicalName": "Saponaria officinalis"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3085360"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Saponaria_officinalis"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/56154"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q156841"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.153728"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 64467
+    },
     "sciurus-carolinensis": {
       "id": "sciurus-carolinensis",
       "fullName": "Sciurus carolinensis",
