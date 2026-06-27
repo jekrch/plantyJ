@@ -658,6 +658,14 @@
         "native"
       ],
       "description": null
+    },
+    {
+      "shortCode": "F x sea",
+      "zoneCode": null,
+      "tags": [
+        "edible"
+      ],
+      "description": null
     }
   ]
 }
