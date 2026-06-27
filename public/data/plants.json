@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "S off",
+      "fullName": "Saponaria officinalis",
+      "commonName": "Soapwort",
+      "variety": null
+    },
+    {
       "shortCode": "C fas",
       "fullName": "Chamaecrista fasciculata",
       "commonName": "Partridge Pea",
