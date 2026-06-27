@@ -417,6 +417,18 @@
       "created": "2026-05-09T00:42:07.417Z"
     },
     {
+      "shortCode": "F x sea",
+      "zoneCode": "fy",
+      "verdict": "MIXED",
+      "analysis": "The hybrid garden strawberry inherits significant ecological value from one of its parent species, the North American native wild strawberry. While not a pure native, its white spring blossoms provide essential early-season pollen and nectar to support native generalist pollinators, including sweat bees and bumble bees. These floral resources enrich the front yard's diverse native plant community, which features species like golden alexanders and prairie violets. Furthermore, as a member of the genus Fragaria, the plant can act as a host for dozens of native lepidopteran larvae, such as the gray hairstreak butterfly and various specialized moths. Though garden birds, squirrels, and small mammals would normally devour the ripening red aggregate fruits, the use of a caged raised bed in this zone successfully prevents vertebrate feeding, conserving the crop for the homeowners while allowing insects to freely utilize the foliage and flowers.\n\nFrom a practical standpoint, the front yard zone presents a challenging environment that makes this specimen's niche highly mixed. The native soil of this zone is a compacted clay loam that suffers from spring waterlogging and summer drought—conditions that easily rot or desiccate the shallow root systems of strawberries. The homeowners' decision to plant the 'Seascape' variety in a raised bed is a brilliant cultural solution, creating a well-drained, custom loamy environment. This day-neutral cultivar is also fully hardy in USDA zone 4b/5a, though applying straw mulch in late autumn is recommended to protect the crown from harsh Twin Cities winters. However, the front yard is mostly shady throughout the day, receiving only limited late afternoon sun. Because strawberries thrive best in full sun, this persistent shade represents a critical limiting factor that will likely reduce fruit sweetness, lower overall yields, and increase the foliage's susceptibility to diseases like powdery mildew.",
+      "references": [
+        "https://pfaf.org/user/Plant.aspx?LatinName=fragaria+x+ananassa",
+        "https://www.gardenia.net/genus/strawberries-benefits-uses-varieties-care",
+        "https://www.vaworkinglandscapes.org/native-plant-watch/native-plant-highlights/whats-in-bloom-wild-strawberry/"
+      ],
+      "created": "2026-06-27T22:34:14.594Z"
+    },
+    {
       "shortCode": "G mac",
       "zoneCode": "mpg",
       "verdict": "GOOD",
