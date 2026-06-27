@@ -33,6 +33,8 @@ const VERDICT_COLOR: Record<AIVerdict, { color: string; filled: number }> = {
   BAD: { color: "text-rose-300", filled: 1 },
 };
 
+const analysisId = (a: AIAnalysis) => `${a.shortCode}::${a.zoneCode}`;
+
 function VerdictBadge({ verdict }: { verdict: AIVerdict }) {
   const { color, filled } = VERDICT_COLOR[verdict];
   return (
@@ -94,12 +96,24 @@ export function NodeDetail({
     return (relationships.neighbors.get(node.data.shortCode) ?? []).length;
   }, [isLeaf, node, relationships]);
 
-  const species =
-    isLeaf && node.data.shortCode ? (speciesByShortCode.get(node.data.shortCode) ?? null) : null;
+  // A species with multiple varieties is rendered as an internal node whose
+  // children are the individual varieties; it carries no organism/shortCode of
+  // its own. It still represents a single species, so surface that species'
+  // info — every variety resolves to the same species record.
+  const isVarietyParent = !isLeaf && (node.children ?? []).some((c) => c.data.rank === "variety");
+  const showSpeciesInfo = isLeaf || isVarietyParent;
+  const speciesShortCode = isLeaf
+    ? (node.data.shortCode ?? null)
+    : isVarietyParent
+      ? (node.descendants().find((d) => d.data.shortCode)?.data.shortCode ?? null)
+      : null;
+  const species = speciesShortCode ? (speciesByShortCode.get(speciesShortCode) ?? null) : null;
 
   const taxaInfo = taxa[node.data.name];
-  const description = isLeaf ? (species?.description ?? null) : (taxaInfo?.description ?? null);
-  const references: { name: string; url: string }[] = isLeaf
+  const description = showSpeciesInfo
+    ? (species?.description ?? null)
+    : (taxaInfo?.description ?? null);
+  const references: { name: string; url: string }[] = showSpeciesInfo
     ? (species?.references ?? [])
     : taxaInfo?.url
       ? [{ name: "Wikipedia", url: taxaInfo.url }]
@@ -112,9 +126,15 @@ export function NodeDetail({
   }, [node]);
 
   const speciesAnalyses = useMemo(() => {
-    if (!isLeaf || !node.data.shortCode) return [] as AIAnalysis[];
-    return aiAnalyses.filter((a) => a.shortCode === node.data.shortCode);
-  }, [isLeaf, node, aiAnalyses]);
+    if (!showSpeciesInfo) return [] as AIAnalysis[];
+    const codes = new Set(
+      node
+        .descendants()
+        .map((d) => d.data.shortCode)
+        .filter((c): c is string => !!c),
+    );
+    return aiAnalyses.filter((a) => codes.has(a.shortCode));
+  }, [showSpeciesInfo, node, aiAnalyses]);
 
   const zoneNameByCode = useMemo(() => {
     const m = new Map<string, string>();
@@ -122,16 +142,16 @@ export function NodeDetail({
     return m;
   }, [zones]);
 
-  const [selectedZone, setSelectedZone] = useState<string | null>(null);
+  const [selectedAnalysis, setSelectedAnalysis] = useState<string | null>(null);
 
   useEffect(() => {
-    setSelectedZone(speciesAnalyses[0]?.zoneCode ?? null);
+    setSelectedAnalysis(speciesAnalyses[0] ? analysisId(speciesAnalyses[0]) : null);
   }, [speciesAnalyses]);
 
   const currentAnalysis = useMemo(() => {
     if (speciesAnalyses.length === 0) return null;
-    return speciesAnalyses.find((a) => a.zoneCode === selectedZone) ?? speciesAnalyses[0];
-  }, [speciesAnalyses, selectedZone]);
+    return speciesAnalyses.find((a) => analysisId(a) === selectedAnalysis) ?? speciesAnalyses[0];
+  }, [speciesAnalyses, selectedAnalysis]);
 
   const shortCodes = useMemo(() => {
     const set = new Set<string>();
@@ -291,22 +311,24 @@ export function NodeDetail({
               {speciesAnalyses.length > 1 ? (
                 <div className="flex flex-wrap items-center gap-1 mb-1.5">
                   <span className="text-[9px] font-mono uppercase tracking-wider text-ink-faint mr-1">
-                    Zone
+                    {isVarietyParent ? "Variety" : "Zone"}
                   </span>
                   {speciesAnalyses.map((a) => {
-                    const active = a.zoneCode === currentAnalysis.zoneCode;
-                    const label = zoneNameByCode.get(a.zoneCode) ?? a.zoneCode;
+                    const active = analysisId(a) === analysisId(currentAnalysis);
+                    const org = organismsByCode.get(a.shortCode);
+                    const zoneName = zoneNameByCode.get(a.zoneCode) ?? a.zoneCode;
+                    const label = isVarietyParent && org ? organismTitle(org) : zoneName;
                     return (
                       <button
-                        key={a.zoneCode}
+                        key={analysisId(a)}
                         type="button"
-                        onClick={() => setSelectedZone(a.zoneCode)}
+                        onClick={() => setSelectedAnalysis(analysisId(a))}
                         className={`text-[10px] leading-none px-2 py-1 rounded-sm transition-colors cursor-pointer ${
                           active
                             ? "bg-accent/20 text-accent ring-1 ring-inset ring-accent/40"
                             : "bg-white/5 text-ink-muted hover:bg-white/10 hover:text-ink"
                         }`}
-                        title={label}
+                        title={isVarietyParent ? `${label} · ${zoneName}` : label}
                       >
                         {label}
                         <span className="ml-1 text-[9px] font-mono opacity-60">{a.zoneCode}</span>
@@ -316,11 +338,25 @@ export function NodeDetail({
                 </div>
               ) : (
                 <div className="text-[10px] text-ink-faint mb-1.5">
-                  Zone:{" "}
-                  <span className="text-ink-muted">
-                    {zoneNameByCode.get(currentAnalysis.zoneCode) ?? currentAnalysis.zoneCode}
-                  </span>{" "}
-                  <span className="font-mono opacity-60">{currentAnalysis.zoneCode}</span>
+                  {(() => {
+                    const org =
+                      isVarietyParent ? organismsByCode.get(currentAnalysis.shortCode) : undefined;
+                    const zoneName =
+                      zoneNameByCode.get(currentAnalysis.zoneCode) ?? currentAnalysis.zoneCode;
+                    return (
+                      <>
+                        {org ? (
+                          <>
+                            <span className="text-ink-muted">{organismTitle(org)}</span> in{" "}
+                          </>
+                        ) : (
+                          "Zone: "
+                        )}
+                        <span className="text-ink-muted">{zoneName}</span>{" "}
+                        <span className="font-mono opacity-60">{currentAnalysis.zoneCode}</span>
+                      </>
+                    );
+                  })()}
                 </div>
               )}
               <p className="text-[12px] leading-relaxed text-ink/85 whitespace-pre-line">

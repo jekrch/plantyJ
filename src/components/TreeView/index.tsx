@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { hierarchy, cluster, type HierarchyPointNode } from "d3-hierarchy";
+import { hierarchy, cluster, type HierarchyNode, type HierarchyPointNode } from "d3-hierarchy";
 import { LoaderCircle, Maximize2, Search, X, ZoomIn, ZoomOut } from "lucide-react";
 import { organismTitle } from "../../utils/display";
 import { buildTree, linkPath } from "./treeUtils";
@@ -53,13 +53,39 @@ export default function TreeView({
   const layout = useMemo(() => {
     const h = hierarchy<RawNode>(root, (d) => d.children);
     const leaves = h.leaves().length;
-    const depth = Math.max(h.height, 1);
     const height = Math.max((leaves - 1) * ROW_HEIGHT, 200);
-    const treeWidth = depth * COL_WIDTH;
+
+    // Column index for a node, fixed by its taxonomic rank. We pin each node to
+    // its rank column rather than letting the dendrogram place internal nodes by
+    // distance-from-leaf. Without this, a branch that stops short of species
+    // (e.g. an organism identified only to family, like a skimmer dragonfly)
+    // gets its order/family nodes pulled toward the leaf edge, sliding them out
+    // from under their rank headers so the lineage looks like it's missing
+    // ranks. Variety overflow nodes sit one column past their parent.
+    const colCache = new Map<HierarchyNode<RawNode>, number>();
+    const colOf = (n: HierarchyNode<RawNode>): number => {
+      const cached = colCache.get(n);
+      if (cached !== undefined) return cached;
+      const rank = n.data.rank;
+      let col: number;
+      if (rank === "root") col = 0;
+      else if (rank === "variety") col = (n.parent ? colOf(n.parent) : RANKS.length) + 1;
+      else {
+        const idx = RANKS.indexOf(rank);
+        col = idx >= 0 ? idx + 1 : n.parent ? colOf(n.parent) + 1 : n.depth;
+      }
+      colCache.set(n, col);
+      return col;
+    };
+
+    const maxCol = Math.max(0, ...h.descendants().map(colOf));
+    const treeWidth = maxCol * COL_WIDTH;
     cluster<RawNode>()
       .size([height, treeWidth])
       .separation(() => 1)(h);
     const nodes = h.descendants() as HierarchyPointNode<RawNode>[];
+    // Override the dendrogram's depth-based y with the fixed rank column.
+    for (const n of nodes) n.y = colOf(n) * COL_WIDTH;
     const links = h.links() as {
       source: HierarchyPointNode<RawNode>;
       target: HierarchyPointNode<RawNode>;
