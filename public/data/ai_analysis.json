@@ -190,6 +190,20 @@
     },
     {
       "shortCode": "A tub",
+      "zoneCode": "fy",
+      "verdict": "MIXED",
+      "analysis": "Asclepias tuberosa (Butterfly Weed) is an ecologically vital native perennial, but its placement in the front yard (fy) zone presents a significant mismatch between the plant's biological needs and the site's environmental conditions. On the positive side, butterfly weed is a cornerstone of the local food web. It acts as a primary larval host for the monarch butterfly (Danaus plexippus) and the milkweed tussock moth (Euchaetes egle). Its flat clusters of bright orange flowers provide high-quality nectar that feeds adult native pollinators, including the red admiral (Vanessa atalanta) and the American lady (Vanessa virginiensis)—both of which are noted residents of this garden. It also draws in a wide variety of native bees, such as the common eastern bumble bee (Bombus impatiens). Although its toxic cardiac glycosides deter mammalian herbivores, the insects it supports provide a crucial indirect food source for local insectivorous birds and other wildlife.\n\nHowever, the physical conditions of the front yard zone are highly sub-optimal for this species. This area is mostly shady through the day with compacted clay loam that is wet in the spring. While fully hardy in Minnesota's zone 4b/5a climate, butterfly weed is a true prairie specialist that demands full sun and sharply drained, sandy, or gravelly soils. In damp, compacted clay, its deep fleshy taproot is extremely vulnerable to crown and root rot, particularly during wet spring periods. Additionally, the lack of sunlight will lead to leggy, weakened growth and minimal flowering, severely diminishing its aesthetic and pollinator value. The owners, who prioritize native ecology, would find greater success keeping this plant in their sunny north boulevard (nbv) zone, where it has already been observed, while substituting the front yard's wet clay spots with a more moisture-tolerant native congener like swamp milkweed (Asclepias incarnata).",
+      "references": [
+        "https://xerces.org/blog/2017-perennial-plant-of-year-and-other-milkweeds-you-should-know",
+        "https://bwsr.state.mn.us/sites/default/files/2020-08/Featured%20Plant%20September%202020%20Butterfly%20Milkweed.pdf",
+        "https://art.msu.edu/news/butterfly-weed-asclepias-tuberosa/",
+        "https://ask.extension.org/kb/faq.php?id=801125",
+        "https://lifetips.alibaba.com/plant-care/butterfly-weed-leaves"
+      ],
+      "created": "2026-06-27T00:19:14.541Z"
+    },
+    {
+      "shortCode": "A tub",
       "zoneCode": "nbv",
       "verdict": "GOOD",
       "analysis": "Asclepias tuberosa (Butterfly Weed) is an essential native perennial that serves as a vital host plant for Monarch butterfly caterpillars and provides high-quality nectar for diverse pollinators. Its deep taproot allows it to thrive in the challenging, dry conditions of a boulevard strip, and it adapts well to well-drained loam or clay-loam in zone 4b/5a. Planting this in the boulevard directly supports the owners' priority of enhancing local ecology and pollinator pathways.",
@@ -260,6 +274,19 @@
       "analysis": "Narcissus cyclamineus 'Tete a Tete' (Dwarf Daffodil) is a non-native spring bulb that provides bright, early color but relatively low ecological value, as most native bees prefer indigenous spring ephemerals. However, daffodils are highly practical in an urban setting because they are completely deer, rabbit, and squirrel resistant due to their toxic alkaloids. They offer harmless aesthetic cheer without becoming invasive, though they do not actively feed the local food web.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "C fas",
+      "zoneCode": "nbv",
+      "verdict": "GOOD",
+      "analysis": "Partridge Pea is an exceptional native annual for the North Boulevard zone, successfully addressing the challenges of compacted clay loam soil and fluctuating moisture. As a legume, it fixes atmospheric nitrogen, which naturally enriches the soil and supports neighboring native species like Butterfly Weed and Golden Alexanders. This rapid-growing pioneer species acts as a valuable \"green mulch\" that suppresses opportunistic weeds, which aids the owners' recent efforts to eliminate invasive Oxeye Daisy from the boulevard. \n\nThe plant serves as a vital ecological hub for local wildlife and insects. It is a larval host plant for several native sulfur butterflies, including the Cloudless Sulphur and Sleepy Orange. While its bright yellow blooms offer abundant pollen for buzz-pollinating bumblebees, its extrafloral nectaries—glands at the base of the leaves—provide a constant nectar source for predatory beneficial insects like wasps and ants, bolstering natural biological pest control. Furthermore, the persistent, high-protein winter seed pods offer a critical cold-season food supply for birds; this directly supports the local food web, providing sustenance for the Wild Turkeys documented visiting this specific zone. Because it is a self-seeding annual, its abundance may naturally shift as perennial stands thicken, which aligns perfectly with a dynamic, ecologically resilient urban garden.",
+      "references": [
+        "https://bwsr.state.mn.us/sites/default/files/2018-12/Plant-of-Month-August-2018-Partridge-Pea4.pdf",
+        "https://www.prairiemoon.com/chamaecrista-fasciculata-partridge-pea",
+        "https://www.nwtf.org/content-hub/7-grasses-and-forbs-you-need-on-your-property",
+        "https://growitbuildit.com/partridge-pea-101-chamaecrista-fasciculate/"
+      ],
+      "created": "2026-06-27T00:19:14.541Z"
     },
     {
       "shortCode": "C pen",
@@ -867,6 +894,19 @@
       "analysis": "Scrophularia marilandica (Late Figwort) is the late-season counterpart to S. lanceolata, stepping in to provide abundant nectar from mid-summer into fall. It is a towering, shade-tolerant native that acts as an insect magnet, supporting specialized bees, wasps, and migrating hummingbirds just as they need to build energy reserves. Planting both figworts ensures a continuous, high-volume nectar flow in the front yard.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "S off",
+      "zoneCode": "mpg",
+      "verdict": "MIXED",
+      "analysis": "Saponaria officinalis (soapwort or bouncing bet) occupies a highly mixed ecological niche in the shaded \"mpg\" (Maple) zone. This zone is heavily constrained by the dense shade, dry soil, and aggressive root systems of a non-native, invasive Norway maple, which creates a notoriously difficult environment for establishing delicate native ephemerals. Soapwort's robust adaptability enables it to tolerate compacted clay-loam, dry shade, and root competition with ease. During its mid-to-late summer bloom, it provides valuable late-season ecological benefits, producing fragrant pink flowers that attract long-tongued nocturnal pollinators like hawkmoths and native bees. Furthermore, the specimen aligns with the garden's medicinal goals; its tissues contain a high concentration of saponins, historically used for gentle, antimicrobial soap-making and traditional herbal applications.\n\nHowever, soapwort presents severe ecological drawbacks that conflict with the owners' prioritization of native plants and local biodiversity. Native to Eurasia, it is a highly aggressive, naturalized perennial that is widely categorized as an invasive weed in many North American regions due to its vigorous underground rhizomes and prolific self-seeding. Because it can rapidly form dense monocultures, it poses a risk of escaping the maple zone and outcompeting the garden's native plants. Additionally, its high saponin content makes it toxic to fish and largely unpalatable to native herbivores. To reconcile these traits with their ecological goals, the owners must proactively manage this specimen. Deadheading flowers before seed set is vital, and growing it within physical barriers or deep under the dry canopy of the Norway maple, which naturally limits its spreading vigor, can help control its invasive tendencies.",
+      "references": [
+        "https://www.minnesotawildflowers.info/flower/bouncing-bet",
+        "https://www.gardenia.net/guide/native-plant-alternatives-to-saponaria-officinalis",
+        "https://davesgarden.com/guides/pf/go/171",
+        "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQFBslgeaAy4MS18oWPccj2ul_RqDnCvXeU4tRBvQyPKDqv3sQ5jxTgl-pCUIDLPe4HW-p7WjbTPwciauk_oaPdKExzSnVs3DhRbKs65T4UwKSwKfbjDF5ogu3nlzojNg6VoI3vlVGlElx_rgNRn9Jexa7brnVLg0FXwUG0Cv5PU4UgpsaWvitKrZnptKLBrpzAxlov9JvlojXLN92c6RK2YA-gnSDux0J6uuRFgOvJv2hAZah-3G9xlCF3IMujopbJQkx8pM0a20IfTYTY4KI="
+      ],
+      "created": "2026-06-27T00:19:14.541Z"
     },
     {
       "shortCode": "S pul",
