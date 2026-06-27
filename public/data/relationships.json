@@ -578,6 +578,48 @@
       "type": "predator-prey",
       "from": "L lib",
       "to": "T amo"
+    },
+    {
+      "id": 85,
+      "type": "pollinator",
+      "from": "B imp",
+      "to": "C fas"
+    },
+    {
+      "id": 86,
+      "type": "pollinator",
+      "from": "B imp",
+      "to": "T ser"
+    },
+    {
+      "id": 87,
+      "type": "pollinator",
+      "from": "B imp",
+      "to": "A tub"
+    },
+    {
+      "id": 88,
+      "type": "pollinator",
+      "from": "B imp",
+      "to": "E yuc"
+    },
+    {
+      "id": 89,
+      "type": "pollinator",
+      "from": "B imp",
+      "to": "S off"
+    },
+    {
+      "id": 90,
+      "type": "pollinator",
+      "from": "V ata",
+      "to": "E ann"
+    },
+    {
+      "id": 91,
+      "type": "forager",
+      "from": "S tri",
+      "to": "H jub"
     }
   ]
 }
