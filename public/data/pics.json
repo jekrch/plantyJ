@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 112,
+      "id": "S off-1782518562",
+      "shortCode": "S off",
+      "zoneCode": "mpg",
+      "tags": [
+        "medicinal"
+      ],
+      "description": "Pale pink blooms in the maple zone.",
+      "image": "images/S off/1782518562.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-06-27T00:02:43.573Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 111,
       "id": "C fas-1782518255",
       "shortCode": "C fas",
@@ -467,7 +482,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -661,7 +676,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
