@@ -774,5 +774,9 @@
   "Saponaria": {
     "description": "Saponaria is a genus of flowering plants in the family Caryophyllaceae. It is usually characterized by pink or white flowers.",
     "url": "https://en.wikipedia.org/wiki/Saponaria"
+  },
+  "Fragaria": {
+    "description": "Fragaria is a genus of flowering plants in the rose family, Rosaceae, commonly known as strawberries for their edible fruits. There are more than 20 described species and many hybrids and cultivars. The most common strawberries grown commercially are cultivars of the garden strawberry, a hybrid known as Fragaria \u00d7 ananassa. Strawberries have a taste that varies by cultivar, and ranges from quite sweet to rather tart. Strawberries are an important commercial fruit crop, widely grown in all temperate regions of the world.",
+    "url": "https://en.wikipedia.org/wiki/Fragaria"
   }
 }

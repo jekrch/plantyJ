@@ -2044,6 +2044,56 @@
       ],
       "observationsCount": 175045
     },
+    "fragaria-x-ananassa": {
+      "id": "fragaria-x-ananassa",
+      "fullName": "Fragaria x ananassa",
+      "commonName": "Garden Strawberry",
+      "description": "The garden strawberry (or simply strawberry; Fragaria \u00d7 ananassa) is a widely grown hybrid plant cultivated worldwide for its fruit. The genus Fragaria, the strawberries, is in the rose family, Rosaceae. The fruit is appreciated for its aroma, bright red colour, juicy texture, and sweetness. It is eaten either fresh or in prepared foods such as jam, ice cream, and chocolates. Artificial strawberry flavourings and aromas are widely used in commercial products. Botanically, the strawberry is not a berry, but an aggregate accessory fruit. Each apparent 'seed' on the outside of the strawberry is actually an achene, a botanical fruit with a seed inside it.\nThe garden strawberry was first bred in Brittany, France, in the 1750s via a cross of F. virginiana from eastern North America and F. chiloensis, which was brought from Chile by Am\u00e9d\u00e9e-Fran\u00e7ois Fr\u00e9zier in 1714. Cultivars of F. \u00d7 ananassa have replaced the woodland strawberry F. vesca in commercial production. In 2024, world production of strawberries exceeded ten million tons, led by China with 38% of the total.\nStrawberries have appeared in literature and art from Roman times; Virgil wrote about the snake lurking beneath the strawberry, an image reinterpreted by later writers including Shakespeare. Strawberries appear in Italian, Flemish, and German paintings, including Hieronymus Bosch's The Garden of Earthly Delights. It has been understood to symbolise the ephemerality of earthly joys or the benefit that blessed souls get from religion, or to allegorise death and resurrection. By the late 20th century, its meaning had shifted: it symbolised female sexuality.",
+      "vernacularNames": [
+        "Garden Strawberry",
+        "Strawberry",
+        "cultivated strawberry",
+        "dessert strawberry"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Rosales",
+        "family": "Rosaceae",
+        "genus": "Fragaria",
+        "species": "Fragaria ananassa",
+        "canonicalName": "Fragaria ananassa"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3029912"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Fragaria_x_ananassa"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/55366"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.155542"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 9145
+    },
     "geranium-maculatum": {
       "id": "geranium-maculatum",
       "fullName": "Geranium maculatum",

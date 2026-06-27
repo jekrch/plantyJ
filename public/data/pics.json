@@ -14,7 +14,10 @@
       "postedBy": "Jacob",
       "addedAt": "2026-06-27T15:44:36.667Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "bioclipSpeciesId": "Potentilla indica",
+      "bioclipCommonName": "Indian strawberry",
+      "bioclipScore": 0.1787
     },
     {
       "seq": 121,
@@ -30,7 +33,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Fraxinus pennsylvanica",
       "bioclipCommonName": "green ash",
-      "bioclipScore": 0.2192
+      "bioclipScore": 0.2192,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Fraxinus_pennsylvanica"
     },
     {
       "seq": 120,
@@ -655,7 +659,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -849,7 +853,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
