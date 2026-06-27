@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 118,
+      "id": "A sci-1782574200",
+      "shortCode": "A sci",
+      "zoneCode": "wbv",
+      "tags": [],
+      "description": "leafed out for summer",
+      "image": "images/A sci/1782574200.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-06-27T15:30:02.136Z",
+      "width": 960,
+      "height": 1280
+    },
+    {
       "seq": 117,
       "id": "H arb-1782574047",
       "shortCode": "H arb",
@@ -571,7 +584,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -765,7 +778,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
