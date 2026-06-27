@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 113,
+      "id": "E yuc-1782518713",
+      "shortCode": "E yuc",
+      "zoneCode": "fy",
+      "tags": [],
+      "description": "Flowering stalk emerging in late June.",
+      "image": "images/E yuc/1782518713.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-06-27T00:05:14.554Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 112,
       "id": "S off-1782518562",
       "shortCode": "S off",
@@ -486,7 +499,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -680,7 +693,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
