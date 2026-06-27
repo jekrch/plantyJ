@@ -13,7 +13,10 @@
       "postedBy": "Jacob",
       "addedAt": "2026-06-27T15:35:46.586Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "bioclipSpeciesId": "Anaphalis margaritacea",
+      "bioclipCommonName": "Pearly everlasting",
+      "bioclipScore": 0.5597
     },
     {
       "seq": 119,
@@ -29,7 +32,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Quercus shumardii",
       "bioclipCommonName": "Shumard oak",
-      "bioclipScore": 0.3142
+      "bioclipScore": 0.3142,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Quercus_shumardii"
     },
     {
       "seq": 118,
@@ -619,7 +623,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -813,7 +817,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
