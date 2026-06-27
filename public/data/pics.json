@@ -11,7 +11,10 @@
       "postedBy": "Jacob",
       "addedAt": "2026-06-27T00:16:12.976Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "bioclipSpeciesId": "Asclepias tuberosa",
+      "bioclipCommonName": "Butterfly-weed",
+      "bioclipScore": 0.9776
     },
     {
       "seq": 114,
@@ -29,7 +32,8 @@
       "height": 960,
       "bioclipSpeciesId": "Thymus pulegioides",
       "bioclipCommonName": "creeping thyme",
-      "bioclipScore": 0.3726
+      "bioclipScore": 0.3726,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Thymus_pulegioides"
     },
     {
       "seq": 113,
@@ -533,7 +537,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -727,7 +731,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
