@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 117,
+      "id": "H arb-1782574047",
+      "shortCode": "H arb",
+      "zoneCode": "hbd",
+      "tags": [
+        "flowering"
+      ],
+      "description": "Flowering hydrangea in the border.",
+      "image": "images/H arb/1782574047.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-06-27T15:27:28.887Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 116,
       "id": "A vir-1782573819",
       "shortCode": "A vir",
@@ -553,7 +568,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -747,7 +762,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
