@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "F x sea",
+      "fullName": "Fragaria x ananassa",
+      "commonName": "Garden Strawberry",
+      "variety": "Seascape"
+    },
+    {
       "shortCode": "S off",
       "fullName": "Saponaria officinalis",
       "commonName": "Soapwort",
