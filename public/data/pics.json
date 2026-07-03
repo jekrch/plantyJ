@@ -13,7 +13,10 @@
       "postedBy": "Jacob",
       "addedAt": "2026-07-03T15:24:54.869Z",
       "width": 960,
-      "height": 1280
+      "height": 1280,
+      "bioclipSpeciesId": "Hemerocallis major",
+      "bioclipCommonName": "",
+      "bioclipScore": 0.3811
     },
     {
       "seq": 123,

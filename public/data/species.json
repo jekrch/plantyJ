@@ -2329,6 +2329,43 @@
       ],
       "observationsCount": 48380
     },
+    "hemerocallis-hybrid": {
+      "id": "hemerocallis-hybrid",
+      "fullName": "Hemerocallis hybrid",
+      "commonName": "Daylily",
+      "description": "",
+      "vernacularNames": [],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Liliopsida",
+        "order": "Asparagales",
+        "family": "Asphodelaceae",
+        "genus": "Hemerocallis",
+        "species": "Hemerocallis hybrida",
+        "canonicalName": "Hemerocallis hybrida"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/11367415"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/1436779"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 260
+    },
     "hepatica-acutiloba": {
       "id": "hepatica-acutiloba",
       "fullName": "Hepatica acutiloba",
