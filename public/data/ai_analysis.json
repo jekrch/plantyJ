@@ -289,6 +289,18 @@
       "created": "2026-06-27T00:19:14.541Z"
     },
     {
+      "shortCode": "C inv",
+      "zoneCode": "fy",
+      "verdict": "MIXED",
+      "analysis": "Purple Poppy Mallow (Callirhoe involucrata) is a highly valuable perennial native to the southern and central Great Plains, extending into southwestern Minnesota, which aligns perfectly with the owners' preference for native, ecologically supportive plants. Ecologically, it serves as an excellent larval host for native butterflies like the Gray Hairstreak (Strymon melinus) and the Checkered Skipper (Pyrgus communis). Its vibrant, magenta, cup-shaped flowers provide an abundance of pollen and nectar for native bees—such as the Common Eastern Bumble Bee (Bombus impatiens) noted elsewhere in the garden—as well as other local pollinators. Additionally, while its foliage provides occasional forage for urban mammalian wildlife like rabbits, it remains a resilient, non-aggressive ground cover that weaves beautifully through garden beds.\n\nHowever, its placement in the front yard (fy) zone presents severe cultural mismatches that warrant a MIXED verdict. This species thrives in full sun and sharply drained, dry, sandy, or rocky soils, relying on a deep taproot to endure extreme drought. Conversely, the fy zone is characterized by mostly shady conditions with only late afternoon sun, coupled with compacted clay loam that stays wet during the spring. This excess moisture and lack of sunlight create a high risk of crown rot and fungal diseases like rust, and will likely cause the plant to become leggy and experience a premature decline. For long-term success, the owners should protect this specimen from early rabbit browse and plan to relocate it to a sunnier, drier area with lighter soil—such as the berry border (bb) or a well-drained slope in the side yard (sy)—before its deep, transplant-sensitive taproot becomes fully established.",
+      "references": [
+        "https://www.wildflower.org/plants/result.php?id_plant=cain2",
+        "https://www.prairiemoon.com/callirhoe-involucrata-purple-poppy-mallow",
+        "https://www.prairienursery.com/purple-poppy-mallow-callirhoe-involucrata.html"
+      ],
+      "created": "2026-07-03T16:46:24.901Z"
+    },
+    {
       "shortCode": "C pen",
       "zoneCode": "mpg",
       "verdict": "MIXED",
@@ -478,6 +490,18 @@
         "https://pnwmoths.biol.wwu.edu/browse/family-erebidae/subfamily-hypeninae/hypena/hypena-humuli/"
       ],
       "created": "2026-05-30T17:54:41.782Z"
+    },
+    {
+      "shortCode": "H hyb yel",
+      "zoneCode": "fy",
+      "verdict": "MIXED",
+      "analysis": "The yellow daylily cultivar (Hemerocallis hybrid) in the Front Yard represents a mixed addition to this Minneapolis landscape. On the positive side, it is incredibly resilient, thriving in the challenging, compacted clay loam of the front yard and easily tolerating the transition from wet spring conditions to dry summer soil. It also aligns with the owners' focus on culinary and medicinal plants; the unopened flower buds and fresh blossoms are edible, offering a sweet-peppery flavor prized in Asian cuisine, and contain beneficial compounds like rutin. However, a major safety concern is the plant’s extreme toxicity to felines. Since Dolly, the resident cat (Felis catus), is active on the property, cultivating a highly nephrotoxic plant in an adjacent zone poses an avoidable risk.\n\nEcologically, this non-native hybrid provides low overall value. Unlike the wild-type orange daylily (Hemerocallis fulva), which is notoriously invasive in Minnesota and forms dense monocultures that displace native flora, this yellow hybrid is typically sterile or clump-forming, making it much less of an ecological threat. Still, it provides minimal pollen or nectar and cannot serve as a larval host for native specialist insects. Because it occupies prime space that could otherwise support the garden’s highly productive native species—such as Golden Alexanders, Culver's Root, or Butterfly Weed—its ecological contribution is poor, making it a compromised choice for owners who prioritize native-first, wildlife-supporting ecology.",
+      "references": [
+        "https://www.minnesotawildflowers.info/flower/day-lily",
+        "https://www.epicgardening.com/daylilies-invasive/",
+        "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGfqehdl3UGghxGY_HKIYk1WpGBplxXpfowKiq9mIjXZOd9ueIIE6QPDkvVJBa3rGzhF8FOx-fr_L8k9d6TKUmf-7OPE6-SolfWJFJQUkde79RrLzqU6HBYioPz-dcCPE3HAws_"
+      ],
+      "created": "2026-07-03T16:46:24.901Z"
     },
     {
       "shortCode": "H jub",
@@ -800,6 +824,19 @@
       "analysis": "Rubus idaeus 'Joan J' (Raspberry) is a fantastic edible crop that also provides excellent ecological benefits. As a native-derived species, the raspberry thicket provides dense, thorny cover for nesting birds, while the early white flowers are highly attractive to native bees. Furthermore, the hollow, pithy stems of raspberries, if left partially intact after pruning, provide critical overwintering habitat for small native cavity-nesting bees.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "r ida",
+      "zoneCode": "mpg",
+      "verdict": "MIXED",
+      "analysis": "The everbearing red raspberry cultivar 'Joan J' (Rubus idaeus) occupies a mixed ecological niche in the Maple (mpg) zone. Under the dense canopy and intense, shallow root competition of the non-native, invasive Norway Maple (Acer platanoides), raspberries face a challenging environment of dry shade and depleted nutrients. This aggressive competition is reflected in the specimen's stunted, compact dwarf habit. However, despite these cultural struggles, 'Joan J' offers excellent ecological benefits within this urban garden. Its early-summer white blossoms provide crucial nectar and pollen for native bees, including the Common Eastern Bumble Bee (Bombus impatiens), which is already active in the Maple zone. Additionally, its highly valued, nutrient-rich red berries serve as a prized food source for local urban wildlife present in the zone, including frugivorous and omnivorous birds like the Northern Cardinal, House Finch, and Goldfinch, as well as mammals like the Gray Squirrel.\n\nFor Minneapolis owners prioritizing native plants, edibles, and local ecology, this planting represents a compromise. Rubus idaeus is native to Minnesota as the wild subspecies strigosus, which serves as a host plant for numerous native caterpillars and insect specialists. While 'Joan J' is a highly productive, thornless commercial hybrid developed in the UK and lacks the strict genetic lineage of the wild native, it still fulfills many of the same ecosystem functions as a food source and pollinator magnet. It is fully hardy in the local USDA zone 4b/5a climate. Culturally, the heavy clay loam soil of Minneapolis is normally prone to waterlogging, which raspberries dislike, but the dry shade and root suction of the Norway Maple actually help mitigate excess moisture. While the shade significantly restricts overall berry yield compared to a full-sun placement, the successful fruiting recorded in July demonstrates that the cultivar can persist and produce in sub-optimal understory conditions, especially when supported by the heavy wood chip and leaf mulching applied to the zone.",
+      "references": [
+        "https://extension.umn.edu/raspberry-farming/raspberry-types-and-varieties",
+        "https://www.minnesotawildflowers.info/shrub/wild-red-raspberry",
+        "https://adamsgardennativeplants.blogspot.com/2010/12/under-norway-maple.html",
+        "https://patents.google.com/patent/USPP18954P3/en"
+      ],
+      "created": "2026-07-03T16:46:24.901Z"
     },
     {
       "shortCode": "R lac",
