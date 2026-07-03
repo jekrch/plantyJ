@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "C inv",
+      "fullName": "Callirhoe involucrata",
+      "commonName": "Purple Poppy Mallow",
+      "variety": null
+    },
+    {
       "shortCode": "F x sea",
       "fullName": "Fragaria x ananassa",
       "commonName": "Garden Strawberry",
