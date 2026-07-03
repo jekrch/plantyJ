@@ -674,6 +674,14 @@
         "native"
       ],
       "description": null
+    },
+    {
+      "shortCode": "S ter",
+      "zoneCode": "mpg",
+      "tags": [
+        "native"
+      ],
+      "description": null
     }
   ]
 }
