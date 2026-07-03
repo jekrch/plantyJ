@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 124,
+      "id": "H hyb yel-1783092293",
+      "shortCode": "H hyb yel",
+      "zoneCode": "fy",
+      "tags": [
+        "flowering"
+      ],
+      "description": "Yellow daylily in full bloom in the front yard.",
+      "image": "images/H hyb yel/1783092293.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-07-03T15:24:54.869Z",
+      "width": 960,
+      "height": 1280
+    },
+    {
       "seq": 123,
       "id": "C inv-1783092195",
       "shortCode": "C inv",
