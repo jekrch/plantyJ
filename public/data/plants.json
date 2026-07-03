@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "S sar",
+      "fullName": "Sedum sarmentosum",
+      "commonName": "Stringy Stonecrop",
+      "variety": null
+    },
+    {
       "shortCode": "H hyb yel",
       "fullName": "Hemerocallis hybrid",
       "commonName": "Daylily",
