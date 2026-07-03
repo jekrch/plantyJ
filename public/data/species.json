@@ -1050,6 +1050,64 @@
       ],
       "observationsCount": 284812
     },
+    "callirhoe-involucrata": {
+      "id": "callirhoe-involucrata",
+      "fullName": "Callirhoe involucrata",
+      "commonName": "Purple Poppy Mallow",
+      "description": "Callirhoe involucrata is a species of flowering plant in the mallow family known by the common names purple poppy-mallow, winecup and buffalo rose. It is native to the Great Plains of the United States and adjacent areas in northern Mexico.\nThe leaves and stems die back in winter, showing at most a small rosette of green leaves immediately above the root crown.",
+      "vernacularNames": [
+        "Low Poppymallow",
+        "Purple Poppy Mallow",
+        "Purple Poppymallow",
+        "Winecup",
+        "poppy mallow",
+        "purple poppy-mallow",
+        "t\u0142'odi cheelebilaga 'i\u0142 chi",
+        "winecup mallow"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Malvales",
+        "family": "Malvaceae",
+        "genus": "Callirhoe",
+        "species": "Callirhoe involucrata",
+        "canonicalName": "Callirhoe involucrata"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5406702"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Callirhoe_involucrata"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/127941"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q5741238"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.143354"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 17998
+    },
     "camassia-scilloides": {
       "id": "camassia-scilloides",
       "fullName": "Camassia scilloides",

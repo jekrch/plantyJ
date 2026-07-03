@@ -778,5 +778,17 @@
   "Fragaria": {
     "description": "Fragaria is a genus of flowering plants in the rose family, Rosaceae, commonly known as strawberries for their edible fruits. There are more than 20 described species and many hybrids and cultivars. The most common strawberries grown commercially are cultivars of the garden strawberry, a hybrid known as Fragaria \u00d7 ananassa. Strawberries have a taste that varies by cultivar, and ranges from quite sweet to rather tart. Strawberries are an important commercial fruit crop, widely grown in all temperate regions of the world.",
     "url": "https://en.wikipedia.org/wiki/Fragaria"
+  },
+  "Callirhoe": {
+    "description": "Callirrhoe may refer to:Callirhoe (mythology), several figures in Greek mythology, including:\nCallirrhoe (Oceanid), daughter of Oceanus and Tethys\nCallirrhoe \nCallirrhoe (Jordan), site of baths near Zareth-shahar on the eastern shore of the Dead Sea\nCallirrhoe (moon), a moon of Jupiter\nCallirhoe (novel), written by the ancient Greek author Chariton\nCallirhoe (plant), a genus of plant within the family Malvaceae\nCallirho\u00e9, an opera by the French composer Andr\u00e9 Cardinal Destouches, first performed on December 27, 1712\nCallirho\u00e9, the only ballet written by French composer C\u00e9cile Chaminade",
+    "url": "https://en.wikipedia.org/wiki/Callirrhoe"
+  },
+  "Malvaceae": {
+    "description": "Malvaceae, or the mallows, is a family of flowering plants estimated to contain 244 genera with 4225 known species. Well-known members of economic importance include cacao, cola, cotton, okra, roselle and durian. There are also some genera containing familiar ornamentals, such as Alcea (hollyhock), Malva (mallow), and Tilia. The genera with the largest numbers of species include Hibiscus, Pavonia, Sida, Ayenia, Dombeya, and Sterculia.",
+    "url": "https://en.wikipedia.org/wiki/Malvaceae"
+  },
+  "Malvales": {
+    "description": "The Malvales are an order of flowering plants. As circumscribed by APG II-system, the order includes about 6000 species within nine families. The order is placed in the eurosids II, which are part of the eudicots.",
+    "url": "https://en.wikipedia.org/wiki/Malvales"
   }
 }
