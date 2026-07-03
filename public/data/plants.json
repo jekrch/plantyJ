@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "H hyb yel",
+      "fullName": "Hemerocallis hybrid",
+      "commonName": "Daylily",
+      "variety": "Yellow Cultivar"
+    },
+    {
       "shortCode": "C inv",
       "fullName": "Callirhoe involucrata",
       "commonName": "Purple Poppy Mallow",
