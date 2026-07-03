@@ -11,7 +11,10 @@
       "postedBy": "Jacob",
       "addedAt": "2026-07-03T16:43:42.644Z",
       "width": 960,
-      "height": 1280
+      "height": 1280,
+      "bioclipSpeciesId": "Sedum sarmentosum",
+      "bioclipCommonName": "Orpine",
+      "bioclipScore": 0.5966
     },
     {
       "seq": 128,
@@ -27,7 +30,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Peperomia fendleriana",
       "bioclipCommonName": "",
-      "bioclipScore": 0.0446
+      "bioclipScore": 0.0446,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 126,

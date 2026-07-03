@@ -4763,6 +4763,65 @@
       ],
       "observationsCount": 3175
     },
+    "sedum-sarmentosum": {
+      "id": "sedum-sarmentosum",
+      "fullName": "Sedum sarmentosum",
+      "commonName": "Stringy Stonecrop",
+      "description": "Sedum sarmentosum, known as stringy stonecrop, gold moss stonecrop, and graveyard moss, is a perennial flowering plant in the family Crassulaceae native to East Asia (China and Korea) and Southeast Asia (Thailand). It has been introduced in at least eastern North America, and Europe.",
+      "vernacularNames": [
+        "Kriechende Fetthenne (DE)",
+        "Kriechtrieb-Fetthenne",
+        "Orpin Sarmenteux",
+        "Star Sedum, Stringy Stonecrop, Trailing Stonecrop, Yellow Moss, Gold Moss, Graveyard Moss",
+        "Stringy Stonecrop",
+        "Stringy stonecrop (EN)",
+        "chui pen cao",
+        "runner-producing stonecrop",
+        "\ub3cc\ub098\ubb3c"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Saxifragales",
+        "family": "Crassulaceae",
+        "genus": "Sedum",
+        "species": "Sedum sarmentosum",
+        "canonicalName": "Sedum sarmentosum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5362004"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Sedum_sarmentosum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/118473"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q779570"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.139741"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 12082
+    },
     "sedum-ternatum": {
       "id": "sedum-ternatum",
       "fullName": "Sedum ternatum",
