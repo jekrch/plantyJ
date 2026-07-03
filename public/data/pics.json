@@ -13,7 +13,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-07-03T16:21:17.144Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "bioclipSpeciesId": "Echinacea purpurea",
+      "bioclipCommonName": "Purple coneflower",
+      "bioclipScore": 0.8619
     },
     {
       "seq": 124,
@@ -31,7 +34,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Hemerocallis major",
       "bioclipCommonName": "",
-      "bioclipScore": 0.3811
+      "bioclipScore": 0.3811,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 123,
@@ -49,7 +53,8 @@
       "height": 1280,
       "bioclipSpeciesId": "Callirhoe leiocarpa",
       "bioclipCommonName": "",
-      "bioclipScore": 0.4966
+      "bioclipScore": 0.4966,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Callirhoe_leiocarpa"
     },
     {
       "seq": 122,
@@ -711,7 +716,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -905,7 +910,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
