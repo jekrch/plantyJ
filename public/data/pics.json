@@ -1,6 +1,22 @@
 {
   "pics": [
     {
+      "seq": 126,
+      "id": "r ida-1783096643",
+      "shortCode": "r ida",
+      "zoneCode": "mpg",
+      "tags": [
+        "fruiting",
+        "edible"
+      ],
+      "description": "Ripe red raspberry fruit on a compact dwarf shrub.",
+      "image": "images/r ida/1783096643.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-07-03T16:37:24.871Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 125,
       "id": "E pur-1783095675",
       "shortCode": "E pur",
@@ -716,7 +732,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -910,7 +926,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
