@@ -13,7 +13,10 @@
       "postedBy": "Jacob",
       "addedAt": "2026-07-04T23:19:37.730Z",
       "width": 1280,
-      "height": 972
+      "height": 972,
+      "bioclipSpeciesId": "Thymus pulegioides",
+      "bioclipCommonName": "creeping thyme",
+      "bioclipScore": 0.3489
     },
     {
       "seq": 133,
