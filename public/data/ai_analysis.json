@@ -361,6 +361,19 @@
       "created": "2026-06-14T20:50:53.641Z"
     },
     {
+      "shortCode": "D ple",
+      "zoneCode": "kg",
+      "verdict": "GOOD",
+      "analysis": "The presence of the monarch butterfly (Danaus plexippus) in the kitchen garden is highly positive, aligning perfectly with the homeowners' goals of fostering local ecology and prioritizing native species. As Minnesota's official state butterfly and a species of conservation concern, monarchs are iconic, highly valued native pollinators. While the kitchen garden itself likely acts as a transient nectaring spot, its proximity to other zones on the property creates a functional habitat matrix. The front yard and north boulevard zones contain Butterfly Weed (Asclepias tuberosa), an essential native milkweed that serves as the exclusive larval host plant for monarch caterpillars. Adults will actively seek out these areas for egg-laying, while nectaring on blooming plants throughout the yard, including Purple Coneflowers in the berry border and any flowering herbs or crops in the kitchen garden.\n\nBecause of the monarch's toxic defenses—derived from sequestering bitter cardenolides from milkweeds—they are largely protected from most vertebrate predators like the resident Northern Cardinal or other birds. However, the garden's rich insect biodiversity presents natural challenges; the presence of Carpenter Ants and Pavement Ants on the property can lead to opportunistic predation of monarch eggs or young caterpillars. No aggressive management is required or recommended. The homeowners should continue their pesticide-free approach and maintain a diverse array of native larval host plants and continuous nectar sources, which naturally buffers monarch populations and supports a balanced, self-sustaining garden ecosystem.",
+      "references": [
+        "https://www.dnr.state.mn.us/insects/monarchbutterfly.html",
+        "https://www.dakotamastergardeners.org/pollinators/our-state-insect%3A-the-monarch-butterfly",
+        "https://www.sos.mn.gov/about-minnesota/state-symbols/state-butterfly-monarch/",
+        "https://www.birdsandblooms.com/gardening/attracting-butterflies/monarch-butterfly-predators/"
+      ],
+      "created": "2026-07-04T19:34:20.038Z"
+    },
+    {
       "shortCode": "D vil",
       "zoneCode": "fy",
       "verdict": "GOOD",
@@ -964,6 +977,19 @@
       "analysis": "Sedum pulchellum (Widow's Cross) is native to the central and southern US (like Missouri and Illinois) but is slightly out of its historic native range in Minnesota, where it acts as a winter annual. It is a beautiful, pollinator-friendly groundcover that provides nectar for bees, but in the shaded, clay-heavy environment under a maple, it may struggle to reseed and thrive compared to its preferred sunny limestone glades.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "S sar",
+      "zoneCode": "mpg",
+      "verdict": "BAD",
+      "analysis": "Although stringy stonecrop (Sedum sarmentosum) is exceptionally cold-hardy and easily tolerates the poor, root-choked soil beneath the Norway maple, its aggressive growth habit makes it a severe ecological threat to this native-priority garden. Native to East Asia, this succulent is considered an invasive weed in the Midwest and is listed as a prohibited invasive species in neighboring Wisconsin due to its capacity to escape into wild spaces and displace native flora. It propagates rapidly through creeping stolons that root easily at every node, creating dense mats that can quickly choke out delicate native spring ephemerals and shade-loving groundcovers cohabitating in the Maple zone, such as wild leek, yellow trout lily, and wild ginger. Crucially, the Maple zone already features wild stonecrop (Sedum ternatum), a well-behaved, shade-tolerant native counterpart that provides superior ecological integration and is at high risk of being outcompeted by this aggressive exotic.\n\nBeyond habitat displacement, stringy stonecrop contributes minimal ecological value to local wildlife. While its yellow, star-shaped summer flowers provide nectar to generalist bees, it lacks the specialized evolutionary relationships of native species and does not support native caterpillar larvae or local specialists. Given the challenging, dry, clay-loam conditions created by the mature Norway maple, adding an aggressive exotic groundcover only intensifies resource competition for water and nutrients. To safeguard the garden’s native biodiversity and honor the owners' ecological priorities, stringy stonecrop should be systematically hand-pulled and eradicated, ensuring that even the smallest stem fragments are removed to prevent re-rooting.",
+      "references": [
+        "https://bplant.org/blog/38",
+        "https://www.minnesotaseasons.com/Main/Plants.html",
+        "https://www.illinoiswildflowers.info/weeds/plants/wh_stonecrop.htm",
+        "https://www.gardeningknowhow.com/ornamental/cacti-succulents/sedum/stringy-stonecrop-in-gardens.htm"
+      ],
+      "created": "2026-07-04T19:34:20.038Z"
     },
     {
       "shortCode": "S ter",
