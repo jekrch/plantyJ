@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 133,
+      "id": "A hyb mil-1783207088",
+      "shortCode": "A hyb mil",
+      "zoneCode": "fy",
+      "tags": [
+        "flowering"
+      ],
+      "description": "Ornamental allium starting to bloom in early July.",
+      "image": "images/A hyb mil/1783207088.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-07-04T23:18:09.543Z",
+      "width": 960,
+      "height": 1280
+    },
+    {
       "seq": 132,
       "id": "E yuc-1783205642",
       "shortCode": "E yuc",
@@ -817,7 +832,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1011,7 +1026,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
