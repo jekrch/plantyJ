@@ -620,6 +620,54 @@
       "type": "forager",
       "from": "S tri",
       "to": "H jub"
+    },
+    {
+      "id": 92,
+      "type": "host-plant",
+      "from": "D ple",
+      "to": "A tub"
+    },
+    {
+      "id": 93,
+      "type": "pollinator",
+      "from": "D ple",
+      "to": "A tub"
+    },
+    {
+      "id": 94,
+      "type": "pollinator",
+      "from": "D ple",
+      "to": "E pur"
+    },
+    {
+      "id": 95,
+      "type": "pollinator",
+      "from": "D ple",
+      "to": "s fle"
+    },
+    {
+      "id": 96,
+      "type": "pollinator",
+      "from": "D ple",
+      "to": "s lat"
+    },
+    {
+      "id": 97,
+      "type": "pollinator",
+      "from": "D ple",
+      "to": "R hir"
+    },
+    {
+      "id": 98,
+      "type": "predator-prey",
+      "from": "L lib",
+      "to": "D ple"
+    },
+    {
+      "id": 99,
+      "type": "predator-prey",
+      "from": "X spe",
+      "to": "D ple"
     }
   ]
 }
