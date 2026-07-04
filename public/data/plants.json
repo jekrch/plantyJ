@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A hyb mil",
+      "fullName": "Allium hybrid",
+      "commonName": "Millennium Ornamental Onion",
+      "variety": "Millenium"
+    },
+    {
       "shortCode": "D ple",
       "fullName": "Danaus plexippus",
       "commonName": "Monarch Butterfly",
