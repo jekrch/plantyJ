@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "D ple",
+      "fullName": "Danaus plexippus",
+      "commonName": "Monarch Butterfly",
+      "variety": null
+    },
+    {
       "shortCode": "S sar",
       "fullName": "Sedum sarmentosum",
       "commonName": "Stringy Stonecrop",
