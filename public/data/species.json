@@ -1627,6 +1627,60 @@
       ],
       "observationsCount": 16914
     },
+    "danaus-plexippus": {
+      "id": "danaus-plexippus",
+      "fullName": "Danaus plexippus",
+      "commonName": "Monarch Butterfly",
+      "description": "The monarch butterfly or simply monarch (Danaus plexippus) is a milkweed butterfly (subfamily Danainae) in the family Nymphalidae. Other common names, depending on region, include milkweed, common tiger, wanderer, and black-veined brown. It is among the most familiar of North American butterflies and an iconic pollinator, although it is not an especially effective pollinator of milkweeds. Its wings feature an easily recognizable black, orange, and white pattern, with a wingspan of 8.9\u201310.2 cm (3.5\u20134.0 in). A M\u00fcllerian mimic, the viceroy butterfly, is similar in color and pattern, but is markedly smaller and has an extra black stripe across each hindwing.\nThe eastern North American monarch population is notable for its annual southward late-summer/autumn instinctive migration from the northern and central United States and southern Canada to Florida and Mexico. During the fall migration, monarchs cover thousands of miles, with a corresponding multigenerational return north in spring. The western North American population of monarchs west of the Rocky Mountains often migrates to sites in southern California, but have been found in overwintering Mexican sites, as well. Populations are found further south in the Americas, and in parts of Europe, Oceania, and Southeast Asia.",
+      "vernacularNames": [
+        "Milkweed",
+        "Milkweed Butterfly",
+        "Milkweed [butterfly]",
+        "Monarch",
+        "Monarch Butterfly",
+        "Monarch or Milkweed",
+        "Monarka",
+        "The Milkweed"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Lepidoptera",
+        "family": "Nymphalidae",
+        "genus": "Danaus",
+        "species": "Danaus plexippus",
+        "canonicalName": "Danaus plexippus"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5133088"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Danaus_plexippus"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/48662"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.108245"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 484776
+    },
     "delphinia-picta": {
       "id": "delphinia-picta",
       "fullName": "Delphinia picta",

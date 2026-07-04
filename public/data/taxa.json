@@ -798,5 +798,9 @@
   "Malvales": {
     "description": "The Malvales are an order of flowering plants. As circumscribed by APG II-system, the order includes about 6000 species within nine families. The order is placed in the eurosids II, which are part of the eudicots.",
     "url": "https://en.wikipedia.org/wiki/Malvales"
+  },
+  "Danaus": {
+    "description": "In Greek mythology, Danaus was the king of Libya. His myth is a foundation legend of Argos, one of the foremost Mycenaean cities of the Peloponnesus. In Homer's Iliad, \"Danaans\" and \"Argives\" commonly designate the Greek forces opposed to the Trojans.",
+    "url": "https://en.wikipedia.org/wiki/Danaus"
   }
 }
