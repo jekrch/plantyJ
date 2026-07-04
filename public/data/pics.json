@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 132,
+      "id": "E yuc-1783205642",
+      "shortCode": "E yuc",
+      "zoneCode": "fy",
+      "tags": [],
+      "description": "Unopened flower heads",
+      "image": "images/E yuc/1783205642.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-07-04T22:54:03.482Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 131,
       "id": "V vir-1783193460",
       "shortCode": "V vir",
@@ -801,7 +814,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -995,7 +1008,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
