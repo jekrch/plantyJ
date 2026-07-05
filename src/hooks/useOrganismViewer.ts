@@ -87,7 +87,15 @@ export function useOrganismViewer({
   }, []);
 
   const selectOrganism = useCallback(
-    (organism: Organism) => {
+    (organism: Organism, group?: Organism[]) => {
+      // A related-image group (e.g. all photos of a plant, or everything in a
+      // zone) scopes prev/next to just that group via the custom list.
+      if (group && group.length > 0) {
+        setCustomViewerOrganisms(group);
+        setViewerScope("custom");
+        setOpenOrganismId(organism.id);
+        return;
+      }
       const inFiltered = sortedOrganisms.some((p) => p.id === organism.id);
       setViewerScope(inFiltered ? "filtered" : "all");
       setOpenOrganismId(organism.id);

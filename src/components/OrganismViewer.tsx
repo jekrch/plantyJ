@@ -28,7 +28,7 @@ interface Props {
   currentIndex: number;
   onClose: () => void;
   onNavigate: (index: number) => void;
-  onSelectOrganism: (organism: Organism) => void;
+  onSelectOrganism: (organism: Organism, group?: Organism[]) => void;
   onSelectTaxon: (name: string) => void;
 }
 

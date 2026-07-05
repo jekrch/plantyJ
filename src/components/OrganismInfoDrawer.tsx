@@ -64,7 +64,7 @@ interface Props {
   speciesByShortCode: Map<string, Species>;
   aiAnalyses?: AIAnalysis[];
   relationships?: RelationshipsData;
-  onSelectOrganism: (organism: Organism) => void;
+  onSelectOrganism: (organism: Organism, group?: Organism[]) => void;
   onSelectTaxon: (name: string) => void;
   topOffset?: number;
   bottomOffset?: number;
@@ -172,6 +172,20 @@ export default function OrganismInfoDrawer({
     }, []);
 
   const sharingHeader = `Others in ${zoneNameByCode.get(organism.zoneCode) ?? organism.zoneCode}`;
+
+  // Groups that scope the viewer's prev/next when a related image is clicked,
+  // so paging stays within the group instead of the whole gallery. Sorted
+  // newest-first to match the spotlight views.
+  const byAddedDesc = (a: Organism, b: Organism) =>
+    new Date(b.addedAt).getTime() - new Date(a.addedAt).getTime();
+  const plantGroup = useMemo(
+    () => allOrganisms.filter((p) => p.shortCode === organism.shortCode).sort(byAddedDesc),
+    [allOrganisms, organism.shortCode],
+  );
+  const zoneGroup = useMemo(
+    () => allOrganisms.filter((p) => p.zoneCode === organism.zoneCode).sort(byAddedDesc),
+    [allOrganisms, organism.zoneCode],
+  );
 
   const otherVernaculars = useMemo(() => {
     if (!species?.vernacularNames?.length) return [] as string[];
@@ -445,7 +459,7 @@ export default function OrganismInfoDrawer({
                       <button
                         key={p.id}
                         type="button"
-                        onClick={() => onSelectOrganism(p)}
+                        onClick={() => onSelectOrganism(p, plantGroup)}
                         className="relative shrink-0 h-24 rounded-sm overflow-hidden bg-white/5 ring-1 ring-inset ring-white/5 hover:ring-white/25 transition-colors"
                         style={{ aspectRatio: `${p.width} / ${p.height}` }}
                         title={new Date(p.addedAt).toLocaleDateString()}
@@ -521,7 +535,7 @@ export default function OrganismInfoDrawer({
                       <button
                         key={p.id}
                         type="button"
-                        onClick={() => onSelectOrganism(p)}
+                        onClick={() => onSelectOrganism(p, zoneGroup)}
                         className="relative shrink-0 h-24 rounded-sm overflow-hidden bg-white/5 ring-1 ring-inset ring-white/5 hover:ring-white/25 transition-colors"
                         style={{ aspectRatio: `${p.width} / ${p.height}` }}
                         title={p.commonName ?? p.shortCode}
