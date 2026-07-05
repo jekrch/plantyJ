@@ -62,6 +62,7 @@ export default function OrganismCard({
 
   return (
     <div
+      data-organism-id={organism.id}
       className={`panel-item group relative cursor-pointer overflow-hidden rounded-sm bg-surface-raised ${
         selected ? "panel-selected" : ""
       } ${removed ? "ring-1 ring-inset ring-amber-500/50" : ""}`}

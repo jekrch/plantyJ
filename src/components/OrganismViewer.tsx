@@ -1,17 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { X, ZoomIn, ZoomOut, Info, Trash2 } from "lucide-react";
+import {
+  ImageViewer,
+  type ViewerItem,
+  type ViewerContext,
+} from "@jekrch/react-viewport-lightbox";
 import type { Annotation, Organism, Species, Zone, ZonePic } from "../types";
 import { buildRemovedSet, isOrganismRemoved } from "../utils/removed";
-import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
-import {
-  MAX_SCALE,
-  MIN_SCALE,
-  useImageZoomPan,
-  useGestureHandler,
-  useSlideNavigation,
-} from "../hooks/imageViewer";
-import { useBarMeasure } from "../hooks/useBarMeasure";
-import NavButton from "./NavButton";
 import OrganismInfoDrawer, { AIAnalysis } from "./OrganismInfoDrawer";
 import type { RelationshipsData } from "../hooks/useRelationships";
 import { organismTitle } from "../utils/display";
@@ -32,6 +27,38 @@ interface Props {
   onSelectTaxon: (name: string) => void;
 }
 
+type OrganismItem = ViewerItem<Organism>;
+
+// Chrome icons matched to the app's previous viewer (lucide at 16px / 1.5),
+// overriding the library's slightly heavier 18px / 1.75 defaults. The bottom
+// nav arrows are left to the library default (identical geometry, rendered at
+// 38px via `--rvl-nav-height`).
+const viewerIcons = {
+  close: <X size={16} strokeWidth={1.5} />,
+  zoomIn: <ZoomIn size={16} strokeWidth={1.5} />,
+  zoomOut: <ZoomOut size={16} strokeWidth={1.5} />,
+};
+
+/**
+ * Pushes the image stage up while the details drawer is open (revealing the
+ * drawer that sits between the bars), then resets on close. `setContentShift`
+ * is only reachable from a render slot's context, so this lives as a child of
+ * the overlay slot and drives the shift from an effect.
+ */
+function DrawerContentShift({
+  open,
+  setContentShift,
+}: {
+  open: boolean;
+  setContentShift: (transform: string | null, animate?: boolean) => void;
+}) {
+  useEffect(() => {
+    setContentShift(open ? "translateY(-100vh)" : null);
+    return () => setContentShift(null);
+  }, [open, setContentShift]);
+  return null;
+}
+
 export default function OrganismViewer({
   organism,
   organisms,
@@ -47,43 +74,8 @@ export default function OrganismViewer({
   onSelectOrganism,
   onSelectTaxon,
 }: Props) {
-  const [visible, setVisible] = useState(false);
-  const [closing, setClosing] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerSlideDir, setDrawerSlideDir] = useState<"left" | "right" | null>(null);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const imgWrapperRef = useRef<HTMLDivElement>(null);
-  const topBarRef = useRef<HTMLDivElement>(null);
-  const bottomBarRef = useRef<HTMLDivElement>(null);
-
-  const [viewportWidth, setViewportWidth] = useState(() => window.innerWidth);
-
-  const hasPrev = currentIndex > 0;
-  const hasNext = currentIndex < organisms.length - 1;
-
-  useBodyScrollLock(containerRef);
-  const { topBarH, bottomBarH } = useBarMeasure(topBarRef, bottomBarRef, currentIndex);
-
-  const zoomPan = useImageZoomPan(imgWrapperRef, currentIndex);
-  const {
-    imgRef,
-    displayScale,
-    isZoomed,
-    transformRef,
-    resetTransform,
-    setTransform,
-    clampTranslate,
-    measureBaseDims,
-    handleDoubleClick,
-  } = zoomPan;
-
-  const slide = useSlideNavigation(organisms, currentIndex, onNavigate);
-  const { slideTrackRef, slideActive, slideAnimating, swipeOffset, commitSlide } = slide;
-
-  const gestures = useGestureHandler(zoomPan, slide, hasPrev, hasNext);
-
   const [aiAnalyses, setAiAnalyses] = useState<AIAnalysis[]>([]);
 
   useEffect(() => {
@@ -93,44 +85,26 @@ export default function OrganismViewer({
       .catch(console.error);
   }, []);
 
-  useEffect(() => {
-    setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
-  }, []);
-
-  useEffect(() => {
-    const onResize = () => setViewportWidth(window.innerWidth);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-
-  useEffect(() => {
-    requestAnimationFrame(() => setVisible(true));
-  }, []);
-
-  const handleClose = useCallback(() => {
-    setClosing(true);
-    setVisible(false);
-    setTimeout(onClose, 250);
-  }, [onClose]);
-
-  const handleNavigate = useCallback(
-    (dir: "prev" | "next") => {
-      const slideOut = dir === "next" ? "left" : "right";
-      if (drawerOpen) {
-        setDrawerSlideDir(slideOut);
-        setDrawerOpen(false);
-      }
-      commitSlide(dir);
-    },
-    [drawerOpen, commitSlide],
+  const items = useMemo<OrganismItem[]>(
+    () =>
+      organisms.map((o) => ({
+        id: o.id,
+        src: `${import.meta.env.BASE_URL}${o.image}`,
+        alt: organismTitle(o),
+        data: o,
+      })),
+    [organisms],
   );
 
-  useEffect(() => {
-    setDrawerOpen(false);
-    const timer = setTimeout(() => setDrawerSlideDir(null), 450);
-    return () => clearTimeout(timer);
-  }, [currentIndex]);
+  const zoneNameByCode = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const z of zones) if (z.name) m.set(z.code, z.name);
+    return m;
+  }, [zones]);
 
+  const removedSet = useMemo(() => buildRemovedSet(annotations), [annotations]);
+
+  // Reflect the active organism in the URL (?plant=id), clearing it on close.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     params.set("plant", organism.id);
@@ -149,327 +123,126 @@ export default function OrganismViewer({
     };
   }, [organism.id]);
 
+  // Close the drawer whenever the active image changes; clear the slide-out
+  // direction once the drawer has finished animating away.
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        if (drawerOpen) {
-          setDrawerOpen(false);
-          return;
-        }
-        handleClose();
-      }
-      if (e.key === "ArrowLeft" && hasPrev && displayScale <= 1) handleNavigate("prev");
-      if (e.key === "ArrowRight" && hasNext && displayScale <= 1) handleNavigate("next");
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [handleClose, hasPrev, hasNext, displayScale, drawerOpen, handleNavigate]);
+    setDrawerOpen(false);
+    const timer = setTimeout(() => setDrawerSlideDir(null), 450);
+    return () => clearTimeout(timer);
+  }, [currentIndex]);
 
-  const IMG_PADDING = 44;
-  const reservedH = bottomBarH + IMG_PADDING * 2;
-  const imgMaxHeight = `calc(100vh - ${reservedH}px)`;
-
-  const totalDigits = String(organisms.length).length;
-  const counterMinWidth = `${totalDigits * 2 * 0.6 + 1.5}em`;
-
-  const prevOrganism = hasPrev ? organisms[currentIndex - 1] : null;
-  const nextOrganism = hasNext ? organisms[currentIndex + 1] : null;
-  const showAdjacentSlides = slideActive || slideAnimating || swipeOffset !== 0;
-  const showPrev = !!prevOrganism && showAdjacentSlides;
-  const showNext = !!nextOrganism && showAdjacentSlides;
-  const adjacentOpacity = Math.min(1, Math.abs(swipeOffset) / (viewportWidth * 0.8));
-
-  const slideImgStyle: React.CSSProperties = {
-    maxWidth: "96vw",
-    maxHeight: imgMaxHeight,
-    willChange: "transform",
+  // Shared-element "zoom from thumbnail": hand the library the grid thumbnail
+  // for the given index so the image expands out of / collapses back into it.
+  // Falls back to the fade when the source isn't on screen (e.g. opened from a
+  // spotlight or a deep link).
+  const getOrigin = (index: number): HTMLElement | null => {
+    const target = organisms[index];
+    if (!target) return null;
+    const nodes = document.querySelectorAll<HTMLElement>("[data-organism-id]");
+    for (const node of nodes) {
+      if (node.dataset.organismId === target.id) return node;
+    }
+    return null;
   };
 
-  const slideTrackTransform = drawerOpen ? "translateY(-100vh)" : "translateY(0)";
-
-  const titleLine = organismTitle(organism);
-  const zoneNameByCode = useMemo(() => {
-    const m = new Map<string, string>();
-    for (const z of zones) if (z.name) m.set(z.code, z.name);
-    return m;
-  }, [zones]);
-  const subtitle = zoneNameByCode.get(organism.zoneCode) ?? organism.zoneCode;
-
-  const removedSet = useMemo(() => buildRemovedSet(annotations), [annotations]);
-  const isRemoved = isOrganismRemoved(organism, removedSet);
+  const hintText = (ctx: ViewerContext<Organism>, single: boolean) =>
+    ctx.isTouchDevice
+      ? single
+        ? "pinch to zoom · double-tap to enlarge"
+        : "swipe to navigate · pinch to zoom"
+      : single
+        ? "scroll to zoom · double-click to enlarge · esc to close"
+        : "← → or drag to navigate · scroll to zoom · esc to close";
 
   return (
-    <div
-      ref={containerRef}
-      className={`
-        fixed inset-0 z-50 flex items-center justify-center
-        transition-all duration-250 ease-out
-        ${visible && !closing ? "bg-black/90" : "bg-black/0"}
-      `}
-      style={{ touchAction: "none" }}
-      role="dialog"
-      aria-modal="true"
-      aria-label={`${titleLine} — full view`}
-    >
-      <div
-        className={`
-          absolute inset-0 z-0 transition-all duration-250 ease-out
-          ${visible && !closing ? "backdrop-blur-sm" : "backdrop-blur-0"}
-        `}
-        onClick={drawerOpen ? () => setDrawerOpen(false) : handleClose}
-        aria-hidden="true"
-      />
-
-      <div
-        ref={topBarRef}
-        className={`
-          absolute top-0 inset-x-0 z-20 flex items-start justify-between
-          px-4 py-3 sm:px-6 sm:py-4
-          bg-gradient-to-b from-black/70 via-black/40 to-transparent
-          transition-all duration-250 ease-out
-          ${visible && !closing ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-3"}
-        `}
-        style={{
-          paddingTop: "max(0.75rem, env(safe-area-inset-top))",
-          pointerEvents: "none",
-        }}
-      >
-        <div className="min-w-0 flex-1 px-2!" style={{ pointerEvents: "none" }}>
-          <div style={{ pointerEvents: "auto", width: "fit-content" }}>
+    <ImageViewer<Organism>
+      items={items}
+      index={currentIndex}
+      onIndexChange={onNavigate}
+      onClose={onClose}
+      // Slide start: fling the open drawer out in the swipe direction and close
+      // it, so it animates in step with the image.
+      onNavigate={(dir) => {
+        if (drawerOpen) {
+          setDrawerSlideDir(dir === "next" ? "left" : "right");
+          setDrawerOpen(false);
+        }
+      }}
+      // Escape dismisses the drawer first (vetoing the close) when it's open.
+      onEscape={() => {
+        if (drawerOpen) {
+          setDrawerOpen(false);
+          return true;
+        }
+        return false;
+      }}
+      getOrigin={getOrigin}
+      // Match the old viewer's bottom spacing (the library defaults to 1.3rem,
+      // which floats the nav row + hint text too high). Still floored by the
+      // device safe-area inset.
+      navInset="0.3rem"
+      // Click empty space to close — but never while the details drawer is open
+      // (its own toggle / Escape dismiss it instead).
+      closeOnBackdropClick={!drawerOpen}
+      icons={viewerIcons}
+      ariaLabel={`${organismTitle(organism)} — full view`}
+      renderHeader={(ctx) => {
+        const o = ctx.item.data!;
+        const subtitle = zoneNameByCode.get(o.zoneCode) ?? o.zoneCode;
+        return (
+          <div style={{ width: "fit-content" }}>
             <p className="font-display text-sm text-white/90 leading-snug">
-              {titleLine} <span className="text-accent text-xs">{organism.shortCode}</span>
+              {organismTitle(o)} <span className="text-accent text-xs">{o.shortCode}</span>
             </p>
             <p className="text-xs text-white/60 mt-0.5 leading-snug">{subtitle}</p>
           </div>
-        </div>
-
-        <div className="flex flex-col items-end ml-3 shrink-0" style={{ pointerEvents: "auto" }}>
-          <div className="flex items-center gap-1">
-            {!isTouchDevice && !drawerOpen && isZoomed && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  resetTransform();
-                }}
-                className="viewer-btn text-[11px] tabular-nums font-mono"
-                title="Reset zoom"
-              >
-                {Math.round(displayScale * 100)}%
-              </button>
-            )}
-
-            {!isTouchDevice && !drawerOpen && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const t = transformRef.current;
-                  const next = Math.min(MAX_SCALE, t.scale * 1.3);
-                  const clamped = clampTranslate(t.x, t.y, next);
-                  setTransform({ scale: next, ...clamped }, true);
-                }}
-                className="viewer-btn"
-                title="Zoom in"
-              >
-                <ZoomIn size={16} strokeWidth={1.5} />
-              </button>
-            )}
-
-            {!isTouchDevice && !drawerOpen && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const t = transformRef.current;
-                  const next = Math.max(MIN_SCALE, t.scale / 1.3);
-                  const clamped = next <= 1 ? { x: 0, y: 0 } : clampTranslate(t.x, t.y, next);
-                  setTransform({ scale: next, ...clamped }, true);
-                }}
-                className="viewer-btn"
-                title="Zoom out"
-              >
-                <ZoomOut size={16} strokeWidth={1.5} />
-              </button>
-            )}
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleClose();
-              }}
-              className={`viewer-btn ${!isTouchDevice ? "ml-1" : ""}`}
-              title="Close (Esc)"
-            >
-              <X size={16} strokeWidth={1.5} />
-            </button>
-          </div>
-          <p className="text-[10px] text-white/30 mt-1 leading-snug whitespace-nowrap mt-2">
-            {organism.postedBy} ·{" "}
-            {new Date(organism.addedAt).toLocaleDateString(undefined, {
+        );
+      }}
+      // The postedBy · date line, stacked under the top-bar controls (see the
+      // `.viewer-meta` rule — it's pinned below the button row, not inline).
+      renderHeaderActions={(ctx) => {
+        const o = ctx.item.data!;
+        return (
+          <span className="viewer-meta">
+            {o.postedBy} ·{" "}
+            {new Date(o.addedAt).toLocaleDateString(undefined, {
               month: "short",
               day: "numeric",
               year: "numeric",
             })}
-          </p>
-        </div>
-      </div>
-
-      <div
-        className="relative z-10 w-full h-full"
-        style={{
-          transform: slideTrackTransform,
-          transition: "transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1)",
-        }}
-      >
-        <div
-          ref={slideTrackRef}
-          className={`
-            relative flex items-center justify-center w-full h-full
-            transition-opacity duration-250 ease-out
-            ${visible && !closing ? "opacity-100" : "opacity-0"}
-          `}
-          style={{ touchAction: "none", pointerEvents: "none" }}
-        >
-          {showPrev && prevOrganism && (
-            <div
-              className="absolute inset-0 flex items-center justify-center select-none pointer-events-none"
-              style={{
-                transform: `translateX(-${viewportWidth}px)`,
-                opacity: adjacentOpacity,
-              }}
-            >
-              <img
-                src={`${import.meta.env.BASE_URL}${prevOrganism.image}`}
-                alt=""
-                className="block w-auto h-auto object-contain rounded-sm"
-                style={slideImgStyle}
-                draggable={false}
-              />
-            </div>
-          )}
-
-          <div
-            ref={imgWrapperRef}
-            className="relative flex items-center justify-center select-none overflow-hidden cursor-default"
-            style={{ touchAction: "none", pointerEvents: "auto" }}
-            onClick={(e) => e.stopPropagation()}
-            onDoubleClick={handleDoubleClick}
-            onPointerDown={gestures.handlePointerDown}
-            onPointerMove={gestures.handlePointerMove}
-            onPointerUp={gestures.handlePointerUp}
-            onPointerLeave={gestures.handlePointerUp}
-            onTouchStart={gestures.handleTouchStart}
-            onTouchMove={gestures.handleTouchMove}
-            onTouchEnd={gestures.handleTouchEnd}
+          </span>
+        );
+      }}
+      // Details toggle, pinned to the left of the centered nav group. Only when
+      // there is a nav group to flank; the single-image case renders it centered
+      // in the footer instead (matching the old layout).
+      renderNavStart={(ctx) =>
+        ctx.hasPrev || ctx.hasNext ? (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setDrawerOpen((d) => !d);
+            }}
+            className={`viewer-btn viewer-btn-accent gap-1.5 ${drawerOpen ? "is-active" : ""}`}
+            title="Show details"
           >
-            <img
-              ref={imgRef}
-              src={`${import.meta.env.BASE_URL}${organism.image}`}
-              alt={titleLine}
-              className="block w-auto h-auto object-contain rounded-sm"
-              style={slideImgStyle}
-              draggable={false}
-              onLoad={measureBaseDims}
-            />
-            {isRemoved && !isZoomed && (
-              <span className="absolute top-2 left-2 z-10 flex items-center gap-1 rounded-sm bg-amber-900/80 px-1.5 py-0.5 text-[10px] font-display uppercase tracking-wider text-amber-100 backdrop-blur-sm pointer-events-none">
-                <Trash2 size={11} strokeWidth={1.75} />
-                Removed
-              </span>
-            )}
-          </div>
-
-          {showNext && nextOrganism && (
-            <div
-              className="absolute inset-0 flex items-center justify-center select-none pointer-events-none"
-              style={{
-                transform: `translateX(${viewportWidth}px)`,
-                opacity: adjacentOpacity,
-              }}
-            >
-              <img
-                src={`${import.meta.env.BASE_URL}${nextOrganism.image}`}
-                alt=""
-                className="block w-auto h-auto object-contain rounded-sm"
-                style={slideImgStyle}
-                draggable={false}
-              />
+            <Info size={18} strokeWidth={2} />
+            <span className="text-[11px] font-medium tracking-wide hidden sm:inline">Details</span>
+          </button>
+        ) : null
+      }
+      renderFooter={(ctx) => {
+        if (ctx.isZoomed) return null;
+        const single = !ctx.hasPrev && !ctx.hasNext;
+        if (!single) {
+          return (
+            <div className="text-center mt-0 mb-1 mx-auto w-fit">
+              <span className="text-[11px] text-white/30 tracking-wide">{hintText(ctx, false)}</span>
             </div>
-          )}
-        </div>
-      </div>
-
-      <div
-        ref={bottomBarRef}
-        className={`
-          absolute bottom-0 inset-x-0 z-20 pt-4
-          transition-all duration-250 ease-out
-          ${visible && !closing ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}
-        `}
-        style={{
-          paddingBottom: "max(0.3rem, env(safe-area-inset-bottom))",
-          pointerEvents: "none",
-        }}
-      >
-        {!isZoomed && (hasPrev || hasNext) && (
-          <div className="w-full px-4 sm:px-6" style={{ pointerEvents: "auto" }}>
-            <div className="relative flex items-center justify-center max-w-2xl mx-auto">
-              {/* Info Button - Positioned left within the centered max-width row */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setDrawerOpen((d) => !d);
-                }}
-                className={`viewer-btn viewer-btn-accent absolute left-0 gap-1.5 ${
-                  drawerOpen ? "is-active" : ""
-                }`}
-                title="Show details"
-              >
-                <Info size={18} strokeWidth={2} />
-                <span className="text-[11px] font-medium tracking-wide hidden sm:inline">
-                  Details
-                </span>
-              </button>
-
-              {/* Navigation Group - Now perfectly centered in isolation */}
-              <div className="flex items-center justify-center gap-3">
-                <NavButton
-                  direction="prev"
-                  enabled={hasPrev}
-                  onClick={() => handleNavigate("prev")}
-                />
-
-                <span
-                  className="text-[11px] text-white/50 tabular-nums tracking-wide select-none text-center inline-block font-mono"
-                  style={{ minWidth: counterMinWidth }}
-                >
-                  {currentIndex + 1} / {organisms.length}
-                </span>
-
-                <NavButton
-                  direction="next"
-                  enabled={hasNext}
-                  onClick={() => handleNavigate("next")}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-
-        {!isZoomed && (hasPrev || hasNext) && (
-          <div className="text-center mt-0 mb-1 mx-auto w-fit" style={{ pointerEvents: "auto" }}>
-            <span className="text-[11px] text-white/30 tracking-wide">
-              {isTouchDevice
-                ? "swipe to navigate · pinch to zoom"
-                : "← → or drag to navigate · scroll to zoom · esc to close"}
-            </span>
-          </div>
-        )}
-
-        {!isZoomed && !hasPrev && !hasNext && (
-          <div
-            className="flex flex-col items-center justify-center gap-2 w-full px-4 sm:px-6"
-            style={{ pointerEvents: "auto" }}
-          >
-            {/* Info Button - Now perfectly centered */}
+          );
+        }
+        return (
+          <div className="flex flex-col items-center justify-center gap-2 w-full px-4 sm:px-6">
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -481,36 +254,45 @@ export default function OrganismViewer({
               <Info size={18} strokeWidth={2} />
               <span className="text-[11px] font-medium tracking-wide">Details</span>
             </button>
-
-            {/* Helper Text - Stacked below the button */}
             <div className="text-center mx-auto w-fit">
-              <span className="text-[11px] text-white/30 tracking-wide">
-                {isTouchDevice
-                  ? "pinch to zoom · double-tap to enlarge"
-                  : "scroll to zoom · double-click to enlarge · esc to close"}
-              </span>
+              <span className="text-[11px] text-white/30 tracking-wide">{hintText(ctx, true)}</span>
             </div>
           </div>
-        )}
-      </div>
-
-      <OrganismInfoDrawer
-        open={drawerOpen}
-        closing={closing}
-        organism={organism}
-        allOrganisms={allOrganisms}
-        zones={zones}
-        zonePics={zonePics}
-        annotations={annotations}
-        speciesByShortCode={speciesByShortCode}
-        relationships={relationships}
-        onSelectOrganism={onSelectOrganism}
-        onSelectTaxon={onSelectTaxon}
-        topOffset={topBarH}
-        bottomOffset={bottomBarH}
-        slideDir={drawerSlideDir}
-        aiAnalyses={aiAnalyses}
-      />
-    </div>
+        );
+      }}
+      // "Removed" badge, pinned to the image's own top-left corner.
+      renderImageOverlay={(ctx) => {
+        const o = ctx.item.data!;
+        if (ctx.isZoomed || !isOrganismRemoved(o, removedSet)) return null;
+        return (
+          <span className="absolute top-2 left-2 z-10 flex items-center gap-1 rounded-sm bg-amber-900/80 px-1.5 py-0.5 text-[10px] font-display uppercase tracking-wider text-amber-100 backdrop-blur-sm pointer-events-none">
+            <Trash2 size={11} strokeWidth={1.75} />
+            Removed
+          </span>
+        );
+      }}
+      renderOverlay={(ctx) => (
+        <>
+          <DrawerContentShift open={drawerOpen} setContentShift={ctx.setContentShift} />
+          <OrganismInfoDrawer
+            open={drawerOpen}
+            closing={ctx.closing}
+            organism={organism}
+            allOrganisms={allOrganisms}
+            zones={zones}
+            zonePics={zonePics}
+            annotations={annotations}
+            speciesByShortCode={speciesByShortCode}
+            relationships={relationships}
+            onSelectOrganism={onSelectOrganism}
+            onSelectTaxon={onSelectTaxon}
+            topOffset={ctx.topBarHeight}
+            bottomOffset={ctx.bottomBarHeight}
+            slideDir={drawerSlideDir}
+            aiAnalyses={aiAnalyses}
+          />
+        </>
+      )}
+    />
   );
 }

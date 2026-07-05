@@ -104,6 +104,32 @@ button,
   @apply bg-accent/35 border-accent/70 text-white;
 }
 
+/* Theme @jekrch/react-viewport-lightbox to match the app (loaded after the
+   library stylesheet, so these :root overrides win at equal specificity). */
+:root {
+  --rvl-accent: #7fb069;
+  --rvl-font-mono: "Space Mono", monospace;
+}
+
+/* The postedBy · date line stacked under the top-bar controls. Rendered inside
+   the viewer's header-actions slot but pinned below the button row, so it can't
+   share that row's flex layout — position it against the (absolute) top bar. */
+.viewer-meta {
+  position: absolute;
+  top: calc(max(0.75rem, env(safe-area-inset-top)) + 2.5rem);
+  right: 1rem;
+  font-size: 10px;
+  line-height: 1.35;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+}
+@media (min-width: 640px) {
+  .viewer-meta {
+    right: 1.5rem;
+  }
+}
+
 .viewer-pill {
   @apply flex items-center gap-1.5 h-7 px-3 rounded-full border border-white/15 bg-white/5 backdrop-blur-md text-[11px] tracking-wide text-white/60 hover:text-white/90 hover:bg-white/12 hover:border-white/25 transition-all duration-150 ease-out active:scale-95 cursor-pointer;
 }
