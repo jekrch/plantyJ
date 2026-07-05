@@ -1,4 +1,4 @@
-import { useRef, useCallback } from "react";
+import { useCallback } from "react";
 import type { Organism } from "../types";
 import { Expand, Trash2 } from "lucide-react";
 import { organismTitle } from "../utils/display";
@@ -13,24 +13,26 @@ function formatPicTime(organism: Organism): string {
   return `${mm}/${dd}/${yy}`;
 }
 
-const DOUBLE_CLICK_DELAY = 400;
-const MOUSE_TOLERANCE = 20;
-const TOUCH_TOLERANCE = 30;
-
 interface Props {
   organism: Organism;
   zoneNameByCode: Map<string, string>;
   /** This pic's plant+zone combo has been removed from the garden. */
   removed?: boolean;
+  /** This card is the one currently revealing its details overlay. */
+  selected: boolean;
+  /** Reveal this card's details (and hide any other card's). */
+  onSelect: (organism: Organism) => void;
   onOpen: (organism: Organism) => void;
 }
 
-export default function OrganismCard({ organism, zoneNameByCode, removed = false, onOpen }: Props) {
-  const lastTap = useRef<{ time: number; x: number; y: number } | null>(null);
-  const lastClick = useRef<{ time: number; x: number; y: number } | null>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
-
+export default function OrganismCard({
+  organism,
+  zoneNameByCode,
+  removed = false,
+  selected,
+  onSelect,
+  onOpen,
+}: Props) {
   const imgSrc = `${import.meta.env.BASE_URL}${organism.image}`;
 
   const aspectRatio =
@@ -42,36 +44,16 @@ export default function OrganismCard({ organism, zoneNameByCode, removed = false
     onOpen(organism);
   }, [onOpen, organism]);
 
+  // First tap reveals the details; tapping the already-selected card opens the
+  // full viewer. Selecting one card deselects any other (handled by the parent),
+  // so there is no timing window — the two taps can be arbitrarily far apart.
   const handlePointerUp = useCallback(
     (e: React.PointerEvent) => {
-      const now = Date.now();
-      const isTouch = e.pointerType === "touch";
-
-      if (isTouch && overlayRef.current) {
-        const opacity = window.getComputedStyle(overlayRef.current).opacity;
-        if (opacity === "0") {
-          lastTap.current = null;
-          return;
-        }
-      }
-
-      const ref = isTouch ? lastTap : lastClick;
-      const tolerance = isTouch ? TOUCH_TOLERANCE : MOUSE_TOLERANCE;
-      const prev = ref.current;
-
-      if (
-        prev &&
-        now - prev.time < DOUBLE_CLICK_DELAY &&
-        Math.abs(e.clientX - prev.x) <= tolerance &&
-        Math.abs(e.clientY - prev.y) <= tolerance
-      ) {
-        ref.current = null;
-        openViewer();
-      } else {
-        ref.current = { time: now, x: e.clientX, y: e.clientY };
-      }
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      if (selected) openViewer();
+      else onSelect(organism);
     },
-    [openViewer],
+    [selected, openViewer, onSelect, organism],
   );
 
   const titleLine = organismTitle(organism);
@@ -81,13 +63,12 @@ export default function OrganismCard({ organism, zoneNameByCode, removed = false
   return (
     <div
       className={`panel-item group relative cursor-pointer overflow-hidden rounded-sm bg-surface-raised ${
-        removed ? "ring-1 ring-inset ring-amber-500/50" : ""
-      }`}
+        selected ? "panel-selected" : ""
+      } ${removed ? "ring-1 ring-inset ring-amber-500/50" : ""}`}
       onPointerUp={handlePointerUp}
     >
       <div style={{ aspectRatio, width: "100%" }}>
         <img
-          ref={imgRef}
           src={imgSrc}
           alt={titleLine}
           decoding="async"
@@ -114,11 +95,9 @@ export default function OrganismCard({ organism, zoneNameByCode, removed = false
         )}
       </div>
 
-      <div
-        ref={overlayRef}
-        className="panel-overlay absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-3"
-      >
+      <div className="panel-overlay absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-3">
         <button
+          onPointerUp={(e) => e.stopPropagation()}
           onClick={(e) => {
             e.stopPropagation();
             openViewer();

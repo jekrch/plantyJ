@@ -54,7 +54,8 @@ button,
 }
 
 .panel-item:hover .panel-overlay,
-.panel-item:focus-within .panel-overlay {
+.panel-item:focus-within .panel-overlay,
+.panel-item.panel-selected .panel-overlay {
   opacity: 1;
 }
 

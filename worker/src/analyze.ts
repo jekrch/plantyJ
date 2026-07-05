@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import type { AiAnalysisEntry, AiVerdict, Env } from "./types";
-import { readAiAnalyses, writeAiAnalyses } from "./github";
+import { readAiAnalyses, readRollupRaw, writeAiAnalyses } from "./github";
 import { sendReply } from "./telegram";
 import { estimateCost, formatUsd } from "./ask";
 import { recordCost } from "./cost";
@@ -78,13 +78,14 @@ interface RunMeta {
   messageId?: number;
 }
 
+// Read the rollup from the GitHub repo (source of truth), not the deployed CDN
+// copy. The CDN copy only refreshes after the full compute-metadata → deploy
+// chain finishes and can be served stale from the edge cache for minutes after
+// that, so a freshly-added specimen would be missing from the rollup and get
+// silently skipped by findMissingPairs. Reading from GitHub means /analyze
+// picks up a new pair as soon as the metadata commit lands.
 async function loadRollupParsed(env: Env): Promise<{ raw: string; rollup: Rollup }> {
-  const base = env.DATA_BASE_URL ?? "https://plantyj.com/data";
-  const res = await fetch(`${base}/rollup.min.json`, {
-    cf: { cacheTtl: 60, cacheEverything: true } as RequestInitCfProperties,
-  });
-  if (!res.ok) throw new Error(`rollup fetch failed: ${res.status}`);
-  const raw = await res.text();
+  const raw = await readRollupRaw(env);
   return { raw, rollup: JSON.parse(raw) as Rollup };
 }
 

@@ -312,6 +312,9 @@ export default function MasonryGrid({
   const [totalHeight, setTotalHeight] = useState(0);
   const [colCount, setColCount] = useState(getColumnCount);
   const [colWidth, setColWidth] = useState(0);
+  // The card currently revealing its details overlay. Tapping a card selects it;
+  // tapping the selected card opens the viewer; tapping empty space clears it.
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const stampCacheRef = useRef<Map<string, { stamp: StampDef; fillerIndex: number }>>(new Map());
 
@@ -439,6 +442,17 @@ export default function MasonryGrid({
     });
   }, [placed, onLayoutReady]);
 
+  // Clear the revealed details when the user taps/clicks outside any card.
+  useEffect(() => {
+    if (selectedId === null) return;
+    const onPointerDown = (e: PointerEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target?.closest(".panel-item")) setSelectedId(null);
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [selectedId]);
+
   const lastColX = (colCount - 1) * (colWidth + GAP);
 
   useEffect(() => {
@@ -545,6 +559,8 @@ export default function MasonryGrid({
                     removedComboKey(item.organism.shortCode, item.organism.zoneCode),
                   ) ?? false
                 }
+                selected={selectedId === item.organism.id}
+                onSelect={(o) => setSelectedId(o.id)}
                 onOpen={onOpenOrganism}
               />
             </div>

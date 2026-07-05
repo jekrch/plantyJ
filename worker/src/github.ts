@@ -20,6 +20,7 @@ const ZONE_PICS_PATH = "public/data/zone_pics.json";
 const ANNOTATIONS_PATH = "public/data/annotations.json";
 const AI_ANALYSIS_PATH = "public/data/ai_analysis.json";
 const RELATIONSHIPS_PATH = "public/data/relationships.json";
+const ROLLUP_PATH = "public/data/rollup.min.json";
 
 function githubHeaders(token: string): Record<string, string> {
   return {
@@ -1086,4 +1087,24 @@ export async function writeAiAnalyses(
   commitMessage: string,
 ): Promise<void> {
   await writeJsonFile(env, AI_ANALYSIS_PATH, { analyses }, sha, commitMessage);
+}
+
+// Reads rollup.min.json straight from the GitHub repo (the source of truth)
+// rather than the deployed CDN copy at plantyj.com. compute-metadata.yml
+// regenerates and commits this file as soon as pics/plants change, so reading
+// it here means /analyze and /reassess see a newly-added specimen the moment
+// the metadata commit lands — no waiting for the Pages deploy, and no risk of
+// the Cloudflare/GitHub-Pages edge cache serving a stale rollup that omits the
+// latest pair. Returns the raw JSON text (for embedding verbatim in the Gemini
+// prompt); the caller parses it. Throws if the file can't be read.
+export async function readRollupRaw(env: Env): Promise<string> {
+  const [owner, repo] = env.GITHUB_REPO.split("/");
+  const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${ROLLUP_PATH}`;
+  const resp = await fetch(url, { headers: githubHeaders(env.GITHUB_TOKEN) });
+  if (!resp.ok) {
+    const err = await resp.text();
+    throw new Error(`Failed to read ${ROLLUP_PATH} (${resp.status}): ${err}`);
+  }
+  const meta: GitHubContentsResponse = await resp.json();
+  return base64ToUtf8(meta.content.replace(/\n/g, ""));
 }
