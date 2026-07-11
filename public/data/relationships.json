@@ -668,6 +668,30 @@
       "type": "predator-prey",
       "from": "X spe",
       "to": "D ple"
+    },
+    {
+      "id": 100,
+      "type": "predator-prey",
+      "from": "L lib",
+      "to": "L ser"
+    },
+    {
+      "id": 101,
+      "type": "predator-prey",
+      "from": "X spe",
+      "to": "L ser"
+    },
+    {
+      "id": 102,
+      "type": "predator-prey",
+      "from": "p dom",
+      "to": "L ser"
+    },
+    {
+      "id": 103,
+      "type": "predator-prey",
+      "from": "c card",
+      "to": "L ter"
     }
   ]
 }
