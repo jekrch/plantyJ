@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "L ser",
+      "fullName": "Lucilia sericata",
+      "commonName": "Common Green Bottle Fly",
+      "variety": null
+    },
+    {
       "shortCode": "L ter",
       "fullName": "Lumbricus terrestris",
       "commonName": "Earthworm",
