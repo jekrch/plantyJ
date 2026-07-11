@@ -3064,6 +3064,55 @@
       ],
       "observationsCount": 2392599
     },
+    "lucilia-sericata": {
+      "id": "lucilia-sericata",
+      "fullName": "Lucilia sericata",
+      "commonName": "Common Green Bottle Fly",
+      "description": "The common green bottle fly (Lucilia sericata) is a blowfly found in most areas of the world and is the most well-known of the numerous green bottle fly species. Its body is 10\u201314 mm (0.39\u20130.55 in) in length \u2013 slightly larger than a house fly \u2013 and has brilliant, metallic, blue-green or golden coloration with black markings. It has short, sparse, black bristles (setae) and three cross-grooves on the thorax. The wings are clear with light brown veins, and the legs and antennae are black. The larvae of the fly may be used for maggot therapy, are commonly used in forensic entomology, and can be the cause of myiasis in livestock and pets. The common green bottle fly emerges in the spring for mating.",
+      "vernacularNames": [
+        "Blow Fly",
+        "Sheep-strike Greenbottle",
+        "Common European Greenbottle Fly"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Diptera",
+        "family": "Calliphoridae",
+        "genus": "Lucilia",
+        "species": "Lucilia sericata",
+        "canonicalName": "Lucilia sericata"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5063973"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Lucilia_sericata"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/1632739"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.1061250"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 61088
+    },
     "lumbricus-terrestris": {
       "id": "lumbricus-terrestris",
       "fullName": "Lumbricus terrestris",

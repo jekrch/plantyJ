@@ -28,7 +28,8 @@
       "kind": "animal",
       "bioclipSpeciesId": "Dipylidium caninum",
       "bioclipCommonName": "",
-      "bioclipScore": 0.0425
+      "bioclipScore": 0.0425,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Dipylidium"
     },
     {
       "seq": 134,

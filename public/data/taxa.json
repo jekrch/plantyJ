@@ -822,5 +822,13 @@
   "Lumbricus": {
     "description": "The genus Lumbricus contains some of the most commonly seen earthworms in Europe among its nearly 700 valid species.",
     "url": "https://en.wikipedia.org/wiki/Lumbricus"
+  },
+  "Calliphoridae": {
+    "description": "The Calliphoridae are a family of insects in the order Diptera, with almost 1,900 known species. The maggot larvae, often used as fishing bait, are known as gentles. The family is known to be polyphyletic, but much remains disputed regarding proper treatment of the constituent taxa, some of which are occasionally accorded family status.",
+    "url": "https://en.wikipedia.org/wiki/Calliphoridae"
+  },
+  "Lucilia": {
+    "description": "Lucilia may refer to:Lucilia, the wife of Roman philosopher Lucretius\nLucilia (fly), a greenbottle fly genus in the family Calliphoridae\nLucilia (plant), a plant genus in the family Asteraceae",
+    "url": "https://en.wikipedia.org/wiki/Lucilia"
   }
 }
