@@ -11,7 +11,10 @@
       "postedBy": "Jacob",
       "addedAt": "2026-07-11T22:20:10.406Z",
       "width": 1280,
-      "height": 905
+      "height": 905,
+      "bioclipSpeciesId": "Papilio polyxenes",
+      "bioclipCommonName": "Black Swallowtail",
+      "bioclipScore": 0.9527
     },
     {
       "seq": 136,
