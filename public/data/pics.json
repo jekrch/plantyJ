@@ -24,7 +24,11 @@
       "postedBy": "Jacob",
       "addedAt": "2026-07-11T22:18:29.876Z",
       "width": 1280,
-      "height": 1102
+      "height": 1102,
+      "kind": "animal",
+      "bioclipSpeciesId": "Lucilia sericata",
+      "bioclipCommonName": "Blow fly",
+      "bioclipScore": 0.3233
     },
     {
       "seq": 135,
@@ -899,7 +903,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1093,7 +1097,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
