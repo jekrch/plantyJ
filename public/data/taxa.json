@@ -802,5 +802,25 @@
   "Danaus": {
     "description": "In Greek mythology, Danaus was the king of Libya. His myth is a foundation legend of Argos, one of the foremost Mycenaean cities of the Peloponnesus. In Homer's Iliad, \"Danaans\" and \"Argives\" commonly designate the Greek forces opposed to the Trojans.",
     "url": "https://en.wikipedia.org/wiki/Danaus"
+  },
+  "Annelida": {
+    "description": "Annelids, also known as segmented worms, are animals that comprise the phylum Annelida. The phylum contains over 22,000 extant species, including ragworms, earthworms, and leeches. The species exist in and have adapted to various ecologies \u2013 some in marine environments as distinct as tidal zones and hydrothermal vents, others in fresh water, and yet others in moist terrestrial environments.",
+    "url": "https://en.wikipedia.org/wiki/Annelid"
+  },
+  "Clitellata": {
+    "description": "The Clitellata are a class of annelid worms, characterized by having a clitellum \u2013 the 'collar' that forms a reproductive cocoon during part of their life cycles. The clitellates comprise around 8,000 species. Unlike the class of Polychaeta, they do not have parapodia and their heads are less developed.",
+    "url": "https://en.wikipedia.org/wiki/Clitellata"
+  },
+  "Crassiclitellata": {
+    "description": "Crassiclitellata is an order of annelids belonging to the class Clitellata..",
+    "url": "https://en.wikipedia.org/wiki/Crassiclitellata"
+  },
+  "Lumbricidae": {
+    "description": "The Lumbricidae are a family of earthworms. About 33 lumbricid species have become naturalized around the world, but the bulk of the species are in the Holarctic region, from Canada and the United States and throughout Eurasia to Japan. An enigmatic species in Tasmania is Eophila eti. Currently, 670 valid species and subspecies in about 42 genera are recognized. This family includes the majority of earthworm species well known in Europe and Asia.",
+    "url": "https://en.wikipedia.org/wiki/Lumbricidae"
+  },
+  "Lumbricus": {
+    "description": "The genus Lumbricus contains some of the most commonly seen earthworms in Europe among its nearly 700 valid species.",
+    "url": "https://en.wikipedia.org/wiki/Lumbricus"
   }
 }

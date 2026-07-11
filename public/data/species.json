@@ -3064,6 +3064,73 @@
       ],
       "observationsCount": 2392599
     },
+    "lumbricus-terrestris": {
+      "id": "lumbricus-terrestris",
+      "fullName": "Lumbricus terrestris",
+      "commonName": "Earthworm",
+      "description": "Lumbricus terrestris is a large, reddish worm species thought to be native to Western Europe, now widely distributed around the world (along with several other lumbricids). In some areas where it is an introduced species, some people consider it to be a significant pest for out-competing native worms.\nThrough much of Europe, it is the largest naturally occurring species of earthworm, typically reaching 20 to 25 cm in length when extended.",
+      "vernacularNames": [
+        "Angleworm",
+        "Canadian Crawler",
+        "Common Earthworm",
+        "Dew Worm",
+        "Earthworm",
+        "European Common Earthworm",
+        "Grandaddy Earthworm",
+        "Green Crawler",
+        "Large Crawler",
+        "Lob",
+        "Lob Worm",
+        "Night Crawler (N. America)",
+        "Nightcrawler",
+        "Nitro Crawler",
+        "Rinwirem",
+        "Squirrel Tail",
+        "Squirreltail Worm"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Annelida",
+        "class": "Clitellata",
+        "order": "Crassiclitellata",
+        "family": "Lumbricidae",
+        "genus": "Lumbricus",
+        "species": "Lumbricus terrestris",
+        "canonicalName": "Lumbricus terrestris"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/4410657"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Lumbricus_terrestris"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/81545"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q30092"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.964736"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 12659
+    },
     "malus-domestica": {
       "id": "malus-domestica",
       "fullName": "Malus domestica",
