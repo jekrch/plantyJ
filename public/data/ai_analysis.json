@@ -646,6 +646,31 @@
       "created": "2026-06-22T17:43:14.632Z"
     },
     {
+      "shortCode": "L ser",
+      "zoneCode": "kg",
+      "verdict": "MIXED",
+      "analysis": "The common green bottle fly (Lucilia sericata) is a native, cosmopolitan blowfly species in the Twin Cities and the broader Nearctic region, making it a natural fit for an ecology-focused garden. In the kitchen garden (kg) and adjacent zones, adult flies occupy a highly beneficial ecological niche as incredibly active, generalist pollinators. Adult flies feed on nectar and pollen, and their hairy bodies inadvertently collect and distribute pollen. They are valuable pollinators for many of the edible and companion plants on the property, such as the garden strawberries (Fragaria x ananassa) in the front yard and berry border, wild leeks (Allium tricoccum) in the maple zone, and ornamental onions (Allium hybrids). Because flies remain active in cooler, wetter, or windier conditions that keep bees and butterflies grounded, their presence ensures steady pollination and improved fruit set across the garden's crops.\n\nHowever, their presence warrants a MIXED verdict due to their breeding habits and potential sanitation risks in a kitchen garden setting. While the larvae (maggots) are essential decomposers that recycle nutrients from carrion, feces, and organic waste, their breeding requirements can attract them to unmanaged compost bins or household trash, potentially making them vectors for food-borne pathogens. Additionally, they present a minor veterinary concern for blowfly strike (myiasis) if the resident cat, Dolly (Felis catus), or local wildlife have untreated wounds. To manage them effectively, owners should ensure that kitchen garden compost is kept covered, hot, and free of meat scraps, allowing the adult flies to serve as a beneficial pollinator and prey resource for local predators—including skimmer dragonflies (Libellulidae) in the berry border, ground crab spiders (Xysticus) in the front yard, and insectivorous birds like cardinals and house sparrows.",
+      "references": [
+        "https://www.minnesotaseasons.com/Insects/common_green_bottle_fly.html",
+        "https://animaldiversity.org/accounts/Lucilia_sericata/",
+        "https://vegcropshotline.org/article/insect-spotlight-blow-flies/",
+        "https://www.researchgate.net/publication/327404416_Positive_effects_of_the_pollinators_Osmia_cornuta_Megachilidae_and_Lucilia_sericata_Calliphoridae_on_strawberry_quality"
+      ],
+      "created": "2026-07-11T22:22:30.110Z"
+    },
+    {
+      "shortCode": "L ter",
+      "zoneCode": "mpg",
+      "verdict": "MIXED",
+      "analysis": "The presence of the common earthworm, or nightcrawler, in the maple zone represents a mixed ecological reality. On the positive side, these deep-burrowing (anecic) worms can help alleviate the compacted clay loam soils typical of the property by creating macro-pores that improve water infiltration and aeration. They also provide a significant, protein-rich food source for local insectivorous birds found in or near this zone, such as the resident Northern Cardinal and visiting Wild Turkeys. However, because Minnesota was entirely scraped clean by glaciers during the last ice age, all terrestrial earthworms are non-native, and this species is classified as a highly damaging invasive species in local forest and woodland environments.\n\nFor a garden prioritizing native woodland species, the ecological impact of this worm is severely detrimental. The maple zone is heavily mulched with wood chips and leaves to build up a rich organic layer under the invasive Norway Maple canopy, supporting delicate native spring ephemerals and shade-tolerant species like Yellow Trout Lily, Sharp Lobed Hepatica, Wild Leek, and Virginia Bluebells. The earthworms voraciously consume this leaf litter and destroy the spongy organic 'duff' layer, which these native plants rely on for seed germination, moisture retention, and root insulation. This feeding style exposes bare soil, accelerating soil desiccation—already aggravated by the thirsty roots of the Norway Maple—and creates conditions that favor weedy invaders. Management should focus on preserving the duff layer by using coarser, slower-to-decompose wood mulches and carefully inspecting any incoming soil, compost, or plant roots to prevent introducing more worms or the even more destructive invasive Asian jumping worms.",
+      "references": [
+        "https://www.dnr.state.mn.us/invasives/terrestrialanimals/earthworms/index.html",
+        "https://extension.umn.edu/identify-invasive-species/earthworms",
+        "https://www.dnr.state.mn.us/invasives/terrestrialanimals/earthworms/index.html"
+      ],
+      "created": "2026-07-11T22:22:30.110Z"
+    },
+    {
       "shortCode": "L vul",
       "zoneCode": "nbv",
       "verdict": "BAD",
