@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "L ter",
+      "fullName": "Lumbricus terrestris",
+      "commonName": "Earthworm",
+      "variety": null
+    },
+    {
       "shortCode": "A hyb mil",
       "fullName": "Allium hybrid",
       "commonName": "Millennium Ornamental Onion",
