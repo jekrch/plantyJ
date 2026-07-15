@@ -5252,6 +5252,62 @@
       ],
       "observationsCount": 38805
     },
+    "sylvilagus-floridanus": {
+      "id": "sylvilagus-floridanus",
+      "fullName": "Sylvilagus floridanus",
+      "commonName": "Eastern Cottontail",
+      "description": "The eastern cottontail (Sylvilagus floridanus) is a species of rabbit in the family Leporidae. It is the most widespread and abundant rabbit species in North America, inhabiting a wide range that extends from southern Canada throughout most of the United States and into parts of Mexico, Central America, and the northern regions of South America. Known for its distinctive fluffy white tail, which resembles a cotton ball and gives the species its common name, the eastern cottontail typically inhabits open fields, meadows, and brushy areas where it can easily find cover and food. It is a primarily herbivorous, crepuscular mammal that feeds on grasses, herbs, twigs, and bark, and plays an important role in the ecosystem as prey for a variety of predators including foxes, hawks, and owls. Due to its adaptability to human-altered landscapes such as suburban and agricultural areas, the eastern cottontail has maintained stable population levels and is not considered threatened. It is also well known for its high reproductive rate, with females capable of producing multiple large litters annually, which contributes to its widespread presence.",
+      "vernacularNames": [
+        "Andean Rabbit",
+        "Chuwnguecuppui",
+        "Conejo",
+        "Conejo De Florida",
+        "Cottontail Rabbit",
+        "Eastern Cottontail",
+        "Eastern Cottontail Rabbit",
+        "Florida Cottontail",
+        "Gray Rabbit",
+        "Grey Rabbit"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Chordata",
+        "class": "Mammalia",
+        "order": "Lagomorpha",
+        "family": "Leporidae",
+        "genus": "Sylvilagus",
+        "species": "Sylvilagus floridanus",
+        "canonicalName": "Sylvilagus floridanus"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2436886"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Sylvilagus_floridanus"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/43111"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.1370686"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 198813
+    },
     "symphyotrichum-lateriflorum": {
       "id": "symphyotrichum-lateriflorum",
       "fullName": "Symphyotrichum lateriflorum",

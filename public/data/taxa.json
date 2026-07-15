@@ -830,5 +830,17 @@
   "Lucilia": {
     "description": "Lucilia may refer to:Lucilia, the wife of Roman philosopher Lucretius\nLucilia (fly), a greenbottle fly genus in the family Calliphoridae\nLucilia (plant), a plant genus in the family Asteraceae",
     "url": "https://en.wikipedia.org/wiki/Lucilia"
+  },
+  "Lagomorpha": {
+    "description": "The lagomorphs are the members of the taxonomic order Lagomorpha, of which there are two living families: the Leporidae and the Ochotonidae (pikas). There are 110 recent species of lagomorph, of which 109 species in twelve genera are extant, including ten genera of rabbits, one genus of hare, and one genus of pika ; and in which one monospecific genus is recently extinct, that of the Sardinian pika.",
+    "url": "https://en.wikipedia.org/wiki/Lagomorpha"
+  },
+  "Leporidae": {
+    "description": "Leporidae is the family of rabbits and hares (Lepus), containing over 70 species of extant mammals in all. Together with the pikas, the Leporidae constitute the mammalian order Lagomorpha. Leporidae differ from pikas in that they have short, furry tails and elongated ears and hind legs.",
+    "url": "https://en.wikipedia.org/wiki/Leporidae"
+  },
+  "Sylvilagus": {
+    "description": "Cottontail rabbits comprise the genus Sylvilagus, which is in the family Leporidae. They are found in the Americas. Most Sylvilagus species have stub tails with white undersides that show when they retreat, giving them their characteristic name, but this feature is not present in all Sylvilagus species, nor is it unique to the genus. Their fur ranges from brown to gray and changes throughout the year, depending on the season.",
+    "url": "https://en.wikipedia.org/wiki/Cottontail_rabbit"
   }
 }
