@@ -971,6 +971,19 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "S flo",
+      "zoneCode": "kg",
+      "verdict": "MIXED",
+      "analysis": "The presence of the Eastern cottontail (Sylvilagus floridanus) in the kitchen garden represents a mixed impact on the property's ecological goals and the owners' priorities. As a species native to Minnesota and the Twin Cities, the cottontail is a cornerstone of the urban food web, acting as a vital prey source for local raptors, foxes, and owls. This directly supports the owners' priority of fostering native wildlife and local ecology. However, because this sighting occurred in the kitchen garden, the rabbit poses a direct threat to the owners' edible plantings. Cottontails are opportunistic, highly prolific generalist herbivores that eagerly consume vegetable crops, leafy greens, legumes, and young seedlings, which can easily decimate home food production.\n\nBeyond the kitchen garden, this mammal poses a threat to adjacent zones on the property. Highly preferred winter foods like raspberries and currants in the berry border, as well as strawberries in the front yard, are primary targets. Additionally, the young fruit trees in the side yard (apple, apricot, and pear) are highly susceptible to winter bark gnawing and girdling, which can kill dwarf rootstocks. To manage this presence without harming the local food web, the owners should focus on exclusion. Low wire fencing of at least two feet with buried edges will protect the kitchen garden beds, while hardware cloth cylinders are essential to safeguard the trunks of the side yard fruit trees.",
+      "references": [
+        "https://www.dnr.state.mn.us/mammals/easterncottontail.html",
+        "https://digitalcommons.morris.umn.edu/cgi/viewcontent.cgi?article=1800&context=jmas",
+        "https://hort.extension.wisc.edu/articles/protecting-gardens-and-landscape-plantings-rabbits/",
+        "https://www.cbsnews.com/minnesota/news/rabbit-garden-protection/"
+      ],
+      "created": "2026-07-15T04:38:08.445Z"
+    },
+    {
       "shortCode": "S lan",
       "zoneCode": "fy",
       "verdict": "GOOD",
