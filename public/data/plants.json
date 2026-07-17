@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "M fis",
+      "fullName": "Monarda fistulosa",
+      "commonName": "Wild Bergamot",
+      "variety": null
+    },
+    {
       "shortCode": "S flo",
       "fullName": "Sylvilagus floridanus",
       "commonName": "Eastern Cottontail",
