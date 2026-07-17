@@ -3404,6 +3404,66 @@
       ],
       "observationsCount": 51172
     },
+    "monarda-fistulosa": {
+      "id": "monarda-fistulosa",
+      "fullName": "Monarda fistulosa",
+      "commonName": "Wild Bergamot",
+      "description": "Monarda fistulosa, the wild bergamot or bee balm, is a wildflower in the mint family Lamiaceae, widespread and abundant as a native plant in much of North America. This plant, with showy summer-blooming pink to lavender flowers, is often used as a honey plant, medicinal plant, and garden ornamental. The species is quite variable, and several subspecies or varieties have been recognized within it. Despite its name, it has no relation to the 'true' bergamot, a citrus fruit.",
+      "vernacularNames": [
+        "Beebalm",
+        "Horse-mint",
+        "Mintleaf Beebalm",
+        "Oswego-tea",
+        "Purple Beebalm",
+        "Wild Bergamot",
+        "Wild Bergamot Beebalm",
+        "Wild bergamot (EN)",
+        "Wildbergamot Beebalm",
+        "Wildbergamot Horsemint"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Lamiales",
+        "family": "Lamiaceae",
+        "genus": "Monarda",
+        "species": "Monarda fistulosa",
+        "canonicalName": "Monarda fistulosa"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5341411"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Monarda_fistulosa"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/85320"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q1521039"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.139254"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 79738
+    },
     "narcissus-cyclamineus": {
       "id": "narcissus-cyclamineus",
       "fullName": "Narcissus cyclamineus",

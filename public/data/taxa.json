@@ -842,5 +842,9 @@
   "Sylvilagus": {
     "description": "Cottontail rabbits comprise the genus Sylvilagus, which is in the family Leporidae. They are found in the Americas. Most Sylvilagus species have stub tails with white undersides that show when they retreat, giving them their characteristic name, but this feature is not present in all Sylvilagus species, nor is it unique to the genus. Their fur ranges from brown to gray and changes throughout the year, depending on the season.",
     "url": "https://en.wikipedia.org/wiki/Cottontail_rabbit"
+  },
+  "Monarda": {
+    "description": "Monarda is a genus of flowering plants in the mint family, Lamiaceae. The genus is endemic to North America. Common names include bergamot, bee balm, horsemint, and oswego tea, the first being inspired by the fragrance of the leaves, which is reminiscent of bergamot orange. The genus was named for the Spanish botanist Nicol\u00e1s Monardes, who wrote a book in 1574 describing plants of the New World.",
+    "url": "https://en.wikipedia.org/wiki/Monarda"
   }
 }
