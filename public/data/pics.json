@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 140,
+      "id": "D ple-1784325703",
+      "shortCode": "D ple",
+      "zoneCode": "bb",
+      "tags": [],
+      "description": "monarch butterfly nectaring on coneflower",
+      "image": "images/D ple/1784325703.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-07-17T22:01:44.328Z",
+      "width": 800,
+      "height": 600
+    },
+    {
       "seq": 139,
       "id": "M fis-1784325488",
       "shortCode": "M fis",
@@ -944,7 +957,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1138,7 +1151,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
