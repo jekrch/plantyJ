@@ -374,6 +374,18 @@
     },
     {
       "shortCode": "D ple",
+      "zoneCode": "bb",
+      "verdict": "GOOD",
+      "analysis": "The presence of the monarch butterfly (Danaus plexippus) in the sunny Berry Border is an outstanding indicator of ecological health, aligning perfectly with the owners' priority of supporting native wildlife and local ecology. The monarch is a beloved native insect and the official state butterfly of Minnesota. Currently facing severe global population declines, it is a high-priority conservation species. In the open, sunny conditions of the Berry Border, adult monarchs utilize the blooming purple coneflower (Echinacea purpurea) as a key nectar source, assisting in the pollination of these native wildflowers. Adult monarchs in this zone also benefit from neighboring nectar sources across the garden, such as wild bergamot, yarrow, and goldenrods, which provide vital energy for their multi-generational breeding cycles and subsequent autumn migration to Mexico.\n\nWhile adult monarchs forage for nectar in the Berry Border, their caterpillars rely exclusively on milkweed species as host plants. The garden supports this reproductive cycle through butterfly weed (Asclepias tuberosa) established in the front yard and north boulevard. Within the local food web, monarchs participate in natural predator-prey dynamics, potentially falling prey to native skimmer dragonflies in the Berry Border or ground crab spiders in neighboring zones. Rather than a concern, these interactions indicate a balanced, thriving backyard ecosystem. To further enhance monarch conservation, the owners should maintain a continuous succession of native blooms. Since butterfly weed prefers drier conditions, they might also consider introducing swamp milkweed (Asclepias incarnata) to the damper, clay-loam areas of the front yard to diversify host plant options.",
+      "references": [
+        "https://www.dnr.state.mn.us/insects/monarchbutterfly.html",
+        "https://xerces.org/sites/default/files/publications/16-043_02_MNPL_Midwest_web-screen.pdf",
+        "https://monarchbutterflygarden.net/milkweed-for-monarchs/asclepias-tuberosa-butterfly-weed/"
+      ],
+      "created": "2026-07-17T22:05:47.803Z"
+    },
+    {
+      "shortCode": "D ple",
       "zoneCode": "kg",
       "verdict": "GOOD",
       "analysis": "The presence of the monarch butterfly (Danaus plexippus) in the kitchen garden is highly positive, aligning perfectly with the homeowners' goals of fostering local ecology and prioritizing native species. As Minnesota's official state butterfly and a species of conservation concern, monarchs are iconic, highly valued native pollinators. While the kitchen garden itself likely acts as a transient nectaring spot, its proximity to other zones on the property creates a functional habitat matrix. The front yard and north boulevard zones contain Butterfly Weed (Asclepias tuberosa), an essential native milkweed that serves as the exclusive larval host plant for monarch caterpillars. Adults will actively seek out these areas for egg-laying, while nectaring on blooming plants throughout the yard, including Purple Coneflowers in the berry border and any flowering herbs or crops in the kitchen garden.\n\nBecause of the monarch's toxic defenses—derived from sequestering bitter cardenolides from milkweeds—they are largely protected from most vertebrate predators like the resident Northern Cardinal or other birds. However, the garden's rich insect biodiversity presents natural challenges; the presence of Carpenter Ants and Pavement Ants on the property can lead to opportunistic predation of monarch eggs or young caterpillars. No aggressive management is required or recommended. The homeowners should continue their pesticide-free approach and maintain a diverse array of native larval host plants and continuous nectar sources, which naturally buffers monarch populations and supports a balanced, self-sustaining garden ecosystem.",
@@ -688,6 +700,19 @@
       "analysis": "Malus domestica 'Red Rome' (Apple) is a non-native tree, but it is highly valued in an edible landscape and provides a spectacular early-spring nectar flow that benefits native bees and honeybees alike. While it does not support the deep web of native Lepidoptera that indigenous crabapples (Malus coronaria) do, its dwarf rootstock makes it a practical, manageable fruit producer in a tight side yard. It requires careful organic management to prevent pests without harming local pollinators.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "M fis",
+      "zoneCode": "kg",
+      "verdict": "GOOD",
+      "analysis": "Wild Bergamot (Monarda fistulosa) is a stellar addition to the kitchen garden (zone kg), acting as a highly functional ecological anchor that bridges native habitat restoration and edible plant cultivation. Its long-blooming, nectar-rich flowers draw a diverse array of pollinators, including the common eastern bumble bee (Bombus impatiens) and the monarch butterfly (Danaus plexippus), both of which are active in this yard. It plays a critical role in supporting insect specialists; most notably, it serves as the primary pollen host for the Beebalm Shortface Bee (Dufourea monardae), an uncommon native specialist bee in Minnesota. Additionally, it acts as a larval host plant for over a dozen native moth species, such as the Hermit Sphinx Moth, and attracts predatory insects like soldier beetles and sand wasps (Bicyrtes). These predatory wasps hunt stinkbugs and other agricultural pests, providing valuable biological pest control that directly shields neighboring edible crops.\n\nFor a Minneapolis garden in USDA zone 4b/5a with clay-loam soil, Wild Bergamot is exceptionally well-suited. It is robustly cold-hardy, thrives in heavy clay soils, and aligns perfectly with the owners' native-priority gardening philosophy. Its strongly aromatic, thymol-rich foliage serves as an effective natural deterrent against mammalian herbivores—a highly useful feature given that eastern cottontails (Sylvilagus floridanus) have been observed browsing in this kitchen garden zone. Once the blooms fade, the dried seed heads offer vital late-season food for songbirds like goldfinches. However, the owners must manage its vigorous, rhizomatous spreading habit to prevent it from outcompeting more delicate, neighboring vegetable crops. Providing adequate spacing and maximizing air circulation will also help mitigate powdery mildew, a common fungal issue for this species in humid midsummer.",
+      "references": [
+        "https://xerces.org/blog/plants-for-pollinators-wild-bergamot",
+        "https://www.dnr.state.mn.us/pollinators/dufourea-monardae-beebalm-shortface-bee.html",
+        "https://www.wildcherryfarm.com/shop-native-plants/p/bee-balm-monarda-fistulosa-aka-wild-bergamot",
+        "https://www.wildflower.org/plants/result.php?id_plant=mofi"
+      ],
+      "created": "2026-07-17T22:05:47.803Z"
     },
     {
       "shortCode": "m gal",
