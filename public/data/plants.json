@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A syr",
+      "fullName": "Asclepias syriaca",
+      "commonName": "Common Milkweed",
+      "variety": null
+    },
+    {
       "shortCode": "B cur",
       "fullName": "Bouteloua curtipendula",
       "commonName": "Sideoats Grama",
