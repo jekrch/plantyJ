@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "B cur",
+      "fullName": "Bouteloua curtipendula",
+      "commonName": "Sideoats Grama",
+      "variety": null
+    },
+    {
       "shortCode": "A mell",
       "fullName": "Apis mellifera",
       "commonName": "Honey Bee",
