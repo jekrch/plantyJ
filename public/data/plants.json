@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A mell",
+      "fullName": "Apis mellifera",
+      "commonName": "Honey Bee",
+      "variety": null
+    },
+    {
       "shortCode": "M fis",
       "fullName": "Monarda fistulosa",
       "commonName": "Wild Bergamot",
