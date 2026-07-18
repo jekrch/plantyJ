@@ -26,7 +26,10 @@
       "postedBy": "Jacob",
       "addedAt": "2026-07-18T23:15:29.541Z",
       "width": 1179,
-      "height": 1280
+      "height": 1280,
+      "bioclipSpeciesId": "Bouteloua curtipendula",
+      "bioclipCommonName": "Side-oats grama",
+      "bioclipScore": 0.6135
     },
     {
       "seq": 141,
@@ -45,7 +48,8 @@
       "kind": "animal",
       "bioclipSpeciesId": "Sphex ichneumoneus",
       "bioclipCommonName": "Great golden digger wasp",
-      "bioclipScore": 0.1848
+      "bioclipScore": 0.1848,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Sphex_ichneumoneus"
     },
     {
       "seq": 140,
@@ -1008,7 +1012,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1202,7 +1206,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,

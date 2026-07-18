@@ -1138,6 +1138,62 @@
       ],
       "observationsCount": 284812
     },
+    "bouteloua-curtipendula": {
+      "id": "bouteloua-curtipendula",
+      "fullName": "Bouteloua curtipendula",
+      "commonName": "Sideoats Grama",
+      "description": "Bouteloua curtipendula, commonly known as sideoats grama, is a perennial, short prairie grass that is native throughout the temperate and tropical Western Hemisphere, from Canada south to Argentina.\nThe species epithet comes from Latin curtus \"shortened\" and pendulus \"hanging\".",
+      "vernacularNames": [
+        "grama-azul",
+        "side oats",
+        "side-oats grama",
+        "sideoats grama",
+        "tall grama",
+        "tall grama grass"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Liliopsida",
+        "order": "Poales",
+        "family": "Poaceae",
+        "genus": "Bouteloua",
+        "species": "Bouteloua curtipendula",
+        "canonicalName": "Bouteloua curtipendula"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5289861"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Bouteloua_curtipendula"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/75858"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q4950436"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.128943"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 17241
+    },
     "callirhoe-involucrata": {
       "id": "callirhoe-involucrata",
       "fullName": "Callirhoe involucrata",
