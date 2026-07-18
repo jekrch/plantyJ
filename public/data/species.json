@@ -1024,6 +1024,64 @@
       ],
       "observationsCount": 42794
     },
+    "asclepias-syriaca": {
+      "id": "asclepias-syriaca",
+      "fullName": "Asclepias syriaca",
+      "commonName": "Common Milkweed",
+      "description": "Asclepias syriaca, commonly called common milkweed, butterfly flower, silkweed, silky swallow-wort, and Virginia silkweed, is a species of flowering plant. It is native to southern Canada and much of the United States east of the Rocky Mountains, excluding the drier parts of the prairies. It is in the genus Asclepias, the milkweeds. It grows in sandy soils as well as other kinds of soils in sunny areas.",
+      "vernacularNames": [
+        "Broadleaf Milkweed",
+        "Butterfly Flower",
+        "Common Milkweed",
+        "Kansas Milkweed",
+        "Silkweed",
+        "Silky Swallowwort",
+        "Virginia Silkweed",
+        "Virginia-silk"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Gentianales",
+        "family": "Apocynaceae",
+        "genus": "Asclepias",
+        "species": "Asclepias syriaca",
+        "canonicalName": "Asclepias syriaca"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3170247"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Asclepias_syriaca"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/47911"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q158295"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.131135"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 183197
+    },
     "asclepias-tuberosa": {
       "id": "asclepias-tuberosa",
       "fullName": "Asclepias tuberosa",
