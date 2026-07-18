@@ -13,7 +13,10 @@
       "postedBy": "Jacob",
       "addedAt": "2026-07-18T23:18:13.978Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "bioclipSpeciesId": "Chamaecrista fasciculata",
+      "bioclipCommonName": "partridge pea",
+      "bioclipScore": 0.6542
     },
     {
       "seq": 143,
