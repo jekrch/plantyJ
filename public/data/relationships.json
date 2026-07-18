@@ -692,6 +692,48 @@
       "type": "predator-prey",
       "from": "c card",
       "to": "L ter"
+    },
+    {
+      "id": 104,
+      "type": "pollinator",
+      "from": "A mell",
+      "to": "V vir"
+    },
+    {
+      "id": 105,
+      "type": "host-plant",
+      "from": "D ple",
+      "to": "A syr"
+    },
+    {
+      "id": 106,
+      "type": "pollinator",
+      "from": "D ple",
+      "to": "A syr"
+    },
+    {
+      "id": 107,
+      "type": "pollinator",
+      "from": "D ple",
+      "to": "M fis"
+    },
+    {
+      "id": 108,
+      "type": "pollinator",
+      "from": "B imp",
+      "to": "M fis"
+    },
+    {
+      "id": 109,
+      "type": "pollinator",
+      "from": "A mell",
+      "to": "M fis"
+    },
+    {
+      "id": 110,
+      "type": "herbivore",
+      "from": "S flo",
+      "to": "B cur"
     }
   ]
 }
