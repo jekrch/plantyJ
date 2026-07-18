@@ -105,6 +105,18 @@
       "created": "2026-05-19T00:56:58.121Z"
     },
     {
+      "shortCode": "A mell",
+      "zoneCode": "fy",
+      "verdict": "MIXED",
+      "analysis": "Apis mellifera (Honey Bee) represents a mixed presence within this Minneapolis garden. Observed in the front yard ('fy') visiting Veronicastrum virginicum (Culver’s Root), this non-native insect is widely naturalized throughout North America but is classified as managed agricultural livestock rather than wild fauna. In the context of the 'fy' zone, honey bees serve as generalist pollinators, and they can provide useful pollination services for the garden's edible plants, such as the raised-bed 'Seascape' strawberries or side-yard fruit trees. However, they are highly efficient, large-scale foragers that do not contribute to native bee conservation, conflicting with the owners' priority of supporting wild local ecology.\n\nEcologically, honey bees pose a strong competitive threat to the region's native bees. Because they live in massive managed colonies of up to fifty thousand individuals, honey bees can easily monopolize and deplete nectar and pollen from local floral resources, including the diverse native blooms in 'fy' and neighboring zones. This intense resource competition forces native species, like the Common Eastern Bumble Bee (Bombus impatiens) nesting in the nearby maple ('mpg') zone, to forage wider distances, which directly reduces their reproductive success. Furthermore, honey bees can transmit diseases and viral pathogens to wild populations at shared flowers. For these native-priority gardeners, management should focus on avoiding backyard hives—which exacerbate native bee declines—and instead continuing to plant diverse native species that support vulnerable local pollinators.",
+      "references": [
+        "https://beelab.umn.edu/managed-bees-impact-wild-bees",
+        "https://xerces.org/blog/want-to-save-bees-focus-on-habitat-not-honey-bees",
+        "https://extension.psu.edu/programs/master-gardener/counties/adams/news/culvers-root-the-perfect-native-plant-for-pollinators"
+      ],
+      "created": "2026-07-18T23:19:51.263Z"
+    },
+    {
       "shortCode": "A mil",
       "zoneCode": "fy",
       "verdict": "GOOD",
@@ -234,6 +246,18 @@
         "https://www.prairieresto.com/plant/anemone-virginiana/"
       ],
       "created": "2026-05-19T00:56:58.121Z"
+    },
+    {
+      "shortCode": "B cur",
+      "zoneCode": "nbv",
+      "verdict": "GOOD",
+      "analysis": "Sideoats Grama is an exceptional addition to the North Boulevard zone, demonstrating a perfect alignment with the owners' ecological and aesthetic goals. The boulevard's challenging conditions—full sun, compacted clay loam, and alternating periods of intense dryness and low-lying moisture—are easily tolerated by this tough, warm-season native bunchgrass. Its deep, fibrous root system, which can extend up to four feet deep, plays a critical role in mitigating urban soil compaction, stabilizing roadside soils, and enhancing water infiltration. Additionally, its compact stature (typically 1.5 to 2.5 feet tall) is ideal for city boulevard height regulations, providing a structured, non-invasive alternative to taller prairie grasses that might otherwise obstruct sidewalk or road sightlines. It pairs wonderfully with surrounding sun-loving boulevard neighbors like Butterfly Weed and Partridge Pea.\n\nEcologically, sideoats grama provides immense value as a larval host plant for several native skipper butterflies, including the Ottoe skipper, Leonard's skipper, and the federally threatened Dakota skipper, a rare Minnesota native prairie obligate. The Xerces Society also recognizes it for providing valuable nesting materials and structures for native bees. During the late summer and fall, the grass produces distinctive dangling, oat-like seeds that serve as an important food source for songbirds, small mammals, and larger native wildlife. Crucially, these seeds are a documented favorite of Wild Turkeys, which have been noted visiting this exact boulevard zone in the garden journal. By offering habitat, overwintering cover, and a rich seed bank, this grass effectively transforms a challenging urban boundary into a functional ecological refuge.",
+      "references": [
+        "https://www.dnr.state.mn.us/rsg/species-detail.html?id=8647",
+        "https://bluethumb.org/plantfinder/bouteloua-curtipendula/",
+        "https://tallgrassprairiecenter.org/sites/default/files/inline-files/IRVM%20PDFs/roadside_weeds_brush_and_erosion_white_paper.pdf"
+      ],
+      "created": "2026-07-18T23:19:51.263Z"
     },
     {
       "shortCode": "B imp",
