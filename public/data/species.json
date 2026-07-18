@@ -730,6 +730,58 @@
       ],
       "observationsCount": 1818
     },
+    "apis-mellifera": {
+      "id": "apis-mellifera",
+      "fullName": "Apis mellifera",
+      "commonName": "Honey Bee",
+      "description": "The western honey bee (Apis mellifera) is the most common of the 7\u201312 species of honey bees worldwide. The genus name Apis is Latin for 'bee', and mellifera is the Latin for 'honey-bearing' or 'honey-carrying', referring to the species' production of honey.\nLike all honey bee species, the western honey bee is eusocial, creating colonies with a single fertile female (or \"queen\"), many normally non-reproductive females or \"workers\", and a small proportion of fertile males or \"drones\". Individual colonies can house tens of thousands of bees. Colony activities are organized by complex communication between individuals, through both pheromones and the waggle dance.\nThe western honey bee was one of the first domesticated insects, and it is the primary species maintained by beekeepers to this day for both its honey production and pollination activities. With human assistance, the western honey bee now occupies every continent except Antarctica. Western honey bees are threatened by pests and diseases, especially the Varroa mite and colony collapse disorder. As of 2025, the western honey bee was assessed as \"Data Deficient\" on the IUCN Red List.\nWestern honey bees are an important model organism in scientific studies, particularly in the fields of social evolution, learning, and memory; they are also used in studies of pesticide toxicity, especially via pollen, to assess non-target impacts of commercial pesticides.",
+      "vernacularNames": [
+        "Africanized honey bee",
+        "Drone-bee",
+        "European Honey Bee",
+        "Honey Bee",
+        "Killer Bee",
+        "Western Honey Bee"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Hymenoptera",
+        "family": "Apidae",
+        "genus": "Apis",
+        "species": "Apis mellifera",
+        "canonicalName": "Apis mellifera"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/1341976"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Apis_mellifera"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/47219"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.110276"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 700384
+    },
     "aquilegia-canadensis": {
       "id": "aquilegia-canadensis",
       "fullName": "Aquilegia canadensis",
