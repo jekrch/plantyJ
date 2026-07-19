@@ -1,6 +1,7 @@
 import {
   createFile,
   deleteFile,
+  downloadBlob,
   downloadJson,
   ensureFolder,
   listFiles,
@@ -146,4 +147,35 @@ export function driveDeleteImage(fileId: string): Promise<void> {
     if (entry?.local) URL.revokeObjectURL(entry.local);
     state!.images.delete(fileId);
   });
+}
+
+export interface GardenFile {
+  path: string;
+  blob: Blob;
+}
+
+/**
+ * Download every file in the PlantyJ folder (data JSON + images) so the whole
+ * garden can be packaged for backup. Listed fresh from Drive so it captures
+ * files created this session and any the user added out of band.
+ */
+export async function collectGardenFiles(
+  onProgress?: (done: number, total: number) => void,
+): Promise<GardenFile[]> {
+  await initDrive();
+  const [dataList, imageList] = await Promise.all([
+    listFiles(`'${state!.dataId}' in parents and trashed=false`, "id,name"),
+    listFiles(`'${state!.imagesId}' in parents and trashed=false`, "id,name"),
+  ]);
+  const jobs = [
+    ...dataList.map((f) => ({ id: f.id, path: `PlantyJ/data/${f.name}` })),
+    ...imageList.map((f) => ({ id: f.id, path: `PlantyJ/images/${f.name}` })),
+  ];
+  const out: GardenFile[] = [];
+  let done = 0;
+  for (const job of jobs) {
+    out.push({ path: job.path, blob: await downloadBlob(job.id) });
+    onProgress?.(++done, jobs.length);
+  }
+  return out;
 }

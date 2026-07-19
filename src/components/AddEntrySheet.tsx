@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ImagePlus, LoaderCircle, X } from "lucide-react";
+import { Camera, ImagePlus, LoaderCircle, X } from "lucide-react";
 import type { OrganismRecord, Zone } from "../types";
 import { addEntries, type NewEntryInput } from "../data/mutations";
+import { isValidCode } from "../lib/journal/validation";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 
 interface Props {
@@ -40,7 +41,9 @@ export default function AddEntrySheet({ open, onClose, organismRecords, zones }:
   const [saving, setSaving] = useState(false);
   const [progress, setProgress] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
   // Only mounted while open (see App), so the lock spans the sheet's lifetime.
@@ -81,10 +84,22 @@ export default function AddEntrySheet({ open, onClose, organismRecords, zones }:
 
   const shortCode = plantChoice === NEW ? newShortCode.trim() : plantChoice;
   const zoneCode = zoneChoice === NEW ? newZoneCode.trim() : zoneChoice;
-  const canSave = !saving && files.length > 0 && shortCode !== "" && zoneCode !== "";
+  // New codes must pass the shared journal rules; existing ones are already valid.
+  const shortCodeOk = plantChoice !== NEW || (shortCode !== "" && isValidCode(shortCode));
+  const zoneCodeOk = zoneChoice !== NEW || (zoneCode !== "" && isValidCode(zoneCode));
+  const canSave =
+    !saving && files.length > 0 && shortCode !== "" && zoneCode !== "" && shortCodeOk && zoneCodeOk;
 
   const handleSave = async () => {
     if (!canSave) return;
+    if (plantChoice === NEW && !isValidCode(shortCode)) {
+      setError(`Plant code "${shortCode}" has invalid characters (letters, digits, spaces, - and _).`);
+      return;
+    }
+    if (zoneChoice === NEW && !isValidCode(zoneCode)) {
+      setError(`Zone code "${zoneCode}" has invalid characters (letters, digits, spaces, - and _).`);
+      return;
+    }
     if (plantChoice === NEW && organismRecords.some((p) => p.shortCode === shortCode)) {
       setError(`Plant code "${shortCode}" already exists — pick it from the list instead.`);
       return;
@@ -161,14 +176,51 @@ export default function AddEntrySheet({ open, onClose, organismRecords, zones }:
               e.target.value = "";
             }}
           />
-          <button
-            onClick={() => inputRef.current?.click()}
-            disabled={saving}
-            className="w-full flex items-center justify-center gap-2 rounded border border-dashed border-white/15 hover:border-accent/40 py-4 text-xs text-ink-muted hover:text-ink transition-colors cursor-pointer"
+          {/* Separate capture input opens the camera directly on mobile. */}
+          <input
+            ref={cameraRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            className="hidden"
+            onChange={(e) => {
+              addFiles(e.target.files);
+              e.target.value = "";
+            }}
+          />
+          <div
+            onDragOver={(e) => {
+              if (saving) return;
+              e.preventDefault();
+              setDragOver(true);
+            }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setDragOver(false);
+              if (!saving) addFiles(e.dataTransfer.files);
+            }}
+            className={`flex gap-2 rounded border border-dashed py-4 px-2 transition-colors ${
+              dragOver ? "border-accent/60 bg-accent/5" : "border-white/15"
+            }`}
           >
-            <ImagePlus size={16} strokeWidth={1.5} />
-            {files.length === 0 ? "Choose photos" : "Add more photos"}
-          </button>
+            <button
+              onClick={() => inputRef.current?.click()}
+              disabled={saving}
+              className="flex-1 flex items-center justify-center gap-2 text-xs text-ink-muted hover:text-ink transition-colors cursor-pointer"
+            >
+              <ImagePlus size={16} strokeWidth={1.5} />
+              {files.length === 0 ? "Choose or drop photos" : "Add more photos"}
+            </button>
+            <button
+              onClick={() => cameraRef.current?.click()}
+              disabled={saving}
+              className="flex items-center justify-center gap-2 px-3 text-xs text-ink-muted hover:text-ink transition-colors cursor-pointer border-l border-white/10 sm:hidden"
+              title="Take a photo"
+            >
+              <Camera size={16} strokeWidth={1.5} />
+            </button>
+          </div>
           {files.length > 0 && (
             <div className="mt-3 space-y-2">
               {files.map((f, idx) => (

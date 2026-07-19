@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { LoaderCircle, Trash2, X } from "lucide-react";
+import { LoaderCircle, Pencil, Trash2, X } from "lucide-react";
 import type { Organism, Zone } from "../types";
-import { deleteEntry, updateEntry } from "../data/mutations";
+import { deleteEntry, updateEntry, updateZone } from "../data/mutations";
 import { imageSrc } from "../data/source";
 
 interface Props {
@@ -25,6 +25,11 @@ export default function EditEntrySheet({ organism, zones, onClose, onChanged }: 
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const selectedZone = zones.find((z) => z.code === zoneCode) ?? null;
+  const [editingZone, setEditingZone] = useState(false);
+  const [zoneName, setZoneName] = useState(selectedZone?.name ?? "");
+  const [zoneDesc, setZoneDesc] = useState(selectedZone?.description ?? "");
+
   const run = (action: () => Promise<void>) => {
     setBusy(true);
     setError(null);
@@ -40,16 +45,28 @@ export default function EditEntrySheet({ organism, zones, onClose, onChanged }: 
   };
 
   const handleSave = () =>
-    run(() =>
-      updateEntry(organism.id, {
+    run(async () => {
+      // Persist zone renames/description edits first, then the entry itself.
+      const zone = zones.find((z) => z.code === zoneCode);
+      if (
+        editingZone &&
+        zone &&
+        (zoneName !== (zone.name ?? "") || zoneDesc !== (zone.description ?? ""))
+      ) {
+        await updateZone(zoneCode, {
+          name: zoneName.trim() || zoneCode,
+          description: zoneDesc.trim() || null,
+        });
+      }
+      await updateEntry(organism.id, {
         zoneCode,
         tags: tags
           .split(",")
           .map((t) => t.trim())
           .filter(Boolean),
         description: description.trim() || null,
-      }),
-    );
+      });
+    });
 
   const handleDelete = () => {
     if (!confirmDelete) {
@@ -93,12 +110,35 @@ export default function EditEntrySheet({ organism, zones, onClose, onChanged }: 
         </div>
 
         <div>
-          <label className={LABEL}>Zone</label>
+          <div className="flex items-center justify-between mb-1">
+            <label className={`${LABEL} mb-0`}>Zone</label>
+            <button
+              type="button"
+              onClick={() => {
+                const z = zones.find((zz) => zz.code === zoneCode);
+                setZoneName(z?.name ?? "");
+                setZoneDesc(z?.description ?? "");
+                setEditingZone((v) => !v);
+              }}
+              disabled={busy}
+              className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-accent hover:text-accent-dim transition-colors cursor-pointer"
+            >
+              <Pencil size={10} strokeWidth={1.75} />
+              {editingZone ? "Hide" : "Edit zone"}
+            </button>
+          </div>
           <select
             className={INPUT}
             value={zoneCode}
             disabled={busy}
-            onChange={(e) => setZoneCode(e.target.value)}
+            onChange={(e) => {
+              setZoneCode(e.target.value);
+              if (editingZone) {
+                const z = zones.find((zz) => zz.code === e.target.value);
+                setZoneName(z?.name ?? "");
+                setZoneDesc(z?.description ?? "");
+              }
+            }}
           >
             {zones.map((z) => (
               <option key={z.code} value={z.code}>
@@ -106,6 +146,29 @@ export default function EditEntrySheet({ organism, zones, onClose, onChanged }: 
               </option>
             ))}
           </select>
+          {editingZone && (
+            <div className="mt-2 space-y-2 rounded border border-white/10 p-2.5">
+              <div>
+                <label className={LABEL}>Zone name</label>
+                <input
+                  className={INPUT}
+                  value={zoneName}
+                  disabled={busy}
+                  onChange={(e) => setZoneName(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className={LABEL}>Zone description</label>
+                <textarea
+                  className={`${INPUT} resize-none`}
+                  rows={2}
+                  value={zoneDesc}
+                  disabled={busy}
+                  onChange={(e) => setZoneDesc(e.target.value)}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         <div>

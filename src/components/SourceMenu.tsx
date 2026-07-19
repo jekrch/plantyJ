@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { Check, Cloud, LogOut } from "lucide-react";
+import { Check, Cloud, Download, LogOut, Sparkles } from "lucide-react";
 import { getSourceMode, setSourceMode } from "../data/source";
 import { AUTH_CHANGED_EVENT, getSessionUser, signOut } from "../data/googleAuth";
+import { enrichGarden } from "../data/enrichment";
+import { exportGarden } from "../data/exportGarden";
 
 /**
  * Header dropdown for switching between the static demo garden and the
@@ -10,9 +12,40 @@ import { AUTH_CHANGED_EVENT, getSessionUser, signOut } from "../data/googleAuth"
 export default function SourceMenu() {
   const [open, setOpen] = useState(false);
   const [, setAuthTick] = useState(0);
+  const [busy, setBusy] = useState<null | string>(null);
   const ref = useRef<HTMLDivElement>(null);
   const mode = getSourceMode();
   const user = getSessionUser();
+
+  const handleEnrich = async () => {
+    setBusy("Enriching…");
+    try {
+      const { speciesUpdated, taxaAdded } = await enrichGarden((p) =>
+        setBusy(`Enriching ${p.done}/${p.total}`),
+      );
+      setBusy(
+        speciesUpdated || taxaAdded
+          ? `Enriched ${speciesUpdated} species, ${taxaAdded} taxa`
+          : "Everything already enriched",
+      );
+    } catch (err) {
+      setBusy(err instanceof Error ? err.message : "Enrichment failed");
+    } finally {
+      setTimeout(() => setBusy(null), 2500);
+    }
+  };
+
+  const handleExport = async () => {
+    setBusy("Preparing backup…");
+    try {
+      await exportGarden((label, done, total) => setBusy(`${label} ${done}/${total}`));
+      setBusy("Backup downloaded");
+    } catch (err) {
+      setBusy(err instanceof Error ? err.message : "Backup failed");
+    } finally {
+      setTimeout(() => setBusy(null), 2500);
+    }
+  };
 
   useEffect(() => {
     const bump = () => setAuthTick((t) => t + 1);
@@ -62,6 +95,24 @@ export default function SourceMenu() {
           </button>
           {mode === "drive" && user && (
             <>
+              <div className="my-1 border-t border-ink-faint/20" />
+              <button className={optionCls} onClick={handleEnrich} disabled={busy !== null}>
+                <span className="w-4">
+                  <Sparkles size={13} />
+                </span>
+                Enrich my garden
+              </button>
+              <button className={optionCls} onClick={handleExport} disabled={busy !== null}>
+                <span className="w-4">
+                  <Download size={13} />
+                </span>
+                Download backup (.zip)
+              </button>
+              {busy && (
+                <p className="px-3 py-1 text-[11px] text-accent truncate" title={busy}>
+                  {busy}
+                </p>
+              )}
               <div className="my-1 border-t border-ink-faint/20" />
               <p className="px-3 py-1.5 text-[11px] text-ink-muted truncate" title={user.email}>
                 {user.email || user.name}

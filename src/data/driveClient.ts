@@ -83,6 +83,11 @@ export async function downloadJson<T>(fileId: string): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+export async function downloadBlob(fileId: string): Promise<Blob> {
+  const res = await authFetch(`${API}/files/${fileId}?alt=media`);
+  return res.blob();
+}
+
 export async function createFile(
   name: string,
   parentId: string,
