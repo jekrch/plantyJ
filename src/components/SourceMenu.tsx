@@ -26,6 +26,7 @@ import { resetGardenDescription } from "../data/gardenDescription";
 import { enrichGarden } from "../data/enrichment";
 import { exportGarden } from "../data/exportGarden";
 import AnalysisAIAssist from "./AnalysisAIAssist";
+import { useAIFeaturesVisible } from "../hooks/useAIFeatures";
 
 /** Human-readable byte size, e.g. 1536 -> "1.5 KB". */
 function formatBytes(n: number): string {
@@ -59,6 +60,7 @@ export default function SourceMenu() {
   const fileRef = useRef<HTMLInputElement>(null);
   const mode = getSourceMode();
   const user = getSessionUser();
+  const aiVisible = useAIFeaturesVisible();
 
   const displayName = profile?.name || user?.name || "My garden";
   const avatar = profile?.picture || user?.picture || null;
@@ -173,10 +175,32 @@ export default function SourceMenu() {
     }
   };
 
+  const handleToggleAI = async () => {
+    const next = !(profile?.hideAI ?? false);
+    setBusy(next ? "Hiding AI features…" : "Showing AI features…");
+    try {
+      setProfile(
+        await saveProfile({
+          name: profile?.name ?? null,
+          picture: profile?.picture ?? null,
+          hideAI: next,
+        }),
+      );
+      setBusy(null);
+    } catch (err) {
+      setBusy(err instanceof Error ? err.message : "Save failed");
+      setTimeout(() => setBusy(null), 2500);
+    }
+  };
+
   const handleSaveProfile = async () => {
     setBusy("Saving…");
     try {
-      const saved = await saveProfile({ name: draftName, picture: draftPic });
+      const saved = await saveProfile({
+        name: draftName,
+        picture: draftPic,
+        hideAI: profile?.hideAI ?? false,
+      });
       setProfile(saved);
       setEditing(false);
       setBusy(null);
@@ -235,19 +259,21 @@ export default function SourceMenu() {
                 </span>
                 Enrich my garden
               </button>
-              <button
-                className={optionCls}
-                onClick={() => {
-                  setOpen(false);
-                  setAnalyzeOpen(true);
-                }}
-                disabled={busy !== null}
-              >
-                <span className="w-4">
-                  <FileText size={13} />
-                </span>
-                Draft analyses with a model
-              </button>
+              {aiVisible && (
+                <button
+                  className={optionCls}
+                  onClick={() => {
+                    setOpen(false);
+                    setAnalyzeOpen(true);
+                  }}
+                  disabled={busy !== null}
+                >
+                  <span className="w-4">
+                    <FileText size={13} />
+                  </span>
+                  Draft analyses with a model
+                </button>
+              )}
               <button className={optionCls} onClick={handleExport} disabled={busy !== null}>
                 <span className="w-4">
                   <Download size={13} />
@@ -348,6 +374,18 @@ export default function SourceMenu() {
                   )}
                 </>
               )}
+              <div className="my-1 border-t border-ink-faint/20" />
+              <button
+                className={optionCls}
+                onClick={handleToggleAI}
+                disabled={busy !== null}
+                role="menuitemcheckbox"
+                aria-checked={!aiVisible}
+                title="Hide every model-assisted feature (prompt generation, drafting) from this account"
+              >
+                <span className="w-4">{!aiVisible && <Check size={14} />}</span>
+                Hide AI features
+              </button>
               <button
                 className={optionCls}
                 onClick={() => {
@@ -382,7 +420,7 @@ export default function SourceMenu() {
           onExport={handleExport}
         />
       )}
-      {analyzeOpen && (
+      {analyzeOpen && aiVisible && (
         <AnalysisAIAssist onClose={() => setAnalyzeOpen(false)} onApplied={() => {}} />
       )}
     </div>

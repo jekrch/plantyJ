@@ -8,9 +8,10 @@ import BackgroundEchoes from "./components/BackgroundEchoes";
 import { SpinnerState, ErrorState, EmptyState, SignInState } from "./components/StatusStates";
 import SourceMenu from "./components/SourceMenu";
 import AddEntrySheet from "./components/AddEntrySheet";
-import { isWritable } from "./data/source";
+import { isDriveMode, isWritable } from "./data/source";
 import OrganismViewer from "./components/OrganismViewer";
 import InfoModal from "./components/InfoModal";
+import WelcomeModal, { hasSeenWelcome } from "./components/WelcomeModal";
 import SpotlightView from "./components/SpotlightView";
 import TreeView from "./components/TreeView";
 import WebView from "./components/WebView";
@@ -97,6 +98,10 @@ export default function App() {
   const [headerHeight, setHeaderHeight] = useState(0);
   const [addOpen, setAddOpen] = useState(false);
   const writable = isWritable();
+
+  // First visit to the founder's garden gets a one-time greeting pointing at
+  // the cloud menu. Drive mode means they've already started their own journal.
+  const [welcomeOpen, setWelcomeOpen] = useState(() => !isDriveMode() && !hasSeenWelcome());
 
   useLayoutEffect(() => {
     const el = headerRef.current;
@@ -284,6 +289,8 @@ export default function App() {
           onNodeSelect={view.handleWebNodeSelect}
         />
       )}
+
+      <WelcomeModal open={welcomeOpen} onClose={() => setWelcomeOpen(false)} />
 
       <InfoModal
         open={view.infoOpen}

@@ -45,6 +45,7 @@ import {
   upsertRelationshipType,
 } from "../data/relationshipMutations";
 import RelationshipAIAssist from "./RelationshipAIAssist";
+import { useAIFeaturesVisible } from "../hooks/useAIFeatures";
 import { Dropdown, type DropdownOption } from "./Dropdown";
 
 // Same palette as the food web, so a type keeps its colour across both views.
@@ -462,6 +463,7 @@ export default function RelationshipEditor({
   const [typeForm, setTypeForm] = useState<null | { editing?: RelationshipType }>(null);
   const [addOpen, setAddOpen] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
+  const aiVisible = useAIFeaturesVisible();
 
   const knownCodes = useMemo(() => new Set(labelByCode.keys()), [labelByCode]);
 
@@ -539,13 +541,15 @@ export default function RelationshipEditor({
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {busy && <LoaderCircle size={15} className="animate-spin text-ink-muted" />}
-          <button
-            onClick={() => setAiOpen(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-xs text-accent hover:bg-accent/10 transition-colors"
-            title="Generate a prompt for a model, then paste its reply back to create relationships"
-          >
-            <Sparkles size={14} /> <span className="hidden sm:inline">AI assist</span>
-          </button>
+          {aiVisible && (
+            <button
+              onClick={() => setAiOpen(true)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-xs text-accent hover:bg-accent/10 transition-colors"
+              title="Generate a prompt for a model, then paste its reply back to create relationships"
+            >
+              <Sparkles size={14} /> <span className="hidden sm:inline">AI assist</span>
+            </button>
+          )}
           <button
             onClick={() => setAddOpen((v) => !v)}
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-xs text-ink-muted hover:text-ink hover:bg-white/5 transition-colors"
@@ -1018,7 +1022,7 @@ export default function RelationshipEditor({
       </div>
 
       {/* AI assist */}
-      {aiOpen && (
+      {aiOpen && aiVisible && (
         <RelationshipAIAssist
           knownCodes={knownCodes}
           onClose={() => setAiOpen(false)}

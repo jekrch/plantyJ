@@ -243,10 +243,10 @@ export default function AnalysisAIAssist({ onClose, onApplied }: Props) {
       onClick={applying ? undefined : onClose}
     >
       <div
-        className="w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto thin-scroll bg-surface border border-ink-faint/30 rounded-t-lg sm:rounded-lg p-5 space-y-4"
+        className="w-full sm:max-w-2xl max-h-[92vh] flex flex-col bg-surface border border-ink-faint/30 rounded-t-lg sm:rounded-lg"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between shrink-0 px-5 pt-5 pb-4">
           <h2 className="flex items-center gap-2 font-display text-sm uppercase tracking-widest text-ink">
             <Sparkles size={15} className="text-accent" /> Draft analyses with a model
           </h2>
@@ -260,6 +260,7 @@ export default function AnalysisAIAssist({ onClose, onApplied }: Props) {
           </button>
         </div>
 
+        <div className="flex-1 min-h-0 overflow-y-auto thin-scroll px-5 pb-5 space-y-4">
         {loadError ? (
           <p className="text-xs text-rose-300">{loadError}</p>
         ) : !rollup ? (
@@ -504,6 +505,7 @@ export default function AnalysisAIAssist({ onClose, onApplied }: Props) {
             </div>
           </>
         )}
+        </div>
       </div>
     </div>
   );
