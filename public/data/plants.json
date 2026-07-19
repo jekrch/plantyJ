@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A spe",
+      "fullName": "Agelenopsis species",
+      "commonName": "Grass Spider",
+      "variety": null
+    },
+    {
       "shortCode": "A syr",
       "fullName": "Asclepias syriaca",
       "commonName": "Common Milkweed",
