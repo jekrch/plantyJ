@@ -11,6 +11,10 @@ import type {
   ZonePic,
 } from "../types";
 import { useRelationships, type RelationshipsData } from "./useRelationships";
+import { DATA_CHANGED_EVENT, isDriveMode, loadJson } from "../data/source";
+import { AUTH_CHANGED_EVENT, getAccessToken } from "../data/googleAuth";
+import { initDrive } from "../data/driveSource";
+import { DriveAuthError } from "../data/driveClient";
 
 export function slugifyName(name: string): string {
   return name
@@ -55,7 +59,7 @@ export function buildSpeciesMap(
   return m;
 }
 
-export type LoadStatus = "loading" | "ready" | "error";
+export type LoadStatus = "loading" | "ready" | "error" | "needs-auth";
 
 export interface OrganismData {
   organisms: Organism[];
@@ -87,61 +91,99 @@ export function useOrganismData(): OrganismData {
   const [taxa, setTaxa] = useState<Record<string, TaxaInfo>>({});
   const [aiAnalyses, setAiAnalyses] = useState<AIAnalysis[]>([]);
   const [status, setStatus] = useState<LoadStatus>("loading");
+  const [reloadKey, setReloadKey] = useState(0);
   const relationships = useRelationships();
 
+  // Refetch after any mutation or auth change (sign-in unlocks Drive mode).
   useEffect(() => {
-    const base = import.meta.env.BASE_URL;
-    const fetchJson = <T>(path: string) =>
-      fetch(`${base}${path}`).then((res) => {
-        if (!res.ok) throw new Error(`${path}: ${res.status}`);
-        return res.json() as Promise<T>;
-      });
+    const bump = () => setReloadKey((k) => k + 1);
+    window.addEventListener(DATA_CHANGED_EVENT, bump);
+    window.addEventListener(AUTH_CHANGED_EVENT, bump);
+    return () => {
+      window.removeEventListener(DATA_CHANGED_EVENT, bump);
+      window.removeEventListener(AUTH_CHANGED_EVENT, bump);
+    };
+  }, []);
 
-    Promise.all([
-      fetchJson<{ pics?: PicRecord[] }>("data/pics.json"),
-      fetchJson<{ plants?: OrganismRecord[] }>("data/plants.json"),
-      fetchJson<{ zones?: Zone[] }>("data/zones.json"),
-      fetchJson<{ zonePics?: ZonePic[] }>("data/zone_pics.json").catch(() => ({
-        zonePics: [] as ZonePic[],
-      })),
-      fetchJson<{ annotations?: Annotation[] }>("data/annotations.json").catch(() => ({
-        annotations: [] as Annotation[],
-      })),
-      fetchJson<Record<string, TaxaInfo>>("data/taxa.json").catch(
-        () => ({}) as Record<string, TaxaInfo>,
-      ),
-    ])
-      .then(([picsData, organismsData, zonesData, zonePicsData, annotationsData, taxaData]) => {
-        const records = organismsData.plants ?? [];
-        setOrganisms(mergeOrganisms(picsData.pics ?? [], records));
-        setOrganismRecords(records);
-        setZones(zonesData.zones ?? []);
-        setZonePics(zonePicsData.zonePics ?? []);
-        setAnnotations(annotationsData.annotations ?? []);
-        setTaxa(taxaData ?? {});
-        setStatus("ready");
+  useEffect(() => {
+    let cancelled = false;
 
-        // Load combined species bundle — non-blocking; fills in once available.
-        fetchJson<{ species?: Record<string, Species> }>("data/species.json")
-          .then((bundle) => {
-            setSpeciesByShortCode(buildSpeciesMap(records, bundle.species ?? {}));
-          })
-          .catch(() => {
-            setSpeciesByShortCode(new Map());
-          })
-          .finally(() => {
-            setSpeciesLoaded(true);
-          });
+    async function load() {
+      if (isDriveMode()) {
+        if (!getAccessToken()) {
+          setStatus("needs-auth");
+          return;
+        }
+        setStatus("loading");
+        try {
+          await initDrive();
+        } catch (err) {
+          if (cancelled) return;
+          setStatus(err instanceof DriveAuthError ? "needs-auth" : "error");
+          return;
+        }
+      }
+
+      const [picsData, organismsData, zonesData, zonePicsData, annotationsData, taxaData] =
+        await Promise.all([
+          loadJson<{ pics?: PicRecord[] }>("pics.json"),
+          loadJson<{ plants?: OrganismRecord[] }>("plants.json"),
+          loadJson<{ zones?: Zone[] }>("zones.json"),
+          loadJson<{ zonePics?: ZonePic[] }>("zone_pics.json").catch(() => ({
+            zonePics: [] as ZonePic[],
+          })),
+          loadJson<{ annotations?: Annotation[] }>("annotations.json").catch(() => ({
+            annotations: [] as Annotation[],
+          })),
+          loadJson<Record<string, TaxaInfo>>("taxa.json").catch(
+            () => ({}) as Record<string, TaxaInfo>,
+          ),
+        ]);
+      if (cancelled) return;
+
+      const records = organismsData.plants ?? [];
+      setOrganisms(mergeOrganisms(picsData.pics ?? [], records));
+      setOrganismRecords(records);
+      setZones(zonesData.zones ?? []);
+      setZonePics(zonePicsData.zonePics ?? []);
+      setAnnotations(annotationsData.annotations ?? []);
+      setTaxa(taxaData ?? {});
+      setStatus("ready");
+
+      // Load combined species bundle — non-blocking; fills in once available.
+      loadJson<{ species?: Record<string, Species> }>("species.json")
+        .then((bundle) => {
+          if (!cancelled) setSpeciesByShortCode(buildSpeciesMap(records, bundle.species ?? {}));
+        })
+        .catch(() => {
+          if (!cancelled) setSpeciesByShortCode(new Map());
+        })
+        .finally(() => {
+          if (!cancelled) setSpeciesLoaded(true);
+        });
+    }
+
+    load().catch(() => {
+      if (!cancelled) setStatus("error");
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [reloadKey]);
+
+  useEffect(() => {
+    let cancelled = false;
+    loadJson<{ analyses?: AIAnalysis[] }>("ai_analysis.json")
+      .then((data) => {
+        if (!cancelled) setAiAnalyses(data.analyses ?? []);
       })
-      .catch(() => setStatus("error"));
-  }, []);
-
-  useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data/ai_analysis.json`)
-      .then((res) => res.json())
-      .then((data) => setAiAnalyses(data.analyses ?? []))
-      .catch(() => setAiAnalyses([]));
-  }, []);
+      .catch(() => {
+        if (!cancelled) setAiAnalyses([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [reloadKey]);
 
   return {
     organisms,

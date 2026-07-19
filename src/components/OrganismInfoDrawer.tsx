@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, ExternalLink, Leaf, Trash2 } from "lucide-react";
+import { ChevronDown, ExternalLink, Leaf, Pencil, Trash2 } from "lucide-react";
 import type {
   AIAnalysis,
   AIVerdict,
@@ -11,6 +11,8 @@ import type {
   ZonePic,
 } from "../types";
 import { organismTitle } from "../utils/display";
+import { imageSrc, isWritable } from "../data/source";
+import EditEntrySheet from "./EditEntrySheet";
 import { ModelAttribution } from "./ModelAttribution";
 import { TabBtn } from "./TreeView/CtrlBtn";
 import { RelationsSubgraph } from "./TreeView/RelationsSubgraph";
@@ -66,6 +68,8 @@ interface Props {
   relationships?: RelationshipsData;
   onSelectOrganism: (organism: Organism, group?: Organism[]) => void;
   onSelectTaxon: (name: string) => void;
+  /** Drive mode: called after this entry is edited or deleted. */
+  onEntryChanged?: () => void;
   topOffset?: number;
   bottomOffset?: number;
   closing?: boolean;
@@ -115,6 +119,7 @@ export default function OrganismInfoDrawer({
   relationships,
   onSelectOrganism,
   onSelectTaxon,
+  onEntryChanged,
   topOffset = 0,
   bottomOffset = 0,
   closing = false,
@@ -123,11 +128,13 @@ export default function OrganismInfoDrawer({
   const [descExpanded, setDescExpanded] = useState(false);
   const [expandedRank, setExpandedRank] = useState<keyof SpeciesTaxonomy | null>(null);
   const [tab, setTab] = useState<"info" | "web">("info");
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     setDescExpanded(false);
     setExpandedRank(null);
     setTab("info");
+    setEditing(false);
   }, [organism.id]);
 
   const species = speciesByShortCode.get(organism.shortCode) ?? null;
@@ -378,7 +385,7 @@ export default function OrganismInfoDrawer({
                   }}
                 >
                   <img
-                    src={`${import.meta.env.BASE_URL}${organism.image}`}
+                    src={imageSrc(organism.image, 800)}
                     alt=""
                     className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
                   />
@@ -409,6 +416,17 @@ export default function OrganismInfoDrawer({
                 )}
               </div>
             </div>
+
+            {/* Drive mode: manage this entry */}
+            {isWritable() && (
+              <button
+                onClick={() => setEditing(true)}
+                className="flex items-center gap-1.5 text-[10px] font-display uppercase tracking-wider text-accent hover:text-accent-dim transition-colors cursor-pointer"
+              >
+                <Pencil size={11} strokeWidth={1.75} />
+                Edit entry
+              </button>
+            )}
 
             {/* Organism, zone, and photo annotations — each note/tags section
                 flows side by side, wrapping only when it runs out of room */}
@@ -465,7 +483,7 @@ export default function OrganismInfoDrawer({
                         title={new Date(p.addedAt).toLocaleDateString()}
                       >
                         <img
-                          src={`${import.meta.env.BASE_URL}${p.image}`}
+                          src={imageSrc(p.image, 400)}
                           alt=""
                           loading="lazy"
                           decoding="async"
@@ -498,7 +516,7 @@ export default function OrganismInfoDrawer({
                   }}
                 >
                   <img
-                    src={`${import.meta.env.BASE_URL}${matchingZonePic.image}`}
+                    src={imageSrc(matchingZonePic.image, 800)}
                     alt=""
                     className="w-full h-full object-cover opacity-40 mix-blend-luminosity"
                   />
@@ -541,7 +559,7 @@ export default function OrganismInfoDrawer({
                         title={p.commonName ?? p.shortCode}
                       >
                         <img
-                          src={`${import.meta.env.BASE_URL}${p.image}`}
+                          src={imageSrc(p.image, 400)}
                           alt=""
                           loading="lazy"
                           decoding="async"
@@ -887,6 +905,15 @@ export default function OrganismInfoDrawer({
           </div>
         )}
       </div>
+
+      {editing && (
+        <EditEntrySheet
+          organism={organism}
+          zones={zones}
+          onClose={() => setEditing(false)}
+          onChanged={() => onEntryChanged?.()}
+        />
+      )}
     </div>
   );
 }

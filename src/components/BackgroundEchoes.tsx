@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { Organism } from "../types";
+import { imageSrc } from "../data/source";
 
 interface EchoDef {
   organism: Organism;
@@ -114,7 +115,7 @@ export default function BackgroundEchoes({ organismPositions }: BackgroundEchoes
       }}
     >
       {echoes.map((echo, idx) => {
-        const src = `${import.meta.env.BASE_URL}${echo.organism.image}`;
+        const src = imageSrc(echo.organism.image, 800);
         const echoHeight = echo.h * 1.8;
         const baseY = echo.y - echo.h * 0.4;
         const drift = (scrollY - echo.y) * PARALLAX;

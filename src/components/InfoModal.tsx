@@ -24,6 +24,7 @@ import type {
   ZonePic,
 } from "../types";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
+import { imageSrc } from "../data/source";
 import StatsPanel from "./StatsPanel";
 import TelegramChat from "./TelegramChat";
 
@@ -590,7 +591,6 @@ function EntryCard({
   capitalizeLabel,
   onClick,
 }: EntryCardProps) {
-  const base = import.meta.env.BASE_URL;
   const interactive = onClick !== null;
   const Tag = interactive ? "button" : "div";
   const tagProps = interactive
@@ -613,7 +613,7 @@ function EntryCard({
       <div className="relative aspect-square overflow-hidden bg-surface">
         {image ? (
           <img
-            src={`${base}${image}`}
+            src={imageSrc(image, 400)}
             alt={altLabel}
             loading="lazy"
             decoding="async"

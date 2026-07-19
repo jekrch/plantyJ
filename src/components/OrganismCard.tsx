@@ -3,6 +3,7 @@ import type { Organism } from "../types";
 import { Expand, Trash2 } from "lucide-react";
 import { organismTitle } from "../utils/display";
 import { imageTime } from "../utils/sorting";
+import { imageSrc } from "../data/source";
 
 function formatPicTime(organism: Organism): string {
   const d = new Date(imageTime(organism));
@@ -33,7 +34,7 @@ export default function OrganismCard({
   onSelect,
   onOpen,
 }: Props) {
-  const imgSrc = `${import.meta.env.BASE_URL}${organism.image}`;
+  const imgSrc = imageSrc(organism.image, 800);
 
   const aspectRatio =
     organism.width && organism.height && organism.width > 0 && organism.height > 0

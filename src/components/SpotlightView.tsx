@@ -3,6 +3,7 @@ import { Trash2 } from "lucide-react";
 import type { Organism, Zone, ZonePic } from "../types";
 import { organismTitle } from "../utils/display";
 import { isOrganismRemoved } from "../utils/removed";
+import { imageSrc } from "../data/source";
 
 const DOUBLE_CLICK_DELAY = 400;
 const MOUSE_TOLERANCE = 20;
@@ -145,7 +146,7 @@ export default function SpotlightView({
     );
   }
 
-  const heroSrc = `${import.meta.env.BASE_URL}${hero.image}`;
+  const heroSrc = imageSrc(hero.image);
   const heroTitle = hero.kind === "plant" ? organismTitle(hero.organism) : headline;
   const heroOpensViewer = hero.kind === "plant";
 
@@ -301,7 +302,7 @@ function Thumb({ item, active, removed, label, onSingleClick, onDoubleClick }: T
       style={{ aspectRatio: aspect }}
     >
       <img
-        src={`${import.meta.env.BASE_URL}${item.image}`}
+        src={imageSrc(item.image, 800)}
         alt={altText}
         loading="lazy"
         decoding="async"

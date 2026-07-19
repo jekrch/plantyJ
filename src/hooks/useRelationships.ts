@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Relationship, RelationshipType, RelationshipsFile } from "../types";
+import { DATA_CHANGED_EVENT, loadJson } from "../data/source";
+import { AUTH_CHANGED_EVENT } from "../data/googleAuth";
 
 export interface RelationshipsData {
   types: RelationshipType[];
@@ -14,23 +16,38 @@ export function useRelationships(): RelationshipsData {
   const [relationships, setRelationships] = useState<Relationship[]>([]);
   const [loaded, setLoaded] = useState(false);
 
+  const [reloadKey, setReloadKey] = useState(0);
+
   useEffect(() => {
-    const base = import.meta.env.BASE_URL;
-    fetch(`${base}data/relationships.json`)
-      .then((res) => {
-        if (!res.ok) throw new Error(`relationships.json: ${res.status}`);
-        return res.json() as Promise<RelationshipsFile>;
-      })
+    const bump = () => setReloadKey((k) => k + 1);
+    window.addEventListener(DATA_CHANGED_EVENT, bump);
+    window.addEventListener(AUTH_CHANGED_EVENT, bump);
+    return () => {
+      window.removeEventListener(DATA_CHANGED_EVENT, bump);
+      window.removeEventListener(AUTH_CHANGED_EVENT, bump);
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    loadJson<RelationshipsFile>("relationships.json")
       .then((data) => {
+        if (cancelled) return;
         setTypes(data.types ?? []);
         setRelationships(data.relationships ?? []);
       })
       .catch(() => {
+        if (cancelled) return;
         setTypes([]);
         setRelationships([]);
       })
-      .finally(() => setLoaded(true));
-  }, []);
+      .finally(() => {
+        if (!cancelled) setLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [reloadKey]);
 
   const typeById = useMemo(() => {
     const m = new Map<string, RelationshipType>();

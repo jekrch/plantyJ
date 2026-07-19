@@ -23,6 +23,7 @@ import { effectiveDirection, type RelationshipsData } from "../../hooks/useRelat
 import { usePanZoom } from "../../hooks/usePanZoom";
 import { organismTitle } from "../../utils/display";
 import { LEAF_RADIUS } from "../TreeView/types";
+import { imageSrc } from "../../data/source";
 import { CtrlBtn } from "../TreeView/CtrlBtn";
 import { NodeDetail } from "../TreeView/NodeDetail";
 import { buildWebNode } from "./buildWebNode";
@@ -305,7 +306,6 @@ export default function WebView({
   initialWebNode,
   onNodeSelect,
 }: Props) {
-  const baseURL = import.meta.env.BASE_URL;
 
   const [enabledTypes, setEnabledTypes] = useState<Set<string>>(
     () => new Set(relationships.types.map((t) => t.id)),
@@ -857,7 +857,7 @@ export default function WebView({
                     {n.organism ? (
                       <g clipPath="url(#web-leaf-clip)">
                         <image
-                          href={`${baseURL}${n.organism.image}`}
+                          href={imageSrc(n.organism.image, 200)}
                           x={-r}
                           y={-r}
                           width={r * 2}

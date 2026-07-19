@@ -1,4 +1,5 @@
 import type { Organism } from "../types";
+import { loadJson } from "../data/source";
 
 export type SortMode = "newest" | "oldest" | "color" | "similarity" | "duplicates";
 
@@ -44,12 +45,7 @@ export async function loadEmbeddings(): Promise<EmbeddingMap> {
   if (embeddingCache.data) return embeddingCache.data;
   if (embeddingCache.promise) return embeddingCache.promise;
 
-  const url = `${import.meta.env.BASE_URL}data/embeddings.json`;
-  embeddingCache.promise = fetch(url)
-    .then((res) => {
-      if (!res.ok) throw new Error(`Failed to load embeddings: ${res.status}`);
-      return res.json();
-    })
+  embeddingCache.promise = loadJson<EmbeddingFile>("embeddings.json")
     .then((data: EmbeddingFile) => {
       embeddingCache.data = data.embeddings ?? {};
       return embeddingCache.data;
@@ -67,13 +63,10 @@ export async function loadPicMetadata(): Promise<PicMetadataMap> {
   if (picMetadataCache.data) return picMetadataCache.data;
   if (picMetadataCache.promise) return picMetadataCache.promise;
 
-  const url = `${import.meta.env.BASE_URL}data/pic-metadata.json`;
-  picMetadataCache.promise = fetch(url)
-    .then((res) => {
-      if (!res.ok) throw new Error(`Failed to load pic-metadata: ${res.status}`);
-      return res.json();
-    })
-    .then((data: { picMetadata?: { id: string; phash: string; dominantColors: number[][] }[] }) => {
+  picMetadataCache.promise = loadJson<{
+    picMetadata?: { id: string; phash: string; dominantColors: number[][] }[];
+  }>("pic-metadata.json")
+    .then((data) => {
       const map: PicMetadataMap = {};
       for (const m of data.picMetadata ?? [])
         map[m.id] = { phash: m.phash, dominantColors: m.dominantColors };

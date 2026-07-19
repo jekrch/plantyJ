@@ -6,6 +6,7 @@ import { usePanZoom } from "../../hooks/usePanZoom";
 import type { Transform } from "../../hooks/usePanZoom";
 import { LEAF_RADIUS } from "./types";
 import { CtrlBtn } from "./CtrlBtn";
+import { imageSrc } from "../../data/source";
 
 interface Props {
   centerCode: string;
@@ -62,7 +63,6 @@ export function RelationsSubgraph({
   graphClassName = "relative h-75 overflow-hidden rounded",
   outerClassName = "flex flex-col gap-2",
 }: Props) {
-  const baseURL = import.meta.env.BASE_URL;
   const [hovered, setHovered] = useState<string | null>(null);
 
   // Unique per-instance ids: RelationsSubgraph renders in both the info
@@ -399,7 +399,7 @@ export function RelationsSubgraph({
                   {n.organism ? (
                     <g clipPath={`url(#${clipId})`}>
                       <image
-                        href={`${baseURL}${n.organism.image}`}
+                        href={imageSrc(n.organism.image, 200)}
                         x={-r}
                         y={-r}
                         width={r * 2}

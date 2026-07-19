@@ -5,6 +5,7 @@ import type { Organism, Species, TaxaInfo, Zone } from "../../types";
 import type { RawNode } from "./types";
 import { RANK_LABEL } from "./types";
 import { organismTitle } from "../../utils/display";
+import { imageSrc } from "../../data/source";
 import { speciesPicsFor } from "./treeUtils";
 import { TabBtn } from "./CtrlBtn";
 import type { AIAnalysis, AIVerdict } from "../OrganismInfoDrawer";
@@ -78,7 +79,6 @@ export function NodeDetail({
   onSpotlightOrganism,
 }: Props) {
   const isLeaf = !!node.data.organism;
-  const baseURL = import.meta.env.BASE_URL;
 
   const organismsByCode = useMemo(() => {
     const m = new Map<string, Organism>();
@@ -203,7 +203,7 @@ export function NodeDetail({
           }}
         >
           <img
-            src={`${baseURL}${firstImage}`}
+            src={imageSrc(firstImage, 800)}
             alt=""
             className="w-full h-full object-cover opacity-[0.05] mix-blend-luminosity"
             draggable={false}
@@ -409,7 +409,7 @@ export function NodeDetail({
                     style={{ aspectRatio: aspect }}
                   >
                     <img
-                      src={`${baseURL}${p.image}`}
+                      src={imageSrc(p.image, 800)}
                       alt={organismTitle(p)}
                       loading="lazy"
                       decoding="async"

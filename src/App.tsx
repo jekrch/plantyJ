@@ -1,11 +1,14 @@
 import { useEffect, useLayoutEffect, useState, useMemo, useCallback, useRef } from "react";
-import { Sprout, House } from "lucide-react";
+import { Sprout, House, ImagePlus } from "lucide-react";
 import { sortOrganismsAsync } from "./utils/sorting.ts";
 import { applyFilters, hasActiveFilters } from "./utils/filtering.ts";
 import { activeOrganisms, buildRemovedSet, fullyRemovedShortCodes } from "./utils/removed.ts";
 import MasonryGrid from "./components/MasonryGrid";
 import BackgroundEchoes from "./components/BackgroundEchoes";
-import { SpinnerState, ErrorState, EmptyState } from "./components/StatusStates";
+import { SpinnerState, ErrorState, EmptyState, SignInState } from "./components/StatusStates";
+import SourceMenu from "./components/SourceMenu";
+import AddEntrySheet from "./components/AddEntrySheet";
+import { isWritable } from "./data/source";
 import OrganismViewer from "./components/OrganismViewer";
 import InfoModal from "./components/InfoModal";
 import SpotlightView from "./components/SpotlightView";
@@ -92,6 +95,8 @@ export default function App() {
 
   const headerRef = useRef<HTMLElement>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
+  const [addOpen, setAddOpen] = useState(false);
+  const writable = isWritable();
 
   useLayoutEffect(() => {
     const el = headerRef.current;
@@ -130,14 +135,27 @@ export default function App() {
               PlantyJ
             </h1>
           </div>
-          <button
-            onClick={view.handleOpenInfo}
-            className="flex items-center justify-center h-8 w-8 mr-2 rounded-md text-ink-muted hover:text-ink hover:bg-white/5 transition-colors"
-            title="About this site"
-            aria-label="About this site"
-          >
-            <House color={"#b08968"} size={20} strokeWidth={1.5} />
-          </button>
+          <div className="flex items-center gap-1 mr-2">
+            {writable && status === "ready" && (
+              <button
+                onClick={() => setAddOpen(true)}
+                className="flex items-center justify-center h-8 w-8 rounded-md text-ink-muted hover:text-ink hover:bg-white/5 transition-colors"
+                title="Add photos"
+                aria-label="Add photos"
+              >
+                <ImagePlus size={20} strokeWidth={1.5} className="text-accent" />
+              </button>
+            )}
+            <SourceMenu />
+            <button
+              onClick={view.handleOpenInfo}
+              className="flex items-center justify-center h-8 w-8 rounded-md text-ink-muted hover:text-ink hover:bg-white/5 transition-colors"
+              title="About this site"
+              aria-label="About this site"
+            >
+              <House color={"#b08968"} size={20} strokeWidth={1.5} />
+            </button>
+          </div>
         </div>
         {status === "ready" &&
           organisms.length > 0 &&
@@ -177,7 +195,10 @@ export default function App() {
             viewMode === "gallery" &&
             !imagesLoaded)) && <SpinnerState />}
         {status === "error" && <ErrorState />}
-        {status === "ready" && organisms.length === 0 && <EmptyState />}
+        {status === "needs-auth" && <SignInState />}
+        {status === "ready" && organisms.length === 0 && (
+          <EmptyState onAdd={writable ? () => setAddOpen(true) : undefined} />
+        )}
         {status === "ready" && organisms.length > 0 && (
           <div
             className="transition-opacity duration-700 ease-out"
@@ -282,6 +303,15 @@ export default function App() {
         onShowBioclipConflicts={view.handleShowBioclipConflicts}
         onShowEcoFit={view.handleShowEcoFit}
       />
+
+      {writable && addOpen && (
+        <AddEntrySheet
+          open={addOpen}
+          onClose={() => setAddOpen(false)}
+          organismRecords={data.organismRecords}
+          zones={data.zones}
+        />
+      )}
 
       {viewer.openIndex >= 0 && (
         <OrganismViewer

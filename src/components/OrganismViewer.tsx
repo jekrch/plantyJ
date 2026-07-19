@@ -10,6 +10,7 @@ import { buildRemovedSet, isOrganismRemoved } from "../utils/removed";
 import OrganismInfoDrawer, { AIAnalysis } from "./OrganismInfoDrawer";
 import type { RelationshipsData } from "../hooks/useRelationships";
 import { organismTitle } from "../utils/display";
+import { imageSrc, loadJson } from "../data/source";
 
 interface Props {
   organism: Organism;
@@ -79,9 +80,8 @@ export default function OrganismViewer({
   const [aiAnalyses, setAiAnalyses] = useState<AIAnalysis[]>([]);
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data/ai_analysis.json`)
-      .then((res) => res.json())
-      .then((data) => setAiAnalyses(data.analyses))
+    loadJson<{ analyses?: AIAnalysis[] }>("ai_analysis.json")
+      .then((data) => setAiAnalyses(data.analyses ?? []))
       .catch(console.error);
   }, []);
 
@@ -89,7 +89,7 @@ export default function OrganismViewer({
     () =>
       organisms.map((o) => ({
         id: o.id,
-        src: `${import.meta.env.BASE_URL}${o.image}`,
+        src: imageSrc(o.image),
         alt: organismTitle(o),
         data: o,
       })),
@@ -286,6 +286,7 @@ export default function OrganismViewer({
             relationships={relationships}
             onSelectOrganism={onSelectOrganism}
             onSelectTaxon={onSelectTaxon}
+            onEntryChanged={onClose}
             topOffset={ctx.topBarHeight}
             bottomOffset={ctx.bottomBarHeight}
             slideDir={drawerSlideDir}

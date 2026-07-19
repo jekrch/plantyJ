@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { hierarchy, cluster, type HierarchyNode, type HierarchyPointNode } from "d3-hierarchy";
 import { LoaderCircle, Maximize2, Search, X, ZoomIn, ZoomOut } from "lucide-react";
 import { organismTitle } from "../../utils/display";
+import { imageSrc, loadJson } from "../../data/source";
 import { buildTree, linkPath } from "./treeUtils";
 import { usePanZoom, type Transform } from "./usePanZoom";
 import { useTreeSearch } from "./useTreeSearch";
@@ -37,13 +38,10 @@ export default function TreeView({
   const [aiAnalyses, setAiAnalyses] = useState<AIAnalysis[]>([]);
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data/ai_analysis.json`)
-      .then((res) => res.json())
+    loadJson<{ analyses?: AIAnalysis[] }>("ai_analysis.json")
       .then((data) => setAiAnalyses(data.analyses ?? []))
       .catch(console.error);
   }, []);
-
-  const baseURL = import.meta.env.BASE_URL;
 
   const { root } = useMemo(
     () => buildTree(organisms, speciesByShortCode),
@@ -258,7 +256,6 @@ export default function TreeView({
               activeNode={activeNode}
               pinned={pinned}
               pinnedKey={pinnedKey}
-              baseURL={baseURL}
               makeNodeHandlers={makeNodeHandlers}
             />
           </g>
@@ -454,14 +451,12 @@ function TreeNodes({
   activeNode,
   pinned,
   pinnedKey,
-  baseURL,
   makeNodeHandlers,
 }: {
   nodes: HierarchyPointNode<RawNode>[];
   activeNode: HierarchyPointNode<RawNode> | null;
   pinned: HierarchyPointNode<RawNode> | null;
   pinnedKey: number;
-  baseURL: string;
   makeNodeHandlers: (n: HierarchyPointNode<RawNode>) => {
     onPointerEnter: () => void;
     onPointerLeave: () => void;
@@ -484,7 +479,6 @@ function TreeNodes({
             isActive={isActive}
             isPinned={isPinned}
             pinnedKey={pinnedKey}
-            baseURL={baseURL}
             handlers={handlers}
           />
         ) : (
@@ -508,14 +502,12 @@ function LeafNode({
   isActive,
   isPinned,
   pinnedKey,
-  baseURL,
   handlers,
 }: {
   n: HierarchyPointNode<RawNode>;
   isActive: boolean;
   isPinned: boolean;
   pinnedKey: number;
-  baseURL: string;
   handlers: {
     onPointerEnter: () => void;
     onPointerLeave: () => void;
@@ -570,7 +562,7 @@ function LeafNode({
       />
       <g clipPath="url(#leaf-clip)">
         <image
-          href={`${baseURL}${p.image}`}
+          href={imageSrc(p.image, 200)}
           x={-r}
           y={-r}
           width={r * 2}
