@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { ExternalLink, Leaf, Sprout, X } from "lucide-react";
+import { Check, ExternalLink, Leaf, LoaderCircle, Pencil, Sprout, Trash2, X } from "lucide-react";
 import type { HierarchyPointNode } from "d3-hierarchy";
 import type { Organism, Species, TaxaInfo, Zone } from "../../types";
 import type { RawNode } from "./types";
 import { RANK_LABEL } from "./types";
 import { organismTitle } from "../../utils/display";
-import { imageSrc } from "../../data/source";
+import { imageSrc, isWritable } from "../../data/source";
+import { deleteOrganism, updatePlantNames, updateSpecies, updateTaxon } from "../../data/mutations";
 import { speciesPicsFor } from "./treeUtils";
 import { TabBtn } from "./CtrlBtn";
 import type { AIAnalysis, AIVerdict } from "../OrganismInfoDrawer";
@@ -121,9 +122,100 @@ export function NodeDetail({
 
   const [tab, setTab] = useState<"info" | "images" | "relations">("info");
 
+  // The plant record (plants.json) is the source of truth for the displayed
+  // scientific/common name and the link to a species entry, so name edits target
+  // it; the species entry is mirrored by the mutation.
+  const repOrganism = speciesShortCode ? (organismsByCode.get(speciesShortCode) ?? null) : null;
+
+  // Drive users can edit inline. Species/variety nodes edit the plant's
+  // scientific + common name and the species description; internal clade nodes
+  // edit the Wikipedia-sourced taxa entry (description + source URL). A species
+  // node needs a resolvable plant to key the write on.
+  const canEdit = isWritable() && (showSpeciesInfo ? !!speciesShortCode : true);
+  const [editing, setEditing] = useState(false);
+  const [draftFullName, setDraftFullName] = useState("");
+  const [draftCommonName, setDraftCommonName] = useState("");
+  const [draftDesc, setDraftDesc] = useState("");
+  const [draftUrl, setDraftUrl] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+
+  // Whole-organism delete, offered on leaf nodes (a single shortCode) only.
+  const deletableCode = isWritable() && isLeaf ? (node.data.shortCode ?? null) : null;
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
   useEffect(() => {
     setTab("info");
+    setEditing(false);
+    setConfirmDelete(false);
+    setDeleting(false);
   }, [node]);
+
+  const handleDelete = () => {
+    if (!deletableCode) return;
+    if (!confirmDelete) {
+      setConfirmDelete(true);
+      return;
+    }
+    setDeleting(true);
+    setSaveError(null);
+    deleteOrganism(deletableCode)
+      .then(() => onClose())
+      .catch((err) => {
+        setSaveError(err instanceof Error ? err.message : "Delete failed");
+        setConfirmDelete(false);
+        setDeleting(false);
+      });
+  };
+
+  const startEdit = () => {
+    if (showSpeciesInfo) {
+      setDraftFullName(repOrganism?.fullName ?? species?.fullName ?? "");
+      setDraftCommonName(repOrganism?.commonName ?? species?.commonName ?? "");
+      setDraftDesc(species?.description ?? "");
+    } else {
+      setDraftDesc(taxaInfo?.description ?? "");
+      setDraftUrl(taxaInfo?.url ?? "");
+    }
+    setSaveError(null);
+    setEditing(true);
+  };
+
+  const saveEdit = async () => {
+    setSaving(true);
+    setSaveError(null);
+    try {
+      if (showSpeciesInfo) {
+        const fullName = draftFullName.trim() || null;
+        const commonName = draftCommonName.trim() || null;
+        const description = draftDesc.trim() || null;
+        const nameChanged =
+          fullName !== (repOrganism?.fullName ?? null) ||
+          commonName !== (repOrganism?.commonName ?? null);
+        // All shortCodes under this species node share one identity.
+        const targetCodes = node
+          .descendants()
+          .map((d) => d.data.shortCode)
+          .filter((c): c is string => !!c);
+        // Route through the plant mutation when names change (or when there's no
+        // species entry yet to hold a description-only edit); otherwise just
+        // save the description onto the existing species record.
+        if (nameChanged || (!species && fullName)) {
+          await updatePlantNames(targetCodes, { fullName, commonName, description });
+        } else if (species) {
+          await updateSpecies(species.id, { description });
+        }
+      } else {
+        await updateTaxon(node.data.name, { description: draftDesc.trim(), url: draftUrl.trim() });
+      }
+      setEditing(false);
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : "Save failed");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const speciesAnalyses = useMemo(() => {
     if (!showSpeciesInfo) return [] as AIAnalysis[];
@@ -268,7 +360,108 @@ export function NodeDetail({
           className={`h-full overflow-y-auto px-3 pt-3 pb-3 thin-scroll flex flex-col gap-3 ${tab !== "info" ? "hidden" : ""}`}
         >
           <div className="flex-1">
-            {description ? (
+            {!editing && (canEdit || deletableCode) && (
+              <div className="flex justify-end items-center gap-3 mb-1.5">
+                {canEdit && (
+                  <button
+                    type="button"
+                    onClick={startEdit}
+                    className="inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-ink-muted hover:text-accent transition-colors"
+                  >
+                    <Pencil size={11} strokeWidth={1.5} />
+                    Edit
+                  </button>
+                )}
+                {deletableCode && (
+                  <button
+                    type="button"
+                    onClick={handleDelete}
+                    disabled={deleting}
+                    className={`inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider transition-colors disabled:opacity-50 ${
+                      confirmDelete
+                        ? "text-rose-300"
+                        : "text-ink-muted hover:text-rose-300"
+                    }`}
+                  >
+                    {deleting ? (
+                      <LoaderCircle size={11} strokeWidth={1.5} className="animate-spin" />
+                    ) : (
+                      <Trash2 size={11} strokeWidth={1.5} />
+                    )}
+                    {confirmDelete ? "Delete organism?" : "Delete"}
+                  </button>
+                )}
+              </div>
+            )}
+            {editing ? (
+              <div className="space-y-2">
+                {showSpeciesInfo && (
+                  <div className="flex flex-col gap-2 sm:flex-row">
+                    <label className="flex-1">
+                      <span className="block text-[9px] font-mono uppercase tracking-wider text-ink-faint mb-1">
+                        Species (scientific name)
+                      </span>
+                      <input
+                        value={draftFullName}
+                        onChange={(e) => setDraftFullName(e.target.value)}
+                        placeholder="e.g. Viola sororia"
+                        className="w-full rounded bg-white/5 border border-white/10 px-2.5 py-1.5 text-[12px] italic text-ink placeholder:text-ink-faint placeholder:not-italic focus:outline-none focus:border-accent/50"
+                      />
+                    </label>
+                    <label className="flex-1">
+                      <span className="block text-[9px] font-mono uppercase tracking-wider text-ink-faint mb-1">
+                        Common name
+                      </span>
+                      <input
+                        value={draftCommonName}
+                        onChange={(e) => setDraftCommonName(e.target.value)}
+                        placeholder="e.g. Common blue violet"
+                        className="w-full rounded bg-white/5 border border-white/10 px-2.5 py-1.5 text-[12px] text-ink placeholder:text-ink-faint focus:outline-none focus:border-accent/50"
+                      />
+                    </label>
+                  </div>
+                )}
+                <textarea
+                  value={draftDesc}
+                  onChange={(e) => setDraftDesc(e.target.value)}
+                  rows={6}
+                  placeholder={`Description for ${title}`}
+                  className="w-full rounded bg-white/5 border border-white/10 px-2.5 py-1.5 text-[12px] leading-relaxed text-ink placeholder:text-ink-faint focus:outline-none focus:border-accent/50 thin-scroll resize-y"
+                />
+                {!showSpeciesInfo && (
+                  <input
+                    value={draftUrl}
+                    onChange={(e) => setDraftUrl(e.target.value)}
+                    placeholder="Source URL (optional)"
+                    className="w-full rounded bg-white/5 border border-white/10 px-2.5 py-1.5 text-[11px] text-ink placeholder:text-ink-faint focus:outline-none focus:border-accent/50"
+                  />
+                )}
+                {saveError && <p className="text-[11px] text-rose-300">{saveError}</p>}
+                <div className="flex items-center justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setEditing(false)}
+                    disabled={saving}
+                    className="text-[11px] px-2.5 py-1 rounded-sm text-ink-muted hover:text-ink hover:bg-white/5 transition-colors disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={saveEdit}
+                    disabled={saving}
+                    className="inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-sm bg-accent/20 text-accent ring-1 ring-inset ring-accent/40 hover:bg-accent/30 transition-colors disabled:opacity-50"
+                  >
+                    {saving ? (
+                      <LoaderCircle size={12} strokeWidth={1.5} className="animate-spin" />
+                    ) : (
+                      <Check size={12} strokeWidth={1.5} />
+                    )}
+                    Save
+                  </button>
+                </div>
+              </div>
+            ) : description ? (
               <p className="text-[12px] leading-relaxed text-ink/90 max-w-[60em] whitespace-pre-line">
                 {description.replace(/(?<!\n)\n(?!\n)/g, "\n\n")}
               </p>

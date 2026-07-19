@@ -910,6 +910,7 @@ export default function OrganismInfoDrawer({
         <EditEntrySheet
           organism={organism}
           zones={zones}
+          zonePics={zonePics}
           onClose={() => setEditing(false)}
           onChanged={() => onEntryChanged?.()}
         />

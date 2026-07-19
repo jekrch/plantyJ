@@ -16,6 +16,7 @@ export interface DriveFile {
   name: string;
   mimeType?: string;
   thumbnailLink?: string;
+  size?: string; // bytes, as a string; absent for folders/Google-native files
 }
 
 async function authFetch(url: string, init: RequestInit = {}, retry = true): Promise<Response> {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CloudOff, LoaderCircle } from "lucide-react";
+import { CloudOff, EyeOff, HardDrive, LoaderCircle, Lock, Monitor } from "lucide-react";
 import { signIn } from "../data/googleAuth";
 import { setSourceMode } from "../data/source";
 
@@ -69,11 +69,36 @@ export function SignInState() {
     <div className="flex flex-col items-center justify-center py-32 text-center px-6">
       <CloudOff size={28} strokeWidth={1.25} className="text-ink-muted mb-4" />
       <p className="text-ink text-sm font-display">Your garden, in your Google Drive</p>
-      <p className="text-ink-muted text-xs mt-2 max-w-sm leading-relaxed">
-        Sign in with Google to keep your own journal. Photos and data are stored in a{" "}
-        <span className="text-ink">PlantyJ</span> folder in your Drive — nothing is stored on our
-        servers.
-      </p>
+      <ul className="text-ink-muted text-xs mt-4 max-w-xs text-left leading-relaxed space-y-3">
+        <li className="flex gap-2.5">
+          <HardDrive size={15} strokeWidth={1.5} className="mt-0.5 shrink-0 text-ink-muted" />
+          <span>
+            Build your journal using your own Google Drive for storage. Everything is saved to and
+            read from a <span className="text-ink">PlantyJ</span> folder in your Drive. Nothing is
+            stored on our servers.
+          </span>
+        </li>
+        <li className="flex gap-2.5">
+          <Monitor size={15} strokeWidth={1.5} className="mt-0.5 shrink-0 text-ink-muted" />
+          <span>
+            The site can only reach that data while you're signed in, and it only ever shows up in
+            your browser. We don't collect it or use it for anything else.
+          </span>
+        </li>
+        <li className="flex gap-2.5">
+          <Lock size={15} strokeWidth={1.5} className="mt-0.5 shrink-0 text-ink-muted" />
+          <span>
+            Google only lets the site touch the files it creates. It can't see anything else in your
+            Drive.
+          </span>
+        </li>
+        <li className="flex gap-2.5">
+          <EyeOff size={15} strokeWidth={1.5} className="mt-0.5 shrink-0 text-ink-muted" />
+          <span>
+            No one else can see your journal. You'll only see your garden when you're signed in.
+          </span>
+        </li>
+      </ul>
       <button
         onClick={handleSignIn}
         disabled={busy}
@@ -86,7 +111,7 @@ export function SignInState() {
         onClick={() => setSourceMode("static")}
         className="mt-4 text-xs text-ink-muted hover:text-ink transition-colors cursor-pointer"
       >
-        ← Back to the demo garden
+        ← Back to the founder's garden
       </button>
     </div>
   );

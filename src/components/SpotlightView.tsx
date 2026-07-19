@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
-import { Trash2 } from "lucide-react";
+import { LoaderCircle, Trash2 } from "lucide-react";
 import type { Organism, Zone, ZonePic } from "../types";
 import { organismTitle } from "../utils/display";
 import { isOrganismRemoved } from "../utils/removed";
-import { imageSrc } from "../data/source";
+import { imageSrc, isWritable } from "../data/source";
+import { deleteOrganism, deleteZone } from "../data/mutations";
 
 const DOUBLE_CLICK_DELAY = 400;
 const MOUSE_TOLERANCE = 20;
@@ -20,6 +21,8 @@ interface Props {
   zonePics: ZonePic[];
   zones: Zone[];
   onOpenViewer: (organism: Organism) => void;
+  /** Drive mode: called after this whole plant/zone is deleted. */
+  onDeleted?: () => void;
 }
 
 interface OrganismItem {
@@ -80,7 +83,37 @@ export default function SpotlightView({
   zonePics,
   zones,
   onOpenViewer,
+  onDeleted,
 }: Props) {
+  const writable = isWritable();
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  // Reset the delete affordance whenever the spotlight subject changes.
+  useEffect(() => {
+    setConfirmDelete(false);
+    setDeleting(false);
+    setDeleteError(null);
+  }, [subjectCode, kind]);
+
+  const handleDelete = () => {
+    if (!confirmDelete) {
+      setConfirmDelete(true);
+      return;
+    }
+    setDeleting(true);
+    setDeleteError(null);
+    const run = kind === "plant" ? deleteOrganism(subjectCode) : deleteZone(subjectCode);
+    run
+      .then(() => onDeleted?.())
+      .catch((err: unknown) => {
+        setDeleteError(err instanceof Error ? err.message : "Delete failed");
+        setConfirmDelete(false);
+        setDeleting(false);
+      });
+  };
+
   const itemRemoved = useCallback(
     (it: SpotlightItem) =>
       it.kind === "plant" && !!removedSet && isOrganismRemoved(it.organism, removedSet),
@@ -105,6 +138,15 @@ export default function SpotlightView({
       .sort(byAddedDesc);
     return [...zoneItems, ...organismItems];
   }, [allOrganisms, zonePics, kind, subjectCode]);
+
+  // A zone can only be deleted once it holds no journal entries — deleteZone
+  // refuses otherwise so entries never dangle on a missing zone. Surface that
+  // as a hint instead of a button that would always error.
+  const zoneEntryCount = useMemo(
+    () => (kind === "zone" ? items.filter((it) => it.kind === "plant").length : 0),
+    [kind, items],
+  );
+  const canDeleteSubject = writable && (kind === "plant" || zoneEntryCount === 0);
 
   const [selectedId, setSelectedId] = useState<string | null>(items[0]?.id ?? null);
 
@@ -199,10 +241,44 @@ export default function SpotlightView({
               </h2>
               {subline && <p className="text-xs text-ink-muted mt-0.5 leading-snug">{subline}</p>}
             </div>
-            <p className="text-[10px] text-ink-faint whitespace-nowrap font-mono shrink-0">
-              {formatDate(hero.addedAt)}
-            </p>
+            <div className="flex flex-col items-end gap-1.5 shrink-0">
+              <p className="text-[10px] text-ink-faint whitespace-nowrap font-mono">
+                {formatDate(hero.addedAt)}
+              </p>
+              {canDeleteSubject && (
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className={`flex items-center gap-1 rounded px-2 py-1 text-[10px] font-display uppercase tracking-wider transition-colors cursor-pointer disabled:opacity-50 ${
+                    confirmDelete
+                      ? "bg-rose-900/60 text-rose-200 hover:bg-rose-900/80"
+                      : "text-rose-300/70 hover:text-rose-300"
+                  }`}
+                >
+                  {deleting ? (
+                    <LoaderCircle size={11} className="animate-spin" />
+                  ) : (
+                    <Trash2 size={11} strokeWidth={1.75} />
+                  )}
+                  {confirmDelete
+                    ? kind === "plant"
+                      ? "Delete plant?"
+                      : "Delete zone?"
+                    : "Delete"}
+                </button>
+              )}
+            </div>
           </div>
+          {writable && kind === "zone" && zoneEntryCount > 0 && (
+            <p className="mt-2 px-1 text-[10px] text-ink-faint text-right">
+              Move or delete this zone's {zoneEntryCount} entr{zoneEntryCount === 1 ? "y" : "ies"} to
+              remove it.
+            </p>
+          )}
+          {deleteError && (
+            <p className="mt-2 px-1 text-[11px] text-rose-300 text-right">{deleteError}</p>
+          )}
         </div>
       </div>
 

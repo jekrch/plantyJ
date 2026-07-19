@@ -5,6 +5,8 @@ import {
   PAD_Y,
   INITIAL_ZOOM_FACTOR_NARROW,
   INITIAL_ZOOM_FACTOR_WIDE,
+  INITIAL_ZOOM_MAX_NARROW,
+  INITIAL_ZOOM_MAX_WIDE,
   NARROW_SCREEN_WIDTH,
 } from "./types";
 
@@ -21,9 +23,13 @@ export function usePanZoom({ layoutWidth, layoutHeight, dataReady }: PanZoomOpti
   // then zoom past fit-to-view by INITIAL_ZOOM_FACTOR.
   const initialTransform = useCallback((cw: number, ch: number, lw: number, _lh: number) => {
     const fitK = Math.min(cw / lw, ch / _lh, 1);
-    const zoomFactor =
-      cw <= NARROW_SCREEN_WIDTH ? INITIAL_ZOOM_FACTOR_NARROW : INITIAL_ZOOM_FACTOR_WIDE;
-    const k = Math.min(4, Math.max(0.2, fitK * zoomFactor));
+    const narrow = cw <= NARROW_SCREEN_WIDTH;
+    const zoomFactor = narrow ? INITIAL_ZOOM_FACTOR_NARROW : INITIAL_ZOOM_FACTOR_WIDE;
+    // Cap the first-load zoom at a comfortable absolute ceiling so small gardens
+    // (whose fit-to-view is width-pinned, not height-pinned) don't overshoot the
+    // founder-garden node scale. See INITIAL_ZOOM_MAX_* in types.ts.
+    const zoomMax = narrow ? INITIAL_ZOOM_MAX_NARROW : INITIAL_ZOOM_MAX_WIDE;
+    const k = Math.min(zoomMax, Math.max(0.2, fitK * zoomFactor));
     const scaledW = lw * k;
     const x = scaledW <= cw ? (cw - scaledW) / 2 : cw - scaledW + 60;
     const y = 0;

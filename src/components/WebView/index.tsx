@@ -8,7 +8,7 @@ import {
   forceY,
   type SimulationNodeDatum,
 } from "d3-force";
-import { LoaderCircle, Maximize2, Search, X, ZoomIn, ZoomOut, Filter } from "lucide-react";
+import { LoaderCircle, Maximize2, Pencil, Search, X, ZoomIn, ZoomOut, Filter } from "lucide-react";
 import type {
   AIAnalysis,
   Organism,
@@ -23,10 +23,11 @@ import { effectiveDirection, type RelationshipsData } from "../../hooks/useRelat
 import { usePanZoom } from "../../hooks/usePanZoom";
 import { organismTitle } from "../../utils/display";
 import { LEAF_RADIUS } from "../TreeView/types";
-import { imageSrc } from "../../data/source";
+import { imageSrc, isWritable } from "../../data/source";
 import { CtrlBtn } from "../TreeView/CtrlBtn";
 import { NodeDetail } from "../TreeView/NodeDetail";
 import { buildWebNode } from "./buildWebNode";
+import RelationshipEditor from "../RelationshipEditor";
 
 interface Props {
   organisms: Organism[];
@@ -311,6 +312,8 @@ export default function WebView({
     () => new Set(relationships.types.map((t) => t.id)),
   );
   const [filtersExpanded, setFiltersExpanded] = useState(false);
+  const [editorOpen, setEditorOpen] = useState(false);
+  const writable = isWritable();
 
   useEffect(() => {
     setEnabledTypes(new Set(relationships.types.map((t) => t.id)));
@@ -707,14 +710,28 @@ export default function WebView({
         }}
       >
         {nodeCodes.length === 0 ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-center px-6">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center px-6">
             <p className="text-ink-muted text-sm font-display tracking-wide">
               NO RELATIONSHIPS YET
             </p>
-            <p className="text-[11px] text-ink-faint max-w-md">
-              Use /relate &lt;type&gt; &lt;fromCode&gt; &lt;toCode&gt; in Telegram to register a
-              relationship between two organisms.
-            </p>
+            {writable ? (
+              <>
+                <p className="text-[11px] text-ink-faint max-w-xs">
+                  Open the studio and drag from one organism to another to connect them.
+                </p>
+                <button
+                  onClick={() => setEditorOpen(true)}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-accent/20 hover:bg-accent/30 text-accent text-xs font-display uppercase tracking-wider transition-colors"
+                >
+                  <Pencil size={13} strokeWidth={1.5} /> Create relationships
+                </button>
+              </>
+            ) : (
+              <p className="text-[11px] text-ink-faint max-w-md">
+                Use /relate &lt;type&gt; &lt;fromCode&gt; &lt;toCode&gt; in Telegram to register a
+                relationship between two organisms.
+              </p>
+            )}
           </div>
         ) : (
           <svg
@@ -1048,7 +1065,34 @@ export default function WebView({
             {isolatedCount} isolated organism{isolatedCount === 1 ? "" : "s"} hidden
           </div>
         )}
+
+        {/* Edit relationships (Drive gardens only) */}
+        {writable && nodeCodes.length > 0 && (
+          <div
+            className="absolute top-3 right-3"
+            onClick={stop}
+            onPointerDown={stop}
+            onWheel={stop}
+          >
+            <button
+              onClick={() => setEditorOpen(true)}
+              className="inline-flex items-center gap-2 px-3 py-1.5 bg-surface/85 backdrop-blur-sm border border-white/10 text-[10px] font-mono uppercase tracking-[0.15em] text-ink-muted hover:text-ink transition-colors rounded-sm"
+            >
+              <Pencil size={12} strokeWidth={1.5} />
+              <span>Edit</span>
+            </button>
+          </div>
+        )}
       </div>
+
+      {writable && editorOpen && (
+        <RelationshipEditor
+          organisms={organisms}
+          organismRecords={organismRecords}
+          relationships={relationships}
+          onClose={() => setEditorOpen(false)}
+        />
+      )}
 
       {renderedDetailNode && (
         <div className="absolute bottom-0 left-0 right-0 z-20 flex justify-center pointer-events-none">

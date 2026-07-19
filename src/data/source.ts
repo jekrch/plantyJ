@@ -1,7 +1,7 @@
 import { driveImageUrl, driveLoadJson } from "./driveSource";
 
 /**
- * Data-source switch: the demo garden served statically with the site, or the
+ * Data-source switch: the founder's garden served statically with the site, or the
  * signed-in user's own garden in their Google Drive. The active mode is
  * persisted in localStorage and applied at page load; switching reloads the
  * app so every consumer starts from a clean slate.

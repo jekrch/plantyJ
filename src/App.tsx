@@ -244,6 +244,7 @@ export default function App() {
                 zonePics={data.zonePics}
                 zones={data.zones}
                 onOpenViewer={viewer.openFromSpotlight}
+                onDeleted={() => view.handleViewModeChange("gallery", null)}
               />
             )}
           </div>

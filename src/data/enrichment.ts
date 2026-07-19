@@ -332,3 +332,41 @@ export async function enrichGarden(
   notifyDataChanged();
   return { speciesUpdated, taxaAdded };
 }
+
+// Coalesced background runner so the upload path can trigger enrichment
+// automatically without blocking the UI or double-hitting the APIs.
+let bgRunning = false;
+let bgPending = false;
+
+/**
+ * Fire-and-forget enrichment for the upload path. Runs the same pipeline as the
+ * manual "Enrich my garden" action, but off the critical path: newly added
+ * species get taxonomy/description/native-range filled in as soon as their
+ * photo is saved. Per-species `sources` gating keeps a re-run cheap — already
+ * enriched species are skipped, so this only touches the just-added ones.
+ *
+ * Runs are coalesced: a burst of uploads results in at most one in-flight pass
+ * plus one trailing pass, so species added mid-run still get picked up. Errors
+ * are swallowed — enrichment is best-effort and must never break an upload.
+ */
+export function enrichGardenInBackground(): void {
+  if (!isDriveMode()) return;
+  if (bgRunning) {
+    bgPending = true;
+    return;
+  }
+  bgRunning = true;
+  void (async () => {
+    try {
+      do {
+        bgPending = false;
+        await enrichGarden();
+      } while (bgPending);
+    } catch {
+      // Best-effort: a failed background enrichment is retried on the next
+      // upload, and the manual "Enrich my garden" action remains available.
+    } finally {
+      bgRunning = false;
+    }
+  })();
+}

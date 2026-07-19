@@ -30,6 +30,7 @@ const EMPTY_BUNDLES: Record<string, unknown> = {
   "taxa.json": {},
   "species.json": { species: {} },
   "ai_analysis.json": { analyses: [] },
+  "garden_profile.json": { description: null },
   "embeddings.json": { embeddings: {} },
   "pic-metadata.json": { picMetadata: [] },
   "relationships.json": { types: [], relationships: [] },
@@ -147,6 +148,48 @@ export function driveDeleteImage(fileId: string): Promise<void> {
     if (entry?.local) URL.revokeObjectURL(entry.local);
     state!.images.delete(fileId);
   });
+}
+
+export interface GardenSize {
+  bytes: number;
+  files: number;
+}
+
+/**
+ * Total storage the PlantyJ garden occupies in the user's Drive: the summed
+ * byte size of every data-JSON and image file. Folders report no size, so we
+ * add up the leaf files. Listed fresh so it reflects the current contents.
+ */
+export async function getGardenSize(): Promise<GardenSize> {
+  await initDrive();
+  const [dataList, imageList] = await Promise.all([
+    listFiles(`'${state!.dataId}' in parents and trashed=false`, "id,name,size"),
+    listFiles(`'${state!.imagesId}' in parents and trashed=false`, "id,name,size"),
+  ]);
+  const all = [...dataList, ...imageList];
+  const bytes = all.reduce((sum, f) => sum + (Number(f.size) || 0), 0);
+  return { bytes, files: all.length };
+}
+
+/**
+ * Permanently delete the user's entire PlantyJ folder (data JSON + images)
+ * from their Drive, then drop in-memory state. PlantyJ keeps nothing
+ * server-side, so this — paired with revoking access (signOut) — fully erases
+ * everything the app holds about a cloud user. Irreversible; callers should
+ * confirm and offer a backup first.
+ */
+export async function deleteGarden(): Promise<void> {
+  // Match ensureFolder's lookup: any PlantyJ folder the app created (drive.file
+  // scope only ever surfaces our own files). Deleting a folder cascades to the
+  // data/ and images/ subfolders and every file inside.
+  const folders = await listFiles(
+    `name='${APP_FOLDER}' and mimeType='application/vnd.google-apps.folder' and trashed=false`,
+    "id,name",
+  );
+  for (const folder of folders) {
+    await deleteFile(folder.id);
+  }
+  resetDrive();
 }
 
 export interface GardenFile {
