@@ -422,6 +422,40 @@
       ],
       "observationsCount": 2618
     },
+    "agelenopsis-species": {
+      "id": "agelenopsis-species",
+      "fullName": "Agelenopsis species",
+      "commonName": "Grass Spider",
+      "description": "",
+      "vernacularNames": [
+        "Grass Spiders"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Arachnida",
+        "order": "Araneae",
+        "family": "Agelenidae",
+        "genus": "Agelenopsis",
+        "species": null,
+        "canonicalName": "Agelenopsis"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2139659"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ]
+    },
     "allium-hybrid": {
       "id": "allium-hybrid",
       "fullName": "Allium hybrid",

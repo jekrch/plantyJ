@@ -854,5 +854,13 @@
   "Bouteloua": {
     "description": "Bouteloua is a genus of plants in the grass family Poaceae. Members of the genus are commonly known as grama grass.",
     "url": "https://en.wikipedia.org/wiki/Bouteloua"
+  },
+  "Agelenidae": {
+    "description": "The Agelenidae are a large family of spiders in the suborder Araneomorphae. Well-known examples include the common \"grass spiders\" of the genus Agelenopsis. The most widely accepted common name for members of the family is funnel weaver.",
+    "url": "https://en.wikipedia.org/wiki/Agelenidae"
+  },
+  "Agelenopsis": {
+    "description": "Agelenopsis, commonly known as the American grass spiders, is a genus of funnel weavers described by C.G. Giebel in 1869. They weave sheet webs that have a funnel shelter on one edge. The web is not sticky, but these spiders make up for that by running very rapidly.",
+    "url": "https://en.wikipedia.org/wiki/Agelenopsis"
   }
 }
