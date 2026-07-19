@@ -3,6 +3,7 @@ import { LoaderCircle, Pencil, Trash2, X } from "lucide-react";
 import type { Organism, Zone } from "../types";
 import { deleteEntry, updateEntry, updateZone } from "../data/mutations";
 import { imageSrc } from "../data/source";
+import { Dropdown } from "./Dropdown";
 
 interface Props {
   organism: Organism;
@@ -127,25 +128,23 @@ export default function EditEntrySheet({ organism, zones, onClose, onChanged }: 
               {editingZone ? "Hide" : "Edit zone"}
             </button>
           </div>
-          <select
-            className={INPUT}
+          <Dropdown
             value={zoneCode}
             disabled={busy}
-            onChange={(e) => {
-              setZoneCode(e.target.value);
+            onChange={(code) => {
+              setZoneCode(code);
               if (editingZone) {
-                const z = zones.find((zz) => zz.code === e.target.value);
+                const z = zones.find((zz) => zz.code === code);
                 setZoneName(z?.name ?? "");
                 setZoneDesc(z?.description ?? "");
               }
             }}
-          >
-            {zones.map((z) => (
-              <option key={z.code} value={z.code}>
-                {z.name ?? z.code} ({z.code})
-              </option>
-            ))}
-          </select>
+            options={zones.map((z) => ({
+              value: z.code,
+              label: z.name ?? z.code,
+              hint: z.code,
+            }))}
+          />
           {editingZone && (
             <div className="mt-2 space-y-2 rounded border border-white/10 p-2.5">
               <div>

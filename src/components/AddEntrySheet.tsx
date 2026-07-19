@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Camera, ImagePlus, LoaderCircle, X } from "lucide-react";
+import { Camera, ImagePlus, LoaderCircle, Search, X } from "lucide-react";
 import type { OrganismRecord, Zone } from "../types";
 import { addEntries, type NewEntryInput } from "../data/mutations";
 import { isValidCode } from "../lib/journal/validation";
+import { searchSpecies, suggestShortCode, type SpeciesMatch } from "../data/speciesSearch";
 import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
+import { Dropdown } from "./Dropdown";
 
 interface Props {
   open: boolean;
@@ -38,6 +40,11 @@ export default function AddEntrySheet({ open, onClose, organismRecords, zones }:
   const [newZoneCode, setNewZoneCode] = useState("");
   const [newZoneName, setNewZoneName] = useState("");
   const [tags, setTags] = useState("");
+  const [speciesQuery, setSpeciesQuery] = useState("");
+  const [speciesResults, setSpeciesResults] = useState<SpeciesMatch[]>([]);
+  const [searchingSpecies, setSearchingSpecies] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const [shortCodeTouched, setShortCodeTouched] = useState(false);
   const [saving, setSaving] = useState(false);
   const [progress, setProgress] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -65,7 +72,44 @@ export default function AddEntrySheet({ open, onClose, organismRecords, zones }:
     [organismRecords],
   );
 
+  // Debounced species lookup (curated dataset + iNaturalist) while the user
+  // types a name for a brand-new plant. Superseded queries abort in flight.
+  useEffect(() => {
+    const q = speciesQuery.trim();
+    if (plantChoice !== NEW || q.length < 2) {
+      setSpeciesResults([]);
+      setSearchingSpecies(false);
+      return;
+    }
+    setSearchingSpecies(true);
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      try {
+        const results = await searchSpecies(q, controller.signal);
+        if (!controller.signal.aborted) setSpeciesResults(results);
+      } finally {
+        if (!controller.signal.aborted) setSearchingSpecies(false);
+      }
+    }, 250);
+    return () => {
+      controller.abort();
+      clearTimeout(timer);
+    };
+  }, [speciesQuery, plantChoice]);
+
   if (!open) return null;
+
+  const selectSpecies = (m: SpeciesMatch) => {
+    setNewFullName(m.scientificName);
+    if (m.commonName) setNewCommonName(m.commonName);
+    // Only auto-fill a code the user hasn't hand-edited.
+    if (!shortCodeTouched && !newShortCode.trim()) {
+      const taken = new Set(organismRecords.map((p) => p.shortCode));
+      setNewShortCode(suggestShortCode(m.scientificName, m.commonName, taken));
+    }
+    setSpeciesQuery(m.commonName ? `${m.commonName} — ${m.scientificName}` : m.scientificName);
+    setShowResults(false);
+  };
 
   const addFiles = (list: FileList | null) => {
     if (!list) return;
@@ -131,6 +175,9 @@ export default function AddEntrySheet({ open, onClose, organismRecords, zones }:
       for (const f of files) URL.revokeObjectURL(f.preview);
       setFiles([]);
       setTags("");
+      setSpeciesQuery("");
+      setSpeciesResults([]);
+      setShortCodeTouched(false);
       setProgress(null);
       onClose();
     } catch (err) {
@@ -258,21 +305,83 @@ export default function AddEntrySheet({ open, onClose, organismRecords, zones }:
         {/* Plant */}
         <div>
           <label className={LABEL}>Plant</label>
-          <select
-            className={INPUT}
+          <Dropdown
             value={plantChoice}
             disabled={saving}
-            onChange={(e) => setPlantChoice(e.target.value)}
-          >
-            <option value={NEW}>+ New plant…</option>
-            {sortedPlants.map((p) => (
-              <option key={p.shortCode} value={p.shortCode}>
-                {p.commonName ?? p.fullName ?? p.shortCode} ({p.shortCode})
-              </option>
-            ))}
-          </select>
+            onChange={setPlantChoice}
+            options={[
+              { value: NEW, label: "+ New plant…" },
+              ...sortedPlants.map((p) => ({
+                value: p.shortCode,
+                label: p.commonName ?? p.fullName ?? p.shortCode,
+                hint: p.shortCode,
+              })),
+            ]}
+          />
           {plantChoice === NEW && (
-            <div className="mt-2 grid grid-cols-2 gap-2">
+            <div className="mt-2 space-y-2">
+              {/* Search a catalogue (curated dataset + iNaturalist) by common
+                  or scientific name; picking a match pre-fills the fields. */}
+              <div className="relative">
+                <label className={LABEL}>Find a plant</label>
+                <div className="relative">
+                  <Search
+                    size={14}
+                    strokeWidth={1.5}
+                    className="absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-faint pointer-events-none"
+                  />
+                  <input
+                    className={`${INPUT} pl-8 pr-8`}
+                    placeholder="Search by common or scientific name…"
+                    value={speciesQuery}
+                    disabled={saving}
+                    onChange={(e) => {
+                      setSpeciesQuery(e.target.value);
+                      setShowResults(true);
+                    }}
+                    onFocus={() => setShowResults(true)}
+                    onBlur={() => setTimeout(() => setShowResults(false), 150)}
+                  />
+                  {searchingSpecies && (
+                    <LoaderCircle
+                      size={14}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 animate-spin text-ink-faint"
+                    />
+                  )}
+                </div>
+                {showResults && speciesResults.length > 0 && (
+                  <ul className="absolute z-10 mt-1 w-full max-h-60 overflow-y-auto thin-scroll rounded border border-white/10 bg-surface shadow-lg">
+                    {speciesResults.map((m, i) => (
+                      <li key={`${m.scientificName}-${i}`}>
+                        <button
+                          type="button"
+                          // onMouseDown fires before the input's blur, so the pick lands.
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            selectSpecies(m);
+                          }}
+                          className="w-full text-left px-2.5 py-1.5 hover:bg-white/5 transition-colors"
+                        >
+                          <div className="flex items-baseline justify-between gap-2">
+                            <span className="text-sm text-ink truncate">
+                              {m.commonName ?? m.scientificName}
+                            </span>
+                            <span className="text-[9px] uppercase tracking-widest text-ink-faint shrink-0">
+                              {m.source === "dataset" ? "In dataset" : m.group ?? "iNaturalist"}
+                            </span>
+                          </div>
+                          {m.commonName && (
+                            <div className="text-xs italic text-ink-muted truncate">
+                              {m.scientificName}
+                            </div>
+                          )}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className={LABEL}>Short code *</label>
                 <input
@@ -280,7 +389,10 @@ export default function AddEntrySheet({ open, onClose, organismRecords, zones }:
                   placeholder="e.g. tmt-c"
                   value={newShortCode}
                   disabled={saving}
-                  onChange={(e) => setNewShortCode(e.target.value)}
+                  onChange={(e) => {
+                    setShortCodeTouched(true);
+                    setNewShortCode(e.target.value);
+                  }}
                 />
               </div>
               <div>
@@ -303,6 +415,7 @@ export default function AddEntrySheet({ open, onClose, organismRecords, zones }:
                   onChange={(e) => setNewFullName(e.target.value)}
                 />
               </div>
+              </div>
             </div>
           )}
         </div>
@@ -310,19 +423,19 @@ export default function AddEntrySheet({ open, onClose, organismRecords, zones }:
         {/* Zone */}
         <div>
           <label className={LABEL}>Zone</label>
-          <select
-            className={INPUT}
+          <Dropdown
             value={zoneChoice}
             disabled={saving}
-            onChange={(e) => setZoneChoice(e.target.value)}
-          >
-            {zones.map((z) => (
-              <option key={z.code} value={z.code}>
-                {z.name ?? z.code} ({z.code})
-              </option>
-            ))}
-            <option value={NEW}>+ New zone…</option>
-          </select>
+            onChange={setZoneChoice}
+            options={[
+              ...zones.map((z) => ({
+                value: z.code,
+                label: z.name ?? z.code,
+                hint: z.code,
+              })),
+              { value: NEW, label: "+ New zone…" },
+            ]}
+          />
           {zoneChoice === NEW && (
             <div className="mt-2 grid grid-cols-2 gap-2">
               <div>
