@@ -467,6 +467,18 @@ export default function MasonryGrid({
     onOrganismPositions(positions);
   }, [placed, onOrganismPositions]);
 
+  // The guided tour points at a single card. Cards are absolutely positioned
+  // and `placed` isn't in visual order, so pick the topmost one — anything
+  // lower risks a spotlight that starts off-screen.
+  const tourCardId = useMemo(() => {
+    let top: PlacedOrganism | null = null;
+    for (const item of placed) {
+      if (item.kind !== "panel") continue;
+      if (!top || item.y < top.y) top = item;
+    }
+    return top?.organism.id ?? null;
+  }, [placed]);
+
   return (
     <>
       <div ref={containerRef} className="relative" style={{ height: `${totalHeight}px` }}>
@@ -544,6 +556,7 @@ export default function MasonryGrid({
           return (
             <div
               key={item.organism.id}
+              data-tour={item.organism.id === tourCardId ? "card" : undefined}
               className="absolute"
               style={{
                 left: `${item.x}px`,

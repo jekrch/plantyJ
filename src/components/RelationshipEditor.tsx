@@ -12,6 +12,7 @@ import {
 import {
   ArrowLeftRight,
   Check,
+  Link2,
   LoaderCircle,
   Maximize2,
   Pencil,
@@ -38,6 +39,7 @@ import { LEAF_RADIUS } from "./TreeView/types";
 import { CtrlBtn } from "./TreeView/CtrlBtn";
 import {
   addRelationship,
+  addRelationships,
   deleteRelationship,
   deleteRelationshipType,
   slugifyTypeId,
@@ -47,6 +49,8 @@ import {
 import RelationshipAIAssist from "./RelationshipAIAssist";
 import { useAIFeaturesVisible } from "../hooks/useAIFeatures";
 import { Dropdown, type DropdownOption } from "./Dropdown";
+import { DirectionPicker, dirToStored, type DirChoice } from "./DirectionPicker";
+import BulkConnectSheet from "./BulkConnectSheet";
 
 // Same palette as the food web, so a type keeps its colour across both views.
 const TYPE_COLORS = [
@@ -142,52 +146,6 @@ function runLayout(
     cache.set(n.id, p);
   }
   return positions;
-}
-
-type DirChoice = "auto" | RelationshipDirection;
-
-function dirToStored(d: DirChoice): RelationshipDirection | undefined {
-  return d === "auto" ? undefined : d;
-}
-
-/** Segmented control for the four direction choices. */
-function DirectionPicker({
-  value,
-  directional,
-  onChange,
-  disabled,
-}: {
-  value: DirChoice;
-  directional: boolean;
-  onChange: (d: DirChoice) => void;
-  disabled?: boolean;
-}) {
-  const opts: { key: DirChoice; label: string; title: string }[] = [
-    { key: "auto", label: directional ? "→ auto" : "↔ auto", title: "Use the type's default" },
-    { key: "f", label: "→", title: "From → To" },
-    { key: "b", label: "←", title: "To → From" },
-    { key: "u", label: "↔", title: "Undirected" },
-  ];
-  return (
-    <div className="flex rounded border border-white/10 overflow-hidden">
-      {opts.map((o) => (
-        <button
-          key={o.key}
-          type="button"
-          disabled={disabled}
-          title={o.title}
-          onClick={() => onChange(o.key)}
-          className={`flex-1 px-2 py-1.5 text-xs font-mono transition-colors ${
-            value === o.key
-              ? "bg-accent/20 text-accent"
-              : "text-ink-muted hover:text-ink hover:bg-white/5"
-          }`}
-        >
-          {o.label}
-        </button>
-      ))}
-    </div>
-  );
 }
 
 /** Create / edit form for a relationship type. */
@@ -462,6 +420,7 @@ export default function RelationshipEditor({
   const [typesOpen, setTypesOpen] = useState(false);
   const [typeForm, setTypeForm] = useState<null | { editing?: RelationshipType }>(null);
   const [addOpen, setAddOpen] = useState(false);
+  const [bulkOpen, setBulkOpen] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
   const aiVisible = useAIFeaturesVisible();
 
@@ -536,7 +495,8 @@ export default function RelationshipEditor({
             Relationship studio
           </h2>
           <p className="hidden sm:block text-[11px] text-ink-faint">
-            Drag from one organism to another to connect them · click a link to edit it
+            Drag between organisms to connect them, or use Connect to pick from a list · click a
+            link to edit it
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
@@ -544,6 +504,7 @@ export default function RelationshipEditor({
           {aiVisible && (
             <button
               onClick={() => setAiOpen(true)}
+              data-tour="rel-ai"
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-xs text-accent hover:bg-accent/10 transition-colors"
               title="Generate a prompt for a model, then paste its reply back to create relationships"
             >
@@ -551,7 +512,16 @@ export default function RelationshipEditor({
             </button>
           )}
           <button
+            onClick={() => setBulkOpen(true)}
+            data-tour="rel-connect"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-xs text-ink-muted hover:text-ink hover:bg-white/5 transition-colors"
+            title="Pick a relationship, then tick every organism to connect — no dragging"
+          >
+            <Link2 size={14} /> <span className="hidden sm:inline">Connect</span>
+          </button>
+          <button
             onClick={() => setAddOpen((v) => !v)}
+            data-tour="rel-add"
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-xs text-ink-muted hover:text-ink hover:bg-white/5 transition-colors"
           >
             <Plus size={14} /> <span className="hidden sm:inline">Add organism</span>
@@ -569,6 +539,7 @@ export default function RelationshipEditor({
       {/* Canvas */}
       <div
         ref={containerRef}
+        data-tour="rel-canvas"
         className="relative flex-1 min-h-0 overflow-hidden bg-surface-raised/30"
         style={{
           touchAction: "none",
@@ -648,7 +619,7 @@ export default function RelationshipEditor({
 
             {/* Edges */}
             <g>
-              {edgesForRender.map(({ rel, color, dir, typeName, idx, total }) => {
+              {edgesForRender.map(({ rel, color, dir, typeName, idx, total }, i) => {
                 const a = positions.get(rel.from)!;
                 const b = positions.get(rel.to)!;
                 const reverse = dir === "bwd";
@@ -673,7 +644,9 @@ export default function RelationshipEditor({
                 else if (ang < -90) ang += 180;
                 return (
                   <g
-                    key={`e-${rel.id}`}
+                    // Index-suffixed because ids are not guaranteed unique in the
+                    // file — a bare id key silently drops colliding edges.
+                    key={`e-${rel.id}-${i}`}
                     style={{ cursor: "pointer" }}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -833,6 +806,7 @@ export default function RelationshipEditor({
           <div className="rounded-md bg-surface/90 backdrop-blur-sm border border-white/10 overflow-hidden">
             <button
               onClick={() => setTypesOpen((v) => !v)}
+              data-tour="rel-types"
               className="w-full flex items-center justify-between px-3 py-2 text-[10px] font-mono uppercase tracking-[0.15em] text-ink-muted hover:text-ink transition-colors"
             >
               <span>Relationship types ({types.length})</span>
@@ -951,12 +925,12 @@ export default function RelationshipEditor({
                   No links yet. Drag from this organism to another to connect them.
                 </p>
               ) : (
-                selectedRels.map((r) => {
+                selectedRels.map((r, i) => {
                   const dir = effectiveDirection(r, typeById.get(r.type));
                   const other = r.from === selected ? r.to : r.from;
                   return (
                     <div
-                      key={r.id}
+                      key={`${r.id}-${i}`}
                       className="group flex items-center gap-2 px-3 py-1.5 hover:bg-white/5"
                     >
                       <span
@@ -1027,6 +1001,52 @@ export default function RelationshipEditor({
           knownCodes={knownCodes}
           onClose={() => setAiOpen(false)}
           onApplied={() => setSelected(null)}
+        />
+      )}
+
+      {/* Bulk connect (list-driven alternative to dragging) */}
+      {bulkOpen && (
+        <BulkConnectSheet
+          allCodes={allCodes}
+          label={label}
+          organismByCode={organismByCode}
+          types={types}
+          relationships={rels}
+          initialSource={selected}
+          busy={busy}
+          onCancel={() => setBulkOpen(false)}
+          onSubmit={(input) =>
+            run(async () => {
+              let typeId = input.typeId;
+              if (input.newType) {
+                const t = await upsertRelationshipType(input.newType);
+                typeId = t.id;
+              }
+              const { created, skipped } = await addRelationships(
+                input.targets.map((to) => ({
+                  typeId,
+                  from: input.source,
+                  to,
+                  direction: input.direction,
+                })),
+              );
+              // Endpoints may not have been on the canvas — pull them in so the
+              // new links are visible the moment the sheet closes.
+              setExtraCodes((s) => {
+                const next = new Set(s).add(input.source);
+                for (const r of created) next.add(r.to);
+                return next;
+              });
+              setBulkOpen(false);
+              setSelected(input.source);
+              if (created.length === 0) throw new Error(skipped[0]?.reason ?? "Nothing to add");
+              showToast(
+                skipped.length > 0
+                  ? `Added ${created.length} · skipped ${skipped.length}`
+                  : `Added ${created.length} relationship${created.length === 1 ? "" : "s"}`,
+              );
+            })
+          }
         />
       )}
 

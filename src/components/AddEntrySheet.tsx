@@ -247,6 +247,7 @@ export default function AddEntrySheet({ open, onClose, organismRecords, zones }:
               setDragOver(false);
               if (!saving) addFiles(e.dataTransfer.files);
             }}
+            data-tour="entry-photos"
             className={`flex gap-2 rounded border border-dashed py-4 px-2 transition-colors ${
               dragOver ? "border-accent/60 bg-accent/5" : "border-white/15"
             }`}
@@ -303,7 +304,7 @@ export default function AddEntrySheet({ open, onClose, organismRecords, zones }:
         </div>
 
         {/* Plant */}
-        <div>
+        <div data-tour="entry-plant">
           <label className={LABEL}>Plant</label>
           <Dropdown
             value={plantChoice}
@@ -421,7 +422,7 @@ export default function AddEntrySheet({ open, onClose, organismRecords, zones }:
         </div>
 
         {/* Zone */}
-        <div>
+        <div data-tour="entry-zone">
           <label className={LABEL}>Zone</label>
           <Dropdown
             value={zoneChoice}
@@ -463,7 +464,7 @@ export default function AddEntrySheet({ open, onClose, organismRecords, zones }:
         </div>
 
         {/* Tags */}
-        <div>
+        <div data-tour="entry-tags">
           <label className={LABEL}>Tags (comma-separated)</label>
           <input
             className={INPUT}
@@ -493,6 +494,7 @@ export default function AddEntrySheet({ open, onClose, organismRecords, zones }:
           <button
             onClick={handleSave}
             disabled={!canSave}
+            data-tour="entry-save"
             className="px-4 py-1.5 rounded bg-accent/20 hover:bg-accent/30 text-accent text-xs font-display uppercase tracking-wider transition-colors disabled:opacity-40 cursor-pointer"
           >
             {saving ? "Saving…" : `Save ${files.length || ""}`.trim()}

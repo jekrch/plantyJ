@@ -12,6 +12,7 @@ import { isDriveMode, isWritable } from "./data/source";
 import OrganismViewer from "./components/OrganismViewer";
 import InfoModal from "./components/InfoModal";
 import WelcomeModal, { hasSeenWelcome } from "./components/WelcomeModal";
+import GardenTour from "./components/GardenTour";
 import SpotlightView from "./components/SpotlightView";
 import TreeView from "./components/TreeView";
 import WebView from "./components/WebView";
@@ -99,6 +100,17 @@ export default function App() {
   const [addOpen, setAddOpen] = useState(false);
   const writable = isWritable();
 
+  // Lets a guided tour open the UI its steps point at. Memoized because the
+  // tour rebuilds its steps whenever this identity changes.
+  const tourControls = useMemo(
+    () => ({
+      openAddSheet: () => setAddOpen(true),
+      closeAddSheet: () => setAddOpen(false),
+      showWebView: () => view.handleViewModeChange("web", null),
+    }),
+    [view.handleViewModeChange],
+  );
+
   // First visit to the founder's garden gets a one-time greeting pointing at
   // the cloud menu. Drive mode means they've already started their own journal.
   const [welcomeOpen, setWelcomeOpen] = useState(() => !isDriveMode() && !hasSeenWelcome());
@@ -144,6 +156,7 @@ export default function App() {
             {writable && status === "ready" && (
               <button
                 onClick={() => setAddOpen(true)}
+                data-tour="add"
                 className="flex items-center justify-center h-8 w-8 rounded-md text-ink-muted hover:text-ink hover:bg-white/5 transition-colors"
                 title="Add photos"
                 aria-label="Add photos"
@@ -151,7 +164,9 @@ export default function App() {
                 <ImagePlus size={20} strokeWidth={1.5} className="text-accent" />
               </button>
             )}
-            <SourceMenu />
+            <div data-tour="source" className="flex items-center">
+              <SourceMenu />
+            </div>
             <button
               onClick={view.handleOpenInfo}
               className="flex items-center justify-center h-8 w-8 rounded-md text-ink-muted hover:text-ink hover:bg-white/5 transition-colors"
@@ -165,7 +180,10 @@ export default function App() {
         {status === "ready" &&
           organisms.length > 0 &&
           (viewMode === "tree" || viewMode === "web") && (
-            <div className="content-container px-1 pt-2 pb-3 border-t border-ink-faint/20">
+            <div
+              data-tour="views"
+              className="content-container px-1 pt-2 pb-3 border-t border-ink-faint/20"
+            >
               <ViewModeControl
                 mode={viewMode}
                 subjectCode={view.spotlightCode}
@@ -183,7 +201,7 @@ export default function App() {
           organisms.length > 0 &&
           viewMode !== "tree" &&
           viewMode !== "web" && (
-            <div className="pt-2 pb-3">
+            <div data-tour="views" className="pt-2 pb-3">
               <ViewModeControl
                 mode={viewMode}
                 subjectCode={view.spotlightCode}
@@ -291,6 +309,23 @@ export default function App() {
       )}
 
       <WelcomeModal open={welcomeOpen} onClose={() => setWelcomeOpen(false)} />
+
+      {/* `ready` gates only the automatic tour: a spotlight measured against an
+          overlay lands in the wrong place, and two overlapping introductions is
+          one too many. Tours the user picks deliberately are not gated — the
+          add-specimen tour opens the add sheet itself. */}
+      <GardenTour
+        organismCount={organisms.length}
+        controls={tourControls}
+        ready={
+          status === "ready" &&
+          !welcomeOpen &&
+          !addOpen &&
+          !view.infoOpen &&
+          viewer.openIndex < 0 &&
+          (organisms.length === 0 || imagesLoaded)
+        }
+      />
 
       <InfoModal
         open={view.infoOpen}

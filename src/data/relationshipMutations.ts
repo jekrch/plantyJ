@@ -110,6 +110,58 @@ export async function addRelationship(input: AddRelationshipInput): Promise<Rela
   return rel;
 }
 
+export interface AddRelationshipsResult {
+  created: Relationship[];
+  /** Inputs that were rejected, paired with why (duplicate, self-link, …). */
+  skipped: Array<{ input: AddRelationshipInput; reason: string }>;
+}
+
+/**
+ * Create many relationships in one read-modify-write. Used by the bulk connect
+ * flow, where a user fans one organism out to a list of others — doing this as
+ * N `addRelationship` calls would be N Drive round-trips.
+ *
+ * Each input succeeds or fails independently (a duplicate never aborts the
+ * batch), mirroring `applyRelationshipCommands`. Nothing is written when no
+ * input survives.
+ */
+export async function addRelationships(
+  inputs: AddRelationshipInput[],
+): Promise<AddRelationshipsResult> {
+  assertWritable();
+  const file = await loadFile();
+  const created: Relationship[] = [];
+  const skipped: AddRelationshipsResult["skipped"] = [];
+
+  for (const input of inputs) {
+    try {
+      if (input.from === input.to) throw new Error("An organism can't relate to itself.");
+      const type = file.types.find((t) => t.id === input.typeId);
+      if (!type) throw new Error(`Unknown relationship type "${input.typeId}".`);
+
+      const direction = normalizeDirection(input.direction, type);
+      if (isDuplicate(file.relationships, input.typeId, input.from, input.to, direction, type)) {
+        throw new Error(`That ${type.name} relationship already exists.`);
+      }
+
+      const rel: Relationship = {
+        id: nextId(file.relationships),
+        type: input.typeId,
+        from: input.from,
+        to: input.to,
+      };
+      if (direction) rel.direction = direction;
+      file.relationships.push(rel);
+      created.push(rel);
+    } catch (err) {
+      skipped.push({ input, reason: err instanceof Error ? err.message : "Failed" });
+    }
+  }
+
+  if (created.length > 0) await save(file);
+  return { created, skipped };
+}
+
 export interface UpdateRelationshipInput {
   typeId?: string;
   from?: string;

@@ -3,6 +3,7 @@ import {
   AlertTriangle,
   Check,
   Cloud,
+  Compass,
   Download,
   FileText,
   ImagePlus,
@@ -27,6 +28,7 @@ import { enrichGarden } from "../data/enrichment";
 import { exportGarden } from "../data/exportGarden";
 import AnalysisAIAssist from "./AnalysisAIAssist";
 import { useAIFeaturesVisible } from "../hooks/useAIFeatures";
+import { requestTour } from "./GardenTour";
 
 /** Human-readable byte size, e.g. 1536 -> "1.5 KB". */
 function formatBytes(n: number): string {
@@ -280,6 +282,18 @@ export default function SourceMenu() {
                 </span>
                 Download backup (.zip)
               </button>
+              <button
+                className={optionCls}
+                onClick={() => {
+                  setOpen(false);
+                  requestTour();
+                }}
+              >
+                <span className="w-4">
+                  <Compass size={13} />
+                </span>
+                Take the tour
+              </button>
               {busy && (
                 <p className="px-3 py-1 text-[11px] text-accent truncate" title={busy}>
                   {busy}
@@ -387,6 +401,16 @@ export default function SourceMenu() {
                 Hide AI features
               </button>
               <button
+                className={`${optionCls} text-red-400 hover:text-red-300`}
+                onClick={() => setConfirmingDelete(true)}
+                disabled={busy !== null}
+              >
+                <span className="w-4">
+                  <Trash2 size={13} />
+                </span>
+                Delete my garden
+              </button>
+              <button
                 className={optionCls}
                 onClick={() => {
                   signOut();
@@ -397,16 +421,6 @@ export default function SourceMenu() {
                   <LogOut size={13} />
                 </span>
                 Sign out
-              </button>
-              <button
-                className={`${optionCls} text-red-400 hover:text-red-300`}
-                onClick={() => setConfirmingDelete(true)}
-                disabled={busy !== null}
-              >
-                <span className="w-4">
-                  <Trash2 size={13} />
-                </span>
-                Delete my garden
               </button>
             </>
           )}

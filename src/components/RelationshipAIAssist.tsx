@@ -116,7 +116,7 @@ export default function RelationshipAIAssist({ knownCodes, onClose, onApplied }:
           </div>
           <p className="text-[11px] text-ink-faint">
             It bundles a rollup of your garden (organisms, zones, existing relationships) with the
-            command format the model must reply in — works with Claude, ChatGPT, Gemini, or any
+            command format the model must reply in. Works with Claude, ChatGPT, Gemini, or any
             chat model.
           </p>
           {buildError ? (

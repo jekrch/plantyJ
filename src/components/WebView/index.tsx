@@ -1076,6 +1076,7 @@ export default function WebView({
           >
             <button
               onClick={() => setEditorOpen(true)}
+              data-tour="web-edit"
               className="inline-flex items-center gap-2 px-3 py-1.5 bg-surface/85 backdrop-blur-sm border border-white/10 text-[10px] font-mono uppercase tracking-[0.15em] text-ink-muted hover:text-ink transition-colors rounded-sm"
             >
               <Pencil size={12} strokeWidth={1.5} />

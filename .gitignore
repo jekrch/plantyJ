@@ -4,6 +4,7 @@ dist/
 *.tsbuildinfo
 public/sw.js
 /.claude
+/docs
 
 # Python
 __pycache__/
