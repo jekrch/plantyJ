@@ -1,19 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  forceSimulation,
-  forceLink,
-  forceManyBody,
-  forceCollide,
-  forceX,
-  forceY,
-  type SimulationNodeDatum,
-} from "d3-force";
-import { LoaderCircle, Maximize2, Pencil, Search, X, ZoomIn, ZoomOut, Filter } from "lucide-react";
+import { LoaderCircle, Maximize2, Pencil, Search, ZoomIn, ZoomOut, Filter } from "lucide-react";
 import type {
   AIAnalysis,
   Organism,
   OrganismRecord,
-  Relationship,
   RelationshipType,
   Species,
   TaxaInfo,
@@ -28,6 +18,15 @@ import { CtrlBtn } from "../TreeView/CtrlBtn";
 import { NodeDetail } from "../TreeView/NodeDetail";
 import { buildWebNode } from "./buildWebNode";
 import RelationshipEditor from "../RelationshipEditor";
+import EdgeLabel from "./EdgeLabel";
+import WebSearchPanel from "./WebSearchPanel";
+import {
+  edgeGeometry,
+  layoutGraph,
+  TYPE_COLORS,
+  type PositionedEdge,
+  type PositionedNode,
+} from "./layout";
 
 interface Props {
   organisms: Organism[];
@@ -46,250 +45,6 @@ interface Props {
   initialWebNode?: string | null;
   /** Reports the selected node code (or null) so it can be encoded in the URL. */
   onNodeSelect?: (code: string | null) => void;
-}
-
-const TYPE_COLORS = [
-  "var(--color-accent)",
-  "#f59e0b",
-  "#60a5fa",
-  "#f472b6",
-  "#34d399",
-  "#a78bfa",
-  "#f87171",
-];
-
-interface PositionedNode {
-  code: string;
-  label: string;
-  subLabel: string | null;
-  x: number;
-  y: number;
-  organism: Organism | undefined;
-  isAnimal: boolean;
-}
-
-interface PositionedEdge {
-  rel: Relationship;
-  typeName: string;
-  fromX: number;
-  fromY: number;
-  toX: number;
-  toY: number;
-  color: string;
-  dir: "fwd" | "bwd" | "u";
-  groupIndex: number;
-  groupTotal: number;
-}
-
-interface SimNode extends SimulationNodeDatum {
-  id: string;
-}
-
-// Force-directed layout via d3-force. A persistent position cache (keyed by
-// node code, owned by the component) seeds the simulation so toggling a
-// relationship filter relaxes the existing layout instead of reshuffling it.
-function layoutGraph(
-  nodes: string[],
-  edges: Array<[string, string]>,
-  posCache: Map<string, { x: number; y: number }>,
-): { positions: Map<string, { x: number; y: number }>; width: number; height: number } {
-  const positions = new Map<string, { x: number; y: number }>();
-  if (nodes.length === 0) return { positions, width: 1600, height: 1000 };
-
-  if (nodes.length === 1) {
-    positions.set(nodes[0], { x: 800, y: 500 });
-    posCache.set(nodes[0], { x: 800, y: 500 });
-    return { positions, width: 1600, height: 1000 };
-  }
-
-  const k = 240; // Ideal link distance (gives edge labels breathing room)
-  const minDistance = LEAF_RADIUS * 4 + 60; // Strict anti-collision padding
-
-  // Seed from cache when we've placed this node before; otherwise a
-  // deterministic circle (no Math.random — layout stays reproducible).
-  let cachedCount = 0;
-  const simNodes: SimNode[] = nodes.map((id, i) => {
-    const cached = posCache.get(id);
-    if (cached) {
-      cachedCount++;
-      return { id, x: cached.x, y: cached.y };
-    }
-    const angle = (i / nodes.length) * Math.PI * 2;
-    return { id, x: Math.cos(angle) * 200, y: Math.sin(angle) * 200 };
-  });
-  const hasNode = new Set(nodes);
-  const simLinks = edges
-    .filter(([a, b]) => hasNode.has(a) && hasNode.has(b))
-    .map(([source, target]) => ({ source, target }));
-
-  const sim = forceSimulation(simNodes)
-    .force(
-      "link",
-      forceLink<SimNode, { source: string; target: string }>(simLinks)
-        .id((d) => d.id)
-        .distance(k * 1.3)
-        .strength(0.4),
-    )
-    .force("charge", forceManyBody().strength(-3800).distanceMax(1400))
-    .force("collide", forceCollide(minDistance).strength(1))
-    .force("x", forceX(0).strength(0.03))
-    .force("y", forceY(0).strength(0.03))
-    .stop();
-
-  // Mostly-cached graph => a filter toggle: relax gently so existing nodes
-  // barely move. Fresh graph => full settle from the seed.
-  const mostlyCached = cachedCount >= nodes.length * 0.5;
-  if (mostlyCached) {
-    sim.alpha(0.3).alphaDecay(0.05);
-    for (let i = 0; i < 120; i++) sim.tick();
-  } else {
-    sim.alpha(1).alphaDecay(0.0228);
-    for (let i = 0; i < 300; i++) sim.tick();
-  }
-
-  for (const n of simNodes) {
-    const p = { x: n.x ?? 0, y: n.y ?? 0 };
-    positions.set(n.id, p);
-    posCache.set(n.id, p);
-  }
-
-  // Measure the final organic size of the graph
-  let minX = Infinity,
-    minY = Infinity;
-  let maxX = -Infinity,
-    maxY = -Infinity;
-  positions.forEach((p) => {
-    if (p.x < minX) minX = p.x;
-    if (p.y < minY) minY = p.y;
-    if (p.x > maxX) maxX = p.x;
-    if (p.y > maxY) maxY = p.y;
-  });
-
-  if (maxX === minX) maxX += 10;
-  if (maxY === minY) maxY += 10;
-
-  // Find the densest node (the one with the most relationships) to use as our focal point
-  const degrees = new Map<string, number>();
-  nodes.forEach((n) => degrees.set(n, 0));
-  edges.forEach(([u, v]) => {
-    degrees.set(u, (degrees.get(u) || 0) + 1);
-    degrees.set(v, (degrees.get(v) || 0) + 1);
-  });
-
-  let densestNode = nodes[0];
-  let maxDegree = -1;
-  degrees.forEach((deg, n) => {
-    if (deg > maxDegree) {
-      maxDegree = deg;
-      densestNode = n;
-    }
-  });
-
-  // Create a fixed virtual canvas size. By making this smaller than the
-  // graph's maximum bounding box, the pan/zoom hook will start in a naturally
-  // zoomed-in state.
-  const width = 1600;
-  const height = 1000;
-
-  // Center the densest cluster in the middle of our view
-  const cx =
-    densestNode && positions.has(densestNode) ? positions.get(densestNode)!.x : (minX + maxX) / 2;
-  const cy =
-    densestNode && positions.has(densestNode) ? positions.get(densestNode)!.y : (minY + maxY) / 2;
-
-  const targetCx = width / 2;
-  const targetCy = height / 2;
-
-  // Shift the graph cluster so our focal point centers in our viewport
-  const offsetX = targetCx - cx;
-  const offsetY = targetCy - cy;
-
-  positions.forEach((p) => {
-    p.x += offsetX;
-    p.y += offsetY;
-  });
-
-  return { positions, width, height };
-}
-
-// Geometry for one rendered edge: the curved path plus where/how its type
-// label sits. Pulled out of the render so the edge layer and the on-top
-// label layer compute identical positions.
-function edgeGeometry(e: PositionedEdge) {
-  const reverse = e.dir === "bwd";
-  const x1 = reverse ? e.toX : e.fromX;
-  const y1 = reverse ? e.toY : e.fromY;
-  const x2 = reverse ? e.fromX : e.toX;
-  const y2 = reverse ? e.fromY : e.toY;
-  const directed = e.dir !== "u";
-
-  const midX = (x1 + x2) / 2;
-  const midY = (y1 + y2) / 2;
-
-  const isFromSmaller = e.rel.from < e.rel.to;
-  const normX1 = isFromSmaller ? e.fromX : e.toX;
-  const normY1 = isFromSmaller ? e.fromY : e.toY;
-  const normX2 = isFromSmaller ? e.toX : e.fromX;
-  const normY2 = isFromSmaller ? e.toY : e.fromY;
-
-  const baseDx = normX2 - normX1;
-  const baseDy = normY2 - normY1;
-  const baseLen = Math.max(0.01, Math.hypot(baseDx, baseDy));
-  const nx = -baseDy / baseLen;
-  const ny = baseDx / baseLen;
-
-  const spread = 60;
-  const offset = (e.groupIndex - (e.groupTotal - 1) / 2) * spread;
-
-  const cx = midX + nx * (offset * 2);
-  const cy = midY + ny * (offset * 2);
-
-  const pathD = `M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`;
-
-  const textMidX = midX + nx * offset;
-  const textMidY = midY + ny * offset;
-
-  let angle = (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI;
-  if (angle > 90) angle -= 180;
-  else if (angle < -90) angle += 180;
-
-  return { pathD, directed, textMidX, textMidY, angle };
-}
-
-function EdgeLabel({
-  text,
-  x,
-  y,
-  angle,
-  isActive,
-  dim,
-}: {
-  text: string;
-  x: number;
-  y: number;
-  angle: number;
-  isActive: boolean;
-  dim: boolean;
-}) {
-  return (
-    <g transform={`translate(${x},${y}) rotate(${angle})`} pointerEvents="none">
-      <text
-        textAnchor="middle"
-        dy={-5}
-        fontFamily="'Space Mono', monospace"
-        fontSize={9}
-        letterSpacing="0.06em"
-        fill={isActive ? "var(--color-ink)" : "var(--color-ink-muted)"}
-        fillOpacity={dim ? 0.2 : isActive ? 1 : 0.85}
-        stroke="var(--color-surface)"
-        strokeWidth={4}
-        strokeOpacity={0.9}
-        paintOrder="stroke fill"
-      >
-        {text}
-      </text>
-    </g>
-  );
 }
 
 export default function WebView({
@@ -1121,84 +876,6 @@ export default function WebView({
             />
           </div>
         </div>
-      )}
-    </div>
-  );
-}
-
-// --- Search panel ---
-
-type SearchMatch = { node: PositionedNode; label: string; sublabel: string };
-
-function WebSearchPanel({
-  searchQuery,
-  setSearchQuery,
-  searchHi,
-  setSearchHi,
-  matches,
-  searchInputRef,
-  closeSearch,
-  selectNode,
-  onKeyDown,
-}: {
-  searchQuery: string;
-  setSearchQuery: (q: string) => void;
-  searchHi: number;
-  setSearchHi: (i: number) => void;
-  matches: SearchMatch[];
-  searchInputRef: React.RefObject<HTMLInputElement | null>;
-  closeSearch: () => void;
-  selectNode: (node: PositionedNode) => void;
-  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-}) {
-  return (
-    <div className="w-72 max-w-[80vw] rounded-md bg-surface-raised/95 backdrop-blur-sm ring-1 ring-inset ring-white/10 shadow-xl overflow-hidden">
-      <div className="flex items-center gap-2 px-2 py-1.5 border-b border-ink-faint/15">
-        <Search size={12} strokeWidth={1.5} className="text-ink-muted shrink-0" />
-        <input
-          ref={searchInputRef}
-          type="text"
-          placeholder="Search species…"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onKeyDown={onKeyDown}
-          className="flex-1 min-w-0 bg-transparent text-[12px] text-ink placeholder:text-ink-faint outline-none"
-          autoComplete="off"
-          spellCheck={false}
-        />
-        <button
-          type="button"
-          aria-label="Close search"
-          onClick={closeSearch}
-          className="flex items-center justify-center h-5 w-5 rounded text-ink-muted hover:text-ink hover:bg-white/5 transition-colors shrink-0"
-        >
-          <X size={12} strokeWidth={1.5} />
-        </button>
-      </div>
-      {searchQuery.trim() && (
-        <ul className="max-h-72 overflow-y-auto thin-scroll py-1">
-          {matches.length === 0 ? (
-            <li className="px-3 py-2 text-[11px] text-ink-faint italic">No matches</li>
-          ) : (
-            matches.map((m, i) => (
-              <li key={`wsr-${m.node.code}-${i}`}>
-                <button
-                  type="button"
-                  onMouseEnter={() => setSearchHi(i)}
-                  onClick={() => selectNode(m.node)}
-                  className={`w-full text-left px-3 py-1.5 flex items-baseline gap-2 transition-colors ${
-                    i === searchHi ? "bg-white/8" : "hover:bg-white/5"
-                  }`}
-                >
-                  <span className="text-[12px] text-ink truncate min-w-0">{m.label}</span>
-                  <span className="ml-auto text-[9px] font-mono uppercase tracking-wider text-ink-faint shrink-0">
-                    {m.sublabel}
-                  </span>
-                </button>
-              </li>
-            ))
-          )}
-        </ul>
       )}
     </div>
   );

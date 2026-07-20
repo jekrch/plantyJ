@@ -69,11 +69,21 @@ async function createFolder(name: string, parentId?: string): Promise<string> {
   return ((await res.json()) as { id: string }).id;
 }
 
+/**
+ * Quote a value as a Drive query string literal. Drive's `q` grammar escapes
+ * with backslashes, so an unescaped apostrophe (common in cultivar names like
+ * `Rudbeckia 'Goldsturm'`) would otherwise terminate the literal early and let
+ * the rest of the value be parsed as query syntax.
+ */
+export function quote(value: string): string {
+  return `'${value.replace(/\\/g, "\\\\").replace(/'/g, "\\'")}'`;
+}
+
 /** Find a folder by name (optionally under a parent), creating it if absent. */
 export async function ensureFolder(name: string, parentId?: string): Promise<string> {
-  const parentClause = parentId ? ` and '${parentId}' in parents` : "";
+  const parentClause = parentId ? ` and ${quote(parentId)} in parents` : "";
   const found = await listFiles(
-    `name='${name}' and mimeType='application/vnd.google-apps.folder' and trashed=false${parentClause}`,
+    `name=${quote(name)} and mimeType='application/vnd.google-apps.folder' and trashed=false${parentClause}`,
     "id,name",
   );
   return found[0]?.id ?? createFolder(name, parentId);

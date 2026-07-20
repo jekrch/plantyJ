@@ -5,6 +5,7 @@ import {
   downloadJson,
   ensureFolder,
   listFiles,
+  quote,
   updateFileContent,
 } from "./driveClient";
 
@@ -183,7 +184,7 @@ export async function deleteGarden(): Promise<void> {
   // scope only ever surfaces our own files). Deleting a folder cascades to the
   // data/ and images/ subfolders and every file inside.
   const folders = await listFiles(
-    `name='${APP_FOLDER}' and mimeType='application/vnd.google-apps.folder' and trashed=false`,
+    `name=${quote(APP_FOLDER)} and mimeType='application/vnd.google-apps.folder' and trashed=false`,
     "id,name",
   );
   for (const folder of folders) {
