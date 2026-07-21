@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A rot",
+      "fullName": "Amblycorypha rotundifolia",
+      "commonName": "Round-winged Katydid",
+      "variety": null
+    },
+    {
       "shortCode": "A spe",
       "fullName": "Agelenopsis species",
       "commonName": "Grass Spider",
