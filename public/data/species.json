@@ -4236,6 +4236,54 @@
       ],
       "observationsCount": 20426
     },
+    "polistes-dominula": {
+      "id": "polistes-dominula",
+      "fullName": "Polistes dominula",
+      "commonName": "European Paper Wasp",
+      "description": "The European paper wasp (Polistes dominula) is one of the most common and well-known species of social wasps in the genus Polistes. Its diet is more diverse than those of most Polistes species\u2014many genera of insects versus mainly caterpillars in other Polistes\u2014giving it superior survivability compared to other wasp species during a shortage of resources.\nThe dominant females are the principal egg layers, while the subordinate females (\"auxiliaries\") or workers primarily forage and do not lay eggs. This hierarchy is not permanent, though; when the queen is removed from the nest, the second-most dominant female takes over the role of the previous queen. Dominance in females is determined by the severity of the scatteredness in the coloration of the clypeus (face), whereas dominance in males is shown by the variation of spots of their abdomens. P. dominula is common and cosmopolitan due to their exceptional survival features such as productive colony cycle, short development time, and higher ability to endure predator attacks.\nThese wasps have a lek-based mating system. Unlike most social insects, 35% of P. dominula wasps in a colony are unrelated. It is considered an invasive species in Canada and the United States.",
+      "vernacularNames": [
+        "Paper Wasp",
+        "European Paper Wasp"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Hymenoptera",
+        "family": "Eumenidae",
+        "genus": "Polistes",
+        "species": "Polistes dominula",
+        "canonicalName": "Polistes dominula"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5871389"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Polistes_dominula"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/84640"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.808598"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 97837
+    },
     "polygonia-comma": {
       "id": "polygonia-comma",
       "fullName": "Polygonia comma",

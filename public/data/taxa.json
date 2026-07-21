@@ -874,5 +874,13 @@
   "Tettigoniidae": {
     "description": "Insects in the family Tettigoniidae are commonly called katydids or bush crickets. They have previously been known as \"long-horned grasshoppers\". More than 8,000 species are known. Part of the suborder Ensifera, the Tettigoniidae are the only extant family in the superfamily Tettigonioidea.",
     "url": "https://en.wikipedia.org/wiki/Tettigoniidae"
+  },
+  "Eumenidae": {
+    "description": "Potter wasps, the Eumeninae, are a cosmopolitan wasp group considered as a subfamily of Vespidae, but were recognized in the past as a separate family, Eumenidae.",
+    "url": "https://en.wikipedia.org/wiki/Potter_wasp"
+  },
+  "Polistes": {
+    "description": "Polistes is a cosmopolitan genus of paper wasps and the only genus in the tribe Polistini. Vernacular names for the genus include umbrella wasps, coined by Walter Ebeling in 1975 to distinguish it from other types of paper wasp, in reference to the form of their nests, and umbrella paper wasps. Polistes is the single largest genus within the family Vespidae, with over 200 recognized species. Their innate preferences for nest-building sites leads them to commonly build nests on human habitation, where they can be very unwelcome; although generally not aggressive, they can be provoked into defending their nests. All species are predatory, and they may consume large numbers of caterpillars, in which respect they are generally considered beneficial.",
+    "url": "https://en.wikipedia.org/wiki/Polistes"
   }
 }
