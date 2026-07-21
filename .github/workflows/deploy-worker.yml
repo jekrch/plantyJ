@@ -22,8 +22,14 @@ jobs:
       - name: Install dependencies
         run: bun install
         working-directory: worker
-      - name: Deploy worker
+      - name: Deploy bot worker
         run: bunx wrangler deploy
+        working-directory: worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Deploy public read-proxy worker
+        run: bunx wrangler deploy -c wrangler.public.toml
         working-directory: worker
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

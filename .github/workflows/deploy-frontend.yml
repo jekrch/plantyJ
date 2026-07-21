@@ -41,9 +41,12 @@ jobs:
       - run: bun install
       - run: bun run build
         env:
-          # Public, referrer-restricted browser key used only to read published
-          # (anonymous) gardens. Baked into the bundle at build time; define it
-          # as a repo secret. Absent -> public-garden viewing stays disabled.
+          # Base URL of the worker's public read proxy (a repo variable, e.g.
+          # https://plantyj-bot.<account>.workers.dev). Preferred path for
+          # reading published gardens; the Drive API key lives as a worker secret.
+          VITE_PUBLIC_PROXY_URL: ${{ vars.VITE_PUBLIC_PROXY_URL }}
+          # Direct-read fallback key, only used when the proxy URL is unset.
+          # Public, referrer-restricted; baked into the bundle. Optional.
           VITE_GOOGLE_API_KEY: ${{ secrets.VITE_GOOGLE_API_KEY }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
