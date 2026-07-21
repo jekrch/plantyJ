@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P dom",
+      "fullName": "Polistes dominula",
+      "commonName": "European Paper Wasp",
+      "variety": null
+    },
+    {
       "shortCode": "A rot",
       "fullName": "Amblycorypha rotundifolia",
       "commonName": "Round-winged Katydid",
