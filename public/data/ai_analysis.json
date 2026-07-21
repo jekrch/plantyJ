@@ -144,6 +144,18 @@
       "created": "2026-05-12T05:01:08.712Z"
     },
     {
+      "shortCode": "A rot",
+      "zoneCode": "bb",
+      "verdict": "GOOD",
+      "analysis": "The presence of the round-winged katydid in the berry border is highly beneficial for the garden's ecology and aligns perfectly with the owners' goals of supporting local wildlife. As a species native to Minnesota, this nocturnal insect occupies the shrub understory and feeds on the foliage of deciduous plants. Within the berry border, its diet likely includes minor nibbling on the leaves of raspberries, currants, or hops. However, because these katydids occur in very low numbers and feed in a highly dispersed, non-destructive manner, their herbivory is strictly cosmetic and presents no threat to crop yields or plant health. They do not compete destructively with other organisms in this zone and require absolutely no pest management.\n\nRather than acting as a garden pest, this katydid is a valuable contributor to the local food web. It serves as a vital high-protein food source for local insectivores. Songbirds such as the Northern Cardinal, alongside generalist garden predators like skimmer dragonflies and various spiders, rely heavily on native Orthopterans to sustain themselves and feed their young. Its presence is a strong indicator of a healthy, pesticide-free garden environment, and its soft, rhythmic evening calls provide a peaceful acoustic backdrop that enhances the garden's wild, natural aesthetic.",
+      "references": [
+        "https://en.wikipedia.org/wiki/Amblycorypha_rotundifolia",
+        "http://listeninginnature.blogspot.com/2022/10/leaves-with-stems-and-leaves-with-legs.html",
+        "https://www.listeningtoinsects.com/rattler-round-winged-katydid"
+      ],
+      "created": "2026-07-21T02:46:07.659Z"
+    },
+    {
       "shortCode": "A rus",
       "zoneCode": "mpg",
       "verdict": "MIXED",
@@ -203,6 +215,34 @@
         "https://www.canr.msu.edu/news/aphids_on_hops_reported_in_significant_numbers"
       ],
       "created": "2026-05-24T23:27:40.645Z"
+    },
+    {
+      "shortCode": "A spe",
+      "zoneCode": "mpg",
+      "verdict": "GOOD",
+      "analysis": "The presence of the grass spider (Agelenopsis species) in the Maple (mpg) zone is highly beneficial, aligning perfectly with the owners' priorities of supporting local ecology and organic garden management. The heavily mulched, leaf-strewn ground and rocky terrain of this shaded zone provide the ideal structural habitat for this funnel-weaving spider to build its signature sheet-and-funnel webs. As a native generalist predator, it acts as a highly effective biological control agent. It predates on various crawling and low-flying insects in the understory and leaf litter, including pavement ants (Tetramorium immigrans) and carpenter ants (Camponotus pennsylvanicus) found in this zone. Crucially, it can help regulate pests like the ash plant bug (Tropidosteptes amoenus), which resides in this zone and feeds on the garden's lilacs (Syringa vulgaris). The spider may experience mild resource competition with other generalists, such as the ground crab spider (Xysticus species) in the neighboring front yard, while simultaneously serving as a valuable food source for local insectivorous birds like the northern cardinal (Cardinalis cardinalis), house finch (Haemorhous mexicanus), and American goldfinch (Spinus tristis) that frequent the canopy.\n\nAgelenopsis is the only grass spider genus native to Minnesota and is incredibly well-adapted to the Twin Cities region. Because grass spiders are entirely harmless to humans and rarely bite unless heavily provoked, they require absolutely no active management. Their webs are often highly visible on dewy mornings, which is a fantastic indicator of a healthy, pesticide-free garden ecosystem. Garden owners should simply let these native arachnids be, leaving the leaf mulch intact through winter to shelter their egg sacs and ensure a robust pest-control presence for the following spring.",
+      "references": [
+        "https://www.minnesotaseasons.com/Arachnids/Potters_grass_spider.html",
+        "https://en.wikipedia.org/wiki/Agelenopsis",
+        "https://www.planetnatural.com/grass-spider/",
+        "https://www.westernexterminator.com/spiders/everything-you-never-knew-about-grass-spiders",
+        "http://www.treesquad.com/ash-plant-bug",
+        "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQEkSMQ_6unhxYcWyFvm7CHo9D954862pbxtVSF9VkHgqs7Q_PztaZjDVBVlcTtFAidy9-6SuBRPhz9uJjBb14MyZ-QuJenEi1P5TNXDfN_vlOq0dbpLbNNMUU2kSAdyo9leMjTU8wKmmtYoyc6WN0oPTZDdV18==",
+        "https://www.reddit.com/r/spiders/comments/1eozvd2/wondering_what_this_guy_is/"
+      ],
+      "created": "2026-07-21T02:46:07.659Z"
+    },
+    {
+      "shortCode": "A syr",
+      "zoneCode": "nbv",
+      "verdict": "MIXED",
+      "analysis": "Common milkweed (Asclepias syriaca) is an ecological powerhouse, serving as the essential host plant for the monarch butterfly (Danaus plexippus) and supporting a diverse array of native bees, such as the common eastern bumble bee (Bombus impatiens), honey bees, and other pollinators with its fragrant, nectar-rich summer blooms. In the tough conditions of the north boulevard, its robust, rhizomatous root system is uniquely suited to breaking through compacted clay loam and thriving across the site's moisture extremes, from parched edges to seasonal damp pockets. It also competes exceptionally well against aggressive weeds, providing robust, self-sustaining native cover that aligns perfectly with the owners' priorities for supporting local wildlife.\n\nHowever, its physical characteristics present severe practical and legal challenges on this specific property. Because the garden is situated on the northwest corner of a city block, traffic and pedestrian sightlines are highly regulated. Minneapolis boulevard ordinances cap general flower heights at 36 inches and strictly limit vegetation to just 18 inches within 40 feet of an intersection. Since common milkweed naturally reaches heights of 3 to 6 feet, its presence here is highly likely to trigger city code violations. Additionally, its aggressive underground spread can quickly crowd out the more delicate, low-growing boulevard companions like sideoats grama (Bouteloua curtipendula) and partridge pea (Chamaecrista fasciculata). For this restricted space, shorter, well-behaved native alternatives such as butterfly weed (Asclepias tuberosa)—which is already established on the property—or whorled milkweed (Asclepias verticillata) provide similar ecological benefits without violating city height codes.",
+      "references": [
+        "https://twincities.wildones.org/wp-content/uploads/sites/32/2016/12/Minnesota-Milkweed-for-monarchs.pdf",
+        "https://www.minneapolismn.gov/resident-services/property-housing/housing/property-maintenance/boulevard-gardens/blvd-garden-rules/",
+        "https://www.reddit.com/r/Minneapolis/comments/wp4fvw/is_a_permit_required_in_order_to_put_a_bee_garden/"
+      ],
+      "created": "2026-07-21T02:46:07.659Z"
     },
     {
       "shortCode": "a tri",
@@ -834,6 +874,19 @@
       "analysis": "Passer domesticus (House Sparrow) is a highly aggressive, non-native invasive bird that wreaks havoc on local avian ecology. They actively hunt down, evict, and kill native cavity-nesting birds—such as Eastern Bluebirds, Tree Swallows, and Chickadees—to steal their nesting sites and compete for seeds. Because they adapt so well to urban environments, managing their population (by removing their nests or using sparrow-resistant birdhouses) is a sad but necessary step to protect native bird species in the garden.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "P dom",
+      "zoneCode": "mpg",
+      "verdict": "MIXED",
+      "analysis": "The European paper wasp (Polistes dominula) is an introduced, highly invasive species in the Twin Cities and broader North American landscape, presenting a mixed ecological presence in the shaded Maple zone (mpg). On the beneficial side, P. dominula is an exceptionally efficient generalist predator that contributes to biological pest control. Adults hunt various garden pests, such as beetle larvae, flies, and plant bugs like the Ash Plant Bug (Tropidosteptes amoenus) found in the Maple and Berry Border zones, while also visiting flowers for nectar and acting as minor opportunistic pollinators.\n\nHowever, this wasp poses severe ecological threats that directly conflict with the owners' native-priority and edible gardening goals. It is a highly aggressive competitor that displaces native paper wasps, such as the Northern Paper Wasp (Polistes fuscatus), through nesting and resource competition. Crucially, its intense predation on caterpillars can turn pollinator-rich yards into ecological traps for desirable native lepidoptera, including the Monarch (Danaus plexippus), Black Swallowtail (Papilio polyxenes), and American Lady (Vanessa virginiensis) reared in the garden. Furthermore, unlike most native paper wasps, P. dominula frequently feeds on ripening, thin-fleshed soft fruits, making it a direct threat to the garden's edible raspberries (Rubus idaeus) and gooseberries (Ribes uva-crispa) in the Maple and Berry Border zones. Managing early-season nests around structures is recommended to limit their impact.",
+      "references": [
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC7293228/",
+        "https://bioone.org/journalArticle/Download?urlId=10.3958%2F059.036.0110",
+        "https://extension.psu.edu/european-paper-wasp",
+        "https://pilowsky.me/publication/pilowsky-displacement-2018/pilowsky-displacement-2018.pdf"
+      ],
+      "created": "2026-07-21T02:46:07.659Z"
     },
     {
       "shortCode": "P pol",
