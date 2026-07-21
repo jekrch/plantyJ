@@ -40,6 +40,11 @@ jobs:
           bun-version: latest
       - run: bun install
       - run: bun run build
+        env:
+          # Public, referrer-restricted browser key used only to read published
+          # (anonymous) gardens. Baked into the bundle at build time; define it
+          # as a repo secret. Absent -> public-garden viewing stays disabled.
+          VITE_GOOGLE_API_KEY: ${{ secrets.VITE_GOOGLE_API_KEY }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

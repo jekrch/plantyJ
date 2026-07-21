@@ -132,3 +132,26 @@ export async function updateFileContent(fileId: string, content: Blob): Promise<
 export async function deleteFile(fileId: string): Promise<void> {
   await authFetch(`${API}/files/${fileId}`, { method: "DELETE" });
 }
+
+/**
+ * Grant a permission on a file/folder the app created and return its id.
+ * Used to publish a garden by adding `{ role: "reader", type: "anyone" }` to
+ * the PlantyJ folder; Drive inherits the grant to every descendant. Permission
+ * management is allowed under `drive.file` for app-created files.
+ */
+export async function createPermission(
+  fileId: string,
+  body: { role: string; type: string },
+): Promise<string> {
+  const res = await authFetch(`${API}/files/${fileId}/permissions?fields=id`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return ((await res.json()) as { id: string }).id;
+}
+
+/** Revoke a permission (the mirror of createPermission — unpublishes a garden). */
+export async function deletePermission(fileId: string, permissionId: string): Promise<void> {
+  await authFetch(`${API}/files/${fileId}/permissions/${permissionId}`, { method: "DELETE" });
+}

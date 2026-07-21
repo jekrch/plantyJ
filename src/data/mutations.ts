@@ -11,7 +11,7 @@ import type {
   ZonePic,
 } from "../types";
 import { DRIVE_IMAGE_PREFIX, isWritable, loadJson, notifyDataChanged } from "./source";
-import { driveDeleteImage, driveSaveJson, driveUploadImage } from "./driveSource";
+import { driveDeleteImage, driveSaveJson, driveUploadImage, THUMB_MAX_DIM } from "./driveSource";
 import { getSessionUser } from "./googleAuth";
 import { loadProfile } from "./profile";
 import { resizeImage } from "../utils/resizeImage";
@@ -46,6 +46,16 @@ export interface EntryUpdate {
 
 function assertWritable(): void {
   if (!isWritable()) throw new Error("The founder's garden is read-only");
+}
+
+/**
+ * A ~320px thumbnail for a just-resized upload, so a garden published later has
+ * light-weight images ready without a backfill pass. Derived from the full blob
+ * (already downscaled) rather than the original file — cheaper, same result.
+ */
+async function makeThumb(full: Blob): Promise<Blob> {
+  const { blob } = await resizeImage(new File([full], "thumb.jpg", { type: full.type }), THUMB_MAX_DIM);
+  return blob;
 }
 
 /** Short author label for new entries: the account name, else the Google name. */
@@ -104,7 +114,7 @@ export async function addEntries(
     const meta = await computeImageMetadata(blob);
     const ts = Math.max(lastTs + 1, Math.floor(Date.now() / 1000));
     lastTs = ts;
-    const fileId = await driveUploadImage(`${input.shortCode}-${ts}.jpg`, blob);
+    const fileId = await driveUploadImage(`${input.shortCode}-${ts}.jpg`, blob, await makeThumb(blob));
     const id = `${input.shortCode}-${ts}`;
 
     if (!plants.some((p) => p.shortCode === input.shortCode)) {
@@ -367,7 +377,7 @@ export async function addZonePic(
   assertValidCode("zone code", zoneCode);
   const { blob } = await resizeImage(file);
   const ts = Math.floor(Date.now() / 1000);
-  const fileId = await driveUploadImage(`zone-${zoneCode}-${ts}.jpg`, blob);
+  const fileId = await driveUploadImage(`zone-${zoneCode}-${ts}.jpg`, blob, await makeThumb(blob));
   const id = `${zoneCode}-${ts}`;
 
   const [zonePicsFile, zonesFile] = await Promise.all([

@@ -1,4 +1,4 @@
-import { driveLoadJson, driveSaveJson } from "./driveSource";
+import { driveLoadJson, driveSaveJson, setPublishedManifest } from "./driveSource";
 import { resizeImage } from "../utils/resizeImage";
 
 /**
@@ -20,11 +20,24 @@ export const TOUR_NONE = 0;
 export const TOUR_STARTED = 1; // stage 1 seen
 export const TOUR_DONE = 2; // stage 2 seen — nothing left to show
 
+/**
+ * Public-sharing state for a garden. Present (non-null) while the garden is
+ * published for anonymous read; carries what's needed to reverse it
+ * (`permissionId`) and to rebuild the share link (`manifestFileId`). Lives in
+ * the profile so a garden published on one device stays published on the next.
+ */
+export interface PublishInfo {
+  manifestFileId: string;
+  permissionId: string;
+  publishedAt: string;
+}
+
 export interface GardenProfile {
   name: string | null;
   picture: string | null; // data URL, or null to fall back to the Google avatar
   hideAI: boolean; // opt out of every model-assisted feature in the UI
   tourStage: number; // TOUR_NONE | TOUR_STARTED | TOUR_DONE
+  published: PublishInfo | null; // set while the garden is publicly shared
 }
 
 const PROFILE_FILE = "profile.json";
@@ -118,8 +131,12 @@ export function loadProfile(): Promise<GardenProfile> {
         // Treating that as TOUR_NONE would tour an established garden, so
         // absent-but-non-empty is resolved by the caller, not here.
         tourStage: p.tourStage ?? TOUR_NONE,
+        published: p.published ?? null,
       };
       writeMirrors(cache);
+      // Let the write path know whether to refresh the public snapshot on
+      // mutation for a garden that was published in an earlier session.
+      setPublishedManifest(cache.published?.manifestFileId ?? null);
       window.dispatchEvent(new Event(PROFILE_CHANGED_EVENT));
       return cache;
     })
@@ -138,13 +155,18 @@ export function loadProfile(): Promise<GardenProfile> {
  * it; omitting it carries the stored stage forward rather than resetting it.
  */
 export async function saveProfile(
-  update: Omit<GardenProfile, "tourStage"> & { tourStage?: number },
+  update: Omit<GardenProfile, "tourStage" | "published"> & {
+    tourStage?: number;
+    published?: PublishInfo | null;
+  },
 ): Promise<GardenProfile> {
   const next: GardenProfile = {
     name: update.name?.trim() || null,
     picture: update.picture || null,
     hideAI: update.hideAI,
     tourStage: update.tourStage ?? cache?.tourStage ?? TOUR_NONE,
+    // Publish state is edited only via setPublished; other saves carry it forward.
+    published: update.published !== undefined ? update.published : (cache?.published ?? null),
   };
   await driveSaveJson(PROFILE_FILE, next);
   cache = next;
@@ -153,12 +175,29 @@ export async function saveProfile(
   return next;
 }
 
+/**
+ * Record (or clear) the garden's public-sharing state, rebuilding the rest of
+ * the profile from cache. The caller has already performed the Drive side
+ * (permission + manifest); this only persists the bookkeeping.
+ */
+export async function setPublished(info: PublishInfo | null): Promise<GardenProfile> {
+  const base = (await loadProfile().catch(getCachedProfile)) ?? {
+    name: null,
+    picture: null,
+    hideAI: false,
+    tourStage: TOUR_NONE,
+    published: null,
+  };
+  return saveProfile({ ...base, published: info });
+}
+
 /** Clear the cache on sign-out / account switch / deletion. */
 export function resetProfile(): void {
   cache = null;
   loadPromise = null;
   // The mirrors describe the account that just went away, not the next one.
-  writeMirrors({ name: null, picture: null, hideAI: false, tourStage: TOUR_NONE });
+  writeMirrors({ name: null, picture: null, hideAI: false, tourStage: TOUR_NONE, published: null });
+  setPublishedManifest(null);
   window.dispatchEvent(new Event(PROFILE_CHANGED_EVENT));
 }
 

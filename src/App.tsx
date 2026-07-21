@@ -8,7 +8,7 @@ import BackgroundEchoes from "./components/BackgroundEchoes";
 import { SpinnerState, ErrorState, EmptyState, SignInState } from "./components/StatusStates";
 import SourceMenu from "./components/SourceMenu";
 import AddEntrySheet from "./components/AddEntrySheet";
-import { isDriveMode, isWritable } from "./data/source";
+import { getSourceMode, isWritable } from "./data/source";
 import OrganismViewer from "./components/OrganismViewer";
 import InfoModal from "./components/InfoModal";
 import WelcomeModal, { hasSeenWelcome } from "./components/WelcomeModal";
@@ -112,8 +112,11 @@ export default function App() {
   );
 
   // First visit to the founder's garden gets a one-time greeting pointing at
-  // the cloud menu. Drive mode means they've already started their own journal.
-  const [welcomeOpen, setWelcomeOpen] = useState(() => !isDriveMode() && !hasSeenWelcome());
+  // the cloud menu. Only in static mode: a Drive user has already started their
+  // own journal, and a public-share visitor is looking at someone else's.
+  const [welcomeOpen, setWelcomeOpen] = useState(
+    () => getSourceMode() === "static" && !hasSeenWelcome(),
+  );
 
   useLayoutEffect(() => {
     const el = headerRef.current;
@@ -218,7 +221,7 @@ export default function App() {
             viewMode === "gallery" &&
             !imagesLoaded)) && <SpinnerState />}
         {status === "error" && <ErrorState />}
-        {status === "needs-auth" && <SignInState />}
+        {status === "needs-auth" && <SignInState headerHeight={headerHeight} />}
         {status === "ready" && organisms.length === 0 && (
           <EmptyState onAdd={writable ? () => setAddOpen(true) : undefined} />
         )}

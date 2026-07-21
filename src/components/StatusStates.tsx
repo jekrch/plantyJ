@@ -51,7 +51,7 @@ export function EmptyState({ onAdd }: { onAdd?: () => void }) {
  * Shown in Drive mode when there is no (or an expired) Google session.
  * Signing in re-triggers the data load via the auth-changed event.
  */
-export function SignInState() {
+export function SignInState({ headerHeight = 0 }: { headerHeight?: number }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -66,7 +66,13 @@ export function SignInState() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center py-32 text-center px-6">
+    <div
+      // Center in the viewport space left below the sticky header. Uses min-height so
+      // the content grows (and the page scrolls) only when it can't fit; the extra
+      // 3rem matches <main>'s pb-12 so a fitting screen produces no scrollbar.
+      className="flex flex-col items-center justify-center py-8 text-center px-6"
+      style={{ minHeight: `calc(100dvh - ${headerHeight}px - 3rem)` }}
+    >
       <CloudOff size={28} strokeWidth={1.25} className="text-ink-muted mb-4" />
       <p className="text-ink text-sm font-display">Your garden, in your Google Drive</p>
       <ul className="text-ink-muted text-xs mt-4 max-w-xs text-left leading-relaxed space-y-3">
@@ -95,7 +101,9 @@ export function SignInState() {
         <li className="flex gap-2.5">
           <EyeOff size={15} strokeWidth={1.5} className="mt-0.5 shrink-0 text-ink-muted" />
           <span>
-            No one else can see your journal. You'll only see your garden when you're signed in.
+            Private by default — no one else can see your journal, and you'll only see your garden
+            when you're signed in. If you ever want to, you can publish a read-only link to share
+            it, and unpublish to make it private again at any time.
           </span>
         </li>
       </ul>

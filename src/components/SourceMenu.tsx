@@ -4,8 +4,10 @@ import {
   Check,
   Cloud,
   Compass,
+  Copy,
   Download,
   FileText,
+  Globe,
   ImagePlus,
   LogOut,
   Pencil,
@@ -13,14 +15,23 @@ import {
   Trash2,
   UserRound,
 } from "lucide-react";
-import { getSourceMode, setSourceMode } from "../data/source";
+import { getSourceMode, isPublicMode, setSourceMode } from "../data/source";
 import { AUTH_CHANGED_EVENT, getSessionUser, signOut } from "../data/googleAuth";
-import { deleteGarden, getGardenSize, type GardenSize } from "../data/driveSource";
+import {
+  deleteGarden,
+  getGardenSize,
+  publicShareUrl,
+  publishGarden,
+  unpublishGarden,
+  type GardenSize,
+} from "../data/driveSource";
 import {
   type GardenProfile,
+  type PublishInfo,
   loadProfile,
   resetProfile,
   saveProfile,
+  setPublished as savePublishedState,
   toAvatarDataUrl,
 } from "../data/profile";
 import { resetGardenDescription } from "../data/gardenDescription";
@@ -55,6 +66,9 @@ export default function SourceMenu() {
   const [profile, setProfile] = useState<GardenProfile | null>(null);
   const [editing, setEditing] = useState(false);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [confirmingPublish, setConfirmingPublish] = useState(false);
+  const [published, setPublishedInfo] = useState<PublishInfo | null>(null);
+  const [copied, setCopied] = useState(false);
   const [analyzeOpen, setAnalyzeOpen] = useState(false);
   const [draftName, setDraftName] = useState("");
   const [draftPic, setDraftPic] = useState<string | null>(null);
@@ -159,6 +173,68 @@ export default function SourceMenu() {
     };
   }, [open, mode, user?.email]);
 
+  // Published state drives an always-visible indicator, so load it on mount
+  // (not only when the menu opens) whenever this is the user's Drive garden.
+  useEffect(() => {
+    if (mode !== "drive" || !user) {
+      setPublishedInfo(null);
+      return;
+    }
+    let cancelled = false;
+    loadProfile()
+      .then((p) => !cancelled && setPublishedInfo(p.published))
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [mode, user?.email]);
+
+  const handlePublish = async () => {
+    setConfirmingPublish(false);
+    setBusy("Preparing photos…");
+    try {
+      const result = await publishGarden((done, total) =>
+        total > 0 ? setBusy(`Preparing photos ${done}/${total}`) : setBusy("Publishing…"),
+      );
+      const info: PublishInfo = {
+        manifestFileId: result.manifestFileId,
+        permissionId: result.permissionId,
+        publishedAt: new Date().toISOString(),
+      };
+      await savePublishedState(info);
+      setPublishedInfo(info);
+      setBusy(null);
+    } catch (err) {
+      setBusy(err instanceof Error ? err.message : "Publish failed");
+      setTimeout(() => setBusy(null), 3000);
+    }
+  };
+
+  const handleUnpublish = async () => {
+    if (!published) return;
+    setBusy("Stopping sharing…");
+    try {
+      await unpublishGarden(published.permissionId);
+      await savePublishedState(null);
+      setPublishedInfo(null);
+      setBusy(null);
+    } catch (err) {
+      setBusy(err instanceof Error ? err.message : "Could not stop sharing");
+      setTimeout(() => setBusy(null), 3000);
+    }
+  };
+
+  const handleCopyLink = async () => {
+    if (!published) return;
+    try {
+      await navigator.clipboard.writeText(publicShareUrl(published.manifestFileId));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // Clipboard blocked; the link is shown in full for manual copy.
+    }
+  };
+
   const startEditing = () => {
     setDraftName(profile?.name ?? "");
     setDraftPic(profile?.picture ?? null);
@@ -228,8 +304,8 @@ export default function SourceMenu() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center justify-center h-8 w-8 rounded-md text-ink-muted hover:text-ink hover:bg-white/5 transition-colors"
-        title="Choose garden"
+        className="relative flex items-center justify-center h-8 w-8 rounded-md text-ink-muted hover:text-ink hover:bg-white/5 transition-colors"
+        title={published ? "Choose garden — currently shared publicly" : "Choose garden"}
         aria-label="Choose garden"
         aria-expanded={open}
       >
@@ -238,12 +314,28 @@ export default function SourceMenu() {
           strokeWidth={1.5}
           className={mode === "drive" ? "text-accent" : undefined}
         />
+        {published && (
+          // Persistent reminder that this garden is public, visible without
+          // opening the menu.
+          <span
+            className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-surface text-accent"
+            title="This garden is shared publicly"
+          >
+            <Globe size={11} strokeWidth={2} />
+          </span>
+        )}
       </button>
       {open && (
         <div className="absolute right-0 top-9 z-50 w-56 rounded-md border border-ink-faint/30 bg-surface shadow-xl py-1">
           <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-widest text-ink-muted font-display">
             Garden
           </p>
+          {isPublicMode() && (
+            <div className="mx-3 mb-1 flex items-start gap-1.5 rounded bg-accent/10 px-2 py-1.5 text-[11px] leading-relaxed text-ink-muted">
+              <Globe size={12} strokeWidth={1.75} className="mt-0.5 shrink-0 text-accent" />
+              <span>You're viewing a shared garden. Open your own below.</span>
+            </div>
+          )}
           <button className={optionCls} onClick={() => setSourceMode("static")}>
             <span className="w-4">{mode === "static" && <Check size={14} />}</span>
             Founder's garden (plantyj.com)
@@ -294,6 +386,52 @@ export default function SourceMenu() {
                 </span>
                 Take the tour
               </button>
+              <div className="my-1 border-t border-ink-faint/20" />
+              {published ? (
+                <div className="px-3 py-2">
+                  <div className="flex items-center gap-1.5 text-[11px] text-accent">
+                    <Globe size={12} strokeWidth={1.75} />
+                    <span className="font-display uppercase tracking-widest">Shared publicly</span>
+                  </div>
+                  <p className="mt-1 text-[11px] leading-relaxed text-ink-muted">
+                    Anyone with this link can browse your garden — no sign-in.
+                  </p>
+                  <div className="mt-2 flex items-center gap-1.5">
+                    <input
+                      readOnly
+                      value={publicShareUrl(published.manifestFileId)}
+                      onFocus={(e) => e.currentTarget.select()}
+                      className="min-w-0 flex-1 rounded border border-ink-faint/30 bg-white/5 px-2 py-1 text-[11px] text-ink"
+                    />
+                    <button
+                      onClick={handleCopyLink}
+                      className="shrink-0 rounded p-1.5 text-ink-muted transition-colors hover:bg-white/5 hover:text-ink"
+                      title="Copy link"
+                      aria-label="Copy link"
+                    >
+                      {copied ? <Check size={13} /> : <Copy size={13} />}
+                    </button>
+                  </div>
+                  <button
+                    onClick={handleUnpublish}
+                    disabled={busy !== null}
+                    className="mt-2 text-[11px] text-ink-muted transition-colors hover:text-red-300 disabled:opacity-50"
+                  >
+                    Stop sharing
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className={optionCls}
+                  onClick={() => setConfirmingPublish(true)}
+                  disabled={busy !== null}
+                >
+                  <span className="w-4">
+                    <Globe size={13} />
+                  </span>
+                  Share publicly
+                </button>
+              )}
               {busy && (
                 <p className="px-3 py-1 text-[11px] text-accent truncate" title={busy}>
                   {busy}
@@ -434,6 +572,13 @@ export default function SourceMenu() {
           onExport={handleExport}
         />
       )}
+      {confirmingPublish && (
+        <PublishGardenDialog
+          busy={busy !== null}
+          onCancel={() => setConfirmingPublish(false)}
+          onConfirm={handlePublish}
+        />
+      )}
       {analyzeOpen && aiVisible && (
         <AnalysisAIAssist onClose={() => setAnalyzeOpen(false)} onApplied={() => {}} />
       )}
@@ -512,6 +657,93 @@ function DeleteGardenDialog({
           >
             <Trash2 size={13} strokeWidth={1.75} />
             {busy ? "Deleting…" : "Delete garden"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Consent gate for publishing a garden. States plainly and completely what
+ * becomes public, that the link is unguessable-but-not-secret, and that it's
+ * reversible — the disclosures the sharing plan requires before the switch flips.
+ */
+function PublishGardenDialog({
+  busy,
+  onCancel,
+  onConfirm,
+}: {
+  busy: boolean;
+  onCancel: () => void;
+  onConfirm: () => void;
+}) {
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !busy) onCancel();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [busy, onCancel]);
+
+  return (
+    <div
+      className="fixed inset-0 z-60 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Share garden publicly"
+    >
+      <div
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        onClick={() => !busy && onCancel()}
+        aria-hidden="true"
+      />
+      <div className="relative z-10 w-full max-w-sm rounded-lg border border-ink-faint/25 bg-surface-raised p-5 shadow-2xl shadow-black/50">
+        <div className="flex items-start gap-3">
+          <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent/12 text-accent">
+            <Globe size={16} strokeWidth={1.75} />
+          </span>
+          <div className="min-w-0">
+            <h2 className="font-display text-sm tracking-tight text-ink">Share your garden?</h2>
+            <p className="mt-2 text-xs leading-relaxed text-ink-muted">
+              You'll get a link anyone can open to browse your garden read-only — no Google
+              account, no sign-in. Before you do:
+            </p>
+            <ul className="mt-2 space-y-1 text-xs leading-relaxed text-ink-muted">
+              <li>
+                • <span className="text-ink">Everything becomes public</span> — all photos, notes,
+                zones, species data, and your display name and avatar.
+              </li>
+              <li>
+                • The folder is <span className="text-ink">browsable in Google Drive</span>, not
+                only through PlantyJ.
+              </li>
+              <li>
+                • The link is unguessable but <span className="text-ink">not secret</span> — anyone
+                you send it to, and anyone they forward it to, has access.
+              </li>
+              <li>
+                • It's <span className="text-ink">reversible anytime</span>; stopping takes effect
+                immediately.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="mt-5 flex items-center justify-end gap-2">
+          <button
+            onClick={onCancel}
+            disabled={busy}
+            className="rounded-md px-3 py-1.5 text-xs text-ink-muted hover:bg-white/5 hover:text-ink transition-colors disabled:opacity-50"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={busy}
+            className="inline-flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-xs font-display tracking-wide text-surface hover:opacity-90 transition-opacity disabled:opacity-50"
+          >
+            <Globe size={13} strokeWidth={2} className="stroke-surface" />
+            Publish
           </button>
         </div>
       </div>
