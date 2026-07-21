@@ -2,6 +2,7 @@ import { useCallback, useMemo } from "react";
 import type { Filters } from "../utils/filtering";
 import type { SortMode } from "../utils/sorting";
 import type { ViewMode } from "../components/ViewModeControl";
+import { getPublicManifestId } from "../data/publicSource";
 
 const SET_FILTER_KEYS = [
   "tags",
@@ -92,13 +93,25 @@ export function buildParams(
   return params.toString();
 }
 
+// buildParams rebuilds the query from scratch, so re-add the `public` share
+// param (dropped otherwise) to keep a shared link reloadable and copyable.
+function withPublic(qs: string): string {
+  const id = getPublicManifestId();
+  if (!id) return qs;
+  const params = new URLSearchParams(qs);
+  params.set("public", id);
+  return params.toString();
+}
+
 function replaceURL(qs: string) {
-  const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
+  const full = withPublic(qs);
+  const url = full ? `${window.location.pathname}?${full}` : window.location.pathname;
   window.history.replaceState(null, "", url);
 }
 
 function pushURL(qs: string) {
-  const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
+  const full = withPublic(qs);
+  const url = full ? `${window.location.pathname}?${full}` : window.location.pathname;
   window.history.pushState(null, "", url);
 }
 

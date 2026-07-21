@@ -25,13 +25,21 @@ const PARAM = "public";
 // (the masonry grid); at/above it — lightbox and hero images — the full upload.
 const THUMB_MAX_REQUEST = 800;
 
-/** The manifest fileId from `?public=<id>`, or null when not a share link. */
-export function getPublicManifestId(): string | null {
+// Captured once at load, before the app's filter/view state can rewrite the URL
+// and drop the param (useFilterParams rebuilds the query string from scratch).
+// Public mode must stay stable across in-app navigation and survive a reload, so
+// mode detection reads this snapshot, not the live URL.
+const CAPTURED_MANIFEST_ID: string | null = (() => {
   try {
     return new URLSearchParams(window.location.search).get(PARAM);
   } catch {
     return null;
   }
+})();
+
+/** The manifest fileId from `?public=<id>`, or null when not a share link. */
+export function getPublicManifestId(): string | null {
+  return CAPTURED_MANIFEST_ID;
 }
 
 let manifest: PublicManifest | null = null;
