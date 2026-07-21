@@ -553,6 +553,59 @@
       ],
       "observationsCount": 30319
     },
+    "amblycorypha-rotundifolia": {
+      "id": "amblycorypha-rotundifolia",
+      "fullName": "Amblycorypha rotundifolia",
+      "commonName": "Round-winged Katydid",
+      "description": "Amblycorypha rotundifolia, the rattler round-winged katydid, is a species of phaneropterine katydid in the family Tettigoniidae. It is found in North America.",
+      "vernacularNames": [
+        "Rattler Round-winged Katydid",
+        "Round-winged Katydid",
+        "Round-winged Katydids"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Orthoptera",
+        "family": "Tettigoniidae",
+        "genus": "Amblycorypha",
+        "species": "Amblycorypha rotundifolia",
+        "canonicalName": "Amblycorypha rotundifolia"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/1688354"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Amblycorypha_rotundifolia"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/1399824"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q10407693"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.116115"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 538
+    },
     "anaphalis-margaritacea": {
       "id": "anaphalis-margaritacea",
       "fullName": "Anaphalis margaritacea",

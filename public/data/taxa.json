@@ -862,5 +862,17 @@
   "Agelenopsis": {
     "description": "Agelenopsis, commonly known as the American grass spiders, is a genus of funnel weavers described by C.G. Giebel in 1869. They weave sheet webs that have a funnel shelter on one edge. The web is not sticky, but these spiders make up for that by running very rapidly.",
     "url": "https://en.wikipedia.org/wiki/Agelenopsis"
+  },
+  "Amblycorypha": {
+    "description": "Amblycorypha is a North American genus of round-headed katydids in the family Tettigoniidae. There are about 14 described species in Amblycorypha.",
+    "url": "https://en.wikipedia.org/wiki/Amblycorypha"
+  },
+  "Orthoptera": {
+    "description": "Orthoptera is an order of insects that comprises the grasshoppers, locusts, and crickets, including closely related insects, such as the bush crickets or katydids and w\u0113t\u0101. The order is subdivided into two suborders: Caelifera \u2013 grasshoppers, locusts, and close relatives; and Ensifera \u2013 crickets and close relatives.",
+    "url": "https://en.wikipedia.org/wiki/Orthoptera"
+  },
+  "Tettigoniidae": {
+    "description": "Insects in the family Tettigoniidae are commonly called katydids or bush crickets. They have previously been known as \"long-horned grasshoppers\". More than 8,000 species are known. Part of the suborder Ensifera, the Tettigoniidae are the only extant family in the superfamily Tettigonioidea.",
+    "url": "https://en.wikipedia.org/wiki/Tettigoniidae"
   }
 }

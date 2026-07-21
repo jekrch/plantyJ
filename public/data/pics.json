@@ -11,7 +11,11 @@
       "postedBy": "Jacob",
       "addedAt": "2026-07-21T02:28:15.185Z",
       "width": 1280,
-      "height": 1074
+      "height": 1074,
+      "kind": "animal",
+      "bioclipSpeciesId": "Amblycorypha longinicta",
+      "bioclipCommonName": "Common virtuoso katydid",
+      "bioclipScore": 0.1123
     },
     {
       "seq": 145,
@@ -28,7 +32,8 @@
       "kind": "animal",
       "bioclipSpeciesId": "Aglaoctenus lagotis",
       "bioclipCommonName": "",
-      "bioclipScore": 0.0827
+      "bioclipScore": 0.0827,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 144,
@@ -1063,7 +1068,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1257,7 +1262,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
