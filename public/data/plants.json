@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P vir",
+      "fullName": "Pycnanthemum virginianum",
+      "commonName": "Virginia Mountain Mint",
+      "variety": null
+    },
+    {
       "shortCode": "P dom",
       "fullName": "Polistes dominula",
       "commonName": "European Paper Wasp",
