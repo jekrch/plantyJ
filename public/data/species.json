@@ -4491,6 +4491,61 @@
         "natureserve"
       ]
     },
+    "pycnanthemum-virginianum": {
+      "id": "pycnanthemum-virginianum",
+      "fullName": "Pycnanthemum virginianum",
+      "commonName": "Virginia Mountain Mint",
+      "description": "Pycnanthemum virginianum, the Virginia or common mountain-mint, is a plant in the mint family, Lamiaceae. It is a herbaceous plant with narrow, opposite, simple leaves, on wiry, green stems. The flowers are white with purplish spotting, borne in summer. Like most plants in the genus, the foliage has a strong mint fragrance when crushed or disturbed. It is native to the eastern United States and eastern Canada.\nThe flowers are visited by many insects, including honeybees, cuckoo bees, sweat bees, thread-waisted wasps, potter wasps, tachinid flies, wedge-shaped beetles, and pearl crescent butterflies.",
+      "vernacularNames": [
+        "Virginia Mountain-mint",
+        "Virginia Mountainmint",
+        "Virginia-thyme",
+        "Wild Basil",
+        "common mountain mint"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Lamiales",
+        "family": "Lamiaceae",
+        "genus": "Pycnanthemum",
+        "species": "Pycnanthemum virginianum",
+        "canonicalName": "Pycnanthemum virginianum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2927376"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Pycnanthemum_virginianum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/154473"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q7262902"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.157009"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 12688
+    },
     "pyrus-pyrifolia": {
       "id": "pyrus-pyrifolia",
       "fullName": "Pyrus pyrifolia",
