@@ -32,7 +32,15 @@
         object-src 'none'
       "
     />
-    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <!-- no-referrer, not strict-origin: Google's Drive image CDN
+         (lh3.googleusercontent.com) rate-limits by requesting origin and
+         throttles unrecognized ones (esp. localhost) to 429, while serving
+         referer-less requests normally. Sending no Referer sidesteps that. No
+         app request depends on the Referer header — Drive JSON uses bearer
+         tokens and public reads go through the worker proxy — so this is safe
+         and privacy-positive. (The one exception, the referer-restricted
+         browser API-key fallback for proxy-less public dev, isn't used here.) -->
+    <meta name="referrer" content="no-referrer" />
 
     <!-- Hide the SEO prerender fallback before first paint so it never flashes
          for JS-enabled visitors (React replaces it on mount). It stays in the

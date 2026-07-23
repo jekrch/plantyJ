@@ -17,6 +17,7 @@ export interface DriveFile {
   mimeType?: string;
   thumbnailLink?: string;
   size?: string; // bytes, as a string; absent for folders/Google-native files
+  modifiedTime?: string; // RFC 3339; requested when a file's freshness matters
 }
 
 async function authFetch(url: string, init: RequestInit = {}, retry = true): Promise<Response> {
@@ -121,12 +122,14 @@ export async function createFile(
   return res.json() as Promise<DriveFile>;
 }
 
-export async function updateFileContent(fileId: string, content: Blob): Promise<void> {
-  await authFetch(`${UPLOAD}/files/${fileId}?uploadType=media`, {
+/** Overwrite a file's content; returns the new `modifiedTime` for cache stamping. */
+export async function updateFileContent(fileId: string, content: Blob): Promise<string | undefined> {
+  const res = await authFetch(`${UPLOAD}/files/${fileId}?uploadType=media&fields=modifiedTime`, {
     method: "PATCH",
     headers: { "Content-Type": content.type || "application/octet-stream" },
     body: content,
   });
+  return ((await res.json()) as { modifiedTime?: string }).modifiedTime;
 }
 
 export async function deleteFile(fileId: string): Promise<void> {

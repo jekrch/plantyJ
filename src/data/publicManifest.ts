@@ -18,8 +18,14 @@ export interface PublicManifest {
 export const MANIFEST_FILE = "public.json";
 export const MANIFEST_VERSION = 1;
 
-/** Data files that are app-internal plumbing, never requested via loadJson. */
-export const INTERNAL_DATA_FILES = new Set([MANIFEST_FILE, "thumbnails.json"]);
+/**
+ * Data files that must never be handed to an anonymous visitor: app-internal
+ * plumbing (`public.json`, `thumbnails.json`) plus `profile.json`, which holds
+ * account bookkeeping (the publish `permissionId`, tour/AI flags) that isn't the
+ * owner's to leak just because they shared a garden. Public author identity, if
+ * ever wanted, should be a purpose-built subset — not the raw profile.
+ */
+export const INTERNAL_DATA_FILES = new Set([MANIFEST_FILE, "thumbnails.json", "profile.json"]);
 
 /**
  * Snapshot the garden's current file IDs into a manifest. Pure — the caller

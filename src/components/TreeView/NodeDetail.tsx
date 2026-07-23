@@ -5,6 +5,7 @@ import type { Organism, Species, TaxaInfo, Zone } from "../../types";
 import type { RawNode } from "./types";
 import { RANK_LABEL } from "./types";
 import { organismTitle } from "../../utils/display";
+import { safeHref } from "../../utils/safeUrl";
 import { imageSrc, isWritable } from "../../data/source";
 import { deleteOrganism, updatePlantNames, updateSpecies, updateTaxon } from "../../data/mutations";
 import { speciesPicsFor } from "./treeUtils";
@@ -480,7 +481,7 @@ export function NodeDetail({
                 {references.map((r) => (
                   <a
                     key={r.url}
-                    href={r.url}
+                    href={safeHref(r.url)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 text-[11px] text-ink-muted hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
@@ -567,7 +568,7 @@ export function NodeDetail({
                     return (
                       <a
                         key={url}
-                        href={url}
+                        href={safeHref(url)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-[10px] text-ink-muted hover:text-accent transition-colors px-1.5 py-0.5 rounded-sm bg-white/5 hover:bg-white/8"

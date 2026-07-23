@@ -11,6 +11,7 @@ import type {
   ZonePic,
 } from "../types";
 import { organismTitle } from "../utils/display";
+import { safeHref } from "../utils/safeUrl";
 import { imageSrc, isWritable } from "../data/source";
 import EditEntrySheet from "./EditEntrySheet";
 import { ModelAttribution } from "./ModelAttribution";
@@ -745,7 +746,7 @@ export default function OrganismInfoDrawer({
                       {bioclipMatch !== "match" ? (
                         <a
                           href={
-                            bioclipWikiUrl ||
+                            safeHref(bioclipWikiUrl) ||
                             `https://www.google.com/search?q=${encodeURIComponent(bioclipSpeciesId ?? "")}`
                           }
                           target="_blank"
@@ -813,7 +814,7 @@ export default function OrganismInfoDrawer({
                     {species?.references?.map((ref) => (
                       <a
                         key={ref.url}
-                        href={ref.url}
+                        href={safeHref(ref.url)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-[11px] text-white/55 hover:text-accent transition-colors px-2 py-1 rounded-sm bg-white/5 hover:bg-white/8"
@@ -869,7 +870,7 @@ export default function OrganismInfoDrawer({
                           return (
                             <a
                               key={url}
-                              href={url}
+                              href={safeHref(url)}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-1 text-[10px] text-white/40 hover:text-accent transition-colors px-1.5 py-0.5 rounded-sm bg-white/5 hover:bg-white/8"

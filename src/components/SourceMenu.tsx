@@ -11,6 +11,7 @@ import {
   ImagePlus,
   LogOut,
   Pencil,
+  RefreshCw,
   Sparkles,
   Trash2,
   UserRound,
@@ -22,6 +23,7 @@ import {
   getGardenSize,
   publicShareUrl,
   publishGarden,
+  resetDrive,
   unpublishGarden,
   type GardenSize,
 } from "../data/driveSource";
@@ -145,8 +147,12 @@ export default function SourceMenu() {
   };
 
   useEffect(() => {
-    // Sign-in/out/switch invalidates the cached profile for the old account.
+    // Sign-in/out/switch invalidates every cache tied to the old account. Drive
+    // state (indexed folder/file IDs + the published-manifest flag) is keyed to
+    // that account, so it must be dropped too — otherwise the next account, or a
+    // re-sign-in in the same tab, reuses the previous account's file IDs.
     const bump = () => {
+      resetDrive();
       resetProfile();
       resetGardenDescription();
       setProfile(null);
@@ -331,10 +337,18 @@ export default function SourceMenu() {
             Garden
           </p>
           {isPublicMode() && (
-            <div className="mx-3 mb-1 flex items-start gap-1.5 rounded bg-accent/10 px-2 py-1.5 text-[11px] leading-relaxed text-ink-muted">
-              <Globe size={12} strokeWidth={1.75} className="mt-0.5 shrink-0 text-accent" />
-              <span>You're viewing a shared garden. Open your own below.</span>
-            </div>
+            <>
+              <div className="mx-3 mb-1 flex items-start gap-1.5 rounded bg-accent/10 px-2 py-1.5 text-[11px] leading-relaxed text-ink-muted">
+                <Globe size={12} strokeWidth={1.75} className="mt-0.5 shrink-0 text-accent" />
+                <span>You're viewing a shared garden. Open your own below.</span>
+              </div>
+              <button className={optionCls} onClick={() => window.location.reload()}>
+                <span className="w-4">
+                  <RefreshCw size={13} />
+                </span>
+                Refresh for latest
+              </button>
+            </>
           )}
           <button className={optionCls} onClick={() => setSourceMode("static")}>
             <span className="w-4">{mode === "static" && <Check size={14} />}</span>

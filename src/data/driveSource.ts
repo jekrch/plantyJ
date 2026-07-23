@@ -11,6 +11,7 @@ import {
   updateFileContent,
 } from "./driveClient";
 import { buildManifest, MANIFEST_FILE } from "./publicManifest";
+import { indexedDbCache, loadWithCache } from "./driveCache";
 import { resizeImage } from "../utils/resizeImage";
 
 /**
@@ -63,6 +64,7 @@ interface DriveState {
   dataId: string;
   imagesId: string;
   dataFiles: Map<string, string>; // file name -> fileId
+  dataModified: Map<string, string>; // file name -> Drive modifiedTime (cache key)
   images: Map<string, ImageUrls>; // fileId -> render URLs
   thumbs: Map<string, string>; // full-image fileId -> thumbnail fileId
 }
@@ -90,10 +92,13 @@ export function initDrive(): Promise<void> {
     const dataId = await ensureFolder("data", rootId);
     const imagesId = await ensureFolder("images", rootId);
     const [dataList, imageList] = await Promise.all([
-      listFiles(`'${dataId}' in parents and trashed=false`, "id,name"),
+      // modifiedTime rides along on this listing so cached bundles can be
+      // freshness-checked without any extra per-file request.
+      listFiles(`'${dataId}' in parents and trashed=false`, "id,name,modifiedTime"),
       listFiles(`'${imagesId}' in parents and trashed=false`, "id,name,thumbnailLink"),
     ]);
     const dataFiles = new Map(dataList.map((f) => [f.name, f.id]));
+    const dataModified = new Map(dataList.map((f) => [f.name, f.modifiedTime ?? ""]));
     // Pre-generated thumbnail map (full fileId -> thumb fileId), if the garden
     // has ever been prepared for public sharing. Absent for gardens that never
     // have; backfill fills it lazily at publish time.
@@ -106,9 +111,12 @@ export function initDrive(): Promise<void> {
       dataId,
       imagesId,
       dataFiles,
+      dataModified,
       images: new Map(imageList.map((f) => [f.id, { thumb: f.thumbnailLink ?? null, local: null }])),
       thumbs: new Map(Object.entries(thumbsData.thumbs ?? {})),
     };
+    // Drop cache entries for files no longer in the folder (deleted out of band).
+    indexedDbCache.prune(dataFiles.values()).catch(() => {});
   })().catch((err) => {
     initPromise = null;
     throw err;
@@ -120,7 +128,11 @@ export async function driveLoadJson<T>(name: string): Promise<T> {
   await initDrive();
   const fileId = state!.dataFiles.get(name);
   if (!fileId) return (EMPTY_BUNDLES[name] ?? {}) as T;
-  return downloadJson<T>(fileId);
+  // Served from the browser cache when Drive's modifiedTime is unchanged;
+  // downloaded (and re-cached) only when the bundle has actually changed.
+  return loadWithCache<T>(fileId, state!.dataModified.get(name), indexedDbCache, (id) =>
+    downloadJson<T>(id),
+  );
 }
 
 /**
@@ -155,11 +167,23 @@ async function writeJsonFile(name: string, obj: unknown): Promise<void> {
   await initDrive();
   const blob = new Blob([JSON.stringify(obj, null, 2)], { type: "application/json" });
   const existing = state!.dataFiles.get(name);
+  let fileId: string;
+  let modifiedTime: string | undefined;
   if (existing) {
-    await updateFileContent(existing, blob);
+    fileId = existing;
+    modifiedTime = await updateFileContent(existing, blob);
   } else {
-    const f = await createFile(name, state!.dataId, blob, "id,name");
+    const f = await createFile(name, state!.dataId, blob, "id,name,modifiedTime");
     state!.dataFiles.set(name, f.id);
+    fileId = f.id;
+    modifiedTime = f.modifiedTime;
+  }
+  // Write the just-saved bundle through to the cache with its new modifiedTime,
+  // so the refetch every mutation triggers is served locally instead of
+  // re-downloading what we already hold — and a later reload confirms it fresh.
+  if (modifiedTime) {
+    state!.dataModified.set(name, modifiedTime);
+    await indexedDbCache.set(fileId, { modifiedTime, json: obj }).catch(() => {});
   }
 }
 
@@ -252,6 +276,9 @@ export async function deleteGarden(): Promise<void> {
   for (const folder of folders) {
     await deleteFile(folder.id);
   }
+  // The cached bundles are now dead fileIds; clear them so nothing about the
+  // deleted garden lingers in the browser (matches the full-erase guarantee).
+  await indexedDbCache.clear().catch(() => {});
   resetDrive();
 }
 
