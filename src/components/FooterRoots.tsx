@@ -255,6 +255,14 @@ export default function FooterRoots() {
           ))}
         </svg>
       </div>
+
+      <a
+        href="/privacy.html"
+        className="mt-4 text-[11px] uppercase tracking-widest text-white/30 transition-colors hover:text-white/60"
+        style={{ fontFamily: "'Space Mono', monospace" }}
+      >
+        Privacy
+      </a>
     </div>
   );
 }

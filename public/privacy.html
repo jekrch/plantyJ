@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Privacy Policy · PlantyJ</title>
+    <meta name="robots" content="index,follow" />
+    <link rel="icon" href="/favicon.svg" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #10140f;
+        --surface: #171c14;
+        --ink: #e8ede3;
+        --ink-muted: #a7b09c;
+        --ink-faint: #6c7563;
+        --accent: #8fbf6b;
+        --line: #2a3324;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      main {
+        max-width: 46rem;
+        margin: 0 auto;
+        padding: 3rem 1.25rem 5rem;
+      }
+      a { color: var(--accent); }
+      h1 {
+        font-size: 1.9rem;
+        line-height: 1.15;
+        margin: 0 0 0.25rem;
+        letter-spacing: -0.01em;
+      }
+      h2 {
+        font-size: 1.15rem;
+        margin: 2.5rem 0 0.6rem;
+        letter-spacing: -0.01em;
+      }
+      h3 {
+        font-size: 1rem;
+        margin: 1.5rem 0 0.4rem;
+        color: var(--ink);
+      }
+      p, li { color: var(--ink-muted); }
+      strong { color: var(--ink); font-weight: 600; }
+      .updated { color: var(--ink-faint); font-size: 0.85rem; margin: 0 0 2rem; }
+      .lede {
+        color: var(--ink);
+        font-size: 1.05rem;
+        border-left: 2px solid var(--accent);
+        padding-left: 1rem;
+        margin: 1.5rem 0;
+      }
+      ul { padding-left: 1.25rem; }
+      li { margin: 0.35rem 0; }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 0.6rem;
+        padding: 1rem 1.25rem;
+        margin: 1.25rem 0;
+      }
+      hr { border: none; border-top: 1px solid var(--line); margin: 3rem 0; }
+      footer { color: var(--ink-faint); font-size: 0.85rem; }
+      code {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 0.3rem;
+        padding: 0.05rem 0.35rem;
+        font-size: 0.85em;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Privacy Policy</h1>
+      <p class="updated">PlantyJ · Last updated 22 July 2026</p>
+
+      <p class="lede">
+        PlantyJ stores your garden in <strong>your own Google Drive</strong>. It
+        keeps no database of your plants, photos, or notes on its own servers.
+        The few narrow exceptions below exist only for features you choose to
+        turn on.
+      </p>
+
+      <h2>Who we are</h2>
+      <p>
+        PlantyJ (“the app,” “we”) is a personal gardening app available at
+        <a href="https://plantyj.com">plantyj.com</a>. This policy explains what
+        data the app accesses through your Google Account, where it goes, and
+        what, if anything, is retained. Questions:
+        <a href="mailto:jekrch@gmail.com">jekrch@gmail.com</a>.
+      </p>
+
+      <h2>Google Account data we access</h2>
+      <p>When you sign in with Google, the app requests these scopes:</p>
+      <ul>
+        <li>
+          <code>openid</code>, <code>email</code>, <code>profile</code>: your
+          name, email address, profile picture, and Google account identifier,
+          used to show who is signed in and to identify your garden.
+        </li>
+        <li>
+          <code>https://www.googleapis.com/auth/drive.file</code>, a
+          per-file Drive scope that lets the app create and manage
+          <strong>only the files it creates</strong> (your PlantyJ garden
+          folder). It cannot see, read, or touch any other file in your Drive.
+        </li>
+      </ul>
+      <p>
+        Your Google sign-in details and access token are held in your browser
+        for the duration of your session and are not transmitted to or stored on
+        any PlantyJ server.
+      </p>
+
+      <h2>Where your garden lives</h2>
+      <p>
+        Everything you create in PlantyJ (plants, photos, notes, zones, your
+        display name and avatar) is written to a folder in
+        <strong>your own Google Drive</strong>. PlantyJ does not run a database,
+        does not keep a server-side copy of your garden, and cannot read your
+        garden except through your browser using the access you granted.
+      </p>
+
+      <h2>Optional features that involve our servers</h2>
+      <p>
+        The base app is entirely between your browser and your Drive. Two
+        <strong>opt-in</strong> sharing features route data through a lightweight
+        proxy (a Cloudflare Worker). Neither is used unless you choose it.
+      </p>
+
+      <h3>1. Sharing a garden publicly</h3>
+      <p>
+        If you use <strong>“Share publicly,”</strong> you grant anyone-with-the-link
+        read access to that garden’s Drive files, and our proxy fetches those
+        files and briefly caches them at Cloudflare’s edge so they load quickly
+        for visitors. Only files belonging to a garden you deliberately publish
+        are ever fetched this way. Cloudflare may log request metadata (such as
+        IP address and timestamp) as part of operating the service. Choosing
+        <strong>“Stop sharing”</strong> revokes the public access immediately;
+        cached copies expire shortly after.
+      </p>
+
+      <h3>2. Custom share links</h3>
+      <p>
+        If you claim a custom link (for example
+        <code>plantyj.com/?u=your-name</code>), we store a small mapping so the
+        link can resolve. This is the <strong>only</strong> personal data PlantyJ
+        retains on its own servers, and only for users who claim a link. It
+        consists of:
+      </p>
+      <ul>
+        <li>the username you chose;</li>
+        <li>the Drive file ID of your published garden’s manifest;</li>
+        <li>your Google account identifier (the opaque <code>sub</code>), used
+          only to prove you own the link so no one else can take or change it.</li>
+      </ul>
+      <p>
+        No email, name, photo, or garden content is stored in this mapping. To
+        verify ownership when you claim a link, your access token is checked once
+        against Google’s userinfo endpoint; the token itself is not stored.
+      </p>
+
+      <h2>Third-party botanical lookups</h2>
+      <p>
+        The optional <strong>“Enrich my garden”</strong> feature looks up plant
+        <em>species names</em> against public botanical databases:
+        <a href="https://www.gbif.org">GBIF</a>,
+        <a href="https://en.wikipedia.org">Wikipedia</a>, and
+        <a href="https://powo.science.kew.org">Kew’s Plants of the World Online</a>.
+        Only the species name is sent; no personal information or account data is
+        included in these requests.
+      </p>
+      <p>
+        AI-assisted drafting features generate text prompts for you to copy and
+        use in a model of your choice. The app does not automatically transmit
+        your garden data to any AI provider.
+      </p>
+
+      <h2>What we do not do</h2>
+      <ul>
+        <li>We do not sell or rent your data.</li>
+        <li>We do not use it for advertising or profiling.</li>
+        <li>
+          We do not use Google user data to develop, improve, or train
+          generalized AI/ML models.
+        </li>
+        <li>
+          We do not share Google user data with third parties except as needed
+          to run a feature you enabled (as described above).
+        </li>
+      </ul>
+      <p>
+        PlantyJ’s use of information received from Google APIs adheres to the
+        <a href="https://developers.google.com/terms/api-services-user-data-policy">
+          Google API Services User Data Policy</a>, including the Limited Use
+        requirements.
+      </p>
+
+      <h2>Retention and deletion</h2>
+      <p>
+        Because your garden lives in your Drive, you control it directly. In the
+        app, <strong>“Delete my garden”</strong> permanently removes the PlantyJ
+        folder from your Drive and revokes the app’s access. You can also revoke
+        access anytime at
+        <a href="https://myaccount.google.com/permissions">
+          myaccount.google.com/permissions</a>.
+      </p>
+      <p>
+        A custom-link mapping is released when you change or delete it, or on
+        request. To have any retained mapping removed, email
+        <a href="mailto:jekrch@gmail.com">jekrch@gmail.com</a>.
+      </p>
+
+      <h2>Children</h2>
+      <p>PlantyJ is not directed to children under 13.</p>
+
+      <h2>Changes</h2>
+      <p>
+        We may update this policy; material changes will be reflected by the
+        “Last updated” date above.
+      </p>
+
+      <hr />
+      <footer>
+        <p>
+          Contact: <a href="mailto:jekrch@gmail.com">jekrch@gmail.com</a> ·
+          <a href="https://plantyj.com">plantyj.com</a>
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>

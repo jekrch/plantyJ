@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   AlertTriangle,
   Check,
@@ -12,10 +12,13 @@ import {
   LogOut,
   Pencil,
   RefreshCw,
+  Settings as SettingsIcon,
   Sparkles,
   Trash2,
   UserRound,
+  X,
 } from "lucide-react";
+import { useBodyScrollLock } from "../hooks/useBodyScrollLock";
 import { getSourceMode, isPublicMode, setSourceMode } from "../data/source";
 import { AUTH_CHANGED_EVENT, getSessionUser, signOut } from "../data/googleAuth";
 import {
@@ -53,6 +56,13 @@ import AnalysisAIAssist from "./AnalysisAIAssist";
 import { useAIFeaturesVisible } from "../hooks/useAIFeatures";
 import { requestTour } from "./GardenTour";
 
+// Entrance/exit feel matched to InfoModal and WelcomeModal for a consistent
+// polished modal treatment across the site.
+const ENTER_MS = 320;
+const EXIT_MS = 200;
+const EASE_OUT = "cubic-bezier(0.16, 1, 0.3, 1)";
+const EASE_IN = "cubic-bezier(0.4, 0, 1, 1)";
+
 /** Human-readable byte size, e.g. 1536 -> "1.5 KB". */
 function formatBytes(n: number): string {
   if (n < 1024) return `${n} B`;
@@ -72,6 +82,7 @@ function formatBytes(n: number): string {
  */
 export default function SourceMenu() {
   const [open, setOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [, setAuthTick] = useState(0);
   const [busy, setBusy] = useState<null | string>(null);
   const [size, setSize] = useState<GardenSize | null>(null);
@@ -397,7 +408,7 @@ export default function SourceMenu() {
         )}
       </button>
       {open && (
-        <div className="absolute right-0 top-9 z-50 w-56 rounded-md border border-ink-faint/30 bg-surface shadow-xl py-1">
+        <div className="absolute right-0 top-9 z-50 w-60 rounded-md border border-ink-faint/30 bg-surface shadow-xl py-1">
           <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-widest text-ink-muted font-display">
             Garden
           </p>
@@ -426,12 +437,29 @@ export default function SourceMenu() {
           {mode === "drive" && user && (
             <>
               <div className="my-1 border-t border-ink-faint/20" />
-              <button className={optionCls} onClick={handleEnrich} disabled={busy !== null}>
-                <span className="w-4">
-                  <Sparkles size={13} />
-                </span>
-                Enrich my garden
-              </button>
+              <div className="flex items-center gap-2 px-3 py-2">
+                {avatarEl(avatar, 32)}
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xs text-ink" title={displayName}>
+                    {displayName}
+                  </p>
+                  {user.email && (
+                    <p className="truncate text-[11px] text-ink-muted" title={user.email}>
+                      {user.email}
+                    </p>
+                  )}
+                </div>
+                {published && (
+                  <span
+                    className="shrink-0 text-accent"
+                    title="This garden is shared publicly"
+                    aria-label="Shared publicly"
+                  >
+                    <Globe size={13} strokeWidth={1.75} />
+                  </span>
+                )}
+              </div>
+              <div className="my-1 border-t border-ink-faint/20" />
               {aiVisible && (
                 <button
                   className={optionCls}
@@ -447,12 +475,6 @@ export default function SourceMenu() {
                   Draft analyses with a model
                 </button>
               )}
-              <button className={optionCls} onClick={handleExport} disabled={busy !== null}>
-                <span className="w-4">
-                  <Download size={13} />
-                </span>
-                Download backup (.zip)
-              </button>
               <button
                 className={optionCls}
                 onClick={() => {
@@ -466,8 +488,140 @@ export default function SourceMenu() {
                 Take the tour
               </button>
               <div className="my-1 border-t border-ink-faint/20" />
+              <button
+                className={optionCls}
+                onClick={() => {
+                  setOpen(false);
+                  setSettingsOpen(true);
+                }}
+              >
+                <span className="w-4">
+                  <SettingsIcon size={13} />
+                </span>
+                Settings
+              </button>
+              <button
+                className={optionCls}
+                onClick={() => {
+                  signOut();
+                  setOpen(false);
+                }}
+              >
+                <span className="w-4">
+                  <LogOut size={13} />
+                </span>
+                Sign out
+              </button>
+            </>
+          )}
+        </div>
+      )}
+      {mode === "drive" && user && (
+        <SettingsModal
+          open={settingsOpen}
+          onClose={() => {
+            setSettingsOpen(false);
+            setEditing(false);
+          }}
+        >
+          <div className="px-5 py-5 space-y-6">
+            {/* Profile */}
+            <section>
+              <SectionHeading>Profile</SectionHeading>
+              {editing ? (
+                <div className="rounded-md border border-ink-faint/20 bg-white/3 p-3">
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => fileRef.current?.click()}
+                      className="relative shrink-0 rounded-full"
+                      title="Change photo"
+                      aria-label="Change photo"
+                    >
+                      {avatarEl(draftPic, 48)}
+                      <span className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-surface">
+                        <ImagePlus size={11} />
+                      </span>
+                    </button>
+                    <input
+                      value={draftName}
+                      onChange={(e) => setDraftName(e.target.value)}
+                      placeholder={user.name || "Garden name"}
+                      maxLength={60}
+                      autoFocus
+                      className="min-w-0 flex-1 rounded border border-ink-faint/30 bg-white/5 px-2.5 py-1.5 text-sm text-ink placeholder:text-ink-faint focus:border-accent focus:outline-none"
+                    />
+                  </div>
+                  <div className="mt-3 flex items-center gap-2">
+                    {draftPic && (
+                      <button
+                        className="text-[11px] text-ink-muted hover:text-ink transition-colors"
+                        onClick={() => setDraftPic(null)}
+                      >
+                        Remove photo
+                      </button>
+                    )}
+                    <div className="ml-auto flex gap-1.5">
+                      <button
+                        className="rounded-md px-3 py-1.5 text-xs text-ink-muted hover:bg-white/5 hover:text-ink transition-colors disabled:opacity-50"
+                        onClick={() => setEditing(false)}
+                        disabled={busy !== null}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="rounded-md bg-accent px-3 py-1.5 text-xs text-surface hover:opacity-90 transition-opacity disabled:opacity-50"
+                        onClick={handleSaveProfile}
+                        disabled={busy !== null}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                  <input
+                    ref={fileRef}
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    onChange={handlePickPhoto}
+                  />
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 rounded-md border border-ink-faint/20 bg-white/3 p-3">
+                  {avatarEl(avatar, 44)}
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm text-ink" title={displayName}>
+                      {displayName}
+                    </p>
+                    {user.email && (
+                      <p className="truncate text-[11px] text-ink-muted" title={user.email}>
+                        {user.email}
+                      </p>
+                    )}
+                    {size && (
+                      <p className="mt-0.5 text-[11px] text-ink-muted">
+                        {formatBytes(size.bytes)} · {size.files} file
+                        {size.files === 1 ? "" : "s"}
+                      </p>
+                    )}
+                  </div>
+                  <button
+                    className="shrink-0 inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[11px] text-ink-muted transition-colors hover:bg-white/5 hover:text-ink"
+                    onClick={startEditing}
+                    title="Edit name & photo"
+                  >
+                    <Pencil size={12} />
+                    Edit
+                  </button>
+                </div>
+              )}
+            </section>
+
+            {/* Sharing */}
+            <section>
+              <SectionHeading>Sharing</SectionHeading>
               {published ? (
-                <div className="px-3 py-2">
+                <div className="rounded-md border border-ink-faint/20 bg-white/3 p-3">
                   <div className="flex items-center gap-1.5 text-[11px] text-accent">
                     <Globe size={12} strokeWidth={1.75} />
                     <span className="font-display uppercase tracking-widest">Shared publicly</span>
@@ -555,148 +709,81 @@ export default function SourceMenu() {
                   </button>
                 </div>
               ) : (
-                <button
-                  className={optionCls}
+                <SettingRow
+                  icon={<Globe size={15} strokeWidth={1.5} />}
+                  label="Share publicly"
+                  description="Get a read-only link anyone can open — no sign-in."
                   onClick={() => setConfirmingPublish(true)}
                   disabled={busy !== null}
-                >
-                  <span className="w-4">
-                    <Globe size={13} />
+                />
+              )}
+            </section>
+
+            {/* Garden tools */}
+            <section>
+              <SectionHeading>Garden tools</SectionHeading>
+              <div className="space-y-0.5">
+                <SettingRow
+                  icon={<Sparkles size={15} strokeWidth={1.5} />}
+                  label="Enrich my garden"
+                  description="Fetch species and taxonomy data for new plants."
+                  onClick={handleEnrich}
+                  disabled={busy !== null}
+                />
+                <SettingRow
+                  icon={<Download size={15} strokeWidth={1.5} />}
+                  label="Download backup"
+                  description="Save a .zip of your entire garden."
+                  onClick={handleExport}
+                  disabled={busy !== null}
+                />
+              </div>
+            </section>
+
+            {/* Preferences */}
+            <section>
+              <SectionHeading>Preferences</SectionHeading>
+              <div className="flex items-center gap-3 rounded-md px-3 py-2.5">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-white/5 text-ink-muted">
+                  <Sparkles size={15} strokeWidth={1.5} />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-xs text-ink">AI features</span>
+                  <span className="mt-0.5 block text-[11px] leading-snug text-ink-muted">
+                    Model-assisted prompts and drafting.
                   </span>
-                  Share publicly
-                </button>
-              )}
-              {busy && (
-                <p className="px-3 py-1 text-[11px] text-accent truncate" title={busy}>
-                  {busy}
-                </p>
-              )}
-              <div className="my-1 border-t border-ink-faint/20" />
-              {editing ? (
-                <div className="px-3 py-2">
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => fileRef.current?.click()}
-                      className="relative shrink-0 rounded-full"
-                      title="Change photo"
-                      aria-label="Change photo"
-                    >
-                      {avatarEl(draftPic, 40)}
-                      <span className="absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-surface">
-                        <ImagePlus size={10} />
-                      </span>
-                    </button>
-                    <input
-                      value={draftName}
-                      onChange={(e) => setDraftName(e.target.value)}
-                      placeholder={user.name || "Garden name"}
-                      maxLength={60}
-                      autoFocus
-                      className="min-w-0 flex-1 rounded border border-ink-faint/30 bg-white/5 px-2 py-1 text-xs text-ink placeholder:text-ink-faint focus:border-accent focus:outline-none"
-                    />
-                  </div>
-                  <div className="mt-2 flex items-center gap-2">
-                    {draftPic && (
-                      <button
-                        className="text-[11px] text-ink-muted hover:text-ink"
-                        onClick={() => setDraftPic(null)}
-                      >
-                        Remove photo
-                      </button>
-                    )}
-                    <div className="ml-auto flex gap-1.5">
-                      <button
-                        className="rounded px-2 py-1 text-[11px] text-ink-muted hover:bg-white/5 hover:text-ink"
-                        onClick={() => setEditing(false)}
-                        disabled={busy !== null}
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        className="rounded bg-accent px-2 py-1 text-[11px] text-surface hover:opacity-90 disabled:opacity-50"
-                        onClick={handleSaveProfile}
-                        disabled={busy !== null}
-                      >
-                        Save
-                      </button>
-                    </div>
-                  </div>
-                  <input
-                    ref={fileRef}
-                    type="file"
-                    accept="image/*"
-                    hidden
-                    onChange={handlePickPhoto}
-                  />
-                </div>
-              ) : (
-                <>
-                  <div className="flex items-center gap-2 px-3 py-2">
-                    {avatarEl(avatar, 32)}
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-xs text-ink" title={displayName}>
-                        {displayName}
-                      </p>
-                      {user.email && (
-                        <p className="truncate text-[11px] text-ink-muted" title={user.email}>
-                          {user.email}
-                        </p>
-                      )}
-                    </div>
-                    <button
-                      className="shrink-0 rounded p-1 text-ink-muted transition-colors hover:bg-white/5 hover:text-ink"
-                      onClick={startEditing}
-                      title="Edit name & photo"
-                      aria-label="Edit name & photo"
-                    >
-                      <Pencil size={13} />
-                    </button>
-                  </div>
-                  {size && (
-                    <p className="px-3 pb-1 text-[11px] text-ink-muted">
-                      {formatBytes(size.bytes)} · {size.files} file{size.files === 1 ? "" : "s"}
-                    </p>
-                  )}
-                </>
-              )}
-              <div className="my-1 border-t border-ink-faint/20" />
-              <button
-                className={optionCls}
-                onClick={handleToggleAI}
-                disabled={busy !== null}
-                role="menuitemcheckbox"
-                aria-checked={!aiVisible}
-                title="Hide every model-assisted feature (prompt generation, drafting) from this account"
-              >
-                <span className="w-4">{!aiVisible && <Check size={14} />}</span>
-                Hide AI features
-              </button>
-              <button
-                className={`${optionCls} text-red-400 hover:text-red-300`}
+                </span>
+                <Toggle
+                  on={aiVisible}
+                  onChange={handleToggleAI}
+                  disabled={busy !== null}
+                  label="AI features"
+                />
+              </div>
+            </section>
+
+            {/* Danger zone */}
+            <section>
+              <h3 className="mb-2 text-[10px] uppercase tracking-widest text-red-400/70 font-display">
+                Danger zone
+              </h3>
+              <SettingRow
+                danger
+                icon={<Trash2 size={15} strokeWidth={1.5} />}
+                label="Delete my garden"
+                description="Permanently remove the PlantyJ folder from Drive."
                 onClick={() => setConfirmingDelete(true)}
                 disabled={busy !== null}
-              >
-                <span className="w-4">
-                  <Trash2 size={13} />
-                </span>
-                Delete my garden
-              </button>
-              <button
-                className={optionCls}
-                onClick={() => {
-                  signOut();
-                  setOpen(false);
-                }}
-              >
-                <span className="w-4">
-                  <LogOut size={13} />
-                </span>
-                Sign out
-              </button>
-            </>
-          )}
-        </div>
+              />
+            </section>
+
+            {busy && (
+              <p className="text-[11px] text-accent truncate" title={busy}>
+                {busy}
+              </p>
+            )}
+          </div>
+        </SettingsModal>
       )}
       {confirmingDelete && (
         <DeleteGardenDialog
@@ -716,6 +803,211 @@ export default function SourceMenu() {
       {analyzeOpen && aiVisible && (
         <AnalysisAIAssist onClose={() => setAnalyzeOpen(false)} onApplied={() => {}} />
       )}
+    </div>
+  );
+}
+
+/** Small uppercase section label used throughout the settings modal. */
+function SectionHeading({ children }: { children: ReactNode }) {
+  return (
+    <h3 className="mb-2 text-[10px] uppercase tracking-widest text-ink-muted font-display">
+      {children}
+    </h3>
+  );
+}
+
+/**
+ * A single tappable settings action: icon chip, label, and a one-line
+ * description. `danger` tints it red for destructive actions.
+ */
+function SettingRow({
+  icon,
+  label,
+  description,
+  onClick,
+  disabled,
+  danger,
+}: {
+  icon: ReactNode;
+  label: string;
+  description?: string;
+  onClick: () => void;
+  disabled?: boolean;
+  danger?: boolean;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`group flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+        danger ? "hover:bg-red-500/10" : "hover:bg-white/5"
+      }`}
+    >
+      <span
+        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md transition-colors ${
+          danger
+            ? "bg-red-500/10 text-red-400"
+            : "bg-white/5 text-ink-muted group-hover:text-ink"
+        }`}
+      >
+        {icon}
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className={`block text-xs ${danger ? "text-red-400" : "text-ink"}`}>{label}</span>
+        {description && (
+          <span className="mt-0.5 block text-[11px] leading-snug text-ink-muted">
+            {description}
+          </span>
+        )}
+      </span>
+    </button>
+  );
+}
+
+/** Accessible on/off switch matching the site's accent styling. */
+function Toggle({
+  on,
+  onChange,
+  disabled,
+  label,
+}: {
+  on: boolean;
+  onChange: () => void;
+  disabled?: boolean;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={on}
+      aria-label={label}
+      onClick={onChange}
+      disabled={disabled}
+      className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors disabled:opacity-50 ${
+        on ? "bg-accent" : "bg-white/15"
+      }`}
+    >
+      <span
+        className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform ${
+          on ? "translate-x-4.5" : "translate-x-0.5"
+        }`}
+      />
+    </button>
+  );
+}
+
+/**
+ * Animated, scrollable settings modal shell. Mirrors InfoModal/WelcomeModal's
+ * entrance/exit, backdrop, body-scroll lock, and Escape-to-close behavior so
+ * the settings surface feels of a piece with the rest of the site.
+ */
+function SettingsModal({
+  open,
+  onClose,
+  children,
+}: {
+  open: boolean;
+  onClose: () => void;
+  children: ReactNode;
+}) {
+  const [mounted, setMounted] = useState(open);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setMounted(true);
+      // Two rAFs so the entrance transition has a "from" frame to animate from.
+      let raf2 = 0;
+      const raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(() => setVisible(true));
+      });
+      return () => {
+        cancelAnimationFrame(raf1);
+        cancelAnimationFrame(raf2);
+      };
+    } else if (mounted) {
+      setVisible(false);
+      const t = setTimeout(() => setMounted(false), EXIT_MS);
+      return () => clearTimeout(t);
+    }
+  }, [open, mounted]);
+
+  if (!mounted) return null;
+  return (
+    <SettingsModalShell onClose={onClose} visible={visible}>
+      {children}
+    </SettingsModalShell>
+  );
+}
+
+function SettingsModalShell({
+  onClose,
+  visible,
+  children,
+}: {
+  onClose: () => void;
+  visible: boolean;
+  children: ReactNode;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  useBodyScrollLock(containerRef);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClose]);
+
+  const transition = [
+    `opacity ${visible ? ENTER_MS : EXIT_MS}ms ${visible ? EASE_OUT : EASE_IN}`,
+    `transform ${visible ? ENTER_MS : EXIT_MS}ms ${visible ? EASE_OUT : EASE_IN}`,
+  ].join(", ");
+
+  return (
+    <div
+      ref={containerRef}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Settings"
+    >
+      <div
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        style={{
+          opacity: visible ? 1 : 0,
+          transition: `opacity ${visible ? ENTER_MS : EXIT_MS}ms ${visible ? EASE_OUT : EASE_IN}`,
+        }}
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <div
+        className="relative z-10 flex h-[min(640px,85vh)] w-full max-w-lg flex-col overflow-hidden rounded-lg border border-ink-faint/25 bg-surface-raised shadow-2xl shadow-black/50 origin-center"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "scale(1) translateY(0)" : "scale(0.94) translateY(12px)",
+          transition,
+          willChange: "opacity, transform",
+        }}
+      >
+        <div className="flex items-center justify-between border-b border-ink-faint/20 px-5 pt-4 pb-3">
+          <div className="flex items-center gap-2">
+            <SettingsIcon size={16} strokeWidth={1.5} className="stroke-accent" />
+            <h2 className="font-display text-sm tracking-tight text-ink">Settings</h2>
+          </div>
+          <button
+            onClick={onClose}
+            className="flex h-7 w-7 items-center justify-center rounded-md text-ink-muted transition-colors hover:bg-white/5 hover:text-ink"
+            title="Close (Esc)"
+            aria-label="Close"
+          >
+            <X size={16} strokeWidth={1.5} />
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto info-modal-scroll thin-scroll">{children}</div>
+      </div>
     </div>
   );
 }

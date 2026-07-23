@@ -147,8 +147,8 @@ function WelcomeModalContent({ onClose, visible }: Omit<Props, "open"> & { visib
           <p className="text-sm text-ink leading-relaxed">
             If you like it, you can now start a journal of your own. Sign in with a Google account
             and your plants, photos, and notes are saved to a{" "}
-            <span className="text-ink">PlantyJ</span> folder in your own Google Drive. Nothing lives
-            on our servers, and no one else can see it.
+            <span className="text-ink">PlantyJ</span> folder in your own Google Drive. We keep no
+            copy of your garden, and no one else can see it unless you choose to share.
           </p>
           <p className="flex items-start gap-2 text-xs text-ink-muted leading-relaxed">
             <Cloud size={15} strokeWidth={1.5} className="mt-px shrink-0 text-accent" />
@@ -159,7 +159,14 @@ function WelcomeModalContent({ onClose, visible }: Omit<Props, "open"> & { visib
           </p>
         </div>
 
-        <div className="flex items-center justify-end gap-2 px-5 pb-5">
+        <div className="flex items-center justify-between gap-2 px-5 pb-5">
+          <a
+            href="/privacy.html"
+            className="px-1 text-xs text-ink-muted hover:text-ink transition-colors"
+          >
+            Privacy
+          </a>
+          <div className="flex items-center gap-2">
           <button
             onClick={handleClose}
             className="rounded-md px-3 py-1.5 text-xs text-ink-muted hover:bg-white/5 hover:text-ink transition-colors cursor-pointer"
@@ -176,6 +183,7 @@ function WelcomeModalContent({ onClose, visible }: Omit<Props, "open"> & { visib
             <Cloud size={14} strokeWidth={2} className="stroke-surface" />
             Start my own
           </button>
+          </div>
         </div>
       </div>
     </div>
