@@ -1,10 +1,17 @@
+import type { KVNamespace } from "./types";
+import { claimUsername, isValidUsername, lookupUsername, normalizeUsername } from "./usernames";
+
 /**
- * Minimal env for the public proxy: just the Drive API key. Deliberately not the
- * bot's `Env` — this worker is deployed separately (see wrangler.public.toml) and
- * carries none of the Telegram bot's bindings or secrets.
+ * Minimal env for the public proxy: the Drive API key, plus the KV namespace
+ * backing custom share-link usernames. Deliberately not the bot's `Env` — this
+ * worker is deployed separately (see wrangler.public.toml) and carries none of
+ * the Telegram bot's bindings or secrets.
  */
 export interface PublicEnv {
   GOOGLE_API_KEY?: string;
+  // Username -> manifestId index for `?u=<name>` share links. Optional: when
+  // unbound, custom links are simply unavailable and the routes 501.
+  USERNAMES?: KVNamespace;
 }
 
 /**
@@ -31,10 +38,15 @@ const ID_RE = /^[A-Za-z0-9_-]{10,255}$/;
 
 const MANIFEST_TTL = 60; // seconds — bundles change when the owner edits
 const IMMUTABLE_TTL = 31536000; // image bytes for a fileId never change
+// A username->manifestId mapping is stable (a garden's manifest fileId is reused
+// across re-publishes), so resolves can be edge-cached for a few minutes. This is
+// what keeps KV reads far under the free-tier daily cap under real traffic.
+const USERNAME_TTL = 300;
 
 const CORS: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Authorization, Content-Type",
   "Access-Control-Max-Age": "86400",
 };
 
@@ -105,7 +117,87 @@ async function serveFile(
   return resp;
 }
 
-/** Route a `/public/*` GET. Returns null if the path isn't ours. */
+function json(body: unknown, status = 200, extra?: Record<string, string>): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...CORS, "content-type": "application/json", ...(extra ?? {}) },
+  });
+}
+
+/**
+ * The Google account `sub` behind an access token, or null if the token is
+ * missing/expired/invalid. Validated by calling Google's userinfo endpoint
+ * server-side — no JWT crypto needed, and it proves the token is live, not just
+ * well-formed. This is the only gate on claiming a username.
+ */
+async function verifyGoogleSub(token: string): Promise<string | null> {
+  try {
+    const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) return null;
+    const u = (await res.json()) as { sub?: string };
+    return u.sub ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * `/public/user/{username}` — resolve (GET, public) or claim (POST, authed).
+ *
+ * GET returns `{ manifestId }` for a claimed name, edge-cached so a burst of
+ * visitors to the same `?u=` link costs one KV read, not one per visitor.
+ * POST verifies the caller's Google token and writes the mapping, refusing a
+ * name another account already holds.
+ */
+async function handleUsername(
+  request: Request,
+  env: PublicEnv,
+  ctx: { waitUntil: (p: Promise<unknown>) => void },
+  rawName: string,
+): Promise<Response> {
+  if (!env.USERNAMES) return json({ error: "Custom links are not configured" }, 501);
+  const username = normalizeUsername(rawName);
+  if (!isValidUsername(username)) return json({ error: "Invalid username" }, 400);
+
+  if (request.method === "GET") {
+    const cache = caches.default;
+    const hit = await cache.match(request);
+    if (hit) return hit;
+    const record = await lookupUsername(env.USERNAMES, username);
+    // Absent names aren't cached, so a name claimed moments later resolves at
+    // once. A *re-pointed* name can serve its old target for up to USERNAME_TTL.
+    if (!record) return json({ error: "Not found" }, 404);
+    const resp = json({ manifestId: record.manifestId }, 200, {
+      "cache-control": `public, max-age=${USERNAME_TTL}`,
+    });
+    ctx.waitUntil(cache.put(request, resp.clone()));
+    return resp;
+  }
+
+  if (request.method === "POST") {
+    const auth = request.headers.get("Authorization") ?? "";
+    const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+    const sub = token ? await verifyGoogleSub(token) : null;
+    if (!sub) return json({ error: "Sign in to claim a custom link" }, 401);
+
+    let body: { manifestId?: unknown };
+    try {
+      body = (await request.json()) as { manifestId?: unknown };
+    } catch {
+      return json({ error: "Bad request body" }, 400);
+    }
+    const manifestId = typeof body.manifestId === "string" ? body.manifestId : "";
+    const result = await claimUsername(env.USERNAMES, username, manifestId, sub);
+    if (!result.ok) return json({ error: result.message }, result.status);
+    return json({ username, manifestId });
+  }
+
+  return json({ error: "Method not allowed" }, 405);
+}
+
+/** Route a `/public/*` request. Returns null if the path isn't ours. */
 export async function handlePublicProxy(
   request: Request,
   env: PublicEnv,
@@ -115,6 +207,13 @@ export async function handlePublicProxy(
   if (!url.pathname.startsWith("/public/")) return null;
 
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
+
+  // Custom share-link usernames (?u=<name>): resolve is a public GET, claim is an
+  // authenticated POST. Handled before the API-key guard since resolve needs no
+  // Drive key — only the KV binding.
+  const userMatch = url.pathname.match(/^\/public\/user\/([^/]+)$/);
+  if (userMatch) return handleUsername(request, env, ctx, decodeURIComponent(userMatch[1]));
+
   if (request.method !== "GET") return new Response("Method not allowed", { status: 405, headers: CORS });
   if (!env.GOOGLE_API_KEY) return new Response("Proxy not configured", { status: 500, headers: CORS });
 

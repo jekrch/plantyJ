@@ -1,5 +1,6 @@
 import { GOOGLE_API_KEY, PUBLIC_PROXY_URL } from "./config";
 import type { PublicManifest } from "./publicManifest";
+import { resolveUsername } from "./username";
 
 /**
  * Read-only view of a *published* garden, for an anonymous visitor with no
@@ -19,27 +20,61 @@ import type { PublicManifest } from "./publicManifest";
  */
 
 const MEDIA = "https://www.googleapis.com/drive/v3/files";
+// `?public=<manifestFileId>` is the raw share link; `?u=<username>` is the
+// pretty alias that resolves to a manifestFileId via the worker.
 const PARAM = "public";
+const USER_PARAM = "u";
 
 // Below this requested longest-edge we serve the pre-generated ~320px thumbnail
 // (the masonry grid); at/above it — lightbox and hero images — the full upload.
 const THUMB_MAX_REQUEST = 800;
 
-// Captured once at load, before the app's filter/view state can rewrite the URL
-// and drop the param (useFilterParams rebuilds the query string from scratch).
-// Public mode must stay stable across in-app navigation and survive a reload, so
-// mode detection reads this snapshot, not the live URL.
-const CAPTURED_MANIFEST_ID: string | null = (() => {
+// Both share params are captured once at load, before the app's filter/view
+// state can rewrite the URL and drop them (useFilterParams rebuilds the query
+// string from scratch). Public mode must stay stable across in-app navigation
+// and survive a reload, so mode detection reads these snapshots, not the live URL.
+function captureParam(key: string): string | null {
   try {
-    return new URLSearchParams(window.location.search).get(PARAM);
+    return new URLSearchParams(window.location.search).get(key);
   } catch {
     return null;
   }
-})();
+}
 
-/** The manifest fileId from `?public=<id>`, or null when not a share link. */
+const CAPTURED_MANIFEST_ID: string | null = captureParam(PARAM);
+const CAPTURED_USERNAME: string | null = CAPTURED_MANIFEST_ID ? null : captureParam(USER_PARAM);
+
+// The manifest fileId, known synchronously for `?public=` links but only after
+// an async resolve for `?u=` ones (filled in by initPublic).
+let resolvedManifestId: string | null = CAPTURED_MANIFEST_ID;
+
+/**
+ * Whether this page load is a public share link at all — either form. Synchronous
+ * and stable for the tab's life, so getSourceMode() can decide "public mode"
+ * before a `?u=` username has finished resolving.
+ */
+export function isPublicLink(): boolean {
+  return !!(CAPTURED_MANIFEST_ID || CAPTURED_USERNAME);
+}
+
+/**
+ * The manifest fileId this share link points at, or null until a `?u=` link has
+ * been resolved by initPublic. Callers that build file URLs run after initPublic
+ * has awaited, so it's non-null by then.
+ */
 export function getPublicManifestId(): string | null {
-  return CAPTURED_MANIFEST_ID;
+  return resolvedManifestId;
+}
+
+/**
+ * The share param to re-add when useFilterParams rebuilds the query string —
+ * `u` for a pretty link, `public` for a raw one — so the link a visitor arrived
+ * on is the link they can reload and copy.
+ */
+export function getShareParam(): { key: string; value: string } | null {
+  if (CAPTURED_USERNAME) return { key: USER_PARAM, value: CAPTURED_USERNAME };
+  if (CAPTURED_MANIFEST_ID) return { key: PARAM, value: CAPTURED_MANIFEST_ID };
+  return null;
 }
 
 let manifest: PublicManifest | null = null;
@@ -69,7 +104,13 @@ export function initPublic(): Promise<void> {
     if (!PUBLIC_PROXY_URL && !GOOGLE_API_KEY) {
       throw new Error("Public sharing is not configured for this deployment");
     }
-    const id = getPublicManifestId();
+    // A `?u=` link carries a username, not a fileId — resolve it to the manifest
+    // fileId first (once; the result is memoized on resolvedManifestId).
+    if (!resolvedManifestId && CAPTURED_USERNAME) {
+      resolvedManifestId = await resolveUsername(CAPTURED_USERNAME);
+      if (!resolvedManifestId) throw new Error("That garden link doesn't exist");
+    }
+    const id = resolvedManifestId;
     if (!id) throw new Error("No public garden specified");
     const res = await fetch(manifestUrl(id));
     if (!res.ok) throw new Error(`Public garden unavailable (${res.status})`);

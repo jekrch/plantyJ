@@ -34,8 +34,18 @@ import {
   resetProfile,
   saveProfile,
   setPublished as savePublishedState,
+  setUsername as saveUsername,
   toAvatarDataUrl,
 } from "../data/profile";
+import {
+  claimUsername,
+  customLinksAvailable,
+  isValidUsername,
+  normalizeUsername,
+  UsernameTakenError,
+  usernameShareUrl,
+} from "../data/username";
+import { getAccessToken } from "../data/googleAuth";
 import { resetGardenDescription } from "../data/gardenDescription";
 import { enrichGarden } from "../data/enrichment";
 import { exportGarden } from "../data/exportGarden";
@@ -71,6 +81,11 @@ export default function SourceMenu() {
   const [confirmingPublish, setConfirmingPublish] = useState(false);
   const [published, setPublishedInfo] = useState<PublishInfo | null>(null);
   const [copied, setCopied] = useState(false);
+  const [copiedName, setCopiedName] = useState(false);
+  const [nameDraft, setNameDraft] = useState("");
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [nameBusy, setNameBusy] = useState(false);
+  const [nameSaved, setNameSaved] = useState(false);
   const [analyzeOpen, setAnalyzeOpen] = useState(false);
   const [draftName, setDraftName] = useState("");
   const [draftPic, setDraftPic] = useState<string | null>(null);
@@ -238,6 +253,56 @@ export default function SourceMenu() {
       setTimeout(() => setCopied(false), 1500);
     } catch {
       // Clipboard blocked; the link is shown in full for manual copy.
+    }
+  };
+
+  // Seed the custom-link input with the currently claimed name once the profile
+  // loads, so opening the menu shows it ready to keep or edit (not blank).
+  useEffect(() => {
+    if (profile?.username) setNameDraft(profile.username);
+  }, [profile?.username]);
+
+  const handleCopyUsername = async () => {
+    if (!profile?.username) return;
+    try {
+      await navigator.clipboard.writeText(usernameShareUrl(profile.username));
+      setCopiedName(true);
+      setTimeout(() => setCopiedName(false), 1500);
+    } catch {
+      // Clipboard blocked; the link is shown in full for manual copy.
+    }
+  };
+
+  const handleClaimUsername = async () => {
+    if (!published) return;
+    const name = normalizeUsername(nameDraft);
+    if (name === profile?.username) return; // nothing changed
+    if (!isValidUsername(name)) {
+      setNameError("Use 2–30 letters, numbers, or hyphens (no leading/trailing hyphen).");
+      return;
+    }
+    const token = getAccessToken();
+    if (!token) {
+      setNameError("Your session expired — reopen and sign in again.");
+      return;
+    }
+    setNameError(null);
+    setNameBusy(true);
+    try {
+      await claimUsername(name, published.manifestFileId, token);
+      setProfile(await saveUsername(name));
+      setNameSaved(true);
+      setTimeout(() => setNameSaved(false), 1500);
+    } catch (err) {
+      setNameError(
+        err instanceof UsernameTakenError
+          ? "That name is already taken — try another."
+          : err instanceof Error
+            ? err.message
+            : "Couldn't save that link.",
+      );
+    } finally {
+      setNameBusy(false);
     }
   };
 
@@ -426,10 +491,65 @@ export default function SourceMenu() {
                       {copied ? <Check size={13} /> : <Copy size={13} />}
                     </button>
                   </div>
+                  {customLinksAvailable() && (
+                    <div className="mt-3 border-t border-ink-faint/15 pt-2">
+                      <p className="text-[10px] uppercase tracking-widest text-ink-muted font-display">
+                        Custom link
+                      </p>
+                      {profile?.username && (
+                        <div className="mt-1.5 flex items-center gap-1.5">
+                          <input
+                            readOnly
+                            value={usernameShareUrl(profile.username)}
+                            onFocus={(e) => e.currentTarget.select()}
+                            className="min-w-0 flex-1 rounded border border-ink-faint/30 bg-white/5 px-2 py-1 text-[11px] text-ink"
+                          />
+                          <button
+                            onClick={handleCopyUsername}
+                            className="shrink-0 rounded p-1.5 text-ink-muted transition-colors hover:bg-white/5 hover:text-ink"
+                            title="Copy custom link"
+                            aria-label="Copy custom link"
+                          >
+                            {copiedName ? <Check size={13} /> : <Copy size={13} />}
+                          </button>
+                        </div>
+                      )}
+                      <div className="mt-1.5 flex items-center gap-1">
+                        <span className="shrink-0 text-[11px] text-ink-muted">?u=</span>
+                        <input
+                          value={nameDraft}
+                          onChange={(e) => {
+                            setNameDraft(e.target.value);
+                            setNameError(null);
+                          }}
+                          onKeyDown={(e) => e.key === "Enter" && handleClaimUsername()}
+                          placeholder="your-name"
+                          maxLength={30}
+                          spellCheck={false}
+                          autoCapitalize="none"
+                          className="min-w-0 flex-1 rounded border border-ink-faint/30 bg-white/5 px-2 py-1 text-[11px] text-ink placeholder:text-ink-faint focus:border-accent focus:outline-none"
+                        />
+                        <button
+                          onClick={handleClaimUsername}
+                          disabled={nameBusy || !nameDraft.trim()}
+                          className="shrink-0 rounded bg-accent px-2 py-1 text-[11px] text-surface transition-opacity hover:opacity-90 disabled:opacity-50"
+                        >
+                          {nameBusy ? "…" : nameSaved ? <Check size={12} /> : profile?.username ? "Change" : "Claim"}
+                        </button>
+                      </div>
+                      {nameError ? (
+                        <p className="mt-1 text-[11px] leading-relaxed text-red-300">{nameError}</p>
+                      ) : (
+                        <p className="mt-1 text-[10px] leading-relaxed text-ink-faint">
+                          A short, memorable link to share instead of the long one.
+                        </p>
+                      )}
+                    </div>
+                  )}
                   <button
                     onClick={handleUnpublish}
                     disabled={busy !== null}
-                    className="mt-2 text-[11px] text-ink-muted transition-colors hover:text-red-300 disabled:opacity-50"
+                    className="mt-3 text-[11px] text-ink-muted transition-colors hover:text-red-300 disabled:opacity-50"
                   >
                     Stop sharing
                   </button>

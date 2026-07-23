@@ -9,5 +9,17 @@ name = "plantyj-public"
 main = "src/public-entry.ts"
 compatibility_date = "2024-12-01"
 
+# KV index for custom share-link usernames (?u=<name> -> manifest fileId). Create
+# it once, then paste the printed id below:
+#   cd worker
+#   bunx wrangler kv namespace create USERNAMES -c wrangler.public.toml
+#   bunx wrangler kv namespace create USERNAMES --preview -c wrangler.public.toml
+# Until an id is set the /public/user routes return 501 and ?u= links are inert;
+# ?public=<id> links keep working regardless.
+[[kv_namespaces]]
+binding = "USERNAMES"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+preview_id = "REPLACE_WITH_KV_PREVIEW_ID"
+
 [observability.logs]
 enabled = true

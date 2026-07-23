@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 import type { Filters } from "../utils/filtering";
 import type { SortMode } from "../utils/sorting";
 import type { ViewMode } from "../components/ViewModeControl";
-import { getPublicManifestId } from "../data/publicSource";
+import { getShareParam } from "../data/publicSource";
 
 const SET_FILTER_KEYS = [
   "tags",
@@ -93,13 +93,14 @@ export function buildParams(
   return params.toString();
 }
 
-// buildParams rebuilds the query from scratch, so re-add the `public` share
-// param (dropped otherwise) to keep a shared link reloadable and copyable.
+// buildParams rebuilds the query from scratch, so re-add the share param
+// (dropped otherwise) to keep a shared link reloadable and copyable. Preserves
+// whichever form the visitor arrived on — `u=<name>` or `public=<id>`.
 function withPublic(qs: string): string {
-  const id = getPublicManifestId();
-  if (!id) return qs;
+  const share = getShareParam();
+  if (!share) return qs;
   const params = new URLSearchParams(qs);
-  params.set("public", id);
+  params.set(share.key, share.value);
   return params.toString();
 }
 

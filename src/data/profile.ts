@@ -38,6 +38,7 @@ export interface GardenProfile {
   hideAI: boolean; // opt out of every model-assisted feature in the UI
   tourStage: number; // TOUR_NONE | TOUR_STARTED | TOUR_DONE
   published: PublishInfo | null; // set while the garden is publicly shared
+  username: string | null; // claimed custom share-link name (?u=<username>), if any
 }
 
 const PROFILE_FILE = "profile.json";
@@ -99,7 +100,14 @@ export function getTourStage(): number {
  */
 export async function advanceTourStage(stage: number): Promise<void> {
   const current = await loadProfile().catch(getCachedProfile);
-  const base = current ?? { name: null, picture: null, hideAI: false, tourStage: TOUR_NONE };
+  const base = current ?? {
+    name: null,
+    picture: null,
+    hideAI: false,
+    tourStage: TOUR_NONE,
+    published: null,
+    username: null,
+  };
   if (base.tourStage >= stage) return;
   await saveProfile({ ...base, tourStage: stage });
 }
@@ -132,6 +140,7 @@ export function loadProfile(): Promise<GardenProfile> {
         // absent-but-non-empty is resolved by the caller, not here.
         tourStage: p.tourStage ?? TOUR_NONE,
         published: p.published ?? null,
+        username: p.username ?? null,
       };
       writeMirrors(cache);
       // Let the write path know whether to refresh the public snapshot on
@@ -155,9 +164,10 @@ export function loadProfile(): Promise<GardenProfile> {
  * it; omitting it carries the stored stage forward rather than resetting it.
  */
 export async function saveProfile(
-  update: Omit<GardenProfile, "tourStage" | "published"> & {
+  update: Omit<GardenProfile, "tourStage" | "published" | "username"> & {
     tourStage?: number;
     published?: PublishInfo | null;
+    username?: string | null;
   },
 ): Promise<GardenProfile> {
   const next: GardenProfile = {
@@ -167,6 +177,8 @@ export async function saveProfile(
     tourStage: update.tourStage ?? cache?.tourStage ?? TOUR_NONE,
     // Publish state is edited only via setPublished; other saves carry it forward.
     published: update.published !== undefined ? update.published : (cache?.published ?? null),
+    // Likewise the claimed custom-link name — set via setUsername, else preserved.
+    username: update.username !== undefined ? update.username : (cache?.username ?? null),
   };
   await driveSaveJson(PROFILE_FILE, next);
   cache = next;
@@ -187,8 +199,27 @@ export async function setPublished(info: PublishInfo | null): Promise<GardenProf
     hideAI: false,
     tourStage: TOUR_NONE,
     published: null,
+    username: null,
   };
   return saveProfile({ ...base, published: info });
+}
+
+/**
+ * Record the custom share-link name the owner has claimed for this garden, so it
+ * can be shown (and its pretty link rebuilt) on later loads. The KV write that
+ * makes the name resolve is done separately by claimUsername; this only persists
+ * the display bookkeeping.
+ */
+export async function setUsername(username: string | null): Promise<GardenProfile> {
+  const base = (await loadProfile().catch(getCachedProfile)) ?? {
+    name: null,
+    picture: null,
+    hideAI: false,
+    tourStage: TOUR_NONE,
+    published: null,
+    username: null,
+  };
+  return saveProfile({ ...base, username });
 }
 
 /** Clear the cache on sign-out / account switch / deletion. */
@@ -196,7 +227,14 @@ export function resetProfile(): void {
   cache = null;
   loadPromise = null;
   // The mirrors describe the account that just went away, not the next one.
-  writeMirrors({ name: null, picture: null, hideAI: false, tourStage: TOUR_NONE, published: null });
+  writeMirrors({
+    name: null,
+    picture: null,
+    hideAI: false,
+    tourStage: TOUR_NONE,
+    published: null,
+    username: null,
+  });
   setPublishedManifest(null);
   window.dispatchEvent(new Event(PROFILE_CHANGED_EVENT));
 }

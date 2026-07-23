@@ -1,5 +1,5 @@
 import { driveImageUrl, driveLoadJson } from "./driveSource";
-import { getPublicManifestId, publicImageUrl, publicLoadJson } from "./publicSource";
+import { isPublicLink, publicImageUrl, publicLoadJson } from "./publicSource";
 
 /**
  * Data-source switch: the founder's garden served statically with the site, the
@@ -17,8 +17,10 @@ export type SourceMode = "static" | "drive" | "public";
 const MODE_KEY = "plantyj:source";
 
 export function getSourceMode(): SourceMode {
-  // A share link wins over any stored preference: the URL is the intent.
-  if (getPublicManifestId()) return "public";
+  // A share link wins over any stored preference: the URL is the intent. Detected
+  // synchronously from the URL (either `?public=` or `?u=`), before a `?u=`
+  // username has resolved to its manifest id.
+  if (isPublicLink()) return "public";
   try {
     return localStorage.getItem(MODE_KEY) === "drive" ? "drive" : "static";
   } catch {
@@ -53,6 +55,7 @@ export function setSourceMode(mode: SourceMode): void {
   }
   const url = new URL(window.location.href);
   url.searchParams.delete("public");
+  url.searchParams.delete("u");
   window.location.href = url.toString();
 }
 
