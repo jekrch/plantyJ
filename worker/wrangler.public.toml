@@ -18,8 +18,8 @@ compatibility_date = "2024-12-01"
 # ?public=<id> links keep working regardless.
 [[kv_namespaces]]
 binding = "USERNAMES"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
-preview_id = "REPLACE_WITH_KV_PREVIEW_ID"
+id = "8a03141426284b728fd635e25b7df060"
+preview_id = "c4471c6863b74f58a184d3b8c39a6f66"
 
 [observability.logs]
 enabled = true

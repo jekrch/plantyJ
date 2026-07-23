@@ -861,6 +861,14 @@ function PublishGardenDialog({
                 immediately.
               </li>
             </ul>
+            {customLinksAvailable() && (
+              <p className="mt-2 text-xs leading-relaxed text-ink-muted">
+                Afterward you can claim a{" "}
+                <span className="text-ink">short custom link</span> — like{" "}
+                <span className="text-ink">plantyj.com/?u=your-name</span> — to share instead of the
+                long one.
+              </p>
+            )}
           </div>
         </div>
         <div className="mt-5 flex items-center justify-end gap-2">

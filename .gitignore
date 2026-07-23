@@ -9,3 +9,7 @@ public/sw.js
 # Python
 __pycache__/
 *.pyc
+
+# Local env overrides (Vite)
+.env.local
+.env.*.local
