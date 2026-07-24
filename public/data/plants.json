@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "R hum",
+      "fullName": "Ruellia humilis",
+      "commonName": "Wild Petunia",
+      "variety": null
+    },
+    {
       "shortCode": "P pan",
       "fullName": "Phlox paniculata",
       "commonName": "Garden Phlox",
