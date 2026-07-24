@@ -723,6 +723,14 @@
         "medicinal"
       ],
       "description": null
+    },
+    {
+      "shortCode": "P pan",
+      "zoneCode": null,
+      "tags": [
+        "ornamental"
+      ],
+      "description": null
     }
   ]
 }
