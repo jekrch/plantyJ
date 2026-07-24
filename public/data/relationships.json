@@ -336,7 +336,7 @@
     {
       "id": 44,
       "type": "host-plant",
-      "from": "P pol",
+      "from": "P poly",
       "to": "Z aur"
     },
     {
@@ -734,6 +734,54 @@
       "type": "herbivore",
       "from": "S flo",
       "to": "B cur"
+    },
+    {
+      "id": 111,
+      "type": "pollinator",
+      "from": "B imp",
+      "to": "P vir"
+    },
+    {
+      "id": 112,
+      "type": "pollinator",
+      "from": "A mell",
+      "to": "P vir"
+    },
+    {
+      "id": 113,
+      "type": "predator-prey",
+      "from": "P dom",
+      "to": "D ple"
+    },
+    {
+      "id": 114,
+      "type": "predator-prey",
+      "from": "P dom",
+      "to": "P poly"
+    },
+    {
+      "id": 115,
+      "type": "herbivore",
+      "from": "S flo",
+      "to": "E pur"
+    },
+    {
+      "id": 116,
+      "type": "predator-prey",
+      "from": "F cat",
+      "to": "S flo"
+    },
+    {
+      "id": 117,
+      "type": "predator-prey",
+      "from": "c card",
+      "to": "A rot"
+    },
+    {
+      "id": 118,
+      "type": "predator-prey",
+      "from": "m gal",
+      "to": "L ter"
     }
   ]
 }
