@@ -5090,6 +5090,61 @@
       ],
       "observationsCount": 36686
     },
+    "ruellia-humilis": {
+      "id": "ruellia-humilis",
+      "fullName": "Ruellia humilis",
+      "commonName": "Wild Petunia",
+      "description": "Ruellia humilis (wild petunia, fringeleaf wild petunia, hairy petunia, low wild petunia) is a species of flowering plant in the family Acanthaceae. It is native to the eastern United States. It is grown as an ornamental plant.\nRuellia humilis is native to the U.S. from the northeastern/northern central to the southeastern/southern central regions. According to the Germplasm Resources Information Network of the United States Department of Agriculture, Ruellia humilis is native to the following states:\nAlabama, Arkansas, Georgia, Illinois, Indiana, Iowa, (eastern) Kansas, Kentucky, Louisiana, Maryland, Michigan, (southeastern) Minnesota, Mississippi, Missouri, Nebraska, (western) North Carolina, Ohio, Oklahoma, Pennsylvania, Tennessee, (eastern) Texas, West Virginia, Wisconsin, and Virginia.\nIt is not well-known or used much in conventional nurseries or gardens, but use in gardens has been increasing as native plants become more popular. It is usually about one foot high, but can get to two feet high. Its leaves are oppositely arranged, around 2.5 inches long by 1 inch wide, and are light green to medium green with entire margins. The stems and leaves are covered with soft white hairs. The funnel-shaped 5-lobed flowers are about 1.5 to 2.5 inches in diameter and resemble petunias, as does the rest of the plant. The lavender flowers bloom in July into September and open in the morning and fall off in the evening.",
+      "vernacularNames": [
+        "Fringeleaf wild petunia",
+        "fringe-leaf ruellia",
+        "low ruellia",
+        "wild petunia",
+        "hairy ruellia"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Lamiales",
+        "family": "Acanthaceae",
+        "genus": "Ruellia",
+        "species": "Ruellia humilis",
+        "canonicalName": "Ruellia humilis"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5415395"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Ruellia_humilis"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/119651"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q814412"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.144889"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 14961
+    },
     "sambucus-canadensis": {
       "id": "sambucus-canadensis",
       "fullName": "Sambucus canadensis",

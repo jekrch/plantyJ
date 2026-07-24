@@ -886,5 +886,13 @@
   "Pycnanthemum": {
     "description": "Pycnanthemum is a genus of herbaceous plants in the mint family (Lamiaceae). Species in this genus are often referred to as mountain mints and they often have a minty or thyme-like aroma when crushed. All species of Pycnanthemum are native to the United States and Canada. The center of diversity for the genus is North Carolina with 13 of the 20 species having been collected therein. Nineteen of the 20 species of Pycnanthemum occur in the Eastern US and Canada, and one disjunct species occurs in California and Oregon.",
     "url": "https://en.wikipedia.org/wiki/Pycnanthemum"
+  },
+  "Acanthaceae": {
+    "description": "Acanthaceae is a family of dicotyledonous flowering plants containing almost 250 genera and about 2500 species. Most are tropical herbs, shrubs, or twining vines; some are epiphytes. Only a few species are distributed in temperate regions. The four main centres of distribution are Indonesia and Malaysia, Africa, Brazil, and Central America. Representatives of the family can be found in nearly every habitat, including dense or open forests, scrublands, wet fields and valleys, sea coast and marine areas, swamps, and mangrove forests.",
+    "url": "https://en.wikipedia.org/wiki/Acanthaceae"
+  },
+  "Ruellia": {
+    "description": "Ruellia is a genus of flowering plants commonly known as ruellias or wild petunias. They are not closely related to petunias (Petunia) although both genera belong to the same euasterid clade. The genus was named in honor of Jean Ruelle (1474\u20131537), herbalist and physician to Francis I of France and translator of several works of Dioscorides.",
+    "url": "https://en.wikipedia.org/wiki/Ruellia"
   }
 }
