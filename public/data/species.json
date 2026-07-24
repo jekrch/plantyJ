@@ -4120,6 +4120,70 @@
       ],
       "observationsCount": 19131
     },
+    "phlox-paniculata": {
+      "id": "phlox-paniculata",
+      "fullName": "Phlox paniculata",
+      "commonName": "Garden Phlox",
+      "description": "Phlox paniculata is a species of flowering plant in the phlox family (Polemoniaceae). It is native to parts of the eastern and central United States. It is extensively cultivated in temperate regions as an ornamental plant and has become established in the wild in scattered locales in other regions. Common names include fall phlox, garden phlox, perennial phlox, summer phlox, and panicled phlox.",
+      "vernacularNames": [
+        "Fall Phlox",
+        "Fall Phlox (EN)",
+        "Fall-pink",
+        "Garden Phlox",
+        "Hoher Stauden-Phlox (DE)",
+        "L\u011btnja p\u0142omjenjowka",
+        "Panicled Phlox",
+        "Perennial Phlox",
+        "Perennial-pink",
+        "Phlox",
+        "Stauden-Phlox",
+        "Summer Phlox",
+        "Sweet-william",
+        "fall phlox"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Ericales",
+        "family": "Polemoniaceae",
+        "genus": "Phlox",
+        "species": "Phlox paniculata",
+        "canonicalName": "Phlox paniculata"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2927744"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Phlox_paniculata"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/117437"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q164553"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.141754"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 34341
+    },
     "phlox-subulata": {
       "id": "phlox-subulata",
       "fullName": "Phlox subulata",
