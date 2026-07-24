@@ -967,6 +967,19 @@
       "created": "2026-05-13T00:45:26.434Z"
     },
     {
+      "shortCode": "P vir",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "Virginia Mountain Mint (Pycnanthemum virginianum) represents an outstanding ecological addition to the front yard. Renowned as an absolute pollinator powerhouse, this Minnesota-native perennial produces dense, nectar-rich, white-to-lavender flower clusters that hum with life from mid-to-late summer. It supports a remarkable diversity of native insects, including sweat bees, bumblebees, leafcutter bees, butterflies, moths, and beneficial predatory or parasitoid wasps that naturally control garden pests. Its highly aromatic foliage, rich in volatile essential oils, acts as a potent natural deterrent to mammalian herbivores like deer and rabbits, ensuring the plant remains unbothered without chemical intervention.\n\nThis specimen is exceptionally well-suited to the tough conditions of this front yard zone. The compacted clay loam soil, which swings from wet in spring to dry in summer, is easily tolerated by this robust species. Fortuitously, both the dense clay soil and the partial shade provided by this zone will help curb the plant's native rhizomatous spreading tendency, keeping it much more compact and well-behaved than if it were growing in loose, wet, full-sun conditions. Furthermore, it perfectly aligns with the owners' priorities. As a medicinal herb, it has a rich history of ethnobotanical use by Indigenous peoples, including the Ojibwe and Lakota, who brewed the leaves into a peppermint-flavored tea to treat fevers, chills, and gastrointestinal issues. In this semi-shaded urban lot, it is a low-maintenance, ecologically valuable cornerstone.",
+      "references": [
+        "https://www.minnesotawildflowers.info/flower/virginia-mountain-mint",
+        "https://themistymushroom.farm/the-wonders-of-virginia-mountain-mint/",
+        "https://plants.ces.ncsu.edu/plants/pycnanthemum-virginianum/",
+        "https://sagmoraine.org/native-plant/virginia-mountain-mint/"
+      ],
+      "created": "2026-07-24T23:12:07.563Z"
+    },
+    {
       "shortCode": "R bla",
       "zoneCode": "fy",
       "verdict": "GOOD",
@@ -976,11 +989,38 @@
     },
     {
       "shortCode": "R hir",
+      "zoneCode": "fy",
+      "verdict": "MIXED",
+      "analysis": "While Black-eyed Susan is a fantastic native powerhouse, planting it in the front yard (fy) zone presents a mixed ecological and structural fit. This zone is characterized by mostly shady conditions throughout the day, whereas Black-eyed Susan is a sun-loving pioneer species that thrives in open, bright sites. Under heavy shade, it frequently exhibits floppy, leggy growth and significantly reduced flowering, preventing it from performing at its peak ecological potential. However, its tolerance for the compacted clay loam, which transitions from wet in spring to dry in summer, is exceptional, making it highly resilient to local physical soil conditions.\n\nWhen it does bloom, it provides immense ecological benefits to the local fauna. It supports native pollinators, acting as a critical nectar source for resident butterflies such as the American Lady and Monarch. It also serves as a larval host plant for the silvery checkerspot caterpillar and the wavy-lined emerald moth, while its pollen nourishes specialist bees like Andrena rudbeckiae. In autumn, seed-eating songbirds, particularly the American Goldfinch, heavily forage on its dried seed heads. For this Minneapolis garden, this short-lived perennial or biennial will readily self-seed, but the owners should consider transplanting new seedlings to sunnier spots on the property, like the North or West Boulevards, where they can receive the full sun required to maximize their ecological contributions.",
+      "references": [
+        "https://gardenforwildlife.com/products/black-eyed-susan-plant-sets",
+        "https://www.pollinatorsnativeplants.com/specialistbees.html",
+        "https://www.minneapolisparks.org/wp-content/uploads/2026/05/Eloise-Butler-Wildflower-Garden-2023-24-Bee-Census-Report_4.14.26.pdf"
+      ],
+      "created": "2026-07-24T23:12:07.563Z"
+    },
+    {
+      "shortCode": "R hir",
       "zoneCode": "sy",
       "verdict": "GOOD",
       "analysis": "Rudbeckia hirta (Black-eyed Susan) is a pioneer native species that establishes quickly and provides brilliant summer color while supporting a robust ecosystem. Its composite flowers are heavily visited by native bees, beneficial wasps, and butterflies, while its seeds are a favorite of overwintering songbirds. It tolerates clay and loam effortlessly, acting as an excellent short-lived perennial or self-sowing biennial in the side yard.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "R hum",
+      "zoneCode": "nbv",
+      "verdict": "GOOD",
+      "analysis": "The introduction of wild petunia (Ruellia humilis) in the north boulevard zone represents an outstanding ecological fit for this challenging, sunny, and compacted hellstrip. This species is native to Minnesota, where it is listed as a State Special Concern in the wild, making its cultivation highly valuable for urban conservation efforts. With its compact growth habit (usually under two feet tall), it easily complies with city boulevard height ordinances while its extreme drought tolerance and adaptability to compacted clay-loam soils allow it to thrive where other plants might struggle. Although it can aggressively self-seed in optimal conditions, this habit is a benefit in a tough boulevard setting, as it forms a dense, weed-suppressing ground cover that helps fill empty niches.\n\nEcologically, wild petunia is a powerhouse for local fauna. It serves as an essential larval host plant for the Common Buckeye butterfly and provides a vital nectar source for long-tongued native pollinators like bumblebees and butterflies during the hot summer months. Its tubular flowers also attract hummingbirds, and its seed capsules forcefully eject seeds, which are then dispersed by local ants or birds. Situated alongside boulevard neighbors like common milkweed, sideoats grama, and golden alexanders, wild petunia helps establish a rich, multi-layered native plant community that significantly boosts local biodiversity and fits perfectly with the owners' ecological priorities.",
+      "references": [
+        "https://www.minnesotawildflowers.info/flower/wild-petunia",
+        "https://www.dnr.state.mn.us/rsg/species-detail.html?id=9157",
+        "https://www.prairiemoon.com/ruellia-humilis-wild-petunia",
+        "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHNVuHES8-R7On0tQnTML-Z2f8jQIC5rTT1-UaUnTqUidMLe0H9YBheSRLP6H7xDaFe3MM7Wum20-t3RbkObYnCompVbnarV4NISygI_oC8cHBQerpq_PUQD_jK3FGpImW7Z1GGeTrXhPco5bITYUz1ii18Q=",
+        "https://newmoonnursery.com/nursery-plants/ruellia-humilis/",
+        "https://www.cottagegardennatives.com/s/stories/native-plant-spotlight-fringeleaf-wild-petunia-ruellia-humilis-2"
+      ],
+      "created": "2026-07-24T23:12:07.563Z"
     },
     {
       "shortCode": "r ida",
