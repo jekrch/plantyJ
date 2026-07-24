@@ -11,7 +11,10 @@
       "postedBy": "Jacob",
       "addedAt": "2026-07-24T22:11:04.497Z",
       "width": 831,
-      "height": 1280
+      "height": 1280,
+      "bioclipSpeciesId": "Rudbeckia hirta",
+      "bioclipCommonName": "Black-eyed-Susan",
+      "bioclipScore": 0.5873
     },
     {
       "seq": 150,
@@ -1151,7 +1154,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1345,7 +1348,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
