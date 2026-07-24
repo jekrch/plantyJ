@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P pan",
+      "fullName": "Phlox paniculata",
+      "commonName": "Garden Phlox",
+      "variety": null
+    },
+    {
       "shortCode": "P vir",
       "fullName": "Pycnanthemum virginianum",
       "commonName": "Virginia Mountain Mint",
