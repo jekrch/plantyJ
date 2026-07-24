@@ -889,6 +889,19 @@
       "created": "2026-07-21T02:46:07.659Z"
     },
     {
+      "shortCode": "P pan",
+      "zoneCode": "fy",
+      "verdict": "MIXED",
+      "analysis": "Phlox paniculata (Garden Phlox) serves as a valuable mid-to-late summer ecological resource in this front yard garden. As a North American native perennial indigenous to parts of southern and eastern Minnesota, its fragrant, nectar-rich flowers are an evolutionary match for long-tongued insects. Its primary pollinators include native butterflies, skippers, and hummingbird moths (such as clearwing moths), which can successfully navigate its deep, narrow corollas to access the nectar. The plant's mid-summer bloom provides a crucial nectar bridge for adult butterflies that reproduce nearby in the front yard, such as the Black Swallowtails whose caterpillars feed on the neighboring Zizia aurea, and American Ladies whose larvae host on Anaphalis margaritacea. Additionally, its foliage can host the larvae of native moths like the Olive Arches moth, and its autumn seeds provide valuable forage for local songbirds.\n\nHowever, the physical conditions of the front yard zone present significant cultural challenges, making its overall niche mixed. This zone is described as mostly shady during the day with compacted clay loam that remains wet in the spring and dries in the summer. Phlox paniculata is notoriously susceptible to powdery mildew, a fungal pathogen that thrives on damp foliage in shade and poor air circulation. Without at least six hours of direct sunlight to dry its leaves and promote robust growth, the plant will struggle with disfiguring mildew, leggy stems, and sparse flowering. Furthermore, wet spring clay threatens the taproot with crown rot, while summer drought on compacted loam will trigger severe wilting, lower leaf drop, and make the stressed plant highly susceptible to spider mites and native phlox plant bugs. For owners prioritizing a resilient, low-input ecological garden, transitioning to a more shade-tolerant native species like Phlox divaricata in this spot—or moving this specimen to a sunnier, better-aerated zone—would improve its health and maximize its pollinator value.",
+      "references": [
+        "https://www.minnesotawildflowers.info/flower/garden-phlox",
+        "https://extension.umn.edu/gardening-minnesota/tall-garden-phlox",
+        "https://mtcubacenter.org/finding-the-perfect-phlox/",
+        "https://plants.ces.ncsu.edu/plants/phlox-paniculata/"
+      ],
+      "created": "2026-07-24T04:51:07.507Z"
+    },
+    {
       "shortCode": "P pol",
       "zoneCode": "fy",
       "verdict": "GOOD",
