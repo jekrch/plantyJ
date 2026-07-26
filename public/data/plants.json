@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P can",
+      "fullName": "Polymnia canadensis",
+      "commonName": "White Leafcup",
+      "variety": null
+    },
+    {
       "shortCode": "T pra",
       "fullName": "Trifolium pratense",
       "commonName": "Red Clover",
