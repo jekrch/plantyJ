@@ -836,6 +836,19 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "P can",
+      "zoneCode": "nbv",
+      "verdict": "MIXED",
+      "analysis": "Polymnia canadensis (White Leafcup) is a perennial native to Minnesota, making its presence highly aligned with the owners' focus on supporting local ecology. It offers superb ecological benefits: its blooms attract a wide variety of native pollinators, including bumble bees, solitary bees, wasps, flies, and beetles, while its plump seeds serve as forage for birds and small mammals. Crucially, its tall, hollow stems provide vital overwintering and nesting habitat for solitary bees when left standing into spring. Additionally, several native plant bugs and aphids feed on its resinous foliage without causing significant damage.\n\nHowever, the North Boulevard zone is a mixed fit for its cultural requirements. White leafcup is a woodland understory species that typically requires partial to deep shade and loose, moist, calcareous or loamy soils. The North Boulevard is mostly sunny with compacted soil that can become very dry. To help this specimen thrive in these conditions, the owners should capitalize on the shade and leaf litter provided by neighboring trees in the zone, such as the Sugar Maple and Yellow Buckeye. Siting the leafcup in these shaded microclimates or in the damp, low-lying areas of the boulevard will mitigate sun and drought stress, allowing it to establish and self-seed successfully.",
+      "references": [
+        "https://www.minnesotawildflowers.info/flower/leafcup",
+        "https://www.prairiemoon.com/polymnia-canadensis-small-flowered-leafcup",
+        "https://mdc.mo.gov/discover-nature/field-guide/pale-flowered-leaf-cup",
+        "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHIZUJYvo1DZvu_FiznhAmWU8I0wqgEFW3yvIzIhgx8RaEWIazLv9aBXdBVBgaiIR7-xBFNcnIMV_Y6g9alQ_2q5UxG4zyP16cOr5lD9GrrX8XCKLtN50v8HHgj1zsOJ277BY-N-TsxBziLpom8_qhl5BqzPOeoJa4Q27XuQJPnCaisdPx0vsoAYcuMUt_g9ZwaEY4SNqUGdWRpl5NcOK8="
+      ],
+      "created": "2026-07-26T02:18:07.484Z"
+    },
+    {
       "shortCode": "P com",
       "zoneCode": "bb",
       "verdict": "GOOD",
