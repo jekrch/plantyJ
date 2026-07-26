@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "T pra",
+      "fullName": "Trifolium pratense",
+      "commonName": "Red Clover",
+      "variety": null
+    },
+    {
       "shortCode": "R hum",
       "fullName": "Ruellia humilis",
       "commonName": "Wild Petunia",
