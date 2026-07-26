@@ -25,9 +25,13 @@ const MEDIA = "https://www.googleapis.com/drive/v3/files";
 const PARAM = "public";
 const USER_PARAM = "u";
 
-// Below this requested longest-edge we serve the pre-generated ~320px thumbnail
-// (the masonry grid); at/above it — lightbox and hero images — the full upload.
-const THUMB_MAX_REQUEST = 800;
+// The pre-generated thumbnail is 320px on its longest edge (driveSource's
+// THUMB_MAX_DIM). Only substitute it when the request fits within that — small
+// editor/tree/web chips — so an anonymous viewer never receives an image
+// smaller than it asked for. Larger requests (the masonry wall at 800, info
+// panels at 400, lightbox/hero) get the full upload, matching what a signed-in
+// viewer of the same garden sees rather than an upscaled thumbnail.
+const THUMB_MAX_REQUEST = 320;
 
 // Both share params are captured once at load, before the app's filter/view
 // state can rewrite the URL and drop them (useFilterParams rebuilds the query
