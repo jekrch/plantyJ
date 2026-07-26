@@ -898,5 +898,9 @@
   "Trifolium": {
     "description": "Clovers, also called trefoils, are plants of the genus Trifolium. They are herbaceous plants growing up to 30\u00a0cm (12\u00a0in) tall. The leaves are usually trifoliate and the small flowers are reddish to white or yellow. Related genera with similar common names include Melilotus and Medicago (burclover).",
     "url": "https://en.wikipedia.org/wiki/Clover"
+  },
+  "Polymnia": {
+    "description": "Polymnia is a genus of American plants in the sunflower family. It is the only genus in the tribe Polymnieae. Several species are known by the common name leafcup.SpeciesPolymnia aspera (Mart.) Mart. ex DC. \u2013 Mexico\nPolymnia canadensis L. \u2013 Ontario, much of eastern + central United States\nPolymnia cocuyensis Cuatrec. \u2013 Boyac\u00e1 in Colombia\nPolymnia cossatotensis Pittman & V.M.Bates \u2013 Arkansas\nPolymnia johnbeckii D.Estes \u2013 Tennessee\nPolymnia laevigata Beadle \u2013 MO KY TN AL GA FL\nPolymnia quichensis J.M.Coult. \u2013 Costa Rica, Guatemala\nPolymnia sonchifolia Poepp. \u2013 BoliviaFormerly included",
+    "url": "https://en.wikipedia.org/wiki/Polymnia"
   }
 }

@@ -4401,6 +4401,62 @@
       "observationsCount": 35753,
       "edible": true
     },
+    "polymnia-canadensis": {
+      "id": "polymnia-canadensis",
+      "fullName": "Polymnia canadensis",
+      "commonName": "White Leafcup",
+      "description": "Polymnia canadensis, commonly known as whiteflower leafcup, is a flowering perennial plant in the family Asteraceae. It is native to eastern North America from Ontario south to Alabama and from Kansas, Oklahoma, and Minnesota east to North Carolina, Vermont and Connecticut. It is considered endangered in the last three states. It is typically found in moist forests over calcareous rocks.",
+      "vernacularNames": [
+        "Whiteflower Leafcup",
+        "leafcup",
+        "pale-flowered leafcup",
+        "rayless leafcup",
+        "small-flowered leafcup",
+        "white-flowered leafcup"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Asterales",
+        "family": "Asteraceae",
+        "genus": "Polymnia",
+        "species": "Polymnia canadensis",
+        "canonicalName": "Polymnia canadensis"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5385137"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Polymnia_canadensis"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/85383"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q7226587"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.139609"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 12078
+    },
     "primula-veris": {
       "id": "primula-veris",
       "fullName": "Primula veris",
