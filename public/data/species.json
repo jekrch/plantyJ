@@ -6235,6 +6235,64 @@
       ],
       "observationsCount": 21285
     },
+    "trifolium-pratense": {
+      "id": "trifolium-pratense",
+      "fullName": "Trifolium pratense",
+      "commonName": "Red Clover",
+      "description": "Trifolium pratense (from Latin pr\u0101tum, meaning meadow), red clover, is a herbaceous species of flowering plant in the bean family, Fabaceae. It is native to the Old World, but planted and naturalised in many other regions.",
+      "vernacularNames": [
+        "Chilean Clover",
+        "Cowgrass Clover",
+        "Czerwion\u00f4 k\u00f2nicz\u00ebna",
+        "Mammoth Red Clover",
+        "Medium Red Clover",
+        "Peavine Clover",
+        "Purple Clover",
+        "Red Clover"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Fabales",
+        "family": "Fabaceae",
+        "genus": "Trifolium",
+        "species": "Trifolium pratense",
+        "canonicalName": "Trifolium pratense"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/8324121"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Trifolium_pratense"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/51875"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q156635"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.140855"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 234680
+    },
     "tropidosteptes-amoenus": {
       "id": "tropidosteptes-amoenus",
       "fullName": "Tropidosteptes amoenus",

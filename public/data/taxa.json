@@ -894,5 +894,9 @@
   "Ruellia": {
     "description": "Ruellia is a genus of flowering plants commonly known as ruellias or wild petunias. They are not closely related to petunias (Petunia) although both genera belong to the same euasterid clade. The genus was named in honor of Jean Ruelle (1474\u20131537), herbalist and physician to Francis I of France and translator of several works of Dioscorides.",
     "url": "https://en.wikipedia.org/wiki/Ruellia"
+  },
+  "Trifolium": {
+    "description": "Clovers, also called trefoils, are plants of the genus Trifolium. They are herbaceous plants growing up to 30\u00a0cm (12\u00a0in) tall. The leaves are usually trifoliate and the small flowers are reddish to white or yellow. Related genera with similar common names include Melilotus and Medicago (burclover).",
+    "url": "https://en.wikipedia.org/wiki/Clover"
   }
 }
