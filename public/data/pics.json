@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 158,
+      "id": "c card-1785085890",
+      "shortCode": "c card",
+      "zoneCode": "wbv",
+      "tags": [],
+      "description": "male cardinal perched on native plants sign in the wb",
+      "image": "images/c card/1785085890.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-07-26T17:11:31.886Z",
+      "width": 1262,
+      "height": 1280
+    },
+    {
       "seq": 157,
       "id": "S mar-1785085638",
       "shortCode": "S mar",
@@ -1262,7 +1275,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1456,7 +1469,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
