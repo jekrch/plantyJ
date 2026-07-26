@@ -125,6 +125,19 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "A mil",
+      "zoneCode": "nbv",
+      "verdict": "GOOD",
+      "analysis": "Achillea millefolium (Common Yarrow) occupies an exceptionally beneficial ecological niche in the North Boulevard zone. This harsh urban \"hell strip\" is characterized by compacted clay loam, full sun, and seasonal moisture fluctuations, along with typical roadside stressors like winter road salt and reflected heat. Yarrow is famously resilient under these conditions, exhibiting excellent drought and moderate salinity tolerance. Below ground, its extensive, fibrous root network works physically to fracture and aerate dense, compacted clay, which over time enhances water infiltration, prevents erosion, and improves soil structure. This soil remediation directly supports neighboring boulevard plantings such as Asclepias tuberosa and Bouteloua curtipendula. Furthermore, its vigorous rhizomatous spreading habit is highly desirable in an exposed roadside zone, forming a dense, low-maintenance weed barrier that suppresses invasive plants.\n\nFrom a biological standpoint, yarrow's broad, flat-topped flower heads function as ideal landing platforms for a wide array of native generalist pollinators, including bumble bees, sweat bees, hoverflies, and butterflies. It also attracts beneficial predatory and parasitoid insects—such as lacewings and ladybugs—which provide natural pest control for the broader garden. The bitter, aromatic compounds in its fern-like foliage render it highly resistant to deer and rabbits, a critical advantage for an unprotected street-side garden. Although the pink-flowered specimen in this journal suggests a garden cultivar rather than the straight native white species, it still retains the structural and soil-healing benefits of the species complex. In a stressful, compacted boulevard zone, its hardiness, ecological contributions, and compliance with the owners' native and medicinal priorities make it an outstanding addition.",
+      "references": [
+        "https://nativeplantgardener.ca/boulevard-gardens/",
+        "https://mnlcorp.com/blog/2026/01/07/tough-plants-for-tough-places/",
+        "https://hgic.clemson.edu/native-perennial-wildflowers-to-improve-soil-health/",
+        "https://www.pleasantrunnursery.com/plant-name/Achillea-millefolium"
+      ],
+      "created": "2026-07-26T02:05:07.523Z"
+    },
+    {
       "shortCode": "a pla",
       "zoneCode": "mpg",
       "verdict": "BAD",
@@ -1286,6 +1299,19 @@
         "https://myrmecologicalnews.org/cms/index.php?option=com_download&view=download&filename=volume32/mn32_75-92_printable.pdf&format=raw"
       ],
       "created": "2026-05-16T17:54:59.856Z"
+    },
+    {
+      "shortCode": "T pra",
+      "zoneCode": "nbv",
+      "verdict": "MIXED",
+      "analysis": "Trifolium pratense, or red clover, occupies a complex ecological niche in the north boulevard zone. On the positive side, this species is highly resilient and well-equipped to handle the harsh conditions of a city boulevard, which features compacted clay loam soil and variable moisture. Its deep taproot helps aerate and break up compacted soils, while its symbiotic relationship with Rhizobium bacteria allows it to fix atmospheric nitrogen, naturally improving poor soil fertility. For local wildlife, red clover is a valuable resource. It serves as a critical larval host plant for native insects like the clouded sulphur butterfly and provides an abundant supply of high-quality nectar and pollen for long-tongued native pollinators, including the common eastern bumble bee observed elsewhere in the garden. Furthermore, it supports the owners' priority for medicinals; its blossoms are rich in isoflavones and are traditionally harvested for herbal teas to alleviate respiratory issues and menopausal symptoms.\n\nHowever, red clover presents significant challenges for a garden with a strong commitment to native plant ecology. Red clover is a non-native, naturalized species introduced from Europe and Asia, which directly conflicts with the owners' native-priority goals. Because it is a vigorous self-seeder, it can easily become weedy and aggressive in highly disturbed areas like the boulevard. This aggressive growth, coupled with its nitrogen-fixing ability, can alter local soil chemistry in a way that disadvantages native prairie plants in this zone, such as sideoats grama and partridge pea, which are evolutionary adapted to leaner, low-nitrogen soils. Over-enriching the soil can inadvertently facilitate the invasion of other aggressive exotic weeds, demanding ongoing maintenance. Given that the owners have already actively managed this zone by removing other invasive non-natives like the oxeye daisy, red clover's presence is a mixed blessing that requires strict containment or eventual replacement with a native nitrogen-fixer like purple prairie clover.",
+      "references": [
+        "https://www.minnesotawildflowers.info/flower/red-clover",
+        "https://www.minnesotaseasons.com/Plants/red_clover_OLD.html",
+        "https://plants.ces.ncsu.edu/plants/trifolium-pratense/",
+        "https://www.healthline.com/nutrition/red-clover"
+      ],
+      "created": "2026-07-26T02:05:07.523Z"
     },
     {
       "shortCode": "T ser",
