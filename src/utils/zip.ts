@@ -6,7 +6,9 @@
 
 export interface ZipEntry {
   name: string;
-  data: Uint8Array;
+  // Explicitly backed by ArrayBuffer (not SharedArrayBuffer): lib.dom's BlobPart
+  // only accepts ArrayBufferView<ArrayBuffer>, and these end up in a Blob below.
+  data: Uint8Array<ArrayBuffer>;
 }
 
 const CRC_TABLE = (() => {
@@ -27,8 +29,8 @@ function crc32(bytes: Uint8Array): number {
 
 export function createZip(entries: ZipEntry[]): Blob {
   const encoder = new TextEncoder();
-  const chunks: Uint8Array[] = [];
-  const central: Uint8Array[] = [];
+  const chunks: Uint8Array<ArrayBuffer>[] = [];
+  const central: Uint8Array<ArrayBuffer>[] = [];
   let offset = 0;
 
   for (const entry of entries) {
