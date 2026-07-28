@@ -1,4 +1,12 @@
-import { useEffect, useLayoutEffect, useState, useMemo, useCallback, useRef } from "react";
+import {
+  Suspense,
+  useEffect,
+  useLayoutEffect,
+  useState,
+  useMemo,
+  useCallback,
+  useRef,
+} from "react";
 import { Sprout, House, ImagePlus } from "lucide-react";
 import { sortOrganismsAsync } from "./utils/sorting.ts";
 import { applyFilters, hasActiveFilters } from "./utils/filtering.ts";
@@ -7,20 +15,30 @@ import MasonryGrid from "./components/MasonryGrid";
 import BackgroundEchoes from "./components/BackgroundEchoes";
 import { SpinnerState, ErrorState, EmptyState, SignInState } from "./components/StatusStates";
 import SourceMenu from "./components/SourceMenu";
-import AddEntrySheet from "./components/AddEntrySheet";
 import { getSourceMode, isWritable } from "./data/source";
-import OrganismViewer from "./components/OrganismViewer";
-import InfoModal from "./components/InfoModal";
-import WelcomeModal, { hasSeenWelcome } from "./components/WelcomeModal";
+import { hasSeenWelcome } from "./components/welcomeSeen";
 import GardenTour from "./components/GardenTour";
-import SpotlightView from "./components/SpotlightView";
-import TreeView from "./components/TreeView";
-import WebView from "./components/WebView";
 import ViewModeControl from "./components/ViewModeControl";
 import type { Organism } from "./types";
 import { useOrganismData } from "./hooks/useOrganismData";
 import { useViewState } from "./hooks/useViewState";
 import { useOrganismViewer } from "./hooks/useOrganismViewer";
+import { lazyWithPreload, preloadWhenIdle } from "./lazy";
+
+/**
+ * Everything below is split out of the initial bundle. The gallery is what the
+ * first paint needs; the tree and food web carry d3, the viewer carries the
+ * lightbox, the about modal carries the stats charts, and the add sheet only
+ * exists for signed-in writers. Each loads on the interaction that reveals it,
+ * warmed ahead of time by `preloadWhenIdle` below where that's worth doing.
+ */
+const OrganismViewer = lazyWithPreload(() => import("./components/OrganismViewer"));
+const InfoModal = lazyWithPreload(() => import("./components/InfoModal"));
+const TreeView = lazyWithPreload(() => import("./components/TreeView"));
+const WebView = lazyWithPreload(() => import("./components/WebView"));
+const SpotlightView = lazyWithPreload(() => import("./components/SpotlightView"));
+const AddEntrySheet = lazyWithPreload(() => import("./components/AddEntrySheet"));
+const WelcomeModal = lazyWithPreload(() => import("./components/WelcomeModal"));
 
 export default function App() {
   const data = useOrganismData();
@@ -117,6 +135,28 @@ export default function App() {
   const [welcomeOpen, setWelcomeOpen] = useState(
     () => getSourceMode() === "static" && !hasSeenWelcome(),
   );
+
+  // The welcome and about modals animate themselves out, so they have to stay
+  // mounted through the close. Latch on the first open instead of unmounting
+  // with `open`: before that first open there's nothing to animate and no
+  // reason to have fetched the chunk.
+  const [welcomeMounted, setWelcomeMounted] = useState(welcomeOpen);
+  const [infoMounted, setInfoMounted] = useState(false);
+  useEffect(() => {
+    if (welcomeOpen) setWelcomeMounted(true);
+  }, [welcomeOpen]);
+  useEffect(() => {
+    if (view.infoOpen) setInfoMounted(true);
+  }, [view.infoOpen]);
+
+  // Warm the chunks behind the likeliest next taps once the garden has settled
+  // and the browser is idle, so splitting them out doesn't make opening a photo
+  // or switching views wait on a fetch.
+  const dataReady = data.status === "ready";
+  useEffect(() => {
+    if (!dataReady) return;
+    return preloadWhenIdle([OrganismViewer, InfoModal, TreeView, WebView, SpotlightView]);
+  }, [dataReady]);
 
   useLayoutEffect(() => {
     const el = headerRef.current;
@@ -262,56 +302,66 @@ export default function App() {
             )}
 
             {(viewMode === "plant" || viewMode === "zone") && view.spotlightCode && (
-              <SpotlightView
-                kind={viewMode}
-                subjectCode={view.spotlightCode}
-                allOrganisms={viewMode === "plant" ? data.organisms : activeOrgs}
-                removedSet={removedSet}
-                zonePics={data.zonePics}
-                zones={data.zones}
-                onOpenViewer={viewer.openFromSpotlight}
-                onDeleted={() => view.handleViewModeChange("gallery", null)}
-              />
+              <Suspense fallback={<SpinnerState />}>
+                <SpotlightView
+                  kind={viewMode}
+                  subjectCode={view.spotlightCode}
+                  allOrganisms={viewMode === "plant" ? data.organisms : activeOrgs}
+                  removedSet={removedSet}
+                  zonePics={data.zonePics}
+                  zones={data.zones}
+                  onOpenViewer={viewer.openFromSpotlight}
+                  onDeleted={() => view.handleViewModeChange("gallery", null)}
+                />
+              </Suspense>
             )}
           </div>
         )}
       </main>
 
       {status === "ready" && organisms.length > 0 && viewMode === "tree" && (
-        <TreeView
-          organisms={activeOrgs}
-          speciesByShortCode={data.speciesByShortCode}
-          taxa={data.taxa}
-          zones={data.zones}
-          headerHeight={headerHeight}
-          onOpenOrganismInList={viewer.openInList}
-          onSpotlightOrganism={view.handleSpotlightOrganism}
-          initialTreeNode={view.treeFocusNode}
-          onNodeSelect={view.handleTreeNodeSelect}
-          speciesLoaded={data.speciesLoaded}
-          relationships={data.relationships}
-        />
+        <Suspense fallback={<SpinnerState />}>
+          <TreeView
+            organisms={activeOrgs}
+            speciesByShortCode={data.speciesByShortCode}
+            taxa={data.taxa}
+            zones={data.zones}
+            headerHeight={headerHeight}
+            onOpenOrganismInList={viewer.openInList}
+            onSpotlightOrganism={view.handleSpotlightOrganism}
+            initialTreeNode={view.treeFocusNode}
+            onNodeSelect={view.handleTreeNodeSelect}
+            speciesLoaded={data.speciesLoaded}
+            relationships={data.relationships}
+          />
+        </Suspense>
       )}
 
       {status === "ready" && organisms.length > 0 && viewMode === "web" && (
-        <WebView
-          organisms={activeOrgs}
-          organismRecords={data.organismRecords}
-          removedShortCodes={removedShortCodes}
-          speciesByShortCode={data.speciesByShortCode}
-          taxa={data.taxa}
-          zones={data.zones}
-          aiAnalyses={data.aiAnalyses}
-          relationships={data.relationships}
-          headerHeight={headerHeight}
-          onSpotlightOrganism={view.handleSpotlightOrganism}
-          onOpenOrganismInList={viewer.openInList}
-          initialWebNode={view.webFocusNode}
-          onNodeSelect={view.handleWebNodeSelect}
-        />
+        <Suspense fallback={<SpinnerState />}>
+          <WebView
+            organisms={activeOrgs}
+            organismRecords={data.organismRecords}
+            removedShortCodes={removedShortCodes}
+            speciesByShortCode={data.speciesByShortCode}
+            taxa={data.taxa}
+            zones={data.zones}
+            aiAnalyses={data.aiAnalyses}
+            relationships={data.relationships}
+            headerHeight={headerHeight}
+            onSpotlightOrganism={view.handleSpotlightOrganism}
+            onOpenOrganismInList={viewer.openInList}
+            initialWebNode={view.webFocusNode}
+            onNodeSelect={view.handleWebNodeSelect}
+          />
+        </Suspense>
       )}
 
-      <WelcomeModal open={welcomeOpen} onClose={() => setWelcomeOpen(false)} />
+      {welcomeMounted && (
+        <Suspense fallback={null}>
+          <WelcomeModal open={welcomeOpen} onClose={() => setWelcomeOpen(false)} />
+        </Suspense>
+      )}
 
       {/* `ready` gates only the automatic tour: a spotlight measured against an
           overlay lands in the wrong place, and two overlapping introductions is
@@ -330,51 +380,59 @@ export default function App() {
         }
       />
 
-      <InfoModal
-        open={view.infoOpen}
-        onClose={view.handleCloseInfo}
-        activeTab={view.infoTab}
-        onTabChange={view.handleInfoTabChange}
-        organisms={organisms}
-        activeOrganisms={activeOrgs}
-        removedShortCodes={removedShortCodes}
-        organismRecords={data.organismRecords}
-        zones={data.zones}
-        zonePics={data.zonePics}
-        speciesByShortCode={data.speciesByShortCode}
-        aiAnalyses={data.aiAnalyses}
-        onSpotlightOrganism={view.handleSpotlightOrganism}
-        onSpotlightZone={view.handleSpotlightZone}
-        onSelectTaxon={handleSelectTaxon}
-        onShowBioclipConflicts={view.handleShowBioclipConflicts}
-        onShowEcoFit={view.handleShowEcoFit}
-      />
+      {infoMounted && (
+        <Suspense fallback={null}>
+          <InfoModal
+            open={view.infoOpen}
+            onClose={view.handleCloseInfo}
+            activeTab={view.infoTab}
+            onTabChange={view.handleInfoTabChange}
+            organisms={organisms}
+            activeOrganisms={activeOrgs}
+            removedShortCodes={removedShortCodes}
+            organismRecords={data.organismRecords}
+            zones={data.zones}
+            zonePics={data.zonePics}
+            speciesByShortCode={data.speciesByShortCode}
+            aiAnalyses={data.aiAnalyses}
+            onSpotlightOrganism={view.handleSpotlightOrganism}
+            onSpotlightZone={view.handleSpotlightZone}
+            onSelectTaxon={handleSelectTaxon}
+            onShowBioclipConflicts={view.handleShowBioclipConflicts}
+            onShowEcoFit={view.handleShowEcoFit}
+          />
+        </Suspense>
+      )}
 
       {writable && addOpen && (
-        <AddEntrySheet
-          open={addOpen}
-          onClose={() => setAddOpen(false)}
-          organismRecords={data.organismRecords}
-          zones={data.zones}
-        />
+        <Suspense fallback={null}>
+          <AddEntrySheet
+            open={addOpen}
+            onClose={() => setAddOpen(false)}
+            organismRecords={data.organismRecords}
+            zones={data.zones}
+          />
+        </Suspense>
       )}
 
       {viewer.openIndex >= 0 && (
-        <OrganismViewer
-          organism={viewer.viewerOrganisms[viewer.openIndex]}
-          organisms={viewer.viewerOrganisms}
-          allOrganisms={organisms}
-          zones={data.zones}
-          zonePics={data.zonePics}
-          annotations={data.annotations}
-          speciesByShortCode={data.speciesByShortCode}
-          relationships={data.relationships}
-          currentIndex={viewer.openIndex}
-          onClose={viewer.closeViewer}
-          onNavigate={viewer.navigateViewer}
-          onSelectOrganism={viewer.selectOrganism}
-          onSelectTaxon={handleSelectTaxon}
-        />
+        <Suspense fallback={null}>
+          <OrganismViewer
+            organism={viewer.viewerOrganisms[viewer.openIndex]}
+            organisms={viewer.viewerOrganisms}
+            allOrganisms={organisms}
+            zones={data.zones}
+            zonePics={data.zonePics}
+            annotations={data.annotations}
+            speciesByShortCode={data.speciesByShortCode}
+            relationships={data.relationships}
+            currentIndex={viewer.openIndex}
+            onClose={viewer.closeViewer}
+            onNavigate={viewer.navigateViewer}
+            onSelectOrganism={viewer.selectOrganism}
+            onSelectTaxon={handleSelectTaxon}
+          />
+        </Suspense>
       )}
     </div>
   );

@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { EVENTS, Joyride, STATUS, type EventData, type Options } from "react-joyride";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import {
   advanceTourStage,
   getTourStage,
@@ -13,6 +12,9 @@ import { getSessionUser } from "../data/googleAuth";
 import { useAIFeaturesVisible } from "../hooks/useAIFeatures";
 import { tourSteps, type TourControls, type TourId } from "../data/tours";
 import TourPicker from "./TourPicker";
+
+// Joyride itself is loaded on demand — most visits never start a tour.
+const TourRunner = lazy(() => import("./TourRunner"));
 
 /**
  * Guided tours for cloud users.
@@ -77,70 +79,6 @@ export function pickTourStage({
   if (stage === TOUR_STARTED && organismCount > 0) return TOUR_DONE;
   return null;
 }
-
-// Mirrors the palette in index.css — joyride styles inline, so it can't read
-// the Tailwind custom properties.
-const TOUR_OPTIONS: Partial<Options> = {
-  arrowColor: "#112014",
-  backgroundColor: "#112014",
-  overlayColor: "rgba(0, 0, 0, 0.72)",
-  primaryColor: "#7fb069",
-  textColor: "#d8e6d2",
-  // Above the sticky header (z-40), the modals (z-50), and the relationship
-  // studio, which portals itself to z-80.
-  zIndex: 90,
-  spotlightRadius: 8,
-  scrollOffset: 100, // clears the sticky header when scrolling a step into view
-  overlayClickAction: false,
-  buttons: ["back", "skip", "primary"],
-  // The add sheet and the studio mount as the tour walks into them; give the
-  // anchors longer than the 1s default to appear.
-  targetWaitTimeout: 4000,
-};
-
-const TOUR_STYLES = {
-  tooltip: {
-    borderRadius: 8,
-    border: "1px solid rgba(86, 104, 90, 0.25)",
-    fontSize: 13,
-    padding: 16,
-  },
-  tooltipTitle: {
-    fontSize: 13,
-    letterSpacing: "-0.01em",
-    margin: 0,
-    marginBottom: 6,
-  },
-  tooltipContent: {
-    lineHeight: 1.6,
-    padding: 0,
-    textAlign: "left" as const,
-  },
-  buttonPrimary: {
-    borderRadius: 6,
-    color: "#0b140d",
-    fontSize: 12,
-    letterSpacing: "0.02em",
-    padding: "6px 12px",
-  },
-  buttonBack: {
-    color: "#8aa085",
-    fontSize: 12,
-    marginRight: 8,
-  },
-  buttonSkip: {
-    color: "#8aa085",
-    fontSize: 12,
-  },
-};
-
-const LOCALE = {
-  back: "Back",
-  close: "Close",
-  last: "Done",
-  next: "Next",
-  skip: "Skip",
-};
 
 /** The one-step nudge a brand-new, empty garden gets automatically. */
 const GETTING_STARTED_STEPS = [
@@ -222,13 +160,7 @@ export default function GardenTour({ organismCount, ready, controls }: Props) {
 
   // Skipping counts as completing: the user has been offered this and declined
   // it, so re-offering on the next visit would be nagging.
-  const handleEvent = (data: EventData) => {
-    const done =
-      data.type === EVENTS.TOUR_END ||
-      data.status === STATUS.FINISHED ||
-      data.status === STATUS.SKIPPED;
-    if (!done) return;
-
+  const handleDone = (finished: boolean) => {
     setRun(false);
 
     if (chosen) {
@@ -242,7 +174,7 @@ export default function GardenTour({ organismCount, ready, controls }: Props) {
       // Reaching the end drops you back at the menu to pick another. Skipping
       // does not: that's a request to be left alone, and reopening the thing
       // they just dismissed would trap them in it.
-      if (data.status === STATUS.FINISHED) setPickerOpen(true);
+      if (finished) setPickerOpen(true);
       return;
     }
 
@@ -265,15 +197,9 @@ export default function GardenTour({ organismCount, ready, controls }: Props) {
         />
       )}
       {active && steps.length > 0 && (
-        <Joyride
-          steps={steps}
-          run={run}
-          onEvent={handleEvent}
-          continuous
-          options={{ ...TOUR_OPTIONS, showProgress: steps.length > 1 }}
-          locale={LOCALE}
-          styles={TOUR_STYLES}
-        />
+        <Suspense fallback={null}>
+          <TourRunner steps={steps} run={run} onDone={handleDone} />
+        </Suspense>
       )}
     </>
   );

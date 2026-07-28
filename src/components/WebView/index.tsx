@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LoaderCircle, Maximize2, Pencil, Search, ZoomIn, ZoomOut, Filter } from "lucide-react";
 import type {
   AIAnalysis,
@@ -17,7 +17,9 @@ import { imageSrc, isWritable } from "../../data/source";
 import { CtrlBtn } from "../TreeView/CtrlBtn";
 import { NodeDetail } from "../TreeView/NodeDetail";
 import { buildWebNode } from "./buildWebNode";
-import RelationshipEditor from "../RelationshipEditor";
+// The relationship studio — with its own force layout, bulk connect sheet and
+// AI assist — is a writer-only modal opened from inside the web view.
+const RelationshipEditor = lazy(() => import("../RelationshipEditor"));
 import EdgeLabel from "./EdgeLabel";
 import WebSearchPanel from "./WebSearchPanel";
 import {
@@ -842,12 +844,14 @@ export default function WebView({
       </div>
 
       {writable && editorOpen && (
-        <RelationshipEditor
-          organisms={organisms}
-          organismRecords={organismRecords}
-          relationships={relationships}
-          onClose={() => setEditorOpen(false)}
-        />
+        <Suspense fallback={null}>
+          <RelationshipEditor
+            organisms={organisms}
+            organismRecords={organismRecords}
+            relationships={relationships}
+            onClose={() => setEditorOpen(false)}
+          />
+        </Suspense>
       )}
 
       {renderedDetailNode && (

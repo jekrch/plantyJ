@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { ChevronDown, ExternalLink, Leaf, Pencil, Trash2 } from "lucide-react";
 import type {
   AIAnalysis,
@@ -13,7 +13,9 @@ import type {
 import { organismTitle } from "../utils/display";
 import { safeHref } from "../utils/safeUrl";
 import { imageSrc, isWritable } from "../data/source";
-import EditEntrySheet from "./EditEntrySheet";
+// Only writers ever open the edit sheet, and only after the drawer is already
+// on screen — no reason for it to ride along with the viewer chunk.
+const EditEntrySheet = lazy(() => import("./EditEntrySheet"));
 import { ModelAttribution } from "./ModelAttribution";
 import { TabBtn } from "./TreeView/CtrlBtn";
 import { RelationsSubgraph } from "./TreeView/RelationsSubgraph";
@@ -908,13 +910,15 @@ export default function OrganismInfoDrawer({
       </div>
 
       {editing && (
-        <EditEntrySheet
-          organism={organism}
-          zones={zones}
-          zonePics={zonePics}
-          onClose={() => setEditing(false)}
-          onChanged={() => onEntryChanged?.()}
-        />
+        <Suspense fallback={null}>
+          <EditEntrySheet
+            organism={organism}
+            zones={zones}
+            zonePics={zonePics}
+            onClose={() => setEditing(false)}
+            onChanged={() => onEntryChanged?.()}
+          />
+        </Suspense>
       )}
     </div>
   );

@@ -23,4 +23,21 @@ function stripCspInDev(): Plugin {
 export default defineConfig({
   base: "/",
   plugins: [react(), tailwindcss(), stripCspInDev()],
+  build: {
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          groups: [
+            // React changes only when we upgrade it, while the app chunk
+            // changes every deploy. Splitting it out means a returning visitor
+            // re-downloads the app, not the runtime underneath it.
+            {
+              name: "react-vendor",
+              test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
+            },
+          ],
+        },
+      },
+    },
+  },
 });

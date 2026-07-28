@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import {
   AlertTriangle,
   Check,
@@ -50,11 +50,15 @@ import {
 } from "../data/username";
 import { getAccessToken } from "../data/googleAuth";
 import { resetGardenDescription } from "../data/gardenDescription";
-import { enrichGarden } from "../data/enrichment";
-import { exportGarden } from "../data/exportGarden";
-import AnalysisAIAssist from "./AnalysisAIAssist";
 import { useAIFeaturesVisible } from "../hooks/useAIFeatures";
 import { requestTour } from "./GardenTour";
+
+/**
+ * The account menu sits in the header on every page, so its heavier corners
+ * load on use instead: the AI analysis panel, the enrichment pass over the
+ * whole garden, and the zip writer behind "download a backup".
+ */
+const AnalysisAIAssist = lazy(() => import("./AnalysisAIAssist"));
 
 // Entrance/exit feel matched to InfoModal and WelcomeModal for a consistent
 // polished modal treatment across the site.
@@ -129,6 +133,7 @@ export default function SourceMenu() {
   const handleEnrich = async () => {
     setBusy("Enriching…");
     try {
+      const { enrichGarden } = await import("../data/enrichment");
       const { speciesUpdated, taxaAdded } = await enrichGarden((p) =>
         setBusy(`Enriching ${p.done}/${p.total}`),
       );
@@ -147,6 +152,7 @@ export default function SourceMenu() {
   const handleExport = async () => {
     setBusy("Preparing backup…");
     try {
+      const { exportGarden } = await import("../data/exportGarden");
       await exportGarden((label, done, total) => setBusy(`${label} ${done}/${total}`));
       setBusy("Backup downloaded");
     } catch (err) {
@@ -801,7 +807,9 @@ export default function SourceMenu() {
         />
       )}
       {analyzeOpen && aiVisible && (
-        <AnalysisAIAssist onClose={() => setAnalyzeOpen(false)} onApplied={() => {}} />
+        <Suspense fallback={null}>
+          <AnalysisAIAssist onClose={() => setAnalyzeOpen(false)} onApplied={() => {}} />
+        </Suspense>
       )}
     </div>
   );
