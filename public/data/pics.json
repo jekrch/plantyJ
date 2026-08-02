@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 161,
+      "id": "T occ-1785698502",
+      "shortCode": "T occ",
+      "zoneCode": "mpg",
+      "tags": [],
+      "description": "Mature evergreen arborvitae tree growing in the Maple zone.",
+      "image": "images/T occ/1785698502.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-08-02T19:21:43.926Z",
+      "width": 960,
+      "height": 1280
+    },
+    {
       "seq": 160,
       "id": "P pec-1785691380",
       "shortCode": "P pec",
@@ -1320,7 +1333,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1514,7 +1527,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
