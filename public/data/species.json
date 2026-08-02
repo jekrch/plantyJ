@@ -3185,6 +3185,55 @@
         "natureserve"
       ]
     },
+    "jalysus-spinosus": {
+      "id": "jalysus-spinosus",
+      "fullName": "Jalysus spinosus",
+      "commonName": "Stilt Bug",
+      "description": "Jalysus spinosus is a species of stilt bug in the family Berytidae. It is found in Central America and North America.",
+      "vernacularNames": [],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Hemiptera",
+        "family": "Berytidae",
+        "genus": "Jalysus",
+        "species": "Jalysus spinosus",
+        "canonicalName": "Jalysus spinosus"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2008335"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Jalysus_spinosus"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/326702"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q10539387"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.1001430"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 59
+    },
     "leonurus-cardiaca": {
       "id": "leonurus-cardiaca",
       "fullName": "Leonurus cardiaca",

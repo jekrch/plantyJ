@@ -17,7 +17,8 @@
       "kind": "animal",
       "bioclipSpeciesId": "Polites coras",
       "bioclipCommonName": "Peck's skipper",
-      "bioclipScore": 0.9638
+      "bioclipScore": 0.9638,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 159,

@@ -910,5 +910,13 @@
   "Polites": {
     "description": "Polites is the name of two characters in Greek mythology of the Trojan War, and a genus of butterflies.Polites is a Greek warrior in the Iliad.\nPolites is a Trojan killed by Neoptolemus.",
     "url": "https://en.wikipedia.org/wiki/Polites"
+  },
+  "Berytidae": {
+    "description": "Berytidae is a family of the order Hemiptera, commonly called stilt bugs or thread bugs. Most berytids are brown to yellow, with species that are plant sap feeders, a few being predaceous. About 200 species are known from all around the world and they are classified into three subfamilies.",
+    "url": "https://en.wikipedia.org/wiki/Berytidae"
+  },
+  "Jalysus": {
+    "description": "Jalysus is a genus of stilt bugs in the family Berytidae. There are about 12 described species in Jalysus.",
+    "url": "https://en.wikipedia.org/wiki/Jalysus"
   }
 }
