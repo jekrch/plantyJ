@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "H spe",
+      "fullName": "Hosta species",
+      "commonName": "Hosta",
+      "variety": null
+    },
+    {
       "shortCode": "T occ",
       "fullName": "Thuja occidentalis",
       "commonName": "Eastern Arborvitae",
