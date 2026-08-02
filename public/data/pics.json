@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 159,
+      "id": "J spe-1785690905",
+      "shortCode": "J spe",
+      "zoneCode": "mpg",
+      "tags": [
+        "insect"
+      ],
+      "description": "Seen on a serrated leaf in the maple zone.",
+      "image": "images/J spe/1785690905.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-08-02T17:15:06.883Z",
+      "width": 1061,
+      "height": 1280
+    },
+    {
       "seq": 158,
       "id": "c card-1785085890",
       "shortCode": "c card",
@@ -1280,7 +1295,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1474,7 +1489,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
