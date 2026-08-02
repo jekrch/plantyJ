@@ -902,5 +902,13 @@
   "Polymnia": {
     "description": "Polymnia is a genus of American plants in the sunflower family. It is the only genus in the tribe Polymnieae. Several species are known by the common name leafcup.SpeciesPolymnia aspera (Mart.) Mart. ex DC. \u2013 Mexico\nPolymnia canadensis L. \u2013 Ontario, much of eastern + central United States\nPolymnia cocuyensis Cuatrec. \u2013 Boyac\u00e1 in Colombia\nPolymnia cossatotensis Pittman & V.M.Bates \u2013 Arkansas\nPolymnia johnbeckii D.Estes \u2013 Tennessee\nPolymnia laevigata Beadle \u2013 MO KY TN AL GA FL\nPolymnia quichensis J.M.Coult. \u2013 Costa Rica, Guatemala\nPolymnia sonchifolia Poepp. \u2013 BoliviaFormerly included",
     "url": "https://en.wikipedia.org/wiki/Polymnia"
+  },
+  "Hesperiidae": {
+    "description": "Skippers are a group of butterflies placed in the family Hesperiidae within the order Lepidoptera. They were previously placed in a separate superfamily, Hesperioidea, but have since been placed in the superfamily Papilionoidea. They are named for their quick, darting flight habits. Most have their antenna tips modified into narrow, hook-like projections. Moreover, skippers mostly lack wing-coupling structure available in most moths. More than 3500 species of skippers are recognized, and they occur worldwide, but with the greatest diversity in the Neotropical regions of Central and South America.",
+    "url": "https://en.wikipedia.org/wiki/Skipper_(butterfly)"
+  },
+  "Polites": {
+    "description": "Polites is the name of two characters in Greek mythology of the Trojan War, and a genus of butterflies.Polites is a Greek warrior in the Iliad.\nPolites is a Trojan killed by Neoptolemus.",
+    "url": "https://en.wikipedia.org/wiki/Polites"
   }
 }

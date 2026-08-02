@@ -4383,6 +4383,60 @@
       ],
       "observationsCount": 97837
     },
+    "polites-peckius": {
+      "id": "polites-peckius",
+      "fullName": "Polites peckius",
+      "commonName": "Peck's Skipper",
+      "description": "Polites peckius, the Peck's skipper, is a North American butterfly in the family Hesperiidae (skippers), subfamily Hesperiinae (grass skippers). This skipper ranges across Canada from British Columbia, as far north as Cartwright, Labrador; Moar Lake, Ontario; Leaf Rapids, Manitoba; and the Hay River area in Alberta. In the US, it ranges in most of the northern and central states, except on the west coast.",
+      "vernacularNames": [
+        "Peck's Skipper",
+        "Yellow-Patch Skipper",
+        "Yellowpatch Skipper"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Lepidoptera",
+        "family": "Hesperiidae",
+        "genus": "Polites",
+        "species": "Polites coras",
+        "canonicalName": "Polites peckius"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/1943982"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Polites_peckius"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/133631"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q7210158"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.114228"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 38821,
+      "edible": true
+    },
     "polygonia-comma": {
       "id": "polygonia-comma",
       "fullName": "Polygonia comma",
