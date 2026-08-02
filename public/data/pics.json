@@ -13,7 +13,11 @@
       "postedBy": "Jacob",
       "addedAt": "2026-08-02T17:15:06.883Z",
       "width": 1061,
-      "height": 1280
+      "height": 1280,
+      "kind": "animal",
+      "bioclipSpeciesId": "Jalysus sobrinus",
+      "bioclipCommonName": "",
+      "bioclipScore": 0.1876
     },
     {
       "seq": 158,
@@ -1295,7 +1299,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1489,7 +1493,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,

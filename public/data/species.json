@@ -3150,6 +3150,41 @@
         "natureserve"
       ]
     },
+    "jalysus-species": {
+      "id": "jalysus-species",
+      "fullName": "Jalysus species",
+      "commonName": "Stilt Bug",
+      "description": "",
+      "vernacularNames": [
+        "Arthropod",
+        "Arthropods"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": null,
+        "order": null,
+        "family": null,
+        "genus": null,
+        "species": null,
+        "canonicalName": "Arthropoda"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/54"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ]
+    },
     "leonurus-cardiaca": {
       "id": "leonurus-cardiaca",
       "fullName": "Leonurus cardiaca",
