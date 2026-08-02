@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P pec",
+      "fullName": "Polites peckius",
+      "commonName": "Peck's Skipper",
+      "variety": null
+    },
+    {
       "shortCode": "J spe",
       "fullName": "Jalysus species",
       "commonName": "Stilt Bug",
