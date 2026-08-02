@@ -2871,6 +2871,41 @@
       ],
       "observationsCount": 20462
     },
+    "hosta-species": {
+      "id": "hosta-species",
+      "fullName": "Hosta species",
+      "commonName": "Hosta",
+      "description": "",
+      "vernacularNames": [
+        "Tracheophytes",
+        "Vascular Plants"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": null,
+        "order": null,
+        "family": null,
+        "genus": null,
+        "species": null,
+        "canonicalName": "Tracheophyta"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/7707728"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ]
+    },
     "humulus-lupulus": {
       "id": "humulus-lupulus",
       "fullName": "Humulus lupulus",

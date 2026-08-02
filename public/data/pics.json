@@ -11,7 +11,10 @@
       "postedBy": "Jacob",
       "addedAt": "2026-08-02T19:22:30.726Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "bioclipSpeciesId": "Hosta plantaginea",
+      "bioclipCommonName": "Plantain lily",
+      "bioclipScore": 0.4981
     },
     {
       "seq": 161,
