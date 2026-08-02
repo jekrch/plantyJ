@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "J spe",
+      "fullName": "Jalysus species",
+      "commonName": "Stilt Bug",
+      "variety": null
+    },
+    {
       "shortCode": "P can",
       "fullName": "Polymnia canadensis",
       "commonName": "White Leafcup",
