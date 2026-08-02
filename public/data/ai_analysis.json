@@ -357,6 +357,18 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "c card",
+      "zoneCode": "wbv",
+      "verdict": "GOOD",
+      "analysis": "The presence of the Northern Cardinal in the West Boulevard zone is a highly positive indicator of a thriving urban garden ecosystem that aligns perfectly with the owners' ecological priorities. As a native songbird in Minnesota, the cardinal's range has naturally expanded northward into the Twin Cities area over the last century, where it is now a fully established, year-round breeding resident. In the West Boulevard specifically, the mature canopy of the Silver Maple provides valuable seasonal resources, as cardinals are known to feed on maple buds and seeds. The lower-growing Missouri Evening Primrose also serves as a ground-level foraging area, while neighboring boulevard plants like Sideoats Grama and Foxtail Barley offer native seeds that support the bird's granivorous diet, especially during the cooler winter months when they do not migrate.\n\nBeyond seed foraging, the cardinal serves as an important biological control agent, preying on garden pests such as the Ash Plant Bug and Hop Looper caterpillars. While they also consume some native insects like carpenter ants, pavement ants, and even adult butterflies, this predation is a natural and healthy component of a balanced suburban food web. Because cardinals are non-migratory and frequently forage on the ground, the presence of a domestic cat on the property represents a primary management concern. To safely support this species, the owners should ensure the cat's outdoor access is restricted or closely supervised, while continuing to cultivate dense, protective native cover across the garden—such as the nearby Red Osier Dogwood—which offers essential nesting sites and safety from predators.",
+      "references": [
+        "https://www.dnr.state.mn.us/birds/northerncardinal.html",
+        "https://www.audubon.org/field-guide/bird/northern-cardinal",
+        "https://growitbuildit.com/silver-maple-tree-acer-saccharinum/"
+      ],
+      "created": "2026-08-02T20:25:59.355Z"
+    },
+    {
       "shortCode": "c daf",
       "zoneCode": "fy",
       "verdict": "MIXED",
@@ -685,6 +697,18 @@
       "created": "2026-05-24T21:11:40.656Z"
     },
     {
+      "shortCode": "H spe",
+      "zoneCode": "mpg",
+      "verdict": "MIXED",
+      "analysis": "The hosta specimen occupies a highly challenging niche in the Maple zone, which is dominated and shaded by an invasive Norway maple. The Norway maple's aggressive, shallow root system and dense canopy create dry shade and compacted clay loam conditions where many plants fail. Hostas are exceptionally resilient, shade-tolerant perennials capable of surviving this intense root competition while offering dense ground cover that stabilizes the soil and shelters ground-dwelling microfauna. However, as non-native plants originating from Asia, hostas represent a missed ecological opportunity. While generalist pollinators like the Common Eastern Bumble Bee may occasionally visit their summer blooms, hostas provide minimal value to native insects, supporting no specialist pollinators and serving as host plants for zero native caterpillar species. Additionally, they are highly susceptible to damage from slugs and local herbivores like cottontail rabbits.\n\nFor homeowners who prioritize native ecology, edibles, and medicinals in USDA zone 4b/5a, keeping a non-native ornamental like a hosta is a compromise. While their young spring shoots are technically edible, hostas do not actively support local biodiversity. The owners should consider gradually replacing this specimen with high-performance native shade plants already present in their garden journal. Excellent alternatives that can withstand dry shade and maple competition include Wild Ginger as a dense ground cover, Foamflower or Wild Geranium for pollinator-friendly spring blooms, or the native, edible Wild Leek. Transitioning the area slowly will protect the soil from erosion while establishing a more functional, native-dominant understory.",
+      "references": [
+        "https://wildones.org/treating-the-hosta-as-hostile/",
+        "https://www.naturalshore.com/replace-ornamentals-with-natives-species/",
+        "https://rooted-haven.com/replace-your-hostas-with-these-6-native-alternatives/"
+      ],
+      "created": "2026-08-02T20:25:59.355Z"
+    },
+    {
       "shortCode": "h tel aut",
       "zoneCode": "bb",
       "verdict": "MIXED",
@@ -711,6 +735,18 @@
         "https://www.rhs.org.uk/plants/trials-awards/ongoing-plant-trials/ipheion"
       ],
       "created": "2026-05-14T05:00:04.138Z"
+    },
+    {
+      "shortCode": "J spe",
+      "zoneCode": "mpg",
+      "verdict": "GOOD",
+      "analysis": "The presence of the spined stilt bug (Jalysus spinosus) in the shady maple zone is highly beneficial for the garden's ecology and aligns perfectly with the owners' priorities. As a native insect to Minnesota and eastern North America, this stilt bug serves as an excellent natural biological control agent. Spined stilt bugs are omnivorous, supplementing their diet of plant fluids by preying on a variety of small, soft-bodied pests. In this garden, they are documented as active predators of aphids, helping to suppress sap-sucking insects that could otherwise stress delicate understory plantings in the maple zone, such as wild leeks, spring ephemerals, and native asters. \n\nWhile stilt bugs occasionally sip plant juices to stay hydrated, their minor herbivory does not cause significant aesthetic or physical damage to the perennial understory plants, shrubs, or mature trees in this shade-tolerant zone. Because the property owners prioritize supporting local ecology and maintaining a pesticide-free landscape, the stilt bug is a welcome addition to the garden's trophic web. No chemical control or manual management is necessary; rather, its presence indicates a healthy, self-regulating ecosystem where native predators successfully keep pest populations in check.",
+      "references": [
+        "https://extension.psu.edu/spined-stilt-bug",
+        "https://content.ces.ncsu.edu/spined-stilt-bug-in-tobacco",
+        "https://bugoftheweek.com/blog/2022/7/4/small-strange-bugs-with-very-long-legs-stilt-bugs-berytidae"
+      ],
+      "created": "2026-08-02T20:25:59.355Z"
     },
     {
       "shortCode": "L car",
@@ -926,6 +962,18 @@
         "https://plants.ces.ncsu.edu/plants/phlox-paniculata/"
       ],
       "created": "2026-07-24T04:51:07.507Z"
+    },
+    {
+      "shortCode": "P pec",
+      "zoneCode": "bb",
+      "verdict": "GOOD",
+      "analysis": "Peck's Skipper (Polites peckius) is a native grass skipper butterfly that is highly beneficial to the local ecosystem of the Twin Cities. Its presence in the sunny Berry Border (bb) is an excellent match for the owners' priorities of supporting local ecology. In its adult stage, the skipper is a harmless generalist pollinator that feeds on nectar from a variety of flowering plants. Within the Berry Border, it was observed nectaring on Purple Coneflower (Echinacea purpurea), a prime native perennial. The skipper can also utilize neighboring zones, visiting plants such as Red Clover (Trifolium pratense) in the North Boulevard (nbv) to fulfill its dietary requirements without creating negative resource competition for other native pollinators.\n\nThe larval stage of this native butterfly relies strictly on grasses, which serves as another ecological link within this garden layout. While the caterpillars do not consume the berry bushes or other edibles in the Berry Border, they utilize native grasses like Sideoats Grama (Bouteloua curtipendula) growing in the neighboring North Boulevard (nbv) as host plants. The caterpillars construct protective shelters by tying grass blades together with silk, safely overwintering before pupating in the spring. In addition to aiding pollination, Peck's Skipper is a valuable component of the local food web, serving as an important food source for insectivorous urban wildlife including native songbirds like the Cardinal (Cardinalis cardinalis) and predators like the Skimmer Dragonfly (Libellulidae). No management or control is necessary, as this native skipper represents a thriving, balanced garden habitat.",
+      "references": [
+        "https://www.minnesotaseasons.com/Insects/Pecks_skipper.html",
+        "https://natureworks.nhpbs.org/animals/pecks-skipper/",
+        "https://www.massaudubon.org/nature-wildlife/insects-arachnids/butterfly-atlas/find-a-butterfly?id=119"
+      ],
+      "created": "2026-08-02T20:25:59.355Z"
     },
     {
       "shortCode": "P pol",
@@ -1312,6 +1360,19 @@
         "https://myrmecologicalnews.org/cms/index.php?option=com_download&view=download&filename=volume32/mn32_75-92_printable.pdf&format=raw"
       ],
       "created": "2026-05-16T17:54:59.856Z"
+    },
+    {
+      "shortCode": "T occ",
+      "zoneCode": "mpg",
+      "verdict": "GOOD",
+      "analysis": "The mature Eastern Arborvitae (Thuja occidentalis) occupies a highly beneficial ecological niche in the Maple (mpg) zone, serving as a vital native evergreen counterweight to the dominant, invasive Norway Maple (a pla). In an urban garden prioritizing native ecology, this mature specimen provides year-round structural diversity and crucial thermal cover and nesting sites for local birds, particularly during harsh Minnesota winters when deciduous canopies are bare. This aligns perfectly with the activity of resident avian species such as the Northern Cardinal (c card), House Finch (H mex), and Goldfinch (S tri), all of which find shelter in its dense foliage and forage on its small, seed-bearing cones. On an insect level, it acts as a host plant for native specialists like the Arborvitae Leafminer moth (Argyresthia thuiella) and hosts other native Lepidoptera. Additionally, it coexists with the observed Black Carpenter Ant (Camponotus pennsylvanicus), which naturally chambers in older conifer wood, creating an insect-rich environment that fuels insectivorous birds and woodpeckers.\n\nFrom a practical garden management standpoint in Minneapolis (USDA hardiness zone 4b/5a), Thuja occidentalis is exceptionally cold-hardy and well-adapted to the clay-loam soils of the region, tolerating heavy and compacted substrates better than many other conifers. Its primary stressor in this specific zone is the aggressive, water-depleting root system and dense summer shade of the neighboring Norway Maple. While shade and low drought tolerance can cause arborvitae foliage to thin out, this specimen is already mature and established, meaning its root system has successfully integrated into the soil matrix. To support its ongoing health and mitigate competition from the maple, the owners' choice to keep the ground heavily mulched with leaves and wood chips is excellent, as it helps conserve essential soil moisture and builds a rich, organic duff layer.",
+      "references": [
+        "https://www.carleton.edu/arboretum/about/species/flora/tree-key/white-cedar/",
+        "https://www.dnr.state.mn.us/trees/northern-white-cedar.html",
+        "https://www.illinoiswildflowers.info/trees/plants/white_cedar.html",
+        "https://www.fs.usda.gov/database/feis/plants/tree/thuocc/all.html"
+      ],
+      "created": "2026-08-02T20:25:59.355Z"
     },
     {
       "shortCode": "T pra",
