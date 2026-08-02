@@ -782,6 +782,24 @@
       "type": "predator-prey",
       "from": "m gal",
       "to": "L ter"
+    },
+    {
+      "id": 119,
+      "type": "predator-prey",
+      "from": "J spe",
+      "to": "A sp"
+    },
+    {
+      "id": 120,
+      "type": "host-plant",
+      "from": "P pec",
+      "to": "B cur"
+    },
+    {
+      "id": 121,
+      "type": "pollinator",
+      "from": "P pec",
+      "to": "T pra"
     }
   ]
 }
