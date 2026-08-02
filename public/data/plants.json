@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "T occ",
+      "fullName": "Thuja occidentalis",
+      "commonName": "Eastern Arborvitae",
+      "variety": null
+    },
+    {
       "shortCode": "P pec",
       "fullName": "Polites peckius",
       "commonName": "Peck's Skipper",
