@@ -918,5 +918,21 @@
   "Jalysus": {
     "description": "Jalysus is a genus of stilt bugs in the family Berytidae. There are about 12 described species in Jalysus.",
     "url": "https://en.wikipedia.org/wiki/Jalysus"
+  },
+  "Cupressaceae": {
+    "description": "Cupressaceae or the cypress family is a family of conifers. The family includes 27\u201330 genera, which include the junipers and redwoods, with about 130\u2013140 species in total. They are monoecious, subdioecious or (rarely) dioecious trees and shrubs up to 116\u00a0m (381\u00a0ft) tall. The bark of mature trees is commonly orange- to red-brown and of stringy texture, often flaking or peeling in vertical strips, but smooth, scaly or hard and square-cracked in some species. The family reached its peak of diversity during the Mesozoic era.",
+    "url": "https://en.wikipedia.org/wiki/Cupressaceae"
+  },
+  "Pinales": {
+    "description": "The order Pinales in the subclass Pinidae, in the class Pinopsida, which under current taxonomic treatment is a monotypic order which comprises only one family, the pine family Pinaceae.",
+    "url": "https://en.wikipedia.org/wiki/Pinales"
+  },
+  "Pinopsida": {
+    "description": "Conifers are a group of vascular plants and a subset of gymnosperms. They are primarily perennial, woody trees and shrubs, mostly evergreen with a regular branching pattern, reproducing with male and female cones, usually on the same tree. They are wind-pollinated and the seeds are usually dispersed by the wind. Taxonomically, they make up the division Pinophyta, also known as Coniferae. All extant conifers, except for the gnetophytes, are perennial woody plants with secondary growth. There are over 600 living species.",
+    "url": "https://en.wikipedia.org/wiki/Conifer"
+  },
+  "Thuja": {
+    "description": "Thuja is a genus of coniferous tree or shrub in the Cupressaceae. There are five species in the genus, two native to North America and three native to eastern Asia. The genus is monophyletic and sister to Thujopsis. Members are commonly known as arborvitaes, thujas, or New World false cedars.",
+    "url": "https://en.wikipedia.org/wiki/Thuja"
   }
 }

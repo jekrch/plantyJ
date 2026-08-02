@@ -6308,6 +6308,69 @@
       ],
       "observationsCount": 29973
     },
+    "thuja-occidentalis": {
+      "id": "thuja-occidentalis",
+      "fullName": "Thuja occidentalis",
+      "commonName": "Eastern Arborvitae",
+      "description": "Thuja occidentalis, also known as northern white-cedar, eastern white-cedar, or arborvitae, is an evergreen coniferous tree, in the cypress family Cupressaceae, which is native to eastern Canada and much of the north-central and northeastern United States. It is widely cultivated as an ornamental plant. It is not to be confused with Juniperus virginiana (eastern red cedar).",
+      "vernacularNames": [
+        "American Arbor-Vitae",
+        "American arborvitae",
+        "Arbor-vitae",
+        "Arborvitae",
+        "Eastern Arbor-vitae",
+        "Eastern Arborvitae",
+        "Eastern White Cedar",
+        "Eastern White-cedar",
+        "Northern White Cedar",
+        "Northern White-cedar",
+        "Northern White-cedar, Eastern White-cedar, Arborvitae",
+        "Swamp Cedar",
+        "northern whitecedar"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Pinopsida",
+        "order": "Pinales",
+        "family": "Cupressaceae",
+        "genus": "Thuja",
+        "species": "Thuja occidentalis",
+        "canonicalName": "Thuja occidentalis"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2684178"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Thuja_occidentalis"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/54037"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q147468"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.145680"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 63598
+    },
     "thymus-serpyllum": {
       "id": "thymus-serpyllum",
       "fullName": "Thymus serpyllum",

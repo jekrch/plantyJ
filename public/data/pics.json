@@ -24,7 +24,10 @@
       "postedBy": "Jacob",
       "addedAt": "2026-08-02T19:21:43.926Z",
       "width": 960,
-      "height": 1280
+      "height": 1280,
+      "bioclipSpeciesId": "Cephalotaxus harringtonii (Knight ex J. Forbes) K. Koch",
+      "bioclipCommonName": "",
+      "bioclipScore": 0.0998
     },
     {
       "seq": 160,
@@ -1346,7 +1349,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1540,7 +1543,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
