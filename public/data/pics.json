@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 162,
+      "id": "H spe-1785698549",
+      "shortCode": "H spe",
+      "zoneCode": "mpg",
+      "tags": [],
+      "description": "Lush clump of green hostas in the shade of the maple zone.",
+      "image": "images/H spe/1785698549.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-08-02T19:22:30.726Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 161,
       "id": "T occ-1785698502",
       "shortCode": "T occ",
