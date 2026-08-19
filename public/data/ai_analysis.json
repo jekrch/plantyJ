@@ -856,6 +856,20 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "N can",
+      "zoneCode": "sy",
+      "verdict": "MIXED",
+      "analysis": "Neotibicen canicularis, the dog-day cicada, is a native annual species and the most common cicada in Minnesota and the Twin Cities area. Its presence aligns beautifully with the owners' general priority of supporting local ecology. Underground, the nymphs spend two to five years aerating the heavy clay-loam soil of the garden and feeding on root sap, while the emerging adults serve as a rich and critical food source for native birds, such as the resident Northern Cardinals, as well as local spiders and insectivorous mammals. When adults die, their decaying bodies return valuable nutrients back to the soil, functioning as a natural fertilizer.\n\nHowever, its presence in the Side Yard presents a mixed scenario due to the proximity of several young, dwarf fruit trees, including 'Red Rome' apple, apricot, and 'Peggy' Asian pear. Female cicadas lay their eggs by sawing slits into twigs that are a quarter- to half-inch in diameter, which can cause twig dieback or 'flagging.' While established trees tolerate this natural pruning easily, the tender and limited branches of young, dwarf fruit trees can suffer stunted growth or structural disfigurement. Fortunately, because dog-day cicadas do not undergo massive, synchronized mass-emergences like periodical cicadas, their pressure is low. Management is straightforward: owners can protect their young dwarf fruit trees with fine mesh netting during the late summer oviposition period or simply prune out any flagged branches in the autumn.",
+      "references": [
+        "https://seasonwatch.umn.edu/cicada",
+        "https://www.minnesotaseasons.com/Insects/dog_day_cicada.html",
+        "https://sites.rutgers.edu/nursery-ipm/dog-day-cicada/",
+        "https://hort.extension.wisc.edu/articles/cicadas/",
+        "https://thomaspestservices.com/atlas-theme-blog/post/how-do-cicadas-harm-trees-and-shrubs"
+      ],
+      "created": "2026-08-19T18:20:46.569Z"
+    },
+    {
       "shortCode": "O mac",
       "zoneCode": "wbv",
       "verdict": "GOOD",
