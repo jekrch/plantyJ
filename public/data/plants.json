@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "N can",
+      "fullName": "Neotibicen canicularis",
+      "commonName": "Dog-day Cicada",
+      "variety": null
+    },
+    {
       "shortCode": "H spe",
       "fullName": "Hosta species",
       "commonName": "Hosta",
