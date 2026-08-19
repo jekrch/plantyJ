@@ -934,5 +934,13 @@
   "Thuja": {
     "description": "Thuja is a genus of coniferous tree or shrub in the Cupressaceae. There are five species in the genus, two native to North America and three native to eastern Asia. The genus is monophyletic and sister to Thujopsis. Members are commonly known as arborvitaes, thujas, or New World false cedars.",
     "url": "https://en.wikipedia.org/wiki/Thuja"
+  },
+  "Cicadidae": {
+    "description": "Cicadidae, the true cicadas, is one of two families of cicadas, with about 3,400 species in over 520 genera worldwide; it contains most living cicada species, except for the two belonging to its sister taxon, the Tettigarctidae. The classification of this family, of often very similar insects, has undergone many revisions, continuing into the 21st century; for example, many species previously assigned to the type genus Cicada, are now placed in different tribes.",
+    "url": "https://en.wikipedia.org/wiki/Cicadidae"
+  },
+  "Neotibicen": {
+    "description": "Cicadas of the genus Neotibicen are large-bodied insects of the family Cicadidae that appear in summer or early fall in eastern North America and formerly Bermuda. Common names include cicada, harvestfly, jar fly, and the misnomer locust.",
+    "url": "https://en.wikipedia.org/wiki/Neotibicen"
   }
 }

@@ -3889,6 +3889,57 @@
       ],
       "observationsCount": 648
     },
+    "neotibicen-canicularis": {
+      "id": "neotibicen-canicularis",
+      "fullName": "Neotibicen canicularis",
+      "commonName": "Dog-day Cicada",
+      "description": "Neotibicen canicularis, commonly called the dog-day cicada, dog-day harvestfly, or heatbug, is a species of annual cicada.",
+      "vernacularNames": [
+        "Dog-day Harvestfly",
+        "Dogday Harvestfly",
+        "God-day Cicada",
+        "Lumberjack Scissor-Grinder",
+        "Northern Dog-day Cicada"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Hemiptera",
+        "family": "Cicadidae",
+        "genus": "Neotibicen",
+        "species": "Neotibicen canicularis",
+        "canonicalName": "Neotibicen canicularis"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/8529239"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Neotibicen_canicularis"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/469238"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.907864"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 22461
+    },
     "oenothera-macrocarpa": {
       "id": "oenothera-macrocarpa",
       "fullName": "Oenothera macrocarpa",
