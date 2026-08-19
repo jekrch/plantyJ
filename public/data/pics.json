@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 164,
+      "id": "H lup Wil-1787101111",
+      "shortCode": "H lup Wil",
+      "zoneCode": "bb",
+      "tags": [
+        "fruiting"
+      ],
+      "description": "Blooming",
+      "image": "images/H lup Wil/1787101111.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-08-19T00:58:33.033Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 163,
       "id": "A scr-1786574110",
       "shortCode": "A scr",
@@ -1372,7 +1387,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1566,7 +1581,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
