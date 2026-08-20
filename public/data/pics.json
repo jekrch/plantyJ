@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 166,
+      "id": "R hir-1787266873",
+      "shortCode": "R hir",
+      "zoneCode": "nbv",
+      "tags": [
+        "blooming"
+      ],
+      "description": null,
+      "image": "images/R hir/1787266873.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-08-20T23:01:15.344Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 165,
       "id": "N can-1787162844",
       "shortCode": "N can",
@@ -1411,7 +1426,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1605,7 +1620,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
