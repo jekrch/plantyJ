@@ -800,6 +800,48 @@
       "type": "pollinator",
       "from": "P pec",
       "to": "T pra"
+    },
+    {
+      "id": 122,
+      "type": "predator-prey",
+      "from": "c card",
+      "to": "N can"
+    },
+    {
+      "id": 123,
+      "type": "predator-prey",
+      "from": "p dom",
+      "to": "N can"
+    },
+    {
+      "id": 124,
+      "type": "predator-prey",
+      "from": "m gal",
+      "to": "N can"
+    },
+    {
+      "id": 125,
+      "type": "predator-prey",
+      "from": "F cat",
+      "to": "N can"
+    },
+    {
+      "id": 126,
+      "type": "herbivore",
+      "from": "N can",
+      "to": "A sac"
+    },
+    {
+      "id": 127,
+      "type": "herbivore",
+      "from": "N can",
+      "to": "A sci"
+    },
+    {
+      "id": 128,
+      "type": "herbivore",
+      "from": "N can",
+      "to": "a pla"
     }
   ]
 }
