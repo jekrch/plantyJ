@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 168,
+      "id": "R lac-1787415779",
+      "shortCode": "R lac",
+      "zoneCode": "sy",
+      "tags": [
+        "flowering"
+      ],
+      "description": "Sochan blooming in the Side Yard.",
+      "image": "images/R lac/1787415779.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-08-22T16:23:01.194Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 167,
       "id": "C fas-1787415391",
       "shortCode": "C fas",
