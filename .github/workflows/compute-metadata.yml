@@ -37,6 +37,7 @@ jobs:
         run: python3 scripts/check-pending-work.py
 
       - name: Set up Python
+        id: setup-python
         if: steps.guard.outputs.any_work == 'true'
         uses: actions/setup-python@v5
         with:
@@ -52,12 +53,22 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .venv
-          key: ${{ runner.os }}-venv-py3.11-${{ hashFiles('scripts/requirements.txt') }}
+          key: ${{ runner.os }}-venv-py${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('scripts/requirements.txt') }}
 
       - name: Install dependencies
-        if: steps.guard.outputs.any_work == 'true' && steps.venv-cache.outputs.cache-hit != 'true'
+        if: steps.guard.outputs.any_work == 'true'
         run: |
-          uv venv .venv --python 3.11
+          # A cached .venv can still be unusable: `.venv/bin/python` is a symlink
+          # into the hosted toolcache, which dangles once the runner bumps the
+          # Python patch version. Verify before trusting the cache.
+          check='import importlib.util as u, sys; sys.exit(0 if all(u.find_spec(m) for m in ["PIL","imagehash","sklearn","skimage","numpy","requests","torch","torchvision","open_clip","bioclip"]) else 1)'
+          if .venv/bin/python -c "$check" 2>/dev/null; then
+            echo "Reusing cached venv ($(.venv/bin/python -V))."
+            exit 0
+          fi
+          echo "No usable cached venv; creating one."
+          rm -rf .venv
+          uv venv .venv --python "${{ steps.setup-python.outputs.python-path }}"
           uv pip install --python .venv/bin/python -r scripts/requirements.txt
 
       - name: Cache HuggingFace + bioclip weights
