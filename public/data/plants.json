@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "D car",
+      "fullName": "Dissosteira carolina",
+      "commonName": "Carolina Locust",
+      "variety": null
+    },
+    {
       "shortCode": "N can",
       "fullName": "Neotibicen canicularis",
       "commonName": "Dog-day Cicada",
