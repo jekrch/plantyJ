@@ -2083,6 +2083,61 @@
       ],
       "observationsCount": 21406
     },
+    "dissosteira-carolina": {
+      "id": "dissosteira-carolina",
+      "fullName": "Dissosteira carolina",
+      "commonName": "Carolina Locust",
+      "description": "Dissosteira carolina, the Carolina grasshopper, Carolina locust, black-winged grasshopper, road-duster or quaker, is a band-winged species of grasshopper which ranges widely in North America inhabiting weedy grasslands.\nThe Carolina Locust is a short-horned grasshopper (Family Acrididae) found in most of the United States and other parts of North America (Fig 1). These grasshoppers can be anywhere between 32 and 58 mm, with females being larger than males. Their color can range from grey to brown with contrasting black and yellow-white hind wings.\nCarolina Locusts are often found on or around dirt roads or paths, where they can easily blend in to gravel and soil. They prefer dry, sunny, open areas for basking, courting displays, and egg laying. Their courtship displays include flying and hovering above the open ground. These males can also call, but their sound is soft and quiet. Their flight is commonly confused for the flight of butterflies.\nThis species is not known to be a major pest, but some outbreaks have caused some damage in the early 20th century.",
+      "vernacularNames": [
+        "Black-winged Grasshopper",
+        "Carolina Grasshopper",
+        "Carolina Locust",
+        "Quaker",
+        "Road-Duster"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Orthoptera",
+        "family": "Acrididae",
+        "genus": "Dissosteira",
+        "species": "Dissosteira carolina",
+        "canonicalName": "Dissosteira carolina"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/1712343"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Dissosteira_carolina"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/126206"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q1992952"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.112278"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 40880
+    },
     "echinacea-purpurea": {
       "id": "echinacea-purpurea",
       "fullName": "Echinacea purpurea",

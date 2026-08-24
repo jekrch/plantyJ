@@ -942,5 +942,13 @@
   "Neotibicen": {
     "description": "Cicadas of the genus Neotibicen are large-bodied insects of the family Cicadidae that appear in summer or early fall in eastern North America and formerly Bermuda. Common names include cicada, harvestfly, jar fly, and the misnomer locust.",
     "url": "https://en.wikipedia.org/wiki/Neotibicen"
+  },
+  "Acrididae": {
+    "description": "Acrididae are the predominant family of grasshoppers, comprising some 10,000 of the 11,000 species of the entire suborder Caelifera. The Acrididae are best known because all locusts are of the Acrididae. The subfamily Oedipodinae is sometimes classified as a distinct family Oedipodidae in the superfamily Acridoidea. Acrididae grasshoppers are characterized by relatively short and stout antennae, and tympana on the side of the first abdominal segment.",
+    "url": "https://en.wikipedia.org/wiki/Acrididae"
+  },
+  "Dissosteira": {
+    "description": "Dissosteira is a genus of grasshoppers in the family Acrididae found in North America. They are about 1 to 1+1\u20442 inches long, and range from gray to various shades of brown.",
+    "url": "https://en.wikipedia.org/wiki/Dissosteira"
   }
 }

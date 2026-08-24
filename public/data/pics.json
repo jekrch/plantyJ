@@ -11,7 +11,11 @@
       "postedBy": "Jacob",
       "addedAt": "2026-08-24T18:10:01.375Z",
       "width": 1280,
-      "height": 1082
+      "height": 1082,
+      "kind": "animal",
+      "bioclipSpeciesId": "Dissosteira carolina",
+      "bioclipCommonName": "Carolina grasshopper",
+      "bioclipScore": 0.8972
     },
     {
       "seq": 168,
@@ -29,7 +33,8 @@
       "height": 960,
       "bioclipSpeciesId": "Asphondylia rudbeckiaeconspicua",
       "bioclipCommonName": "",
-      "bioclipScore": 0.3546
+      "bioclipScore": 0.3546,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Asphondylia_rudbeckiaeconspicua"
     },
     {
       "seq": 167,
@@ -47,7 +52,8 @@
       "height": 960,
       "bioclipSpeciesId": "Chamaecrista chamaecristoides",
       "bioclipCommonName": "",
-      "bioclipScore": 0.3979
+      "bioclipScore": 0.3979,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 166,
@@ -65,7 +71,8 @@
       "height": 960,
       "bioclipSpeciesId": "Rudbeckia triloba",
       "bioclipCommonName": "Cutleaf coneflower",
-      "bioclipScore": 0.6517
+      "bioclipScore": 0.6517,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Rudbeckia_triloba"
     },
     {
       "seq": 165,
@@ -1479,7 +1486,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1673,7 +1680,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
