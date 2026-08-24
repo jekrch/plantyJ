@@ -450,6 +450,18 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "D car",
+      "zoneCode": "mpg",
+      "verdict": "GOOD",
+      "analysis": "The Carolina Locust (Dissosteira carolina) is a secure native short-horned grasshopper in the Twin Cities area, and its presence on the pathway in the shaded Maple zone is highly typical. These band-winged grasshoppers are famous for their excellent camouflage on bare, compacted soil or gravel pathways, which they use to bask and conduct aerial courtship displays. From an ecological perspective, this species represents a highly positive addition to a garden prioritized for local ecology. While it is a generalist herbivore (polyphagous) that feeds on a variety of native grasses and broadleaf plants, it rarely reaches pest-level densities in residential gardens. Instead, it serves as a critical nutrient recycler and a vital food source for local insectivorous wildlife, including the resident Northern Cardinals and visiting Wild Turkeys documented on this property.\n\nIn terms of diet, this grasshopper feeds on both grasses and forbs, meaning it could potentially nibble on adjacent native plants such as sideoats grama in the nearby North Boulevard or native violets, asters, and goldenrods in the Maple zone. However, because it primarily targets weedy species and lower-forage plants, it does not pose a serious competitive or destructive threat to the prized native flora. Natural management is already built into the garden's healthy ecosystem; local birds, predatory spiders, and native entomopathogenic fungi like Entomophaga grylli will easily keep its numbers in check. No chemical or manual intervention is necessary, making this native insect a welcome, low-maintenance contributor to the property's biodiversity.",
+      "references": [
+        "https://www.minnesotaseasons.com/Insects/Carolina_grasshopper.html",
+        "https://en.wikipedia.org/wiki/Dissosteira_carolina",
+        "https://extension.colostate.edu/resource/grasshopper-control-in-gardens-and-small-acreages/"
+      ],
+      "created": "2026-08-24T18:46:46.569Z"
+    },
+    {
       "shortCode": "D pic",
       "zoneCode": "bb",
       "verdict": "GOOD",
@@ -1086,6 +1098,20 @@
         "https://www.minneapolisparks.org/wp-content/uploads/2026/05/Eloise-Butler-Wildflower-Garden-2023-24-Bee-Census-Report_4.14.26.pdf"
       ],
       "created": "2026-07-24T23:12:07.563Z"
+    },
+    {
+      "shortCode": "R hir",
+      "zoneCode": "nbv",
+      "verdict": "GOOD",
+      "analysis": "Rudbeckia hirta (Black-eyed Susan) occupies an exceptionally beneficial ecological niche in the North Boulevard (nbv) zone. Its rugged adaptability allows it to thrive in the compacted clay loam, full sun, and highly variable moisture conditions typical of city boulevards. As a native pioneer species, it establishes quickly to provide immediate soil stability and visual appeal alongside neighboring boulevard natives like Bouteloua curtipendula (Sideoats Grama) and Zizia aurea (Golden Alexanders). This hardy wildflower is perfectly suited to the climate of USDA Zone 4b/5a and does not require soil amendments, making it an ideal choice for low-maintenance urban areas.\n\nEcologically, this plant is a powerhouse that supports a diverse web of local fauna. It serves as a larval host plant for native insects, including the Silvery Checkerspot (Chlosyne nycteis) and the Wavy-lined Emerald moth (Synchlora aerata), while its pollen-rich blooms feed a variety of native bees, including the specialist Coneflower Mining Bee (Andrena rudbeckiae). Adult butterflies such as the Monarch (Danaus plexippus) and American Lady (Vanessa virginiensis) visit for nectar. Post-bloom, leaving the spent seed heads intact provides a critical fall and winter food source for granivorous birds, such as the American Goldfinch (Spinus tristis). Because it is a short-lived biennial that self-seeds prolifically, the owners will need to practice occasional seedling editing to prevent it from overcrowding slower-growing perennials, but its overall ecological contributions align perfectly with the garden's native-priority objectives.",
+      "references": [
+        "https://extension.psu.edu/black-eyed-susan-beautiful-and-beneficial",
+        "https://plants.ces.ncsu.edu/plants/rudbeckia-hirta/",
+        "https://kb.jniplants.com/black-eyed-susan-rudbeckia-hirta",
+        "https://www.minnesotawildflowers.info/flower/black-eyed-susan",
+        "https://www.prairiemoon.com/rudbeckia-hirta-black-eyed-susan"
+      ],
+      "created": "2026-08-24T18:46:46.569Z"
     },
     {
       "shortCode": "R hir",
