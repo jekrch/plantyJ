@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 169,
+      "id": "D car-1787594999",
+      "shortCode": "D car",
+      "zoneCode": "mpg",
+      "tags": [],
+      "description": "Found on the pathway in the Maple zone.",
+      "image": "images/D car/1787594999.jpg",
+      "postedBy": "Jacob",
+      "addedAt": "2026-08-24T18:10:01.375Z",
+      "width": 1280,
+      "height": 1082
+    },
+    {
       "seq": 168,
       "id": "R lac-1787415779",
       "shortCode": "R lac",
@@ -1466,7 +1479,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1660,7 +1673,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
