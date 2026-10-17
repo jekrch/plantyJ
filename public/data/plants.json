@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "S cor",
+      "fullName": "Symphyotrichum cordifolium",
+      "commonName": "Blue Wood Aster",
+      "variety": null
+    },
+    {
       "shortCode": "D car",
       "fullName": "Dissosteira carolina",
       "commonName": "Carolina Locust",
