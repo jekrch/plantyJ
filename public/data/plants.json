@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "S lae",
+      "fullName": "Symphyotrichum laeve",
+      "commonName": "Smooth Blue Aster",
+      "variety": null
+    },
+    {
       "shortCode": "S can",
       "fullName": "Solidago canadensis",
       "commonName": "Canada Goldenrod",
