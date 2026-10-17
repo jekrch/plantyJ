@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 177,
+      "id": "S lae-1792273376",
+      "shortCode": "S lae",
+      "zoneCode": "nbv",
+      "tags": [
+        "blooming"
+      ],
+      "description": "In full bloom in the north boulevard.",
+      "image": "images/S lae/1792273376.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-10-17T21:42:58.054Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 176,
       "id": "S can-1792273236",
       "shortCode": "S can",
@@ -1611,7 +1626,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1805,7 +1820,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
