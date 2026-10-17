@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "S pil",
+      "fullName": "Symphyotrichum pilosum",
+      "commonName": "Frost Aster",
+      "variety": null
+    },
+    {
       "shortCode": "S cor",
       "fullName": "Symphyotrichum cordifolium",
       "commonName": "Blue Wood Aster",
