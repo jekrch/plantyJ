@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A spec",
+      "fullName": "Anoplius species",
+      "commonName": "Spider Wasp",
+      "variety": null
+    },
+    {
       "shortCode": "S lae",
       "fullName": "Symphyotrichum laeve",
       "commonName": "Smooth Blue Aster",
