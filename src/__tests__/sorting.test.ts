@@ -176,10 +176,17 @@ describe("computeMonthMarkers", () => {
     expect(markers.get("new")).toBe("June 2026");
   });
 
-  it("derives the month from the image timestamp in the id, not addedAt", () => {
-    // id ts = 2026-06-15 ~ UTC; addedAt is a different month
+  it("derives the month from addedAt, not the upload timestamp in the id", () => {
+    // id ts = 2026-06-15 ~ UTC; addedAt is backdated to a different month
     const ts = Math.floor(Date.UTC(2026, 5, 15, 12) / 1000);
-    const o = organism({ id: `A atr-${ts}`, addedAt: "2026-01-01T00:00:00Z" });
+    const o = organism({ id: `A atr-${ts}`, addedAt: "2026-01-15T12:00:00Z" });
+    const markers = computeMonthMarkers([o], "newest");
+    expect(markers.get(o.id)).toBe("January 2026");
+  });
+
+  it("falls back to the id timestamp when addedAt is unparseable", () => {
+    const ts = Math.floor(Date.UTC(2026, 5, 15, 12) / 1000);
+    const o = organism({ id: `A atr-${ts}`, addedAt: "" });
     const markers = computeMonthMarkers([o], "newest");
     expect(markers.get(o.id)).toBe("June 2026");
   });

@@ -201,15 +201,18 @@ const MONTH_NAMES = [
 ];
 
 /**
- * The image's own timestamp (Unix seconds embedded in its id / filename),
- * falling back to `addedAt` when no timestamp can be parsed.
+ * The pic's display time: `addedAt`, which can be backdated to when the photo
+ * was actually taken. Falls back to the upload timestamp (Unix seconds embedded
+ * in its id / filename) when `addedAt` is missing or unparseable.
  */
 export function imageTime(organism: Organism): number {
+  const added = new Date(organism.addedAt).getTime();
+  if (!Number.isNaN(added)) return added;
   const fromId = /-(\d{9,})$/.exec(organism.id);
   if (fromId) return Number(fromId[1]) * 1000;
   const fromImage = /\/(\d{9,})\.[a-z0-9]+$/i.exec(organism.image);
   if (fromImage) return Number(fromImage[1]) * 1000;
-  return new Date(organism.addedAt).getTime();
+  return added;
 }
 
 function monthKey(ms: number): { key: string; rank: number; label: string } {
@@ -229,7 +232,7 @@ function monthKey(ms: number): { key: string; rank: number; label: string } {
  *
  * A month/year qualifies for a header when it is the newest month present
  * (which by definition has ≥1 pic) or when it contains at least three pics.
- * Time is taken from the image itself (see `imageTime`), not `addedAt`.
+ * Time is taken from `addedAt`, falling back to the upload timestamp (see `imageTime`).
  *
  * `organisms` must already be in the order they will be laid out. Returns a
  * map from the leading organism's id to the header label to render before it.
