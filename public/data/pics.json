@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 178,
+      "id": "a tri-1792273542",
+      "shortCode": "a tri",
+      "zoneCode": "mpg",
+      "tags": [
+        "fruiting"
+      ],
+      "description": "Wild leeks with seedpods",
+      "image": "images/a tri/1792273542.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-10-17T21:45:44.235Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 177,
       "id": "S lae-1792273376",
       "shortCode": "S lae",
@@ -1630,7 +1645,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1824,7 +1839,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
