@@ -1,6 +1,21 @@
 {
   "pics": [
     {
+      "seq": 171,
+      "id": "S cor-1792272596",
+      "shortCode": "S cor",
+      "zoneCode": "bb",
+      "tags": [
+        "flowering"
+      ],
+      "description": "Abundant late-season blooms in the Berry Border.",
+      "image": "images/S cor/1792272596.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-10-17T21:29:58.016Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 170,
       "id": "S tri-1792272469",
       "shortCode": "S tri",
@@ -1503,7 +1518,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1697,7 +1712,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
