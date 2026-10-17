@@ -6295,6 +6295,63 @@
       ],
       "observationsCount": 36789
     },
+    "symphyotrichum-laeve": {
+      "id": "symphyotrichum-laeve",
+      "fullName": "Symphyotrichum laeve",
+      "commonName": "Smooth Blue Aster",
+      "description": "Symphyotrichum laeve (formerly Aster laevis) is a flowering plant native to Canada, the United States, and Coahuila (Mexico). It has the common names of smooth blue aster, smooth aster, smooth-leaved aster, glaucous Michaelmas-daisy and glaucous aster.",
+      "vernacularNames": [
+        "Glatte Herbstaster (DE)",
+        "Glaucous Aster",
+        "Glaucous Michaelmas-daisy",
+        "Smooth Aster",
+        "Smooth Blue Aster",
+        "Smooth aster (EN)",
+        "Smooth-leaf Aster"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Asterales",
+        "family": "Asteraceae",
+        "genus": "Symphyotrichum",
+        "species": "Symphyotrichum laeve",
+        "canonicalName": "Symphyotrichum laeve"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/8421156"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Symphyotrichum_laeve"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/129607"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q544417"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.151439"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 23507
+    },
     "symphyotrichum-lateriflorum": {
       "id": "symphyotrichum-lateriflorum",
       "fullName": "Symphyotrichum lateriflorum",
