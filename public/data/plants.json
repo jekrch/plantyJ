@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "S nov",
+      "fullName": "Symphyotrichum novae-angliae",
+      "commonName": "New England Aster",
+      "variety": null
+    },
+    {
       "shortCode": "S pil",
       "fullName": "Symphyotrichum pilosum",
       "commonName": "Frost Aster",
