@@ -246,6 +246,20 @@
       "created": "2026-07-21T02:46:07.659Z"
     },
     {
+      "shortCode": "A spec",
+      "zoneCode": "wbv",
+      "verdict": "GOOD",
+      "analysis": "The presence of a native spider wasp (Anoplius sp.) in the West Boulevard zone is a distinct indicator of a healthy, biodiverse urban ecosystem. Adult spider wasps feed on floral nectar, making them beneficial minor pollinators that utilize late-season blooming perennials in and near the boulevard, such as Canada Goldenrod (Solidago canadensis) and neighboring composites, while using native warm-season grasses like Sideoats Grama (Bouteloua curtipendula) for perching. As specialized solitary predators, female Anoplius wasps hunt ground-dwelling arachnids—including wolf spiders, funnel-web grass spiders (such as the Agelenopsis species present in the adjacent Maple zone), and crab spiders (Xysticus species)—paralyzing them to provision underground nest cells for their developing larvae. This specialized hunting provides natural biological control that regulates local spider populations across garden zones without harming vegetation.\n\nNative to Minnesota and the broader Midwest, Anoplius species are docile, solitary wasps that pose no defense-driven sting hazard to humans or pets, as they do not construct collective colonies to defend. Females prefer open, sunny ground with uncompacted soil or loose leaf litter for excavating burrow sites, making boulevard edges and garden borders ideal nesting habitat. Because they enhance natural predator-prey dynamics and support native pollinator interactions, no management or removal is required. Their activity in late summer confirms that the garden's native plantings are successfully supporting higher trophic levels.",
+      "references": [
+        "https://www.minnesotaseasons.com/Insects/half-belted_blue_black_spider_wasp.html",
+        "https://bugswithmike.com/guide/arthropoda/hexapoda/insecta/hymenoptera/pompiloidea/pompilidae/pompilinae/anopliini/anoplius",
+        "https://bugeric.blogspot.com/2012/04/wasp-wednesday-anoplius.html",
+        "https://extension.psu.edu/programs/master-gardener/counties/monroe/news/wasps-beneficial-insects-and-pollinators",
+        "https://www.researchgate.net/publication/353021983_The_spider-hunting_wasps_of_Ireland_Hymenoptera_Pompilidae_A_review_of_the_species_their_natural_history_and_recorded_distribution"
+      ],
+      "created": "2026-10-17T22:24:50.507Z"
+    },
+    {
       "shortCode": "A syr",
       "zoneCode": "nbv",
       "verdict": "MIXED",
@@ -1208,6 +1222,18 @@
       "created": "2026-05-09T00:30:07.442Z"
     },
     {
+      "shortCode": "S can",
+      "zoneCode": "wbv",
+      "verdict": "MIXED",
+      "analysis": "Canada Goldenrod (Solidago canadensis) serves as a keystone late-season ecological asset in the urban landscape. Observed blooming in mid-to-late September in the west boulevard zone, its dense floral plumes provide crucial nectar and pollen for late-season pollinators, including migrating monarch butterflies, native bees preparing for winter, and beneficial predatory insects. Its persistent seedheads offer valuable autumn and winter forage for local songbirds like finches, while its foliage supports a vast array of native insect larvae. Furthermore, it is exceptionally hardy in Twin Cities zone 4b/5a clay loam, effortlessly enduring full sun, roadside heat, and compacted soils typical of boulevard conditions.\n\nHowever, its presence in a constrained urban strip yields a mixed rating due to its aggressive, rhizomatous spreading habit. Left unmanaged, Canada Goldenrod can rapidly form dense, monospecific colonies that displace less assertive native neighbors in the West Boulevard, such as Missouri Evening Primrose (Oenothera macrocarpa). While it strongly aligns with the owners' priority to support local biodiversity, it requires active spring root-thinning and stem editing to prevent it from dominating the planting bed.",
+      "references": [
+        "https://seasonwatch.umn.edu/canada-goldenrod",
+        "https://anokamastergardeners.org/gardening-articles/goldenrod-for-gardeners",
+        "https://www.uvm.edu/extension/news/glorious-goldenrod"
+      ],
+      "created": "2026-10-17T22:24:50.507Z"
+    },
+    {
       "shortCode": "s can bob",
       "zoneCode": "mpg",
       "verdict": "GOOD",
@@ -1232,6 +1258,18 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "S cor",
+      "zoneCode": "bb",
+      "verdict": "GOOD",
+      "analysis": "Symphyotrichum cordifolium (Blue Wood Aster) is an exceptional native perennial that provides critical ecological value during late summer and autumn in Minneapolis. As a late-season bloomer, its cloud-like displays of pale blue-purple flowers serve as a vital nectar and pollen lifeline for native sweat bees, bumblebees, syrphid flies, and migrating monarch butterflies preparing for winter. It also acts as an essential larval host plant for native butterflies such as the Pearl Crescent and Silvery Checkerspot, as well as specialized moth species. Once flowers set seed, the dried mature flower heads offer a valuable cold-weather foraging source for native songbirds like goldfinches.\n\nPlanted in the Berry Border, Blue Wood Aster easily adapts to the lighter, looser, and well-draining soil conditions. While naturally found in woodland edges and dappled shade, full sun exposure induces prolific blooming, though stems may lean without physical support from neighboring plants; pinching stems back in early June encourages a bushier habit and prevents flopping. Because the plant readily self-seeds via wind-dispersed plumes, gardeners prioritizing native ecology can either allow it to naturalize in sunny borders or trim spent seed heads to control its spread, aligning perfectly with the garden's ecological restoration priorities.",
+      "references": [
+        "https://northerngardener.org/native-aster/",
+        "https://www.minnesotawildflowers.info/flower/blue-wood-aster",
+        "https://plants.ces.ncsu.edu/plants/symphyotrichum-cordifolium/"
+      ],
+      "created": "2026-10-17T22:24:50.507Z"
+    },
+    {
       "shortCode": "s fle",
       "zoneCode": "mpg",
       "verdict": "GOOD",
@@ -1251,6 +1289,19 @@
         "https://www.cbsnews.com/minnesota/news/rabbit-garden-protection/"
       ],
       "created": "2026-07-15T04:38:08.445Z"
+    },
+    {
+      "shortCode": "S lae",
+      "zoneCode": "nbv",
+      "verdict": "GOOD",
+      "analysis": "Smooth Blue Aster (Symphyotrichum laeve) is an outstanding native perennial that excels in the North Boulevard zone. Perfectly suited to USDA Zone 4b/5a, this species thrives in full sun and easily tolerates the compacted clay-loam and variable moisture typical of urban boulevard exposures. Unlike some larger or floppier asters, its smooth, glaucous stems and foliage remain sturdy and upright in average to dry soils, while its deep fibrous root system provides strong drought resistance once established.\n\nEcologically, Smooth Blue Aster acts as a crucial late-season lifeline from late August through October, delivering abundant pollen and nectar when few other forage options remain. It supports migrating Monarch butterflies, overwintering bumblebee queens, and specialist native bees like the aster mining bee (Andrena asteris). Furthermore, it serves as a larval host plant for the Pearl Crescent butterfly (Phyciodes tharos) and produces seedheads that feed native songbirds like American Goldfinches through late fall and winter. For owners prioritizing native plants and ecosystem support, this specimen is an ideal choice for the boulevard.",
+      "references": [
+        "https://www.minnesotawildflowers.info/flower/smooth-blue-aster",
+        "https://bwsr.state.mn.us/october-2017-featured-plant",
+        "https://legacynativeplants.com/products/smooth-blue-aster-symphyotrichum-laeve",
+        "https://www.gardenia.net/plant/symphyotrichum-laeve"
+      ],
+      "created": "2026-10-17T22:24:50.507Z"
     },
     {
       "shortCode": "S lan",
@@ -1275,6 +1326,18 @@
       "analysis": "Scrophularia marilandica (Late Figwort) is the late-season counterpart to S. lanceolata, stepping in to provide abundant nectar from mid-summer into fall. It is a towering, shade-tolerant native that acts as an insect magnet, supporting specialized bees, wasps, and migrating hummingbirds just as they need to build energy reserves. Planting both figworts ensures a continuous, high-volume nectar flow in the front yard.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "S nov",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "Symphyotrichum novae-angliae (New England Aster) is a high-value native perennial that supplies a vital late-season ecological lifeline in Minneapolis gardens. Blooming heavily from late August through October, its composite heads offer high-energy pollen and nectar for migrating Monarch butterflies, queen bumblebees preparing for overwintering, and a wide array of native bees and beneficial flies when most other nectar sources have waned. Beyond adult pollinators, it serves as an essential larval host plant for caterpillars of the Pearl Crescent butterfly, Silvery Checkerspot, and dozens of native moth species. In late fall and winter, its persistent, feathery seed heads remain intact, providing valuable seed forage for overwintering songbirds like goldfinches and native sparrows.\n\nIn the Front Yard zone, New England Aster is well adapted to the heavy clay loam soil and seasonal moisture swings, easily tolerating both wet spring conditions and summer dry spells. While it blooms most densely in full sun, the late afternoon sun available in this zone provides adequate energy for robust flowering. To handle its tall, upright habit (3–5 feet) and prevent floppiness or natural lower-leaf loss in partial shade, owners can prune the stems back by half in early summer (a \"Chelsea chop\") to induce compact, multi-branched growth or utilize surrounding groundcovers and shorter perennials to mask its lower stems. Given the property owners' commitment to native restoration and ecological support, this specimen is an excellent fit.",
+      "references": [
+        "https://www.minnesotawildflowers.info/flower/new-england-aster",
+        "https://www.prairiemoon.com/symphyotrichum-novae-angliae-new-england-aster",
+        "https://growitbuildit.com/new-england-aster-symphyotrichum-novae-angliae/"
+      ],
+      "created": "2026-10-17T22:24:50.507Z"
     },
     {
       "shortCode": "S off",
