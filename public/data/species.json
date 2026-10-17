@@ -5956,6 +5956,61 @@
       ],
       "observationsCount": 16240
     },
+    "solidago-canadensis": {
+      "id": "solidago-canadensis",
+      "fullName": "Solidago canadensis",
+      "commonName": "Canada Goldenrod",
+      "description": "Solidago canadensis, known as Canada goldenrod or Canadian goldenrod, is an herbaceous perennial plant of the family Asteraceae. It forms colonies of upright growing plants, with many small yellow flowers in a branching inflorescence held above the foliage. It is native to northeastern and north-central North America and is an invasive plant in other parts of the continent and several areas worldwide, including Eurasia.",
+      "vernacularNames": [
+        "Canada goldenrod",
+        "Canadian Goldenrod",
+        "Canadian Goldenrod (EN)",
+        "Kanadische Goldrute",
+        "Kanadische Goldrute (DE)"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Asterales",
+        "family": "Asteraceae",
+        "genus": "Solidago",
+        "species": "Solidago canadensis",
+        "canonicalName": "Solidago canadensis"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/5389029"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Solidago_canadensis"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/67808"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q254436"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.137819"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 78062
+    },
     "solidago-flexicaulis": {
       "id": "solidago-flexicaulis",
       "fullName": "Solidago flexicaulis",

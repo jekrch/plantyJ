@@ -11,7 +11,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-10-17T21:40:38.023Z",
       "width": 960,
-      "height": 1280
+      "height": 1280,
+      "bioclipSpeciesId": "Solidago altissima",
+      "bioclipCommonName": "canescent tall goldenrod",
+      "bioclipScore": 0.3858
     },
     {
       "seq": 175,
@@ -47,7 +50,8 @@
       "height": 960,
       "bioclipSpeciesId": "Solidago speciosa",
       "bioclipCommonName": "Showy goldenrod",
-      "bioclipScore": 0.0372
+      "bioclipScore": 0.0372,
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Solidago_speciosa"
     },
     {
       "seq": 173,
@@ -1607,7 +1611,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1801,7 +1805,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
