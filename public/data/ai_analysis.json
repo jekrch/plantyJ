@@ -1278,6 +1278,18 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "s fle",
+      "zoneCode": "sy",
+      "verdict": "GOOD",
+      "analysis": "Zigzag Goldenrod (Solidago flexicaulis) is an ideal ecological fit for the Side Yard zone, which is characterized by heavy shade, a steep slope, and damp, compacted clay/loam soil near the top of the incline. Unlike sun-loving prairie goldenrods, this native woodland perennial thrives in dappled light to deep shade and readily adapts to heavy, moisture-retentive soils. Its fibrous root structure and gentle rhizomatous spreading habit provide excellent soil stabilization along the hillside, helping mitigate erosion without overpowering neighboring native species.\n\nEcologically, Zigzag Goldenrod fulfills a crucial late-season niche by blooming from late summer into autumn, a period when nectar sources in shady garden beds are scarce. Its golden flower clusters offer pollen and nectar to native bumblebees, halictid bees, syrphid flies, and migrating butterflies such as red admirals. It also serves as a larval host plant for native moth species, while its persistent winter seed heads feed songbirds like goldfinches. Hardy through USDA Zone 4b and insect-pollinated (meaning it does not cause hay fever), this species aligns seamlessly with the owners' goals of ecological stewardship and native garden restoration.",
+      "references": [
+        "https://bwsr.state.mn.us/november-2018-featured-plant",
+        "https://plantfinder.mobot.org/PlantFinderDetails.aspx?kempercode=b917",
+        "https://www.wildflower.org/plants/result.php?id_plant=sofl2"
+      ],
+      "created": "2026-10-17T22:25:49.888Z"
+    },
+    {
       "shortCode": "S flo",
       "zoneCode": "kg",
       "verdict": "MIXED",
@@ -1353,6 +1365,19 @@
       "created": "2026-06-27T00:19:14.541Z"
     },
     {
+      "shortCode": "S pil",
+      "zoneCode": "nbv",
+      "verdict": "GOOD",
+      "analysis": "Frost Aster (Symphyotrichum pilosum) fills an essential ecological niche in the North Boulevard zone, thriving in the full sun and dry, compacted soil typical of urban boulevard strips. As a hardy native perennial across the Upper Midwest, it produces masses of small white blooms late in the season from September through October, providing a vital bridge of nectar and pollen when few other plants are flowering. It serves as a larval host plant for Pearl Crescent caterpillars and offers high-value forage for migrating Monarch butterflies, honey bees, and specialized native bees such as Andrena species.",
+      "references": [
+        "https://www.minnesotawildflowers.info/flower/awl-aster",
+        "https://www.prairiemoon.com/symphyotrichum-pilosum-frost-aster-prairie-moon-nursery.html",
+        "https://arb.umn.edu/news/asters-minnesota-gardens",
+        "https://extensiongardener.ces.ncsu.edu/plant-toolbox/plants/symphyotrichum-pilosum/"
+      ],
+      "created": "2026-10-17T22:25:49.888Z"
+    },
+    {
       "shortCode": "S pul",
       "zoneCode": "mpg",
       "verdict": "MIXED",
@@ -1380,6 +1405,18 @@
       "analysis": "Sedum ternatum (Wild Stonecrop) is a fantastic, shade-tolerant native succulent that makes an excellent living mulch beneath the dense canopy of maples. It blooms in the spring with star-like white flowers that attract early-emerging native bees and hoverflies. Because it has shallow roots and tolerates dry shade, it thrives where grass fails, stabilizing the clay/loam soil without competing heavily with tree roots.",
       "references": [],
       "created": "2026-05-05T02:52:53.830Z"
+    },
+    {
+      "shortCode": "S tri",
+      "zoneCode": "bb",
+      "verdict": "GOOD",
+      "analysis": "The American Goldfinch (Spinus tristis) is a beneficial native songbird whose presence in the Berry Border reflects a healthy, seed-producing ecosystem. Unlike most songbirds that raise nestlings on insects, goldfinches are strict granivores, timing their late-summer breeding season to coincide with seed set in composite wildflowers like Purple Coneflower (Echinacea purpurea) and native grasses. In the sunny, loose-soiled Berry Border, goldfinches actively forage on standing seed heads, serving as welcome seed foragers and providing high ecological value for naturalistic urban landscapes.\n\nHosting goldfinches aligns directly with the owners' priority to support local fauna through native flora. Maintaining spent flower heads through autumn and winter rather than deadheading ensures a continuous natural food supply. The primary management consideration in this urban setting is protecting these low-foraging birds from domestic cat (Felis catus) predation, ensuring feeding areas remain safe habitats.",
+      "references": [
+        "https://www.wildflower.org/plants/result.php?id_plant=ECPU",
+        "https://www.allaboutbirds.org/guide/American_Goldfinch/lifehistory",
+        "https://animaldiversity.org/accounts/Carduelis_tristis/"
+      ],
+      "created": "2026-10-17T22:25:49.888Z"
     },
     {
       "shortCode": "S tri",
