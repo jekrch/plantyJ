@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "S can",
+      "fullName": "Solidago canadensis",
+      "commonName": "Canada Goldenrod",
+      "variety": null
+    },
+    {
       "shortCode": "S nov",
       "fullName": "Symphyotrichum novae-angliae",
       "commonName": "New England Aster",
