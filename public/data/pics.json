@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 170,
+      "id": "S tri-1792272469",
+      "shortCode": "S tri",
+      "zoneCode": "bb",
+      "tags": [],
+      "description": "On echinacea",
+      "image": "images/S tri/1792272469.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-10-17T21:27:51.411Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 169,
       "id": "D car-1787594999",
       "shortCode": "D car",
@@ -1486,7 +1499,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1680,7 +1693,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
