@@ -777,6 +777,40 @@
         "natureserve"
       ]
     },
+    "anoplius-species": {
+      "id": "anoplius-species",
+      "fullName": "Anoplius species",
+      "commonName": "Spider Wasp",
+      "description": "",
+      "vernacularNames": [
+        "Blue-black Spider Wasps"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Hymenoptera",
+        "family": "Pompilidae",
+        "genus": "Anoplius",
+        "species": null,
+        "canonicalName": "Anoplius"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/1311909"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ]
+    },
     "aphis-sp": {
       "id": "aphis-sp",
       "fullName": "Aphis sp.",

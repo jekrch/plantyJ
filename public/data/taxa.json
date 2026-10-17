@@ -950,5 +950,13 @@
   "Dissosteira": {
     "description": "Dissosteira is a genus of grasshoppers in the family Acrididae found in North America. They are about 1 to 1+1\u20442 inches long, and range from gray to various shades of brown.",
     "url": "https://en.wikipedia.org/wiki/Dissosteira"
+  },
+  "Anoplius": {
+    "description": "Anoplius is a genus of spider wasps in the family Pompilidae called the blue-black spider wasps. It is one of two genera within the tribe Anopliini of subfamily Pompilinae.",
+    "url": "https://en.wikipedia.org/wiki/Anoplius"
+  },
+  "Pompilidae": {
+    "description": "Pompilidae is a family of wasps commonly called spider wasps, spider-hunting wasps, or pompilid wasps. The family is cosmopolitan, with some 5,000 species in six subfamilies. With the exception of some group-nesting Ageniellini, the wasps are solitary. Most capture and paralyze prey, though members of the subfamily Ceropalinae are kleptoparasites of other pompilids, or ectoparasitoids of living spiders.",
+    "url": "https://en.wikipedia.org/wiki/Spider_wasp"
   }
 }
