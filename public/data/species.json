@@ -6304,6 +6304,66 @@
       ],
       "observationsCount": 32652
     },
+    "symphyotrichum-novae-angliae": {
+      "id": "symphyotrichum-novae-angliae",
+      "fullName": "Symphyotrichum novae-angliae",
+      "commonName": "New England Aster",
+      "description": "Symphyotrichum novae-angliae (formerly Aster novae-angliae) is a species of flowering plant in the aster family (Asteraceae) native to central and eastern North America. Commonly known as New England aster, hairy Michaelmas-daisy, or Michaelmas daisy, it is a perennial, herbaceous plant usually between 30 and 120 centimeters (1 and 4 feet) tall and 60 to 90 cm (2 to 3 ft) wide.\nThe usually deep purple flowers have up to 100 ray florets which are rarely pink or white. These surround the flower centers which are composed of just as many tiny yellow disk florets. The plant grows naturally in clumps, with several erect stems emerging from a single point. The stems are stout, hairy, and mostly unbranched. The untoothed, lance-shaped leaves clasp the stem with earlobe-like appendages, and the lower stem leaves often wither by the time of flowering.\nNew England aster generally grows in wet environments but also has been found in dry soil or sand. The seeds and nectar of this mostly conservationally secure species, which blooms August to November, are important to a wide variety of animals, including birds, bees, and butterflies. It has been introduced to Europe, Central Asia, Hispaniola, New Zealand, and some western states and provinces of North America.\nThe naturally occurring hybrid species of New England aster and white heath aster (Symphyotrichum ericoides) is named Symphyotrichum \u00d7 amethystinum and is commonly known as amethyst aster. It can grow where the two parents are in close proximity. There are roughly 50 cultivars of Symphyotrichum novae-angliae available, including the award-winners 'Brunswick', 'Helen Picton', and 'James Ritchie'. It has been used by indigenous Americans, such as the Cherokee, Haudenosaunee, and Potawatomi, to heal multiple ailments.",
+      "vernacularNames": [
+        "Hairy Michaelmas Daisy",
+        "Hairy Michaelmas-daisy",
+        "Hairy Michaelmas-daisy (EN)",
+        "Michaelmas Daisy",
+        "Neuengland-Herbstaster (DE)",
+        "New England Aster",
+        "New England Daisy",
+        "New England Michaelmas-daisy",
+        "New England Or Michaelmas Daisy",
+        "Wild Prairie Aster"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Asterales",
+        "family": "Asteraceae",
+        "genus": "Symphyotrichum",
+        "species": "Symphyotrichum novae-angliae",
+        "canonicalName": "Symphyotrichum novae-angliae"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3151618"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Symphyotrichum_novae-angliae"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/117443"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q1894641"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.141304"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 76789
+    },
     "symphyotrichum-pilosum": {
       "id": "symphyotrichum-pilosum",
       "fullName": "Symphyotrichum pilosum",
