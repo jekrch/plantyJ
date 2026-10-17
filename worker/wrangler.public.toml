@@ -9,6 +9,12 @@ name = "plantyj-public"
 main = "src/public-entry.ts"
 compatibility_date = "2024-12-01"
 
+# The OAuth web client ID the frontend signs in with (src/data/config.ts). Not a
+# secret — client IDs are public by design. A username claim is refused unless
+# the caller's access token was issued to this client; unset, claims return 501.
+[vars]
+GOOGLE_CLIENT_ID = "996945252569-0fhinopjkdr5udal57gn000k4f44ffrv.apps.googleusercontent.com"
+
 # KV index for custom share-link usernames (?u=<name> -> manifest fileId). Create
 # it once, then paste the printed id below:
 #   cd worker

@@ -9,6 +9,10 @@ import { claimUsername, isValidUsername, lookupUsername, normalizeUsername } fro
  */
 export interface PublicEnv {
   GOOGLE_API_KEY?: string;
+  // The web OAuth client ID the frontend signs in with. A username claim's
+  // access token must have been issued to it; unset, claims 501 rather than
+  // accepting a token from any Google client.
+  GOOGLE_CLIENT_ID?: string;
   // Username -> manifestId index for `?u=<name>` share links. Optional: when
   // unbound, custom links are simply unavailable and the routes 501.
   USERNAMES?: KVNamespace;
@@ -124,20 +128,45 @@ function json(body: unknown, status = 200, extra?: Record<string, string>): Resp
   });
 }
 
+const TOKENINFO = "https://oauth2.googleapis.com/tokeninfo";
+
+/** The fields of Google's tokeninfo response this worker reads. */
+export interface TokenInfo {
+  aud?: string;
+  sub?: string;
+}
+
 /**
- * The Google account `sub` behind an access token, or null if the token is
- * missing/expired/invalid. Validated by calling Google's userinfo endpoint
- * server-side — no JWT crypto needed, and it proves the token is live, not just
- * well-formed. This is the only gate on claiming a username.
+ * The `sub` a tokeninfo response vouches for, but only when the token was
+ * issued to `clientId`. Google issues tokens to every app with a Google
+ * sign-in, and any of them carrying identity scopes resolves to a `sub` — so
+ * without the audience check, a token a user granted some *other* app could be
+ * replayed here to claim or re-point that user's link.
  */
-async function verifyGoogleSub(token: string): Promise<string | null> {
+export function subForClient(info: TokenInfo, clientId: string): string | null {
+  if (!clientId || info.aud !== clientId) return null;
+  return typeof info.sub === "string" && info.sub ? info.sub : null;
+}
+
+/**
+ * The Google account `sub` behind an access token issued to this app, or null
+ * if the token is missing/expired/invalid or belongs to another client.
+ * Validated by Google's tokeninfo endpoint server-side — access tokens are
+ * opaque, so there's no JWT to check locally, and unlike userinfo it reports
+ * which client the token was issued to. This is the only gate on claiming a
+ * username.
+ */
+async function verifyGoogleSub(token: string, clientId: string): Promise<string | null> {
   try {
-    const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
-      headers: { Authorization: `Bearer ${token}` },
+    // A form body rather than `?access_token=`, so the token never sits in a
+    // subrequest URL that might be logged.
+    const res = await fetch(TOKENINFO, {
+      method: "POST",
+      headers: { "content-type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ access_token: token }),
     });
     if (!res.ok) return null;
-    const u = (await res.json()) as { sub?: string };
-    return u.sub ?? null;
+    return subForClient((await res.json()) as TokenInfo, clientId);
   } catch {
     return null;
   }
@@ -177,9 +206,12 @@ async function handleUsername(
   }
 
   if (request.method === "POST") {
+    // Without a client ID there's no audience to check a token against, and
+    // accepting any Google token is the hole this guards. Refuse outright.
+    if (!env.GOOGLE_CLIENT_ID) return json({ error: "Custom links are not configured" }, 501);
     const auth = request.headers.get("Authorization") ?? "";
     const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
-    const sub = token ? await verifyGoogleSub(token) : null;
+    const sub = token ? await verifyGoogleSub(token, env.GOOGLE_CLIENT_ID) : null;
     if (!sub) return json({ error: "Sign in to claim a custom link" }, 401);
 
     let body: { manifestId?: unknown };

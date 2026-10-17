@@ -1,5 +1,5 @@
 import { describe, it, expect } from "bun:test";
-import { allowedIds, isDriveId } from "../public";
+import { allowedIds, isDriveId, subForClient } from "../public";
 
 describe("isDriveId", () => {
   it("accepts Drive-shaped ids and rejects junk", () => {
@@ -34,5 +34,31 @@ describe("allowedIds", () => {
     const set = allowedIds({ data: { "pics.json": "PICS" }, images: {} });
     expect(set.has("PICS")).toBe(true);
     expect(set.has("some-other-public-file")).toBe(false);
+  });
+});
+
+describe("subForClient", () => {
+  const CLIENT = "123-abc.apps.googleusercontent.com";
+
+  it("returns the sub for a token issued to this client", () => {
+    expect(subForClient({ aud: CLIENT, sub: "110248495921238986420" }, CLIENT)).toBe(
+      "110248495921238986420",
+    );
+  });
+
+  it("refuses a token issued to another client (the replay guard)", () => {
+    expect(
+      subForClient({ aud: "999-other.apps.googleusercontent.com", sub: "1102" }, CLIENT),
+    ).toBeNull();
+  });
+
+  it("refuses a missing audience or sub", () => {
+    expect(subForClient({ sub: "1102" }, CLIENT)).toBeNull();
+    expect(subForClient({ aud: CLIENT }, CLIENT)).toBeNull();
+    expect(subForClient({ aud: CLIENT, sub: "" }, CLIENT)).toBeNull();
+  });
+
+  it("fails closed when no client id is configured", () => {
+    expect(subForClient({ aud: "", sub: "1102" }, "")).toBeNull();
   });
 });
