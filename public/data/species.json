@@ -6304,6 +6304,75 @@
       ],
       "observationsCount": 32652
     },
+    "symphyotrichum-pilosum": {
+      "id": "symphyotrichum-pilosum",
+      "fullName": "Symphyotrichum pilosum",
+      "commonName": "Frost Aster",
+      "description": "Symphyotrichum pilosum (formerly Aster pilosus) is a perennial, herbaceous, flowering plant in the Asteraceae family native to central and eastern North America. It is commonly called hairy white oldfield aster, frost aster, white heath aster, heath aster, hairy aster, common old field aster, old field aster, awl aster, nailrod, and steelweed. There are two varieties: Symphyotrichum pilosum var. pilosum, known by the common names previously listed, and Symphyotrichum pilosum var. pringlei, known as Pringle's aster. Both varieties are conservationally secure globally and in most provinces and states where they are native.\nThe varieties differ in morphology, distribution, and habitat; S. pilosum var. pilosum is hairy, and S. pilosum var. pringlei is hairless, or nearly so. S. pilosum var. pilosum is the more widespread of the two and grows in various dry habitats, often with weeds. S. pilosum var. pringlei grows in higher-quality calcium-rich ecosystems, often with many non-weedy companion flora. S. pilosum has been introduced to several European and Asian countries.\nThe species usually reaches heights between 20 centimeters (8 inches) and 120 cm (4 feet). It blooms late summer to late fall with composite flowers that are 13 to 19 millimeters (0.5 to 0.75 in) wide and have white ray florets and yellow disk florets. S. pilosum var. pringlei has been used in the cultivar industry, and it and its cultivar 'Ochtendgloren' have won the Royal Horticultural Society's Award of Garden Merit.",
+      "vernacularNames": [
+        "Awl Aster",
+        "Behaarte Herbstaster (DE)",
+        "Frost Aster",
+        "Frost-weed Aster",
+        "Hairy Aster",
+        "Hairy White Oldfield Aster",
+        "Heath Aster",
+        "Michaelmas Daisy",
+        "Nailrod",
+        "Old-field Aster",
+        "Oldfield weed",
+        "Pringle's Aster",
+        "Steelweed",
+        "White Heath Aster",
+        "White Old-field Aster",
+        "frost Michaelmas-daisy",
+        "frost weed",
+        "hairy white old field aster",
+        "hairy white oldfield aster (EN)"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Asterales",
+        "family": "Asteraceae",
+        "genus": "Symphyotrichum",
+        "species": "Symphyotrichum pilosum",
+        "canonicalName": "Symphyotrichum pilosum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3151755"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Symphyotrichum_pilosum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/142279"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q743808"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.155420"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 39150
+    },
     "syringa-vulgaris": {
       "id": "syringa-vulgaris",
       "fullName": "Syringa vulgaris",
