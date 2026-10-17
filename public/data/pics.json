@@ -13,7 +13,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-10-17T21:34:57.912Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "bioclipSpeciesId": "Asclepias tuberosa",
+      "bioclipCommonName": "Butterfly-weed",
+      "bioclipScore": 0.6739
     },
     {
       "seq": 174,
