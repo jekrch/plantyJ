@@ -842,6 +842,66 @@
       "type": "herbivore",
       "from": "N can",
       "to": "a pla"
+    },
+    {
+      "id": 129,
+      "type": "predator-prey",
+      "from": "A spec",
+      "to": "A spe"
+    },
+    {
+      "id": 130,
+      "type": "predator-prey",
+      "from": "A spec",
+      "to": "X spe"
+    },
+    {
+      "id": 131,
+      "type": "pollinator",
+      "from": "B imp",
+      "to": "S can"
+    },
+    {
+      "id": 132,
+      "type": "pollinator",
+      "from": "D ple",
+      "to": "S can"
+    },
+    {
+      "id": 133,
+      "type": "pollinator",
+      "from": "B imp",
+      "to": "S cor"
+    },
+    {
+      "id": 134,
+      "type": "pollinator",
+      "from": "B imp",
+      "to": "S lae"
+    },
+    {
+      "id": 135,
+      "type": "pollinator",
+      "from": "D ple",
+      "to": "S lae"
+    },
+    {
+      "id": 136,
+      "type": "pollinator",
+      "from": "B imp",
+      "to": "S nov"
+    },
+    {
+      "id": 137,
+      "type": "pollinator",
+      "from": "D ple",
+      "to": "S nov"
+    },
+    {
+      "id": 138,
+      "type": "pollinator",
+      "from": "B imp",
+      "to": "S pil"
     }
   ]
 }
