@@ -6178,6 +6178,68 @@
       ],
       "observationsCount": 198813
     },
+    "symphyotrichum-cordifolium": {
+      "id": "symphyotrichum-cordifolium",
+      "fullName": "Symphyotrichum cordifolium",
+      "commonName": "Blue Wood Aster",
+      "description": "Symphyotrichum cordifolium (formerly Aster cordifolius), commonly known as common blue wood aster, heartleaf aster, and blue wood-aster, is a perennial herbaceous flowering plant in the family Asteraceae native to central and eastern North America. It reaches heights of up to 1.2 meters (4 feet) and has bluish daisy-like flowers which bloom late-summer and fall in its range.",
+      "vernacularNames": [
+        "Beeweed",
+        "Blaue Wald-Herbstaster",
+        "Blue Wood Aster",
+        "Common Blue Heart-leaf Aster",
+        "Common Blue Wood Aster",
+        "Heart-leaf Aster",
+        "Heartleaf Or Common Blue Wood Aster",
+        "Heartleaf or common blue wood aster (EN)",
+        "Herzblatt-Herbstaster (DE)",
+        "Lowrie's Blue Wood Aster",
+        "heart-leaved aster",
+        "heartleaf aster"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Asterales",
+        "family": "Asteraceae",
+        "genus": "Symphyotrichum",
+        "species": "Symphyotrichum cordifolium",
+        "canonicalName": "Symphyotrichum cordifolium"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/3151421"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Symphyotrichum_cordifolium"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/153441"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q4050493"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.1275460"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 36789
+    },
     "symphyotrichum-lateriflorum": {
       "id": "symphyotrichum-lateriflorum",
       "fullName": "Symphyotrichum lateriflorum",
