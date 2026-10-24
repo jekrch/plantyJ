@@ -902,6 +902,48 @@
       "type": "pollinator",
       "from": "B imp",
       "to": "S pil"
+    },
+    {
+      "id": 139,
+      "type": "forager",
+      "from": "S caro",
+      "to": "a pla"
+    },
+    {
+      "id": 140,
+      "type": "forager",
+      "from": "S caro",
+      "to": "A sac"
+    },
+    {
+      "id": 141,
+      "type": "forager",
+      "from": "S caro",
+      "to": "A sci"
+    },
+    {
+      "id": 142,
+      "type": "forager",
+      "from": "S caro",
+      "to": "T occ"
+    },
+    {
+      "id": 143,
+      "type": "frugivore",
+      "from": "S caro",
+      "to": "C ame"
+    },
+    {
+      "id": 144,
+      "type": "predator-prey",
+      "from": "S caro",
+      "to": "C pen"
+    },
+    {
+      "id": 145,
+      "type": "predator-prey",
+      "from": "F cat",
+      "to": "S caro"
     }
   ]
 }
