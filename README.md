@@ -68,9 +68,9 @@ The bot answers from a pre-computed plant rollup and — whenever the answer inv
 
 | Command | Model |  |
 |---|---|---|
-| `/ask1` / `/resp1` | `gemini-3.1-flash-lite-preview` | |
-| `/ask2` / `/resp2` | `gemini-2.5-pro` | |
-| `/ask` / `/ask3` / `/resp3` | `gemini-3.1-pro-preview` | Default |
+| `/ask1` / `/resp1` | `gemini-3.5-flash-lite` | |
+| `/ask2` / `/resp2` | `gemini-3.8-flash` | |
+| `/ask` / `/ask3` / `/resp3` | `gemini-4-argon` | Default |
 
 Each reply includes an approximate token count and cost.
 
@@ -90,7 +90,7 @@ The agent only proposes existing verbs (`/addtag`, `/removetag`, `/update`, `/de
 - `/confirm 1 3` — run only the listed proposals (space- or comma-separated)
 - `/cancel` — drop the pending list
 
-Pending proposals expire after an hour and are replaced when a follow-up `/resp` (or a fresh `/ask`) emits a new set. Confirmed commands are queued and run in chunks (~25/min) to stay inside Cloudflare and GitHub API limits; a summary is posted when the batch finishes.
+Pending proposals expire after an hour and are replaced when a follow-up `/resp` (or a fresh `/ask`) emits a new set. Confirmed commands are queued and run in chunks of 25, one invocation each, to stay inside Cloudflare and GitHub API limits; a summary is posted when the batch finishes.
 
 ### Photo identification (`/identify`, `/pick`)
 
@@ -101,7 +101,7 @@ Don't know what you photographed? Send the photo with the caption `/identify` an
 /identify shrub in fb1, maybe a viburnum
 ```
 
-The image goes to Gemini 3.1 Pro vision on the cron path (like `/ask`, so the Telegram webhook never blocks). The prompt is grounded against the live rollup of every existing plant and zone, plus the property context — Minneapolis, MN, USDA zone 4b/5a — and the current date, so seasonality informs plausibility. Any hint you give is treated as a strong signal about the species and which zone the photo belongs to.
+The image goes to Gemini 3.8 Flash vision inline on the webhook, falling back to the job queue if it runs long (like `/ask`, so the Telegram webhook never blocks). The prompt is grounded against the live rollup of every existing plant and zone, plus the property context — Minneapolis, MN, USDA zone 4b/5a — and the current date, so seasonality informs plausibility. Any hint you give is treated as a strong signal about the species and which zone the photo belongs to.
 
 The bot replies with up to three candidates, ordered most→least likely. Each carries a common + scientific name, a `high` / `medium` / `low` confidence, a one-line note (distinguishing features seen, how to confirm, any guessed zone), and a **ready-to-ingest caption**:
 

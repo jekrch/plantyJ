@@ -6,40 +6,38 @@ import { recordCost } from "./cost";
 
 const MAX_TOOL_ITERATIONS = 3;
 const TELEGRAM_MAX_LEN = 4096;
-const CACHE_TTL_SECONDS = 3600; // 1 hour; recreated only when rollup checksum changes
-// Bare /ask  = /ask2 (flash, default), /ask1 = lite (cheap),
-// /ask2 = flash 3.5 (balanced), /ask3 = pro preview (best).
+// /ask1 = flash-lite (cheap), /ask2 = flash (balanced), /ask3 = argon (best).
 export const MODEL_ALIASES: Record<string, string> = {
-  "1": "gemini-3.1-flash-lite-preview",
-  "2": "gemini-3.5-flash",
-  "3": "gemini-3.1-pro-preview",
+  "1": "gemini-3.5-flash-lite",
+  "2": "gemini-3.8-flash",
+  "3": "gemini-4-argon",
 };
+// Bare /ask and /resp, and threads whose model has since been retired.
+export const DEFAULT_MODEL_ALIAS = "3";
+export const DEFAULT_MODEL = MODEL_ALIASES[DEFAULT_MODEL_ALIAS];
 
-// Per-1M-token rates (verify at ai.google.dev/pricing).
-// Tiers are [≤200k prompt tokens, >200k prompt tokens]; flat-rate models
-// repeat the same value in both slots.
-//   i = uncached input, c = cached input read, o = output (incl. thinking),
-//   s = cache storage per hour (single rate, not tier-split)
-interface Pricing {
-  i: [number, number];
-  c: [number, number];
-  o: [number, number];
-  s: number;
+// Standard paid-tier USD per 1M tokens (verify at ai.google.dev/pricing).
+//   i = uncached input, c = implicit-cache read, o = output (incl. thinking)
+// None of these models has a >200k-prompt tier. Each model lists its price
+// periods oldest-first; `from` is the UTC date a period takes effect, so
+// announced price changes apply on schedule without a redeploy.
+interface PricePeriod {
+  from?: string;
+  i: number;
+  c: number;
+  o: number;
 }
-const MODEL_PRICING: Record<string, Pricing> = {
-  // Confirmed against the user's pricing table (Gemini 3 Pro Preview).
-  "gemini-3.1-pro-preview": { i: [2.0, 4.0], c: [0.2, 0.4], o: [12.0, 18.0], s: 4.5 },
-  // Gemini 2.5 Pro public rates — same two-tier structure.
-  "gemini-2.5-pro": { i: [1.25, 2.5], c: [0.31, 0.625], o: [10.0, 15.0], s: 4.5 },
-  // Flash-lite is flat-rate across prompt size (approximate — verify).
-  "gemini-3.1-flash-lite-preview": { i: [0.1, 0.1], c: [0.025, 0.025], o: [0.4, 0.4], s: 1.0 },
-  // Gemini 3.5 Flash paid-tier rates (single tier; input $1.50/M, output $9/M,
-  // cached read $0.15/M, storage $1/M-tok-hr). Verify the model string against
-  // Google's docs before deploying — naming hasn't been confirmed publicly.
-  "gemini-3.5-flash": { i: [1.5, 1.5], c: [0.15, 0.15], o: [9.0, 9.0], s: 1.0 },
+const MODEL_PRICING: Record<string, PricePeriod[]> = {
+  "gemini-4-argon": [
+    { i: 2.0, c: 0.1, o: 10.0 },
+    { from: "2026-12-01", i: 4.0, c: 0.2, o: 20.0 },
+  ],
+  "gemini-3.8-flash": [
+    { i: 0.75, c: 0.075, o: 3.75 },
+    { from: "2027-01-01", i: 1.5, c: 0.15, o: 7.5 },
+  ],
+  "gemini-3.5-flash-lite": [{ i: 0.3, c: 0.03, o: 2.5 }],
 };
-
-const LARGE_PROMPT_TOKENS = 200_000;
 
 export interface Thread {
   model: string;
@@ -55,12 +53,6 @@ export interface AnswerResult {
   reply: string;
   thread: Thread;
   proposals: ProposedCommand[];
-}
-
-interface CacheState {
-  checksum: string;
-  cacheName: string;
-  expiresAt: number;
 }
 
 const ALLOWED_VERBS = [
@@ -84,43 +76,25 @@ const ALLOWED_VERBS = [
 
 export interface Usage {
   prompt: number;
+  /** Prompt tokens Gemini served from its implicit cache (a subset of prompt). */
   cached: number;
   output: number;
-  cacheCreation: number;
-  /** Token-hours the context cache is kept alive (cacheCreationTokens × TTL_hours).
-   *  Priced separately from the per-call cache-creation input charge. */
-  cacheStorageTokenHours: number;
 }
 
-// Estimated USD cost for a usage breakdown, or null if the model is unpriced.
-// Tier is chosen by prompt size: prompts >200k tokens hit the higher rate for
-// input, cached input, and output. Cache storage and cache creation are
-// billed at the lower-tier input rate (cache creation is metered as input).
-export function estimateCost(model: string, usage: Usage): number | null {
-  const p = MODEL_PRICING[model];
-  if (!p) return null;
-  const tier = usage.prompt > LARGE_PROMPT_TOKENS ? 1 : 0;
+// Estimated USD cost for a usage breakdown at the rates in effect on `at`, or
+// null if the model is unpriced.
+export function estimateCost(model: string, usage: Usage, at: Date = new Date()): number | null {
+  const periods = MODEL_PRICING[model];
+  if (!periods) return null;
+  const day = at.toISOString().slice(0, 10);
+  let p = periods[0];
+  for (const period of periods) if (!period.from || period.from <= day) p = period;
   const uncached = usage.prompt - usage.cached;
-  return (
-    (uncached * p.i[tier] +
-      usage.cached * p.c[tier] +
-      usage.output * p.o[tier] +
-      usage.cacheCreation * p.i[tier] +
-      usage.cacheStorageTokenHours * p.s) /
-    1_000_000
-  );
+  return (uncached * p.i + usage.cached * p.c + usage.output * p.o) / 1_000_000;
 }
 
 export function formatUsd(cost: number): string {
   return cost < 0.0001 ? "<$0.0001" : `$${cost.toFixed(4)}`;
-}
-
-async function computeChecksum(text: string): Promise<string> {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
-  return Array.from(new Uint8Array(buf))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("")
-    .slice(0, 16);
 }
 
 async function loadRollup(env: Env): Promise<string> {
@@ -212,9 +186,7 @@ function formatCost(model: string, usage: Usage): string {
   if (cost === null) return "";
   const costStr = formatUsd(cost);
   const cacheNote = usage.cached > 0 ? ` ${usage.cached.toLocaleString()} cached,` : "";
-  const createNote =
-    usage.cacheCreation > 0 ? ` +${usage.cacheCreation.toLocaleString()} cache-create,` : "";
-  return `[${costStr} |${createNote}${cacheNote} ${usage.prompt.toLocaleString()} in / ${usage.output.toLocaleString()} out]`;
+  return `[${costStr} |${cacheNote} ${usage.prompt.toLocaleString()} in / ${usage.output.toLocaleString()} out]`;
 }
 
 const GET_SPECIES_DECLARATION = {
@@ -287,77 +259,6 @@ function sanitizeProposals(raw: unknown): ProposedCommand[] {
   return out;
 }
 
-// Returns a valid Gemini cache name from KV, or creates+stores a new one.
-// Falls back to undefined on any error so callers can proceed without caching.
-async function getOrCreateCache(
-  client: GoogleGenAI,
-  model: string,
-  systemPrompt: string,
-  rollupJson: string,
-  env: Env,
-): Promise<{
-  cacheName: string | undefined;
-  cacheCreationTokens: number;
-  cacheStorageTokenHours: number;
-}> {
-  if (!env.ASK_CACHE)
-    return { cacheName: undefined, cacheCreationTokens: 0, cacheStorageTokenHours: 0 };
-  try {
-    const checksum = await computeChecksum(rollupJson);
-    // v2: cache contents include propose_commands tool — old v1 caches lack it.
-    const kvKey = `cache:v2:${model}`;
-    const raw = await env.ASK_CACHE.get(kvKey);
-
-    let staleCacheName: string | undefined;
-    if (raw) {
-      const state: CacheState = JSON.parse(raw);
-      if (state.checksum === checksum && state.expiresAt > Date.now()) {
-        // Cache hit — no new tokens stored, so no storage charge for this call.
-        return { cacheName: state.cacheName, cacheCreationTokens: 0, cacheStorageTokenHours: 0 };
-      }
-      staleCacheName = state.cacheName;
-    }
-
-    // Create a new Gemini context cache with the static parts of the prompt.
-    // The model path must use the full resource name for the caching API.
-    const cache = await client.caches.create({
-      model: model.startsWith("models/") ? model : `models/${model}`,
-      config: {
-        systemInstruction: systemPrompt,
-        tools: [{ functionDeclarations: TOOL_DECLARATIONS }],
-        ttl: `${CACHE_TTL_SECONDS}s`,
-      },
-    });
-
-    // Replacing an existing cache: explicitly delete the old one so it doesn't
-    // sit unreferenced on Gemini's side until its TTL expires. Best-effort —
-    // a 404 here just means Gemini already evicted it.
-    if (staleCacheName) {
-      await client.caches.delete({ name: staleCacheName }).catch(() => {});
-    }
-
-    const state: CacheState = {
-      checksum,
-      cacheName: cache.name!,
-      expiresAt: Date.now() + (CACHE_TTL_SECONDS - 60) * 1000,
-    };
-    await env.ASK_CACHE.put(kvKey, JSON.stringify(state), {
-      expirationTtl: CACHE_TTL_SECONDS,
-    });
-
-    const creationTokens =
-      (cache.usageMetadata as { totalTokenCount?: number } | undefined)?.totalTokenCount ?? 0;
-    // Charge full TTL up front. Early eviction (404 retry path) or replacement
-    // before TTL would reduce this; accepting a slight over-estimate keeps the
-    // ledger simple — no need to track per-cache lifetime.
-    const cacheStorageTokenHours = creationTokens * (CACHE_TTL_SECONDS / 3600);
-    return { cacheName: cache.name!, cacheCreationTokens: creationTokens, cacheStorageTokenHours };
-  } catch {
-    // Caching is best-effort; any failure falls back to uncached.
-    return { cacheName: undefined, cacheCreationTokens: 0, cacheStorageTokenHours: 0 };
-  }
-}
-
 export async function answerQuestion(
   question: string,
   env: Env,
@@ -366,66 +267,34 @@ export async function answerQuestion(
   style?: string,
 ): Promise<AnswerResult> {
   const rollupJson = await loadRollup(env);
-  const model = modelOverride ?? env.LLM_MODEL ?? MODEL_ALIASES["2"];
+  const model = modelOverride ?? DEFAULT_MODEL;
   const client = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
-  const systemPrompt = buildSystemPrompt(rollupJson);
+  // No explicit context cache: the rollup-heavy system prompt is a stable
+  // prefix, so Gemini's implicit caching discounts repeat calls automatically
+  // (reported as cachedContentTokenCount) with no storage fee.
+  const config = {
+    systemInstruction: buildSystemPrompt(rollupJson),
+    tools: [{ functionDeclarations: TOOL_DECLARATIONS }],
+  };
 
-  const { cacheName, cacheCreationTokens, cacheStorageTokenHours } = await getOrCreateCache(
-    client,
-    model,
-    systemPrompt,
-    rollupJson,
-    env,
-  );
-
-  // When using a cache the system instruction and tools are already stored server-side.
-  const baseConfig = cacheName
-    ? { cachedContent: cacheName }
-    : { systemInstruction: systemPrompt, tools: [{ functionDeclarations: TOOL_DECLARATIONS }] };
-
-  // Style is injected per-turn so it doesn't affect the shared model cache.
+  // Style is injected per-turn so the system prompt stays a cacheable prefix.
   const questionText = style ? `[Respond in this style: ${style}]\n\n${question}` : question;
   const contents: Content[] = [
     ...(priorHistory ?? []),
     { role: "user", parts: [{ text: questionText }] },
   ];
 
-  const totalUsage: Usage = {
-    prompt: 0,
-    cached: 0,
-    output: 0,
-    cacheCreation: cacheCreationTokens,
-    cacheStorageTokenHours,
-  };
+  const totalUsage: Usage = { prompt: 0, cached: 0, output: 0 };
   let proposals: ProposedCommand[] = [];
 
   for (let i = 0; i <= MAX_TOOL_ITERATIONS; i++) {
-    let response;
-    try {
-      response = await client.models.generateContent({ model, contents, config: baseConfig });
-    } catch (err: unknown) {
-      // If Gemini evicted the cache early, clear the stale KV entry and retry uncached.
-      // The next request will recreate the cache.
-      if (cacheName && String(err).includes("404")) {
-        if (env.ASK_CACHE) await env.ASK_CACHE.delete(`cache:v2:${model}`).catch(() => {});
-        response = await client.models.generateContent({
-          model,
-          contents,
-          config: {
-            systemInstruction: systemPrompt,
-            tools: [{ functionDeclarations: TOOL_DECLARATIONS }],
-          },
-        });
-      } else {
-        throw err;
-      }
-    }
+    const response = await client.models.generateContent({ model, contents, config });
 
     const meta = response.usageMetadata;
     if (meta) {
       totalUsage.prompt += meta.promptTokenCount ?? 0;
       totalUsage.cached += meta.cachedContentTokenCount ?? 0;
-      totalUsage.output += meta.candidatesTokenCount ?? 0;
+      totalUsage.output += (meta.candidatesTokenCount ?? 0) + (meta.thoughtsTokenCount ?? 0);
     }
 
     const parts: Part[] = response.candidates?.[0]?.content?.parts ?? [];

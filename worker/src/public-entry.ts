@@ -8,11 +8,7 @@ import { handlePublicProxy, type PublicEnv } from "./public";
  * it. Its one secret is GOOGLE_API_KEY.
  */
 export default {
-  async fetch(
-    request: Request,
-    env: PublicEnv,
-    ctx: { waitUntil: (p: Promise<unknown>) => void },
-  ): Promise<Response> {
+  async fetch(request: Request, env: PublicEnv, ctx: ExecutionContext): Promise<Response> {
     const proxied = await handlePublicProxy(request, env, ctx);
     return proxied ?? new Response("Not found", { status: 404 });
   },

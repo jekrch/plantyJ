@@ -21,6 +21,25 @@ export function authHeaders(env: Env): Record<string, string> {
   return githubHeaders(env.GITHUB_TOKEN);
 }
 
+/**
+ * Decoded text of a Contents API response. Files over 1 MB come back with
+ * `encoding: "none"` and no content; the Git blobs API serves the same blob
+ * (by sha) as base64 up to 100 MB, at the cost of one extra subrequest.
+ */
+async function contentsText(env: Env, path: string, meta: GitHubContentsResponse): Promise<string> {
+  if (meta.encoding !== "none") return base64ToUtf8(meta.content.replace(/\n/g, ""));
+  const [owner, repo] = env.GITHUB_REPO.split("/");
+  const resp = await fetch(`${GITHUB_API}/repos/${owner}/${repo}/git/blobs/${meta.sha}`, {
+    headers: authHeaders(env),
+  });
+  if (!resp.ok) {
+    const err = await resp.text();
+    throw new Error(`Failed to read ${path} blob (${resp.status}): ${err}`);
+  }
+  const blob: { content: string } = await resp.json();
+  return base64ToUtf8(blob.content.replace(/\n/g, ""));
+}
+
 export async function commitFile(
   env: Env,
   path: string,
@@ -59,7 +78,7 @@ export async function readJsonFile<T>(
   }
 
   const meta: GitHubContentsResponse = await resp.json();
-  const content = base64ToUtf8(meta.content.replace(/\n/g, ""));
+  const content = await contentsText(env, path, meta);
   return { data: JSON.parse(content) as T, sha: meta.sha };
 }
 
@@ -71,7 +90,7 @@ export async function readTextFile(env: Env, path: string): Promise<string> {
     throw new Error(`Failed to read ${path} (${resp.status}): ${err}`);
   }
   const meta: GitHubContentsResponse = await resp.json();
-  return base64ToUtf8(meta.content.replace(/\n/g, ""));
+  return contentsText(env, path, meta);
 }
 
 export async function writeJsonFile(

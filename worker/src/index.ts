@@ -3,14 +3,10 @@ import { makeReplier } from "./telegram";
 import { handleTextCommand } from "./commands";
 import { handlePhotoMessage } from "./photos";
 import { processAnalyzeTick } from "./analyze";
-import { processJobsTick } from "./jobs";
+import { drainLegacyJobQueue, processJobBatch, type JobMessage } from "./jobs";
 
 export default {
-  async fetch(
-    request: Request,
-    env: Env,
-    ctx: { waitUntil: (p: Promise<unknown>) => void },
-  ): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     if (request.method !== "POST") {
       return new Response("OK", { status: 200 });
     }
@@ -36,39 +32,37 @@ export default {
     return new Response("OK");
   },
 
-  async scheduled(
-    _event: { cron?: string; scheduledTime?: number },
-    env: Env,
-    ctx: { waitUntil: (p: Promise<unknown>) => void },
-  ): Promise<void> {
+  // Drains the /analyze queue. Jobs (/ask, /identify, batch /confirm, ...) go
+  // through the JOBS queue instead — see the queue handler below.
+  async scheduled(_controller: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
     ctx.waitUntil(
-      Promise.all([
-        processAnalyzeTick(env)
-          .then((r) => {
-            if (r.ranTick) {
-              console.log(
-                `[analyze.cron] processed=${r.processed} succeeded=${r.succeeded} failed=${r.failed} remaining=${r.remaining}`,
-              );
-            }
-          })
-          .catch((err) => {
-            console.log(`[analyze.cron] tick failed: ${(err as Error).message}`);
-          }),
-        processJobsTick(env)
-          .then((r) => {
-            if (r.ranTick) {
-              console.log(
-                `[jobs.cron] succeeded=${r.succeeded} failed=${r.failed} remaining=${r.remaining}`,
-              );
-            }
-          })
-          .catch((err) => {
-            console.log(`[jobs.cron] tick failed: ${(err as Error).message}`);
-          }),
-      ]),
+      processAnalyzeTick(env)
+        .then((r) => {
+          if (r.ranTick) {
+            console.log(
+              `[analyze.cron] processed=${r.processed} succeeded=${r.succeeded} failed=${r.failed} remaining=${r.remaining}`,
+            );
+          }
+        })
+        .catch((err) => {
+          console.log(`[analyze.cron] tick failed: ${(err as Error).message}`);
+        }),
+    );
+    ctx.waitUntil(
+      drainLegacyJobQueue(env)
+        .then((moved) => {
+          if (moved > 0) console.log(`[jobs.legacy] moved ${moved} job(s) to the JOBS queue`);
+        })
+        .catch((err) => {
+          console.log(`[jobs.legacy] drain failed: ${(err as Error).message}`);
+        }),
     );
   },
-};
+
+  async queue(batch: MessageBatch<JobMessage>, env: Env): Promise<void> {
+    await processJobBatch(batch, env);
+  },
+} satisfies ExportedHandler<Env, JobMessage>;
 
 // Constant-time string comparison so that a wrong webhook secret can't be
 // progressively recovered byte-by-byte via response timing. The early-exit on

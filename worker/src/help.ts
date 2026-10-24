@@ -187,6 +187,6 @@ Ecological analysis:
 
 Cost:
   /cost — Estimated Gemini spend today and this month, with token totals
-    (uncached in, cache reads, cache writes, cache storage token-hours).
+    (input, implicit-cache reads, and output including thinking).
     Estimate from this worker's pricing table; the GCP invoice is the
     authoritative number.`;

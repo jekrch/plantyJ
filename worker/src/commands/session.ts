@@ -3,7 +3,7 @@
 // here reads or clears per-user state in KV.
 import type { Env, TelegramMessage, TelegramPhotoSize } from "../types";
 import { type Replier } from "../telegram";
-import { MODEL_ALIASES, type Thread } from "../ask";
+import { DEFAULT_MODEL, DEFAULT_MODEL_ALIAS, MODEL_ALIASES, type Thread } from "../ask";
 import { ingestPlantPhoto } from "../photos";
 import {
   PENDING_IDENTIFY_KEY,
@@ -21,7 +21,7 @@ import {
 } from "../jobs";
 import { readCostTotals, formatCostReport } from "../cost";
 import {
-  CONFIRM_BATCH_RATE_PER_MIN,
+  CONFIRM_CHUNK_SIZE,
   PENDING_DO_KEY,
   STYLE_KEY,
   THREAD_KEY,
@@ -36,7 +36,7 @@ export async function handleAskStyle(
   reply: Replier,
 ): Promise<void> {
   const styleText = text.match(/^\/askstyle(?:\s+(\S[\s\S]*))?$/i)![1]?.trim();
-  if (!message.from || !env.ASK_CACHE) {
+  if (!message.from) {
     await reply("Style preferences require user context.");
     return;
   }
@@ -51,14 +51,14 @@ export async function handleAskStyle(
 
 export async function handleShowStyle(message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
   const style =
-    message.from && env.ASK_CACHE ? await env.ASK_CACHE.get(STYLE_KEY(message.from.id)) : null;
+    message.from ? await env.ASK_CACHE.get(STYLE_KEY(message.from.id)) : null;
   await reply(
     style ? `Current style: ${style}` : "No style set. Use /askstyle {description} to set one.",
   );
 }
 
 export async function handleCancel(message: TelegramMessage, env: Env, reply: Replier): Promise<void> {
-  if (message.from && env.ASK_CACHE) {
+  if (message.from) {
     await Promise.all([
       env.ASK_CACHE.delete(PENDING_DO_KEY(message.from.id)).catch(() => {}),
       env.ASK_CACHE.delete(PENDING_IDENTIFY_KEY(message.from.id)).catch(() => {}),
@@ -77,8 +77,8 @@ export async function handlePick(
   env: Env,
   reply: Replier,
 ): Promise<void> {
-  if (!message.from || !env.ASK_CACHE) {
-    await reply("/pick requires KV and a known user.");
+  if (!message.from) {
+    await reply("/pick requires a known user.");
     return;
   }
   const raw = await env.ASK_CACHE.get(PENDING_IDENTIFY_KEY(message.from.id));
@@ -114,8 +114,8 @@ export async function handleConfirm(
   env: Env,
   reply: Replier,
 ): Promise<void> {
-  if (!message.from || !env.ASK_CACHE) {
-    await reply("/confirm requires KV and a known user.");
+  if (!message.from) {
+    await reply("/confirm requires a known user.");
     return;
   }
   // A pending specimen (from /ask on a photo) is the most recent deliberate
@@ -154,7 +154,6 @@ export async function handleConfirm(
         targetZoneCode: pendingReassess.zoneCode,
         note: pendingReassess.note,
         createdAt: new Date().toISOString(),
-        attempts: 0,
       });
       if (status === "queued") {
         await reply(
@@ -186,12 +185,11 @@ export async function handleConfirm(
     nextIndex: 0,
     results: [],
     createdAt: new Date().toISOString(),
-    attempts: 0,
   });
   await env.ASK_CACHE.delete(PENDING_DO_KEY(message.from.id)).catch(() => {});
-  const etaMin = Math.ceil(commands.length / CONFIRM_BATCH_RATE_PER_MIN);
+  const chunks = Math.ceil(commands.length / CONFIRM_CHUNK_SIZE);
   await reply(
-    `Queued ${commands.length} command(s) — batched in chunks of ${CONFIRM_BATCH_RATE_PER_MIN}/min (~${etaMin} min). Summary will arrive when complete.`,
+    `Queued ${commands.length} command(s) — runs in ${chunks} chunk(s) of up to ${CONFIRM_CHUNK_SIZE}. Summary will arrive when complete.`,
   );
 }
 
@@ -202,13 +200,9 @@ export async function handleAsk(
   reply: Replier,
 ): Promise<void> {
   const m = text.match(/^\/ask([123])?\s+(\S[\s\S]*)$/i)!;
-  const alias = m[1] ?? "3";
+  const alias = m[1] ?? DEFAULT_MODEL_ALIAS;
   const question = m[2].trim();
   const model = MODEL_ALIASES[alias];
-  if (!env.ASK_CACHE) {
-    await reply("/ask requires KV (ASK_CACHE).");
-    return;
-  }
   if (message.from && !(await checkAskRateLimit(message.from.id, env))) {
     await reply("Rate limit reached: max 100 /ask queries per day.");
     return;
@@ -226,7 +220,6 @@ export async function handleAsk(
     model,
     style,
     createdAt: new Date().toISOString(),
-    attempts: 0,
   });
   if (status === "queued") {
     await reply("Taking a moment — queued, reply will arrive shortly.");
@@ -246,10 +239,6 @@ export async function handleReassess(
     );
     return;
   }
-  if (!env.ASK_CACHE) {
-    await reply("/reassess requires KV (ASK_CACHE).");
-    return;
-  }
   if (message.from && !(await checkAskRateLimit(message.from.id, env))) {
     await reply("Rate limit reached: max 100 LLM queries per day.");
     return;
@@ -262,7 +251,6 @@ export async function handleReassess(
     userId: message.from?.id ?? null,
     request,
     createdAt: new Date().toISOString(),
-    attempts: 0,
   });
   if (status === "queued") {
     await reply("Working out which plant you mean — queued, reply will arrive shortly.");
@@ -278,7 +266,7 @@ export async function handleResp(
   const m = text.match(/^\/resp([123])?\s+(\S[\s\S]*)$/i)!;
   const aliasOverride = m[1];
   const question = m[2].trim();
-  if (!message.from || !env.ASK_CACHE) {
+  if (!message.from) {
     await reply("No active /ask thread or /identify session.");
     return;
   }
@@ -310,7 +298,6 @@ export async function handleResp(
       postedBy: pending.postedBy,
       priorPrompts: pending.userPrompts ?? [],
       createdAt: new Date().toISOString(),
-      attempts: 0,
     });
     if (status === "queued") {
       await reply("Revising — updated proposal will arrive shortly.");
@@ -343,7 +330,6 @@ export async function handleResp(
       priorCandidates: pending.candidates,
       priorPrompts: pending.userPrompts ?? [],
       createdAt: new Date().toISOString(),
-      attempts: 0,
     });
     if (status === "queued") {
       await reply("Refining identification — updated options will arrive shortly.");
@@ -357,7 +343,13 @@ export async function handleResp(
     return;
   }
   const thread: Thread = JSON.parse(raw);
-  const model = aliasOverride ? MODEL_ALIASES[aliasOverride] : thread.model;
+  // Threads persist without a TTL, so one started before a model upgrade can
+  // name a retired model; continue it on the default instead.
+  const model = aliasOverride
+    ? MODEL_ALIASES[aliasOverride]
+    : Object.values(MODEL_ALIASES).includes(thread.model)
+      ? thread.model
+      : DEFAULT_MODEL;
   if (!(await checkAskRateLimit(message.from.id, env))) {
     await reply("Rate limit reached: max 100 /ask queries per day.");
     return;
@@ -374,7 +366,6 @@ export async function handleResp(
     history: thread.history,
     style,
     createdAt: new Date().toISOString(),
-    attempts: 0,
   });
   if (status === "queued") {
     await reply("Taking a moment — queued, reply will arrive shortly.");
@@ -388,7 +379,11 @@ export async function handleAnalyzeLoad(env: Env, reply: Replier): Promise<void>
     return;
   }
   const scope = result.zoneFilter ? ` (zone ${result.zoneFilter})` : "";
-  const tokens = formatAnalyzeUsage(result.promptTokens, result.outputTokens);
+  const tokens = formatAnalyzeUsage(
+    result.promptTokens,
+    result.cachedTokens,
+    result.outputTokens,
+  );
   const status =
     result.kind === "done"
       ? "Done"

@@ -7,62 +7,19 @@ import type {
 } from "./types";
 import { type Replier } from "./telegram";
 import { assertValidCode } from "./validation";
-
-const RELATIONSHIPS_PATH = "public/data/relationships.json";
-const GITHUB_API = "https://api.github.com";
-const USER_AGENT = "plantyj-bot";
-
-const EMPTY_FILE: RelationshipsFile = { types: [], relationships: [] };
-
-interface GitHubContentsResponse {
-  content: string;
-  sha: string;
-}
-
-function githubHeaders(token: string): Record<string, string> {
-  return {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
-    "User-Agent": USER_AGENT,
-    Accept: "application/vnd.github+json",
-  };
-}
-
-function bytesToBase64(bytes: Uint8Array): string {
-  let binary = "";
-  const CHUNK = 0x8000;
-  for (let i = 0; i < bytes.byteLength; i += CHUNK) {
-    binary += String.fromCharCode(...bytes.subarray(i, i + CHUNK));
-  }
-  return btoa(binary);
-}
-
-function base64ToBytes(b64: string): Uint8Array {
-  const binary = atob(b64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-  return bytes;
-}
+import { readJsonFile, writeJsonFile } from "./github/client";
+import { RELATIONSHIPS_PATH } from "./github/paths";
 
 export async function readRelationshipsFile(
   env: Env,
 ): Promise<{ file: RelationshipsFile; sha: string | null }> {
-  const [owner, repo] = env.GITHUB_REPO.split("/");
-  const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${RELATIONSHIPS_PATH}`;
-  const resp = await fetch(url, { headers: githubHeaders(env.GITHUB_TOKEN) });
-  if (resp.status === 404) return { file: { ...EMPTY_FILE }, sha: null };
-  if (!resp.ok) {
-    throw new Error(`Failed to read relationships.json (${resp.status}): ${await resp.text()}`);
-  }
-  const meta = (await resp.json()) as GitHubContentsResponse;
-  const text = new TextDecoder().decode(base64ToBytes(meta.content.replace(/\n/g, "")));
-  const parsed = JSON.parse(text) as Partial<RelationshipsFile>;
+  const { data, sha } = await readJsonFile<Partial<RelationshipsFile>>(env, RELATIONSHIPS_PATH, {});
   return {
     file: {
-      types: parsed.types ?? [],
-      relationships: parsed.relationships ?? [],
+      types: data.types ?? [],
+      relationships: data.relationships ?? [],
     },
-    sha: meta.sha,
+    sha,
   };
 }
 
@@ -72,23 +29,7 @@ export async function writeRelationshipsFile(
   sha: string | null,
   commitMessage: string,
 ): Promise<void> {
-  const [owner, repo] = env.GITHUB_REPO.split("/");
-  const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${RELATIONSHIPS_PATH}`;
-  const body = utf8ToBase64(JSON.stringify(file, null, 2));
-  const put: Record<string, string> = { message: commitMessage, content: body, branch: "main" };
-  if (sha) put.sha = sha;
-  const resp = await fetch(url, {
-    method: "PUT",
-    headers: githubHeaders(env.GITHUB_TOKEN),
-    body: JSON.stringify(put),
-  });
-  if (!resp.ok) {
-    throw new Error(`relationships.json update failed (${resp.status}): ${await resp.text()}`);
-  }
-}
-
-function utf8ToBase64(text: string): string {
-  return bytesToBase64(new TextEncoder().encode(text));
+  await writeJsonFile(env, RELATIONSHIPS_PATH, file, sha, commitMessage);
 }
 
 // ─── parsing helpers ───────────────────────────────────────────────────────

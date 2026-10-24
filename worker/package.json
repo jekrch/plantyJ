@@ -2,7 +2,8 @@
   "name": "plantyj-bot",
   "version": "1.0.0",
   "devDependencies": {
-    "wrangler": "^4"
+    "typescript": "^7.0.2",
+    "wrangler": "^4.152.0"
   },
   "private": true,
   "scripts": {
@@ -11,6 +12,6 @@
     "postinstall": "wrangler types"
   },
   "dependencies": {
-    "@google/genai": "^1.51.0"
+    "@google/genai": "^2.31.0"
   }
 }

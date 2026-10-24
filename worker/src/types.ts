@@ -1,22 +1,22 @@
+/** The slice of Workers KV that usernames.ts and the public proxy use. Kept
+ *  narrow so tests can pass a plain in-memory object. */
 export interface KVNamespace {
   get(key: string): Promise<string | null>;
   put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
   delete(key: string): Promise<void>;
 }
 
-export interface Env {
+/**
+ * Bot worker env. Vars and bindings (ASK_CACHE, JOBS, ...) come from the
+ * `wrangler types` output for wrangler.toml (worker-configuration.d.ts,
+ * regenerated on `bun install`); only secrets are declared here, since
+ * `wrangler secret put` values don't appear in that output.
+ */
+export interface Env extends Cloudflare.Env {
   TELEGRAM_BOT_TOKEN: string;
-  TELEGRAM_ALLOWED_CHAT_ID: string;
   GITHUB_TOKEN: string;
-  GITHUB_REPO: string;
   WEBHOOK_SECRET: string;
-  ALLOWED_USER_IDS?: string;
-  DATA_BASE_URL?: string;
-  LLM_MODEL?: string;
   GEMINI_API_KEY: string;
-  // KV namespace for persisting Gemini context-cache state between requests.
-  // Optional — caching is skipped gracefully when absent.
-  ASK_CACHE?: KVNamespace;
 }
 
 export interface TelegramUser {
@@ -61,6 +61,8 @@ export interface TelegramFileResponse {
 export interface GitHubContentsResponse {
   content: string;
   sha: string;
+  /** "none" (with empty content) for files over 1 MB. */
+  encoding?: string;
 }
 
 export interface ParsedZoneRef {

@@ -1,4 +1,4 @@
-import { describe, it, expect } from "bun:test";
+import { describe, it, expect, afterEach } from "bun:test";
 import {
   arrayBufferToBase64,
   base64ToBytes,
@@ -8,7 +8,8 @@ import {
 } from "../github/encoding";
 import { isPicField, isUpdatableField, parseList, UPDATABLE_FIELD_LIST } from "../github/fields";
 import { applyZoneUpserts, nextSeq, upsertPlantRecord } from "../github/gallery";
-import type { Gallery, PicEntry, PlantRecord, Zone } from "../types";
+import { readJsonFile } from "../github/client";
+import type { Env, Gallery, PicEntry, PlantRecord, Zone } from "../types";
 
 function pic(seq: number, overrides: Partial<PicEntry> = {}): PicEntry {
   return {
@@ -222,5 +223,53 @@ describe("upsertPlantRecord", () => {
 
   it("seeds an empty list", () => {
     expect(upsertPlantRecord([], plant("tmt-c"))).toEqual([plant("tmt-c")]);
+  });
+});
+
+describe("readJsonFile", () => {
+  const realFetch = globalThis.fetch;
+  const env = { GITHUB_REPO: "o/r", GITHUB_TOKEN: "t" } as Env;
+  afterEach(() => {
+    globalThis.fetch = realFetch;
+  });
+
+  function mockFetch(routes: Record<string, unknown>): string[] {
+    const urls: string[] = [];
+    globalThis.fetch = ((input: RequestInfo | URL) => {
+      const url = typeof input === "string" ? input : input.toString();
+      urls.push(url);
+      const hit = Object.entries(routes).find(([suffix]) => url.endsWith(suffix));
+      return Promise.resolve(
+        hit
+          ? new Response(JSON.stringify(hit[1]), { status: 200 })
+          : new Response("not found", { status: 404 }),
+      );
+    }) as typeof fetch;
+    return urls;
+  }
+
+  it("decodes inline base64 content", async () => {
+    mockFetch({
+      "/contents/data/x.json": { content: utf8ToBase64('{"a":1}'), sha: "s1", encoding: "base64" },
+    });
+    const { data, sha } = await readJsonFile(env, "data/x.json", null);
+    expect(data).toEqual({ a: 1 });
+    expect(sha).toBe("s1");
+  });
+
+  it("falls back to the blobs API for files over 1 MB", async () => {
+    const urls = mockFetch({
+      "/contents/data/big.json": { content: "", sha: "s2", encoding: "none" },
+      "/git/blobs/s2": { content: utf8ToBase64('{"big":true}'), encoding: "base64" },
+    });
+    const { data, sha } = await readJsonFile(env, "data/big.json", null);
+    expect(data).toEqual({ big: true });
+    expect(sha).toBe("s2");
+    expect(urls[1]).toBe("https://api.github.com/repos/o/r/git/blobs/s2");
+  });
+
+  it("returns the fallback with a null sha on 404", async () => {
+    mockFetch({});
+    expect(await readJsonFile(env, "data/missing.json", [])).toEqual({ data: [], sha: null });
   });
 });

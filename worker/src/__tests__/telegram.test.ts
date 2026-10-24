@@ -30,7 +30,7 @@ function parseBody(init?: RequestInit): Record<string, unknown> {
 }
 
 describe("sendReply", () => {
-  it("POSTs JSON to the sendMessage endpoint with reply_to_message_id on the first chunk", async () => {
+  it("POSTs JSON to the sendMessage endpoint with reply_parameters on the first chunk", async () => {
     await sendReply("TOKEN", 123, 456, "hello");
     expect(calls).toHaveLength(1);
     expect(calls[0].url).toBe("https://api.telegram.org/botTOKEN/sendMessage");
@@ -41,7 +41,7 @@ describe("sendReply", () => {
     expect(parseBody(calls[0].init)).toEqual({
       chat_id: 123,
       text: "hello",
-      reply_to_message_id: 456,
+      reply_parameters: { message_id: 456, allow_sending_without_reply: true },
     });
   });
 
@@ -60,12 +60,15 @@ describe("sendReply", () => {
     expect(joined).toBe(text);
   });
 
-  it("only attaches reply_to_message_id to the first chunk", async () => {
+  it("only attaches reply_parameters to the first chunk", async () => {
     await sendReply("T", 1, 99, "a".repeat(5000));
     const bodies = calls.map((c) => parseBody(c.init));
-    expect(bodies[0].reply_to_message_id).toBe(99);
+    expect(bodies[0].reply_parameters).toEqual({
+      message_id: 99,
+      allow_sending_without_reply: true,
+    });
     for (const b of bodies.slice(1)) {
-      expect(b.reply_to_message_id).toBeUndefined();
+      expect(b.reply_parameters).toBeUndefined();
     }
   });
 
@@ -83,6 +86,28 @@ describe("sendReply", () => {
     expect(second.startsWith("y")).toBe(true);
   });
 
+  it("retries once after a short 429 retry_after", async () => {
+    let n = 0;
+    responder = () =>
+      n++ === 0
+        ? new Response(JSON.stringify({ ok: false, parameters: { retry_after: 0 } }), {
+            status: 429,
+          })
+        : new Response("{}", { status: 200 });
+    await sendReply("T", 1, 2, "hi");
+    expect(calls).toHaveLength(2);
+    expect(parseBody(calls[1].init).text).toBe("hi");
+  });
+
+  it("does not retry when the 429 retry_after is too long to wait out", async () => {
+    responder = () =>
+      new Response(JSON.stringify({ ok: false, parameters: { retry_after: 60 } }), {
+        status: 429,
+      });
+    await sendReply("T", 1, 2, "hi");
+    expect(calls).toHaveLength(1);
+  });
+
   it("does not throw when Telegram returns a non-2xx status", async () => {
     responder = () => new Response("boom", { status: 500 });
     await expect(sendReply("T", 1, 2, "hi")).resolves.toBeUndefined();
@@ -90,7 +115,7 @@ describe("sendReply", () => {
 });
 
 describe("makeReplier", () => {
-  it("binds chat_id and reply_to_message_id from the message", async () => {
+  it("binds chat_id and the reply target from the message", async () => {
     const env = { TELEGRAM_BOT_TOKEN: "TOK" } as Env;
     const message = { message_id: 77, chat: { id: 42, type: "private" } } as TelegramMessage;
     const reply = makeReplier(env, message);
@@ -100,7 +125,7 @@ describe("makeReplier", () => {
     expect(parseBody(calls[0].init)).toEqual({
       chat_id: 42,
       text: "hi",
-      reply_to_message_id: 77,
+      reply_parameters: { message_id: 77, allow_sending_without_reply: true },
     });
   });
 });

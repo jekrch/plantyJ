@@ -4,9 +4,9 @@ import { estimateCost, formatUsd, type Usage } from "./ask";
 import { recordCost } from "./cost";
 
 // Vision identification: tried inline on the webhook with a short timeout and
-// queued if it doesn't return in time (see runOrEnqueue in jobs.ts). Flash 3.5
+// queued if it doesn't return in time (see runOrEnqueue in jobs.ts). Flash
 // is fast enough that most calls finish within the inline budget.
-const IDENTIFY_MODEL = "gemini-3.5-flash";
+const IDENTIFY_MODEL = "gemini-3.8-flash";
 const MAX_CANDIDATES = 3;
 
 export const PENDING_IDENTIFY_KEY = (userId: number) => `pending:identify:${userId}`;
@@ -317,10 +317,8 @@ export async function identifyPhoto(
   const meta = response.usageMetadata;
   const usage: Usage = {
     prompt: meta?.promptTokenCount ?? 0,
-    cached: 0,
-    output: meta?.candidatesTokenCount ?? 0,
-    cacheCreation: 0,
-    cacheStorageTokenHours: 0,
+    cached: meta?.cachedContentTokenCount ?? 0,
+    output: (meta?.candidatesTokenCount ?? 0) + (meta?.thoughtsTokenCount ?? 0),
   };
   await recordCost(env, IDENTIFY_MODEL, usage).catch((err) =>
     console.log(`[identify] recordCost failed: ${(err as Error).message}`),
@@ -491,10 +489,8 @@ export async function describeSpecimen(
   const meta = response.usageMetadata;
   const usage: Usage = {
     prompt: meta?.promptTokenCount ?? 0,
-    cached: 0,
-    output: meta?.candidatesTokenCount ?? 0,
-    cacheCreation: 0,
-    cacheStorageTokenHours: 0,
+    cached: meta?.cachedContentTokenCount ?? 0,
+    output: (meta?.candidatesTokenCount ?? 0) + (meta?.thoughtsTokenCount ?? 0),
   };
   await recordCost(env, IDENTIFY_MODEL, usage).catch((err) =>
     console.log(`[describe] recordCost failed: ${(err as Error).message}`),

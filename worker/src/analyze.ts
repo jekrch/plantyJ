@@ -5,23 +5,33 @@ import { sendReply } from "./telegram";
 import { estimateCost, formatUsd } from "./ask";
 import { recordCost } from "./cost";
 
-const ANALYSIS_MODEL = "gemini-3.5-flash";
+const ANALYSIS_MODEL = "gemini-3.8-flash";
 
-// Analyze never uses context caching, so cost is just uncached in + out.
-function analyzeCost(promptTokens: number, outputTokens: number): number | null {
+// Analyze prompts share the garden rollup as a prefix, so part of each prompt
+// can be served from Gemini's implicit cache (cachedTokens, a subset of
+// promptTokens) and is priced at the cache-read rate.
+function analyzeCost(
+  promptTokens: number,
+  cachedTokens: number,
+  outputTokens: number,
+): number | null {
   return estimateCost(ANALYSIS_MODEL, {
     prompt: promptTokens,
-    cached: 0,
+    cached: cachedTokens,
     output: outputTokens,
-    cacheCreation: 0,
-    cacheStorageTokenHours: 0,
   });
 }
 
-// "12,345 in / 6,789 out (~$0.1234)" — cost suffix omitted if model unpriced.
-export function formatAnalyzeUsage(promptTokens: number, outputTokens: number): string {
-  const tokens = `${promptTokens.toLocaleString()} in / ${outputTokens.toLocaleString()} out`;
-  const cost = analyzeCost(promptTokens, outputTokens);
+// "12,345 in (10,000 cached) / 6,789 out (~$0.1234)" — cached part omitted when
+// zero, cost suffix omitted if model unpriced.
+export function formatAnalyzeUsage(
+  promptTokens: number,
+  cachedTokens: number,
+  outputTokens: number,
+): string {
+  const cached = cachedTokens > 0 ? ` (${cachedTokens.toLocaleString()} cached)` : "";
+  const tokens = `${promptTokens.toLocaleString()} in${cached} / ${outputTokens.toLocaleString()} out`;
+  const cost = analyzeCost(promptTokens, cachedTokens, outputTokens);
   return cost === null ? tokens : `${tokens} (~${formatUsd(cost)})`;
 }
 // Queue + run-state KV keys.
@@ -68,6 +78,8 @@ interface RunMeta {
   succeeded: number;
   failed: number;
   promptTokens: number;
+  // Absent on runs started before cached tokens were tracked.
+  cachedTokens?: number;
   outputTokens: number;
   startedAt: string;
   lastTickAt?: string;
@@ -230,6 +242,7 @@ interface PairResult {
   entry?: AiAnalysisEntry;
   error?: string;
   promptTokens: number;
+  cachedTokens: number;
   outputTokens: number;
   diag: GroundingDiag;
 }
@@ -290,6 +303,7 @@ async function analyzeOnePair(
   let lastFinishReason: string | undefined;
   let lastModelVersion: string | undefined;
   let promptTokens = 0;
+  let cachedTokens = 0;
   let outputTokens = 0;
   let lastUrlContextMeta: unknown;
 
@@ -302,6 +316,7 @@ async function analyzeOnePair(
     lastModelVersion = undefined;
     lastUrlContextMeta = undefined;
     promptTokens = 0;
+    cachedTokens = 0;
     outputTokens = 0;
 
     try {
@@ -323,7 +338,12 @@ async function analyzeOnePair(
         if (chunk.modelVersion) lastModelVersion = chunk.modelVersion;
         const usage = chunk.usageMetadata;
         if (usage?.promptTokenCount != null) promptTokens = usage.promptTokenCount;
-        if (usage?.candidatesTokenCount != null) outputTokens = usage.candidatesTokenCount;
+        if (usage?.cachedContentTokenCount != null) cachedTokens = usage.cachedContentTokenCount;
+        // A thinking-only response (e.g. cut off at MAX_TOKENS) has no
+        // candidatesTokenCount, but its thoughts are still billed as output.
+        if (usage?.candidatesTokenCount != null || usage?.thoughtsTokenCount != null) {
+          outputTokens = (usage.candidatesTokenCount ?? 0) + (usage.thoughtsTokenCount ?? 0);
+        }
       }
       break; // stream closed cleanly
     } catch (err) {
@@ -340,6 +360,7 @@ async function analyzeOnePair(
         pair,
         error: message,
         promptTokens,
+        cachedTokens,
         outputTokens,
         diag: emptyDiag(pair),
       };
@@ -366,7 +387,7 @@ async function analyzeOnePair(
   };
 
   if (!text.trim()) {
-    return { pair, error: "empty response text", promptTokens, outputTokens, diag };
+    return { pair, error: "empty response text", promptTokens, cachedTokens, outputTokens, diag };
   }
 
   let parsed: { verdict?: unknown; analysis?: unknown; references?: unknown };
@@ -377,6 +398,7 @@ async function analyzeOnePair(
       pair,
       error: `JSON parse failed: ${(err as Error).message}`,
       promptTokens,
+      cachedTokens,
       outputTokens,
       diag,
     };
@@ -384,16 +406,16 @@ async function analyzeOnePair(
 
   const rawAnalysis = typeof parsed.analysis === "string" ? parsed.analysis.trim() : "";
   if (!rawAnalysis) {
-    return { pair, error: "missing analysis field", promptTokens, outputTokens, diag };
+    return { pair, error: "missing analysis field", promptTokens, cachedTokens, outputTokens, diag };
   }
   const stripped = extractLeadingVerdict(rawAnalysis);
   const verdict = coerceVerdict(parsed.verdict) ?? stripped.verdict;
   if (!verdict) {
-    return { pair, error: "no verdict found", promptTokens, outputTokens, diag };
+    return { pair, error: "no verdict found", promptTokens, cachedTokens, outputTokens, diag };
   }
   const analysis = stripInlineCitations(stripped.rest).trim();
   if (!analysis) {
-    return { pair, error: "analysis empty after cleanup", promptTokens, outputTokens, diag };
+    return { pair, error: "analysis empty after cleanup", promptTokens, cachedTokens, outputTokens, diag };
   }
 
   // The model emits its retrieved URLs in `references`. Prefer those over
@@ -424,6 +446,7 @@ async function analyzeOnePair(
       ...(note ? { note } : {}),
     },
     promptTokens,
+    cachedTokens,
     outputTokens,
     diag,
   };
@@ -450,9 +473,6 @@ export async function submitAnalyzeRun(
   zoneFilter: string | null,
   notify?: { chatId: number; messageId: number },
 ): Promise<SubmitOk | SubmitErr> {
-  if (!env.ASK_CACHE) {
-    return { ok: false, message: "KV not configured — analyze runs require ASK_CACHE." };
-  }
 
   const queueRaw = await env.ASK_CACHE.get(QUEUE_KV_KEY);
   if (queueRaw) {
@@ -487,6 +507,7 @@ export async function submitAnalyzeRun(
     succeeded: 0,
     failed: 0,
     promptTokens: 0,
+    cachedTokens: 0,
     outputTokens: 0,
     startedAt: new Date().toISOString(),
     chatId: notify?.chatId,
@@ -507,13 +528,13 @@ export type StatusResult =
       failed: number;
       remaining: number;
       promptTokens: number;
+      cachedTokens: number;
       outputTokens: number;
       elapsed: string;
       zoneFilter: string | null;
     };
 
 export async function analyzeStatus(env: Env): Promise<StatusResult> {
-  if (!env.ASK_CACHE) return { kind: "no-run" };
   const metaRaw = await env.ASK_CACHE.get(META_KV_KEY);
   if (!metaRaw) return { kind: "no-run" };
   const meta: RunMeta = JSON.parse(metaRaw);
@@ -526,6 +547,7 @@ export async function analyzeStatus(env: Env): Promise<StatusResult> {
     failed: meta.failed,
     remaining,
     promptTokens: meta.promptTokens,
+    cachedTokens: meta.cachedTokens ?? 0,
     outputTokens: meta.outputTokens,
     elapsed: elapsedSince(meta.startedAt),
     zoneFilter: meta.zoneFilter,
@@ -545,7 +567,6 @@ export interface TickResult {
 // non-batch generateContent calls, commits successful entries to GitHub, and
 // updates run meta in KV. Called from the scheduled cron handler.
 export async function processAnalyzeTick(env: Env): Promise<TickResult> {
-  if (!env.ASK_CACHE) return { ranTick: false, reason: "no KV" };
 
   const queueRaw = await env.ASK_CACHE.get(QUEUE_KV_KEY);
   if (!queueRaw) return { ranTick: false, reason: "no queue" };
@@ -578,6 +599,7 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
           succeeded: 0,
           failed: 0,
           promptTokens: 0,
+          cachedTokens: 0,
           outputTokens: 0,
           startedAt: new Date().toISOString(),
         };
@@ -592,9 +614,11 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
     const newEntries: AiAnalysisEntry[] = [];
     const failures: { pair: Pair; error: string }[] = [];
     let promptTokens = 0;
+    let cachedTokens = 0;
     let outputTokens = 0;
     for (const r of results) {
       promptTokens += r.promptTokens;
+      cachedTokens += r.cachedTokens;
       outputTokens += r.outputTokens;
       if (r.entry) newEntries.push(r.entry);
       else failures.push({ pair: r.pair, error: r.error ?? "unknown" });
@@ -619,14 +643,13 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
     meta.succeeded += newEntries.length;
     meta.failed += failures.length;
     meta.promptTokens += promptTokens;
+    meta.cachedTokens = (meta.cachedTokens ?? 0) + cachedTokens;
     meta.outputTokens += outputTokens;
     if (promptTokens > 0 || outputTokens > 0) {
       await recordCost(env, ANALYSIS_MODEL, {
         prompt: promptTokens,
-        cached: 0,
+        cached: cachedTokens,
         output: outputTokens,
-        cacheCreation: 0,
-        cacheStorageTokenHours: 0,
       }).catch((err) =>
         console.log(`[analyze.tick] recordCost failed: ${(err as Error).message}`),
       );
@@ -643,7 +666,11 @@ export async function processAnalyzeTick(env: Env): Promise<TickResult> {
     // transition, making it safe to notify exactly once here.
     if (justFinished && meta.chatId != null && meta.messageId != null) {
       const scope = meta.zoneFilter ? ` (zone ${meta.zoneFilter})` : "";
-      const tokens = formatAnalyzeUsage(meta.promptTokens, meta.outputTokens);
+      const tokens = formatAnalyzeUsage(
+        meta.promptTokens,
+        meta.cachedTokens ?? 0,
+        meta.outputTokens,
+      );
       await sendReply(
         env.TELEGRAM_BOT_TOKEN,
         meta.chatId,
@@ -711,14 +738,17 @@ async function commitAnalyses(
   await writeAiAnalyses(env, merged, latestSha, commitMessage);
 }
 
-async function recordAnalyzeCost(env: Env, promptTokens: number, outputTokens: number): Promise<void> {
+async function recordAnalyzeCost(
+  env: Env,
+  promptTokens: number,
+  cachedTokens: number,
+  outputTokens: number,
+): Promise<void> {
   if (promptTokens <= 0 && outputTokens <= 0) return;
   await recordCost(env, ANALYSIS_MODEL, {
     prompt: promptTokens,
-    cached: 0,
+    cached: cachedTokens,
     output: outputTokens,
-    cacheCreation: 0,
-    cacheStorageTokenHours: 0,
   }).catch((err) => console.log(`[reassess] recordCost failed: ${(err as Error).message}`));
 }
 
@@ -769,6 +799,7 @@ export async function resolveReassessTarget(env: Env, request: string): Promise<
 
   let text = "";
   let promptTokens = 0;
+  let cachedTokens = 0;
   let outputTokens = 0;
   try {
     const res = await client.models.generateContent({
@@ -781,11 +812,13 @@ export async function resolveReassessTarget(env: Env, request: string): Promise<
       .join("")
       .trim();
     promptTokens = res.usageMetadata?.promptTokenCount ?? 0;
-    outputTokens = res.usageMetadata?.candidatesTokenCount ?? 0;
+    cachedTokens = res.usageMetadata?.cachedContentTokenCount ?? 0;
+    outputTokens =
+      (res.usageMetadata?.candidatesTokenCount ?? 0) + (res.usageMetadata?.thoughtsTokenCount ?? 0);
   } catch (err) {
     return { ok: false, message: `Could not resolve the request: ${(err as Error).message}` };
   } finally {
-    await recordAnalyzeCost(env, promptTokens, outputTokens);
+    await recordAnalyzeCost(env, promptTokens, cachedTokens, outputTokens);
   }
 
   const parsed = tryParseAnalysisJson(text) as
@@ -830,6 +863,9 @@ export async function generateReassessment(
   shortCode: string,
   zoneCode: string,
   note: string,
+  // Called just before the commit; may throw to abandon the run (see
+  // runOrEnqueue's claim in jobs.ts).
+  beforeCommit: () => void = () => {},
 ): Promise<ReassessGenResult> {
   const { raw: rollupJson, rollup } = await loadRollupParsed(env);
   const plant = rollup.plants.find((p) => p.shortCode === shortCode);
@@ -847,17 +883,17 @@ export async function generateReassessment(
     now,
     note,
   );
-  await recordAnalyzeCost(env, result.promptTokens, result.outputTokens);
+  await recordAnalyzeCost(env, result.promptTokens, result.cachedTokens, result.outputTokens);
 
   if (!result.entry) {
     return { ok: false, message: result.error ?? "analysis generation failed" };
   }
+  beforeCommit();
   await commitAnalyses(env, [result.entry], `Reassess ${shortCode}@${zoneCode}`);
   return { ok: true, verdict: result.entry.verdict };
 }
 
 export async function clearAnalyzeRun(env: Env): Promise<void> {
-  if (!env.ASK_CACHE) return;
   await Promise.all([
     env.ASK_CACHE.delete(QUEUE_KV_KEY),
     env.ASK_CACHE.delete(META_KV_KEY),

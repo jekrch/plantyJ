@@ -1,6 +1,6 @@
 name = "plantyj-bot"
 main = "src/index.ts"
-compatibility_date = "2024-12-01"
+compatibility_date = "2026-10-15"
 
 [vars]
 TELEGRAM_ALLOWED_CHAT_ID = "-5285047199"
@@ -8,14 +8,32 @@ TELEGRAM_ALLOWED_CHAT_ID = "-5285047199"
 ALLOWED_USER_IDS = "8510422630,8539814055"
 GITHUB_REPO = "jekrch/plantyJ"
 DATA_BASE_URL = "https://plantyj.com/data"
-LLM_MODEL = "gemini-3.1-pro-preview"
 
-# KV namespace for Gemini context-cache state (checksum + cache name).
-# To enable caching:
+# KV namespace for bot state: oversized queued jobs, /ask threads and pending proposals,
+# rate limits, and the /cost ledger. (Name predates its current use.)
 [[kv_namespaces]]
 binding = "ASK_CACHE"
 id = "6ce8e5b515f140988b9069aafb021e35"
 preview_id = "12d42f7ae38e415cb6cea937066906a4"
+
+# Jobs that outrun the webhook (LLM calls, batch /confirm): enqueued by
+# runOrEnqueue/enqueueJob, drained by the queue handler in src/index.ts. See
+# processJobBatch in src/jobs.ts. Create the queue once before deploying:
+#   cd worker && bunx wrangler queues create plantyj-jobs
+[[queues.producers]]
+queue = "plantyj-jobs"
+binding = "JOBS"
+
+[[queues.consumers]]
+queue = "plantyj-jobs"
+# One job per invocation, so each gets a fresh subrequest budget; one
+# invocation at a time, so /confirm chunks never race each other's commits.
+max_batch_size = 1
+max_concurrency = 1
+# MAX_ATTEMPTS in src/jobs.ts is the retry budget; this must be at least
+# MAX_ATTEMPTS so a job whose attempts all crashed gets one more delivery that
+# reports the failure. Enforced by src/__tests__/jobs.test.ts.
+max_retries = 2
 
 # Drains the analyze queue (one batch of pairs per tick) via the scheduled
 # handler in src/index.ts. See processAnalyzeTick in src/analyze.ts.

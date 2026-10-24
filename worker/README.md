@@ -32,9 +32,9 @@ Only `shortCode` is required. Use `Display Name (code)` to declare a new zone; b
 ### Q&A and actions
 
 - `/ask {question}` — ask anything about the garden journal (alias for `/ask3`)
-- `/ask1 {question}` — uses `gemini-3.1-flash-lite-preview` (fastest, cheapest)
-- `/ask2 {question}` — uses `gemini-2.5-pro`
-- `/ask3 {question}` — uses `gemini-3.1-pro-preview` (default)
+- `/ask1 {question}` — uses `gemini-3.5-flash-lite` (fastest, cheapest)
+- `/ask2 {question}` — uses `gemini-3.8-flash`
+- `/ask3 {question}` — uses `gemini-4-argon` (default)
 - `/resp {follow-up}` — continues the previous `/ask` thread. A new
   `/ask` starts a fresh thread. Accepts the same `1`/`2`/`3` model suffix.
 - `/confirm` — runs every command from the most recent set of proposals.
@@ -75,18 +75,17 @@ The bot answers factually from the pre-computed plant rollup (`public/data/rollu
 
 The `/ask` and `/resp` commands both run through `worker/src/ask.ts`. It:
 
-1. Fetches `rollup.min.json` — a pre-computed, plant-centric denormalization of the four source JSONs (~12–15KB, ~3.5K tokens)
-2. Optionally reuses a **Gemini context cache** (server-side, 30-day TTL) keyed by a SHA-256 checksum of the rollup. Cache state (checksum + Gemini cache name) is persisted in a Workers KV namespace (`ASK_CACHE`) under `cache:v2:{model}`. The cache is invalidated automatically when the rollup changes.
-3. Runs a tool-call loop (max 3 iterations) with two tools:
+1. Fetches `rollup.min.json` — a pre-computed, plant-centric denormalization of the source JSONs — and builds it into the system prompt. There is no explicit context cache: the system prompt is a stable prefix, so Gemini's implicit caching discounts repeat calls automatically, with no storage fee.
+2. Runs a tool-call loop (max 3 iterations) with two tools:
    - `get_species(fullName)` — on-demand taxonomy/Wikipedia lookups.
-   - `propose_commands(commands[])` — emits a list of bot commands the model wants the user to run. Output is filtered against an `ALLOWED_VERBS` allowlist (`/addtag`, `/removetag`, `/update`, `/accept`, `/annotate`, `/addzone`, `/renamezone`, `/deletezonepic`, `/delete`, `/deleteannotation`); `/deletezone` is intentionally excluded.
-4. If `propose_commands` was called with a non-empty list, stores it at `pending:do:{userId}` (1-hour TTL) and appends a numbered list to the reply with `/confirm` instructions.
-5. For `/resp`, replays the prior conversation `thread:{userId}` so the model has context. A new turn from `/resp` can produce a fresh proposal that replaces the pending one.
-6. Appends an approximate cost line to every reply.
+   - `propose_commands(commands[])` — emits a list of bot commands the model wants the user to run. Output is filtered against the `ALLOWED_VERBS` allowlist in `src/ask.ts` (data edits such as `/addtag`, `/update`, `/merge`, `/annotate`, `/remove`, `/relate`, …); `/deletezone` is intentionally excluded.
+3. If `propose_commands` was called with a non-empty list, stores it at `pending:do:{userId}` (1-hour TTL) and appends a numbered list to the reply with `/confirm` instructions.
+4. For `/resp`, replays the prior conversation `thread:{userId}` so the model has context. A new turn from `/resp` can produce a fresh proposal that replaces the pending one.
+5. Appends an approximate cost line to every reply.
 
 ## Deployment
 
-The Worker deploys via GitHub Actions on pushes to `main` that touch `worker/`. Cloudflare credentials and Telegram/GitHub secrets live in GitHub repo secrets and Cloudflare Worker secrets — nothing sensitive in the codebase.
+The Worker deploys via GitHub Actions on pushes to `main` that touch `worker/`, after a typecheck and `bun test` pass. Cloudflare credentials and Telegram/GitHub secrets live in GitHub repo secrets and Cloudflare Worker secrets — nothing sensitive in the codebase.
 
 ## Environment
 
@@ -95,9 +94,9 @@ The Worker deploys via GitHub Actions on pushes to `main` that touch `worker/`. 
 | Variable | Description |
 |---|---|
 | `TELEGRAM_ALLOWED_CHAT_ID` | Telegram chat ID the bot accepts messages from |
+| `ALLOWED_USER_IDS` | Comma-separated Telegram user IDs allowed to use the bot. Unset means no one is allowed. |
 | `GITHUB_REPO` | `owner/repo` for GitHub Contents API writes |
 | `DATA_BASE_URL` | Base URL for reading JSON data files (default: `https://plantyj.com/data`) |
-| `LLM_MODEL` | Default Gemini model (overridden per-command by `/ask1`–`/ask3`) |
 
 ### Secrets (`wrangler secret put`)
 
@@ -106,13 +105,13 @@ The Worker deploys via GitHub Actions on pushes to `main` that touch `worker/`. 
 | `TELEGRAM_BOT_TOKEN` | Telegram Bot API token |
 | `GITHUB_TOKEN` | GitHub PAT with `contents:write` on the repo |
 | `GEMINI_API_KEY` | Google AI API key |
-| `WEBHOOK_SECRET` | Optional — Telegram webhook secret token |
+| `WEBHOOK_SECRET` | Required — Telegram webhook secret token (`secret_token` on `setWebhook`); requests without it are rejected |
 
 ### KV namespaces
 
 | Binding | Purpose |
 |---|---|
-| `ASK_CACHE` | Persists Gemini context-cache state between Worker invocations. Optional — caching is skipped if absent. |
+| `ASK_CACHE` | Bot state: oversized queued jobs, `/ask` threads and pending proposals, rate limits, the `/analyze` queue, and the `/cost` ledger. Required. |
 
 To create:
 ```bash
@@ -121,3 +120,14 @@ bunx wrangler kv namespace create ASK_CACHE --preview # local dev
 ```
 
 Then add the printed IDs to the `[[kv_namespaces]]` block in `wrangler.toml`.
+
+### Queues
+
+| Binding | Purpose |
+|---|---|
+| `JOBS` (`plantyj-jobs`) | Jobs that outrun the webhook: LLM calls that miss the inline timeout and batch `/confirm`. The worker's `queue` handler runs one job per invocation, one at a time, with one retry. The message carries the job itself, except a job over 100 KB (a long `/resp` history), which is parked in KV. |
+
+To create (once, before the first deploy that binds it):
+```bash
+bunx wrangler queues create plantyj-jobs
+```

@@ -217,7 +217,7 @@ async function handlePlantPic(message: TelegramMessage, env: Env, reply: Replier
  * /identify {optional hint} sent with a photo. Tries the Gemini vision call
  * inline on the webhook (runOrEnqueue); falls back to a queued job carrying
  * the Telegram file_id if the call doesn't finish in the inline budget. The
- * cron path then downloads the image, asks Gemini, and replies with /pick
+ * queue consumer then downloads the image, asks Gemini, and replies with /pick
  * options.
  */
 async function handleIdentify(
@@ -226,8 +226,8 @@ async function handleIdentify(
   env: Env,
   reply: Replier,
 ): Promise<void> {
-  if (!message.from || !env.ASK_CACHE) {
-    await reply("/identify requires KV (ASK_CACHE) and a known user.");
+  if (!message.from) {
+    await reply("/identify requires a known user.");
     return;
   }
   const photo = message.photo![message.photo!.length - 1];
@@ -243,7 +243,6 @@ async function handleIdentify(
     prompt: prompt ?? undefined,
     postedBy: postedByOf(message),
     createdAt: new Date().toISOString(),
-    attempts: 0,
   });
   if (status === "queued") {
     await reply("Identifying — options will arrive shortly.");
@@ -262,8 +261,8 @@ async function handleAskPhoto(
   env: Env,
   reply: Replier,
 ): Promise<void> {
-  if (!message.from || !env.ASK_CACHE) {
-    await reply("/ask on a photo requires KV (ASK_CACHE) and a known user.");
+  if (!message.from) {
+    await reply("/ask on a photo requires a known user.");
     return;
   }
   if (!prompt) {
@@ -291,7 +290,6 @@ async function handleAskPhoto(
     prompt,
     postedBy: postedByOf(message),
     createdAt: new Date().toISOString(),
-    attempts: 0,
   });
   if (status === "queued") {
     await reply("Working out the details — proposal will arrive shortly.");
