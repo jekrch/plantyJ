@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "P isa",
+      "fullName": "Pyrrharctia isabella",
+      "commonName": "Banded Woolly Bear",
+      "variety": null
+    },
+    {
       "shortCode": "S caro",
       "fullName": "Sitta carolinensis",
       "commonName": "White-breasted Nuthatch",
