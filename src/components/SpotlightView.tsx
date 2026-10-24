@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback, type CSSProperties } from "react";
 import { LoaderCircle, Trash2 } from "lucide-react";
 import type { Organism, Zone, ZonePic } from "../types";
 import { organismTitle } from "../utils/display";
@@ -192,12 +192,14 @@ export default function SpotlightView({
   const heroTitle = hero.kind === "plant" ? organismTitle(hero.organism) : headline;
   const heroOpensViewer = hero.kind === "plant";
 
+  // Keyed on the subject so moving to another plant or zone replays the
+  // arrival (`.spotlight-rise` in index.css); picking a thumbnail doesn't.
   return (
-    <div className="pt-3 pb-6">
+    <div key={`${kind}:${subjectCode}`} className="pt-3 pb-6">
       <div className="flex flex-col items-center">
         <div className="w-full max-w-[420px] mx-auto">
           <div
-            className={`relative rounded-sm overflow-hidden bg-surface-raised flex items-center justify-center w-full ${
+            className={`spotlight-rise relative rounded-sm overflow-hidden bg-surface-raised flex items-center justify-center w-full ${
               heroOpensViewer ? "cursor-zoom-in" : "cursor-default"
             }`}
             style={{ height: "min(45vh, 360px)" }}
@@ -227,7 +229,10 @@ export default function SpotlightView({
             )}
           </div>
 
-          <div className="mt-3 px-1 flex items-baseline justify-between gap-3">
+          <div
+            className="spotlight-rise mt-3 px-1 flex items-baseline justify-between gap-3"
+            style={{ "--i": 1 } as CSSProperties}
+          >
             <div className="min-w-0">
               <h2
                 className={`font-display text-ink leading-tight text-base sm:text-lg truncate ${
@@ -284,11 +289,14 @@ export default function SpotlightView({
 
       {items.length > 1 && (
         <div className="mt-6">
-          <p className="text-[10px] uppercase tracking-widest text-ink-muted mb-2 px-1">
+          <p
+            className="spotlight-rise text-[10px] uppercase tracking-widest text-ink-muted mb-2 px-1"
+            style={{ "--i": 2 } as CSSProperties}
+          >
             {items.length} photo{items.length === 1 ? "" : "s"}
           </p>
           <div className="columns-3 sm:columns-4 md:columns-5 lg:columns-6 gap-1.5">
-            {items.map((it) => {
+            {items.map((it, i) => {
               let thumbLabel: string | undefined;
               if (kind === "plant" && it.kind === "plant") {
                 const z = zones.find((z) => z.code === it.organism.zoneCode);
@@ -300,6 +308,7 @@ export default function SpotlightView({
                 <Thumb
                   key={it.id}
                   item={it}
+                  index={i}
                   active={it.id === hero.id}
                   removed={itemRemoved(it)}
                   label={thumbLabel}
@@ -320,6 +329,8 @@ export default function SpotlightView({
 
 interface ThumbProps {
   item: SpotlightItem;
+  /** Position in the strip, for the arrival stagger. */
+  index: number;
   active: boolean;
   removed?: boolean;
   label?: string;
@@ -327,7 +338,7 @@ interface ThumbProps {
   onDoubleClick: () => void;
 }
 
-function Thumb({ item, active, removed, label, onSingleClick, onDoubleClick }: ThumbProps) {
+function Thumb({ item, index, active, removed, label, onSingleClick, onDoubleClick }: ThumbProps) {
   const lastTap = useRef<{ time: number; x: number; y: number } | null>(null);
   const lastClick = useRef<{ time: number; x: number; y: number } | null>(null);
 
@@ -372,10 +383,10 @@ function Thumb({ item, active, removed, label, onSingleClick, onDoubleClick }: T
       type="button"
       onPointerUp={handlePointerUp}
       title={item.kind === "plant" ? "Click to enlarge · double-click to open" : "Click to enlarge"}
-      className={`panel-item relative overflow-hidden rounded-sm bg-surface-raised group ring-1 ring-inset transition-all break-inside-avoid mb-1.5 block w-full ${
+      className={`spotlight-thumb-in panel-item relative overflow-hidden rounded-sm bg-surface-raised group ring-1 ring-inset transition-all break-inside-avoid mb-1.5 block w-full ${
         active ? "ring-accent/70" : "ring-white/5 hover:ring-accent/30"
       }`}
-      style={{ aspectRatio: aspect }}
+      style={{ aspectRatio: aspect, "--i": index } as CSSProperties}
     >
       <img
         src={imageSrc(item.image, 800)}

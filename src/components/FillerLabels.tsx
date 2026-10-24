@@ -5,8 +5,11 @@ import {
   BADGE_PY,
   FONT_SIZE,
   layoutFillerLabels,
+  layoutMergedFillerLabels,
   STROKE_W,
+  type EdgeSpans,
   type Leader,
+  type PlacedLabel,
 } from "./fillerLabelLayout";
 
 // Badge style (shared)
@@ -47,6 +50,60 @@ export default function FillerLabels({ neighbors, width, height }: FillerLabelsP
 
   return (
     <div className="filler-labels absolute inset-0 pointer-events-none z-[2]">
+      <LabelSet labels={labels} width={width} height={height} />
+    </div>
+  );
+}
+
+/** One filler of a merged body, positioned relative to the body's bounding box. */
+export interface MergedLabelMember {
+  key: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  neighbors: NeighborMap;
+  spans?: EdgeSpans;
+}
+
+/**
+ * Labels for adjacent fillers merged into one body. They are laid out per
+ * filler but as one set — each plant named once for the whole body — and
+ * revealed together, since the body reads as a single surface.
+ */
+export function MergedFillerLabels({ members }: { members: MergedLabelMember[] }) {
+  const perMember = useMemo(() => layoutMergedFillerLabels(members), [members]);
+  if (perMember.every((labels) => labels.length === 0)) return null;
+
+  return (
+    <div className="filler-labels absolute inset-0 pointer-events-none z-[2]">
+      {members.map((m, i) =>
+        perMember[i].length > 0 ? (
+          <div
+            key={m.key}
+            className="absolute"
+            style={{ left: `${m.x}px`, top: `${m.y}px`, width: `${m.w}px`, height: `${m.h}px` }}
+          >
+            <LabelSet labels={perMember[i]} width={m.w} height={m.h} />
+          </div>
+        ) : null,
+      )}
+    </div>
+  );
+}
+
+/** Leaders and badges for one filler's labels, in that filler's coordinates. */
+function LabelSet({
+  labels,
+  width,
+  height,
+}: {
+  labels: PlacedLabel[];
+  width: number;
+  height: number;
+}) {
+  return (
+    <>
       {/* All leaders share one canvas so they can be routed against each other. */}
       <svg className="absolute inset-0" width={width} height={height} aria-hidden="true">
         {labels.map((label) =>
@@ -72,7 +129,7 @@ export default function FillerLabels({ neighbors, width, height }: FillerLabelsP
           </span>
         </div>
       ))}
-    </div>
+    </>
   );
 }
 

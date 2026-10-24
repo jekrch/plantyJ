@@ -1,4 +1,5 @@
-import { useRef, useState, useCallback, useEffect, useMemo } from "react";
+import { useRef, useState, useCallback, useEffect, useLayoutEffect, useMemo } from "react";
+import type { CSSProperties } from "react";
 import type { AIAnalysis, Annotation, Organism, Zone } from "../types";
 import type { SortMode } from "../utils/sorting";
 import { computeMonthMarkers } from "../utils/sorting";
@@ -8,10 +9,11 @@ import OrganismCard from "./OrganismCard";
 import FilterControl from "./FilterControl";
 import SortControl from "./SortControl";
 import HatchFiller from "./HatchFiller";
-import { buildStampPool } from "./HatchFiller";
-import type { StampDef } from "./HatchFiller";
+import { buildStampPool, CORNER_RADIUS } from "./HatchFiller";
+import type { FillerRect, FillerShape, StampDef } from "./HatchFiller";
 import FooterRoots from "./FooterRoots";
 import { resolveNeighbors } from "../adjacency";
+import type { EdgeSpans } from "./fillerLabelLayout";
 import type { NeighborMap } from "../adjacency";
 
 const GAP = 4;
@@ -20,6 +22,21 @@ const WIDE_THRESHOLD = 1.4;
 // Aspect ratio (w / h) of a month-section header tile in newest/oldest sort.
 // Higher = shorter/smaller banner.
 const MONTH_HEADER_ASPECT = 6.5;
+
+/**
+ * Which step of the load-in wave a card sits on: its column plus how far down
+ * the page it is, so the wall assembles as a diagonal running out of the
+ * top-left corner rather than all at once. Capped because the tail is dead
+ * time — cards far below the fold are never seen arriving anyway.
+ */
+const STAGGER_BAND = 420;
+const STAGGER_MAX = 5;
+
+function staggerStep(x: number, y: number, colWidth: number) {
+  const col = colWidth > 0 ? Math.round(x / (colWidth + GAP)) : 0;
+  const down = Math.floor(y / STAGGER_BAND);
+  return Math.min(col + down, STAGGER_MAX);
+}
 
 function getColumnCount() {
   if (typeof window === "undefined") return 3;
@@ -70,7 +87,148 @@ interface PlacedMonth {
   h: number;
 }
 
-type PlacedItem = PlacedOrganism | PlacedFiller | PlacedMonth;
+/** Adjacent fillers merged into one body, positioned at their bounding box. */
+interface PlacedFillerGroup {
+  kind: "fillerGroup";
+  key: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  fillerIndex: number;
+  shape: FillerShape;
+}
+
+type PlacedItem = PlacedOrganism | PlacedFiller | PlacedMonth | PlacedFillerGroup;
+
+// How far two filler edges can drift from exactly one GAP apart and still
+// count as touching, and how much edge they must share before merging. A
+// sliver of shared edge would join them with a thin neck that reads as a
+// mistake, so those stay separate.
+const MERGE_TOLERANCE = 1;
+const MIN_SHARED_EDGE = 24;
+
+/**
+ * The gap between two fillers that sit one GAP apart along either axis, if
+ * they share enough edge to merge. The bridge reaches a corner radius into
+ * each side so the rounded corners at the join are covered and the outer
+ * edge runs straight across.
+ */
+function bridgeBetween(a: PlacedFiller, b: PlacedFiller): FillerRect | null {
+  const [left, right] = a.x <= b.x ? [a, b] : [b, a];
+  const [upper, lower] = a.y <= b.y ? [a, b] : [b, a];
+
+  if (Math.abs(right.x - (left.x + left.w) - GAP) <= MERGE_TOLERANCE) {
+    const top = Math.max(a.y, b.y);
+    const bottom = Math.min(a.y + a.h, b.y + b.h);
+    if (bottom - top < MIN_SHARED_EDGE) return null;
+    const x = left.x + left.w - CORNER_RADIUS;
+    return { x, y: top, w: right.x + CORNER_RADIUS - x, h: bottom - top };
+  }
+  if (Math.abs(lower.y - (upper.y + upper.h) - GAP) <= MERGE_TOLERANCE) {
+    const l = Math.max(a.x, b.x);
+    const r = Math.min(a.x + a.w, b.x + b.w);
+    if (r - l < MIN_SHARED_EDGE) return null;
+    const y = upper.y + upper.h - CORNER_RADIUS;
+    return { x: l, y, w: r - l, h: lower.y + CORNER_RADIUS - y };
+  }
+  return null;
+}
+
+/**
+ * Where each neighbor actually borders a filler, in filler-local px. Inside a
+ * merged body part of an edge can open onto the next filler rather than the
+ * card named for it, so labels need to know which stretch to point at. Edges
+ * bordered end to end are left out.
+ */
+function borderSpans(f: PlacedFiller, panelRects: Map<Organism, FillerRect>): EdgeSpans {
+  const spans: EdgeSpans = {};
+  for (const edge of ["top", "bottom", "left", "right"] as const) {
+    const organism = f.neighbors[edge];
+    const p = organism && panelRects.get(organism);
+    if (!p) continue;
+    const horizontal = edge === "top" || edge === "bottom";
+    const [start, len] = horizontal ? [f.x, f.w] : [f.y, f.h];
+    const [pStart, pLen] = horizontal ? [p.x, p.w] : [p.y, p.h];
+    const a = Math.max(0, pStart - start);
+    const b = Math.min(len, pStart + pLen - start);
+    if (a > 0 || b < len) spans[edge] = [a, Math.max(a, b)];
+  }
+  return spans;
+}
+
+/**
+ * Replace every run of touching fillers with a single body, so neighbors
+ * share one continuous pattern instead of being split by the grid gap.
+ * Lone fillers pass through unchanged.
+ */
+function mergeAdjacentFillers(items: PlacedItem[]): PlacedItem[] {
+  const fillers = items.filter((i): i is PlacedFiller => i.kind === "filler");
+  if (fillers.length < 2) return items;
+
+  const parent = fillers.map((_, i) => i);
+  const find = (i: number): number => (parent[i] === i ? i : (parent[i] = find(parent[i])));
+  const bridges: { a: number; rect: FillerRect }[] = [];
+  for (let i = 0; i < fillers.length; i++) {
+    for (let j = i + 1; j < fillers.length; j++) {
+      const rect = bridgeBetween(fillers[i], fillers[j]);
+      if (!rect) continue;
+      parent[find(j)] = find(i);
+      bridges.push({ a: i, rect });
+    }
+  }
+  if (bridges.length === 0) return items;
+
+  const groups = new Map<number, number[]>();
+  fillers.forEach((_, i) => {
+    const root = find(i);
+    groups.set(root, [...(groups.get(root) ?? []), i]);
+  });
+
+  const panelRects = new Map<Organism, FillerRect>();
+  for (const item of items) {
+    if (item.kind !== "panel") continue;
+    const { organism, x, y, w } = item;
+    panelRects.set(organism, { x, y, w, h: getOrganismHeight(organism, w) });
+  }
+
+  const merged: PlacedFillerGroup[] = [];
+  const absorbed = new Set<PlacedFiller>();
+  for (const [root, members] of groups) {
+    if (members.length < 2) continue;
+    const parts = members.map((i) => fillers[i]);
+    parts.forEach((f) => absorbed.add(f));
+    const x = Math.min(...parts.map((f) => f.x));
+    const y = Math.min(...parts.map((f) => f.y));
+    const w = Math.max(...parts.map((f) => f.x + f.w)) - x;
+    const h = Math.max(...parts.map((f) => f.y + f.h)) - y;
+    merged.push({
+      kind: "fillerGroup",
+      key: parts.map((f) => f.key).join("+"),
+      x,
+      y,
+      w,
+      h,
+      fillerIndex: Math.min(...parts.map((f) => f.fillerIndex)),
+      shape: {
+        members: parts.map((f) => ({
+          key: f.key,
+          x: f.x - x,
+          y: f.y - y,
+          w: f.w,
+          h: f.h,
+          neighbors: f.neighbors,
+          spans: borderSpans(f, panelRects),
+        })),
+        bridges: bridges
+          .filter((b) => find(b.a) === root)
+          .map(({ rect }) => ({ ...rect, x: rect.x - x, y: rect.y - y })),
+      },
+    });
+  }
+
+  return [...items.filter((i) => !(i.kind === "filler" && absorbed.has(i))), ...merged];
+}
 
 function assignStampsToFillers(fillers: PlacedFiller[]): void {
   const pool = buildStampPool();
@@ -315,6 +473,7 @@ export default function MasonryGrid({
   // The card currently revealing its details overlay. Tapping a card selects it;
   // tapping the selected card opens the viewer; tapping empty space clears it.
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const handleSelect = useCallback((o: Organism) => setSelectedId(o.id), []);
 
   const stampCacheRef = useRef<Map<string, { stamp: StampDef; fillerIndex: number }>>(new Map());
 
@@ -358,7 +517,7 @@ export default function MasonryGrid({
       }
     }
 
-    setPlaced(result.items);
+    setPlaced(mergeAdjacentFillers(result.items));
     setTotalHeight(result.totalHeight);
 
     requestAnimationFrame(() => {
@@ -375,7 +534,10 @@ export default function MasonryGrid({
     }
   }, [organisms]);
 
-  useEffect(() => {
+  // Before paint, not after: otherwise a freshly mounted wall paints one empty
+  // frame and its cards arrive a frame later, missing the start state of the
+  // load-in animation (`.wall-entering` in index.css).
+  useLayoutEffect(() => {
     layout();
     window.addEventListener("resize", layout);
     return () => window.removeEventListener("resize", layout);
@@ -515,13 +677,16 @@ export default function MasonryGrid({
             return (
               <div
                 key={item.key}
-                className="absolute"
-                style={{
-                  left: `${item.x}px`,
-                  top: `${item.y}px`,
-                  width: `${item.w}px`,
-                  height: `${item.h}px`,
-                }}
+                className="absolute wall-card"
+                style={
+                  {
+                    left: `${item.x}px`,
+                    top: `${item.y}px`,
+                    width: `${item.w}px`,
+                    height: `${item.h}px`,
+                    "--d": staggerStep(item.x, item.y, colWidth),
+                  } as CSSProperties
+                }
               >
                 <HatchFiller
                   assignedStamp={{ type: "word", value: item.label.toUpperCase() }}
@@ -537,13 +702,16 @@ export default function MasonryGrid({
             return (
               <div
                 key={item.key}
-                className="absolute"
-                style={{
-                  left: `${item.x}px`,
-                  top: `${item.y}px`,
-                  width: `${item.w}px`,
-                  height: `${item.h}px`,
-                }}
+                className="absolute wall-card"
+                style={
+                  {
+                    left: `${item.x}px`,
+                    top: `${item.y}px`,
+                    width: `${item.w}px`,
+                    height: `${item.h}px`,
+                    "--d": staggerStep(item.x, item.y, colWidth),
+                  } as CSSProperties
+                }
               >
                 <HatchFiller
                   assignedStamp={item.assignedStamp}
@@ -553,16 +721,42 @@ export default function MasonryGrid({
               </div>
             );
           }
+          if (item.kind === "fillerGroup") {
+            return (
+              <div
+                key={item.key}
+                className="absolute wall-card pointer-events-none"
+                style={
+                  {
+                    left: `${item.x}px`,
+                    top: `${item.y}px`,
+                    width: `${item.w}px`,
+                    height: `${item.h}px`,
+                    "--d": staggerStep(item.x, item.y, colWidth),
+                  } as CSSProperties
+                }
+              >
+                <HatchFiller
+                  assignedStamp={{ type: "blank" }}
+                  fillerIndex={item.fillerIndex}
+                  shape={item.shape}
+                />
+              </div>
+            );
+          }
           return (
             <div
               key={item.organism.id}
               data-tour={item.organism.id === tourCardId ? "card" : undefined}
-              className="absolute"
-              style={{
-                left: `${item.x}px`,
-                top: `${item.y}px`,
-                width: `${item.w}px`,
-              }}
+              className="absolute wall-card"
+              style={
+                {
+                  left: `${item.x}px`,
+                  top: `${item.y}px`,
+                  width: `${item.w}px`,
+                  "--d": staggerStep(item.x, item.y, colWidth),
+                } as CSSProperties
+              }
             >
               <OrganismCard
                 organism={item.organism}
@@ -573,7 +767,7 @@ export default function MasonryGrid({
                   ) ?? false
                 }
                 selected={selectedId === item.organism.id}
-                onSelect={(o) => setSelectedId(o.id)}
+                onSelect={handleSelect}
                 onOpen={onOpenOrganism}
               />
             </div>

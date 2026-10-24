@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 import type { Organism } from "../types";
 import { Expand, Trash2 } from "lucide-react";
 import { organismTitle } from "../utils/display";
@@ -26,7 +26,7 @@ interface Props {
   onOpen: (organism: Organism) => void;
 }
 
-export default function OrganismCard({
+function OrganismCard({
   organism,
   zoneNameByCode,
   removed = false,
@@ -148,3 +148,8 @@ export default function OrganismCard({
     </div>
   );
 }
+
+// The grid re-renders on every relayout (dropdown expand, resize, sort). For an
+// already-placed card only `selected` usually changes, so a shallow compare
+// skips nearly all of them.
+export default memo(OrganismCard);

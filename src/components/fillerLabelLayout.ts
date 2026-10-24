@@ -1,4 +1,5 @@
 import type { NeighborMap } from "../adjacency";
+import type { Organism } from "../types";
 
 // Configuration
 
@@ -58,6 +59,17 @@ const EPS = 0.5;
 // Types
 
 export type Edge = "top" | "bottom" | "left" | "right";
+
+/**
+ * Where along each edge its neighbor actually borders the filler, in
+ * filler-local px (x for top/bottom, y for left/right). An edge left out is
+ * bordered along its whole length. Merged fillers need this: part of an edge
+ * can open onto another filler, and a leader landing there would point at the
+ * wrong thing.
+ */
+export type EdgeSpans = Partial<Record<Edge, [number, number]>>;
+
+type Spans = Record<Edge, [number, number]>;
 
 const EDGE_ORDER: Edge[] = ["top", "bottom", "left", "right"];
 
@@ -128,6 +140,33 @@ interface Placement {
 
 // Name helpers
 
+function neighborName(organism: Organism): string | undefined {
+  return organism.commonName ?? organism.fullName ?? organism.shortCode;
+}
+
+function resolveSpans(fillerW: number, fillerH: number, spans?: EdgeSpans): Spans {
+  return {
+    top: spans?.top ?? [0, fillerW],
+    bottom: spans?.bottom ?? [0, fillerW],
+    left: spans?.left ?? [0, fillerH],
+    right: spans?.right ?? [0, fillerH],
+  };
+}
+
+/** Does a leader ending at `at` along `edge` land clear inside the bordered span? */
+function landsOn(edge: Edge, at: number, spans: Spans): boolean {
+  const [a, b] = spans[edge];
+  return at >= a + EDGE_PAD - EPS && at <= b - EDGE_PAD + EPS;
+}
+
+/** Midpoint of the given edges' spans, or the filler's center when there are none. */
+function spanCenter(edges: Edge[], spans: Spans, full: number): number {
+  if (edges.length === 0) return full / 2;
+  let sum = 0;
+  for (const edge of edges) sum += (spans[edge][0] + spans[edge][1]) / 2;
+  return sum / edges.length;
+}
+
 function shortLabel(text: string): string {
   return text.length > 20 ? text.slice(0, 18) + "…" : text;
 }
@@ -152,17 +191,22 @@ function handedness(name: string): boolean {
  * bordering the filler on two sides gets a single badge with a leader to each —
  * repeating the name would read as two different neighbors.
  */
-function buildGroups(neighbors: NeighborMap, fillerW: number, fillerH: number): LabelGroup[] {
+function buildGroups(
+  neighbors: NeighborMap,
+  fillerW: number,
+  fillerH: number,
+  spans: Spans,
+): LabelGroup[] {
   const byName = new Map<string, Edge[]>();
 
   for (const edge of EDGE_ORDER) {
     const organism = neighbors[edge];
-    const name = organism && (organism.commonName ?? organism.fullName ?? organism.shortCode);
+    const name = organism && neighborName(organism);
     if (!name) continue;
 
     // An edge only earns a leader if the filler is big enough to carry one.
     const vertical = isVerticalLeader(edge);
-    const primaryAxis = vertical ? fillerW : fillerH;
+    const primaryAxis = spans[edge][1] - spans[edge][0];
     const crossAxis = vertical ? fillerH : fillerW;
     if (primaryAxis < MIN_LABEL_AXIS || crossAxis < MIN_CROSS_AXIS) continue;
 
@@ -184,10 +228,17 @@ function buildGroups(neighbors: NeighborMap, fillerW: number, fillerH: number): 
 
 /**
  * Where a badge sits when nothing else is competing: offset by one leader run
- * from each edge it names, centered on any axis it doesn't name, and always
- * inside the filler's padding.
+ * from each edge it names, centered on any axis it doesn't name (on the
+ * bordered span, where an edge is only partly bordered), and always inside the
+ * filler's padding.
  */
-function naturalBox(edges: Edge[], w: number, fillerW: number, fillerH: number): Rect {
+function naturalBox(
+  edges: Edge[],
+  w: number,
+  fillerW: number,
+  fillerH: number,
+  spans: Spans,
+): Rect {
   const h = BADGE_H;
   const maxX = fillerW - EDGE_PAD - w;
   const maxY = fillerH - EDGE_PAD - h;
@@ -200,12 +251,12 @@ function naturalBox(edges: Edge[], w: number, fillerW: number, fillerH: number):
   let x: number;
   if (wantsLeft && !wantsRight) x = EDGE_PAD + LEADER_RUN;
   else if (wantsRight && !wantsLeft) x = maxX - LEADER_RUN;
-  else x = (fillerW - w) / 2;
+  else x = spanCenter(edges.filter(isVerticalLeader), spans, fillerW) - w / 2;
 
   let y: number;
   if (wantsTop && !wantsBottom) y = EDGE_PAD + LEADER_RUN;
   else if (wantsBottom && !wantsTop) y = maxY - LEADER_RUN;
-  else y = (fillerH - h) / 2;
+  else y = spanCenter(edges.filter((e) => !isVerticalLeader(e)), spans, fillerH) - h / 2;
 
   return {
     x: clamp(x, EDGE_PAD, maxX),
@@ -231,7 +282,13 @@ function clamp(v: number, min: number, max: number): number {
  * the travel still starts inside the badge's own footprint, so it reads as
  * pointing outward even with no space to point into.
  */
-function routeLeader(edge: Edge, box: Rect, fillerW: number, fillerH: number): Leader | null {
+function routeLeader(
+  edge: Edge,
+  box: Rect,
+  fillerW: number,
+  fillerH: number,
+  spans: Spans,
+): Leader | null {
   const { x, y, w, h } = box;
   const cx = x + w / 2;
   const cy = y + h / 2;
@@ -244,6 +301,7 @@ function routeLeader(edge: Edge, box: Rect, fillerW: number, fillerH: number): L
     const target = edge === "top" ? EDGE_PAD : fillerH - EDGE_PAD;
     const start = edge === "top" ? y : y + h;
     if (Math.abs(start - target) < EPS) return null;
+    if (!landsOn(edge, cx, spans)) return null;
     return {
       edge,
       points: [
@@ -257,6 +315,7 @@ function routeLeader(edge: Edge, box: Rect, fillerW: number, fillerH: number): L
   const side = edge === "left" ? x : x + w;
 
   if (Math.abs(side - target) >= MIN_LEADER) {
+    if (!landsOn(edge, cy, spans)) return null;
     return {
       edge,
       points: [
@@ -270,7 +329,10 @@ function routeLeader(edge: Edge, box: Rect, fillerW: number, fillerH: number): L
   const turnX = edge === "left" ? x + inset : x + w - inset;
   const below = y + h + ELBOW_VERT;
   const above = y - ELBOW_VERT;
-  const turnY = below <= fillerH - EDGE_PAD ? below : above >= EDGE_PAD ? above : null;
+  const turnY =
+    [below, above].find(
+      (t) => t >= EDGE_PAD && t <= fillerH - EDGE_PAD && landsOn(edge, t, spans),
+    ) ?? null;
   if (turnY === null) return null;
 
   return {
@@ -313,6 +375,7 @@ function routeFlanked(
   fillerW: number,
   fillerH: number,
   flip: boolean,
+  spans: Spans,
 ): Leader[] | null {
   const { x, y, w, h } = box;
   const cx = x + w / 2;
@@ -329,6 +392,7 @@ function routeFlanked(
       const target = edge === "top" ? EDGE_PAD : fillerH - EDGE_PAD;
       if (turnX < EDGE_PAD || turnX > fillerW - EDGE_PAD) return null;
       if (Math.abs(cy - target) < MIN_LEADER) return null;
+      if (!landsOn(edge, turnX, spans)) return null;
       leaders.push({
         edge,
         points: [
@@ -348,6 +412,7 @@ function routeFlanked(
     const target = edge === "left" ? EDGE_PAD : fillerW - EDGE_PAD;
     if (turnY < EDGE_PAD || turnY > fillerH - EDGE_PAD) return null;
     if (Math.abs(cx - target) < MIN_LEADER) return null;
+    if (!landsOn(edge, turnY, spans)) return null;
     leaders.push({
       edge,
       points: [
@@ -367,16 +432,17 @@ function routeAll(
   fillerW: number,
   fillerH: number,
   flip: boolean,
+  spans: Spans,
 ): Leader[] {
   const axis = opposingAxis(subset);
   if (axis) {
-    const flanked = routeFlanked(axis, box, fillerW, fillerH, flip);
+    const flanked = routeFlanked(axis, box, fillerW, fillerH, flip, spans);
     if (flanked) return flanked;
   }
 
   const leaders: Leader[] = [];
   for (const edge of subset) {
-    const leader = routeLeader(edge, box, fillerW, fillerH);
+    const leader = routeLeader(edge, box, fillerW, fillerH, spans);
     if (leader) leaders.push(leader);
   }
   return leaders;
@@ -525,11 +591,16 @@ function anchorsFor(subset: Edge[], natural: Rect, fillerW: number): Rect[] {
   return anchors;
 }
 
-function buildPlacements(group: LabelGroup, fillerW: number, fillerH: number): Placement[] {
+function buildPlacements(
+  group: LabelGroup,
+  fillerW: number,
+  fillerH: number,
+  spans: Spans,
+): Placement[] {
   const placements: Placement[] = [];
 
   for (const subset of edgeVariants(group.edges)) {
-    const natural = naturalBox(subset, group.badgeW, fillerW, fillerH);
+    const natural = naturalBox(subset, group.badgeW, fillerW, fillerH, spans);
     const slideX = !subset.some((e) => !isVerticalLeader(e));
     const slideY = !subset.some(isVerticalLeader);
 
@@ -544,7 +615,7 @@ function buildPlacements(group: LabelGroup, fillerW: number, fillerH: number): P
       for (const y of ys) {
         for (const x of xs) {
           const box = { x, y, w: anchor.w, h: anchor.h };
-          const leaders = routeAll(subset, box, fillerW, fillerH, group.flip);
+          const leaders = routeAll(subset, box, fillerW, fillerH, group.flip, spans);
           // A badge that points at nothing names no neighbor in particular.
           if (leaders.length === 0) continue;
           placements.push({
@@ -579,8 +650,13 @@ function buildPlacements(group: LabelGroup, fillerW: number, fillerH: number): P
  * pruned whenever a partial layout already collides or cannot beat the best
  * solution so far.
  */
-function resolveLayout(groups: LabelGroup[], fillerW: number, fillerH: number): PlacedLabel[] {
-  const options = groups.map((g) => buildPlacements(g, fillerW, fillerH));
+function resolveLayout(
+  groups: LabelGroup[],
+  fillerW: number,
+  fillerH: number,
+  spans: Spans,
+): PlacedLabel[] {
+  const options = groups.map((g) => buildPlacements(g, fillerW, fillerH, spans));
   // Leaders still up for grabs from `index` on, for the bound below.
   const leadersAhead = new Array(groups.length + 1).fill(0);
   for (let i = groups.length - 1; i >= 0; i--) {
@@ -644,9 +720,77 @@ export function layoutFillerLabels(
   neighbors: NeighborMap,
   fillerW: number,
   fillerH: number,
+  edgeSpans?: EdgeSpans,
 ): PlacedLabel[] {
   if (fillerW <= 0 || fillerH <= 0) return [];
-  const groups = buildGroups(neighbors, fillerW, fillerH);
+  const spans = resolveSpans(fillerW, fillerH, edgeSpans);
+  const groups = buildGroups(neighbors, fillerW, fillerH, spans);
   if (groups.length === 0) return [];
-  return resolveLayout(groups, fillerW, fillerH);
+  return resolveLayout(groups, fillerW, fillerH, spans);
+}
+
+/** One filler of a merged body, as the label layout sees it. */
+export interface LabelFrame {
+  w: number;
+  h: number;
+  neighbors: NeighborMap;
+  spans?: EdgeSpans;
+}
+
+/**
+ * Labels for adjacent fillers merged into one body, one list per frame. The
+ * body reads as a single surface, so each plant is named once across all of
+ * it rather than once per filler it touches: in the frame it borders along
+ * the most edge, or failing that the next frame that can fit it without
+ * pushing out a name already placed there.
+ */
+export function layoutMergedFillerLabels(frames: LabelFrame[]): PlacedLabel[][] {
+  const candidates = new Map<string, { frame: number; length: number }[]>();
+  frames.forEach((f, i) => {
+    const spans = resolveSpans(f.w, f.h, f.spans);
+    const lengths = new Map<string, number>();
+    for (const edge of EDGE_ORDER) {
+      const organism = f.neighbors[edge];
+      const name = organism && neighborName(organism);
+      if (!name) continue;
+      lengths.set(name, (lengths.get(name) ?? 0) + spans[edge][1] - spans[edge][0]);
+    }
+    for (const [name, length] of lengths) {
+      candidates.set(name, [...(candidates.get(name) ?? []), { frame: i, length }]);
+    }
+  });
+  for (const list of candidates.values()) list.sort((a, b) => b.length - a.length);
+
+  const owner = new Map<string, number>();
+  for (const [name, list] of candidates) owner.set(name, list[0].frame);
+
+  const layoutFrame = (i: number) => {
+    const f = frames[i];
+    const neighbors: NeighborMap = {};
+    for (const edge of EDGE_ORDER) {
+      const organism = f.neighbors[edge];
+      if (organism && owner.get(neighborName(organism) ?? "") === i) neighbors[edge] = organism;
+    }
+    return layoutFillerLabels(neighbors, f.w, f.h, f.spans);
+  };
+  const results = frames.map((_, i) => layoutFrame(i));
+
+  for (const [name, list] of candidates) {
+    const first = list[0].frame;
+    if (results[first].some((l) => l.name === name)) continue;
+    let placed = false;
+    for (const { frame } of list.slice(1)) {
+      owner.set(name, frame);
+      const next = layoutFrame(frame);
+      // Only one name was added, so a longer list means nothing was displaced.
+      if (next.length > results[frame].length) {
+        results[frame] = next;
+        placed = true;
+        break;
+      }
+    }
+    if (!placed) owner.set(name, first);
+  }
+
+  return results;
 }

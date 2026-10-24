@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { hierarchy, cluster, type HierarchyNode, type HierarchyPointNode } from "d3-hierarchy";
 import { LoaderCircle, Maximize2, Search, X, ZoomIn, ZoomOut } from "lucide-react";
 import { organismTitle } from "../../utils/display";
@@ -193,6 +193,13 @@ export default function TreeView({
 
   const activeNode = pinned ?? hovered;
 
+  // The tree's arrival (`.tree-grow` in index.css) runs left to right, timed
+  // by how far across the tree each node sits.
+  const growSpan = useMemo(
+    () => layout.nodes.reduce((max, n) => Math.max(max, n.y), 1),
+    [layout.nodes],
+  );
+
   const makeNodeHandlers = useCallback(
     (n: HierarchyPointNode<RawNode>) => ({
       onPointerEnter: () => setHovered(n),
@@ -237,6 +244,7 @@ export default function TreeView({
             opacity: ready ? 1 : 0,
             transition: "opacity 220ms ease-out",
           }}
+          className={ready ? "tree-grow" : undefined}
         >
           <defs>
             <clipPath id="leaf-clip">
@@ -249,10 +257,11 @@ export default function TreeView({
           </defs>
 
           <g transform={`translate(${PAD_X},${PAD_Y})`}>
-            <TreeLinks links={layout.links} activeNode={activeNode} />
-            <InternalLabels nodes={layout.nodes} activeNode={activeNode} />
+            <TreeLinks links={layout.links} activeNode={activeNode} growSpan={growSpan} />
+            <InternalLabels nodes={layout.nodes} activeNode={activeNode} growSpan={growSpan} />
             <TreeNodes
               nodes={layout.nodes}
+              growSpan={growSpan}
               activeNode={activeNode}
               pinned={pinned}
               pinnedKey={pinnedKey}
@@ -384,12 +393,19 @@ function FloatingRankHeaders({
   );
 }
 
+/** A node's place in the arrival wave, the `--t` the CSS times it by. */
+function growStyle(n: HierarchyPointNode<RawNode>, growSpan: number) {
+  return { "--t": n.y / growSpan } as CSSProperties;
+}
+
 function TreeLinks({
   links,
   activeNode,
+  growSpan,
 }: {
   links: { source: HierarchyPointNode<RawNode>; target: HierarchyPointNode<RawNode> }[];
   activeNode: HierarchyPointNode<RawNode> | null;
+  growSpan: number;
 }) {
   return (
     <g className="tree-links" fill="none" strokeLinecap="round">
@@ -400,6 +416,9 @@ function TreeLinks({
           <path
             key={i}
             d={linkPath(l.source, l.target)}
+            pathLength={1}
+            className="tree-branch-in"
+            style={growStyle(l.source, growSpan)}
             stroke={isActive ? "var(--color-ink)" : "var(--color-ink-muted)"}
             strokeOpacity={isActive ? 0.9 : 0.55}
             strokeWidth={isActive ? 1.8 : 1.1}
@@ -413,9 +432,11 @@ function TreeLinks({
 function InternalLabels({
   nodes,
   activeNode,
+  growSpan,
 }: {
   nodes: HierarchyPointNode<RawNode>[];
   activeNode: HierarchyPointNode<RawNode> | null;
+  growSpan: number;
 }) {
   return (
     <g className="tree-internal-labels" pointerEvents="none">
@@ -437,6 +458,8 @@ function InternalLabels({
               strokeWidth={3}
               strokeOpacity={0.85}
               paintOrder="stroke fill"
+              className="tree-label-in"
+              style={growStyle(n, growSpan)}
             >
               {n.data.name}
             </text>
@@ -448,12 +471,14 @@ function InternalLabels({
 
 function TreeNodes({
   nodes,
+  growSpan,
   activeNode,
   pinned,
   pinnedKey,
   makeNodeHandlers,
 }: {
   nodes: HierarchyPointNode<RawNode>[];
+  growSpan: number;
   activeNode: HierarchyPointNode<RawNode> | null;
   pinned: HierarchyPointNode<RawNode> | null;
   pinnedKey: number;
@@ -471,6 +496,7 @@ function TreeNodes({
         const isPinned = n === pinned;
         const isAncestorOfActive = !!(activeNode && activeNode.ancestors().includes(n));
         const handlers = makeNodeHandlers(n);
+        const grow = growStyle(n, growSpan);
 
         return isLeaf ? (
           <LeafNode
@@ -480,6 +506,7 @@ function TreeNodes({
             isPinned={isPinned}
             pinnedKey={pinnedKey}
             handlers={handlers}
+            grow={grow}
           />
         ) : (
           <InternalNode
@@ -490,6 +517,7 @@ function TreeNodes({
             isAncestorOfActive={isAncestorOfActive}
             pinnedKey={pinnedKey}
             handlers={handlers}
+            grow={grow}
           />
         );
       })}
@@ -503,6 +531,7 @@ function LeafNode({
   isPinned,
   pinnedKey,
   handlers,
+  grow,
 }: {
   n: HierarchyPointNode<RawNode>;
   isActive: boolean;
@@ -513,6 +542,7 @@ function LeafNode({
     onPointerLeave: () => void;
     onClick: (e: React.MouseEvent) => void;
   };
+  grow: CSSProperties;
 }) {
   const p = n.data.organism!;
   const r = LEAF_RADIUS;
@@ -523,7 +553,8 @@ function LeafNode({
   return (
     <g
       transform={`translate(${n.y},${n.x})`}
-      style={{ cursor: "pointer" }}
+      className="tree-node-in"
+      style={{ cursor: "pointer", ...grow }}
       data-node="true"
       {...handlers}
     >
@@ -617,6 +648,7 @@ function InternalNode({
   isAncestorOfActive,
   pinnedKey,
   handlers,
+  grow,
 }: {
   n: HierarchyPointNode<RawNode>;
   isActive: boolean;
@@ -628,6 +660,7 @@ function InternalNode({
     onPointerLeave: () => void;
     onClick: (e: React.MouseEvent) => void;
   };
+  grow: CSSProperties;
 }) {
   const isRoot = n.depth === 0;
   const branching = (n.children?.length ?? 0) > 1;
@@ -636,7 +669,8 @@ function InternalNode({
   return (
     <g
       transform={`translate(${n.y},${n.x})`}
-      style={{ cursor: "pointer" }}
+      className="tree-node-in"
+      style={{ cursor: "pointer", ...grow }}
       data-node="true"
       {...handlers}
     >

@@ -25,6 +25,10 @@ import { useViewState } from "./hooks/useViewState";
 import { useOrganismViewer } from "./hooks/useOrganismViewer";
 import { lazyWithPreload, preloadWhenIdle } from "./lazy";
 
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 /**
  * Everything below is split out of the initial bundle. The gallery is what the
  * first paint needs; the tree and food web carry d3, the viewer carries the
@@ -108,7 +112,48 @@ export default function App() {
   );
 
   const [imagesLoaded, setImagesLoaded] = useState(false);
-  const handleLayoutReady = useCallback(() => setImagesLoaded(true), []);
+  // The wall's arrival: cards start a little off to the left and settle into
+  // place in a diagonal wave (see `.wall-entering` in index.css). It plays on
+  // first load and whenever the gallery is switched back to.
+  const [wallEntering, setWallEntering] = useState(false);
+  // First load: set in the same commit as `imagesLoaded` — a frame later, the
+  // cards would already be painted at rest and have to jump back to start.
+  // Guarded because the grid calls this again each time it remounts; returning
+  // to the gallery is handled by the view-mode effect below instead.
+  const layoutReadyRef = useRef(false);
+  const handleLayoutReady = useCallback(() => {
+    if (layoutReadyRef.current) return;
+    layoutReadyRef.current = true;
+    setImagesLoaded(true);
+    if (!prefersReducedMotion()) setWallEntering(true);
+  }, []);
+
+  // Switching back to the gallery from another view. A layout effect so the
+  // remounted cards are first painted in their start state, never at rest.
+  const prevViewModeRef = useRef(view.viewMode);
+  useLayoutEffect(() => {
+    const prev = prevViewModeRef.current;
+    prevViewModeRef.current = view.viewMode;
+    if (prev === view.viewMode || view.viewMode !== "gallery") return;
+    // Not loaded yet: the first-load path above will run the arrival.
+    if (!layoutReadyRef.current || prefersReducedMotion()) return;
+    setWallEntering(true);
+  }, [view.viewMode]);
+
+  // The start state has to be painted once before the class comes off, or
+  // there is nothing to transition from. Two frames: one to paint, one to be
+  // sure it landed.
+  useEffect(() => {
+    if (!wallEntering) return;
+    let inner = 0;
+    const outer = requestAnimationFrame(() => {
+      inner = requestAnimationFrame(() => setWallEntering(false));
+    });
+    return () => {
+      cancelAnimationFrame(outer);
+      cancelAnimationFrame(inner);
+    };
+  }, [wallEntering]);
   const [organismPositions, setOrganismPositions] = useState<
     { organism: Organism; y: number; h: number }[]
   >([]);
@@ -267,7 +312,9 @@ export default function App() {
         )}
         {status === "ready" && organisms.length > 0 && (
           <div
-            className="transition-opacity duration-700 ease-out"
+            className={
+              "transition-opacity duration-700 ease-out" + (wallEntering ? " wall-entering" : "")
+            }
             style={{ opacity: viewMode !== "gallery" || imagesLoaded ? 1 : 0 }}
           >
             {viewMode === "gallery" && (

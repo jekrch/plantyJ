@@ -1,4 +1,13 @@
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { LoaderCircle, Maximize2, Pencil, Search, ZoomIn, ZoomOut, Filter } from "lucide-react";
 import type {
   AIAnalysis,
@@ -72,7 +81,13 @@ export default function WebView({
   const [editorOpen, setEditorOpen] = useState(false);
   const writable = isWritable();
 
+  // Re-enable every type when the type list itself changes. Not on mount: the
+  // initial state already holds them, and a fresh Set would re-run the force
+  // layout just as the web is arriving.
+  const enabledForTypesRef = useRef(relationships.types);
   useEffect(() => {
+    if (enabledForTypesRef.current === relationships.types) return;
+    enabledForTypesRef.current = relationships.types;
     setEnabledTypes(new Set(relationships.types.map((t) => t.id)));
   }, [relationships.types]);
 
@@ -308,6 +323,18 @@ export default function WebView({
     return s;
   }, [layout.edges, activeCode]);
 
+  // The web's arrival (`.web-bloom` in index.css) opens out from the middle of
+  // the graph: a node's `--r` is its distance from the nodes' centroid, 0 at
+  // the centre and 1 at the farthest node.
+  const bloomAt = useMemo(() => {
+    const count = layout.nodes.length || 1;
+    const cx = layout.nodes.reduce((sum, n) => sum + n.x, 0) / count;
+    const cy = layout.nodes.reduce((sum, n) => sum + n.y, 0) / count;
+    const dist = (x: number, y: number) => Math.hypot(x - cx, y - cy);
+    const reach = layout.nodes.reduce((max, n) => Math.max(max, dist(n.x, n.y)), 1);
+    return (x: number, y: number) => dist(x, y) / reach;
+  }, [layout.nodes]);
+
   const isolatedCount = useMemo(() => {
     const inGraph = new Set(nodeCodes);
     let n = 0;
@@ -502,6 +529,7 @@ export default function WebView({
               transition: "opacity 220ms ease-out",
               overflow: "visible",
             }}
+            className={ready ? "web-bloom" : undefined}
           >
             <defs>
               <clipPath id="web-leaf-clip">
@@ -527,7 +555,9 @@ export default function WebView({
               ))}
             </defs>
 
-            <g>
+            {/* One fade for the whole edge layer: an opacity animation per edge
+                would have the browser composite each one offscreen, every frame. */}
+            <g className="web-edges-in">
               {layout.edges.map((e, i) => {
                 const isActive = highlightedEdges.has(e.rel.id);
                 const dim = activeCode != null && !isActive;
@@ -583,11 +613,15 @@ export default function WebView({
                     key={`web-node-${n.code}`}
                     transform={`translate(${n.x},${n.y})`}
                     data-node="true"
-                    style={{
-                      cursor: "pointer",
-                      opacity: dim ? 0.35 : 1,
-                      transition: "opacity 160ms ease-out",
-                    }}
+                    className="web-node-in"
+                    style={
+                      {
+                        cursor: "pointer",
+                        opacity: dim ? 0.35 : 1,
+                        transition: "opacity 160ms ease-out",
+                        "--r": bloomAt(n.x, n.y),
+                      } as CSSProperties
+                    }
                     onPointerEnter={() => setHovered(n.code)}
                     onPointerLeave={() => setHovered((h) => (h === n.code ? null : h))}
                     onClick={(e) => {

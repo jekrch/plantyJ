@@ -304,3 +304,129 @@ button,
   touch-action: pan-y;
   overscroll-behavior: contain;
 }
+
+/* ── The wall's arrival ───────────────────────────────────────────────────────
+   On first load the cards come in off the left edge rather than simply being
+   there once the fade is over, the near column first, the wave running out of
+   the top-left corner diagonally (`--d`, set by MasonryGrid from a card's
+   column and its distance down the page). The filter and sort controls are
+   left out — they're the frame, not the contents. */
+.wall-card {
+  transition:
+    opacity 420ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: calc(var(--d, 0) * 30ms);
+}
+
+/* The start state, painted for one frame before the class comes off. No
+   transition into it — it is where the settle begins. */
+.wall-entering .wall-card {
+  opacity: 0;
+  transform: translate(-30px, 10px);
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wall-card,
+  .wall-entering .wall-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ── The other views' arrivals ────────────────────────────────────────────────
+   Quieter cousins of the wall's: each plays once when its view mounts, as
+   keyframes with a backwards fill so nothing is left styled once they finish
+   (hover and dimming go back to owning opacity). */
+@keyframes viewFadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes viewRiseIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* The tree grows out from the root: each branch draws itself toward its
+   child and the child fades in as the line arrives. `--t` is how far across the
+   tree a node sits, 0 at the root and 1 at the leaf column. */
+@keyframes treeBranchDraw {
+  from {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+}
+
+.tree-grow .tree-branch-in {
+  animation: treeBranchDraw 300ms cubic-bezier(0.3, 0.6, 0.2, 1) backwards;
+  animation-delay: calc(var(--t, 0) * 340ms);
+}
+
+.tree-grow .tree-node-in {
+  animation: viewFadeIn 250ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: calc(var(--t, 0) * 340ms + 130ms);
+}
+
+.tree-grow .tree-label-in {
+  animation: viewFadeIn 250ms ease-out backwards;
+  animation-delay: calc(var(--t, 0) * 340ms + 130ms);
+}
+
+/* The food web blooms from its middle outward, `--r` being a node's distance
+   from the centre, 0 to 1. The edges fade in behind them as one layer. */
+.web-bloom .web-node-in {
+  animation: viewFadeIn 320ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: calc(var(--r, 0) * 280ms);
+}
+
+.web-bloom .web-edges-in {
+  animation: viewFadeIn 380ms ease-out backwards;
+  animation-delay: 180ms;
+}
+
+/* The plant and zone spotlight: the hero rises in, its caption a beat later,
+   then the photo strip in reading order (`--i`, capped so a long strip doesn't
+   keep the last thumbnails waiting). */
+.spotlight-rise {
+  animation: viewRiseIn 290ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+
+.spotlight-thumb-in {
+  animation: viewRiseIn 270ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: calc(105ms + min(var(--i, 0), 16) * 18ms);
+}
+
+/* The about modal's tabs: each panel rises in as it's switched to, and the
+   plant and zone cards fade in behind it in reading order. */
+.info-tab-in {
+  animation: viewRiseIn 290ms cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+
+.info-card-in {
+  animation: viewFadeIn 270ms ease-out backwards;
+  animation-delay: calc(60ms + min(var(--i, 0), 18) * 18ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .info-tab-in,
+  .info-card-in,
+  .tree-grow .tree-branch-in,
+  .tree-grow .tree-node-in,
+  .tree-grow .tree-label-in,
+  .web-bloom .web-node-in,
+  .web-bloom .web-edges-in,
+  .spotlight-rise,
+  .spotlight-thumb-in {
+    animation: none;
+  }
+}

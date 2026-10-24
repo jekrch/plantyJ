@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import {
   X,
   ExternalLink,
@@ -291,24 +291,28 @@ function InfoModalContent({
         </div>
 
         <div className="flex-1 overflow-y-auto info-modal-scroll thin-scroll">
-          {tab === "about" && <AboutPanel />}
-          {tab === "stats" && (
-            <StatsPanel
-              organisms={activeOrganisms}
-              allOrganisms={organisms}
-              zones={zones}
-              speciesByShortCode={speciesByShortCode}
-              aiAnalyses={aiAnalyses}
-              onSelectTaxon={onSelectTaxon}
-              onSpotlightZone={onSpotlightZone}
-              onShowBioclipConflicts={onShowBioclipConflicts}
-              onShowEcoFit={onShowEcoFit}
-            />
-          )}
-          {tab === "plants" && (
-            <OrganismsPanel entries={organismEntries} onFilter={onSpotlightOrganism} />
-          )}
-          {tab === "zones" && <ZonesPanel entries={zoneEntries} onFilter={onSpotlightZone} />}
+          {/* Keyed on the tab so each switch replays the arrival (`.info-tab-in`
+              in index.css). */}
+          <div key={tab} className="info-tab-in">
+            {tab === "about" && <AboutPanel />}
+            {tab === "stats" && (
+              <StatsPanel
+                organisms={activeOrganisms}
+                allOrganisms={organisms}
+                zones={zones}
+                speciesByShortCode={speciesByShortCode}
+                aiAnalyses={aiAnalyses}
+                onSelectTaxon={onSelectTaxon}
+                onSpotlightZone={onSpotlightZone}
+                onShowBioclipConflicts={onShowBioclipConflicts}
+                onShowEcoFit={onShowEcoFit}
+              />
+            )}
+            {tab === "plants" && (
+              <OrganismsPanel entries={organismEntries} onFilter={onSpotlightOrganism} />
+            )}
+            {tab === "zones" && <ZonesPanel entries={zoneEntries} onFilter={onSpotlightZone} />}
+          </div>
         </div>
       </div>
     </div>
@@ -520,9 +524,10 @@ function OrganismsPanel({
         Plants · {entries.length}
       </p>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-        {entries.map((entry) => (
+        {entries.map((entry, i) => (
           <EntryCard
             key={entry.shortCode}
+            index={i}
             image={entry.image}
             label={entry.baseLabel}
             variety={entry.variety}
@@ -551,9 +556,10 @@ function ZonesPanel({
         Zones · {entries.length}
       </p>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-        {entries.map(({ zone, image, count }) => (
+        {entries.map(({ zone, image, count }, i) => (
           <EntryCard
             key={zone.code}
+            index={i}
             image={image}
             label={zone.name ?? zone.code}
             altLabel={zone.name ?? zone.code}
@@ -569,6 +575,8 @@ function ZonesPanel({
 }
 
 interface EntryCardProps {
+  /** Position in the grid, for the arrival stagger. */
+  index: number;
   image: string | null;
   label: string;
   variety?: string | null;
@@ -581,6 +589,7 @@ interface EntryCardProps {
 }
 
 function EntryCard({
+  index,
   image,
   label,
   variety,
@@ -604,7 +613,8 @@ function EntryCard({
   return (
     <Tag
       {...tagProps}
-      className={`group flex flex-col rounded-md overflow-hidden bg-white/3 ring-1 ring-inset ring-white/5 text-left ${
+      style={{ "--i": index } as CSSProperties}
+      className={`info-card-in group flex flex-col rounded-md overflow-hidden bg-white/3 ring-1 ring-inset ring-white/5 text-left ${
         interactive
           ? "hover:ring-accent/40 hover:bg-white/5 transition-colors cursor-pointer"
           : "opacity-60"
