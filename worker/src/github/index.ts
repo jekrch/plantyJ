@@ -58,6 +58,7 @@ export {
 export {
   commitBatchState,
   loadBatchState,
+  PartialCommitError,
   type BatchState,
   type DirtyFile,
 } from "./batchState";

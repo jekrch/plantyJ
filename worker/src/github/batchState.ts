@@ -92,6 +92,23 @@ function buildCommitMessage(state: BatchState, message: string): string {
   return willComputeMetadata ? `${message} [skip-deploy]` : message;
 }
 
+/**
+ * A commitBatchState write failed after earlier writes in the same batch had
+ * already landed on `main`. Re-running the batch would apply its commands a
+ * second time on top of the files that did commit, so callers must not retry.
+ */
+export class PartialCommitError extends Error {
+  constructor(
+    readonly written: DirtyFile[],
+    readonly failed: DirtyFile,
+    cause: unknown,
+  ) {
+    const reason = cause instanceof Error ? cause.message : String(cause);
+    super(`saved ${written.join(", ")} but writing ${failed} failed: ${reason}`);
+    this.name = "PartialCommitError";
+  }
+}
+
 export async function commitBatchState(
   env: Env,
   state: BatchState,
@@ -110,10 +127,10 @@ export async function commitBatchState(
   // serialized round-trips per chunk, which stays well under the subrequest
   // budget. (Different files never collide on blob sha, so the only hazard was
   // the shared branch ref.)
-  const writes: Array<() => Promise<void>> = [];
+  const writes: Array<{ file: DirtyFile; run: () => Promise<void> }> = [];
   const queue = (file: DirtyFile, path: string, body: unknown, sha: string | null) => {
     if (state.dirty.has(file)) {
-      writes.push(() => writeJsonFile(env, path, body, sha, commitMessage));
+      writes.push({ file, run: () => writeJsonFile(env, path, body, sha, commitMessage) });
     }
   };
 
@@ -131,8 +148,16 @@ export async function commitBatchState(
   );
   queue("relationships", RELATIONSHIPS_PATH, state.relationships, state.relationshipsSha);
 
+  const written: DirtyFile[] = [];
   for (const write of writes) {
-    await write();
+    try {
+      await write.run();
+    } catch (err) {
+      // Nothing landed yet, so the caller may safely retry the whole batch.
+      if (written.length === 0) throw err;
+      throw new PartialCommitError(written, write.file, err);
+    }
+    written.push(write.file);
   }
 
   let imagesDeleted = 0;
