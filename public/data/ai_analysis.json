@@ -991,6 +991,18 @@
       "created": "2026-07-21T02:46:07.659Z"
     },
     {
+      "shortCode": "P isa",
+      "zoneCode": "bb",
+      "verdict": "GOOD",
+      "analysis": "The banded woolly bear is the larval stage of the Isabella tiger moth and a familiar native insect throughout Minnesota. Its presence in the Berry Border in late October represents a healthy ecological milestone, as mature caterpillars wander extensively in search of sheltered overwintering sites rather than actively feeding. As generalist herbivores, woolly bears graze low-growing herbaceous vegetation, weeds, grasses, asters, and clovers rather than causing economic or cosmetic damage to woody berry canes, currants, or hops. Once transformed into nocturnal Isabella tiger moths, they contribute to night-flying insect biodiversity and serve as prey for bats, while the larvae themselves provide forage for specialized birds and parasitoid insects.\n\nFor a garden focused on native biodiversity and habitat creation, the woolly bear requires virtually no intervention. Caterpillars survive sub-zero Minnesota winters by producing cryoprotectants such as glycerol that allow their tissues to safely freeze beneath leaf mulch, rocks, or garden debris. To support this specimen and similar beneficial wildlife through winter, the owners should retain light layers of fallen leaves, seed heads, and mulch within the Berry Border and neighboring zones, avoiding excessive late-fall cleanup so the larva can safely hibernate until pupating in spring.",
+      "references": [
+        "https://www.dnr.state.mn.us/mcvmagazine/issues/2024/sep-oct/profile.html",
+        "https://www.minnesotaseasons.com/Insects/Isabella_tiger_moth.html",
+        "https://naturegardenlife.com/tag/pyrrharctia-isabella/"
+      ],
+      "created": "2026-10-24T22:38:27.731Z"
+    },
+    {
       "shortCode": "P pan",
       "zoneCode": "fy",
       "verdict": "MIXED",
