@@ -944,6 +944,48 @@
       "type": "predator-prey",
       "from": "F cat",
       "to": "S caro"
+    },
+    {
+      "id": 146,
+      "type": "herbivore",
+      "from": "P isa",
+      "to": "A syr"
+    },
+    {
+      "id": 147,
+      "type": "herbivore",
+      "from": "P isa",
+      "to": "T pra"
+    },
+    {
+      "id": 148,
+      "type": "herbivore",
+      "from": "P isa",
+      "to": "v sor"
+    },
+    {
+      "id": 149,
+      "type": "herbivore",
+      "from": "P isa",
+      "to": "E ann"
+    },
+    {
+      "id": 150,
+      "type": "predator-prey",
+      "from": "c card",
+      "to": "P isa"
+    },
+    {
+      "id": 151,
+      "type": "predator-prey",
+      "from": "m gal",
+      "to": "P isa"
+    },
+    {
+      "id": 152,
+      "type": "predator-prey",
+      "from": "P dom",
+      "to": "P isa"
     }
   ]
 }
