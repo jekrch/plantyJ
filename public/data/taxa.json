@@ -966,5 +966,9 @@
   "Sittidae": {
     "description": "The nuthatches constitute a genus, Sitta, of small passerine birds belonging to the family Sittidae. Characterised by large heads, short tails, and powerful bills and feet, nuthatches advertise their territory using loud, simple songs. Most species exhibit grey or bluish upper parts and a black eye stripe.",
     "url": "https://en.wikipedia.org/wiki/Nuthatch"
+  },
+  "Pyrrharctia": {
+    "description": "Pyrrharctia is a genus of moths in the family Erebidae described by Packard in 1864. The species are known from North and Central America.",
+    "url": "https://en.wikipedia.org/wiki/Pyrrharctia"
   }
 }

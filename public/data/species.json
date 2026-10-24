@@ -4979,6 +4979,68 @@
       ],
       "observationsCount": 12688
     },
+    "pyrrharctia-isabella": {
+      "id": "pyrrharctia-isabella",
+      "fullName": "Pyrrharctia isabella",
+      "commonName": "Banded Woolly Bear",
+      "description": "Pyrrharctia isabella, the Isabella tiger moth, whose larval form is called the banded woolly bear, woolly bear, or woolly worm, occurs in the United States and throughout Canada. It was first formally named by James Edward Smith in 1797.",
+      "vernacularNames": [
+        "Banded Woollybear",
+        "Black-ended Bear",
+        "Isabella Tiger Moth",
+        "Isabelline Tiger",
+        "Iskaniwoksi",
+        "Lambi",
+        "Woolly Bear",
+        "Woolly Bear Caterpillar",
+        "Woolly Worm",
+        "Wooly Bear",
+        "Wooly Worm"
+      ],
+      "taxonomy": {
+        "kingdom": "Animalia",
+        "phylum": "Arthropoda",
+        "class": "Insecta",
+        "order": "Lepidoptera",
+        "family": "Erebidae",
+        "genus": "Pyrrharctia",
+        "species": "Pyrrharctia isabella",
+        "canonicalName": "Pyrrharctia isabella"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/1807881"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Pyrrharctia_isabella"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/59675"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q1957464"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.115923"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 111354,
+      "edible": true
+    },
     "pyrus-pyrifolia": {
       "id": "pyrus-pyrifolia",
       "fullName": "Pyrus pyrifolia",
