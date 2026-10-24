@@ -958,5 +958,13 @@
   "Pompilidae": {
     "description": "Pompilidae is a family of wasps commonly called spider wasps, spider-hunting wasps, or pompilid wasps. The family is cosmopolitan, with some 5,000 species in six subfamilies. With the exception of some group-nesting Ageniellini, the wasps are solitary. Most capture and paralyze prey, though members of the subfamily Ceropalinae are kleptoparasites of other pompilids, or ectoparasitoids of living spiders.",
     "url": "https://en.wikipedia.org/wiki/Spider_wasp"
+  },
+  "Sitta": {
+    "description": "Sitta may refer to:Nuthatch, a genus, Sitta, of small passerine birds belonging to the family Sittidae\nSihah Sitta, the six canonical hadith collections of Sunni Islam\nSittace, an ancient city, the capital of Sittacene, in Assyria, called 'Sitta' by Diodorus the Sicilian",
+    "url": "https://en.wikipedia.org/wiki/Sitta"
+  },
+  "Sittidae": {
+    "description": "The nuthatches constitute a genus, Sitta, of small passerine birds belonging to the family Sittidae. Characterised by large heads, short tails, and powerful bills and feet, nuthatches advertise their territory using loud, simple songs. Most species exhibit grey or bluish upper parts and a black eye stripe.",
+    "url": "https://en.wikipedia.org/wiki/Nuthatch"
   }
 }
