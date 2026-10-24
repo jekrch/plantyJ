@@ -1258,6 +1258,18 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "S caro",
+      "zoneCode": "mpg",
+      "verdict": "GOOD",
+      "analysis": "The White-breasted Nuthatch (Sitta carolinensis) is a native, year-round resident songbird in Minnesota that provides exceptional ecological value to urban landscapes. As an agile bark-foraging specialist, it creeps down tree trunks probing for hidden overwintering insects, wood-boring beetle larvae, scale insects, ants, caterpillars, and plant bugs—such as the ash plant bug observed in the garden. In spring and summer, insects make up nearly its entire diet, while autumn and winter prompt a transition toward seeds, which the bird frequently caches in the rough bark crevices of mature site canopy trees like Norway maple, sugar maple, silver maple, and eastern arborvitae.\n\nThe nuthatch's utilization of the bird bath in the Maple zone illustrates the importance of clean water stations for maintaining native wildlife in urban lots. By actively foraging on bark-dwelling pest egg masses and larvae through late fall and winter, nuthatches deliver continuous pest control that protects canopy trees and surrounding understory flora. Supporting this species aligns seamlessly with the owners' priorities and requires minimal effort: avoiding chemical insecticides, retaining mature trees with textured bark, maintaining clean water sources, and leaving natural seed heads intact across garden beds.",
+      "references": [
+        "https://mnbirdatlas.org/species/white-breasted-nuthatch/",
+        "https://animaldiversity.org/accounts/Sitta_carolinensis/",
+        "https://www.dnr.state.mn.us/mcvmagazine/issues/2022/jan-feb/nuthatch.html"
+      ],
+      "created": "2026-10-24T19:17:28.336Z"
+    },
+    {
       "shortCode": "S cor",
       "zoneCode": "bb",
       "verdict": "GOOD",
