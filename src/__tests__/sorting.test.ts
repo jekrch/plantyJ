@@ -144,7 +144,7 @@ describe("computeMonthMarkers", () => {
       inMonth("old2", "2026-03-16T12:00:00Z"),
     ];
     const markers = computeMonthMarkers(list, "newest");
-    expect(markers.get("new")).toBe("June 2026");
+    expect(markers.get("new")).toBe("Jun 2026");
     // March has only 2 pics and isn't newest → no header
     expect(markers.has("old1")).toBe(false);
   });
@@ -157,8 +157,8 @@ describe("computeMonthMarkers", () => {
       inMonth("m3", "2026-03-17T12:00:00Z"),
     ];
     const markers = computeMonthMarkers(list, "newest");
-    expect(markers.get("new")).toBe("June 2026");
-    expect(markers.get("m1")).toBe("March 2026"); // first of the qualifying run
+    expect(markers.get("new")).toBe("Jun 2026");
+    expect(markers.get("m1")).toBe("Mar 2026"); // first of the qualifying run
     expect(markers.has("m2")).toBe(false);
     expect(markers.has("m3")).toBe(false);
   });
@@ -172,8 +172,8 @@ describe("computeMonthMarkers", () => {
       inMonth("new", "2026-06-15T12:00:00Z"),
     ];
     const markers = computeMonthMarkers(list, "oldest");
-    expect(markers.get("m1")).toBe("March 2026");
-    expect(markers.get("new")).toBe("June 2026");
+    expect(markers.get("m1")).toBe("Mar 2026");
+    expect(markers.get("new")).toBe("Jun 2026");
   });
 
   it("derives the month from addedAt, not the upload timestamp in the id", () => {
@@ -181,13 +181,13 @@ describe("computeMonthMarkers", () => {
     const ts = Math.floor(Date.UTC(2026, 5, 15, 12) / 1000);
     const o = organism({ id: `A atr-${ts}`, addedAt: "2026-01-15T12:00:00Z" });
     const markers = computeMonthMarkers([o], "newest");
-    expect(markers.get(o.id)).toBe("January 2026");
+    expect(markers.get(o.id)).toBe("Jan 2026");
   });
 
   it("falls back to the id timestamp when addedAt is unparseable", () => {
     const ts = Math.floor(Date.UTC(2026, 5, 15, 12) / 1000);
     const o = organism({ id: `A atr-${ts}`, addedAt: "" });
     const markers = computeMonthMarkers([o], "newest");
-    expect(markers.get(o.id)).toBe("June 2026");
+    expect(markers.get(o.id)).toBe("Jun 2026");
   });
 });

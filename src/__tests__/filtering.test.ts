@@ -7,7 +7,7 @@ import {
   applyFilters,
   computeFacets,
 } from "../utils/filtering";
-import type { Annotation, Zone } from "../types";
+import type { Annotation, Species, Zone } from "../types";
 import type { Filters } from "../utils/filtering";
 import { organism } from "./helpers";
 
@@ -178,6 +178,48 @@ describe("applyFilters", () => {
     const mixed = [organism({ id: "a", kind: "plant" }), organism({ id: "b", kind: "animal" })];
     const result = applyFilters(mixed, { ...EMPTY_FILTERS, misc: new Set(["animal"]) });
     expect(result.map((p) => p.id)).toEqual(["b"]);
+  });
+
+  it("filters by taxonomic class (bird, mammal, insect)", () => {
+    const sp = (cls: string): Species => ({
+      id: cls,
+      fullName: null,
+      commonName: null,
+      description: null,
+      vernacularNames: [],
+      taxonomy: {
+        kingdom: "Animalia",
+        phylum: null,
+        class: cls,
+        order: null,
+        family: null,
+        genus: null,
+        species: null,
+        canonicalName: null,
+      },
+      nativeRange: null,
+      references: [],
+      sources: [],
+    });
+    const speciesMap = new Map<string, Species>([
+      ["robin", sp("Aves")],
+      ["fox", sp("Mammalia")],
+      ["bee", sp("Insecta")],
+    ]);
+    const animals = [
+      organism({ id: "r", shortCode: "robin", kind: "animal" }),
+      organism({ id: "f", shortCode: "fox", kind: "animal" }),
+      organism({ id: "b", shortCode: "bee", kind: "animal" }),
+      organism({ id: "p", shortCode: "oak", kind: "plant" }),
+    ];
+    const run = (misc: string[]) =>
+      applyFilters(animals, { ...EMPTY_FILTERS, misc: new Set(misc) }, [], speciesMap).map(
+        (p) => p.id,
+      );
+    expect(run(["bird"])).toEqual(["r"]);
+    expect(run(["mammal"])).toEqual(["f"]);
+    expect(run(["bird", "mammal"])).toEqual(["r", "f"]);
+    expect(run(["insect", "plant"])).toEqual(["b", "p"]);
   });
 
   it("filters by bioclip-match", () => {

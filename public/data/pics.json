@@ -35,7 +35,8 @@
       "kind": "animal",
       "bioclipSpeciesId": "Pyrrharctia isabella",
       "bioclipCommonName": "Isabella tiger moth",
-      "bioclipScore": 0.9932
+      "bioclipScore": 0.9932,
+      "noWide": true
     },
     {
       "seq": 182,

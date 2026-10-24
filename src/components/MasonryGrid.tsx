@@ -36,7 +36,7 @@ function getAspect(organism: Organism): number {
 }
 
 function isWide(organism: Organism): boolean {
-  return getAspect(organism) >= WIDE_THRESHOLD;
+  return !organism.noWide && getAspect(organism) >= WIDE_THRESHOLD;
 }
 
 interface PlacedOrganism {
@@ -524,7 +524,7 @@ export default function MasonryGrid({
                 }}
               >
                 <HatchFiller
-                  assignedStamp={{ type: "word", value: item.label }}
+                  assignedStamp={{ type: "word", value: item.label.toUpperCase() }}
                   fillerIndex={0}
                   textColor="#b1c3ab" //#b1c3ab
                   textScale={0.65}

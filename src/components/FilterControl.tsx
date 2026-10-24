@@ -214,6 +214,8 @@ export default function FilterControl({
                       { value: "plant", label: "PLANT" },
                       { value: "animal", label: "ANIMAL" },
                       { value: "insect", label: "INSECT" },
+                      { value: "bird", label: "BIRD" },
+                      { value: "mammal", label: "MAMMAL" },
                     ].map(({ value, label }) => {
                       const isActive = filters.misc.has(value);
                       return (

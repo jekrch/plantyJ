@@ -20,6 +20,15 @@ const STYLIZE_PLACEMENT = true;
 // Higher = denser vines.
 const VINE_DENSITY = 1.75;
 
+// How much a stamp grows (relative to its resting scale) when the tile is hovered.
+const HOVER_GROWTH = 1.06;
+
+// Space Mono metrics, in em: glyph advance and cap height.
+const SPACE_MONO_ADVANCE = 0.612;
+const SPACE_MONO_CAP_HEIGHT = 0.7;
+// Extra tracking (em) for framed labels so short uppercase text reads as a banner.
+const FRAMED_TRACKING = 0.14;
+
 export type StampDef = { type: "word"; value: string } | { type: "icon"; value: LucideIcon };
 
 /** Build the full pool of possible stamps for external sequencing. */
@@ -74,6 +83,8 @@ interface StableStyle {
   rotation: number;
   color: string;
   twist: string;
+  /** Resting stamp scale; hover grows from this rather than to a fixed size. */
+  restScale: number;
   placement: PlacementStyle;
   iconInnerX: number;
   iconInnerY: number;
@@ -89,6 +100,7 @@ function generateStableStyle(
       rotation: ROTATIONS[fillerIndex % ROTATIONS.length],
       color: COLORS[fillerIndex % COLORS.length],
       twist: "",
+      restScale: 1,
       placement: { scale: 1, offsetX: 0, offsetY: 0 },
       iconInnerX: 0,
       iconInnerY: 0,
@@ -102,6 +114,7 @@ function generateStableStyle(
     rotation: ROTATIONS[fillerIndex % ROTATIONS.length],
     color: COLORS[fillerIndex % COLORS.length],
     twist: `scale(${scale.toFixed(3)}) rotate(${angle.toFixed(2)}deg)`,
+    restScale: scale,
     placement:
       stamp.type === "icon"
         ? generateDeterministicPlacement(fillerIndex)
@@ -255,7 +268,8 @@ export default function HatchFiller({
   if (styleRef.current === null) {
     styleRef.current = generateStableStyle(stamp, empty, fillerIndex);
   }
-  const { rotation, color, twist, placement, iconInnerX, iconInnerY } = styleRef.current;
+  const { rotation, color, twist, restScale, placement, iconInnerX, iconInnerY } =
+    styleRef.current;
 
   const iconSvgContent = useLucideExtract(stamp?.type === "icon" ? stamp.value : null);
 
@@ -315,9 +329,47 @@ export default function HatchFiller({
   const cy = Math.max(margin, Math.min(size.height - margin, rawCy));
 
   let stampContent: React.ReactNode = null;
-  let frameRect: { x: number; y: number; width: number; height: number; rx: number } | null = null;
+  let frameRect: { x: number; width: number; fadeStop: number } | null = null;
 
-  if (!empty && !isTooShortForStamp && stamp?.type === "word") {
+  if (!empty && !isTooShortForStamp && stamp?.type === "word" && framed) {
+    const len = stamp.value.length;
+    const advance = SPACE_MONO_ADVANCE + FRAMED_TRACKING;
+    const fitByWidth = (size.width * 0.85) / (len * advance);
+    const fontSize = Math.min(80, fitByWidth, size.height * 0.85) * textScale;
+    const tracking = fontSize * FRAMED_TRACKING;
+    // Browsers add tracking after the last glyph too; drop it from the measured
+    // width and shift x by half so the visible glyphs sit dead center.
+    const textWidth = len * advance * fontSize - tracking;
+
+    // Dim band: a flat plateau covering the label plus padding, with a fixed
+    // fade on each side, so every glyph sits on the same quiet background.
+    const pad = fontSize * 0.6;
+    const fade = fontSize * 1.6;
+    const frameW = Math.min(size.width, textWidth + 2 * (pad + fade));
+    frameRect = {
+      x: (size.width - frameW) / 2,
+      width: frameW,
+      fadeStop: Math.max(0, (frameW - textWidth - 2 * pad) / 2 / frameW),
+    };
+
+    stampContent = (
+      <text
+        className="hatch-text"
+        x={size.width / 2 + tracking / 2}
+        // Alphabetic baseline offset by half the cap height centers the
+        // uppercase/digit glyphs optically, independent of font ascent/descent.
+        y={size.height / 2 + (fontSize * SPACE_MONO_CAP_HEIGHT) / 2}
+        textAnchor="middle"
+        fontFamily="'Space Mono', monospace"
+        fontWeight="700"
+        fontSize={fontSize}
+        letterSpacing={tracking}
+        fill={textColor}
+      >
+        {stamp.value}
+      </text>
+    );
+  } else if (!empty && !isTooShortForStamp && stamp?.type === "word") {
     // 1. Define character aspect ratio for Space Mono (width is ~60% of height)
     const charWidthRatio = 0.7;
 
@@ -330,21 +382,6 @@ export default function HatchFiller({
 
     // 4. Calculate the final font size (cap it at your original 80px so it doesn't get massive on large screens)
     const dynamicFontSize = Math.min(80, maxFontSizeByWidth, maxAllowedHeight) * textScale;
-
-    if (framed) {
-      // Size the backdrop to the rendered glyph width plus breathing room; it
-      // spans the full tile height so the blurred band runs edge to edge.
-      const textWidth = stamp.value.length * dynamicFontSize * charWidthRatio;
-      const padX = dynamicFontSize * 0.6;
-      const frameW = Math.min(size.width * 0.96, textWidth + padX * 2);
-      frameRect = {
-        x: (size.width - frameW) / 2,
-        y: 0,
-        width: frameW,
-        height: size.height,
-        rx: 0,
-      };
-    }
 
     stampContent = (
       <text
@@ -389,15 +426,24 @@ export default function HatchFiller({
     <div
       ref={containerRef}
       className="hatch-root relative w-full h-full rounded-sm overflow-hidden"
+      // Per-instance resting/hover transforms. The <style> below is global, so
+      // they can't be interpolated into it or every filler would share the
+      // last-rendered instance's values. Framed labels stay level.
+      style={
+        {
+          "--hatch-twist": framed || !twist ? "none" : twist,
+          "--hatch-hover": `scale(${((framed ? 1 : restScale) * HOVER_GROWTH).toFixed(3)})`,
+        } as React.CSSProperties
+      }
     >
       <style>{`
         .hatch-text {
-          transform: ${twist};
-          transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+          transform: var(--hatch-twist);
+          transition: transform 0.4s cubic-bezier(0.34, 1.15, 0.64, 1);
           transform-origin: center center;
         }
         .hatch-root:hover .hatch-text {
-          transform: scale(1.2) rotate(0deg);
+          transform: var(--hatch-hover);
         }
         .filler-labels {
           opacity: 0;
@@ -435,8 +481,8 @@ export default function HatchFiller({
                 y2="0"
               >
                 <stop offset="0" stopColor="white" />
-                <stop offset="0.28" stopColor="#3a3a3a" />
-                <stop offset="0.72" stopColor="#3a3a3a" />
+                <stop offset={frameRect.fadeStop} stopColor="#3a3a3a" />
+                <stop offset={1 - frameRect.fadeStop} stopColor="#3a3a3a" />
                 <stop offset="1" stopColor="white" />
               </linearGradient>
               {/* Mask applied to the vine pattern only: opaque everywhere,
@@ -446,9 +492,9 @@ export default function HatchFiller({
                 <rect width="100%" height="100%" fill="white" />
                 <rect
                   x={frameRect.x}
-                  y={frameRect.y}
+                  y={0}
                   width={frameRect.width}
-                  height={frameRect.height}
+                  height="100%"
                   fill={`url(#${fadeId})`}
                 />
               </mask>

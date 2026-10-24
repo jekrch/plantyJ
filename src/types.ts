@@ -21,6 +21,8 @@ export interface PicRecord {
   bioclipScore?: number | null;
   bioclipWikiUrl?: string | null;
   kind?: "plant" | "animal";
+  // Keep this pic to a single column in the grid even if it's landscape.
+  noWide?: boolean;
 }
 
 export interface OrganismRecord {
