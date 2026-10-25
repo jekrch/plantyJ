@@ -159,7 +159,7 @@ export function PhenologyStrip({
               rel="noopener noreferrer"
               className="inline-block mt-1.5 text-accent/85 hover:text-accent transition-colors"
             >
-              How iNaturalist annotations work ↗
+              How iNaturalist annotations work {"↗\uFE0E"}
             </a>
           </InfoPopover>
         </span>
@@ -171,7 +171,7 @@ export function PhenologyStrip({
             className="text-[9px] uppercase tracking-widest text-white/30 hover:text-accent transition-colors"
             title="View this species on iNaturalist"
           >
-            iNaturalist ↗
+            iNaturalist {"↗\uFE0E"}
           </a>
         ) : (
           <p className="text-[9px] uppercase tracking-widest text-white/20">iNaturalist</p>

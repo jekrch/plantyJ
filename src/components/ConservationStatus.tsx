@@ -306,7 +306,7 @@ export function ConservationStatus({
               rel="noopener noreferrer"
               className="inline-block mt-1.5 text-accent/85 hover:text-accent transition-colors"
             >
-              How NatureServe ranks work ↗
+              How NatureServe ranks work {"↗\uFE0E"}
             </a>
           </InfoPopover>
         </span>
@@ -318,7 +318,7 @@ export function ConservationStatus({
             className="text-[9px] uppercase tracking-widest text-white/30 hover:text-accent transition-colors"
             title="View this species on NatureServe Explorer"
           >
-            NatureServe ↗
+            NatureServe {"↗\uFE0E"}
           </a>
         ) : (
           <p className="text-[9px] uppercase tracking-widest text-white/20">NatureServe</p>
