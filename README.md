@@ -188,6 +188,7 @@ When viewing a specific photo in the gallery, opening the info drawer surfaces a
 - **Vernacular Names:** Alternative common names pulled from the GBIF API.
 - **Taxonomic Lineage:** The full hierarchical classification (Kingdom down to Species). Each rank is interactive — click to filter the gallery by that taxon or jump to it in the Tree View.
 - **Native Range:** Geographic origin data pulled from POWO.
+- **Conservation Status:** NatureServe's global rank and Minnesota state rank, plus whether the species is native or introduced in Minnesota.
 - **BioCLIP Prediction:** The AI-generated species identification and confidence score, including a logic check that flags whether the visual prediction matches, shares a genus with, or contradicts the manually recorded species.
 - **External Sources:** Direct links to source records — GBIF, POWO, Wikipedia, iNaturalist, Wikidata, and NatureServe (conservation status).
 
@@ -214,6 +215,7 @@ The info modal (accessible via the site header) has four tabs: **About**, **Stat
 - `Zone`: multi-select on `zoneCode` (display labels are `zoneName`s)
 - `Tags`: multi-select free-text tags
 - `Posted by`: multi-select Telegram user
+- `Conservation`: MN native, Non-native (NatureServe records it as introduced in Minnesota), and At risk (NatureServe rank 1–3 or extirpated, globally or in Minnesota)
 
 ## Development
 

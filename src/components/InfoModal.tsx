@@ -1,4 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import {
   X,
   ExternalLink,
@@ -111,6 +119,73 @@ export default function InfoModal(props: Props) {
 
   if (!mounted) return null;
   return <InfoModalContent {...props} visible={visible} />;
+}
+
+// Inset of the underline from each edge of its tab button.
+const INDICATOR_INSET = 8;
+const INDICATOR_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+
+function TabBar({ tab, onTabChange }: { tab: Tab; onTabChange: (tab: Tab) => void }) {
+  const listRef = useRef<HTMLDivElement>(null);
+  const btnRefs = useRef<Partial<Record<Tab, HTMLButtonElement | null>>>({});
+  const [indicator, setIndicator] = useState<{ left: number; width: number } | null>(null);
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const btn = btnRefs.current[tab];
+      if (!btn) return;
+      setIndicator({
+        left: btn.offsetLeft + INDICATOR_INSET,
+        width: btn.offsetWidth - INDICATOR_INSET * 2,
+      });
+    };
+    measure();
+    const list = listRef.current;
+    if (!list || typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(measure);
+    ro.observe(list);
+    return () => ro.disconnect();
+  }, [tab]);
+
+  return (
+    <div
+      ref={listRef}
+      role="tablist"
+      aria-label="Info sections"
+      className="relative flex items-center gap-1 px-3 pt-2 border-b border-ink-faint/20"
+    >
+      {TABS.map((t) => {
+        const active = tab === t.id;
+        return (
+          <button
+            key={t.id}
+            ref={(el) => {
+              btnRefs.current[t.id] = el;
+            }}
+            role="tab"
+            aria-selected={active}
+            onClick={() => onTabChange(t.id)}
+            className={`relative px-3 py-2 text-xs font-display tracking-wide transition-colors ${
+              active ? "text-ink" : "text-ink-muted hover:text-ink"
+            }`}
+          >
+            {t.label}
+          </button>
+        );
+      })}
+      {indicator && (
+        <span
+          aria-hidden
+          className="absolute -bottom-px h-px bg-accent pointer-events-none"
+          style={{
+            left: indicator.left,
+            width: indicator.width,
+            transition: `left 320ms ${INDICATOR_EASE}, width 320ms ${INDICATOR_EASE}`,
+          }}
+        />
+      )}
+    </div>
+  );
 }
 
 function InfoModalContent({
@@ -262,33 +337,7 @@ function InfoModalContent({
           </button>
         </div>
 
-        <div
-          role="tablist"
-          aria-label="Info sections"
-          className="flex items-center gap-1 px-3 pt-2 border-b border-ink-faint/20"
-        >
-          {TABS.map((t) => {
-            const active = tab === t.id;
-            return (
-              <button
-                key={t.id}
-                role="tab"
-                aria-selected={active}
-                onClick={() => onTabChange(t.id)}
-                className={`relative px-3 py-2 text-xs font-display tracking-wide transition-colors ${
-                  active ? "text-ink" : "text-ink-muted hover:text-ink"
-                }`}
-              >
-                {t.label}
-                <span
-                  className={`absolute left-2 right-2 -bottom-px h-px transition-all duration-200 ease-out ${
-                    active ? "bg-accent opacity-100" : "bg-transparent opacity-0"
-                  }`}
-                />
-              </button>
-            );
-          })}
-        </div>
+        <TabBar tab={tab} onTabChange={onTabChange} />
 
         <div className="flex-1 overflow-y-auto info-modal-scroll thin-scroll">
           {/* Keyed on the tab so each switch replays the arrival (`.info-tab-in`

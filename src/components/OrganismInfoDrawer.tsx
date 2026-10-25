@@ -16,7 +16,9 @@ import { imageSrc, isWritable } from "../data/source";
 // Only writers ever open the edit sheet, and only after the drawer is already
 // on screen — no reason for it to ride along with the viewer chunk.
 const EditEntrySheet = lazy(() => import("./EditEntrySheet"));
+import { ConservationStatus } from "./ConservationStatus";
 import { ModelAttribution } from "./ModelAttribution";
+import { PhenologyStrip } from "./PhenologyStrip";
 import { TabBtn } from "./TreeView/CtrlBtn";
 import { RelationsSubgraph } from "./TreeView/RelationsSubgraph";
 import type { RelationshipsData } from "../hooks/useRelationships";
@@ -723,6 +725,22 @@ export default function OrganismInfoDrawer({
                 </p>
                 <p className="text-xs text-white/55 leading-relaxed">{species.nativeRange}</p>
               </div>
+            )}
+
+            {/* Conservation status */}
+            {species?.conservation && (
+              <ConservationStatus
+                conservation={species.conservation}
+                url={species.references.find((r) => r.name === "NatureServe Explorer")?.url}
+              />
+            )}
+
+            {/* Seasonal timeline */}
+            {species?.phenology && species.phenology.stages.length > 0 && (
+              <PhenologyStrip
+                phenology={species.phenology}
+                url={species.references.find((r) => r.name === "iNaturalist")?.url}
+              />
             )}
 
             {/* BioCLIP prediction */}

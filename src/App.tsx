@@ -326,6 +326,7 @@ export default function App() {
                   removedSet={removedSet}
                   annotations={data.annotations}
                   aiAnalyses={data.aiAnalyses}
+                  speciesByShortCode={data.speciesByShortCode}
                   sortMode={view.sortMode}
                   onSort={view.handleSortChange}
                   filters={view.filters}

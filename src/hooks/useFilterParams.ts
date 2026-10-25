@@ -11,6 +11,7 @@ const SET_FILTER_KEYS = [
   "shortCodes",
   "misc",
   "aiVerdicts",
+  "conservation",
 ] as const;
 type SetFilterKey = (typeof SET_FILTER_KEYS)[number];
 const DEFAULT_SORT: SortMode = "newest";
@@ -36,6 +37,7 @@ function parseFiltersFromURL(): InitialState {
     shortCodes: new Set(params.get("plants")?.split(",").filter(Boolean) ?? []),
     misc: new Set(params.get("misc")?.split(",").filter(Boolean) ?? []),
     aiVerdicts: new Set(params.get("ecoFit")?.split(",").filter(Boolean) ?? []),
+    conservation: new Set(params.get("conservation")?.split(",").filter(Boolean) ?? []),
     searchQuery: params.get("q") ?? "",
   };
 
@@ -61,6 +63,7 @@ const KEY_TO_PARAM: Record<SetFilterKey, string> = {
   shortCodes: "plants",
   misc: "misc",
   aiVerdicts: "ecoFit",
+  conservation: "conservation",
 };
 
 export function buildParams(

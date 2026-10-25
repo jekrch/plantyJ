@@ -62,7 +62,7 @@ def main() -> int:
     # so partial coverage of the known sources signals pending work. We don't
     # check taxonomy/description directly — hybrids legitimately end up with
     # empty fields after processing.
-    known_sources = {"gbif", "powo", "wikipedia", "inaturalist", "wikidata", "natureserve"}
+    known_sources = {"gbif", "powo", "wikipedia", "inaturalist", "wikidata", "natureserve", "inat-phenology"}
     needs_species_backfill = False
     for plant in plants:
         full_name = (plant.get("fullName") or "").strip()

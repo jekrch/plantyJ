@@ -5,6 +5,7 @@ SOURCE_POWO = "powo"
 SOURCE_INATURALIST = "inaturalist"
 SOURCE_WIKIDATA = "wikidata"
 SOURCE_NATURESERVE = "natureserve"
+SOURCE_INAT_PHENOLOGY = "inat-phenology"
 
 def has_source(entry: dict, source_id: str) -> bool:
     return source_id in entry.get("sources", [])

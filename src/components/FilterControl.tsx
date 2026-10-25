@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import type { AIAnalysis, Annotation, Organism, Zone } from "../types";
+import type { AIAnalysis, Annotation, Organism, Species, Zone } from "../types";
 import type { Filters } from "../utils/filtering";
 import {
   hasActiveFilters,
@@ -15,6 +15,7 @@ interface FilterControlProps {
   zones: Zone[];
   annotations: Annotation[];
   aiAnalyses?: AIAnalysis[];
+  speciesByShortCode?: Map<string, Species>;
   filters: Filters;
   onFiltersChange: (filters: Filters) => void;
 }
@@ -24,6 +25,7 @@ export default function FilterControl({
   zones,
   annotations,
   aiAnalyses = [],
+  speciesByShortCode,
   filters,
   onFiltersChange,
 }: FilterControlProps) {
@@ -32,14 +34,22 @@ export default function FilterControl({
   const active = hasActiveFilters(filters);
   const count = activeFilterCount(filters);
 
-  const { tagItems, zoneItems, postedByItems, shortCodeItems, verdictItems } = useMemo(
-    () => computeFacets(organisms, filters, zones, annotations, aiAnalyses),
-    [organisms, filters, zones, annotations, aiAnalyses],
-  );
+  const { tagItems, zoneItems, postedByItems, shortCodeItems, verdictItems, conservationItems } =
+    useMemo(
+      () => computeFacets(organisms, filters, zones, annotations, aiAnalyses, speciesByShortCode),
+      [organisms, filters, zones, annotations, aiAnalyses, speciesByShortCode],
+    );
 
   const toggleInSet = useCallback(
     (
-      key: "tags" | "zoneCodes" | "postedBy" | "shortCodes" | "misc" | "aiVerdicts",
+      key:
+        | "tags"
+        | "zoneCodes"
+        | "postedBy"
+        | "shortCodes"
+        | "misc"
+        | "aiVerdicts"
+        | "conservation",
       value: string,
     ) => {
       const next = new Set(filters[key]);
@@ -170,6 +180,12 @@ export default function FilterControl({
               items={verdictItems}
               selected={filters.aiVerdicts}
               onToggle={(v) => toggleInSet("aiVerdicts", v)}
+            />
+            <FacetSection
+              title="CONSERVATION"
+              items={conservationItems}
+              selected={filters.conservation}
+              onToggle={(v) => toggleInSet("conservation", v)}
             />
 
             <div className="border-t border-ink-faint/10">

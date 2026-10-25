@@ -2,29 +2,17 @@ import { memo, useId, useRef, useState, useEffect } from "react";
 import type { NeighborMap } from "../adjacency";
 import type { EdgeSpans } from "./fillerLabelLayout";
 import FillerLabels, { MergedFillerLabels, type MergedLabelMember } from "./FillerLabels";
-
-// Block-print inks: tone-on-tone greens on the raised surface, plus a muted
-// ochre used sparingly for berries. Opaque on purpose — the leaf veins are
-// "cut" by drawing them in the paper color. Two leaf tones alternate between
-// the corner and half-drop sprigs, like a two-block print, so the repeat has
-// depth instead of reading as one flat stamp.
-// The paper sits just above the page background (--color-surface, #0b140d) so
-// fillers read as part of the page rather than raised cards.
-const PAPER = "#0d1710";
-const INK_STEM_FRONT = "#203c28";
-const INK_STEM_BACK = "#1a3022";
-const INK_LEAF_FRONT = "#2b4d33";
-const INK_LEAF_BACK = "#1f3927";
-const INK_BERRY = "#594b30";
-
-// Lighting: a soft wash from the upper left and a gentle falloff toward the
-// edges, so each filler sits like an inset panel of paper rather than a flat
-// fill. Both are very low opacity on purpose.
-const LIGHT_OPACITY = 0.07;
-const SHADE_OPACITY = 0.28;
+import {
+  INK_BERRY,
+  INK_LEAF_BACK,
+  INK_LEAF_FRONT,
+  INK_STEM_BACK,
+  INK_STEM_FRONT,
+  PAPER,
+} from "./hatchPalette";
 
 // Pattern strength behind month labels, relative to regular fillers.
-const MONTH_PATTERN_OPACITY = 0.6;
+const MONTH_PATTERN_OPACITY = 0.85;
 
 // Month labels never set larger than the header logo (text-xl).
 const MONTH_MAX_FONT_SIZE = 20;
@@ -236,8 +224,6 @@ function HatchFiller({
   shape = null,
 }: HatchFillerProps) {
   const patternId = useId();
-  const lightId = `${patternId}-light`;
-  const shadeId = `${patternId}-shade`;
   const clipId = `${patternId}-clip`;
   const containerRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 900, height: 600 });
@@ -361,14 +347,6 @@ function HatchFiller({
               }
             />
           </pattern>
-          <radialGradient id={lightId} cx="0.3" cy="0.2" r="0.9">
-            <stop offset="0" stopColor="#e8f2df" stopOpacity={LIGHT_OPACITY} />
-            <stop offset="1" stopColor="#e8f2df" stopOpacity="0" />
-          </radialGradient>
-          <radialGradient id={shadeId} cx="0.5" cy="0.5" r="0.75">
-            <stop offset="0.55" stopColor="#050a06" stopOpacity="0" />
-            <stop offset="1" stopColor="#050a06" stopOpacity={SHADE_OPACITY} />
-          </radialGradient>
           {shape && (
             <clipPath id={clipId}>
               {shape.members.map((m) => (
@@ -387,8 +365,8 @@ function HatchFiller({
             </clipPath>
           )}
         </defs>
-        {/* One pattern, light and shade across the whole body, so merged
-            fillers read as a single sheet with no seam at the joins. */}
+        {/* One pattern across the whole body, so merged fillers read as a
+            single sheet with no seam at the joins. */}
         <g clipPath={clip}>
           <rect width="100%" height="100%" fill={PAPER} />
           <rect
@@ -399,14 +377,6 @@ function HatchFiller({
             // an even dim (no band, no edge) keeps the text clean.
             opacity={framed ? MONTH_PATTERN_OPACITY : 1}
           />
-          {/* The lighting gradients scale with the box, so on a wide, short
-              month strip they smear into soft bands along the edges. */}
-          {!framed && (
-            <>
-              <rect width="100%" height="100%" fill={`url(#${lightId})`} />
-              <rect width="100%" height="100%" fill={`url(#${shadeId})`} />
-            </>
-          )}
         </g>
         {stampContent}
       </svg>

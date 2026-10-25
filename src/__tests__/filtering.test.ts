@@ -6,6 +6,7 @@ import {
   getEffectiveTags,
   applyFilters,
   computeFacets,
+  conservationCategories,
 } from "../utils/filtering";
 import type { Annotation, Species, Zone } from "../types";
 import type { Filters } from "../utils/filtering";
@@ -46,6 +47,7 @@ describe("activeFilterCount", () => {
       shortCodes: new Set<string>(),
       misc: new Set(["x"]),
       aiVerdicts: new Set<string>(),
+      conservation: new Set<string>(),
       searchQuery: "",
     };
     expect(activeFilterCount(f)).toBe(4);
@@ -414,5 +416,71 @@ describe("computeFacets", () => {
     const { postedByItems } = computeFacets(organisms, EMPTY_FILTERS, zones);
     expect(postedByItems.find((p) => p.value === "alice")?.count).toBe(2);
     expect(postedByItems.find((p) => p.value === "bob")?.count).toBe(1);
+  });
+});
+
+describe("conservation", () => {
+  const sp = (id: string, conservation: Species["conservation"]): Species => ({
+    id,
+    fullName: null,
+    commonName: null,
+    description: null,
+    vernacularNames: [],
+    taxonomy: null,
+    nativeRange: null,
+    references: [],
+    sources: [],
+    conservation,
+  });
+  const mn = (rank: string, native: boolean, exotic: boolean) => ({
+    code: "MN",
+    rank,
+    label: null,
+    native,
+    exotic,
+  });
+  const speciesByShortCode = new Map([
+    ["zizia", sp("zizia", { globalRank: "G5", globalLabel: null, state: mn("SNR", true, false) })],
+    ["witch", sp("witch", { globalRank: "G5", globalLabel: null, state: mn("S2", true, false) })],
+    ["phlox", sp("phlox", { globalRank: "G5", globalLabel: null, state: mn("SNA", false, true) })],
+    ["ginseng", sp("ginseng", { globalRank: "G3", globalLabel: null, state: null })],
+    ["ant", sp("ant", { globalRank: "G5", globalLabel: null, state: null })],
+  ]);
+
+  it("categorizes species from NatureServe ranks", () => {
+    expect(conservationCategories(speciesByShortCode.get("zizia"))).toEqual(["mn-native"]);
+    expect(conservationCategories(speciesByShortCode.get("witch"))).toEqual([
+      "mn-native",
+      "at-risk",
+    ]);
+    expect(conservationCategories(speciesByShortCode.get("phlox"))).toEqual(["non-native"]);
+    expect(conservationCategories(speciesByShortCode.get("ginseng"))).toEqual(["at-risk"]);
+  });
+
+  it("does not treat a missing Minnesota record as non-native", () => {
+    expect(conservationCategories(speciesByShortCode.get("ant"))).toEqual([]);
+    expect(conservationCategories(undefined)).toEqual([]);
+  });
+
+  const items = ["zizia", "witch", "phlox", "ginseng", "ant", "unknown"].map((code) =>
+    organism({ id: code, shortCode: code }),
+  );
+
+  it("applyFilters ORs the selected categories", () => {
+    const filters = { ...EMPTY_FILTERS, conservation: new Set(["non-native", "at-risk"]) };
+    expect(applyFilters(items, filters, [], speciesByShortCode).map((p) => p.id)).toEqual([
+      "witch",
+      "phlox",
+      "ginseng",
+    ]);
+  });
+
+  it("computeFacets counts categories in display order", () => {
+    const { conservationItems } = computeFacets(items, EMPTY_FILTERS, [], [], [], speciesByShortCode);
+    expect(conservationItems).toEqual([
+      expect.objectContaining({ value: "mn-native", label: "MN native", count: 2 }),
+      expect.objectContaining({ value: "non-native", label: "Non-native", count: 1 }),
+      expect.objectContaining({ value: "at-risk", label: "At risk", count: 2 }),
+    ]);
   });
 });

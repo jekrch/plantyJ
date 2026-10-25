@@ -23,6 +23,7 @@ describe("buildParams", () => {
           zoneCodes: new Set(["Z1"]),
           shortCodes: new Set(["rose"]),
           aiVerdicts: new Set(["good"]),
+          conservation: new Set(["mn-native", "at-risk"]),
         }),
         "newest",
         "gallery",
@@ -33,6 +34,7 @@ describe("buildParams", () => {
     expect(p.get("zones")).toBe("Z1");
     expect(p.get("plants")).toBe("rose");
     expect(p.get("ecoFit")).toBe("good");
+    expect(p.get("conservation")).toBe("mn-native,at-risk");
   });
 
   it("includes a non-empty trimmed search query", () => {

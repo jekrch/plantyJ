@@ -196,7 +196,10 @@ function ArrowBtn({
   );
 }
 
-let hasMountedBefore = false;
+// Tree/Web render the control in the header while the other modes render it in
+// <main>, so switching between those groups remounts it. Remembering the last
+// active segment lets the new instance start the indicator there and slide over.
+let lastActive: ViewMode | null = null;
 
 function SegmentedControl({
   segments,
@@ -215,13 +218,21 @@ function SegmentedControl({
     width: number;
   } | null>(null);
   const [hasMeasured, setHasMeasured] = useState(false);
-  const [visible, setVisible] = useState(!hasMountedBefore);
+  const [fromMode, setFromMode] = useState<ViewMode | null>(() =>
+    lastActive !== null && lastActive !== active ? lastActive : null,
+  );
+  const [visible, setVisible] = useState(() => lastActive === null || lastActive !== active);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+  const target = fromMode ?? active;
+
+  useEffect(() => {
+    lastActive = active;
+  }, [active]);
 
   useLayoutEffect(() => {
     const measure = () => {
-      const btn = btnRefs.current[active];
+      const btn = btnRefs.current[target];
       if (!btn) return;
       setIndicator({ left: btn.offsetLeft, width: btn.offsetWidth });
       setHasMeasured(true);
@@ -241,7 +252,7 @@ function SegmentedControl({
       window.removeEventListener("resize", measure);
       ro?.disconnect();
     };
-  }, [active]);
+  }, [target]);
 
   useLayoutEffect(() => {
     const el = scrollRef.current;
@@ -273,15 +284,21 @@ function SegmentedControl({
     }
   }, [active]);
 
+  // Wait two frames so the indicator's starting position is committed to style
+  // before moving it, otherwise the browser skips the transition.
   useEffect(() => {
-    if (!hasMeasured) return;
-    if (!hasMountedBefore) {
-      hasMountedBefore = true;
-      return;
-    }
+    if (!hasMeasured || fromMode === null) return;
+    let id = requestAnimationFrame(() => {
+      id = requestAnimationFrame(() => setFromMode(null));
+    });
+    return () => cancelAnimationFrame(id);
+  }, [hasMeasured, fromMode]);
+
+  useEffect(() => {
+    if (!hasMeasured || visible) return;
     const id = requestAnimationFrame(() => setVisible(true));
     return () => cancelAnimationFrame(id);
-  }, [hasMeasured]);
+  }, [hasMeasured, visible]);
 
   return (
     <div className="relative max-w-full">

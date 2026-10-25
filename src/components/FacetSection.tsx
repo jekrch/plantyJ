@@ -1,6 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 import type { FacetItem } from "../utils/filtering";
+import { Tooltip } from "./Floating";
 
 interface FacetSectionProps {
   title: string;
@@ -54,7 +55,7 @@ export default function FacetSection({ title, items, selected, onToggle }: Facet
           <div className="px-1 pb-1.5">
             {items.map((item) => {
               const isActive = selected.has(item.value);
-              return (
+              const button = (
                 <button
                   key={item.value}
                   onClick={() => onToggle(item.value)}
@@ -86,6 +87,13 @@ export default function FacetSection({ title, items, selected, onToggle }: Facet
                     {item.count}
                   </span>
                 </button>
+              );
+              return item.hint ? (
+                <Tooltip key={item.value} className="block" tapToggle={false} content={item.hint}>
+                  {button}
+                </Tooltip>
+              ) : (
+                button
               );
             })}
           </div>

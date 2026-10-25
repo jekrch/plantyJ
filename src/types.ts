@@ -99,6 +99,48 @@ export interface Species {
   nativeRange: string | null;
   references: SpeciesReference[];
   sources: string[];
+  phenology?: SpeciesPhenology | null;
+  conservation?: SpeciesConservation | null;
+}
+
+// NatureServe rounded ranks: G (global), T (infraspecific), S (state), e.g.
+// "G5", "T4", "S3", "S5B", "SNR", "SNA".
+export interface SpeciesConservation {
+  globalRank: string | null;
+  globalLabel: string | null;
+  state: {
+    code: string;
+    rank: string | null;
+    label: string | null;
+    native: boolean;
+    exotic: boolean;
+  } | null;
+}
+
+export type PhenologyStageId =
+  | "budding"
+  | "flowering"
+  | "fruiting"
+  | "leafOut"
+  | "fallColor"
+  | "egg"
+  | "larva"
+  | "nymph"
+  | "pupa"
+  | "juvenile"
+  | "adult";
+
+export interface PhenologyStage {
+  stage: PhenologyStageId;
+  label: string;
+  // iNaturalist observation counts for Jan..Dec.
+  months: number[];
+}
+
+// Monthly life-cycle observation counts from iNaturalist annotations.
+export interface SpeciesPhenology {
+  place: string;
+  stages: PhenologyStage[];
 }
 
 export interface TaxaInfo {

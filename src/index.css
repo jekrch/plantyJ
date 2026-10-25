@@ -430,3 +430,64 @@ button,
     animation: none;
   }
 }
+
+/* ── Floating panels (tooltips, info popovers) ────────────────────────────────
+   Rise toward the anchor from the side they open on. Origin is set inline at
+   the arrow so the scale grows out of the trigger. */
+.float-panel {
+  --float-shift: -4px;
+}
+
+.float-panel[data-side="top"] {
+  --float-shift: 4px;
+}
+
+@keyframes floatIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--float-shift)) scale(0.96);
+  }
+}
+
+@keyframes floatOut {
+  to {
+    opacity: 0;
+    transform: translateY(var(--float-shift)) scale(0.98);
+  }
+}
+
+.float-in {
+  animation: floatIn 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.float-out {
+  animation: floatOut 120ms ease-in forwards;
+  pointer-events: none;
+}
+
+/* Conservation spectrum: segments fade in left to right, then the species'
+   own segment rises into place. */
+@keyframes specSegIn {
+  from {
+    opacity: 0;
+    transform: scaleY(0.3);
+  }
+}
+
+.spec-seg-in {
+  animation: specSegIn 260ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 35ms);
+  transform-origin: bottom;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float-in,
+  .spec-seg-in {
+    animation: none;
+  }
+
+  .float-out {
+    animation: none;
+    opacity: 0;
+  }
+}

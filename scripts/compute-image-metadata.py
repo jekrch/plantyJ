@@ -5,8 +5,8 @@ enrichment records in public/data/species.json.
 
 For images: dimensions, perceptual hash, and dominant CIELAB colors.
 For species: GBIF taxonomy + vernacular names, POWO native range,
-Wikipedia description, iNaturalist observation counts, Wikidata 
-traits (edibility/toxicity), and IUCN Red List conservation status.
+Wikipedia description, iNaturalist observation counts, Wikidata
+links, and NatureServe conservation status (global + Minnesota).
 
 Each enrichment source is best-effort — failures and rate limits are
 caught so a third-party hiccup doesn't fail the build.
@@ -21,6 +21,7 @@ from metadata.sources.gbif import backfill_gbif
 from metadata.sources.powo import backfill_powo
 from metadata.sources.wikipedia import backfill_wikipedia
 from metadata.sources.inaturalist import backfill_inaturalist
+from metadata.sources.inat_phenology import backfill_inat_phenology
 from metadata.sources.wikidata import backfill_wikidata
 from metadata.sources.natureserve import backfill_natureserve
 from metadata.sources.taxonomy_wiki import build_taxa_registry
@@ -132,7 +133,11 @@ def main():
         inat_count = backfill_inaturalist(species_entries)
         print(f"  iNaturalist processed {inat_count} entries.")
 
-        print("Backfilling Wikidata traits...")
+        print("Backfilling iNaturalist phenology...")
+        phenology_count = backfill_inat_phenology(species_entries)
+        print(f"  iNat phenology processed {phenology_count} entries.")
+
+        print("Backfilling Wikidata links...")
         wikidata_count = backfill_wikidata(species_entries)
         print(f"  Wikidata processed {wikidata_count} entries.")
 

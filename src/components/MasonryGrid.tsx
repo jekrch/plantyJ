@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback, useEffect, useLayoutEffect, useMemo } from "react";
 import type { CSSProperties } from "react";
-import type { AIAnalysis, Annotation, Organism, Zone } from "../types";
+import type { AIAnalysis, Annotation, Organism, Species, Zone } from "../types";
 import type { SortMode } from "../utils/sorting";
 import { computeMonthMarkers } from "../utils/sorting";
 import type { Filters } from "../utils/filtering";
@@ -444,6 +444,7 @@ interface MasonryGridProps {
   removedSet?: Set<string>;
   annotations: Annotation[];
   aiAnalyses?: AIAnalysis[];
+  speciesByShortCode?: Map<string, Species>;
   sortMode: SortMode;
   onSort: (mode: SortMode) => void;
   filters: Filters;
@@ -460,6 +461,7 @@ export default function MasonryGrid({
   removedSet,
   annotations,
   aiAnalyses,
+  speciesByShortCode,
   sortMode,
   onSort,
   filters,
@@ -659,6 +661,7 @@ export default function MasonryGrid({
             zones={zones}
             annotations={annotations}
             aiAnalyses={aiAnalyses}
+            speciesByShortCode={speciesByShortCode}
             filters={filters}
             onFiltersChange={onFiltersChange}
           />

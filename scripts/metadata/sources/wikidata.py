@@ -1,4 +1,8 @@
-"""Wikidata enrichment — extracts semantic traits like toxicity and edibility."""
+"""Wikidata enrichment — links each species to its Wikidata item.
+
+Wikidata has no general toxicity or edibility property for plants and animals
+(P789 "edibility" covers mushrooms only), so no traits are extracted here.
+"""
 import re
 import sys
 import time
@@ -12,16 +16,12 @@ from ..seed import save_species
 WIKI_API = "https://www.wikidata.org/w/api.php"
 WIKIDATA_PORTAL = "https://www.wikidata.org/wiki/{id}"
 
-# P4881 = toxicity, P3064 = edible parts, P225 = taxon name
-TRAIT_PROPERTIES = {"P4881", "P3064"} 
-
-
-def fetch_wikidata_traits(title: str, health: IntegrationHealth) -> dict | None:
+def fetch_wikidata_id(title: str, health: IntegrationHealth) -> str | None:
     params = {
         "action": "wbgetentities",
         "sites": "enwiki",
         "titles": title.replace("_", " "),
-        "props": "claims",
+        "props": "info",
         "format": "json",
     }
     try:
@@ -45,14 +45,7 @@ def fetch_wikidata_traits(title: str, health: IntegrationHealth) -> dict | None:
         return None
 
     # Get the first matching entity (Q-ID)
-    entity_id = next(iter(entities))
-    claims = entities[entity_id].get("claims", {})
-    
-    return {
-        "id": entity_id,
-        "isToxic": "P4881" in claims,
-        "isEdible": "P3064" in claims
-    }
+    return next(iter(entities))
 
 
 def backfill_wikidata(species_entries: list[dict]) -> int:
@@ -72,19 +65,13 @@ def backfill_wikidata(species_entries: list[dict]) -> int:
         base_name = re.sub(r"\s*'[^']+'\s*$", "", full_name).strip()
 
         print(f"  Wikidata lookup: {base_name}")
-        traits = fetch_wikidata_traits(base_name, health)
-        
-        if traits:
-            # We only record these if they are definitively true in the DB
-            if traits.get("isToxic"):
-                entry["toxic"] = True
-            if traits.get("isEdible"):
-                entry["edible"] = True
+        entity_id = fetch_wikidata_id(base_name, health)
 
+        if entity_id:
             ensure_reference(
                 entry,
                 "Wikidata",
-                WIKIDATA_PORTAL.format(id=traits["id"]),
+                WIKIDATA_PORTAL.format(id=entity_id),
             )
 
         mark_source(entry, SOURCE_WIKIDATA)

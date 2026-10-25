@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { INK_BERRY, INK_LEAF_BACK, INK_LEAF_FRONT } from "./hatchPalette";
 
 const VIEW_W = 600;
 const VIEW_H = 300;
@@ -8,9 +9,24 @@ const MAX_Y = VIEW_H - 8;
 const MAX_DEPTH = 2;
 const MIN_WIDTH = 0.45;
 
-const COLOR_TRUNK = "var(--color-ink-faint)"; //"#6b4423";
-const COLOR_BRANCH = "#8b6f47";
-const COLOR_ROOTLET = "#b08968";
+// Same block-print inks as the hatch fillers: the roots are one green block,
+// with a channel "cut" down the thicker roots in the page color (like the leaf
+// veins) and a few ochre nodules at the tips (like the berries).
+const INK_ROOT = INK_LEAF_FRONT;
+const INK_ROOTLET = INK_LEAF_BACK;
+const INK_NODULE = INK_BERRY;
+const CUT = "var(--color-surface)";
+
+// Roots thinner than this take the recessive tone.
+const ROOTLET_BELOW = 2;
+// Channels are cut only where the root is wide enough to hold one.
+const CHANNEL_MIN_WIDTH = 7;
+const CHANNEL_WIDTH = 1.1;
+// Share of the outermost root tips that carry a nodule.
+const NODULE_CHANCE = 0.3;
+// The left half stays this far left of center, so mirrored roots meet the
+// midline instead of crossing over and tangling.
+const HALF_LIMIT_X = TX - 5;
 
 interface Seg {
   ax: number;
@@ -21,7 +37,9 @@ interface Seg {
   by: number;
   wa: number;
   wb: number;
-  color: string;
+  depth: number;
+  /** No child roots grow from this segment's end. */
+  tip: boolean;
 }
 
 interface Quote {
@@ -73,12 +91,6 @@ function mulberry32(seed: number) {
   };
 }
 
-function colorForWidth(w: number): string {
-  if (w > 9) return COLOR_TRUNK;
-  if (w > 3.2) return COLOR_BRANCH;
-  return COLOR_ROOTLET;
-}
-
 function branch(
   segs: Seg[],
   rng: () => number,
@@ -97,7 +109,7 @@ function branch(
   if (a < 0.04) a = 0.04;
   if (a > Math.PI - 0.04) a = Math.PI - 0.04;
 
-  let ex = sx + Math.cos(a) * length;
+  let ex = Math.min(HALF_LIMIT_X, sx + Math.cos(a) * length);
   let ey = sy + Math.sin(a) * length;
 
   if (ey > MAX_Y) {
@@ -111,7 +123,7 @@ function branch(
   const curve = (rng() - 0.5) * 0.22;
   const perpX = -Math.sin(a),
     perpY = Math.cos(a);
-  const mx = (sx + ex) / 2 + perpX * length * curve;
+  const mx = Math.min(HALF_LIMIT_X, (sx + ex) / 2 + perpX * length * curve);
   const my = (sy + ey) / 2 + perpY * length * curve;
 
   const endWidth = Math.max(MIN_WIDTH, width * (0.55 + rng() * 0.12));
@@ -150,45 +162,97 @@ function branch(
     by: ey,
     wa: width,
     wb: endWidth,
-    color: colorForWidth(width),
+    depth,
+    tip: childSegs.length === 0,
   });
 }
 
+function mirror(s: Seg): Seg {
+  return { ...s, ax: 2 * TX - s.ax, mx: 2 * TX - s.mx, bx: 2 * TX - s.bx };
+}
+
+/**
+ * Left half of the root system, mirrored to the right — a symmetric motif
+ * reads as designed rather than simulated.
+ */
 function buildSegments(): Seg[] {
-  const segs: Seg[] = [];
+  const half: Seg[] = [];
   const rng = mulberry32(11);
 
   const primaries = [
     { angle: Math.PI * 0.93, length: 95, width: 10, xOff: -13 },
     { angle: Math.PI * 0.78, length: 110, width: 13, xOff: -8 },
-    { angle: Math.PI * 0.62, length: 130, width: 15, xOff: -3 },
-    { angle: Math.PI * 0.5, length: 145, width: 17, xOff: 0 },
-    { angle: Math.PI * 0.35, length: 130, width: 15, xOff: 3 },
-    { angle: Math.PI * 0.22, length: 110, width: 13, xOff: 8 },
-    { angle: Math.PI * 0.07, length: 95, width: 10, xOff: 13 },
+    { angle: Math.PI * 0.64, length: 130, width: 15, xOff: -4 },
+    { angle: Math.PI * 0.56, length: 145, width: 16, xOff: -1 },
   ];
 
   for (const p of primaries) {
-    branch(segs, rng, TX + p.xOff, TRUNK_BASE_Y, p.angle, p.length, p.width, 0);
+    branch(half, rng, TX + p.xOff, TRUNK_BASE_Y, p.angle, p.length, p.width, 0);
   }
+
+  const segs = [...half, ...half.map(mirror)];
 
   // Trunk drawn last so it covers every primary's joint at the base
   segs.push({
     ax: TX,
     ay: 0,
-    mx: TX + 1,
+    mx: TX,
     my: TRUNK_BASE_Y * 0.5,
     bx: TX,
     by: TRUNK_BASE_Y,
     wa: 28,
     wb: 34,
-    color: COLOR_TRUNK,
+    depth: -1,
+    tip: false,
   });
 
   return segs;
 }
 
+/**
+ * Centerline of the trunk or a primary root, trimmed where the root narrows
+ * below CHANNEL_MIN_WIDTH so the cut never runs out to a hairline tip. Deeper
+ * roots overlap their siblings near the joints, where cuts read as stray
+ * dashes, so they stay solid.
+ */
+function channelPath(s: Seg): string | null {
+  if (s.depth > 0 || s.wa < CHANNEL_MIN_WIDTH) return null;
+  const t =
+    s.wb >= CHANNEL_MIN_WIDTH ? 1 : (s.wa - CHANNEL_MIN_WIDTH) / (s.wa - s.wb);
+  if (t < 0.25) return null;
+  const { ax, ay } = s;
+  // Sub-curve [0, t] of the quadratic A–M–B.
+  const cx = ax + (s.mx - ax) * t;
+  const cy = ay + (s.my - ay) * t;
+  const u = 1 - t;
+  const ex = u * u * ax + 2 * u * t * s.mx + t * t * s.bx;
+  const ey = u * u * ay + 2 * u * t * s.my + t * t * s.by;
+  const f = (n: number) => n.toFixed(1);
+  return `M ${f(ax)} ${f(ay)} Q ${f(cx)} ${f(cy)} ${f(ex)} ${f(ey)}`;
+}
+
+interface Nodule {
+  x: number;
+  y: number;
+  r: number;
+}
+
+/** Ochre nodules on a mirrored subset of the outermost tips. */
+function buildNodules(segs: Seg[]): Nodule[] {
+  const rng = mulberry32(5);
+  const tips = segs.filter((s) => s.tip && s.depth === MAX_DEPTH && s.bx <= TX);
+  const out: Nodule[] = [];
+  for (const s of tips) {
+    if (rng() >= NODULE_CHANCE) continue;
+    const r = 1.9 + rng() * 0.6;
+    out.push({ x: s.bx, y: s.by, r }, { x: 2 * TX - s.bx, y: s.by, r });
+  }
+  return out;
+}
+
 const SEGMENTS = buildSegments();
+const CHANNELS = SEGMENTS.map(channelPath).filter((d): d is string => d !== null);
+const NODULES = buildNodules(SEGMENTS);
 
 export default function FooterRoots() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
@@ -251,7 +315,25 @@ export default function FooterRoots() {
           aria-hidden="true"
         >
           {SEGMENTS.map((seg, i) => (
-            <path key={i} d={taperedPath(seg)} fill={seg.color} />
+            <path
+              key={i}
+              d={taperedPath(seg)}
+              fill={seg.wa < ROOTLET_BELOW ? INK_ROOTLET : INK_ROOT}
+            />
+          ))}
+          {/* Channels go on after every fill, since parents overdraw their joints. */}
+          {CHANNELS.map((d, i) => (
+            <path
+              key={i}
+              d={d}
+              stroke={CUT}
+              strokeWidth={CHANNEL_WIDTH}
+              strokeLinecap="round"
+              fill="none"
+            />
+          ))}
+          {NODULES.map((n, i) => (
+            <circle key={i} cx={n.x} cy={n.y} r={n.r} fill={INK_NODULE} />
           ))}
         </svg>
       </div>
