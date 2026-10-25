@@ -259,10 +259,10 @@ function computeLayout(
   const placeholder: StampDef = { type: "word", value: "" };
   const emptyNeighbors: NeighborMap = {};
 
-  const shortestCol = () => {
+  const shortestCol = (preferLast = false) => {
     let target = 0;
     for (let i = 1; i < colCount; i++) {
-      if (heights[i] < heights[target]) target = i;
+      if (preferLast ? heights[i] <= heights[target] : heights[i] < heights[target]) target = i;
     }
     return target;
   };
@@ -272,7 +272,12 @@ function computeLayout(
 
     const monthLabel = monthMarkers.get(organism.id);
     if (monthLabel) {
-      const col = shortestCol();
+      // The leading header sits under the controls, which are the same height
+      // at rest. Ties go right, under sort: while the filter is open (or
+      // closing) its column is the taller one, so a left-hand tie-break would
+      // jump the header across — shoving the first card down — on the very
+      // last frame of the close.
+      const col = shortestCol(idx === 0);
       const headerH = colWidth / MONTH_HEADER_ASPECT;
       items.push({
         kind: "month",
