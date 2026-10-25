@@ -8,7 +8,9 @@ import FillerLabels, { MergedFillerLabels, type MergedLabelMember } from "./Fill
 // "cut" by drawing them in the paper color. Two leaf tones alternate between
 // the corner and half-drop sprigs, like a two-block print, so the repeat has
 // depth instead of reading as one flat stamp.
-const PAPER = "var(--color-surface-raised, #112014)";
+// The paper sits just above the page background (--color-surface, #0b140d) so
+// fillers read as part of the page rather than raised cards.
+const PAPER = "#0d1710";
 const INK_STEM_FRONT = "#203c28";
 const INK_STEM_BACK = "#1a3022";
 const INK_LEAF_FRONT = "#2b4d33";
@@ -22,7 +24,10 @@ const LIGHT_OPACITY = 0.07;
 const SHADE_OPACITY = 0.28;
 
 // Pattern strength behind month labels, relative to regular fillers.
-const MONTH_PATTERN_OPACITY = 0.5;
+const MONTH_PATTERN_OPACITY = 0.6;
+
+// Month labels never set larger than the header logo (text-xl).
+const MONTH_MAX_FONT_SIZE = 20;
 
 const TEXT_FILL_COLOR = "var(--color-ink-muted)";
 
@@ -32,8 +37,8 @@ const PATTERN_SCALE = 1.8;
 // Space Mono metrics, in em: glyph advance and cap height.
 const SPACE_MONO_ADVANCE = 0.612;
 const SPACE_MONO_CAP_HEIGHT = 0.7;
-// Extra tracking (em) for framed labels so short uppercase text reads as a banner.
-const FRAMED_TRACKING = 0.14;
+// Tracking (em) for month labels, matching the header logo's `tracking-tight`.
+const LABEL_TRACKING = -0.025;
 
 // Matches Tailwind's `rounded-sm`, so merged bodies keep the single-filler corners.
 export const CORNER_RADIUS = 4;
@@ -278,10 +283,10 @@ function HatchFiller({
 
   if (word && framed) {
     const len = word.length;
-    const advance = SPACE_MONO_ADVANCE + FRAMED_TRACKING;
+    const advance = SPACE_MONO_ADVANCE + LABEL_TRACKING;
     const fitByWidth = (size.width * 0.85) / (len * advance);
-    const fontSize = Math.min(80, fitByWidth, size.height * 0.85) * textScale;
-    const tracking = fontSize * FRAMED_TRACKING;
+    const fontSize = Math.min(MONTH_MAX_FONT_SIZE, fitByWidth * textScale, size.height * 0.85 * textScale);
+    const tracking = fontSize * LABEL_TRACKING;
 
     stampContent = (
       <>
@@ -290,7 +295,7 @@ function HatchFiller({
           // it so the visible glyphs sit dead center.
           x={size.width / 2 + tracking / 2}
           // Alphabetic baseline offset by half the cap height centers the
-          // uppercase/digit glyphs optically, independent of font ascent/descent.
+          // capitals/digits optically, independent of font ascent/descent.
           y={size.height / 2 + (fontSize * SPACE_MONO_CAP_HEIGHT) / 2}
           textAnchor="middle"
           fontFamily="'Space Mono', monospace"
@@ -394,8 +399,14 @@ function HatchFiller({
             // an even dim (no band, no edge) keeps the text clean.
             opacity={framed ? MONTH_PATTERN_OPACITY : 1}
           />
-          <rect width="100%" height="100%" fill={`url(#${lightId})`} />
-          <rect width="100%" height="100%" fill={`url(#${shadeId})`} />
+          {/* The lighting gradients scale with the box, so on a wide, short
+              month strip they smear into soft bands along the edges. */}
+          {!framed && (
+            <>
+              <rect width="100%" height="100%" fill={`url(#${lightId})`} />
+              <rect width="100%" height="100%" fill={`url(#${shadeId})`} />
+            </>
+          )}
         </g>
         {stampContent}
       </svg>

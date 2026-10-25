@@ -689,7 +689,7 @@ export default function MasonryGrid({
                 }
               >
                 <HatchFiller
-                  assignedStamp={{ type: "word", value: item.label.toUpperCase() }}
+                  assignedStamp={{ type: "word", value: item.label }}
                   fillerIndex={0}
                   textColor="#b1c3ab" //#b1c3ab
                   textScale={0.65}
