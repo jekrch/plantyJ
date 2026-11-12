@@ -11,7 +11,10 @@
       "postedBy": "Jenny",
       "addedAt": "2026-11-12T03:11:23.123Z",
       "width": 1280,
-      "height": 960
+      "height": 960,
+      "bioclipSpeciesId": "Syringa vulgaris",
+      "bioclipCommonName": "Common lilac",
+      "bioclipScore": 0.4149
     },
     {
       "seq": 185,
@@ -27,7 +30,8 @@
       "height": 960,
       "bioclipSpeciesId": "Hygrophorus glutinosus",
       "bioclipCommonName": "",
-      "bioclipScore": 0.0905
+      "bioclipScore": 0.0905,
+      "bioclipWikiUrl": null
     },
     {
       "seq": 184,
@@ -1786,7 +1790,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Arsène's mountain-ash",
+      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -1980,7 +1984,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
     },
     {
       "seq": 72,
