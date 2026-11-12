@@ -1,0 +1,5 @@
+# What the skills' scripts need. Pinned to the versions deflare-zone-pic was tuned
+# with: its output depends on OpenCV's resampling and scipy's optimizer.
+numpy==2.2.6
+opencv-python-headless==4.10.0.84
+scipy==1.15.3
