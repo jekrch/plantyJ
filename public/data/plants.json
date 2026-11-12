@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "A foe",
+      "fullName": "Agastache foeniculum",
+      "commonName": "Anise Hyssop",
+      "variety": null
+    },
+    {
       "shortCode": "L con",
       "fullName": "Leucocybe connata",
       "commonName": "White Domecap",
