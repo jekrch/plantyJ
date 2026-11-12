@@ -1,6 +1,14 @@
 {
   "zonePics": [
     {
+      "id": "sy-1794452691",
+      "zoneCode": "sy",
+      "image": "images/zones/sy/1794452691.jpg",
+      "addedAt": "2026-11-12T03:04:53.367Z",
+      "postedBy": "Jenny",
+      "description": null
+    },
+    {
       "id": "fy-1794452552",
       "zoneCode": "fy",
       "image": "images/zones/fy/1794452552.jpg",
