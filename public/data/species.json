@@ -7995,6 +7995,56 @@
         ]
       }
     },
+    "leucocybe-connata": {
+      "id": "leucocybe-connata",
+      "fullName": "Leucocybe connata",
+      "commonName": "White Domecap",
+      "description": "",
+      "vernacularNames": [
+        "White Domecap"
+      ],
+      "taxonomy": {
+        "kingdom": "Fungi",
+        "phylum": "Basidiomycota",
+        "class": "Agaricomycetes",
+        "order": "Agaricales",
+        "family": "Tricholomataceae",
+        "genus": "Leucocybe",
+        "species": "Leucocybe connata",
+        "canonicalName": "Leucocybe connata"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/8189348"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/625290"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.1071845"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "inat-phenology",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 3518,
+      "phenology": null,
+      "conservation": {
+        "globalRank": "GNR",
+        "globalLabel": "Unranked",
+        "state": null
+      }
+    },
     "libellulidae": {
       "id": "libellulidae",
       "fullName": "Libellulidae",

@@ -970,5 +970,29 @@
   "Pyrrharctia": {
     "description": "Pyrrharctia is a genus of moths in the family Erebidae described by Packard in 1864. The species are known from North and Central America.",
     "url": "https://en.wikipedia.org/wiki/Pyrrharctia"
+  },
+  "Agaricales": {
+    "description": "The Agaricales are an order of fungi in the division Basidiomycota. As originally conceived, the order contained all the agarics, but subsequent research has shown that not all agarics are closely related and some belong in other orders, such as the Russulales and Boletales. Conversely, DNA research has also shown that many non-agarics, including some of the clavarioid fungi and gasteroid fungi belong within the Agaricales. The order has 46 extant families, more than 400 genera, and over 25,000 described species, along with six extinct genera known only from the fossil record. Species in the Agaricales range from the familiar Agaricus bisporus and the deadly Amanita virosa to the coral-like Clavaria zollingeri and bracket-like Fistulina hepatica.",
+    "url": "https://en.wikipedia.org/wiki/Agaricales"
+  },
+  "Agaricomycetes": {
+    "description": "The Agaricomycetes are a class of fungi in the division Basidiomycota. The taxon is roughly identical to that defined for the Homobasidiomycetes by Hibbett & Thorn, with the inclusion of Auriculariales and Sebacinales. It includes not only mushroom-forming fungi, but also most species placed in the deprecated taxa Gasteromycetes and Homobasidiomycetes. Within the subdivision Agaricomycotina, which already excludes the smut and rust fungi, the Agaricomycetes can be further defined by the exclusion of the classes Tremellomycetes and Dacrymycetes, which are generally considered to be jelly fungi. However, a few former \"jelly fungi\", such as Auricularia, are classified in the Agaricomycetes. According to a 2008 estimate, Agaricomycetes include 17 orders, 100 families, 1147 genera, and about 21000 species. Modern molecular phylogenetic analyses have been since used to help define several new orders in the Agaricomycetes: Amylocorticiales, Jaapiales, Stereopsidales, and Lepidostromatales.",
+    "url": "https://en.wikipedia.org/wiki/Agaricomycetes"
+  },
+  "Basidiomycota": {
+    "description": "The Basidiomycota are one of two large divisions that, together with the Ascomycota, constitute the subkingdom Dikarya within the kingdom Fungi. Members are known as basidiomycetes. This division includes: agarics, puffballs, stinkhorns, bracket fungi, other polypores, jelly fungi, boletes, chanterelles, earth stars, smuts, bunts, rusts, mirror yeasts, and Cryptococcus, the human pathogenic yeast.",
+    "url": "https://en.wikipedia.org/wiki/Basidiomycota"
+  },
+  "Fungi": {
+    "description": "A fungus is any member of the group of eukaryotic organisms that includes yeasts, molds, and mushrooms. These organisms are classified in the biological kingdom Fungi.",
+    "url": "https://en.wikipedia.org/wiki/Fungus"
+  },
+  "Leucocybe": {
+    "description": "Leucocybe is a small mushroom genus, consisting of 3 named species that were formerly placed in the genus Clitocybe, which they resemble in overall appearance and morphology. They occur in woodlands growing on tree litter or disturbed ground.",
+    "url": "https://en.wikipedia.org/wiki/Leucocybe"
+  },
+  "Tricholomataceae": {
+    "description": "The Tricholomataceae are a large family of fungi within the order Agaricales. Originally a classic \"wastebasket taxon\", the family included any white-, yellow-, or pink-spored genera in the Agaricales not already classified as belonging to e.g. the Amanitaceae, Lepiotaceae, Hygrophoraceae, Pluteaceae, or Entolomataceae.",
+    "url": "https://en.wikipedia.org/wiki/Tricholomataceae"
   }
 }
