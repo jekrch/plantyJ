@@ -66,32 +66,57 @@ export default function FilterControl({
 
   return (
     <div className="filter-control panel-item overflow-hidden select-none">
-      <button
-        onClick={() => setOpen((prev) => !prev)}
-        className="
-          w-full flex items-center
-          px-3 py-2.5
-          transition-colors duration-150
-          cursor-pointer
-        "
-      >
-        <span className="flex items-center gap-1.5">
-          <span className="font-display text-[11px] tracking-wider text-ink/80 uppercase">
-            FILTER
-          </span>
-          {active && (
-            <span className="font-display text-[9px] text-surface bg-accent rounded-full w-3.5 h-3.5 flex items-center justify-center leading-none">
-              {count}
+      <div className="flex items-stretch">
+        <button
+          onClick={() => setOpen((prev) => !prev)}
+          className="
+            flex-1 min-w-0 flex items-center
+            px-3 py-2.5
+            transition-colors duration-150
+            cursor-pointer
+          "
+        >
+          <span className="flex items-center gap-1.5">
+            <span className="font-display text-[11px] tracking-wider text-ink/80 uppercase">
+              FILTER
             </span>
-          )}
-          <ChevronDown
-            size={14}
-            className={`text-ink-faint transition-transform duration-200 ${
-              open ? "rotate-180" : ""
-            }`}
-          />
-        </span>
-      </button>
+            {active && (
+              <span className="font-display text-[9px] text-surface bg-accent rounded-full w-3.5 h-3.5 flex items-center justify-center leading-none">
+                {count}
+              </span>
+            )}
+            <ChevronDown
+              size={14}
+              className={`text-ink-faint transition-transform duration-200 ${
+                open ? "rotate-180" : ""
+              }`}
+            />
+          </span>
+        </button>
+        {/* Clear lives in the header, open or closed, so selecting the first
+            filter never pushes the list down. Open, it carries a label. */}
+        {active && (
+          <button
+            type="button"
+            aria-label={`Clear ${count} ${count === 1 ? "filter" : "filters"}`}
+            title="Clear filters"
+            onClick={() => {
+              clearAll();
+              setOpen(false);
+            }}
+            className="
+              shrink-0 flex items-center gap-1.5 px-3
+              font-display text-[10px] tracking-wider uppercase
+              text-ink-muted hover:text-accent
+              transition-colors duration-100
+              cursor-pointer
+            "
+          >
+            {open && <span>CLEAR</span>}
+            <XCircle size={13} />
+          </button>
+        )}
+      </div>
 
       <div
         style={{
@@ -102,27 +127,6 @@ export default function FilterControl({
       >
         <div className="overflow-hidden">
           <div>
-            {active && (
-              <div className="px-3 py-2">
-                <button
-                  onClick={() => {
-                    clearAll();
-                    setOpen(false);
-                  }}
-                  className="
-                    flex items-center gap-1.5
-                    font-display text-[10px] tracking-wider uppercase
-                    text-ink-muted hover:text-accent
-                    transition-colors duration-100
-                    cursor-pointer
-                  "
-                >
-                  <XCircle size={12} className="text-accent" />
-                  CLEAR {count} {count === 1 ? "FILTER" : "FILTERS"}
-                </button>
-              </div>
-            )}
-
             <div className="px-3 pt-2 pb-2">
               <div className="flex items-center gap-2 px-2 py-1.5 rounded-sm bg-surface-raised/60 ring-1 ring-inset ring-ink-faint/15 focus-within:ring-accent/40 transition-colors">
                 <Search size={12} strokeWidth={1.5} className="text-ink-muted shrink-0" />
