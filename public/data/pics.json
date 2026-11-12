@@ -1,6 +1,19 @@
 {
   "pics": [
     {
+      "seq": 189,
+      "id": "A foe-1794453511",
+      "shortCode": "A foe",
+      "zoneCode": "sy",
+      "tags": [],
+      "description": null,
+      "image": "images/A foe/1794453511.jpg",
+      "postedBy": "Jenny",
+      "addedAt": "2026-11-12T03:18:32.887Z",
+      "width": 1280,
+      "height": 960
+    },
+    {
       "seq": 188,
       "id": "S nov-1794453375",
       "shortCode": "S nov",
@@ -1828,7 +1841,7 @@
       "width": 768,
       "height": 1024,
       "bioclipSpeciesId": "Sorbaronia arsenii",
-      "bioclipCommonName": "Ars\u00e8ne's mountain-ash",
+      "bioclipCommonName": "Arsène's mountain-ash",
       "bioclipScore": 0.9081,
       "bioclipWikiUrl": null
     },
@@ -2022,7 +2035,7 @@
       "bioclipSpeciesId": "Primula polyantha",
       "bioclipCommonName": "False oxlip",
       "bioclipScore": 0.4553,
-      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_\u00d7_polyantha"
+      "bioclipWikiUrl": "https://en.wikipedia.org/wiki/Primula_×_polyantha"
     },
     {
       "seq": 72,
