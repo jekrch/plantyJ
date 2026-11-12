@@ -1,6 +1,14 @@
 {
   "zonePics": [
     {
+      "id": "mpg-1794452415",
+      "zoneCode": "mpg",
+      "image": "images/zones/mpg/1794452415.jpg",
+      "addedAt": "2026-11-12T03:00:17.997Z",
+      "postedBy": "Jenny",
+      "description": null
+    },
+    {
       "id": "kg-1780864101",
       "zoneCode": "kg",
       "image": "images/zones/kg/1780864101.jpg",
