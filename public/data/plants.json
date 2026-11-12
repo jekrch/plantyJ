@@ -1,6 +1,12 @@
 {
   "plants": [
     {
+      "shortCode": "L con",
+      "fullName": "Leucocybe connata",
+      "commonName": "White Domecap",
+      "variety": null
+    },
+    {
       "shortCode": "P isa",
       "fullName": "Pyrrharctia isabella",
       "commonName": "Banded Woolly Bear",
