@@ -940,6 +940,158 @@
         ]
       }
     },
+    "agastache-foeniculum": {
+      "id": "agastache-foeniculum",
+      "fullName": "Agastache foeniculum",
+      "commonName": "Anise Hyssop",
+      "description": "Agastache foeniculum (syn. Agastache anethiodora (Nutt.) Britton), commonly called anise hyssop, blue giant hyssop, Fragrant giant hyssop, or the lavender giant hyssop, is a species of perennial plant in the mint family.\nThe plant is native to much of northern North America. It is tolerant of deer and drought, and is visited by many pollinators. The leaves and flowers are edible.",
+      "vernacularNames": [
+        "Anis-Riesenysop (DE)",
+        "Blue Giant Hyssop",
+        "Blue giant hyssop (EN)",
+        "Lavender hyssop",
+        "anise hyssop",
+        "anise-hyssop",
+        "anise-mint",
+        "blue giant-hyssop",
+        "fennel giant hyssop",
+        "fragrant giant-hyssop",
+        "giant-hyssop",
+        "lavender giant-hyssop",
+        "licorice-mint"
+      ],
+      "taxonomy": {
+        "kingdom": "Plantae",
+        "phylum": "Tracheophyta",
+        "class": "Magnoliopsida",
+        "order": "Lamiales",
+        "family": "Lamiaceae",
+        "genus": "Agastache",
+        "species": "Agastache foeniculum",
+        "canonicalName": "Agastache foeniculum"
+      },
+      "nativeRange": null,
+      "references": [
+        {
+          "name": "GBIF",
+          "url": "https://www.gbif.org/species/2926406"
+        },
+        {
+          "name": "Wikipedia",
+          "url": "https://en.wikipedia.org/wiki/Agastache_foeniculum"
+        },
+        {
+          "name": "iNaturalist",
+          "url": "https://www.inaturalist.org/taxa/158076"
+        },
+        {
+          "name": "Wikidata",
+          "url": "https://www.wikidata.org/wiki/Q1264088"
+        },
+        {
+          "name": "NatureServe Explorer",
+          "url": "https://explorer.natureserve.org/Taxon/ELEMENT_GLOBAL.2.137289"
+        }
+      ],
+      "sources": [
+        "gbif",
+        "powo",
+        "wikipedia",
+        "inaturalist",
+        "inat-phenology",
+        "wikidata",
+        "natureserve"
+      ],
+      "observationsCount": 15615,
+      "phenology": {
+        "place": "Minnesota",
+        "stages": [
+          {
+            "stage": "budding",
+            "label": "Flower buds",
+            "months": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              18,
+              25,
+              17,
+              3,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "stage": "flowering",
+            "label": "Flowering",
+            "months": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              19,
+              98,
+              93,
+              35,
+              13,
+              4,
+              0
+            ]
+          },
+          {
+            "stage": "fruiting",
+            "label": "Fruits & seeds",
+            "months": [
+              0,
+              0,
+              1,
+              2,
+              0,
+              2,
+              20,
+              40,
+              15,
+              11,
+              3,
+              0
+            ]
+          },
+          {
+            "stage": "fallColor",
+            "label": "Fall color",
+            "months": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              4,
+              3,
+              0
+            ]
+          }
+        ]
+      },
+      "conservation": {
+        "globalRank": "G5",
+        "globalLabel": "Secure",
+        "state": {
+          "code": "MN",
+          "rank": "SNR",
+          "label": "Unranked",
+          "native": true,
+          "exotic": false
+        }
+      }
+    },
     "agastache-scrophulariifolia": {
       "id": "agastache-scrophulariifolia",
       "fullName": "Agastache scrophulariifolia",
