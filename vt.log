@@ -1,0 +1,8 @@
+12:47:24 PM [vite] (client) Forced re-optimization of dependencies
+error when starting dev server:
+Error: Port 5199 is already in use
+    at httpServerStart (file:///home/jkrch/projects/plantyJ/node_modules/vite/dist/node/chunks/node.js:14673:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async startServer (file:///home/jkrch/projects/plantyJ/node_modules/vite/dist/node/chunks/node.js:25081:30)
+    at async Object.listen (file:///home/jkrch/projects/plantyJ/node_modules/vite/dist/node/chunks/node.js:24887:4)
+    at async CAC.<anonymous> (file:///home/jkrch/projects/plantyJ/node_modules/vite/dist/node/cli.js:734:3)

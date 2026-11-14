@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { X, ZoomIn, ZoomOut, Info, Trash2 } from "lucide-react";
 import {
   ImageViewer,
+  originFromAttribute,
   type ViewerItem,
-  type ViewerContext,
 } from "@jekrch/react-viewport-lightbox";
 import type { Annotation, Organism, Species, Zone, ZonePic } from "../types";
 import { buildRemovedSet, isOrganismRemoved } from "../utils/removed";
@@ -40,25 +40,11 @@ const viewerIcons = {
   zoomOut: <ZoomOut size={16} strokeWidth={1.5} />,
 };
 
-/**
- * Pushes the image stage up while the details drawer is open (revealing the
- * drawer that sits between the bars), then resets on close. `setContentShift`
- * is only reachable from a render slot's context, so this lives as a child of
- * the overlay slot and drives the shift from an effect.
- */
-function DrawerContentShift({
-  open,
-  setContentShift,
-}: {
-  open: boolean;
-  setContentShift: (transform: string | null, animate?: boolean) => void;
-}) {
-  useEffect(() => {
-    setContentShift(open ? "translateY(-100vh)" : null);
-    return () => setContentShift(null);
-  }, [open, setContentShift]);
-  return null;
-}
+// Shared-element "zoom from thumbnail": the image expands out of / collapses
+// back into the grid card carrying the organism's id. Off the grid (opened from
+// a spotlight or a deep link) there's no card, so the library falls back to the
+// fade.
+const getOrigin = originFromAttribute<Organism>("data-organism-id");
 
 export default function OrganismViewer({
   organism,
@@ -104,25 +90,6 @@ export default function OrganismViewer({
 
   const removedSet = useMemo(() => buildRemovedSet(annotations), [annotations]);
 
-  // Reflect the active organism in the URL (?plant=id), clearing it on close.
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    params.set("plant", organism.id);
-    const qs = params.toString();
-    const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
-    window.history.replaceState(null, "", url);
-
-    return () => {
-      const p = new URLSearchParams(window.location.search);
-      if (p.get("plant") === organism.id) {
-        p.delete("plant");
-        const q = p.toString();
-        const u = q ? `${window.location.pathname}?${q}` : window.location.pathname;
-        window.history.replaceState(null, "", u);
-      }
-    };
-  }, [organism.id]);
-
   // Close the drawer whenever the active image changes; clear the slide-out
   // direction once the drawer has finished animating away.
   useEffect(() => {
@@ -130,29 +97,6 @@ export default function OrganismViewer({
     const timer = setTimeout(() => setDrawerSlideDir(null), 450);
     return () => clearTimeout(timer);
   }, [currentIndex]);
-
-  // Shared-element "zoom from thumbnail": hand the library the grid thumbnail
-  // for the given index so the image expands out of / collapses back into it.
-  // Falls back to the fade when the source isn't on screen (e.g. opened from a
-  // spotlight or a deep link).
-  const getOrigin = (index: number): HTMLElement | null => {
-    const target = organisms[index];
-    if (!target) return null;
-    const nodes = document.querySelectorAll<HTMLElement>("[data-organism-id]");
-    for (const node of nodes) {
-      if (node.dataset.organismId === target.id) return node;
-    }
-    return null;
-  };
-
-  const hintText = (ctx: ViewerContext<Organism>, single: boolean) =>
-    ctx.isTouchDevice
-      ? single
-        ? "pinch to zoom · double-tap to enlarge"
-        : "swipe to navigate · pinch to zoom"
-      : single
-        ? "scroll to zoom · double-click to enlarge · esc to close"
-        : "← → or drag to navigate · scroll to zoom · esc to close";
 
   return (
     <ImageViewer<Organism>
@@ -177,13 +121,20 @@ export default function OrganismViewer({
         return false;
       }}
       getOrigin={getOrigin}
+      // The open viewer gets its own history entry, so the back button/gesture
+      // closes it (running through onEscape first, so it dismisses an open
+      // drawer before the viewer), and the URL names the open organism as
+      // ?plant=<id> for sharing — cleared again when the viewer closes.
+      history={{ param: "plant" }}
+      // Push the image up out of the way while the details drawer is open.
+      stageShift={drawerOpen ? "up" : null}
       // Match the old viewer's bottom spacing (the library defaults to 1.3rem,
       // which floats the nav row + hint text too high). Still floored by the
       // device safe-area inset.
       navInset="0.3rem"
-      // Click empty space to close — but never while the details drawer is open
-      // (its own toggle / Escape dismiss it instead).
-      closeOnBackdropClick={!drawerOpen}
+      // Click empty space to close. The library suspends this while the drawer
+      // has the stage shifted (its own toggle / Escape dismiss it instead).
+      closeOnBackdropClick
       icons={viewerIcons}
       ariaLabel={`${organismTitle(organism)} — full view`}
       renderHeader={(ctx) => {
@@ -198,19 +149,18 @@ export default function OrganismViewer({
           </div>
         );
       }}
-      // The postedBy · date line, stacked under the top-bar controls (see the
-      // `.viewer-meta` rule — it's pinned below the button row, not inline).
-      renderHeaderActions={(ctx) => {
+      // The postedBy · date line, stacked under the top-bar controls.
+      renderHeaderMeta={(ctx) => {
         const o = ctx.item.data!;
         return (
-          <span className="viewer-meta">
+          <>
             {o.postedBy} ·{" "}
             {new Date(o.addedAt).toLocaleDateString(undefined, {
               month: "short",
               day: "numeric",
               year: "numeric",
             })}
-          </span>
+          </>
         );
       }}
       // Details toggle, pinned to the left of the centered nav group. Only when
@@ -231,18 +181,12 @@ export default function OrganismViewer({
           </button>
         ) : null
       }
+      // Single image: there's no nav group to flank, so the Details toggle sits
+      // centered in the footer instead (matching the old layout).
       renderFooter={(ctx) => {
-        if (ctx.isZoomed) return null;
-        const single = !ctx.hasPrev && !ctx.hasNext;
-        if (!single) {
-          return (
-            <div className="text-center mt-0 mb-1 mx-auto w-fit">
-              <span className="text-[11px] text-white/30 tracking-wide">{hintText(ctx, false)}</span>
-            </div>
-          );
-        }
+        if (ctx.isZoomed || ctx.hasPrev || ctx.hasNext) return null;
         return (
-          <div className="flex flex-col items-center justify-center gap-2 w-full px-4 sm:px-6">
+          <div className="flex justify-center w-full px-4 sm:px-6">
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -254,12 +198,12 @@ export default function OrganismViewer({
               <Info size={18} strokeWidth={2} />
               <span className="text-[11px] font-medium tracking-wide">Details</span>
             </button>
-            <div className="text-center mx-auto w-fit">
-              <span className="text-[11px] text-white/30 tracking-wide">{hintText(ctx, true)}</span>
-            </div>
           </div>
         );
       }}
+      // Built-in gesture hint (touch vs. desktop, single vs. multiple images);
+      // hides itself while zoomed or while the drawer is up.
+      hint
       // "Removed" badge, pinned to the image's own top-left corner.
       renderImageOverlay={(ctx) => {
         const o = ctx.item.data!;
@@ -272,27 +216,24 @@ export default function OrganismViewer({
         );
       }}
       renderOverlay={(ctx) => (
-        <>
-          <DrawerContentShift open={drawerOpen} setContentShift={ctx.setContentShift} />
-          <OrganismInfoDrawer
-            open={drawerOpen}
-            closing={ctx.closing}
-            organism={organism}
-            allOrganisms={allOrganisms}
-            zones={zones}
-            zonePics={zonePics}
-            annotations={annotations}
-            speciesByShortCode={speciesByShortCode}
-            relationships={relationships}
-            onSelectOrganism={onSelectOrganism}
-            onSelectTaxon={onSelectTaxon}
-            onEntryChanged={onClose}
-            topOffset={ctx.topBarHeight}
-            bottomOffset={ctx.bottomBarHeight}
-            slideDir={drawerSlideDir}
-            aiAnalyses={aiAnalyses}
-          />
-        </>
+        <OrganismInfoDrawer
+          open={drawerOpen}
+          closing={ctx.closing}
+          organism={organism}
+          allOrganisms={allOrganisms}
+          zones={zones}
+          zonePics={zonePics}
+          annotations={annotations}
+          speciesByShortCode={speciesByShortCode}
+          relationships={relationships}
+          onSelectOrganism={onSelectOrganism}
+          onSelectTaxon={onSelectTaxon}
+          onEntryChanged={onClose}
+          topOffset={ctx.topBarHeight}
+          bottomOffset={ctx.bottomBarHeight}
+          slideDir={drawerSlideDir}
+          aiAnalyses={aiAnalyses}
+        />
       )}
     />
   );
