@@ -68,6 +68,19 @@
       "created": "2026-05-05T02:52:53.830Z"
     },
     {
+      "shortCode": "A foe",
+      "zoneCode": "sy",
+      "verdict": "GOOD",
+      "analysis": "Anise Hyssop (Agastache foeniculum) fits seamlessly into the ecological design of this Minneapolis garden, providing exceptional multi-season support for local wildlife. Native to Minnesota's prairies and open woodlands, it functions as an elite nectar and pollen magnet throughout its prolonged summer-to-autumn bloom window. Dense lavender-blue flower spikes draw bumblebees (Bombus impatiens), solitary bees, flower flies, and butterflies, while its upright, sturdy winter seed heads offer a reliable cold-season foraging resource for urban granivores such as American goldfinches (Spinus tristis). In addition, the licorice scent produced by volatile foliage oils makes the plant naturally unpalatable to local browsing mammals, including the garden's resident eastern cottontails.\n\nFrom a practical standpoint, the species aligns directly with the owners' priorities as an established native herb valued historically and culinarily for soothing teas and edible blossoms. Fully cold-hardy in USDA Zone 4b, its main vulnerability in regional clay loam is root and crown rot if soil remains soggy over winter. The steep grade of the Side Yard works strongly to its advantage, providing the natural gravity drainage necessary to shed excessive water. Situating the plant along the sunnier, drier mid-to-lower incline will optimize flower spike production, reduce stem lankiness, and harmonize well with neighboring sun-tolerant species like Rudbeckia laciniata and Penstemon digitalis.",
+      "references": [
+        "https://bwsr.state.mn.us/sites/default/files/2025-01/featured_plant_february_2025_anise_hyssop.pdf",
+        "https://www.wildflower.org/plants/result.php?id_plant=AGFO",
+        "https://www.minnesotawildflowers.info/flower/blue-giant-hyssop",
+        "https://mnherbsociety.com/2019-anise-hyssop/"
+      ],
+      "created": "2026-11-15T07:17:27.584Z"
+    },
+    {
       "shortCode": "A hyb mil",
       "zoneCode": "fy",
       "verdict": "MIXED",
@@ -783,6 +796,18 @@
       "created": "2026-05-08T04:21:00.298Z"
     },
     {
+      "shortCode": "L con",
+      "zoneCode": "fy",
+      "verdict": "GOOD",
+      "analysis": "As a saprotrophic fungus fruiting in late autumn among fallen foliage, the white domecap fills an essential decomposer niche in the Front Yard. Rather than parasitizing living roots or competing with neighboring perennials, its subterranean mycelium actively breaks down fallen leaf litter, dead root tissue, and organic mulch. This enzymatic digestion releases vital bioavailable nutrients and builds humic compounds that gradually improve the soil structure of the zone's dense, compacted clay loam. The fleshy fruiting bodies and mycelial threads also provide late-season food and microhabitat for soil-dwelling detritivores and fungivorous arthropods, including springtails, rove beetles, and fungus gnat larvae, which in turn sustain overwintering predatory insects and ground-foraging urban birds.\n\nFrom a garden management perspective, this fungus requires no control measures and integrates seamlessly into a native-focused landscape. While the property owners prioritize edible and medicinal species, the white domecap must not be foraged or consumed; although historic field guides occasionally listed it as edible, modern research has identified mutagenic compounds in the species, and pale agarics carry significant risks of confusion with dangerously toxic white lookalikes. Because it poses zero pathogenic threat to surrounding plantings like wild columbine, black chokeberry, or New England aster, its presence is a welcome sign of robust soil biological activity and natural nutrient cycling in this cold-climate garden.",
+      "references": [
+        "https://www.wildfooduk.com/mushroom-guide/white-domecap/",
+        "https://www.first-nature.com/fungi/lyophyllum-connatum.php",
+        "https://sporecast.com/species/leucocybe-connata"
+      ],
+      "created": "2026-11-15T07:17:27.584Z"
+    },
+    {
       "shortCode": "L lib",
       "zoneCode": "bb",
       "verdict": "GOOD",
@@ -1325,6 +1350,18 @@
         "https://www.cbsnews.com/minnesota/news/rabbit-garden-protection/"
       ],
       "created": "2026-07-15T04:38:08.445Z"
+    },
+    {
+      "shortCode": "S flo",
+      "zoneCode": "nbv",
+      "verdict": "MIXED",
+      "analysis": "The Eastern cottontail is a common native herbivore throughout Minnesota and plays an integral ecological role in urban and suburban environments, serving as a primary food source for regional predators including raptors, foxes, and roaming neighborhood cats. In the North Boulevard, the cottontail capitalizes on abundant ground-level forage, grazing readily on native grasses like sideoats grama, nutrient-rich legumes such as partridge pea and red clover, and herbaceous shoots. The late-season observation of an individual bedding in the boulevard's leaf litter in mid-November highlights how urban native plantings supply critical protective cover and thermal insulation as freezing weather approaches.\n\nDespite its native status and value to higher trophic levels, the cottontail presents serious challenges for garden owners prioritizing edibles and young woody specimen establishment. Once snow cover and hard frosts eliminate tender green foliage, cottontails shift their diet toward woody browse, chewing buds, twigs, and bark. Unprotected saplings in the boulevard, such as young sugar maple and yellow buckeye, along with fruit trees and berry canes elsewhere on the property, are prime candidates for destructive winter girdling. To maintain ecological harmony without sacrificing vulnerable plantings, management should center on installing hardware cloth cylinders or tree guards standing at least two to three feet high around valuable trunks before heavy snowpack accumulates.",
+      "references": [
+        "https://www.dnr.state.mn.us/mammals/easterncottontail.html",
+        "https://hort.extension.wisc.edu/articles/protecting-gardens-and-landscape-plantings-rabbits/",
+        "https://extension.psu.edu/managing-habitat-for-eastern-cottontails"
+      ],
+      "created": "2026-11-15T07:17:27.584Z"
     },
     {
       "shortCode": "S lae",
