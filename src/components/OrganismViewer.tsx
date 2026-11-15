@@ -135,10 +135,13 @@ export default function OrganismViewer({
       // Click empty space to close. The library suspends this while the drawer
       // has the stage shifted (its own toggle / Escape dismiss it instead).
       closeOnBackdropClick
+      // Every wheel event zooms (1.0 defaults to trackpad behavior: a plain
+      // scroll pans a zoomed image and is otherwise left to the browser).
+      wheel="zoom"
       icons={viewerIcons}
       ariaLabel={`${organismTitle(organism)} — full view`}
       renderHeader={(ctx) => {
-        const o = ctx.item.data!;
+        const o = ctx.item.data;
         const subtitle = zoneNameByCode.get(o.zoneCode) ?? o.zoneCode;
         return (
           <div style={{ width: "fit-content" }}>
@@ -151,7 +154,7 @@ export default function OrganismViewer({
       }}
       // The postedBy · date line, stacked under the top-bar controls.
       renderHeaderMeta={(ctx) => {
-        const o = ctx.item.data!;
+        const o = ctx.item.data;
         return (
           <>
             {o.postedBy} ·{" "}
@@ -206,7 +209,7 @@ export default function OrganismViewer({
       hint
       // "Removed" badge, pinned to the image's own top-left corner.
       renderImageOverlay={(ctx) => {
-        const o = ctx.item.data!;
+        const o = ctx.item.data;
         if (ctx.isZoomed || !isOrganismRemoved(o, removedSet)) return null;
         return (
           <span className="absolute top-2 left-2 z-10 flex items-center gap-1 rounded-sm bg-amber-900/80 px-1.5 py-0.5 text-[10px] font-display uppercase tracking-wider text-amber-100 backdrop-blur-sm pointer-events-none">
@@ -227,7 +230,11 @@ export default function OrganismViewer({
           speciesByShortCode={speciesByShortCode}
           relationships={relationships}
           onSelectOrganism={onSelectOrganism}
-          onSelectTaxon={onSelectTaxon}
+          // A taxon opens the tree. Close first and go there once the viewer
+          // has stepped back off its history entry; writing the tree's URL
+          // while that entry is still current would leave it behind the new
+          // URL, costing an extra press of back.
+          onSelectTaxon={(name) => ctx.close(() => onSelectTaxon(name))}
           onEntryChanged={onClose}
           topOffset={ctx.topBarHeight}
           bottomOffset={ctx.bottomBarHeight}

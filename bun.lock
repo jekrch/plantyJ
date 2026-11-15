@@ -5,7 +5,7 @@
     "": {
       "name": "plantyj",
       "dependencies": {
-        "@jekrch/react-viewport-lightbox": "^0.10.1",
+        "@jekrch/react-viewport-lightbox": "^1.0.2",
         "d3-force": "^3.0.1",
         "d3-hierarchy": "^3.1.3",
         "d3-shape": "^3.2.1",
@@ -52,7 +52,7 @@
 
     "@gilbarbara/types": ["@gilbarbara/types@0.2.2", "", { "dependencies": { "type-fest": "^4.1.0" } }, "sha512-QuQDBRRcm1Q8AbSac2W1YElurOhprj3Iko/o+P1fJxUWS4rOGKMVli98OXS7uo4z+cKAif6a+L9bcZFSyauQpQ=="],
 
-    "@jekrch/react-viewport-lightbox": ["@jekrch/react-viewport-lightbox@0.10.1", "", { "peerDependencies": { "react": ">=18", "react-dom": ">=18" } }, "sha512-vcR70ZL/oRFVdvAUywo0K+TGt9+pR5DZXEoQLI62KcmwIEO1m5ab3Rkwr94vw5hXh6+KdyIdmwd949ZkhsB0bg=="],
+    "@jekrch/react-viewport-lightbox": ["@jekrch/react-viewport-lightbox@1.0.2", "", { "peerDependencies": { "react": ">=18", "react-dom": ">=18" } }, "sha512-trlQaV2EH6ETpqjoGQrZ9kj7FMs8M8zUc3+BjOwVYmQV/vb3x0+b0aWhi6A8LG8LeHDT83I3623uBvHo1yyUdw=="],
 
     "@jridgewell/gen-mapping": ["@jridgewell/gen-mapping@0.3.13", "", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.5.0", "@jridgewell/trace-mapping": "^0.3.24" } }, "sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA=="],
 

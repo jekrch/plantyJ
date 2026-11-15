@@ -325,7 +325,10 @@ export default function OrganismInfoDrawer({
   if (slideDir && !show) {
     transform = `translateX(${slideDir === "left" ? "-100%" : "100%"})`;
   }
-  if (closing) transform = "translateY(0)";
+  // When the viewer closes with the drawer up, it fades where it is instead of
+  // sliding away. Only while it's open: a drawer already put away stays
+  // off-screen, or it would snap into view for the length of the fade.
+  if (closing && open) transform = "translateY(0)";
 
   return (
     <div
